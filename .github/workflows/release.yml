@@ -1,0 +1,101 @@
+name: Publish to Maven Central
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: maven-central-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: maven-central
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-37" "build-tools;37.0.0"
+      - name: Derive release version
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ "$version" == *-SNAPSHOT ]]; then
+            echo "Snapshot versions cannot be released to Maven Central."
+            exit 1
+          fi
+          echo "VERSION_NAME=$version" >> "$GITHUB_ENV"
+      - name: Stage signed publications
+        env:
+          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ env.VERSION_NAME }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.MAVEN_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.MAVEN_SIGNING_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew clean publishAllPublicationsToStagingRepository
+      - name: Create Central deployment bundle
+        shell: bash
+        run: |
+          while IFS= read -r -d '' file; do
+            openssl dgst -md5 "$file" | awk '{print $2}' > "$file.md5"
+            openssl dgst -sha1 "$file" | awk '{print $2}' > "$file.sha1"
+            openssl dgst -sha256 "$file" | awk '{print $2}' > "$file.sha256"
+            openssl dgst -sha512 "$file" | awk '{print $2}' > "$file.sha512"
+          done < <(
+            find staging-repository -type f \
+              ! -name '*.asc' \
+              ! -name '*.md5' \
+              ! -name '*.sha1' \
+              ! -name '*.sha256' \
+              ! -name '*.sha512' \
+              -print0
+          )
+          (cd staging-repository && zip -q -r ../central-bundle.zip .)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-kit-${{ env.VERSION_NAME }}-central-bundle
+          path: central-bundle.zip
+          if-no-files-found: error
+      - name: Upload and await publication
+        shell: bash
+        env:
+          CENTRAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+          CENTRAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+        run: |
+          token="$(printf '%s:%s' "$CENTRAL_TOKEN_USERNAME" "$CENTRAL_TOKEN_PASSWORD" | base64 --wrap=0)"
+          deployment_id="$(curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $token" \
+            --form "bundle=@central-bundle.zip;type=application/octet-stream" \
+            "https://central.sonatype.com/api/v1/publisher/upload?name=android-kit-${VERSION_NAME}&publishingType=AUTOMATIC")"
+          echo "Central deployment: $deployment_id"
+
+          for attempt in {1..90}; do
+            response="$(curl --fail-with-body --silent --show-error \
+              --request POST \
+              --header "Authorization: Bearer $token" \
+              "https://central.sonatype.com/api/v1/publisher/status?id=$deployment_id")"
+            state="$(jq -r '.deploymentState' <<< "$response")"
+            echo "Central state: $state"
+            case "$state" in
+              PUBLISHED) exit 0 ;;
+              FAILED)
+                jq '.errors' <<< "$response"
+                exit 1
+                ;;
+            esac
+            sleep 20
+          done
+
+          echo "Timed out waiting for Maven Central publication."
+          exit 1

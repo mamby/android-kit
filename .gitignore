@@ -1,6 +1,7 @@
 # Gradle files
 .gradle/
 build/
+**/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -15,6 +16,9 @@ captures/
 *.aab
 *.apk
 output-metadata.json
+
+# Maven publication staging
+staging-repository/
 
 # IntelliJ
 *.iml
