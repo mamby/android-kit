@@ -1,2 +1,2 @@
 # android-kit
-Android utils
+Opinionated Android components
