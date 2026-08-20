@@ -1,0 +1,102 @@
+<resources>
+    <string name="catalog_tagline">Des briques réutilisables, résolument cohérentes.</string>
+
+    <string name="action_back">Retour</string>
+    <string name="action_add">Ajouter</string>
+    <string name="action_close">Fermer</string>
+    <string name="action_more">Plus</string>
+    <string name="action_retry">Réessayer</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_confirm">Confirmer</string>
+    <string name="action_save">Enregistrer</string>
+
+    <string name="nav_components">Composants</string>
+    <string name="nav_layouts">Mises en page</string>
+    <string name="nav_forms">Formulaires</string>
+    <string name="nav_localization">Localisation</string>
+    <string name="nav_settings">Réglages</string>
+
+    <string name="components_title">Galerie de composants</string>
+    <string name="components_subtitle">Des primitives Material 3 avec les choix Android Kit</string>
+    <string name="components_buttons_title">Actions</string>
+    <string name="components_buttons_description">Les boutons conservent leur sémantique tout en partageant formes, espacements et emphase.</string>
+    <string name="primary_action">Action principale</string>
+    <string name="secondary_action">Action secondaire</string>
+    <string name="tonal_action">Action tonale</string>
+    <string name="components_states_title">Présentation des états</string>
+    <string name="components_states_description">Chargement, vide et erreur utilisent un contrat composable unique.</string>
+    <string name="empty_title">Rien pour le moment</string>
+    <string name="empty_message">Ajoutez un élément ou choisissez Réessayer pour tester le rappel.</string>
+    <string name="components_metrics_title">En un coup d’œil</string>
+    <string name="component_count">24</string>
+    <string name="component_count_label">éléments réutilisables</string>
+    <string name="theme_count">2 + 1</string>
+    <string name="theme_count_label">thèmes bibliothèque et démo</string>
+
+    <string name="layouts_title">Mises en page adaptatives</string>
+    <string name="layouts_subtitle">Sélectionnez un exemple pour ouvrir sa vue liste-détail</string>
+    <string name="layout_dashboard">Tableau de bord</string>
+    <string name="layout_dashboard_body">Les cartes passent naturellement d’une colonne à une grille large.</string>
+    <string name="layout_library">Liste de bibliothèque</string>
+    <string name="layout_library_body">Liste et détail forment deux volets lorsque la fenêtre le permet.</string>
+    <string name="layout_settings">Page de réglages</string>
+    <string name="layout_settings_body">Les sections restent lisibles grâce à une largeur de contenu limitée.</string>
+    <string name="detail_placeholder_title">Choisissez une mise en page</string>
+    <string name="detail_placeholder_body">Le volet de détail apparaît à côté de la liste sur les grandes fenêtres.</string>
+    <string name="detail_behavior_title">Comportement adaptatif</string>
+    <string name="detail_behavior_body">Ce détail est une scène Navigation 3. Il occupe tout l’écran en mode compact et rejoint la liste sur les fenêtres plus larges.</string>
+    <string name="detail_tokens_title">Jetons partagés</string>
+    <string name="detail_tokens_body">Espacements, formes et largeurs maximales proviennent de la définition du thème actif.</string>
+
+    <string name="forms_title">Formulaires et éditeurs</string>
+    <string name="forms_subtitle">Des champs pilotés par l’état avec des actions accessibles</string>
+    <string name="profile_section">Profil</string>
+    <string name="profile_section_description">Les paires de champs s’adaptent sans branche spécifique à l’appareil.</string>
+    <string name="field_name">Nom</string>
+    <string name="field_email">E-mail</string>
+    <string name="reminders">Rappels</string>
+    <string name="reminders_description">Recevez un rappel discret lorsque le travail reste incomplet.</string>
+    <string name="tags_section">Étiquettes</string>
+    <string name="tags_description">Édition de liste réutilisable avec protection contre les doublons.</string>
+    <string name="tag_hint">Nouvelle étiquette</string>
+    <string name="tag_design">Design</string>
+    <string name="tag_compose">Compose</string>
+    <string name="show_dialog">Vérifier les changements</string>
+    <string name="dialog_title">Enregistrer cet exemple ?</string>
+    <string name="dialog_body">La démo conserve l’état en mémoire ; chaque application décide où et comment le persister.</string>
+
+    <string name="localization_title">Localisation</string>
+    <string name="localization_subtitle">Langues gérées par l’application et formatage localisé</string>
+    <string name="language_section">Langue de l’application</string>
+    <string name="language_section_description">Le changement utilise l’API officielle des langues par application.</string>
+    <string name="language_system">Langue du système</string>
+    <string name="language_english">Anglais</string>
+    <string name="language_french">Français</string>
+    <string name="language_arabic">Arabe</string>
+    <string name="format_section">Exemples formatés</string>
+    <string name="format_section_description">Les formateurs reçoivent explicitement une locale et ne dépendent jamais de l’état global du processus.</string>
+    <string name="format_date">Date</string>
+    <string name="format_time">Heure</string>
+    <string name="format_number">Nombre</string>
+    <string name="format_currency">Devise</string>
+    <string name="format_list">Liste</string>
+    <string name="sample_coffee">Café</string>
+    <string name="sample_design">Design</string>
+    <string name="sample_code">Code</string>
+
+    <string name="settings_title">Réglages du catalogue</string>
+    <string name="settings_subtitle">Thème, langue et surfaces d’application réutilisables</string>
+    <string name="appearance_section">Apparence</string>
+    <string name="appearance_section_description">Clair et Sombre appartiennent à la bibliothèque. Prism existe uniquement dans cette démo.</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="theme_prism">Prism</string>
+    <string name="theme_prism_description">Un thème coloré défini par l’application qui valide le point d’extension public.</string>
+    <string name="sheet_section">Feuille modale</string>
+    <string name="sheet_section_description">Comportement Material 3 officiel avec chrome partagé et zones sûres.</string>
+    <string name="open_sheet">Ouvrir la feuille d’exemple</string>
+    <string name="sheet_title">Feuille réutilisable</string>
+    <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>
+    <string name="about_section">À propos du catalogue</string>
+    <string name="about_body">Le catalogue consomme les mêmes artefacts publics destinés aux applications open source externes.</string>
+</resources>

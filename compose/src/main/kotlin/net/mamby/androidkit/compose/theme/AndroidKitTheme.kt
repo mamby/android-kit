@@ -1,0 +1,212 @@
+package net.mamby.androidkit.compose.theme
+
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+@Immutable
+public data class AndroidKitThemeDefinition(
+    public val colorScheme: ColorScheme,
+    public val typography: Typography = AndroidKitDefaults.typography,
+    public val shapes: Shapes = AndroidKitDefaults.shapes,
+    public val dimensions: AndroidKitDimensions = AndroidKitDimensions(),
+)
+
+@Immutable
+public data class AndroidKitDimensions(
+    public val spaceExtraSmall: Dp = 4.dp,
+    public val spaceSmall: Dp = 8.dp,
+    public val spaceMedium: Dp = 16.dp,
+    public val spaceLarge: Dp = 24.dp,
+    public val spaceExtraLarge: Dp = 32.dp,
+    public val screenPadding: Dp = 20.dp,
+    public val cardMinWidth: Dp = 280.dp,
+    public val contentMaxWidth: Dp = 1_200.dp,
+    public val detailMaxWidth: Dp = 760.dp,
+    public val minimumTouchTarget: Dp = 48.dp,
+    public val floatingNavigationMargin: Dp = 12.dp,
+)
+
+@Immutable
+public data class AndroidKitStrings(
+    public val back: String,
+    public val add: String,
+    public val close: String,
+    public val more: String,
+    public val retry: String,
+    public val cancel: String,
+    public val confirm: String,
+    public val save: String,
+) {
+    public companion object {
+        public val English: AndroidKitStrings = AndroidKitStrings(
+            back = "Back",
+            add = "Add",
+            close = "Close",
+            more = "More",
+            retry = "Retry",
+            cancel = "Cancel",
+            confirm = "Confirm",
+            save = "Save",
+        )
+    }
+}
+
+public object AndroidKitThemes {
+    public val Light: AndroidKitThemeDefinition = AndroidKitThemeDefinition(
+        colorScheme = lightColorScheme(
+            primary = Color(0xFF5555C7),
+            onPrimary = Color.White,
+            primaryContainer = Color(0xFFE3E0FF),
+            onPrimaryContainer = Color(0xFF17124F),
+            secondary = Color(0xFF62616F),
+            onSecondary = Color.White,
+            secondaryContainer = Color(0xFFE8E5F3),
+            onSecondaryContainer = Color(0xFF1E1D29),
+            tertiary = Color(0xFF9A4967),
+            onTertiary = Color.White,
+            tertiaryContainer = Color(0xFFFFD9E4),
+            onTertiaryContainer = Color(0xFF3E001E),
+            background = Color(0xFFFFFBFF),
+            onBackground = Color(0xFF1C1B20),
+            surface = Color(0xFFFFFBFF),
+            onSurface = Color(0xFF1C1B20),
+            surfaceVariant = Color(0xFFE6E0EC),
+            onSurfaceVariant = Color(0xFF48454F),
+            outline = Color(0xFF79747E),
+            outlineVariant = Color(0xFFCAC4D0),
+            error = Color(0xFFBA1A1A),
+            onError = Color.White,
+        ),
+    )
+
+    public val Dark: AndroidKitThemeDefinition = AndroidKitThemeDefinition(
+        colorScheme = darkColorScheme(
+            primary = Color(0xFFC4C1FF),
+            onPrimary = Color(0xFF272175),
+            primaryContainer = Color(0xFF3E3A8D),
+            onPrimaryContainer = Color(0xFFE3E0FF),
+            secondary = Color(0xFFCBC8D7),
+            onSecondary = Color(0xFF33313F),
+            secondaryContainer = Color(0xFF494754),
+            onSecondaryContainer = Color(0xFFE8E5F3),
+            tertiary = Color(0xFFFFB0CA),
+            onTertiary = Color(0xFF5E1138),
+            tertiaryContainer = Color(0xFF7B2F4F),
+            onTertiaryContainer = Color(0xFFFFD9E4),
+            background = Color(0xFF131217),
+            onBackground = Color(0xFFE6E1E7),
+            surface = Color(0xFF131217),
+            onSurface = Color(0xFFE6E1E7),
+            surfaceVariant = Color(0xFF48454F),
+            onSurfaceVariant = Color(0xFFCAC4D0),
+            outline = Color(0xFF938F99),
+            outlineVariant = Color(0xFF48454F),
+            error = Color(0xFFFFB4AB),
+            onError = Color(0xFF690005),
+        ),
+    )
+}
+
+public object AndroidKitDefaults {
+    public val typography: Typography = Typography(
+        displaySmall = TextStyle(
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 36.sp,
+            lineHeight = 44.sp,
+        ),
+        headlineMedium = TextStyle(
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 28.sp,
+            lineHeight = 36.sp,
+        ),
+        titleLarge = TextStyle(
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 22.sp,
+            lineHeight = 28.sp,
+        ),
+        titleMedium = TextStyle(
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+            lineHeight = 24.sp,
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            lineHeight = 24.sp,
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            lineHeight = 20.sp,
+        ),
+        labelLarge = TextStyle(
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 14.sp,
+            lineHeight = 20.sp,
+        ),
+    )
+
+    public val shapes: Shapes = Shapes()
+}
+
+private val LocalAndroidKitDimensions = staticCompositionLocalOf { AndroidKitDimensions() }
+private val LocalAndroidKitStrings = staticCompositionLocalOf { AndroidKitStrings.English }
+
+public object AndroidKitThemeTokens {
+    public val dimensions: AndroidKitDimensions
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitDimensions.current
+
+    public val strings: AndroidKitStrings
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitStrings.current
+}
+
+@Composable
+public fun AndroidKitTheme(
+    definition: AndroidKitThemeDefinition = if (isSystemInDarkTheme()) {
+        AndroidKitThemes.Dark
+    } else {
+        AndroidKitThemes.Light
+    },
+    strings: AndroidKitStrings = AndroidKitStrings.English,
+    content: @Composable () -> Unit,
+): Unit {
+    CompositionLocalProvider(
+        LocalAndroidKitDimensions provides definition.dimensions,
+        LocalAndroidKitStrings provides strings,
+    ) {
+        MaterialTheme(
+            colorScheme = definition.colorScheme,
+            typography = definition.typography,
+            shapes = definition.shapes,
+            content = content,
+        )
+    }
+}

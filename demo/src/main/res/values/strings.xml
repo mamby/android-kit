@@ -1,0 +1,103 @@
+<resources>
+    <string name="app_name" translatable="false">Android Kit Catalog</string>
+    <string name="catalog_tagline">Reusable building blocks, deliberately opinionated.</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_add">Add</string>
+    <string name="action_close">Close</string>
+    <string name="action_more">More</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_save">Save</string>
+
+    <string name="nav_components">Components</string>
+    <string name="nav_layouts">Layouts</string>
+    <string name="nav_forms">Forms</string>
+    <string name="nav_localization">Localization</string>
+    <string name="nav_settings">Settings</string>
+
+    <string name="components_title">Component gallery</string>
+    <string name="components_subtitle">Material 3 primitives with Android Kit defaults</string>
+    <string name="components_buttons_title">Actions</string>
+    <string name="components_buttons_description">Buttons keep their semantics while sharing shape, spacing and emphasis.</string>
+    <string name="primary_action">Primary action</string>
+    <string name="secondary_action">Secondary action</string>
+    <string name="tonal_action">Tonal action</string>
+    <string name="components_states_title">State presentation</string>
+    <string name="components_states_description">Loading, empty and error states use one composable contract.</string>
+    <string name="empty_title">Nothing here yet</string>
+    <string name="empty_message">Add an item or choose retry to exercise the action callback.</string>
+    <string name="components_metrics_title">At a glance</string>
+    <string name="component_count">24</string>
+    <string name="component_count_label">reusable pieces</string>
+    <string name="theme_count">2 + 1</string>
+    <string name="theme_count_label">library and demo themes</string>
+
+    <string name="layouts_title">Adaptive layouts</string>
+    <string name="layouts_subtitle">Select a sample to open its list-detail presentation</string>
+    <string name="layout_dashboard">Dashboard</string>
+    <string name="layout_dashboard_body">Adaptive cards flow from one column to a wide grid.</string>
+    <string name="layout_library">Library list</string>
+    <string name="layout_library_body">List and detail become two panes when the window allows it.</string>
+    <string name="layout_settings">Settings page</string>
+    <string name="layout_settings_body">Sections stay readable with a constrained content width.</string>
+    <string name="detail_placeholder_title">Choose a layout</string>
+    <string name="detail_placeholder_body">The detail pane appears beside the list on larger windows.</string>
+    <string name="detail_behavior_title">Adaptive behavior</string>
+    <string name="detail_behavior_body">This detail is a Navigation 3 scene. It is full-screen on compact windows and paired with the list on larger windows.</string>
+    <string name="detail_tokens_title">Shared tokens</string>
+    <string name="detail_tokens_body">Spacing, shapes and maximum content widths come from the active theme definition.</string>
+
+    <string name="forms_title">Forms and editors</string>
+    <string name="forms_subtitle">State-driven fields with accessible actions</string>
+    <string name="profile_section">Profile</string>
+    <string name="profile_section_description">Field pairs adapt without device-specific branches.</string>
+    <string name="field_name">Name</string>
+    <string name="field_email">Email</string>
+    <string name="reminders">Reminders</string>
+    <string name="reminders_description">Receive a gentle follow-up when work is incomplete.</string>
+    <string name="tags_section">Tags</string>
+    <string name="tags_description">Reusable list editing with duplicate protection.</string>
+    <string name="tag_hint">New tag</string>
+    <string name="tag_design">Design</string>
+    <string name="tag_compose">Compose</string>
+    <string name="show_dialog">Review changes</string>
+    <string name="dialog_title">Save this example?</string>
+    <string name="dialog_body">The demo keeps state in memory; consuming apps decide how and where to persist it.</string>
+
+    <string name="localization_title">Localization</string>
+    <string name="localization_subtitle">App-owned languages with locale-aware formatting</string>
+    <string name="language_section">Application language</string>
+    <string name="language_section_description">Changing language uses the official per-app locale API.</string>
+    <string name="language_system">System default</string>
+    <string name="language_english">English</string>
+    <string name="language_french">French</string>
+    <string name="language_arabic">Arabic</string>
+    <string name="format_section">Formatted examples</string>
+    <string name="format_section_description">Formatters receive a locale explicitly and never depend on process-global state.</string>
+    <string name="format_date">Date</string>
+    <string name="format_time">Time</string>
+    <string name="format_number">Number</string>
+    <string name="format_currency">Currency</string>
+    <string name="format_list">List</string>
+    <string name="sample_coffee">Coffee</string>
+    <string name="sample_design">Design</string>
+    <string name="sample_code">Code</string>
+
+    <string name="settings_title">Catalog settings</string>
+    <string name="settings_subtitle">Theme, language and reusable app surfaces</string>
+    <string name="appearance_section">Appearance</string>
+    <string name="appearance_section_description">Light and Dark belong to the library. Prism exists only in this demo.</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_prism">Prism</string>
+    <string name="theme_prism_description">A colorful app-defined theme that proves the public extension point.</string>
+    <string name="sheet_section">Modal sheet</string>
+    <string name="sheet_section_description">Official Material 3 sheet behavior with shared chrome and safe insets.</string>
+    <string name="open_sheet">Open example sheet</string>
+    <string name="sheet_title">Reusable sheet</string>
+    <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
+    <string name="about_section">About this catalog</string>
+    <string name="about_body">The catalog consumes the same public artifacts intended for external open-source apps.</string>
+</resources>

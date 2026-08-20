@@ -1,0 +1,170 @@
+package net.mamby.androidkit.testing
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.test.DeviceConfigurationOverride
+import androidx.compose.ui.test.WindowSize
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.isToggleable
+import androidx.compose.ui.test.junit4.StateRestorationTester
+import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import net.mamby.androidkit.compose.form.StringListEditor
+import net.mamby.androidkit.compose.form.SwitchField
+import net.mamby.androidkit.compose.navigation.AdaptiveNavigationScaffold
+import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
+import net.mamby.androidkit.compose.presentation.PresentationKind
+import net.mamby.androidkit.compose.presentation.StatePresentation
+import net.mamby.androidkit.compose.theme.AndroidKitTheme
+import org.junit.Assert.assertEquals
+import org.junit.Rule
+import org.junit.Test
+
+class ComposeBehaviorTest {
+    @get:Rule
+    val composeRule = createComposeRule()
+
+    @Test
+    fun statePresentationDispatchesItsAction() {
+        var actions = 0
+        composeRule.setContent {
+            AndroidKitTheme {
+                StatePresentation(
+                    kind = PresentationKind.Error,
+                    title = "Could not load",
+                    message = "Check your connection",
+                    actionLabel = "Try again",
+                    onAction = { actions += 1 },
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("Try again").performClick()
+
+        composeRule.runOnIdle { assertEquals(1, actions) }
+    }
+
+    @Test
+    fun switchFieldTogglesFromItsWholeRow() {
+        composeRule.setContent {
+            var enabled by rememberSaveable { mutableStateOf(false) }
+            AndroidKitTheme {
+                SwitchField(
+                    title = "Encrypted backups",
+                    checked = enabled,
+                    onCheckedChange = { enabled = it },
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("Encrypted backups").performClick()
+
+        composeRule.onNode(isToggleable()).assertIsOn()
+    }
+
+    @Test
+    fun stringEditorRestoresAnUncommittedValue() {
+        val restorationTester = StateRestorationTester(composeRule)
+        restorationTester.setContent {
+            AndroidKitTheme {
+                StringListEditor(
+                    values = emptyList(),
+                    label = "New tag",
+                    onValuesChange = {},
+                )
+            }
+        }
+
+        composeRule.onNode(hasSetTextAction()).performTextInput("urgent")
+        restorationTester.emulateSavedInstanceStateRestore()
+
+        composeRule.onNode(hasSetTextAction()).assertTextContains("urgent")
+    }
+
+    @Test
+    fun compactNavigationShowsAndSelectsEveryPrimaryDestination() {
+        var selected by mutableStateOf("home")
+        val destinations = listOf(
+            Triple("home", "Home", Icons.Default.Home),
+            Triple("list", "Lists", Icons.AutoMirrored.Filled.List),
+            Triple("edit", "Editor", Icons.Default.Edit),
+            Triple("settings", "Settings", Icons.Default.Settings),
+        )
+        composeRule.setContent {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
+            ) {
+                AndroidKitTheme {
+                    AdaptiveNavigationScaffold(
+                        items = destinations.map { (key, label, icon) ->
+                            AndroidKitNavigationItem(key, label, icon)
+                        },
+                        selectedKey = selected,
+                        onSelected = { selected = it },
+                    ) {
+                        Box(Modifier.fillMaxSize())
+                    }
+                }
+            }
+        }
+
+        destinations.forEach { (key, label) ->
+            composeRule
+                .onNodeWithContentDescription(label, useUnmergedTree = true)
+                .assertExists()
+                .performClick()
+            composeRule.runOnIdle { assertEquals(key, selected) }
+        }
+    }
+
+    @Test
+    fun compactNavigationSelectsAnOverflowDestination() {
+        var selected by mutableStateOf("home")
+        composeRule.setContent {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
+            ) {
+                AndroidKitTheme {
+                    AdaptiveNavigationScaffold(
+                        items = listOf(
+                            AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
+                            AndroidKitNavigationItem("edit", "Editor", Icons.Default.Edit),
+                            AndroidKitNavigationItem("language", "Language", Icons.Default.Language),
+                            AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
+                        ),
+                        selectedKey = selected,
+                        onSelected = { selected = it },
+                    ) {
+                        Box(Modifier.fillMaxSize())
+                    }
+                }
+            }
+        }
+
+        composeRule
+            .onNodeWithContentDescription("More", useUnmergedTree = true)
+            .performClick()
+        composeRule.onNodeWithText("Settings").performClick()
+
+        composeRule.runOnIdle { assertEquals("settings", selected) }
+    }
+}

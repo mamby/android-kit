@@ -1,0 +1,102 @@
+<resources>
+    <string name="catalog_tagline">لبنات قابلة لإعادة الاستخدام برؤية متعمدة ومتناسقة.</string>
+
+    <string name="action_back">رجوع</string>
+    <string name="action_add">إضافة</string>
+    <string name="action_close">إغلاق</string>
+    <string name="action_more">المزيد</string>
+    <string name="action_retry">إعادة المحاولة</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_confirm">تأكيد</string>
+    <string name="action_save">حفظ</string>
+
+    <string name="nav_components">المكوّنات</string>
+    <string name="nav_layouts">التخطيطات</string>
+    <string name="nav_forms">النماذج</string>
+    <string name="nav_localization">اللغة</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <string name="components_title">معرض المكوّنات</string>
+    <string name="components_subtitle">عناصر Material 3 بإعدادات Android Kit</string>
+    <string name="components_buttons_title">الإجراءات</string>
+    <string name="components_buttons_description">تحافظ الأزرار على دلالاتها مع مشاركة الشكل والمسافات ودرجات التأكيد.</string>
+    <string name="primary_action">إجراء أساسي</string>
+    <string name="secondary_action">إجراء ثانوي</string>
+    <string name="tonal_action">إجراء لوني</string>
+    <string name="components_states_title">عرض الحالات</string>
+    <string name="components_states_description">تستخدم حالات التحميل والفراغ والخطأ عقداً تركيبياً واحداً.</string>
+    <string name="empty_title">لا يوجد شيء بعد</string>
+    <string name="empty_message">أضف عنصراً أو اختر إعادة المحاولة لاختبار الإجراء.</string>
+    <string name="components_metrics_title">نظرة سريعة</string>
+    <string name="component_count">24</string>
+    <string name="component_count_label">قطعة قابلة لإعادة الاستخدام</string>
+    <string name="theme_count">2 + 1</string>
+    <string name="theme_count_label">سمتا المكتبة والعرض</string>
+
+    <string name="layouts_title">تخطيطات متكيّفة</string>
+    <string name="layouts_subtitle">اختر مثالاً لفتح عرض القائمة والتفاصيل</string>
+    <string name="layout_dashboard">لوحة معلومات</string>
+    <string name="layout_dashboard_body">تنتقل البطاقات من عمود واحد إلى شبكة واسعة تلقائياً.</string>
+    <string name="layout_library">قائمة مكتبة</string>
+    <string name="layout_library_body">تظهر القائمة والتفاصيل في لوحتين عندما تسمح النافذة.</string>
+    <string name="layout_settings">صفحة إعدادات</string>
+    <string name="layout_settings_body">تبقى الأقسام سهلة القراءة بفضل عرض المحتوى المحدود.</string>
+    <string name="detail_placeholder_title">اختر تخطيطاً</string>
+    <string name="detail_placeholder_body">تظهر لوحة التفاصيل بجانب القائمة على النوافذ الأكبر.</string>
+    <string name="detail_behavior_title">السلوك المتكيّف</string>
+    <string name="detail_behavior_body">هذه التفاصيل مشهد Navigation 3. تملأ الشاشة في النوافذ المدمجة وتظهر بجوار القائمة في النوافذ الأكبر.</string>
+    <string name="detail_tokens_title">رموز مشتركة</string>
+    <string name="detail_tokens_body">تأتي المسافات والأشكال والحدود القصوى للعرض من تعريف السمة النشطة.</string>
+
+    <string name="forms_title">النماذج والمحررات</string>
+    <string name="forms_subtitle">حقول موجّهة بالحالة مع إجراءات سهلة الوصول</string>
+    <string name="profile_section">الملف الشخصي</string>
+    <string name="profile_section_description">تتكيّف أزواج الحقول دون فروع خاصة بكل جهاز.</string>
+    <string name="field_name">الاسم</string>
+    <string name="field_email">البريد الإلكتروني</string>
+    <string name="reminders">التذكيرات</string>
+    <string name="reminders_description">استلم متابعة لطيفة عندما يبقى العمل غير مكتمل.</string>
+    <string name="tags_section">الوسوم</string>
+    <string name="tags_description">تحرير قائمة قابل لإعادة الاستخدام مع منع التكرار.</string>
+    <string name="tag_hint">وسم جديد</string>
+    <string name="tag_design">تصميم</string>
+    <string name="tag_compose">Compose</string>
+    <string name="show_dialog">مراجعة التغييرات</string>
+    <string name="dialog_title">هل تريد حفظ هذا المثال؟</string>
+    <string name="dialog_body">يحتفظ العرض بالحالة في الذاكرة، ويقرر التطبيق المستهلك طريقة ومكان حفظها.</string>
+
+    <string name="localization_title">التعريب</string>
+    <string name="localization_subtitle">لغات يملكها التطبيق وتنسيق واعٍ بالإعدادات المحلية</string>
+    <string name="language_section">لغة التطبيق</string>
+    <string name="language_section_description">يستخدم تغيير اللغة واجهة برمجة اللغات الرسمية لكل تطبيق.</string>
+    <string name="language_system">لغة النظام</string>
+    <string name="language_english">الإنجليزية</string>
+    <string name="language_french">الفرنسية</string>
+    <string name="language_arabic">العربية</string>
+    <string name="format_section">أمثلة منسّقة</string>
+    <string name="format_section_description">تستقبل أدوات التنسيق إعداداً محلياً صريحاً ولا تعتمد على حالة العملية العامة.</string>
+    <string name="format_date">التاريخ</string>
+    <string name="format_time">الوقت</string>
+    <string name="format_number">الرقم</string>
+    <string name="format_currency">العملة</string>
+    <string name="format_list">القائمة</string>
+    <string name="sample_coffee">قهوة</string>
+    <string name="sample_design">تصميم</string>
+    <string name="sample_code">برمجة</string>
+
+    <string name="settings_title">إعدادات الدليل</string>
+    <string name="settings_subtitle">السمة واللغة وأسطح التطبيق القابلة لإعادة الاستخدام</string>
+    <string name="appearance_section">المظهر</string>
+    <string name="appearance_section_description">السمة الفاتحة والداكنة من المكتبة. أما Prism فموجودة في هذا العرض فقط.</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
+    <string name="theme_prism">Prism</string>
+    <string name="theme_prism_description">سمة ملوّنة يعرّفها التطبيق لإثبات نقطة التوسعة العامة.</string>
+    <string name="sheet_section">لوحة سفلية</string>
+    <string name="sheet_section_description">سلوك Material 3 الرسمي مع شريط مشترك وهوامش آمنة.</string>
+    <string name="open_sheet">فتح لوحة المثال</string>
+    <string name="sheet_title">لوحة قابلة لإعادة الاستخدام</string>
+    <string name="sheet_body">يمتلك المستدعي الرؤية والمحتوى. ويوفر Android Kit الشريط المتكيّف والمسافات وتسميات إمكانية الوصول.</string>
+    <string name="about_section">حول هذا الدليل</string>
+    <string name="about_body">يستهلك الدليل نفس الحزم العامة المخصصة لتطبيقات المصادر المفتوحة الخارجية.</string>
+</resources>
