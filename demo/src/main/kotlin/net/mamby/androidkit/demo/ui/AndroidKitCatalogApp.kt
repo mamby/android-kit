@@ -31,6 +31,8 @@ import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.FloatingSurfaceStyle
 import net.mamby.androidkit.demo.R
+import net.mamby.androidkit.demo.ui.screen.ComponentDetailScreen
+import net.mamby.androidkit.demo.ui.screen.ComponentPlaceholder
 import net.mamby.androidkit.demo.ui.screen.ComponentsScreen
 import net.mamby.androidkit.demo.ui.screen.FloatingActionsDemoScreen
 import net.mamby.androidkit.demo.ui.screen.FloatingCatalogScreen
@@ -122,14 +124,23 @@ fun AndroidKitCatalogApp() {
                     sceneStrategies = listOf(listDetailStrategy),
                     entryDecorators = listOf(rememberSaveableStateHolderNavEntryDecorator()),
                     entryProvider = entryProvider {
-                        entry<ComponentsRoute> {
+                        entry<ComponentsRoute>(
+                            metadata = ListDetailSceneStrategy.listPane(
+                                detailPlaceholder = { ComponentPlaceholder() },
+                            ),
+                        ) {
                             ComponentsScreen(
-                                onOpenFloatingNavigation = {
-                                    navigation.navigate(FloatingNavigationDemoRoute(showLabels = it))
+                                onSelected = {
+                                    navigation.navigate(ComponentDetailRoute(componentId = it))
                                 },
-                                onOpenFloatingActions = {
-                                    navigation.navigate(FloatingActionsDemoRoute(variant = it))
-                                },
+                            )
+                        }
+                        entry<ComponentDetailRoute>(
+                            metadata = ListDetailSceneStrategy.detailPane(),
+                        ) { route ->
+                            ComponentDetailScreen(
+                                componentId = route.componentId,
+                                onBack = navigation::goBack,
                             )
                         }
                         entry<LayoutsRoute>(
