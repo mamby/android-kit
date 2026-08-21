@@ -60,6 +60,7 @@ public data class AndroidKitDimensions(
     public val floatingSurfaceBorderWidth: Dp = 1.dp,
     public val floatingSurfaceShadowRadius: Dp = 10.dp,
     public val floatingSurfaceShadowOffsetY: Dp = 2.dp,
+    public val floatingDropdownShadowElevation: Dp = 6.dp,
 )
 
 @Immutable
