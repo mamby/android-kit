@@ -1,133 +1,87 @@
 package net.mamby.androidkit.demo.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import net.mamby.androidkit.compose.action.FloatingAddButton
+import androidx.compose.ui.text.style.TextOverflow
 import net.mamby.androidkit.compose.layout.AdaptiveGridPage
 import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.presentation.MetricCard
-import net.mamby.androidkit.compose.presentation.PresentationKind
-import net.mamby.androidkit.compose.presentation.SectionCard
-import net.mamby.androidkit.compose.presentation.StatePresentation
+import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
-import net.mamby.androidkit.demo.ui.FloatingActionDemoVariant
+import net.mamby.androidkit.demo.ui.ComponentCategory
+import net.mamby.androidkit.demo.ui.ComponentId
 
 @Composable
-fun ComponentsScreen(
-    onOpenFloatingNavigation: (showLabels: Boolean) -> Unit,
-    onOpenFloatingActions: (FloatingActionDemoVariant) -> Unit,
-) {
-    var additions by rememberSaveable { mutableIntStateOf(0) }
-    var presentationKind by rememberSaveable { mutableStateOf(PresentationKind.Empty) }
+fun ComponentsScreen(onSelected: (ComponentId) -> Unit) {
+    val dimensions = AndroidKitThemeTokens.dimensions
     PageScaffold(
         title = stringResource(R.string.components_title),
-        subtitle = stringResource(R.string.components_subtitle),
-        floatingActionButton = {
-            FloatingAddButton(onClick = { additions += 1 })
-        },
+        subtitle = stringResource(R.string.components_subtitle, ComponentId.entries.size),
     ) { contentPadding ->
         AdaptiveGridPage(contentPadding = contentPadding) {
-            item {
-                SectionCard(
-                    title = stringResource(R.string.components_buttons_title),
-                    supportingText = stringResource(R.string.components_buttons_description),
+            ComponentCategory.entries.forEach { category ->
+                val components = ComponentId.entries.filter { it.category == category }
+                item(
+                    key = category.name,
+                    span = { GridItemSpan(maxLineSpan) },
                 ) {
-                    Button(onClick = { presentationKind = PresentationKind.Loading }) {
-                        Text(stringResource(R.string.primary_action))
-                    }
-                    OutlinedButton(onClick = { presentationKind = PresentationKind.Empty }) {
-                        Text(stringResource(R.string.secondary_action))
-                    }
-                    FilledTonalButton(onClick = { presentationKind = PresentationKind.Error }) {
-                        Text(stringResource(R.string.tonal_action))
-                    }
-                }
-            }
-            item {
-                SectionCard(
-                    title = stringResource(R.string.components_states_title),
-                    supportingText = stringResource(R.string.components_states_description),
-                ) {
-                    StatePresentation(
-                        kind = presentationKind,
-                        title = stringResource(R.string.empty_title),
-                        message = stringResource(R.string.empty_message),
-                        actionLabel = stringResource(R.string.action_retry),
-                        onAction = { presentationKind = PresentationKind.Loading },
+                    Text(
+                        text = stringResource(category.labelResource),
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 }
-            }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                SectionCard(title = stringResource(R.string.components_metrics_title)) {
-                    val spacing = AndroidKitThemeTokens.dimensions.spaceMedium
-                    Row(
+                items(
+                    count = components.size,
+                    key = { components[it].name },
+                ) { index ->
+                    val component = components[index]
+                    Card(
+                        onClick = { onSelected(component) },
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(spacing),
+                        colors = AndroidKitCardDefaults.colors(),
+                        border = AndroidKitCardDefaults.border(),
                     ) {
-                        MetricCard(
-                            value = (24 + additions).toString(),
-                            label = stringResource(R.string.component_count_label),
-                            modifier = Modifier.weight(1f),
-                        )
-                        MetricCard(
-                            value = stringResource(R.string.theme_count),
-                            label = stringResource(R.string.theme_count_label),
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                }
-            }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                SectionCard(
-                    title = stringResource(R.string.floating_navigation_variations_title),
-                    supportingText = stringResource(R.string.floating_navigation_variations_description),
-                ) {
-                    OutlinedButton(onClick = { onOpenFloatingNavigation(true) }) {
-                        Text(stringResource(R.string.floating_navigation_labels_title))
-                    }
-                    OutlinedButton(onClick = { onOpenFloatingNavigation(false) }) {
-                        Text(stringResource(R.string.floating_navigation_icons_title))
-                    }
-                }
-            }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                SectionCard(
-                    title = stringResource(R.string.floating_actions_variations_title),
-                    supportingText = stringResource(R.string.floating_actions_variations_description),
-                ) {
-                    FloatingActionDemoVariant.entries.forEach { variant ->
-                        OutlinedButton(onClick = { onOpenFloatingActions(variant) }) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(dimensions.spaceMedium),
+                            verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = component.apiName,
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.titleMedium,
+                                )
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = null,
+                                )
+                            }
                             Text(
-                                stringResource(
-                                    when (variant) {
-                                        FloatingActionDemoVariant.IconAndText -> {
-                                            R.string.floating_actions_icon_text_title
-                                        }
-
-                                        FloatingActionDemoVariant.IconsOnly -> {
-                                            R.string.floating_actions_icons_title
-                                        }
-
-                                        FloatingActionDemoVariant.TextOnly -> {
-                                            R.string.floating_actions_text_title
-                                        }
-                                    },
-                                ),
+                                text = stringResource(component.descriptionResource),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 3,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }

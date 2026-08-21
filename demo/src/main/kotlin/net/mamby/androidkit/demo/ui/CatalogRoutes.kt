@@ -26,6 +26,9 @@ data object LocalizationRoute : CatalogRootRoute
 data object SettingsRoute : CatalogRootRoute
 
 @Serializable
+data class ComponentDetailRoute(val componentId: ComponentId) : CatalogRoute
+
+@Serializable
 data class LayoutDetailRoute(val sampleId: Int) : CatalogRoute
 
 @Serializable
