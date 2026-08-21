@@ -1,6 +1,8 @@
 package net.mamby.androidkit.localization
 
 import android.icu.text.ListFormatter
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -64,8 +66,14 @@ public object LocalizedFormatters {
     public fun list(
         values: List<String>,
         locale: Locale,
-        type: LocalizedListType = LocalizedListType.And,
-        width: LocalizedListWidth = LocalizedListWidth.Wide,
+    ): String = ListFormatter.getInstance(locale).format(values)
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    public fun list(
+        values: List<String>,
+        locale: Locale,
+        type: LocalizedListType,
+        width: LocalizedListWidth,
     ): String {
         val formatterType = when (type) {
             LocalizedListType.And -> ListFormatter.Type.AND

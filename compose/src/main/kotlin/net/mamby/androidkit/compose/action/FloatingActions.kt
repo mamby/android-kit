@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,11 +31,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
-import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 
 @Composable
 public fun FloatingBackButton(
@@ -174,7 +171,6 @@ public fun FloatingActionBarFlyout(
 ): Unit {
     require(items.isNotEmpty()) { "At least one flyout item is required." }
     var expanded by remember { mutableStateOf(false) }
-    val visuals = floatingSurfaceVisuals()
     Box(modifier = modifier) {
         if (showLabel) {
             FloatingActionBarIconLabelItem(
@@ -189,13 +185,9 @@ public fun FloatingActionBarFlyout(
                 contentDescription = contentDescription,
             )
         }
-        DropdownMenu(
+        FloatingDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            shape = MaterialTheme.shapes.extraLarge,
-            containerColor = visuals.containerColor,
-            tonalElevation = 0.dp,
-            border = visuals.border,
         ) {
             items.forEach { item ->
                 DropdownMenuItem(

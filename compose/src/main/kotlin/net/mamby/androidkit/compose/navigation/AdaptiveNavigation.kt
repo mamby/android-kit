@@ -2,14 +2,11 @@ package net.mamby.androidkit.compose.navigation
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.exclude
@@ -29,6 +26,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -50,24 +48,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.boundsInWindow
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.SubcomposeLayout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntRect
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupPositionProvider
-import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.unit.Dp
+import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.layout.LocalAndroidKitNavigationInsets
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
@@ -218,7 +206,6 @@ private fun <Key : Any> FloatingNavigationBar(
     showLabels: Boolean,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    var navigationBounds by remember { mutableStateOf(Rect.Zero) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -233,54 +220,49 @@ private fun <Key : Any> FloatingNavigationBar(
         FloatingSurface(
             modifier = Modifier
                 .fillMaxWidth()
-                .widthIn(max = dimensions.floatingNavigationMaxWidth)
-                .onGloballyPositioned { navigationBounds = it.boundsInWindow() },
+                .widthIn(max = dimensions.floatingNavigationMaxWidth),
             shape = MaterialTheme.shapes.extraLarge,
         ) {
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = dimensions.spaceExtraSmall),
+                    .padding(vertical = dimensions.spaceExtraSmall)
+                    .heightIn(min = dimensions.minimumTouchTarget)
+                    .selectableGroup(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = dimensions.minimumTouchTarget)
-                        .selectableGroup(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    items.forEach { item ->
-                        val selected = item.key == selectedKey
-                        CompactNavigationBarItem(
-                            selected = selected,
-                            onClick = { onSelected(item.key) },
-                            icon = if (selected) item.selectedIcon else item.icon,
-                            label = item.label,
-                            showLabel = showLabels,
-                        )
-                    }
-                    if (overflowItems.isNotEmpty()) {
+                items.forEach { item ->
+                    val selected = item.key == selectedKey
+                    CompactNavigationBarItem(
+                        selected = selected,
+                        onClick = { onSelected(item.key) },
+                        icon = if (selected) item.selectedIcon else item.icon,
+                        label = item.label,
+                        showLabel = showLabels,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                if (overflowItems.isNotEmpty()) {
+                    Box(modifier = Modifier.weight(1f)) {
                         CompactNavigationBarItem(
                             selected = overflowSelected,
                             onClick = { onFlyoutVisibleChange(true) },
                             icon = Icons.Default.MoreVert,
                             label = AndroidKitThemeTokens.strings.more,
                             showLabel = showLabels,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        NavigationFlyout(
+                            expanded = flyoutVisible,
+                            items = overflowItems,
+                            selectedKey = selectedKey,
+                            onDismissRequest = { onFlyoutVisibleChange(false) },
+                            onSelected = { key ->
+                                onFlyoutVisibleChange(false)
+                                onSelected(key)
+                            },
                         )
                     }
-                }
-                Box(modifier = Modifier.align(Alignment.TopEnd)) {
-                    NavigationFlyout(
-                        expanded = flyoutVisible,
-                        navigationTopInWindow = navigationBounds.top,
-                        items = overflowItems,
-                        selectedKey = selectedKey,
-                        onDismissRequest = { onFlyoutVisibleChange(false) },
-                        onSelected = { key ->
-                            onFlyoutVisibleChange(false)
-                            onSelected(key)
-                        },
-                    )
                 }
             }
         }
@@ -288,12 +270,13 @@ private fun <Key : Any> FloatingNavigationBar(
 }
 
 @Composable
-private fun RowScope.CompactNavigationBarItem(
+private fun CompactNavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
     icon: ImageVector,
     label: String,
     showLabel: Boolean,
+    modifier: Modifier = Modifier,
 ): Unit {
     val visuals = floatingSurfaceVisuals()
     val contentColor by animateColorAsState(
@@ -301,8 +284,7 @@ private fun RowScope.CompactNavigationBarItem(
         label = "compact navigation item content",
     )
     Box(
-        modifier = Modifier
-            .weight(1f)
+        modifier = modifier
             .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
             .minimumInteractiveComponentSize()
             .clip(MaterialTheme.shapes.large)
@@ -371,120 +353,64 @@ private fun CompactNavigationItemContent(
 @Composable
 private fun <Key : Any> NavigationFlyout(
     expanded: Boolean,
-    navigationTopInWindow: Float,
     items: List<AndroidKitNavigationItem<Key>>,
     selectedKey: Key,
     onDismissRequest: () -> Unit,
     onSelected: (Key) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val density = LocalDensity.current
-    val safeDrawingTopPx = WindowInsets.safeDrawing.getTop(density)
-    val maximumHeight = with(density) {
-        (navigationTopInWindow.toInt() - safeDrawingTopPx)
-            .coerceAtLeast(0)
-            .toDp()
-    }
     val visuals = floatingSurfaceVisuals()
-    val shape = MaterialTheme.shapes.extraLarge
-    val gapPx = with(density) { dimensions.floatingNavigationMargin.roundToPx() }
-    val positionProvider = remember(gapPx) {
-        NavigationFlyoutPositionProvider(gapPx = gapPx)
-    }
-    if (expanded) {
-        Popup(
-            popupPositionProvider = positionProvider,
-            onDismissRequest = onDismissRequest,
-            properties = PopupProperties(focusable = true),
-        ) {
-            FloatingSurface(
-                modifier = Modifier
-                    .fillMaxWidth(FlyoutWindowWidthFraction)
-                    .heightIn(
-                        max = (maximumHeight - dimensions.floatingNavigationMargin)
-                            .coerceAtLeast(0.dp),
-                    ),
-                shape = shape,
-            ) {
-                Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
+    FloatingDropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+    ) {
+        val displayedItems = items.asReversed()
+        displayedItems.forEachIndexed { index, item ->
+            val selected = item.key == selectedKey
+            val itemColor = if (selected) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                visuals.contentColor
+            }
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = item.label,
+                        color = itemColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+                onClick = { onSelected(item.key) },
+                contentPadding = PaddingValues(horizontal = dimensions.spaceMedium),
+                leadingIcon = {
+                    Icon(
+                        imageVector = if (selected) item.selectedIcon else item.icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(dimensions.floatingActionIconSize),
+                        tint = itemColor,
+                    )
+                },
+            )
+            if (item.showDividerAfterInFlyout && index != displayedItems.lastIndex) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = dimensions.spaceSmall)
+                        .testTag(FlyoutDividerTestTag),
                 ) {
-                    val displayedItems = items.asReversed()
-                    displayedItems.forEachIndexed { index, item ->
-                        val selected = item.key == selectedKey
-                        val itemColor = if (selected) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            visuals.contentColor
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = dimensions.minimumTouchTarget)
-                                .clickable(
-                                    role = Role.Button,
-                                    onClick = { onSelected(item.key) },
-                                )
-                                .padding(
-                                    horizontal = dimensions.spaceMedium,
-                                    vertical = dimensions.spaceSmall,
-                                ),
-                            horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                imageVector = if (selected) item.selectedIcon else item.icon,
-                                contentDescription = null,
-                                modifier = Modifier.size(dimensions.floatingActionIconSize),
-                                tint = itemColor,
-                            )
-                            Text(
-                                text = item.label,
-                                modifier = Modifier.weight(1f),
-                                color = itemColor,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        }
-                        if (item.showDividerAfterInFlyout && index != displayedItems.lastIndex) {
-                            HorizontalDivider(
-                                modifier = Modifier
-                                    .padding(horizontal = dimensions.spaceMedium)
-                                    .testTag(FlyoutDividerTestTag),
-                                thickness = dimensions.floatingSurfaceBorderWidth,
-                                color = MaterialTheme.colorScheme.outlineVariant,
-                            )
-                        }
-                    }
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = dimensions.spaceMedium),
+                        thickness = Dp.Hairline,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                    )
                 }
             }
         }
     }
 }
 
-private class NavigationFlyoutPositionProvider(
-    private val gapPx: Int,
-) : PopupPositionProvider {
-    override fun calculatePosition(
-        anchorBounds: IntRect,
-        windowSize: IntSize,
-        layoutDirection: LayoutDirection,
-        popupContentSize: IntSize,
-    ): IntOffset {
-        val preferredX = when (layoutDirection) {
-            LayoutDirection.Ltr -> anchorBounds.right - popupContentSize.width
-            LayoutDirection.Rtl -> anchorBounds.left
-        }
-        val maximumX = (windowSize.width - popupContentSize.width).coerceAtLeast(0)
-        return IntOffset(
-            x = preferredX.coerceIn(0, maximumX),
-            y = (anchorBounds.top - gapPx - popupContentSize.height).coerceAtLeast(0),
-        )
-    }
-}
-
 private const val FlyoutDividerTestTag = "androidKitNavigationFlyoutDivider"
-private const val FlyoutWindowWidthFraction = 0.75f
 
 private fun androidKitNavigationSuiteType(adaptiveInfo: WindowAdaptiveInfo): NavigationSuiteType =
     when (val recommended = NavigationSuiteScaffoldDefaults.navigationSuiteType(adaptiveInfo)) {
