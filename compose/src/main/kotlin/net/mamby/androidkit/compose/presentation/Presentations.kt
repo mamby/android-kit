@@ -8,15 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 public enum class PresentationKind {
@@ -67,24 +66,32 @@ public fun SectionCard(
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    Card(
+    Column(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
     ) {
-        Column(
-            modifier = Modifier.padding(dimensions.spaceMedium),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        supportingText?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = AndroidKitCardDefaults.colors(),
+            border = AndroidKitCardDefaults.border(),
         ) {
-            Text(text = title, style = MaterialTheme.typography.titleMedium)
-            supportingText?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            HorizontalDivider()
-            content()
+            Column(
+                modifier = Modifier.padding(dimensions.spaceMedium),
+                verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+                content = content,
+            )
         }
     }
 }
@@ -124,16 +131,24 @@ public fun MetricCard(
     modifier: Modifier = Modifier,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    Card(modifier = modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.padding(dimensions.spaceMedium),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = AndroidKitCardDefaults.colors(),
+            border = AndroidKitCardDefaults.border(),
         ) {
-            Text(text = value, style = MaterialTheme.typography.headlineMedium)
             Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = value,
+                modifier = Modifier.padding(dimensions.spaceMedium),
+                style = MaterialTheme.typography.headlineMedium,
             )
         }
     }

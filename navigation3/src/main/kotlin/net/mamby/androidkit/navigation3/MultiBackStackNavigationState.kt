@@ -33,12 +33,16 @@ public class MultiBackStackNavigationState<Root : NavKey> internal constructor(
         get() = currentBackStack.size == 1
 
     public fun selectRoot(root: Root, popToRootOnReselect: Boolean = true) {
-        val newIndex = roots.indexOf(root)
-        require(newIndex >= 0) { "The selected root is not registered." }
+        val newIndex = registeredRootIndex(root)
         if (newIndex == selectedIndex && popToRootOnReselect) {
             popCurrentStackToRoot()
         }
         selectedIndex = newIndex
+    }
+
+    public fun openRoot(root: Root) {
+        selectedIndex = registeredRootIndex(root)
+        popCurrentStackToRoot()
     }
 
     public fun navigate(route: NavKey) {
@@ -74,6 +78,10 @@ public class MultiBackStackNavigationState<Root : NavKey> internal constructor(
 
     private fun popCurrentStackToRoot() {
         popToRoot(currentBackStack)
+    }
+
+    private fun registeredRootIndex(root: Root): Int = roots.indexOf(root).also { index ->
+        require(index >= 0) { "The selected root is not registered." }
     }
 
     private companion object {

@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 @Composable
@@ -41,22 +42,32 @@ public fun EditorSection(
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    Card(modifier = modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.padding(dimensions.spaceMedium),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        description?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = AndroidKitCardDefaults.colors(),
+            border = AndroidKitCardDefaults.border(),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall)) {
-                Text(text = title, style = MaterialTheme.typography.titleMedium)
-                description?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-            content()
+            Column(
+                modifier = Modifier.padding(dimensions.spaceMedium),
+                verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+                content = content,
+            )
         }
     }
 }

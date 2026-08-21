@@ -20,7 +20,10 @@ jobs:
           java-version: "21"
           cache: gradle
       - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-37" "build-tools;37.0.0"
+        run: |
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-37" \
+            "build-tools;37.0.0"
       - name: Build catalog and compile test APKs
         run: |
           chmod +x gradlew
@@ -37,7 +40,10 @@ jobs:
           java-version: "21"
           cache: gradle
       - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-37" "build-tools;37.0.0"
+        run: |
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-37" \
+            "build-tools;37.0.0"
       - name: Run Android lint
         run: |
           chmod +x gradlew

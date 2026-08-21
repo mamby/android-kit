@@ -9,10 +9,13 @@
     <string name="action_cancel">Annuler</string>
     <string name="action_confirm">Confirmer</string>
     <string name="action_save">Enregistrer</string>
+    <string name="action_share">Partager</string>
+    <string name="action_delete">Supprimer</string>
 
     <string name="nav_components">Composants</string>
     <string name="nav_layouts">Mises en page</string>
     <string name="nav_forms">Formulaires</string>
+    <string name="nav_floating">Flottants</string>
     <string name="nav_localization">Localisation</string>
     <string name="nav_settings">Réglages</string>
 
@@ -32,6 +35,29 @@
     <string name="component_count_label">éléments réutilisables</string>
     <string name="theme_count">2 + 1</string>
     <string name="theme_count_label">thèmes bibliothèque et démo</string>
+    <string name="floating_navigation_variations_title">Menu inférieur flottant</string>
+    <string name="floating_catalog_subtitle">Toutes les variantes de navigation et d’action flottantes dans un catalogue défilable</string>
+    <string name="floating_navigation_variations_description">Ouvrez chaque page pour tester la variante réelle du menu compact.</string>
+    <string name="floating_navigation_labels_title">Icônes et libellés</string>
+    <string name="floating_navigation_icons_title">Icônes uniquement</string>
+    <string name="floating_actions_variations_title">Barre d’actions flottante</string>
+    <string name="floating_actions_variations_description">Chaque page utilise sa variante comme action active.</string>
+    <string name="floating_actions_icon_text_title">Icône avec texte</string>
+    <string name="floating_actions_icons_title">Icônes uniquement</string>
+    <string name="floating_actions_text_title">Texte uniquement</string>
+    <string name="floating_navigation_demo_subtitle">Le menu compact actif est le composant testé</string>
+    <string name="floating_navigation_labels_description">Les destinations compactes affichent leurs icônes et leurs libellés.</string>
+    <string name="floating_navigation_icons_description">Les libellés restent accessibles tout en affichant uniquement les icônes.</string>
+    <string name="floating_navigation_demo_instruction">Changez de destination, ouvrez le menu de débordement et faites défiler cette page pour vérifier son ancrage.</string>
+    <string name="floating_actions_demo_subtitle">Faites défiler et ouvrez le clavier pour vérifier l’ancrage inférieur</string>
+    <string name="floating_actions_icon_text_description">L’action principale combine une icône et un libellé visible.</string>
+    <string name="floating_actions_icons_description">Un groupe compact expose des actions par icône avec des descriptions accessibles.</string>
+    <string name="floating_actions_text_description">Les actions textuelles proposent un choix secondaire et principal clair.</string>
+    <string name="active_variation">Variante active</string>
+    <string name="action_count">Actions déclenchées : %1$d</string>
+    <string name="scroll_section_title">Section de défilement %1$d</string>
+    <string name="scroll_section_description">Du contenu supplémentaire permet un défilement significatif.</string>
+    <string name="scroll_section_body">Cette section vérifie que les contrôles flottants restent ancrés pendant le défilement du contenu.</string>
 
     <string name="layouts_title">Mises en page adaptatives</string>
     <string name="layouts_subtitle">Sélectionnez un exemple pour ouvrir sa vue liste-détail</string>
@@ -41,12 +67,21 @@
     <string name="layout_library_body">Liste et détail forment deux volets lorsque la fenêtre le permet.</string>
     <string name="layout_settings">Page de réglages</string>
     <string name="layout_settings_body">Les sections restent lisibles grâce à une largeur de contenu limitée.</string>
+    <string name="layout_numbered_title">%1$s · %2$d</string>
     <string name="detail_placeholder_title">Choisissez une mise en page</string>
     <string name="detail_placeholder_body">Le volet de détail apparaît à côté de la liste sur les grandes fenêtres.</string>
     <string name="detail_behavior_title">Comportement adaptatif</string>
     <string name="detail_behavior_body">Ce détail est une scène Navigation 3. Il occupe tout l’écran en mode compact et rejoint la liste sur les fenêtres plus larges.</string>
     <string name="detail_tokens_title">Jetons partagés</string>
     <string name="detail_tokens_body">Espacements, formes et largeurs maximales proviennent de la définition du thème actif.</string>
+    <string name="detail_scrolling_title">Contenu défilant</string>
+    <string name="detail_scrolling_body">Le contenu long reste accessible sans chevaucher la navigation ou les actions flottantes.</string>
+    <string name="detail_accessibility_title">Accessibilité</string>
+    <string name="detail_accessibility_body">La sémantique système, le texte adaptable et les cibles tactiles minimales sont préservés.</string>
+    <string name="detail_window_title">Changements de fenêtre</string>
+    <string name="detail_window_body">La mise en page réagit à l’espace disponible plutôt qu’à un appareil précis.</string>
+    <string name="detail_navigation_title">État de navigation</string>
+    <string name="detail_navigation_body">Chaque racine conserve son historique Navigation 3 tandis que la scène de détail s’adapte.</string>
 
     <string name="forms_title">Formulaires et éditeurs</string>
     <string name="forms_subtitle">Des champs pilotés par l’état avec des actions accessibles</string>
@@ -61,6 +96,27 @@
     <string name="tag_hint">Nouvelle étiquette</string>
     <string name="tag_design">Design</string>
     <string name="tag_compose">Compose</string>
+    <string name="tag_android">Android</string>
+    <string name="tag_accessibility">Accessibilité</string>
+    <string name="tag_adaptive">Adaptatif</string>
+    <string name="work_section">Travail</string>
+    <string name="work_section_description">Des champs supplémentaires allongent le formulaire pour vérifier le défilement avec le focus.</string>
+    <string name="field_company">Entreprise</string>
+    <string name="field_role">Fonction</string>
+    <string name="field_phone">Téléphone</string>
+    <string name="address_section">Adresse</string>
+    <string name="address_section_description">Les champs d’adresse restent visibles lorsque le clavier logiciel s’ouvre.</string>
+    <string name="field_address">Adresse postale</string>
+    <string name="field_city">Ville</string>
+    <string name="preferences_section">Préférences</string>
+    <string name="preferences_section_description">Les interrupteurs pilotés par l’état gardent toute la ligne interactive.</string>
+    <string name="newsletter">Lettre d’information produit</string>
+    <string name="newsletter_description">Recevez occasionnellement des nouvelles sur les produits et composants.</string>
+    <string name="public_profile">Profil public</string>
+    <string name="public_profile_description">Autoriser les autres utilisateurs du catalogue à découvrir ce profil d’exemple.</string>
+    <string name="notes_section">Notes</string>
+    <string name="notes_section_description">Un champ multiligne teste le clavier et la mise en visibilité près du bas de page.</string>
+    <string name="field_notes">Notes supplémentaires</string>
     <string name="show_dialog">Vérifier les changements</string>
     <string name="dialog_title">Enregistrer cet exemple ?</string>
     <string name="dialog_body">La démo conserve l’état en mémoire ; chaque application décide où et comment le persister.</string>
@@ -92,6 +148,8 @@
     <string name="theme_dark">Sombre</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">Un thème coloré défini par l’application qui valide le point d’extension public.</string>
+    <string name="floating_surface_white_description">Toutes les surfaces flottantes sont blanches ; l’opacité s’applique uniformément à chacune.</string>
+    <string name="floating_surface_opacity">Opacité des surfaces flottantes : %1$d %%</string>
     <string name="sheet_section">Feuille modale</string>
     <string name="sheet_section_description">Comportement Material 3 officiel avec chrome partagé et zones sûres.</string>
     <string name="open_sheet">Ouvrir la feuille d’exemple</string>
@@ -99,4 +157,8 @@
     <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>
     <string name="about_section">À propos du catalogue</string>
     <string name="about_body">Le catalogue consomme les mêmes artefacts publics destinés aux applications open source externes.</string>
+    <string name="settings_scroll_section">Contenu de réglages étendu</string>
+    <string name="settings_scroll_description">Des lignes supplémentaires maintiennent cette page défilable sur toutes les tailles de fenêtre.</string>
+    <string name="settings_scroll_item">Option du catalogue %1$d</string>
+    <string name="settings_scroll_value">Configurée</string>
 </resources>

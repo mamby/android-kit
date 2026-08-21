@@ -15,11 +15,11 @@ floating navigation and actions, localization helpers, and Navigation 3 state.
 
 | Artifact | Purpose |
 | --- | --- |
-| `io.github.mamby.androidkit:foundation` | Theme mode and external Android intents |
-| `io.github.mamby.androidkit:localization` | Per-app locales and locale-aware formatting |
-| `io.github.mamby.androidkit:compose` | Themes, adaptive layouts, components, forms and navigation UI |
-| `io.github.mamby.androidkit:navigation3` | Generic Navigation 3 multi-back-stack state |
-| `io.github.mamby.androidkit:bom` | Aligns Android Kit artifact versions |
+| `net.mamby.androidkit:foundation` | Theme mode and external Android intents |
+| `net.mamby.androidkit:localization` | Per-app locales and locale-aware formatting |
+| `net.mamby.androidkit:compose` | Themes, adaptive layouts, components, forms and navigation UI |
+| `net.mamby.androidkit:navigation3` | Generic Navigation 3 multi-back-stack state |
+| `net.mamby.androidkit:bom` | Aligns Android Kit artifact versions |
 
 The `demo` application is the reference consumer. It includes the two library
 themes plus a third, demo-owned Prism theme that proves app-defined theming.

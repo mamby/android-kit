@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
+import net.mamby.androidkit.compose.action.FloatingAddButton
 import net.mamby.androidkit.compose.form.SwitchField
 import net.mamby.androidkit.compose.layout.AdaptiveGridPage
 import net.mamby.androidkit.compose.layout.PageScaffold
@@ -32,6 +33,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
+import net.mamby.androidkit.compose.theme.FloatingSurfaceStyle
 
 @PreviewTest
 @AdaptiveDeviceMatrix
@@ -73,22 +75,81 @@ fun androidKitRtl() {
     ScreenshotGallery(AndroidKitThemes.Light)
 }
 
+@PreviewTest
+@Preview(name = "Floating transparent", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
-private fun ScreenshotGallery(theme: AndroidKitThemeDefinition) {
-    AndroidKitTheme(definition = theme) {
+fun androidKitFloatingTransparent() {
+    ScreenshotGallery(
+        theme = AndroidKitThemes.Light,
+        floatingSurfaceStyle = FloatingSurfaceStyle(opacity = 0f),
+    )
+}
+
+@PreviewTest
+@Preview(name = "Floating opaque", widthDp = 360, heightDp = 800, showBackground = true)
+@Composable
+fun androidKitFloatingOpaque() {
+    ScreenshotGallery(
+        theme = AndroidKitThemes.Light,
+        floatingSurfaceStyle = FloatingSurfaceStyle(opacity = 1f),
+    )
+}
+
+@PreviewTest
+@Preview(name = "White transparent", widthDp = 360, heightDp = 800, showBackground = true)
+@Composable
+fun androidKitWhiteTransparent() {
+    ScreenshotGallery(
+        theme = AndroidKitThemes.Dark,
+        floatingSurfaceStyle = FloatingSurfaceStyle(
+            opacity = 0f,
+        ),
+    )
+}
+
+@PreviewTest
+@Preview(name = "White default", widthDp = 360, heightDp = 800, showBackground = true)
+@Composable
+fun androidKitWhiteDefault() {
+    ScreenshotGallery(
+        theme = AndroidKitThemes.Dark,
+        floatingSurfaceStyle = FloatingSurfaceStyle(
+            opacity = 0.92f,
+        ),
+    )
+}
+
+@PreviewTest
+@Preview(name = "White opaque", widthDp = 360, heightDp = 800, showBackground = true)
+@Composable
+fun androidKitWhiteOpaque() {
+    ScreenshotGallery(
+        theme = AndroidKitThemes.Dark,
+        floatingSurfaceStyle = FloatingSurfaceStyle(
+            opacity = 1f,
+        ),
+    )
+}
+
+@Composable
+private fun ScreenshotGallery(
+    theme: AndroidKitThemeDefinition,
+    floatingSurfaceStyle: FloatingSurfaceStyle = FloatingSurfaceStyle(),
+) {
+    AndroidKitTheme(
+        definition = theme,
+        floatingSurfaceStyle = floatingSurfaceStyle,
+    ) {
         AdaptiveNavigationScaffold(
             items = screenshotNavigationItems,
             selectedKey = "home",
             onSelected = {},
-        ) { navigationPadding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(navigationPadding),
-            ) {
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 PageScaffold(
                     title = "Android Kit",
                     subtitle = "Reusable, adaptive building blocks",
+                    floatingActionButton = { FloatingAddButton(onClick = {}) },
                 ) { pagePadding ->
                     AdaptiveGridPage(contentPadding = pagePadding) {
                         item {
@@ -137,6 +198,7 @@ private val screenshotNavigationItems = listOf(
     AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
     AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
     AndroidKitNavigationItem("edit", "Editor", Icons.Default.Edit),
+    AndroidKitNavigationItem("language", "Language", Icons.Default.Language),
     AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
 )
 

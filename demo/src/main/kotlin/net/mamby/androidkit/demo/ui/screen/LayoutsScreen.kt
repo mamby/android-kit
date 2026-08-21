@@ -21,6 +21,7 @@ import net.mamby.androidkit.compose.layout.AdaptiveGridPage
 import net.mamby.androidkit.compose.layout.DetailPage
 import net.mamby.androidkit.compose.layout.PageScaffold
 import net.mamby.androidkit.compose.presentation.SectionCard
+import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.navigation3.listDetailBackAction
@@ -32,23 +33,21 @@ private data class LayoutSample(
 )
 
 @Composable
-private fun layoutSamples(): List<LayoutSample> = listOf(
-    LayoutSample(
-        id = 0,
-        title = stringResource(R.string.layout_dashboard),
-        body = stringResource(R.string.layout_dashboard_body),
-    ),
-    LayoutSample(
-        id = 1,
-        title = stringResource(R.string.layout_library),
-        body = stringResource(R.string.layout_library_body),
-    ),
-    LayoutSample(
-        id = 2,
-        title = stringResource(R.string.layout_settings),
-        body = stringResource(R.string.layout_settings_body),
-    ),
-)
+private fun layoutSamples(): List<LayoutSample> {
+    val baseSamples = listOf(
+        stringResource(R.string.layout_dashboard) to stringResource(R.string.layout_dashboard_body),
+        stringResource(R.string.layout_library) to stringResource(R.string.layout_library_body),
+        stringResource(R.string.layout_settings) to stringResource(R.string.layout_settings_body),
+    )
+    return List(LayoutSampleCount) { index ->
+        val (title, body) = baseSamples[index % baseSamples.size]
+        LayoutSample(
+            id = index,
+            title = stringResource(R.string.layout_numbered_title, title, index + 1),
+            body = body,
+        )
+    }
+}
 
 @Composable
 fun LayoutsScreen(onSelected: (Int) -> Unit) {
@@ -61,18 +60,23 @@ fun LayoutsScreen(onSelected: (Int) -> Unit) {
         AdaptiveGridPage(contentPadding = contentPadding) {
             items(samples.size, key = { samples[it].id }) { index ->
                 val sample = samples[index]
-                Card(onClick = { onSelected(sample.id) }) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(dimensions.spaceMedium),
-                        verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+                Column(verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
+                    Text(
+                        text = sample.title,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Card(
+                        onClick = { onSelected(sample.id) },
+                        colors = AndroidKitCardDefaults.colors(),
+                        border = AndroidKitCardDefaults.border(),
                     ) {
-                        Text(text = sample.title, style = MaterialTheme.typography.titleMedium)
                         Text(
                             text = sample.body,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(dimensions.spaceMedium),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -134,6 +138,24 @@ fun LayoutDetailScreen(sampleId: Int, onBack: () -> Unit) {
                 title = stringResource(R.string.detail_tokens_title),
                 supportingText = stringResource(R.string.detail_tokens_body),
             ) {}
+            SectionCard(
+                title = stringResource(R.string.detail_scrolling_title),
+                supportingText = stringResource(R.string.detail_scrolling_body),
+            ) {}
+            SectionCard(
+                title = stringResource(R.string.detail_accessibility_title),
+                supportingText = stringResource(R.string.detail_accessibility_body),
+            ) {}
+            SectionCard(
+                title = stringResource(R.string.detail_window_title),
+                supportingText = stringResource(R.string.detail_window_body),
+            ) {}
+            SectionCard(
+                title = stringResource(R.string.detail_navigation_title),
+                supportingText = stringResource(R.string.detail_navigation_body),
+            ) {}
         }
     }
 }
+
+private const val LayoutSampleCount = 12

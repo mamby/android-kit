@@ -25,9 +25,13 @@ import net.mamby.androidkit.compose.presentation.SectionCard
 import net.mamby.androidkit.compose.presentation.StatePresentation
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
+import net.mamby.androidkit.demo.ui.FloatingActionDemoVariant
 
 @Composable
-fun ComponentsScreen() {
+fun ComponentsScreen(
+    onOpenFloatingNavigation: (showLabels: Boolean) -> Unit,
+    onOpenFloatingActions: (FloatingActionDemoVariant) -> Unit,
+) {
     var additions by rememberSaveable { mutableIntStateOf(0) }
     var presentationKind by rememberSaveable { mutableStateOf(PresentationKind.Empty) }
     PageScaffold(
@@ -85,6 +89,47 @@ fun ComponentsScreen() {
                             label = stringResource(R.string.theme_count_label),
                             modifier = Modifier.weight(1f),
                         )
+                    }
+                }
+            }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                SectionCard(
+                    title = stringResource(R.string.floating_navigation_variations_title),
+                    supportingText = stringResource(R.string.floating_navigation_variations_description),
+                ) {
+                    OutlinedButton(onClick = { onOpenFloatingNavigation(true) }) {
+                        Text(stringResource(R.string.floating_navigation_labels_title))
+                    }
+                    OutlinedButton(onClick = { onOpenFloatingNavigation(false) }) {
+                        Text(stringResource(R.string.floating_navigation_icons_title))
+                    }
+                }
+            }
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                SectionCard(
+                    title = stringResource(R.string.floating_actions_variations_title),
+                    supportingText = stringResource(R.string.floating_actions_variations_description),
+                ) {
+                    FloatingActionDemoVariant.entries.forEach { variant ->
+                        OutlinedButton(onClick = { onOpenFloatingActions(variant) }) {
+                            Text(
+                                stringResource(
+                                    when (variant) {
+                                        FloatingActionDemoVariant.IconAndText -> {
+                                            R.string.floating_actions_icon_text_title
+                                        }
+
+                                        FloatingActionDemoVariant.IconsOnly -> {
+                                            R.string.floating_actions_icons_title
+                                        }
+
+                                        FloatingActionDemoVariant.TextOnly -> {
+                                            R.string.floating_actions_text_title
+                                        }
+                                    },
+                                ),
+                            )
+                        }
                     }
                 }
             }

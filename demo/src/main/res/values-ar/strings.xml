@@ -9,10 +9,13 @@
     <string name="action_cancel">إلغاء</string>
     <string name="action_confirm">تأكيد</string>
     <string name="action_save">حفظ</string>
+    <string name="action_share">مشاركة</string>
+    <string name="action_delete">حذف</string>
 
     <string name="nav_components">المكوّنات</string>
     <string name="nav_layouts">التخطيطات</string>
     <string name="nav_forms">النماذج</string>
+    <string name="nav_floating">العناصر العائمة</string>
     <string name="nav_localization">اللغة</string>
     <string name="nav_settings">الإعدادات</string>
 
@@ -32,6 +35,29 @@
     <string name="component_count_label">قطعة قابلة لإعادة الاستخدام</string>
     <string name="theme_count">2 + 1</string>
     <string name="theme_count_label">سمتا المكتبة والعرض</string>
+    <string name="floating_navigation_variations_title">القائمة السفلية العائمة</string>
+    <string name="floating_catalog_subtitle">جميع تنويعات التنقل والإجراءات العائمة في دليل واحد قابل للتمرير</string>
+    <string name="floating_navigation_variations_description">افتح كل صفحة لاختبار النسخة الفعلية من القائمة المدمجة.</string>
+    <string name="floating_navigation_labels_title">أيقونات وتسميات</string>
+    <string name="floating_navigation_icons_title">أيقونات فقط</string>
+    <string name="floating_actions_variations_title">شريط الإجراءات العائم</string>
+    <string name="floating_actions_variations_description">تستخدم كل صفحة نسختها كإجراء فعلي للصفحة.</string>
+    <string name="floating_actions_icon_text_title">أيقونة مع نص</string>
+    <string name="floating_actions_icons_title">أيقونات فقط</string>
+    <string name="floating_actions_text_title">نص فقط</string>
+    <string name="floating_navigation_demo_subtitle">القائمة المدمجة النشطة هي المكوّن قيد الاختبار</string>
+    <string name="floating_navigation_labels_description">تعرض الوجهات المدمجة الأيقونات والتسميات معاً.</string>
+    <string name="floating_navigation_icons_description">تبقى التسميات ضمن دلالات إمكانية الوصول مع عرض الأيقونات فقط.</string>
+    <string name="floating_navigation_demo_instruction">بدّل الوجهات وافتح القائمة الإضافية ومرّر الصفحة للتحقق من ثبات موضع القائمة.</string>
+    <string name="floating_actions_demo_subtitle">مرّر وافتح لوحة المفاتيح للتحقق من التثبيت السفلي</string>
+    <string name="floating_actions_icon_text_description">يجمع الإجراء الأساسي بين أيقونة وتسمية ظاهرة.</string>
+    <string name="floating_actions_icons_description">تعرض المجموعة المدمجة إجراءات بأيقونات مع أوصاف قابلة للوصول.</string>
+    <string name="floating_actions_text_description">توفر الإجراءات النصية خياراً ثانوياً وآخر أساسياً واضحين.</string>
+    <string name="active_variation">النسخة النشطة</string>
+    <string name="action_count">عدد الإجراءات المنفذة: %1$d</string>
+    <string name="scroll_section_title">قسم التمرير %1$d</string>
+    <string name="scroll_section_description">يُبقي المحتوى الإضافي الصفحة قابلة للتمرير بصورة مفيدة.</string>
+    <string name="scroll_section_body">يتحقق هذا القسم من ثبات عناصر التحكم العائمة أثناء استمرار المحتوى أسفلها.</string>
 
     <string name="layouts_title">تخطيطات متكيّفة</string>
     <string name="layouts_subtitle">اختر مثالاً لفتح عرض القائمة والتفاصيل</string>
@@ -41,12 +67,21 @@
     <string name="layout_library_body">تظهر القائمة والتفاصيل في لوحتين عندما تسمح النافذة.</string>
     <string name="layout_settings">صفحة إعدادات</string>
     <string name="layout_settings_body">تبقى الأقسام سهلة القراءة بفضل عرض المحتوى المحدود.</string>
+    <string name="layout_numbered_title">%1$s · %2$d</string>
     <string name="detail_placeholder_title">اختر تخطيطاً</string>
     <string name="detail_placeholder_body">تظهر لوحة التفاصيل بجانب القائمة على النوافذ الأكبر.</string>
     <string name="detail_behavior_title">السلوك المتكيّف</string>
     <string name="detail_behavior_body">هذه التفاصيل مشهد Navigation 3. تملأ الشاشة في النوافذ المدمجة وتظهر بجوار القائمة في النوافذ الأكبر.</string>
     <string name="detail_tokens_title">رموز مشتركة</string>
     <string name="detail_tokens_body">تأتي المسافات والأشكال والحدود القصوى للعرض من تعريف السمة النشطة.</string>
+    <string name="detail_scrolling_title">محتوى قابل للتمرير</string>
+    <string name="detail_scrolling_body">يبقى المحتوى الطويل متاحاً دون تداخل مع التنقل أو الإجراءات العائمة.</string>
+    <string name="detail_accessibility_title">إمكانية الوصول</string>
+    <string name="detail_accessibility_body">تبقى دلالات النظام والنص القابل للتكبير والحدود الدنيا للمس أهداف محفوظة.</string>
+    <string name="detail_window_title">تغيّرات النافذة</string>
+    <string name="detail_window_body">يستجيب التخطيط للمساحة المتاحة بدلاً من التحقق من جهاز محدد.</string>
+    <string name="detail_navigation_title">حالة التنقل</string>
+    <string name="detail_navigation_body">يحتفظ كل جذر بسجل Navigation 3 الخاص به بينما يتكيّف مشهد التفاصيل.</string>
 
     <string name="forms_title">النماذج والمحررات</string>
     <string name="forms_subtitle">حقول موجّهة بالحالة مع إجراءات سهلة الوصول</string>
@@ -61,6 +96,27 @@
     <string name="tag_hint">وسم جديد</string>
     <string name="tag_design">تصميم</string>
     <string name="tag_compose">Compose</string>
+    <string name="tag_android">Android</string>
+    <string name="tag_accessibility">إمكانية الوصول</string>
+    <string name="tag_adaptive">متكيّف</string>
+    <string name="work_section">العمل</string>
+    <string name="work_section_description">تجعل الحقول الإضافية النموذج طويلاً بما يكفي لاختبار التمرير المرتبط بالتركيز.</string>
+    <string name="field_company">الشركة</string>
+    <string name="field_role">الدور</string>
+    <string name="field_phone">الهاتف</string>
+    <string name="address_section">العنوان</string>
+    <string name="address_section_description">تبقى حقول العنوان ظاهرة عند فتح لوحة المفاتيح.</string>
+    <string name="field_address">عنوان الشارع</string>
+    <string name="field_city">المدينة</string>
+    <string name="preferences_section">التفضيلات</string>
+    <string name="preferences_section_description">تحافظ مفاتيح الحالة على قابلية تفاعل الصف بأكمله.</string>
+    <string name="newsletter">نشرة المنتج</string>
+    <string name="newsletter_description">تلقي تحديثات عرضية عن المنتجات والمكوّنات.</string>
+    <string name="public_profile">ملف شخصي عام</string>
+    <string name="public_profile_description">السماح لمستخدمي الدليل الآخرين بالعثور على هذا الملف التجريبي.</string>
+    <string name="notes_section">ملاحظات</string>
+    <string name="notes_section_description">يختبر الحقل متعدد الأسطر لوحة المفاتيح وإظهار العنصر قرب نهاية الصفحة.</string>
+    <string name="field_notes">ملاحظات إضافية</string>
     <string name="show_dialog">مراجعة التغييرات</string>
     <string name="dialog_title">هل تريد حفظ هذا المثال؟</string>
     <string name="dialog_body">يحتفظ العرض بالحالة في الذاكرة، ويقرر التطبيق المستهلك طريقة ومكان حفظها.</string>
@@ -92,6 +148,8 @@
     <string name="theme_dark">داكن</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">سمة ملوّنة يعرّفها التطبيق لإثبات نقطة التوسعة العامة.</string>
+    <string name="floating_surface_white_description">جميع الأسطح العائمة بيضاء، وتُطبّق العتامة على كل منها بصورة موحدة.</string>
+    <string name="floating_surface_opacity">عتامة الأسطح العائمة: %1$d%%</string>
     <string name="sheet_section">لوحة سفلية</string>
     <string name="sheet_section_description">سلوك Material 3 الرسمي مع شريط مشترك وهوامش آمنة.</string>
     <string name="open_sheet">فتح لوحة المثال</string>
@@ -99,4 +157,8 @@
     <string name="sheet_body">يمتلك المستدعي الرؤية والمحتوى. ويوفر Android Kit الشريط المتكيّف والمسافات وتسميات إمكانية الوصول.</string>
     <string name="about_section">حول هذا الدليل</string>
     <string name="about_body">يستهلك الدليل نفس الحزم العامة المخصصة لتطبيقات المصادر المفتوحة الخارجية.</string>
+    <string name="settings_scroll_section">محتوى إعدادات موسّع</string>
+    <string name="settings_scroll_description">تحافظ الصفوف الإضافية على قابلية تمرير صفحة الإعدادات عبر أحجام النوافذ.</string>
+    <string name="settings_scroll_item">خيار الدليل %1$d</string>
+    <string name="settings_scroll_value">مُعدّ</string>
 </resources>
