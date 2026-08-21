@@ -8,10 +8,10 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -29,6 +29,15 @@ public data class AndroidKitThemeDefinition(
 )
 
 @Immutable
+public data class FloatingSurfaceStyle(
+    public val opacity: Float = 0.92f,
+) {
+    init {
+        require(opacity in 0f..1f) { "Floating surface opacity must be between 0 and 1." }
+    }
+}
+
+@Immutable
 public data class AndroidKitDimensions(
     public val spaceExtraSmall: Dp = 4.dp,
     public val spaceSmall: Dp = 8.dp,
@@ -40,7 +49,17 @@ public data class AndroidKitDimensions(
     public val contentMaxWidth: Dp = 1_200.dp,
     public val detailMaxWidth: Dp = 760.dp,
     public val minimumTouchTarget: Dp = 48.dp,
-    public val floatingNavigationMargin: Dp = 12.dp,
+    public val floatingNavigationMargin: Dp = 8.dp,
+    public val floatingNavigationMaxWidth: Dp = 560.dp,
+    public val floatingNavigationIconSize: Dp = 24.dp,
+    public val floatingNavigationIndicatorSize: Dp = 40.dp,
+    public val floatingActionBarIconSize: Dp = 18.dp,
+    public val floatingBackButtonSize: Dp = 44.dp,
+    public val floatingAddButtonSize: Dp = 56.dp,
+    public val floatingActionIconSize: Dp = 20.dp,
+    public val floatingSurfaceBorderWidth: Dp = 1.dp,
+    public val floatingSurfaceShadowRadius: Dp = 10.dp,
+    public val floatingSurfaceShadowOffsetY: Dp = 2.dp,
 )
 
 @Immutable
@@ -83,9 +102,9 @@ public object AndroidKitThemes {
             onTertiary = Color.White,
             tertiaryContainer = Color(0xFFFFD9E4),
             onTertiaryContainer = Color(0xFF3E001E),
-            background = Color(0xFFFFFBFF),
+            background = Neutral50,
             onBackground = Color(0xFF1C1B20),
-            surface = Color(0xFFFFFBFF),
+            surface = Color.White,
             onSurface = Color(0xFF1C1B20),
             surfaceVariant = Color(0xFFE6E0EC),
             onSurfaceVariant = Color(0xFF48454F),
@@ -123,6 +142,8 @@ public object AndroidKitThemes {
         ),
     )
 }
+
+private val Neutral50: Color = Color(0xFFFAFAFA)
 
 public object AndroidKitDefaults {
     public val typography: Typography = Typography(
@@ -175,6 +196,7 @@ public object AndroidKitDefaults {
 
 private val LocalAndroidKitDimensions = staticCompositionLocalOf { AndroidKitDimensions() }
 private val LocalAndroidKitStrings = staticCompositionLocalOf { AndroidKitStrings.English }
+private val LocalFloatingSurfaceStyle = staticCompositionLocalOf { FloatingSurfaceStyle() }
 
 public object AndroidKitThemeTokens {
     public val dimensions: AndroidKitDimensions
@@ -186,6 +208,11 @@ public object AndroidKitThemeTokens {
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitStrings.current
+
+    public val floatingSurfaceStyle: FloatingSurfaceStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalFloatingSurfaceStyle.current
 }
 
 @Composable
@@ -196,11 +223,13 @@ public fun AndroidKitTheme(
         AndroidKitThemes.Light
     },
     strings: AndroidKitStrings = AndroidKitStrings.English,
+    floatingSurfaceStyle: FloatingSurfaceStyle = FloatingSurfaceStyle(),
     content: @Composable () -> Unit,
 ): Unit {
     CompositionLocalProvider(
         LocalAndroidKitDimensions provides definition.dimensions,
         LocalAndroidKitStrings provides strings,
+        LocalFloatingSurfaceStyle provides floatingSurfaceStyle,
     ) {
         MaterialTheme(
             colorScheme = definition.colorScheme,

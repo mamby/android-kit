@@ -1,13 +1,12 @@
 # Publishing to Maven Central
 
 Android Kit publishes from `mamby/android-kit` with the Maven group
-`io.github.mamby.androidkit`. Signing in to Central Portal with the `mamby`
-GitHub identity makes `io.github.mamby` eligible for automatic namespace
-verification; the project-specific subgroup needs no separate namespace.
+`net.mamby.androidkit`. The verified `net.mamby` namespace authorizes this
+project-specific subgroup, which needs no separate namespace registration.
 
 ## One-time setup
 
-1. Create a Central Portal account and verify the `io.github.mamby` namespace.
+1. Create a Central Portal account and verify the `net.mamby` namespace.
 2. Generate a Central Portal user token.
 3. Create a GPG key suitable for signing releases and retain a secure backup.
 4. Add these GitHub Actions secrets:

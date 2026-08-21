@@ -10,10 +10,13 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_save">Save</string>
+    <string name="action_share">Share</string>
+    <string name="action_delete">Delete</string>
 
     <string name="nav_components">Components</string>
     <string name="nav_layouts">Layouts</string>
     <string name="nav_forms">Forms</string>
+    <string name="nav_floating">Floating</string>
     <string name="nav_localization">Localization</string>
     <string name="nav_settings">Settings</string>
 
@@ -33,6 +36,29 @@
     <string name="component_count_label">reusable pieces</string>
     <string name="theme_count">2 + 1</string>
     <string name="theme_count_label">library and demo themes</string>
+    <string name="floating_navigation_variations_title">Floating bottom menu</string>
+    <string name="floating_catalog_subtitle">Every floating navigation and action variation in one scrollable catalog</string>
+    <string name="floating_navigation_variations_description">Open each page to test the real compact menu variation.</string>
+    <string name="floating_navigation_labels_title">Icons and labels</string>
+    <string name="floating_navigation_icons_title">Icons only</string>
+    <string name="floating_actions_variations_title">Floating actions bar</string>
+    <string name="floating_actions_variations_description">Each page uses its variation as the live page action.</string>
+    <string name="floating_actions_icon_text_title">Icon with text</string>
+    <string name="floating_actions_icons_title">Icons only</string>
+    <string name="floating_actions_text_title">Text only</string>
+    <string name="floating_navigation_demo_subtitle">The active compact menu is the component under test</string>
+    <string name="floating_navigation_labels_description">Compact destinations show both their icons and labels.</string>
+    <string name="floating_navigation_icons_description">Compact destinations keep labels in accessibility semantics while displaying icons only.</string>
+    <string name="floating_navigation_demo_instruction">Switch destinations, open the overflow flyout, and scroll this page to verify that the menu remains anchored.</string>
+    <string name="floating_actions_demo_subtitle">Scroll and open the keyboard to verify bottom anchoring</string>
+    <string name="floating_actions_icon_text_description">The primary action combines an icon with a visible label.</string>
+    <string name="floating_actions_icons_description">A compact group exposes icon actions with accessible descriptions.</string>
+    <string name="floating_actions_text_description">Text actions provide a clear secondary and primary choice.</string>
+    <string name="active_variation">Active variation</string>
+    <string name="action_count">Actions invoked: %1$d</string>
+    <string name="scroll_section_title">Scrolling section %1$d</string>
+    <string name="scroll_section_description">Additional content keeps the page meaningfully scrollable.</string>
+    <string name="scroll_section_body">This section verifies that floating controls stay anchored while content continues beneath them.</string>
 
     <string name="layouts_title">Adaptive layouts</string>
     <string name="layouts_subtitle">Select a sample to open its list-detail presentation</string>
@@ -42,12 +68,21 @@
     <string name="layout_library_body">List and detail become two panes when the window allows it.</string>
     <string name="layout_settings">Settings page</string>
     <string name="layout_settings_body">Sections stay readable with a constrained content width.</string>
+    <string name="layout_numbered_title">%1$s · %2$d</string>
     <string name="detail_placeholder_title">Choose a layout</string>
     <string name="detail_placeholder_body">The detail pane appears beside the list on larger windows.</string>
     <string name="detail_behavior_title">Adaptive behavior</string>
     <string name="detail_behavior_body">This detail is a Navigation 3 scene. It is full-screen on compact windows and paired with the list on larger windows.</string>
     <string name="detail_tokens_title">Shared tokens</string>
     <string name="detail_tokens_body">Spacing, shapes and maximum content widths come from the active theme definition.</string>
+    <string name="detail_scrolling_title">Scrolling content</string>
+    <string name="detail_scrolling_body">Long content remains reachable without overlapping floating navigation or actions.</string>
+    <string name="detail_accessibility_title">Accessibility</string>
+    <string name="detail_accessibility_body">System semantics, scalable text and minimum touch targets remain intact.</string>
+    <string name="detail_window_title">Window changes</string>
+    <string name="detail_window_body">The layout reacts to available space instead of checking for a specific device.</string>
+    <string name="detail_navigation_title">Navigation state</string>
+    <string name="detail_navigation_body">Each root retains its own Navigation 3 history while the detail scene adapts.</string>
 
     <string name="forms_title">Forms and editors</string>
     <string name="forms_subtitle">State-driven fields with accessible actions</string>
@@ -62,6 +97,27 @@
     <string name="tag_hint">New tag</string>
     <string name="tag_design">Design</string>
     <string name="tag_compose">Compose</string>
+    <string name="tag_android">Android</string>
+    <string name="tag_accessibility">Accessibility</string>
+    <string name="tag_adaptive">Adaptive</string>
+    <string name="work_section">Work</string>
+    <string name="work_section_description">Extra fields make the form long enough to verify focus-aware scrolling.</string>
+    <string name="field_company">Company</string>
+    <string name="field_role">Role</string>
+    <string name="field_phone">Phone</string>
+    <string name="address_section">Address</string>
+    <string name="address_section_description">Address fields remain visible when the software keyboard opens.</string>
+    <string name="field_address">Street address</string>
+    <string name="field_city">City</string>
+    <string name="preferences_section">Preferences</string>
+    <string name="preferences_section_description">State-driven switches keep the whole row interactive.</string>
+    <string name="newsletter">Product newsletter</string>
+    <string name="newsletter_description">Receive occasional product and component updates.</string>
+    <string name="public_profile">Public profile</string>
+    <string name="public_profile_description">Allow other catalog users to discover this example profile.</string>
+    <string name="notes_section">Notes</string>
+    <string name="notes_section_description">A multiline field exercises keyboard and bring-into-view behavior near the page end.</string>
+    <string name="field_notes">Additional notes</string>
     <string name="show_dialog">Review changes</string>
     <string name="dialog_title">Save this example?</string>
     <string name="dialog_body">The demo keeps state in memory; consuming apps decide how and where to persist it.</string>
@@ -93,6 +149,8 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">A colorful app-defined theme that proves the public extension point.</string>
+    <string name="floating_surface_white_description">All floating surfaces are white; opacity applies consistently to every one.</string>
+    <string name="floating_surface_opacity">Floating surface opacity: %1$d%%</string>
     <string name="sheet_section">Modal sheet</string>
     <string name="sheet_section_description">Official Material 3 sheet behavior with shared chrome and safe insets.</string>
     <string name="open_sheet">Open example sheet</string>
@@ -100,4 +158,8 @@
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
     <string name="about_section">About this catalog</string>
     <string name="about_body">The catalog consumes the same public artifacts intended for external open-source apps.</string>
+    <string name="settings_scroll_section">Extended settings content</string>
+    <string name="settings_scroll_description">Additional rows keep this settings page scrollable across window sizes.</string>
+    <string name="settings_scroll_item">Catalog option %1$d</string>
+    <string name="settings_scroll_value">Configured</string>
 </resources>
