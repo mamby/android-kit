@@ -105,11 +105,6 @@ enum class ComponentId(
         category = ComponentCategory.FormsAndSettings,
         descriptionResource = R.string.component_modal_sheet_description,
     ),
-    FloatingBackButton(
-        apiName = "FloatingBackButton",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_back_button_description,
-    ),
     FloatingAddButton(
         apiName = "FloatingAddButton",
         category = ComponentCategory.FloatingActions,

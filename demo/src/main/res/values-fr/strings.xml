@@ -35,7 +35,7 @@
     <string name="component_preview_selected_destination">%1$s sélectionné</string>
     <string name="title_bar_auto_hide">Masquer automatiquement la barre de titre</string>
     <string name="component_page_scaffold_description">Une structure de page Material 3 avec barre de titre flottante transparente, bords floutés protégés, marges sûres et action flottante ancrée facultative.</string>
-    <string name="component_floating_title_bar_description">Une barre de titre transparente pour pages et feuilles, avec titre centré indépendamment sur une ligne, boutons flottants, débordement adaptatif et masquage automatique facultatif avec réaffichage au toucher.</string>
+    <string name="component_floating_title_bar_description">Une barre transparente pour pages et feuilles, avec titre facultatif centré indépendamment sur une ligne, boutons flottants, débordement adaptatif et masquage automatique facultatif avec réaffichage au toucher.</string>
     <string name="component_adaptive_grid_page_description">Une grille adaptative différée qui choisit son nombre de colonnes selon la largeur disponible et applique les espacements et marges sûres partagés.</string>
     <string name="component_detail_page_description">Une mise en page de détail centrée, à largeur limitée et défilable verticalement, qui respecte les marges de page et de navigation.</string>
     <string name="component_page_floating_action_description">Une action de page circulaire et flottante qui utilise la surface translucide et la cible tactile partagées d’Android Kit.</string>
@@ -50,8 +50,7 @@
     <string name="component_string_list_editor_description">Un éditeur intégré pour ajouter des chaînes uniques et supprimer les valeurs existantes sous forme de puces.</string>
     <string name="component_form_dialog_description">Une boîte de dialogue de confirmation Material 3 avec libellés partagés et contenu de formulaire contrôlé par l’appelant.</string>
     <string name="component_settings_item_description">Une ligne de réglage accessible avec contenus de début, complémentaire et de fin facultatifs.</string>
-    <string name="component_modal_sheet_description">Une feuille modale inférieure avec titre partagé, actions de fermeture ou de retour, espacements et zones sûres.</string>
-    <string name="component_floating_back_button_description">Une action de retour circulaire avec icône auto-inversée, dimensions partagées et style de surface flottante.</string>
+    <string name="component_modal_sheet_description">Une feuille modale inférieure avec titre facultatif, actions de fermeture ou de retour, espacements et zones sûres.</string>
     <string name="component_floating_add_button_description">Une action d’ajout circulaire avec dimensions, sémantique et style de surface flottante partagés.</string>
     <string name="component_floating_action_bar_description">Un conteneur horizontal flottant pour des éléments d’action compacts.</string>
     <string name="component_floating_action_bar_icon_item_description">Un élément d’action avec icône seule qui conserve son libellé dans la sémantique d’accessibilité.</string>
@@ -187,6 +186,8 @@
     <string name="open_sheet">Ouvrir la feuille d’exemple</string>
     <string name="sheet_title">Feuille réutilisable</string>
     <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>
+    <string name="open_sheet_detail">Ouvrir le détail sans titre</string>
+    <string name="sheet_detail_body">Cet état imbriqué utilise les commandes de retour et de fermeture sans titre de la feuille.</string>
     <string name="about_section">À propos du catalogue</string>
     <string name="about_body">Le catalogue consomme les mêmes artefacts publics destinés aux applications open source externes.</string>
     <string name="settings_scroll_section">Contenu de réglages étendu</string>

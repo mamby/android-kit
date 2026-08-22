@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
@@ -20,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,31 +33,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.layout.LocalAndroidKitBottomOverlayProtection
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
-
-@Composable
-public fun FloatingBackButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    contentDescription: String = AndroidKitThemeTokens.strings.back,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    FloatingSurfaceButton(
-        onClick = onClick,
-        shape = CircleShape,
-        visualSize = dimensions.floatingBackButtonSize,
-        modifier = modifier,
-    ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = contentDescription,
-            modifier = Modifier.size(dimensions.floatingActionIconSize),
-        )
-    }
-}
 
 @Composable
 public fun FloatingAddButton(
@@ -213,40 +189,29 @@ private fun FloatingActionBarFlyoutContent(
     require(items.isNotEmpty()) { "At least one flyout item is required." }
     var expanded by remember { mutableStateOf(false) }
     val dimensions = AndroidKitThemeTokens.dimensions
-    val overlayKey = remember { Any() }
-    val updateBottomOverlayProtection = LocalAndroidKitBottomOverlayProtection.current
-
-    fun setExpanded(value: Boolean) {
-        expanded = value
-        updateBottomOverlayProtection(overlayKey, value)
-    }
-
-    DisposableEffect(overlayKey, updateBottomOverlayProtection) {
-        onDispose { updateBottomOverlayProtection(overlayKey, false) }
-    }
 
     Box(modifier = modifier) {
         when (style) {
             FloatingActionBarFlyoutStyle.Icon -> FloatingActionBarIconItem(
-                onClick = { setExpanded(!expanded) },
+                onClick = { expanded = !expanded },
                 icon = Icons.Default.MoreVert,
                 contentDescription = contentDescription,
             )
 
             FloatingActionBarFlyoutStyle.IconAndLabel -> FloatingActionBarIconLabelItem(
-                onClick = { setExpanded(!expanded) },
+                onClick = { expanded = !expanded },
                 icon = Icons.Default.MoreVert,
                 label = contentDescription,
             )
 
             FloatingActionBarFlyoutStyle.Text -> FloatingActionBarTextItem(
-                onClick = { setExpanded(!expanded) },
+                onClick = { expanded = !expanded },
                 label = contentDescription,
             )
         }
         FloatingDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { setExpanded(false) },
+            onDismissRequest = { expanded = false },
             offset = DpOffset(x = 0.dp, y = dimensions.spaceExtraSmall),
         ) {
             items.forEach { item ->
@@ -258,7 +223,7 @@ private fun FloatingActionBarFlyoutContent(
                         )
                     },
                     onClick = {
-                        setExpanded(false)
+                        expanded = false
                         item.onClick()
                     },
                     contentPadding = PaddingValues(

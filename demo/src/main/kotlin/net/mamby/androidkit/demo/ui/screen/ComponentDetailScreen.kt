@@ -47,7 +47,6 @@ import net.mamby.androidkit.compose.action.FloatingActionBarIconItem
 import net.mamby.androidkit.compose.action.FloatingActionBarIconLabelItem
 import net.mamby.androidkit.compose.action.FloatingActionBarTextItem
 import net.mamby.androidkit.compose.action.FloatingAddButton
-import net.mamby.androidkit.compose.action.FloatingBackButton
 import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.form.AndroidKitModalSheet
 import net.mamby.androidkit.compose.form.EditorFieldPair
@@ -149,7 +148,6 @@ private fun ComponentPreview(componentId: ComponentId) {
         ComponentId.FormDialog -> FormDialogPreview()
         ComponentId.SettingsItem -> SettingsItemPreview()
         ComponentId.AndroidKitModalSheet -> AndroidKitModalSheetPreview()
-        ComponentId.FloatingBackButton -> FloatingBackButtonPreview()
         ComponentId.FloatingAddButton -> FloatingAddButtonPreview()
         ComponentId.FloatingActionBar -> FloatingActionBarPreview()
         ComponentId.FloatingActionBarIconItem -> FloatingActionBarIconItemPreview()
@@ -434,23 +432,34 @@ private fun SettingsItemPreview() {
 @Composable
 private fun AndroidKitModalSheetPreview() {
     var visible by rememberSaveable { mutableStateOf(false) }
-    Button(onClick = { visible = true }) {
+    var detailVisible by rememberSaveable { mutableStateOf(false) }
+    Button(
+        onClick = {
+            detailVisible = false
+            visible = true
+        },
+    ) {
         Text(stringResource(R.string.open_sheet))
     }
     if (visible) {
         AndroidKitModalSheet(
-            title = stringResource(R.string.sheet_title),
+            title = stringResource(R.string.sheet_title).takeUnless { detailVisible },
             onDismissRequest = { visible = false },
+            onBack = if (detailVisible) {
+                { detailVisible = false }
+            } else {
+                null
+            },
         ) {
-            Text(stringResource(R.string.sheet_body))
+            if (detailVisible) {
+                Text(stringResource(R.string.sheet_detail_body))
+            } else {
+                Text(stringResource(R.string.sheet_body))
+                Button(onClick = { detailVisible = true }) {
+                    Text(stringResource(R.string.open_sheet_detail))
+                }
+            }
         }
-    }
-}
-
-@Composable
-private fun FloatingBackButtonPreview() {
-    ActionPreview { onAction ->
-        FloatingBackButton(onClick = onAction)
     }
 }
 

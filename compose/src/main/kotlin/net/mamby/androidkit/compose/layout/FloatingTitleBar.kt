@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -50,7 +51,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import net.mamby.androidkit.compose.action.FloatingBackButton
 import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -65,7 +65,7 @@ public class FloatingTitleBarAction(
 
 @Composable
 public fun FloatingTitleBar(
-    title: String,
+    title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: List<FloatingTitleBarAction> = emptyList(),
@@ -76,6 +76,8 @@ public fun FloatingTitleBar(
         WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
     ),
 ): Unit {
+    if (title == null && onBack == null && actions.isEmpty()) return
+
     require(autoHideDelayMillis > 0L) { "The title bar auto-hide delay must be positive." }
 
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -180,7 +182,7 @@ public fun FloatingTitleBar(
                     ).coerceAtLeast(0.dp)
 
                     if (onBack != null) {
-                        FloatingBackButton(
+                        FloatingTitleBarBackButton(
                             onClick = {
                                 registerInteraction()
                                 onBack()
@@ -189,21 +191,23 @@ public fun FloatingTitleBar(
                         )
                     }
 
-                    Text(
-                        text = title,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .fillMaxWidth()
-                            .padding(horizontal = (maxWidth - titleWidth) / 2)
-                            .clearAndSetSemantics {
-                                heading()
-                                contentDescription = title
-                            },
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    title?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .fillMaxWidth()
+                                .padding(horizontal = (maxWidth - titleWidth) / 2)
+                                .clearAndSetSemantics {
+                                    heading()
+                                    contentDescription = it
+                                },
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
 
                     if (endControlCount > 0) {
                         Row(
@@ -281,6 +285,26 @@ public fun FloatingTitleBar(
 }
 
 @Composable
+private fun FloatingTitleBarBackButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+): Unit {
+    val dimensions = AndroidKitThemeTokens.dimensions
+    FloatingSurfaceButton(
+        onClick = onClick,
+        shape = CircleShape,
+        visualSize = dimensions.floatingTitleBarButtonSize,
+        modifier = modifier,
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = AndroidKitThemeTokens.strings.back,
+            modifier = Modifier.size(dimensions.floatingActionIconSize),
+        )
+    }
+}
+
+@Composable
 private fun FloatingTitleBarActionButton(
     action: FloatingTitleBarAction,
     onInteraction: () -> Unit = {},
@@ -292,7 +316,7 @@ private fun FloatingTitleBarActionButton(
             action.onClick()
         },
         shape = CircleShape,
-        visualSize = dimensions.floatingBackButtonSize,
+        visualSize = dimensions.floatingTitleBarButtonSize,
     ) {
         Icon(
             imageVector = action.icon,

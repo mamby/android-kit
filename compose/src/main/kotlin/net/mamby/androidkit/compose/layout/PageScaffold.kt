@@ -25,11 +25,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,31 +51,11 @@ public fun PageScaffold(
     content: @Composable (PaddingValues) -> Unit,
 ): Unit {
     var floatingActionHeightPx by remember { mutableIntStateOf(0) }
-    var titleBarOverflowExpanded by remember { mutableStateOf(false) }
-    val bottomOverlayKeys = remember { mutableStateMapOf<Any, Unit>() }
-    val updateBottomOverlayProtection: (Any, Boolean) -> Unit = remember {
-        { key, expanded ->
-            if (expanded) {
-                bottomOverlayKeys[key] = Unit
-            } else {
-                bottomOverlayKeys.remove(key)
-            }
-        }
-    }
     val floatingActionHeight = with(LocalDensity.current) { floatingActionHeightPx.toDp() }
     val dimensions = AndroidKitThemeTokens.dimensions
     val measuredContentInsets = androidKitContentWindowInsets()
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
     val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
-    val navigationFlyoutClearance = LocalAndroidKitNavigationOverlayProtection.current
-    val bottomOverlayClearance = maxOf(
-        navigationFlyoutClearance,
-        if (bottomOverlayKeys.isNotEmpty()) {
-            dimensions.navigationFlyoutProtectionHeight
-        } else {
-            0.dp
-        },
-    )
     val floatingActionClearance = if (floatingActionHeightPx == 0) {
         0.dp
     } else {
@@ -97,70 +74,59 @@ public fun PageScaffold(
     MaterialTheme(
         colorScheme = pageColorScheme,
     ) {
-        CompositionLocalProvider(
-            LocalAndroidKitBottomOverlayProtection provides updateBottomOverlayProtection,
+        Box(
+            modifier = modifier.imePadding(),
         ) {
-            Box(
-                modifier = modifier.imePadding(),
-            ) {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.background,
-                    contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
-                    topBar = {
-                        FloatingTitleBar(
-                            title = title,
-                            onBack = onBack,
-                            actions = actions,
-                            autoHide = titleBarAutoHide,
-                            onOverflowExpandedChange = { titleBarOverflowExpanded = it },
-                        )
-                    },
-                    content = { contentPadding ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .degradedEdgeProtection(
-                                    topProtectedExtent = contentPadding.calculateTopPadding() +
-                                        if (titleBarOverflowExpanded) {
-                                            dimensions.navigationFlyoutProtectionHeight
-                                        } else {
-                                            0.dp
-                                        },
-                                    bottomProtectedExtent = navigationBottomClearance +
-                                        bottomOverlayClearance +
-                                        floatingActionClearance,
-                                    fadeLength = dimensions.contentProtectionFadeLength,
-                                    blurRadius = dimensions.contentProtectionBlurRadius,
-                                    protectionColor = MaterialTheme.colorScheme.background,
-                                ),
-                        ) {
-                            content(
-                                contentPadding.withAdditionalBottomPadding(
-                                    navigationBottomClearance + floatingActionClearance,
-                                ),
-                            )
-                        }
-                    },
-                )
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .windowInsetsPadding(
-                            measuredContentInsets.only(
-                                WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                containerColor = MaterialTheme.colorScheme.background,
+                contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
+                topBar = {
+                    FloatingTitleBar(
+                        title = title,
+                        onBack = onBack,
+                        actions = actions,
+                        autoHide = titleBarAutoHide,
+                    )
+                },
+                content = { contentPadding ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .progressiveEdgeProtection(
+                                topProtectedExtent = contentPadding.calculateTopPadding(),
+                                bottomProtectedExtent = navigationBottomClearance +
+                                    floatingActionClearance,
+                                fadeLength = dimensions.contentProtectionFadeLength,
+                                blurRadius = dimensions.contentProtectionBlurRadius,
+                                protectionColor = MaterialTheme.colorScheme.background,
+                            ),
+                    ) {
+                        content(
+                            contentPadding.withAdditionalBottomPadding(
+                                navigationBottomClearance + floatingActionClearance,
                             ),
                         )
-                        .padding(dimensions.spaceMedium),
+                    }
+                },
+            )
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .windowInsetsPadding(
+                        measuredContentInsets.only(
+                            WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+                        ),
+                    )
+                    .padding(dimensions.spaceMedium),
+                contentAlignment = Alignment.Center,
+            ) {
+                Box(
+                    modifier = Modifier.onSizeChanged { floatingActionHeightPx = it.height },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Box(
-                        modifier = Modifier.onSizeChanged { floatingActionHeightPx = it.height },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        floatingActionButton()
-                    }
+                    floatingActionButton()
                 }
             }
         }

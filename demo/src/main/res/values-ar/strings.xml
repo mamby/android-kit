@@ -35,7 +35,7 @@
     <string name="component_preview_selected_destination">تم اختيار %1$s</string>
     <string name="title_bar_auto_hide">إخفاء شريط العنوان تلقائياً</string>
     <string name="component_page_scaffold_description">هيكل صفحة Material 3 مع شريط عنوان عائم شفاف وحواف ضبابية محمية وحشو آمن للمحتوى وإجراء عائم اختياري.</string>
-    <string name="component_floating_title_bar_description">شريط عنوان شفاف للصفحات واللوحات بعنوان مستقل في المنتصف على سطر واحد وأزرار عائمة وقائمة إضافية متكيّفة وخيار إخفاء تلقائي مع الإظهار باللمس.</string>
+    <string name="component_floating_title_bar_description">شريط شفاف للصفحات واللوحات بعنوان اختياري مستقل في المنتصف على سطر واحد وأزرار عائمة وقائمة إضافية متكيّفة وخيار إخفاء تلقائي مع الإظهار باللمس.</string>
     <string name="component_adaptive_grid_page_description">شبكة تكيفية مؤجلة تختار عدد الأعمدة وفق العرض المتاح وتطبّق المسافات وهوامش المحتوى الآمنة المشتركة.</string>
     <string name="component_detail_page_description">تخطيط تفاصيل متوسط ومحدود العرض وقابل للتمرير عمودياً ويحترم هوامش الصفحة والتنقل.</string>
     <string name="component_page_floating_action_description">إجراء صفحة دائري عائم يستخدم معالجة السطح الشفاف جزئياً وهدف اللمس المشتركين في Android Kit.</string>
@@ -50,8 +50,7 @@
     <string name="component_string_list_editor_description">محرر مضمّن لإضافة نصوص فريدة وإزالة القيم الحالية المعروضة كشرائح إدخال.</string>
     <string name="component_form_dialog_description">مربع حوار تأكيد Material 3 مع تسميات مشتركة ومحتوى نموذج يملكه المستدعي.</string>
     <string name="component_settings_item_description">صف إعدادات سهل الوصول مع محتوى اختياري في البداية والشرح والنهاية.</string>
-    <string name="component_modal_sheet_description">لوحة سفلية مشروطة مع عنوان مشترك وإجراءات إغلاق أو رجوع ومسافات وهوامش آمنة.</string>
-    <string name="component_floating_back_button_description">إجراء رجوع دائري بأيقونة تنعكس تلقائياً وأبعاد مشتركة ونمط سطح عائم.</string>
+    <string name="component_modal_sheet_description">لوحة سفلية مشروطة مع عنوان اختياري وإجراءات إغلاق أو رجوع ومسافات وهوامش آمنة.</string>
     <string name="component_floating_add_button_description">إجراء إضافة دائري بأبعاد ودلالات ونمط سطح عائم مشتركة.</string>
     <string name="component_floating_action_bar_description">حاوية أفقية عائمة لعناصر إجراءات مدمجة.</string>
     <string name="component_floating_action_bar_icon_item_description">عنصر إجراء بأيقونة فقط يحتفظ بتسميته ضمن دلالات إمكانية الوصول.</string>
@@ -187,6 +186,8 @@
     <string name="open_sheet">فتح لوحة المثال</string>
     <string name="sheet_title">لوحة قابلة لإعادة الاستخدام</string>
     <string name="sheet_body">يمتلك المستدعي الرؤية والمحتوى. ويوفر Android Kit الشريط المتكيّف والمسافات وتسميات إمكانية الوصول.</string>
+    <string name="open_sheet_detail">فتح التفاصيل بدون عنوان</string>
+    <string name="sheet_detail_body">تستخدم هذه الحالة المتداخلة عناصر الرجوع والإغلاق بدون عنوان في اللوحة.</string>
     <string name="about_section">حول هذا الدليل</string>
     <string name="about_body">يستهلك الدليل نفس الحزم العامة المخصصة لتطبيقات المصادر المفتوحة الخارجية.</string>
     <string name="settings_scroll_section">محتوى إعدادات موسّع</string>
