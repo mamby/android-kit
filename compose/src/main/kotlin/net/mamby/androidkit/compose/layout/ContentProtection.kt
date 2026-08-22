@@ -1,5 +1,6 @@
 package net.mamby.androidkit.compose.layout
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -9,14 +10,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import kotlin.math.min
 
-internal fun Modifier.edgeProtection(
-    topProtectedExtent: Dp,
-    bottomProtectedExtent: Dp,
+internal fun Modifier.systemBarEdgeProtection(
+    statusBarInsets: WindowInsets,
+    navigationBarInsets: WindowInsets,
     fadeLength: Dp,
     protectionColor: Color,
 ): Modifier = drawWithCache {
-    val topProtectedHeight = topProtectedExtent.toPx()
-    val bottomProtectedHeight = bottomProtectedExtent.toPx()
+    val topProtectedHeight = statusBarInsets.getTop(this).toFloat()
+    val bottomProtectedHeight = navigationBarInsets.getBottom(this).toFloat()
     val fadeHeight = fadeLength.toPx()
     val topHeight = protectedEdgeHeight(topProtectedHeight, fadeHeight, size.height)
     val bottomHeight = protectedEdgeHeight(bottomProtectedHeight, fadeHeight, size.height)

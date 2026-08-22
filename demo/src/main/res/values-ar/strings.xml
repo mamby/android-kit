@@ -35,7 +35,7 @@
     <string name="component_detail_preview_hint">استخدم عناصر التحكم أدناه لتجربة المكوّن.</string>
     <string name="component_preview_selected_destination">تم اختيار %1$s</string>
     <string name="title_bar_auto_hide">إخفاء شريط العنوان تلقائياً</string>
-    <string name="component_page_scaffold_description">هيكل صفحة Material 3 مع شريط عنوان عائم شفاف اختياري وحماية ناعمة للحواف وحشو آمن للمحتوى وإجراء عائم اختياري.</string>
+    <string name="component_page_scaffold_description">هيكل صفحة Material 3 مع شريط عنوان عائم شفاف اختياري وحماية مقتصرة على حواف أشرطة النظام وحشو آمن للمحتوى وإجراء عائم اختياري.</string>
     <string name="component_floating_title_bar_description">شريط شفاف للصفحات واللوحات بعنوان اختياري مستقل في المنتصف على سطر واحد وأزرار عائمة وقائمة إضافية متكيّفة وخيار إخفاء تلقائي مع الإظهار باللمس.</string>
     <string name="component_adaptive_grid_page_description">شبكة تكيفية مؤجلة تختار عدد الأعمدة وفق العرض المتاح وتطبّق المسافات وهوامش المحتوى الآمنة المشتركة.</string>
     <string name="component_detail_page_description">تخطيط تفاصيل متوسط ومحدود العرض وقابل للتمرير عمودياً ويحترم هوامش الصفحة والتنقل.</string>
@@ -180,8 +180,8 @@
     <string name="theme_dark">داكن</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">سمة ملوّنة يعرّفها التطبيق لإثبات نقطة التوسعة العامة.</string>
-    <string name="floating_surface_white_description">جميع الأسطح العائمة بيضاء، وتُطبّق العتامة على كل منها بصورة موحدة.</string>
-    <string name="floating_surface_opacity">عتامة الأسطح العائمة: %1$d%%</string>
+    <string name="floating_surface_transparency">أسطح عائمة شفافة</string>
+    <string name="floating_surface_transparency_description">تستخدم عتامة بنسبة 80٪. عطّل هذا الخيار لاستخدام لون السطح المعتم للسمة النشطة.</string>
     <string name="sheet_section">لوحة سفلية</string>
     <string name="sheet_section_description">سلوك Material 3 الرسمي مع شريط مشترك وهوامش آمنة.</string>
     <string name="open_sheet">فتح لوحة المثال</string>

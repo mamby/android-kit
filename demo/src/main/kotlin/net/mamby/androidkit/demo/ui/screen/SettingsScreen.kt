@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.form.AndroidKitModalSheet
+import net.mamby.androidkit.compose.form.SwitchField
 import net.mamby.androidkit.compose.layout.DetailPage
 import net.mamby.androidkit.compose.layout.PageScaffold
 import net.mamby.androidkit.compose.presentation.LabeledValue
@@ -23,14 +23,13 @@ import net.mamby.androidkit.compose.presentation.SectionCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
-import kotlin.math.roundToInt
 
 @Composable
 fun SettingsScreen(
     themeChoice: DemoThemeChoice,
     onThemeChoice: (DemoThemeChoice) -> Unit,
-    floatingSurfaceOpacity: Float,
-    onFloatingSurfaceOpacity: (Float) -> Unit,
+    floatingSurfacesTransparent: Boolean,
+    onFloatingSurfacesTransparent: (Boolean) -> Unit,
 ) {
     var sheetVisible by rememberSaveable { mutableStateOf(false) }
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -66,17 +65,13 @@ fun SettingsScreen(
                     )
                 }
                 Text(stringResource(R.string.theme_prism_description))
-                Text(stringResource(R.string.floating_surface_white_description))
-                Text(
-                    stringResource(
-                        R.string.floating_surface_opacity,
-                        (floatingSurfaceOpacity * 100).roundToInt(),
+                SwitchField(
+                    title = stringResource(R.string.floating_surface_transparency),
+                    supportingText = stringResource(
+                        R.string.floating_surface_transparency_description,
                     ),
-                )
-                Slider(
-                    value = floatingSurfaceOpacity,
-                    onValueChange = onFloatingSurfaceOpacity,
-                    valueRange = 0f..1f,
+                    checked = floatingSurfacesTransparent,
+                    onCheckedChange = onFloatingSurfacesTransparent,
                 )
             }
             LocalizationContent()
@@ -103,6 +98,7 @@ fun SettingsScreen(
                     )
                 }
             }
+            ScrollTestContent()
         }
     }
 

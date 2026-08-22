@@ -58,7 +58,7 @@ fun FloatingCatalogScreen(
                     }
                 }
             }
-            LongScrollingExamples()
+            ScrollTestContent()
         }
     }
 }
@@ -91,7 +91,7 @@ fun FloatingNavigationDemoScreen(
             ) {
                 Text(stringResource(R.string.floating_navigation_demo_instruction))
             }
-            LongScrollingExamples()
+            ScrollTestContent()
         }
     }
 }
@@ -183,19 +183,7 @@ fun FloatingActionsDemoScreen(
             ) {
                 Text(stringResource(R.string.action_count, actionCount))
             }
-            LongScrollingExamples()
-        }
-    }
-}
-
-@Composable
-private fun LongScrollingExamples() {
-    repeat(LongExampleCount) { index ->
-        SectionCard(
-            title = stringResource(R.string.scroll_section_title, index + 1),
-            supportingText = stringResource(R.string.scroll_section_description),
-        ) {
-            Text(stringResource(R.string.scroll_section_body))
+            ScrollTestContent()
         }
     }
 }
@@ -211,5 +199,3 @@ private fun FloatingActionDemoVariant.descriptionResource(): Int = when (this) {
     FloatingActionDemoVariant.IconsOnly -> R.string.floating_actions_icons_description
     FloatingActionDemoVariant.TextOnly -> R.string.floating_actions_text_description
 }
-
-private const val LongExampleCount = 6

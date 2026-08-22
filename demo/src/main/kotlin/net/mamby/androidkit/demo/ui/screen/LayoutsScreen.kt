@@ -78,6 +78,7 @@ fun LayoutsScreen(onSelected: (Int) -> Unit) {
                     }
                 }
             }
+            scrollTestContent()
         }
     }
 }
@@ -141,6 +142,7 @@ fun LayoutDetailScreen(sampleId: Int, onBack: () -> Unit) {
                 title = stringResource(R.string.detail_navigation_title),
                 supportingText = stringResource(R.string.detail_navigation_body),
             ) {}
+            ScrollTestContent()
         }
     }
 }

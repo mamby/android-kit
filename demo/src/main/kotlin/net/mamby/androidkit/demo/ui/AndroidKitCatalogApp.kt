@@ -15,13 +15,12 @@ import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
@@ -48,8 +47,11 @@ import net.mamby.androidkit.navigation3.rememberMultiBackStackNavigationState
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun AndroidKitCatalogApp() {
-    var themeChoice by rememberSaveable { mutableStateOf(DemoThemeChoice.Light) }
-    var floatingSurfaceOpacity by rememberSaveable { mutableFloatStateOf(0.92f) }
+    val applicationContext = LocalContext.current.applicationContext
+    val settingsViewModel: DemoSettingsViewModel = viewModel {
+        DemoSettingsViewModel(DemoSettingsRepository(applicationContext))
+    }
+    val settings by settingsViewModel.settings.collectAsStateWithLifecycle()
     val roots = remember {
         listOf(
             ComponentsRoute,
@@ -63,10 +65,14 @@ fun AndroidKitCatalogApp() {
     val navigation = rememberMultiBackStackNavigationState(roots)
 
     AndroidKitTheme(
-        definition = themeChoice.definition(),
+        definition = settings.themeChoice.definition(),
         strings = androidKitStrings(),
         floatingSurfaceStyle = FloatingSurfaceStyle(
-            opacity = floatingSurfaceOpacity,
+            opacity = if (settings.floatingSurfacesTransparent) {
+                TransparentFloatingSurfaceOpacity
+            } else {
+                OpaqueFloatingSurfaceOpacity
+            },
         ),
     ) {
         val navigationItems: List<AndroidKitNavigationItem<CatalogRootRoute>> = listOf(
@@ -181,10 +187,12 @@ fun AndroidKitCatalogApp() {
                         }
                         entry<SettingsRoute> {
                             SettingsScreen(
-                                themeChoice = themeChoice,
-                                onThemeChoice = { themeChoice = it },
-                                floatingSurfaceOpacity = floatingSurfaceOpacity,
-                                onFloatingSurfaceOpacity = { floatingSurfaceOpacity = it },
+                                themeChoice = settings.themeChoice,
+                                onThemeChoice = settingsViewModel::setThemeChoice,
+                                floatingSurfacesTransparent =
+                                    settings.floatingSurfacesTransparent,
+                                onFloatingSurfacesTransparent =
+                                    settingsViewModel::setFloatingSurfacesTransparent,
                             )
                         }
                     },
@@ -193,3 +201,6 @@ fun AndroidKitCatalogApp() {
         }
     }
 }
+
+private const val TransparentFloatingSurfaceOpacity = 0.8f
+private const val OpaqueFloatingSurfaceOpacity = 1f

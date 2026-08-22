@@ -124,6 +124,7 @@ fun ComponentDetailScreen(
             ) {
                 ComponentPreview(componentId)
             }
+            ScrollTestContent()
         }
     }
 }
