@@ -21,6 +21,7 @@
     <string name="nav_localization">Localisation</string>
     <string name="nav_settings">Réglages</string>
 
+    <string name="home_title">Bienvenue</string>
     <string name="components_title">Galerie de composants</string>
     <string name="component_category_layout">Mise en page</string>
     <string name="component_category_presentation">Présentation</string>
@@ -34,7 +35,7 @@
     <string name="component_detail_preview_hint">Utilisez les contrôles ci-dessous pour essayer le composant.</string>
     <string name="component_preview_selected_destination">%1$s sélectionné</string>
     <string name="title_bar_auto_hide">Masquer automatiquement la barre de titre</string>
-    <string name="component_page_scaffold_description">Une structure de page Material 3 avec barre de titre flottante transparente, bords floutés protégés, marges sûres et action flottante ancrée facultative.</string>
+    <string name="component_page_scaffold_description">Une structure de page Material 3 avec barre de titre flottante transparente facultative, protection douce des bords, marges sûres et action flottante ancrée facultative.</string>
     <string name="component_floating_title_bar_description">Une barre transparente pour pages et feuilles, avec titre facultatif centré indépendamment sur une ligne, boutons flottants, débordement adaptatif et masquage automatique facultatif avec réaffichage au toucher.</string>
     <string name="component_adaptive_grid_page_description">Une grille adaptative différée qui choisit son nombre de colonnes selon la largeur disponible et applique les espacements et marges sûres partagés.</string>
     <string name="component_detail_page_description">Une mise en page de détail centrée, à largeur limitée et défilable verticalement, qui respecte les marges de page et de navigation.</string>

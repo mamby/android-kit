@@ -63,8 +63,9 @@ public data class AndroidKitDimensions(
     public val floatingDropdownShadowElevation: Dp = 1.dp,
     public val floatingTitleBarHeight: Dp = 64.dp,
     public val floatingTitleMinimumWidth: Dp = 48.dp,
-    public val contentProtectionBlurRadius: Dp = 28.dp,
-    public val contentProtectionFadeLength: Dp = 40.dp,
+    @Deprecated("Content protection now uses a background gradient instead of blur.")
+    public val contentProtectionBlurRadius: Dp = 0.dp,
+    public val contentProtectionFadeLength: Dp = 4.dp,
     @Deprecated("Flyouts no longer expand page content protection.")
     public val navigationFlyoutProtectionHeight: Dp = 0.dp,
 )

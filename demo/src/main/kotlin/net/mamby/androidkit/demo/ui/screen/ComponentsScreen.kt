@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import net.mamby.androidkit.compose.layout.AdaptiveGridPage
 import net.mamby.androidkit.compose.layout.PageScaffold
@@ -28,10 +30,18 @@ import net.mamby.androidkit.demo.ui.ComponentId
 @Composable
 fun ComponentsScreen(onSelected: (ComponentId) -> Unit) {
     val dimensions = AndroidKitThemeTokens.dimensions
-    PageScaffold(
-        title = stringResource(R.string.components_title),
-    ) { contentPadding ->
+    PageScaffold { contentPadding ->
         AdaptiveGridPage(contentPadding = contentPadding) {
+            item(
+                key = R.string.home_title,
+                span = { GridItemSpan(maxLineSpan) },
+            ) {
+                Text(
+                    text = stringResource(R.string.home_title),
+                    modifier = Modifier.semantics { heading() },
+                    style = MaterialTheme.typography.headlineMedium,
+                )
+            }
             ComponentCategory.entries.forEach { category ->
                 val components = ComponentId.entries.filter { it.category == category }
                 item(
