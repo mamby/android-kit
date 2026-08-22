@@ -61,6 +61,11 @@ public data class AndroidKitDimensions(
     public val floatingSurfaceShadowRadius: Dp = 10.dp,
     public val floatingSurfaceShadowOffsetY: Dp = 2.dp,
     public val floatingDropdownShadowElevation: Dp = 1.dp,
+    public val floatingTitleBarHeight: Dp = 64.dp,
+    public val floatingTitleMinimumWidth: Dp = 48.dp,
+    public val contentProtectionBlurRadius: Dp = 20.dp,
+    public val contentProtectionFadeLength: Dp = 96.dp,
+    public val navigationFlyoutProtectionHeight: Dp = 160.dp,
 )
 
 @Immutable
@@ -73,6 +78,7 @@ public data class AndroidKitStrings(
     public val cancel: String,
     public val confirm: String,
     public val save: String,
+    public val showTitleBar: String = "Show title bar",
 ) {
     public companion object {
         public val English: AndroidKitStrings = AndroidKitStrings(
@@ -84,6 +90,7 @@ public data class AndroidKitStrings(
             cancel = "Cancel",
             confirm = "Confirm",
             save = "Save",
+            showTitleBar = "Show title bar",
         )
     }
 }

@@ -11,6 +11,8 @@
     <string name="action_save">Enregistrer</string>
     <string name="action_share">Partager</string>
     <string name="action_delete">Supprimer</string>
+    <string name="action_edit">Modifier</string>
+    <string name="action_show_title_bar">Afficher la barre de titre</string>
 
     <string name="nav_components">Composants</string>
     <string name="nav_layouts">Mises en page</string>
@@ -20,7 +22,6 @@
     <string name="nav_settings">Réglages</string>
 
     <string name="components_title">Galerie de composants</string>
-    <string name="components_subtitle">%1$d composants d’interface réutilisables avec aperçus interactifs</string>
     <string name="component_category_layout">Mise en page</string>
     <string name="component_category_presentation">Présentation</string>
     <string name="component_category_forms_settings">Formulaires et réglages</string>
@@ -32,7 +33,9 @@
     <string name="component_detail_preview_title">Aperçu interactif</string>
     <string name="component_detail_preview_hint">Utilisez les contrôles ci-dessous pour essayer le composant.</string>
     <string name="component_preview_selected_destination">%1$s sélectionné</string>
-    <string name="component_page_scaffold_description">Une structure de page Material 3 avec barre de titre, zones sûres bord à bord, marges de contenu et action flottante ancrée facultative.</string>
+    <string name="title_bar_auto_hide">Masquer automatiquement la barre de titre</string>
+    <string name="component_page_scaffold_description">Une structure de page Material 3 avec barre de titre flottante transparente, bords floutés protégés, marges sûres et action flottante ancrée facultative.</string>
+    <string name="component_floating_title_bar_description">Une barre de titre transparente pour pages et feuilles, avec titre centré indépendamment sur une ligne, boutons flottants, débordement adaptatif et masquage automatique facultatif avec réaffichage au toucher.</string>
     <string name="component_adaptive_grid_page_description">Une grille adaptative différée qui choisit son nombre de colonnes selon la largeur disponible et applique les espacements et marges sûres partagés.</string>
     <string name="component_detail_page_description">Une mise en page de détail centrée, à largeur limitée et défilable verticalement, qui respecte les marges de page et de navigation.</string>
     <string name="component_page_floating_action_description">Une action de page circulaire et flottante qui utilise la surface translucide et la cible tactile partagées d’Android Kit.</string>
@@ -72,7 +75,6 @@
     <string name="theme_count">2 + 1</string>
     <string name="theme_count_label">thèmes bibliothèque et démo</string>
     <string name="floating_navigation_variations_title">Menu inférieur flottant</string>
-    <string name="floating_catalog_subtitle">Toutes les variantes de navigation et d’action flottantes dans un catalogue défilable</string>
     <string name="floating_navigation_variations_description">Ouvrez chaque page pour tester la variante réelle du menu compact.</string>
     <string name="floating_navigation_labels_title">Icônes et libellés</string>
     <string name="floating_navigation_icons_title">Icônes uniquement</string>
@@ -81,11 +83,9 @@
     <string name="floating_actions_icon_text_title">Icône avec texte</string>
     <string name="floating_actions_icons_title">Icônes uniquement</string>
     <string name="floating_actions_text_title">Texte uniquement</string>
-    <string name="floating_navigation_demo_subtitle">Le menu compact actif est le composant testé</string>
     <string name="floating_navigation_labels_description">Les destinations compactes affichent leurs icônes et leurs libellés.</string>
     <string name="floating_navigation_icons_description">Les libellés restent accessibles tout en affichant uniquement les icônes.</string>
     <string name="floating_navigation_demo_instruction">Changez de destination, ouvrez le menu de débordement et faites défiler cette page pour vérifier son ancrage.</string>
-    <string name="floating_actions_demo_subtitle">Faites défiler et ouvrez le clavier pour vérifier l’ancrage inférieur</string>
     <string name="floating_actions_icon_text_description">L’action principale combine une icône et un libellé visible.</string>
     <string name="floating_actions_icons_description">Un groupe compact expose des actions par icône avec des descriptions accessibles.</string>
     <string name="floating_actions_text_description">Les actions textuelles proposent un choix secondaire et principal clair.</string>
@@ -96,7 +96,6 @@
     <string name="scroll_section_body">Cette section vérifie que les contrôles flottants restent ancrés pendant le défilement du contenu.</string>
 
     <string name="layouts_title">Mises en page adaptatives</string>
-    <string name="layouts_subtitle">Sélectionnez un exemple pour ouvrir sa vue liste-détail</string>
     <string name="layout_dashboard">Tableau de bord</string>
     <string name="layout_dashboard_body">Les cartes passent naturellement d’une colonne à une grille large.</string>
     <string name="layout_library">Liste de bibliothèque</string>
@@ -120,7 +119,6 @@
     <string name="detail_navigation_body">Chaque racine conserve son historique Navigation 3 tandis que la scène de détail s’adapte.</string>
 
     <string name="forms_title">Formulaires et éditeurs</string>
-    <string name="forms_subtitle">Des champs pilotés par l’état avec des actions accessibles</string>
     <string name="profile_section">Profil</string>
     <string name="profile_section_description">Les paires de champs s’adaptent sans branche spécifique à l’appareil.</string>
     <string name="field_name">Nom</string>
@@ -158,7 +156,6 @@
     <string name="dialog_body">La démo conserve l’état en mémoire ; chaque application décide où et comment le persister.</string>
 
     <string name="localization_title">Localisation</string>
-    <string name="localization_subtitle">Langues gérées par l’application et formatage localisé</string>
     <string name="language_section">Langue de l’application</string>
     <string name="language_section_description">Le changement utilise l’API officielle des langues par application.</string>
     <string name="language_system">Langue du système</string>
@@ -177,7 +174,6 @@
     <string name="sample_code">Code</string>
 
     <string name="settings_title">Réglages du catalogue</string>
-    <string name="settings_subtitle">Thème, langue et surfaces d’application réutilisables</string>
     <string name="appearance_section">Apparence</string>
     <string name="appearance_section_description">Clair et Sombre appartiennent à la bibliothèque. Prism existe uniquement dans cette démo.</string>
     <string name="theme_light">Clair</string>

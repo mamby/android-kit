@@ -6,22 +6,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
 import net.mamby.androidkit.compose.action.FloatingAddButton
 import net.mamby.androidkit.compose.form.SwitchField
 import net.mamby.androidkit.compose.layout.AdaptiveGridPage
+import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.PageScaffold
 import net.mamby.androidkit.compose.navigation.AdaptiveNavigationScaffold
 import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
@@ -60,6 +65,48 @@ fun androidKitDarkDeviceMatrix() {
 @Composable
 fun androidKitLargeFont() {
     ScreenshotGallery(AndroidKitThemes.Light)
+}
+
+@PreviewTest
+@Preview(
+    name = "Compact labels stress",
+    widthDp = 320,
+    heightDp = 640,
+    fontScale = 1.5f,
+    showBackground = true,
+)
+@Composable
+fun androidKitCompactLabelsStress() {
+    ScreenshotGallery(
+        theme = AndroidKitThemes.Light,
+        showCompactLabels = true,
+    )
+}
+
+@PreviewTest
+@Preview(name = "Floating title actions", widthDp = 360, heightDp = 800, showBackground = true)
+@Composable
+fun androidKitFloatingTitleActions() {
+    AndroidKitTheme(definition = AndroidKitThemes.Light) {
+        PageScaffold(
+            title = "A centered page title that must ellipsize",
+            onBack = {},
+            actions = listOf(
+                FloatingTitleBarAction(Icons.Default.Edit, "Edit", {}),
+                FloatingTitleBarAction(Icons.Default.Share, "Share", {}),
+                FloatingTitleBarAction(Icons.Default.Delete, "Delete", {}),
+            ),
+        ) { contentPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text("Title bar content protection")
+            }
+        }
+    }
 }
 
 @PreviewTest
@@ -135,6 +182,7 @@ fun androidKitWhiteOpaque() {
 private fun ScreenshotGallery(
     theme: AndroidKitThemeDefinition,
     floatingSurfaceStyle: FloatingSurfaceStyle = FloatingSurfaceStyle(),
+    showCompactLabels: Boolean = false,
 ) {
     AndroidKitTheme(
         definition = theme,
@@ -144,11 +192,11 @@ private fun ScreenshotGallery(
             items = screenshotNavigationItems,
             selectedKey = "home",
             onSelected = {},
+            showCompactLabels = showCompactLabels,
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 PageScaffold(
                     title = "Android Kit",
-                    subtitle = "Reusable, adaptive building blocks",
                     floatingActionButton = { FloatingAddButton(onClick = {}) },
                 ) { pagePadding ->
                     AdaptiveGridPage(contentPadding = pagePadding) {

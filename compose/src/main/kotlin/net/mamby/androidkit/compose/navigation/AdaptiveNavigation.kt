@@ -2,6 +2,7 @@ package net.mamby.androidkit.compose.navigation
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,16 +48,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.layout.LocalAndroidKitNavigationInsets
+import net.mamby.androidkit.compose.layout.LocalAndroidKitNavigationOverlayProtection
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
@@ -89,6 +94,7 @@ public fun <Key : Any> AdaptiveNavigationScaffold(
 
     val adaptiveInfo = currentWindowAdaptiveInfoV2()
     val layoutType = remember(adaptiveInfo) { androidKitNavigationSuiteType(adaptiveInfo) }
+    val dimensions = AndroidKitThemeTokens.dimensions
     val compact = layoutType == NavigationSuiteType.ShortNavigationBarCompact
     val primaryItems = items.take(compactVisibleDestinationCount)
     val overflowItems = items.drop(compactVisibleDestinationCount)
@@ -113,11 +119,17 @@ public fun <Key : Any> AdaptiveNavigationScaffold(
                     showLabels = showCompactLabels,
                 )
             },
+            navigationOverlayProtection = if (flyoutVisible) {
+                dimensions.navigationFlyoutProtectionHeight
+            } else {
+                0.dp
+            },
             content = content,
         )
     } else {
         CompositionLocalProvider(
             LocalAndroidKitNavigationInsets provides WindowInsets(0, 0, 0, 0),
+            LocalAndroidKitNavigationOverlayProtection provides 0.dp,
         ) {
             NavigationSuiteScaffold(
                 navigationSuiteItems = {
@@ -155,6 +167,7 @@ public fun <Key : Any> AdaptiveNavigationScaffold(
 @Composable
 private fun CompactNavigationLayout(
     navigation: @Composable () -> Unit,
+    navigationOverlayProtection: Dp,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ): Unit {
@@ -172,6 +185,7 @@ private fun CompactNavigationLayout(
                     right = 0,
                     bottom = navigationHeight,
                 ),
+                LocalAndroidKitNavigationOverlayProtection provides navigationOverlayProtection,
             ) {
                 content()
             }
@@ -207,61 +221,76 @@ private fun <Key : Any> FloatingNavigationBar(
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .windowInsetsPadding(
-                WindowInsets.safeDrawing
-                    .exclude(WindowInsets.ime)
-                    .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
-            )
-            .padding(dimensions.floatingNavigationMargin),
-        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxWidth(),
     ) {
-        FloatingSurface(
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {})
+                },
+        )
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .widthIn(max = dimensions.floatingNavigationMaxWidth),
-            shape = MaterialTheme.shapes.extraLarge,
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing
+                        .exclude(WindowInsets.ime)
+                        .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
+                )
+                .padding(dimensions.floatingNavigationMargin),
+            contentAlignment = Alignment.Center,
         ) {
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = dimensions.spaceExtraSmall)
-                    .heightIn(min = dimensions.minimumTouchTarget)
-                    .selectableGroup(),
-                verticalAlignment = Alignment.CenterVertically,
+                    .widthIn(max = dimensions.floatingNavigationMaxWidth),
             ) {
-                items.forEach { item ->
-                    val selected = item.key == selectedKey
-                    CompactNavigationBarItem(
-                        selected = selected,
-                        onClick = { onSelected(item.key) },
-                        icon = if (selected) item.selectedIcon else item.icon,
-                        label = item.label,
-                        showLabel = showLabels,
-                        modifier = Modifier.weight(1f),
-                    )
-                }
-                if (overflowItems.isNotEmpty()) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        CompactNavigationBarItem(
-                            selected = overflowSelected,
-                            onClick = { onFlyoutVisibleChange(true) },
-                            icon = Icons.Default.MoreVert,
-                            label = AndroidKitThemeTokens.strings.more,
-                            showLabel = showLabels,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        NavigationFlyout(
-                            expanded = flyoutVisible,
-                            items = overflowItems,
-                            selectedKey = selectedKey,
-                            onDismissRequest = { onFlyoutVisibleChange(false) },
-                            onSelected = { key ->
-                                onFlyoutVisibleChange(false)
-                                onSelected(key)
-                            },
-                        )
+                FloatingSurface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.extraLarge,
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(dimensions.spaceExtraSmall)
+                            .heightIn(min = dimensions.minimumTouchTarget)
+                            .selectableGroup(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        items.forEach { item ->
+                            val selected = item.key == selectedKey
+                            CompactNavigationBarItem(
+                                selected = selected,
+                                onClick = { onSelected(item.key) },
+                                icon = if (selected) item.selectedIcon else item.icon,
+                                label = item.label,
+                                showLabel = showLabels,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
+                        if (overflowItems.isNotEmpty()) {
+                            Box(modifier = Modifier.weight(1f)) {
+                                CompactNavigationBarItem(
+                                    selected = overflowSelected,
+                                    onClick = { onFlyoutVisibleChange(true) },
+                                    icon = Icons.Default.MoreVert,
+                                    label = AndroidKitThemeTokens.strings.more,
+                                    showLabel = showLabels,
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                                NavigationFlyout(
+                                    expanded = flyoutVisible,
+                                    items = overflowItems,
+                                    selectedKey = selectedKey,
+                                    onDismissRequest = { onFlyoutVisibleChange(false) },
+                                    onSelected = { key ->
+                                        onFlyoutVisibleChange(false)
+                                        onSelected(key)
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -287,7 +316,6 @@ private fun CompactNavigationBarItem(
         modifier = modifier
             .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
             .minimumInteractiveComponentSize()
-            .clip(MaterialTheme.shapes.large)
             .selectable(
                 selected = selected,
                 onClick = onClick,
@@ -318,33 +346,47 @@ private fun CompactNavigationItemContent(
         targetValue = if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
         label = "compact navigation selection indicator",
     )
-    val indicatorModifier = if (showLabel) {
-        Modifier
-            .background(containerColor, CircleShape)
-            .padding(horizontal = dimensions.spaceSmall)
-    } else {
-        Modifier
-            .size(dimensions.floatingNavigationIndicatorSize)
-            .background(containerColor, CircleShape)
-    }
-    Column(
-        modifier = indicatorModifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label.takeUnless { showLabel },
-            modifier = Modifier.size(dimensions.floatingNavigationIconSize),
-            tint = contentColor,
-        )
-        if (showLabel) {
+    if (showLabel) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = dimensions.spaceExtraSmall)
+                .background(containerColor, MaterialTheme.shapes.extraLarge)
+                .padding(
+                    horizontal = dimensions.spaceExtraSmall,
+                    vertical = dimensions.spaceExtraSmall,
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(dimensions.floatingNavigationIconSize),
+                tint = contentColor,
+            )
             Text(
                 text = label,
+                modifier = Modifier.fillMaxWidth(),
                 color = contentColor,
                 style = MaterialTheme.typography.labelSmall,
+                textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+            )
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .size(dimensions.floatingNavigationIndicatorSize)
+                .background(containerColor, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                modifier = Modifier.size(dimensions.floatingNavigationIconSize),
+                tint = contentColor,
             )
         }
     }
@@ -363,6 +405,7 @@ private fun <Key : Any> NavigationFlyout(
     FloatingDropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
+        offset = DpOffset(x = 0.dp, y = dimensions.spaceExtraSmall),
     ) {
         val displayedItems = items.asReversed()
         displayedItems.forEachIndexed { index, item ->
@@ -382,7 +425,10 @@ private fun <Key : Any> NavigationFlyout(
                     )
                 },
                 onClick = { onSelected(item.key) },
-                contentPadding = PaddingValues(horizontal = dimensions.spaceMedium),
+                contentPadding = PaddingValues(
+                    start = dimensions.spaceMedium,
+                    end = dimensions.spaceLarge,
+                ),
                 leadingIcon = {
                     Icon(
                         imageVector = if (selected) item.selectedIcon else item.icon,
