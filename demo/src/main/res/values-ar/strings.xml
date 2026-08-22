@@ -35,7 +35,7 @@
     <string name="component_detail_preview_hint">استخدم عناصر التحكم أدناه لتجربة المكوّن.</string>
     <string name="component_preview_selected_destination">تم اختيار %1$s</string>
     <string name="title_bar_auto_hide">إخفاء شريط العنوان تلقائياً</string>
-    <string name="component_page_scaffold_description">هيكل صفحة Material 3 مع شريط عنوان عائم شفاف اختياري وحماية مقتصرة على حواف أشرطة النظام وحشو آمن للمحتوى وإجراء عائم اختياري.</string>
+    <string name="component_page_scaffold_description">هيكل صفحة Material 3 مع شريط عنوان عائم شفاف اختياري وحماية مقتصرة على حافة شريط الحالة وحشو آمن للمحتوى وإجراء عائم اختياري.</string>
     <string name="component_floating_title_bar_description">شريط شفاف للصفحات واللوحات بعنوان اختياري مستقل في المنتصف على سطر واحد وأزرار عائمة وقائمة إضافية متكيّفة وخيار إخفاء تلقائي مع الإظهار باللمس.</string>
     <string name="component_adaptive_grid_page_description">شبكة تكيفية مؤجلة تختار عدد الأعمدة وفق العرض المتاح وتطبّق المسافات وهوامش المحتوى الآمنة المشتركة.</string>
     <string name="component_detail_page_description">تخطيط تفاصيل متوسط ومحدود العرض وقابل للتمرير عمودياً ويحترم هوامش الصفحة والتنقل.</string>

@@ -85,6 +85,7 @@ public fun FloatingTitleBar(
 
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
+    val hasButtons = onBack != null || actions.isNotEmpty()
     val titleTextShadowRadius = with(LocalDensity.current) {
         dimensions.floatingTitleTextShadowRadius.toPx()
     }
@@ -150,7 +151,7 @@ public fun FloatingTitleBar(
                 .heightIn(min = dimensions.floatingTitleBarHeight)
                 .padding(
                     horizontal = dimensions.spaceSmall,
-                    vertical = dimensions.spaceSmall,
+                    vertical = dimensions.floatingTitleBarVerticalPadding,
                 ),
         ) {
             AnimatedVisibility(
@@ -164,7 +165,9 @@ public fun FloatingTitleBar(
                 BoxWithConstraints(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = dimensions.minimumTouchTarget),
+                        .heightIn(
+                            min = if (hasButtons) dimensions.minimumTouchTarget else 0.dp,
+                        ),
                 ) {
                     val directActionCount = directTitleBarActionCount(
                         actionCount = actions.size,

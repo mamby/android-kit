@@ -36,7 +36,7 @@
     <string name="component_detail_preview_hint">Use the controls below to exercise the component.</string>
     <string name="component_preview_selected_destination">%1$s selected</string>
     <string name="title_bar_auto_hide">Auto-hide title bar</string>
-    <string name="component_page_scaffold_description">A Material 3 page shell with an optional transparent floating title bar, system-bar edge protection, safe content padding and an optional anchored floating action.</string>
+    <string name="component_page_scaffold_description">A Material 3 page shell with an optional transparent floating title bar, status-bar edge protection, safe content padding and an optional anchored floating action.</string>
     <string name="component_floating_title_bar_description">A transparent page and sheet bar with an optional independently centered single-line title, floating back and action buttons, adaptive overflow, and optional auto-hide with tap-to-reveal.</string>
     <string name="component_adaptive_grid_page_description">A lazy adaptive grid that chooses its column count from available width while applying shared spacing and safe content padding.</string>
     <string name="component_detail_page_description">A centered, width-constrained, vertically scrollable detail layout that respects page and navigation insets.</string>

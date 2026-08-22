@@ -3,28 +3,22 @@ package net.mamby.androidkit.compose.layout
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import kotlin.math.min
 
-internal fun Modifier.systemBarEdgeProtection(
+internal fun Modifier.statusBarEdgeProtection(
     statusBarInsets: WindowInsets,
-    navigationBarInsets: WindowInsets,
     fadeLength: Dp,
     protectionColor: Color,
 ): Modifier = drawWithCache {
     val topProtectedHeight = statusBarInsets.getTop(this).toFloat()
-    val bottomProtectedHeight = navigationBarInsets.getBottom(this).toFloat()
     val fadeHeight = fadeLength.toPx()
     val topHeight = protectedEdgeHeight(topProtectedHeight, fadeHeight, size.height)
-    val bottomHeight = protectedEdgeHeight(bottomProtectedHeight, fadeHeight, size.height)
     val topProtectedStop = protectedStop(topProtectedHeight, topHeight)
-    val bottomFadeStop = 1f - protectedStop(bottomProtectedHeight, bottomHeight)
     val topMidStop = topProtectedStop + ((1f - topProtectedStop) * EdgeFadeMidpoint)
-    val bottomMidStop = bottomFadeStop * (1f - EdgeFadeMidpoint)
     val topBrush = if (topHeight > 0f) {
         Brush.verticalGradient(
             0f to protectionColor.copy(alpha = EdgeStrongAlpha),
@@ -37,18 +31,6 @@ internal fun Modifier.systemBarEdgeProtection(
     } else {
         null
     }
-    val bottomBrush = if (bottomHeight > 0f) {
-        Brush.verticalGradient(
-            0f to Color.Transparent,
-            bottomMidStop to protectionColor.copy(alpha = EdgeMidAlpha),
-            bottomFadeStop to protectionColor.copy(alpha = EdgeStrongAlpha),
-            1f to protectionColor.copy(alpha = EdgeStrongAlpha),
-            startY = size.height - bottomHeight,
-            endY = size.height,
-        )
-    } else {
-        null
-    }
 
     onDrawWithContent {
         drawContent()
@@ -56,13 +38,6 @@ internal fun Modifier.systemBarEdgeProtection(
             drawRect(
                 brush = it,
                 size = Size(size.width, topHeight),
-            )
-        }
-        bottomBrush?.let {
-            drawRect(
-                brush = it,
-                topLeft = Offset(0f, size.height - bottomHeight),
-                size = Size(size.width, bottomHeight),
             )
         }
     }
