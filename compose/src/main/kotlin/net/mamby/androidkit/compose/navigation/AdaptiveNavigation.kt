@@ -61,7 +61,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.layout.LocalAndroidKitNavigationInsets
-import net.mamby.androidkit.compose.layout.LocalAndroidKitNavigationOverlayProtection
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
@@ -94,7 +93,6 @@ public fun <Key : Any> AdaptiveNavigationScaffold(
 
     val adaptiveInfo = currentWindowAdaptiveInfoV2()
     val layoutType = remember(adaptiveInfo) { androidKitNavigationSuiteType(adaptiveInfo) }
-    val dimensions = AndroidKitThemeTokens.dimensions
     val compact = layoutType == NavigationSuiteType.ShortNavigationBarCompact
     val primaryItems = items.take(compactVisibleDestinationCount)
     val overflowItems = items.drop(compactVisibleDestinationCount)
@@ -119,17 +117,11 @@ public fun <Key : Any> AdaptiveNavigationScaffold(
                     showLabels = showCompactLabels,
                 )
             },
-            navigationOverlayProtection = if (flyoutVisible) {
-                dimensions.navigationFlyoutProtectionHeight
-            } else {
-                0.dp
-            },
             content = content,
         )
     } else {
         CompositionLocalProvider(
             LocalAndroidKitNavigationInsets provides WindowInsets(0, 0, 0, 0),
-            LocalAndroidKitNavigationOverlayProtection provides 0.dp,
         ) {
             NavigationSuiteScaffold(
                 navigationSuiteItems = {
@@ -167,7 +159,6 @@ public fun <Key : Any> AdaptiveNavigationScaffold(
 @Composable
 private fun CompactNavigationLayout(
     navigation: @Composable () -> Unit,
-    navigationOverlayProtection: Dp,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ): Unit {
@@ -185,7 +176,6 @@ private fun CompactNavigationLayout(
                     right = 0,
                     bottom = navigationHeight,
                 ),
-                LocalAndroidKitNavigationOverlayProtection provides navigationOverlayProtection,
             ) {
                 content()
             }

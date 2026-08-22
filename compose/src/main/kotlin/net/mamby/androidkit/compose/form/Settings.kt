@@ -64,7 +64,7 @@ public fun SettingsItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun AndroidKitModalSheet(
-    title: String,
+    title: String? = null,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,

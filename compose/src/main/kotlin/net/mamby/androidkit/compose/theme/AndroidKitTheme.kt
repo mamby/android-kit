@@ -54,7 +54,7 @@ public data class AndroidKitDimensions(
     public val floatingNavigationIconSize: Dp = 24.dp,
     public val floatingNavigationIndicatorSize: Dp = 40.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
-    public val floatingBackButtonSize: Dp = 44.dp,
+    public val floatingTitleBarButtonSize: Dp = 44.dp,
     public val floatingAddButtonSize: Dp = 56.dp,
     public val floatingActionIconSize: Dp = 20.dp,
     public val floatingSurfaceBorderWidth: Dp = 1.dp,
@@ -63,9 +63,10 @@ public data class AndroidKitDimensions(
     public val floatingDropdownShadowElevation: Dp = 1.dp,
     public val floatingTitleBarHeight: Dp = 64.dp,
     public val floatingTitleMinimumWidth: Dp = 48.dp,
-    public val contentProtectionBlurRadius: Dp = 20.dp,
-    public val contentProtectionFadeLength: Dp = 96.dp,
-    public val navigationFlyoutProtectionHeight: Dp = 160.dp,
+    public val contentProtectionBlurRadius: Dp = 28.dp,
+    public val contentProtectionFadeLength: Dp = 40.dp,
+    @Deprecated("Flyouts no longer expand page content protection.")
+    public val navigationFlyoutProtectionHeight: Dp = 0.dp,
 )
 
 @Immutable

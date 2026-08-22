@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.unit.Dp
 import kotlin.math.min
 
-internal fun Modifier.degradedEdgeProtection(
+internal fun Modifier.progressiveEdgeProtection(
     topProtectedExtent: Dp,
     bottomProtectedExtent: Dp,
     fadeLength: Dp,
@@ -38,15 +38,27 @@ internal fun Modifier.degradedEdgeProtection(
     val bottomHeight = min(bottomProtectedHeight + fadeHeight, size.height / 2f)
     val topProtectedStop = protectedStop(topProtectedHeight, topHeight)
     val bottomFadeStop = 1f - protectedStop(bottomProtectedHeight, bottomHeight)
+    // A single blur pass stays efficient while the nonlinear mask makes the perceived blur
+    // begin softly and reach full strength only as content enters the protected bar area.
+    val topMaskMidStop = topProtectedStop +
+        ((1f - topProtectedStop) * BlurMaskMidpoint)
+    val topMaskLightStop = topProtectedStop +
+        ((1f - topProtectedStop) * BlurMaskLightPoint)
+    val bottomMaskLightStop = bottomFadeStop * (1f - BlurMaskLightPoint)
+    val bottomMaskMidStop = bottomFadeStop * (1f - BlurMaskMidpoint)
     val topMask = Brush.verticalGradient(
         0f to Color.White,
         topProtectedStop to Color.White,
+        topMaskMidStop to Color.White.copy(alpha = BlurMaskMidAlpha),
+        topMaskLightStop to Color.White.copy(alpha = BlurMaskLightAlpha),
         1f to Color.Transparent,
         startY = 0f,
         endY = topHeight,
     )
     val bottomMask = Brush.verticalGradient(
         0f to Color.Transparent,
+        bottomMaskLightStop to Color.White.copy(alpha = BlurMaskLightAlpha),
+        bottomMaskMidStop to Color.White.copy(alpha = BlurMaskMidAlpha),
         bottomFadeStop to Color.White,
         1f to Color.White,
         startY = size.height - bottomHeight,
@@ -152,6 +164,10 @@ private fun ContentDrawScope.drawMaskedLayer(
     drawContext.canvas.restore()
 }
 
-private const val EdgeScrimStrongAlpha = 0.82f
-private const val EdgeScrimMidAlpha = 0.42f
-private const val EdgeScrimMidpoint = 0.38f
+private const val BlurMaskMidpoint = 0.38f
+private const val BlurMaskLightPoint = 0.74f
+private const val BlurMaskMidAlpha = 0.58f
+private const val BlurMaskLightAlpha = 0.14f
+private const val EdgeScrimStrongAlpha = 0.24f
+private const val EdgeScrimMidAlpha = 0.06f
+private const val EdgeScrimMidpoint = 0.40f

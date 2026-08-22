@@ -36,7 +36,7 @@
     <string name="component_preview_selected_destination">%1$s selected</string>
     <string name="title_bar_auto_hide">Auto-hide title bar</string>
     <string name="component_page_scaffold_description">A Material 3 page shell with a transparent floating title bar, protected blurred edges, safe content padding and an optional anchored floating action.</string>
-    <string name="component_floating_title_bar_description">A transparent page and sheet title bar with an independently centered single-line title, floating back and action buttons, adaptive overflow, and optional auto-hide with tap-to-reveal.</string>
+    <string name="component_floating_title_bar_description">A transparent page and sheet bar with an optional independently centered single-line title, floating back and action buttons, adaptive overflow, and optional auto-hide with tap-to-reveal.</string>
     <string name="component_adaptive_grid_page_description">A lazy adaptive grid that chooses its column count from available width while applying shared spacing and safe content padding.</string>
     <string name="component_detail_page_description">A centered, width-constrained, vertically scrollable detail layout that respects page and navigation insets.</string>
     <string name="component_page_floating_action_description">A circular floating page action that uses Android Kit’s shared translucent surface treatment and touch target.</string>
@@ -51,8 +51,7 @@
     <string name="component_string_list_editor_description">An inline editor for adding unique strings and removing existing values as input chips.</string>
     <string name="component_form_dialog_description">A Material 3 confirmation dialog with shared labels and caller-owned form content.</string>
     <string name="component_settings_item_description">An accessible settings row with optional leading, supporting and trailing content.</string>
-    <string name="component_modal_sheet_description">A modal bottom sheet with shared title chrome, close or back actions, spacing and safe insets.</string>
-    <string name="component_floating_back_button_description">A circular back action with an auto-mirrored icon, shared sizing and floating surface styling.</string>
+    <string name="component_modal_sheet_description">A modal bottom sheet with optional title chrome, close or back actions, spacing and safe insets.</string>
     <string name="component_floating_add_button_description">A circular add action with shared sizing, semantics and floating surface styling.</string>
     <string name="component_floating_action_bar_description">A floating horizontal container for compact action-bar items.</string>
     <string name="component_floating_action_bar_icon_item_description">An icon-only action-bar item that keeps its label in accessibility semantics.</string>
@@ -188,6 +187,8 @@
     <string name="open_sheet">Open example sheet</string>
     <string name="sheet_title">Reusable sheet</string>
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
+    <string name="open_sheet_detail">Open titleless detail</string>
+    <string name="sheet_detail_body">This nested state uses the sheet’s titleless back and close controls.</string>
     <string name="about_section">About this catalog</string>
     <string name="about_body">The catalog consumes the same public artifacts intended for external open-source apps.</string>
     <string name="settings_scroll_section">Extended settings content</string>
