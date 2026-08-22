@@ -42,7 +42,7 @@ import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
 
 @Composable
 public fun PageScaffold(
-    title: String,
+    title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: List<FloatingTitleBarAction> = emptyList(),
@@ -55,7 +55,9 @@ public fun PageScaffold(
     val dimensions = AndroidKitThemeTokens.dimensions
     val measuredContentInsets = androidKitContentWindowInsets()
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
+    val statusBarClearance = measuredContentPadding.calculateTopPadding()
     val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
+    val hasTitleBar = title != null || onBack != null || actions.isNotEmpty()
     val floatingActionClearance = if (floatingActionHeightPx == 0) {
         0.dp
     } else {
@@ -82,29 +84,36 @@ public fun PageScaffold(
                 containerColor = MaterialTheme.colorScheme.background,
                 contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
                 topBar = {
-                    FloatingTitleBar(
-                        title = title,
-                        onBack = onBack,
-                        actions = actions,
-                        autoHide = titleBarAutoHide,
-                    )
+                    if (hasTitleBar) {
+                        FloatingTitleBar(
+                            title = title,
+                            onBack = onBack,
+                            actions = actions,
+                            autoHide = titleBarAutoHide,
+                        )
+                    }
                 },
                 content = { contentPadding ->
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .progressiveEdgeProtection(
-                                topProtectedExtent = contentPadding.calculateTopPadding(),
+                            .edgeProtection(
+                                topProtectedExtent = if (hasTitleBar) {
+                                    contentPadding.calculateTopPadding()
+                                } else {
+                                    statusBarClearance
+                                },
                                 bottomProtectedExtent = navigationBottomClearance +
                                     floatingActionClearance,
                                 fadeLength = dimensions.contentProtectionFadeLength,
-                                blurRadius = dimensions.contentProtectionBlurRadius,
                                 protectionColor = MaterialTheme.colorScheme.background,
                             ),
                     ) {
                         content(
-                            contentPadding.withAdditionalBottomPadding(
-                                navigationBottomClearance + floatingActionClearance,
+                            contentPadding.withAdditionalPadding(
+                                additionalTop = if (hasTitleBar) 0.dp else statusBarClearance,
+                                additionalBottom = navigationBottomClearance +
+                                    floatingActionClearance,
                             ),
                         )
                     }
@@ -202,11 +211,14 @@ public fun PageFloatingAction(
 }
 
 @Composable
-private fun PaddingValues.withAdditionalBottomPadding(additionalBottom: Dp): PaddingValues {
+private fun PaddingValues.withAdditionalPadding(
+    additionalTop: Dp,
+    additionalBottom: Dp,
+): PaddingValues {
     val layoutDirection = LocalLayoutDirection.current
     return PaddingValues(
         start = calculateStartPadding(layoutDirection),
-        top = calculateTopPadding(),
+        top = calculateTopPadding() + additionalTop,
         end = calculateEndPadding(layoutDirection),
         bottom = calculateBottomPadding() + additionalBottom,
     )
