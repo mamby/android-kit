@@ -39,8 +39,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -82,6 +85,9 @@ public fun FloatingTitleBar(
 
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
+    val titleTextShadowRadius = with(LocalDensity.current) {
+        dimensions.floatingTitleTextShadowRadius.toPx()
+    }
     var controlsVisible by rememberSaveable { mutableStateOf(true) }
     var interactionVersion by remember { mutableIntStateOf(0) }
     var overflowExpanded by remember { mutableStateOf(false) }
@@ -203,7 +209,15 @@ public fun FloatingTitleBar(
                                     contentDescription = it
                                 },
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                shadow = Shadow(
+                                    color = MaterialTheme.colorScheme.background.copy(
+                                        alpha = FloatingTitleTextShadowAlpha,
+                                    ),
+                                    offset = Offset.Zero,
+                                    blurRadius = titleTextShadowRadius,
+                                ),
+                            ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -353,3 +367,4 @@ private fun controlRowWidth(
 public const val FloatingTitleBarDefaultAutoHideDelayMillis: Long = 4_000L
 
 private const val MaximumDirectTitleBarActions = 2
+private const val FloatingTitleTextShadowAlpha = 0.85f

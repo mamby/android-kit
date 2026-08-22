@@ -189,6 +189,7 @@ fun FormsScreen() {
                     minLines = 4,
                 )
             }
+            ScrollTestContent()
         }
     }
 

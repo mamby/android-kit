@@ -33,8 +33,8 @@ internal fun floatingSurfaceVisuals(): FloatingSurfaceVisuals {
     val dimensions = AndroidKitThemeTokens.dimensions
     val scheme = MaterialTheme.colorScheme
     return FloatingSurfaceVisuals(
-        containerColor = Color.White.copy(alpha = style.opacity),
-        contentColor = Color.Black,
+        containerColor = scheme.surface.copy(alpha = style.opacity),
+        contentColor = scheme.onSurface,
         border = BorderStroke(
             width = dimensions.floatingSurfaceBorderWidth,
             color = scheme.outlineVariant.copy(alpha = FloatingSurfaceBorderAlpha),

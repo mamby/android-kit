@@ -143,9 +143,9 @@ fun androidKitFloatingOpaque() {
 }
 
 @PreviewTest
-@Preview(name = "White transparent", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(name = "Dark surface transparent", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
-fun androidKitWhiteTransparent() {
+fun androidKitDarkSurfaceTransparent() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Dark,
         floatingSurfaceStyle = FloatingSurfaceStyle(
@@ -155,21 +155,18 @@ fun androidKitWhiteTransparent() {
 }
 
 @PreviewTest
-@Preview(name = "White default", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(name = "Dark surface default", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
-fun androidKitWhiteDefault() {
+fun androidKitDarkSurfaceDefault() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Dark,
-        floatingSurfaceStyle = FloatingSurfaceStyle(
-            opacity = 0.92f,
-        ),
     )
 }
 
 @PreviewTest
-@Preview(name = "White opaque", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(name = "Dark surface opaque", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
-fun androidKitWhiteOpaque() {
+fun androidKitDarkSurfaceOpaque() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Dark,
         floatingSurfaceStyle = FloatingSurfaceStyle(

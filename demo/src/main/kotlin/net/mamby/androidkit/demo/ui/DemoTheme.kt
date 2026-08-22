@@ -10,10 +10,16 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
 import net.mamby.androidkit.demo.R
 
-enum class DemoThemeChoice {
-    Light,
-    Dark,
-    Prism,
+enum class DemoThemeChoice(internal val storedValue: String) {
+    Light("light"),
+    Dark("dark"),
+    Prism("prism"),
+    ;
+
+    internal companion object {
+        fun fromStoredValue(value: String?): DemoThemeChoice =
+            entries.firstOrNull { it.storedValue == value } ?: Light
+    }
 }
 
 val PrismThemeDefinition = AndroidKitThemeDefinition(

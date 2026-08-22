@@ -30,7 +30,7 @@ public data class AndroidKitThemeDefinition(
 
 @Immutable
 public data class FloatingSurfaceStyle(
-    public val opacity: Float = 0.92f,
+    public val opacity: Float = 0.8f,
 ) {
     init {
         require(opacity in 0f..1f) { "Floating surface opacity must be between 0 and 1." }
@@ -63,6 +63,7 @@ public data class AndroidKitDimensions(
     public val floatingDropdownShadowElevation: Dp = 1.dp,
     public val floatingTitleBarHeight: Dp = 64.dp,
     public val floatingTitleMinimumWidth: Dp = 48.dp,
+    public val floatingTitleTextShadowRadius: Dp = 2.dp,
     @Deprecated("Content protection now uses a background gradient instead of blur.")
     public val contentProtectionBlurRadius: Dp = 0.dp,
     public val contentProtectionFadeLength: Dp = 4.dp,

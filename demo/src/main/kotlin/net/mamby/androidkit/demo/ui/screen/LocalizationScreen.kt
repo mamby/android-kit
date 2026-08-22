@@ -31,14 +31,7 @@ fun LocalizationScreen() {
     ) { contentPadding ->
         DetailPage(contentPadding = contentPadding) {
             LocalizationContent()
-            repeat(LocalizationScrollExampleCount) { index ->
-                SectionCard(
-                    title = stringResource(R.string.scroll_section_title, index + 1),
-                    supportingText = stringResource(R.string.scroll_section_description),
-                ) {
-                    Text(stringResource(R.string.scroll_section_body))
-                }
-            }
+            ScrollTestContent()
         }
     }
 }
@@ -133,5 +126,4 @@ private fun nativeLanguageName(languageTag: String): String =
         }
     }
 
-private const val LocalizationScrollExampleCount = 5
 private val SupportedLanguageTags: List<String> = listOf("en", "fr", "ar")
