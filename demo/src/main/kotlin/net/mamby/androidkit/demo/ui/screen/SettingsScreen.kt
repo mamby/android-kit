@@ -36,7 +36,6 @@ fun SettingsScreen(
     val dimensions = AndroidKitThemeTokens.dimensions
     PageScaffold(
         title = stringResource(R.string.settings_title),
-        subtitle = stringResource(R.string.settings_subtitle),
     ) { contentPadding ->
         DetailPage(contentPadding = contentPadding) {
             SectionCard(

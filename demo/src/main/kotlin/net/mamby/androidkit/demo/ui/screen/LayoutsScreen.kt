@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,7 +53,6 @@ fun LayoutsScreen(onSelected: (Int) -> Unit) {
     val dimensions = AndroidKitThemeTokens.dimensions
     PageScaffold(
         title = stringResource(R.string.layouts_title),
-        subtitle = stringResource(R.string.layouts_subtitle),
     ) { contentPadding ->
         AdaptiveGridPage(contentPadding = contentPadding) {
             items(samples.size, key = { samples[it].id }) { index ->
@@ -117,17 +114,7 @@ fun LayoutDetailScreen(sampleId: Int, onBack: () -> Unit) {
     val backAction = listDetailBackAction(onBack)
     PageScaffold(
         title = sample.title,
-        subtitle = sample.body,
-        navigationIcon = backAction?.let { action ->
-            {
-                IconButton(onClick = action) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.action_back),
-                    )
-                }
-            }
-        },
+        onBack = backAction,
     ) { contentPadding ->
         DetailPage(contentPadding = contentPadding) {
             SectionCard(

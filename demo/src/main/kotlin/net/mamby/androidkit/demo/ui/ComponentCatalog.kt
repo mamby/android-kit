@@ -25,6 +25,11 @@ enum class ComponentId(
         category = ComponentCategory.Layout,
         descriptionResource = R.string.component_page_scaffold_description,
     ),
+    FloatingTitleBar(
+        apiName = "FloatingTitleBar",
+        category = ComponentCategory.Layout,
+        descriptionResource = R.string.component_floating_title_bar_description,
+    ),
     AdaptiveGridPage(
         apiName = "AdaptiveGridPage",
         category = ComponentCategory.Layout,

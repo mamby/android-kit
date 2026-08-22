@@ -12,6 +12,8 @@
     <string name="action_save">Save</string>
     <string name="action_share">Share</string>
     <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_show_title_bar">Show title bar</string>
 
     <string name="nav_components">Components</string>
     <string name="nav_layouts">Layouts</string>
@@ -21,7 +23,6 @@
     <string name="nav_settings">Settings</string>
 
     <string name="components_title">Component gallery</string>
-    <string name="components_subtitle">%1$d reusable UI components with live previews</string>
     <string name="component_category_layout">Layout</string>
     <string name="component_category_presentation">Presentation</string>
     <string name="component_category_forms_settings">Forms and settings</string>
@@ -33,7 +34,9 @@
     <string name="component_detail_preview_title">Live preview</string>
     <string name="component_detail_preview_hint">Use the controls below to exercise the component.</string>
     <string name="component_preview_selected_destination">%1$s selected</string>
-    <string name="component_page_scaffold_description">A Material 3 page shell with a title bar, edge-to-edge insets, content padding and an optional anchored floating action.</string>
+    <string name="title_bar_auto_hide">Auto-hide title bar</string>
+    <string name="component_page_scaffold_description">A Material 3 page shell with a transparent floating title bar, protected blurred edges, safe content padding and an optional anchored floating action.</string>
+    <string name="component_floating_title_bar_description">A transparent page and sheet title bar with an independently centered single-line title, floating back and action buttons, adaptive overflow, and optional auto-hide with tap-to-reveal.</string>
     <string name="component_adaptive_grid_page_description">A lazy adaptive grid that chooses its column count from available width while applying shared spacing and safe content padding.</string>
     <string name="component_detail_page_description">A centered, width-constrained, vertically scrollable detail layout that respects page and navigation insets.</string>
     <string name="component_page_floating_action_description">A circular floating page action that uses Android Kit’s shared translucent surface treatment and touch target.</string>
@@ -73,7 +76,6 @@
     <string name="theme_count">2 + 1</string>
     <string name="theme_count_label">library and demo themes</string>
     <string name="floating_navigation_variations_title">Floating bottom menu</string>
-    <string name="floating_catalog_subtitle">Every floating navigation and action variation in one scrollable catalog</string>
     <string name="floating_navigation_variations_description">Open each page to test the real compact menu variation.</string>
     <string name="floating_navigation_labels_title">Icons and labels</string>
     <string name="floating_navigation_icons_title">Icons only</string>
@@ -82,11 +84,9 @@
     <string name="floating_actions_icon_text_title">Icon with text</string>
     <string name="floating_actions_icons_title">Icons only</string>
     <string name="floating_actions_text_title">Text only</string>
-    <string name="floating_navigation_demo_subtitle">The active compact menu is the component under test</string>
     <string name="floating_navigation_labels_description">Compact destinations show both their icons and labels.</string>
     <string name="floating_navigation_icons_description">Compact destinations keep labels in accessibility semantics while displaying icons only.</string>
     <string name="floating_navigation_demo_instruction">Switch destinations, open the overflow flyout, and scroll this page to verify that the menu remains anchored.</string>
-    <string name="floating_actions_demo_subtitle">Scroll and open the keyboard to verify bottom anchoring</string>
     <string name="floating_actions_icon_text_description">The primary action combines an icon with a visible label.</string>
     <string name="floating_actions_icons_description">A compact group exposes icon actions with accessible descriptions.</string>
     <string name="floating_actions_text_description">Text actions provide a clear secondary and primary choice.</string>
@@ -97,7 +97,6 @@
     <string name="scroll_section_body">This section verifies that floating controls stay anchored while content continues beneath them.</string>
 
     <string name="layouts_title">Adaptive layouts</string>
-    <string name="layouts_subtitle">Select a sample to open its list-detail presentation</string>
     <string name="layout_dashboard">Dashboard</string>
     <string name="layout_dashboard_body">Adaptive cards flow from one column to a wide grid.</string>
     <string name="layout_library">Library list</string>
@@ -121,7 +120,6 @@
     <string name="detail_navigation_body">Each root retains its own Navigation 3 history while the detail scene adapts.</string>
 
     <string name="forms_title">Forms and editors</string>
-    <string name="forms_subtitle">State-driven fields with accessible actions</string>
     <string name="profile_section">Profile</string>
     <string name="profile_section_description">Field pairs adapt without device-specific branches.</string>
     <string name="field_name">Name</string>
@@ -159,7 +157,6 @@
     <string name="dialog_body">The demo keeps state in memory; consuming apps decide how and where to persist it.</string>
 
     <string name="localization_title">Localization</string>
-    <string name="localization_subtitle">App-owned languages with locale-aware formatting</string>
     <string name="language_section">Application language</string>
     <string name="language_section_description">Changing language uses the official per-app locale API.</string>
     <string name="language_system">System default</string>
@@ -178,7 +175,6 @@
     <string name="sample_code">Code</string>
 
     <string name="settings_title">Catalog settings</string>
-    <string name="settings_subtitle">Theme, language and reusable app surfaces</string>
     <string name="appearance_section">Appearance</string>
     <string name="appearance_section_description">Light and Dark belong to the library. Prism exists only in this demo.</string>
     <string name="theme_light">Light</string>

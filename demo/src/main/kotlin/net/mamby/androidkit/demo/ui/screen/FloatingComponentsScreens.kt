@@ -1,13 +1,12 @@
 package net.mamby.androidkit.demo.ui.screen
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.action.FloatingActionBar
 import net.mamby.androidkit.compose.action.FloatingActionBarFlyout
 import net.mamby.androidkit.compose.action.FloatingActionBarFlyoutItem
+import net.mamby.androidkit.compose.action.FloatingActionBarFlyoutStyle
 import net.mamby.androidkit.compose.action.FloatingActionBarIconItem
 import net.mamby.androidkit.compose.action.FloatingActionBarIconLabelItem
 import net.mamby.androidkit.compose.action.FloatingActionBarTextItem
@@ -35,7 +35,6 @@ fun FloatingCatalogScreen(
 ) {
     PageScaffold(
         title = stringResource(R.string.nav_floating),
-        subtitle = stringResource(R.string.floating_catalog_subtitle),
     ) { contentPadding ->
         DetailPage(contentPadding = contentPadding) {
             SectionCard(
@@ -77,8 +76,7 @@ fun FloatingNavigationDemoScreen(
                 R.string.floating_navigation_icons_title
             },
         ),
-        subtitle = stringResource(R.string.floating_navigation_demo_subtitle),
-        navigationIcon = { DemoBackButton(onBack) },
+        onBack = onBack,
     ) { contentPadding ->
         DetailPage(contentPadding = contentPadding) {
             SectionCard(
@@ -115,11 +113,15 @@ fun FloatingActionsDemoScreen(
             label = stringResource(R.string.action_delete),
             onClick = { actionCount += 1 },
         ),
+        FloatingActionBarFlyoutItem(
+            icon = Icons.Default.Edit,
+            label = stringResource(R.string.action_edit),
+            onClick = { actionCount += 1 },
+        ),
     )
     PageScaffold(
         title = stringResource(variant.titleResource()),
-        subtitle = stringResource(R.string.floating_actions_demo_subtitle),
-        navigationIcon = { DemoBackButton(onBack) },
+        onBack = onBack,
         floatingActionButton = {
             FloatingActionBar {
                 when (variant) {
@@ -136,7 +138,7 @@ fun FloatingActionsDemoScreen(
                         )
                         FloatingActionBarFlyout(
                             items = flyoutItems,
-                            showLabel = true,
+                            style = FloatingActionBarFlyoutStyle.IconAndLabel,
                         )
                     }
 
@@ -165,6 +167,10 @@ fun FloatingActionsDemoScreen(
                             onClick = { actionCount += 1 },
                             label = stringResource(R.string.action_save),
                         )
+                        FloatingActionBarFlyout(
+                            items = flyoutItems,
+                            style = FloatingActionBarFlyoutStyle.Text,
+                        )
                     }
                 }
             }
@@ -191,16 +197,6 @@ private fun LongScrollingExamples() {
         ) {
             Text(stringResource(R.string.scroll_section_body))
         }
-    }
-}
-
-@Composable
-private fun DemoBackButton(onBack: () -> Unit) {
-    IconButton(onClick = onBack) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = stringResource(R.string.action_back),
-        )
     }
 }
 

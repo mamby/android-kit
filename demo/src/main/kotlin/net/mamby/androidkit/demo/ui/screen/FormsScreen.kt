@@ -54,7 +54,6 @@ fun FormsScreen() {
 
     PageScaffold(
         title = stringResource(R.string.forms_title),
-        subtitle = stringResource(R.string.forms_subtitle),
         floatingActionButton = {
             FloatingActionBar {
                 FloatingActionBarTextItem(

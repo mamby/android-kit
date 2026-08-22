@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +33,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
+import net.mamby.androidkit.compose.layout.LocalAndroidKitBottomOverlayProtection
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
@@ -162,32 +167,87 @@ public class FloatingActionBarFlyoutItem(
     public val onClick: () -> Unit,
 )
 
+public enum class FloatingActionBarFlyoutStyle {
+    Icon,
+    IconAndLabel,
+    Text,
+}
+
 @Composable
 public fun FloatingActionBarFlyout(
     items: List<FloatingActionBarFlyoutItem>,
     modifier: Modifier = Modifier,
     showLabel: Boolean = false,
     contentDescription: String = AndroidKitThemeTokens.strings.more,
+): Unit = FloatingActionBarFlyoutContent(
+    items = items,
+    modifier = modifier,
+    style = if (showLabel) {
+        FloatingActionBarFlyoutStyle.IconAndLabel
+    } else {
+        FloatingActionBarFlyoutStyle.Icon
+    },
+    contentDescription = contentDescription,
+)
+
+@Composable
+public fun FloatingActionBarFlyout(
+    items: List<FloatingActionBarFlyoutItem>,
+    style: FloatingActionBarFlyoutStyle,
+    modifier: Modifier = Modifier,
+    contentDescription: String = AndroidKitThemeTokens.strings.more,
+): Unit = FloatingActionBarFlyoutContent(
+    items = items,
+    modifier = modifier,
+    style = style,
+    contentDescription = contentDescription,
+)
+
+@Composable
+private fun FloatingActionBarFlyoutContent(
+    items: List<FloatingActionBarFlyoutItem>,
+    modifier: Modifier,
+    style: FloatingActionBarFlyoutStyle,
+    contentDescription: String,
 ): Unit {
     require(items.isNotEmpty()) { "At least one flyout item is required." }
     var expanded by remember { mutableStateOf(false) }
+    val dimensions = AndroidKitThemeTokens.dimensions
+    val overlayKey = remember { Any() }
+    val updateBottomOverlayProtection = LocalAndroidKitBottomOverlayProtection.current
+
+    fun setExpanded(value: Boolean) {
+        expanded = value
+        updateBottomOverlayProtection(overlayKey, value)
+    }
+
+    DisposableEffect(overlayKey, updateBottomOverlayProtection) {
+        onDispose { updateBottomOverlayProtection(overlayKey, false) }
+    }
+
     Box(modifier = modifier) {
-        if (showLabel) {
-            FloatingActionBarIconLabelItem(
-                onClick = { expanded = !expanded },
+        when (style) {
+            FloatingActionBarFlyoutStyle.Icon -> FloatingActionBarIconItem(
+                onClick = { setExpanded(!expanded) },
+                icon = Icons.Default.MoreVert,
+                contentDescription = contentDescription,
+            )
+
+            FloatingActionBarFlyoutStyle.IconAndLabel -> FloatingActionBarIconLabelItem(
+                onClick = { setExpanded(!expanded) },
                 icon = Icons.Default.MoreVert,
                 label = contentDescription,
             )
-        } else {
-            FloatingActionBarIconItem(
-                onClick = { expanded = !expanded },
-                icon = Icons.Default.MoreVert,
-                contentDescription = contentDescription,
+
+            FloatingActionBarFlyoutStyle.Text -> FloatingActionBarTextItem(
+                onClick = { setExpanded(!expanded) },
+                label = contentDescription,
             )
         }
         FloatingDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
+            onDismissRequest = { setExpanded(false) },
+            offset = DpOffset(x = 0.dp, y = dimensions.spaceExtraSmall),
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
@@ -198,15 +258,19 @@ public fun FloatingActionBarFlyout(
                         )
                     },
                     onClick = {
-                        expanded = false
+                        setExpanded(false)
                         item.onClick()
                     },
+                    contentPadding = PaddingValues(
+                        start = dimensions.spaceMedium,
+                        end = dimensions.spaceLarge,
+                    ),
                     leadingIcon = {
                         Icon(
                             imageVector = item.icon,
                             contentDescription = null,
                             modifier = Modifier.size(
-                                AndroidKitThemeTokens.dimensions.floatingActionBarIconSize,
+                                dimensions.floatingActionBarIconSize,
                             ),
                         )
                     },

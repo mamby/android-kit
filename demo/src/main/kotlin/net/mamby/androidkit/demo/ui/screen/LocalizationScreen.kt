@@ -28,7 +28,6 @@ import java.util.Locale
 fun LocalizationScreen() {
     PageScaffold(
         title = stringResource(R.string.localization_title),
-        subtitle = stringResource(R.string.localization_subtitle),
     ) { contentPadding ->
         DetailPage(contentPadding = contentPadding) {
             LocalizationContent()

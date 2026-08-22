@@ -6,16 +6,17 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DashboardCustomize
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Save
@@ -24,7 +25,6 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.action.FloatingActionBar
 import net.mamby.androidkit.compose.action.FloatingActionBarFlyout
 import net.mamby.androidkit.compose.action.FloatingActionBarFlyoutItem
+import net.mamby.androidkit.compose.action.FloatingActionBarFlyoutStyle
 import net.mamby.androidkit.compose.action.FloatingActionBarIconItem
 import net.mamby.androidkit.compose.action.FloatingActionBarIconLabelItem
 import net.mamby.androidkit.compose.action.FloatingActionBarTextItem
@@ -58,6 +59,8 @@ import net.mamby.androidkit.compose.form.StringListEditor
 import net.mamby.androidkit.compose.form.SwitchField
 import net.mamby.androidkit.compose.layout.AdaptiveGridPage
 import net.mamby.androidkit.compose.layout.DetailPage
+import net.mamby.androidkit.compose.layout.FloatingTitleBar
+import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.PageFloatingAction
 import net.mamby.androidkit.compose.layout.PageScaffold
 import net.mamby.androidkit.compose.navigation.AdaptiveNavigationScaffold
@@ -107,17 +110,7 @@ fun ComponentDetailScreen(
     val backAction = listDetailBackAction(onBack)
     PageScaffold(
         title = componentId.apiName,
-        subtitle = stringResource(componentId.category.labelResource),
-        navigationIcon = backAction?.let { action ->
-            {
-                IconButton(onClick = action) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.action_back),
-                    )
-                }
-            }
-        },
+        onBack = backAction,
     ) { contentPadding ->
         DetailPage(contentPadding = contentPadding) {
             SectionCard(title = stringResource(R.string.component_detail_about_title)) {
@@ -140,6 +133,7 @@ fun ComponentDetailScreen(
 private fun ComponentPreview(componentId: ComponentId) {
     when (componentId) {
         ComponentId.PageScaffold -> PageScaffoldPreview()
+        ComponentId.FloatingTitleBar -> FloatingTitleBarPreview()
         ComponentId.AdaptiveGridPage -> AdaptiveGridPagePreview()
         ComponentId.DetailPage -> DetailPagePreview()
         ComponentId.PageFloatingAction -> PageFloatingActionPreview()
@@ -185,6 +179,47 @@ private fun PageScaffoldPreview() {
                     modifier = Modifier.padding(AndroidKitThemeTokens.dimensions.spaceMedium),
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun FloatingTitleBarPreview() {
+    var autoHide by rememberSaveable { mutableStateOf(false) }
+    val dimensions = AndroidKitThemeTokens.dimensions
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+    ) {
+        SwitchField(
+            title = stringResource(R.string.title_bar_auto_hide),
+            checked = autoHide,
+            onCheckedChange = { autoHide = it },
+        )
+        PreviewViewport {
+            FloatingTitleBar(
+                title = stringResource(R.string.components_title),
+                modifier = Modifier.align(Alignment.TopCenter),
+                onBack = {},
+                actions = listOf(
+                    FloatingTitleBarAction(
+                        icon = Icons.Default.Edit,
+                        label = stringResource(R.string.action_edit),
+                        onClick = {},
+                    ),
+                    FloatingTitleBarAction(
+                        icon = Icons.Default.Share,
+                        label = stringResource(R.string.action_share),
+                        onClick = {},
+                    ),
+                    FloatingTitleBarAction(
+                        icon = Icons.Default.Delete,
+                        label = stringResource(R.string.action_delete),
+                        onClick = {},
+                    ),
+                ),
+                autoHide = autoHide,
+                windowInsets = WindowInsets(0, 0, 0, 0),
+            )
         }
     }
 }
@@ -497,8 +532,13 @@ private fun FloatingActionBarFlyoutPreview() {
                         label = stringResource(R.string.action_delete),
                         onClick = onAction,
                     ),
+                    FloatingActionBarFlyoutItem(
+                        icon = Icons.Default.Edit,
+                        label = stringResource(R.string.action_edit),
+                        onClick = onAction,
+                    ),
                 ),
-                showLabel = true,
+                style = FloatingActionBarFlyoutStyle.IconAndLabel,
             )
         }
     }

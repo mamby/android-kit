@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -23,14 +22,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,23 +43,42 @@ import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun PageScaffold(
     title: String,
     modifier: Modifier = Modifier,
-    subtitle: String? = null,
-    navigationIcon: (@Composable () -> Unit)? = null,
-    actions: @Composable RowScope.() -> Unit = {},
+    onBack: (() -> Unit)? = null,
+    actions: List<FloatingTitleBarAction> = emptyList(),
+    titleBarAutoHide: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ): Unit {
     var floatingActionHeightPx by remember { mutableIntStateOf(0) }
+    var titleBarOverflowExpanded by remember { mutableStateOf(false) }
+    val bottomOverlayKeys = remember { mutableStateMapOf<Any, Unit>() }
+    val updateBottomOverlayProtection: (Any, Boolean) -> Unit = remember {
+        { key, expanded ->
+            if (expanded) {
+                bottomOverlayKeys[key] = Unit
+            } else {
+                bottomOverlayKeys.remove(key)
+            }
+        }
+    }
     val floatingActionHeight = with(LocalDensity.current) { floatingActionHeightPx.toDp() }
     val dimensions = AndroidKitThemeTokens.dimensions
     val measuredContentInsets = androidKitContentWindowInsets()
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
     val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
+    val navigationFlyoutClearance = LocalAndroidKitNavigationOverlayProtection.current
+    val bottomOverlayClearance = maxOf(
+        navigationFlyoutClearance,
+        if (bottomOverlayKeys.isNotEmpty()) {
+            dimensions.navigationFlyoutProtectionHeight
+        } else {
+            0.dp
+        },
+    )
     val floatingActionClearance = if (floatingActionHeightPx == 0) {
         0.dp
     } else {
@@ -79,54 +97,71 @@ public fun PageScaffold(
     MaterialTheme(
         colorScheme = pageColorScheme,
     ) {
-        Box(
-            modifier = modifier.imePadding(),
+        CompositionLocalProvider(
+            LocalAndroidKitBottomOverlayProtection provides updateBottomOverlayProtection,
         ) {
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                containerColor = MaterialTheme.colorScheme.background,
-                contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Column {
-                                Text(text = title, maxLines = 1)
-                                subtitle?.let {
-                                    Text(
-                                        text = it,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = 1,
-                                    )
-                                }
-                            }
-                        },
-                        navigationIcon = { navigationIcon?.invoke() },
-                        actions = actions,
-                    )
-                },
-                content = { contentPadding ->
-                    content(
-                        contentPadding.withAdditionalBottomPadding(
-                            navigationBottomClearance + floatingActionClearance,
-                        ),
-                    )
-                },
-            )
             Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .windowInsetsPadding(
-                        measuredContentInsets.only(
-                            WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
-                        ),
-                    )
-                    .padding(dimensions.spaceMedium)
-                    .onSizeChanged { floatingActionHeightPx = it.height },
-                contentAlignment = Alignment.Center,
+                modifier = modifier.imePadding(),
             ) {
-                floatingActionButton()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
+                    topBar = {
+                        FloatingTitleBar(
+                            title = title,
+                            onBack = onBack,
+                            actions = actions,
+                            autoHide = titleBarAutoHide,
+                            onOverflowExpandedChange = { titleBarOverflowExpanded = it },
+                        )
+                    },
+                    content = { contentPadding ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .degradedEdgeProtection(
+                                    topProtectedExtent = contentPadding.calculateTopPadding() +
+                                        if (titleBarOverflowExpanded) {
+                                            dimensions.navigationFlyoutProtectionHeight
+                                        } else {
+                                            0.dp
+                                        },
+                                    bottomProtectedExtent = navigationBottomClearance +
+                                        bottomOverlayClearance +
+                                        floatingActionClearance,
+                                    fadeLength = dimensions.contentProtectionFadeLength,
+                                    blurRadius = dimensions.contentProtectionBlurRadius,
+                                    protectionColor = MaterialTheme.colorScheme.background,
+                                ),
+                        ) {
+                            content(
+                                contentPadding.withAdditionalBottomPadding(
+                                    navigationBottomClearance + floatingActionClearance,
+                                ),
+                            )
+                        }
+                    },
+                )
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .windowInsetsPadding(
+                            measuredContentInsets.only(
+                                WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+                            ),
+                        )
+                        .padding(dimensions.spaceMedium),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Box(
+                        modifier = Modifier.onSizeChanged { floatingActionHeightPx = it.height },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        floatingActionButton()
+                    }
+                }
             }
         }
     }

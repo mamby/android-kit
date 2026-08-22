@@ -30,7 +30,6 @@ fun ComponentsScreen(onSelected: (ComponentId) -> Unit) {
     val dimensions = AndroidKitThemeTokens.dimensions
     PageScaffold(
         title = stringResource(R.string.components_title),
-        subtitle = stringResource(R.string.components_subtitle, ComponentId.entries.size),
     ) { contentPadding ->
         AdaptiveGridPage(contentPadding = contentPadding) {
             ComponentCategory.entries.forEach { category ->
