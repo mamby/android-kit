@@ -20,11 +20,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import net.mamby.androidkit.compose.layout.FloatingTitleBar
 import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
+import net.mamby.androidkit.compose.layout.toggleTitleBarOnUnconsumedTap
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 @Composable
@@ -76,6 +81,7 @@ public fun AndroidKitModalSheet(
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
+    var titleBarVisible by rememberSaveable(titleBarImmersiveMode) { mutableStateOf(true) }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
@@ -86,7 +92,13 @@ public fun AndroidKitModalSheet(
         },
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .toggleTitleBarOnUnconsumedTap(
+                    enabled = titleBarImmersiveMode,
+                    titleBarVisible = titleBarVisible,
+                    onTitleBarVisibilityChange = { titleBarVisible = it },
+                ),
         ) {
             FloatingTitleBar(
                 title = title,
@@ -98,7 +110,7 @@ public fun AndroidKitModalSheet(
                         onClick = onDismissRequest,
                     ),
                 ) + actions,
-                immersiveMode = titleBarImmersiveMode,
+                visible = titleBarVisible,
             )
             Column(
                 modifier = Modifier

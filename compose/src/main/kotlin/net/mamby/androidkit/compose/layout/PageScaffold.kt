@@ -19,7 +19,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +44,7 @@ public fun PageScaffold(
     content: @Composable (PaddingValues) -> Unit,
 ): Unit {
     var floatingActionHeightPx by remember { mutableIntStateOf(0) }
+    var titleBarVisible by rememberSaveable(titleBarImmersiveMode) { mutableStateOf(true) }
     val floatingActionHeight = with(LocalDensity.current) { floatingActionHeightPx.toDp() }
     val dimensions = AndroidKitThemeTokens.dimensions
     val measuredContentInsets = androidKitContentWindowInsets()
@@ -68,7 +71,13 @@ public fun PageScaffold(
         colorScheme = pageColorScheme,
     ) {
         Box(
-            modifier = modifier.imePadding(),
+            modifier = modifier
+                .toggleTitleBarOnUnconsumedTap(
+                    enabled = titleBarImmersiveMode && hasTitleBar,
+                    titleBarVisible = titleBarVisible,
+                    onTitleBarVisibilityChange = { titleBarVisible = it },
+                )
+                .imePadding(),
         ) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
@@ -80,7 +89,7 @@ public fun PageScaffold(
                             title = title,
                             onBack = onBack,
                             actions = actions,
-                            immersiveMode = titleBarImmersiveMode,
+                            visible = titleBarVisible,
                         )
                     }
                 },

@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -34,19 +33,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -70,7 +66,7 @@ public fun FloatingTitleBar(
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: List<FloatingTitleBarAction> = emptyList(),
-    immersiveMode: Boolean = false,
+    visible: Boolean = true,
     onOverflowExpandedChange: (Boolean) -> Unit = {},
     windowInsets: WindowInsets = WindowInsets.safeDrawing.only(
         WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
@@ -84,7 +80,6 @@ public fun FloatingTitleBar(
     val titleTextShadowRadius = with(LocalDensity.current) {
         dimensions.floatingTitleTextShadowRadius.toPx()
     }
-    var controlsVisible by rememberSaveable(immersiveMode) { mutableStateOf(true) }
     var overflowExpanded by remember { mutableStateOf(false) }
 
     fun setOverflowExpanded(expanded: Boolean) {
@@ -92,176 +87,146 @@ public fun FloatingTitleBar(
         onOverflowExpandedChange(expanded)
     }
 
-    fun toggleControlsVisibility() {
-        controlsVisible = !controlsVisible
-        if (!controlsVisible) {
-            setOverflowExpanded(false)
-        }
+    LaunchedEffect(visible) {
+        if (!visible && overflowExpanded) setOverflowExpanded(false)
     }
 
     Box(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .windowInsetsPadding(windowInsets)
+            .heightIn(min = dimensions.floatingTitleBarHeight)
+            .padding(
+                horizontal = dimensions.spaceSmall,
+                vertical = dimensions.floatingTitleBarVerticalPadding,
+            ),
     ) {
-        Box(
+        AnimatedVisibility(
+            visible = visible,
             modifier = Modifier
-                .matchParentSize()
-                .pointerInput(immersiveMode, controlsVisible) {
-                    detectTapGestures {
-                        if (immersiveMode) toggleControlsVisibility()
-                    }
-                }
-                .clearAndSetSemantics {
-                    if (immersiveMode) {
-                        contentDescription = if (controlsVisible) {
-                            strings.hideTitleBar
-                        } else {
-                            strings.showTitleBar
-                        }
-                        onClick {
-                            toggleControlsVisibility()
-                            true
-                        }
-                    }
-                },
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .windowInsetsPadding(windowInsets)
-                .heightIn(min = dimensions.floatingTitleBarHeight)
-                .padding(
-                    horizontal = dimensions.spaceSmall,
-                    vertical = dimensions.floatingTitleBarVerticalPadding,
-                ),
+                .align(Alignment.Center)
+                .fillMaxWidth(),
+            enter = fadeIn() + slideInVertically { -it / 2 },
+            exit = fadeOut() + slideOutVertically { -it / 2 },
         ) {
-            AnimatedVisibility(
-                visible = controlsVisible,
+            BoxWithConstraints(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .fillMaxWidth(),
-                enter = fadeIn() + slideInVertically { -it / 2 },
-                exit = fadeOut() + slideOutVertically { -it / 2 },
+                    .fillMaxWidth()
+                    .heightIn(
+                        min = if (hasButtons) dimensions.minimumTouchTarget else 0.dp,
+                    ),
             ) {
-                BoxWithConstraints(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(
-                            min = if (hasButtons) dimensions.minimumTouchTarget else 0.dp,
-                        ),
-                ) {
-                    val directActionCount = directTitleBarActionCount(
-                        actionCount = actions.size,
-                        availableWidth = maxWidth,
-                        dimensions = dimensions,
-                    )
-                    val directActions = actions.take(directActionCount)
-                    val overflowActions = actions.drop(directActionCount)
-                    LaunchedEffect(overflowActions.isNotEmpty()) {
-                        if (overflowActions.isEmpty()) setOverflowExpanded(false)
-                    }
-                    val endControlCount = directActions.size + if (overflowActions.isNotEmpty()) 1 else 0
-                    val leadingWidth = controlRowWidth(
-                        controlCount = onBack?.let { 1 } ?: 0,
-                        dimensions = dimensions,
-                    )
-                    val endWidth = controlRowWidth(endControlCount, dimensions)
-                    val sideWidth = maxOf(leadingWidth, endWidth)
-                    val titleWidth = (
-                        maxWidth - ((sideWidth + dimensions.spaceExtraSmall) * 2)
-                    ).coerceAtLeast(0.dp)
+                val directActionCount = directTitleBarActionCount(
+                    actionCount = actions.size,
+                    availableWidth = maxWidth,
+                    dimensions = dimensions,
+                )
+                val directActions = actions.take(directActionCount)
+                val overflowActions = actions.drop(directActionCount)
+                LaunchedEffect(overflowActions.isNotEmpty()) {
+                    if (overflowActions.isEmpty()) setOverflowExpanded(false)
+                }
+                val endControlCount = directActions.size + if (overflowActions.isNotEmpty()) 1 else 0
+                val leadingWidth = controlRowWidth(
+                    controlCount = onBack?.let { 1 } ?: 0,
+                    dimensions = dimensions,
+                )
+                val endWidth = controlRowWidth(endControlCount, dimensions)
+                val sideWidth = maxOf(leadingWidth, endWidth)
+                val titleWidth = (
+                    maxWidth - ((sideWidth + dimensions.spaceExtraSmall) * 2)
+                ).coerceAtLeast(0.dp)
 
-                    if (onBack != null) {
-                        FloatingTitleBarBackButton(
-                            onClick = onBack,
-                            modifier = Modifier.align(Alignment.CenterStart),
-                        )
-                    }
+                if (onBack != null) {
+                    FloatingTitleBarBackButton(
+                        onClick = onBack,
+                        modifier = Modifier.align(Alignment.CenterStart),
+                    )
+                }
 
-                    title?.let {
-                        Text(
-                            text = it,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .fillMaxWidth()
-                                .padding(horizontal = (maxWidth - titleWidth) / 2)
-                                .clearAndSetSemantics {
-                                    heading()
-                                    contentDescription = it
-                                },
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                shadow = Shadow(
-                                    color = MaterialTheme.colorScheme.background.copy(
-                                        alpha = FloatingTitleTextShadowAlpha,
-                                    ),
-                                    offset = Offset.Zero,
-                                    blurRadius = titleTextShadowRadius,
+                title?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxWidth()
+                            .padding(horizontal = (maxWidth - titleWidth) / 2)
+                            .clearAndSetSemantics {
+                                heading()
+                                contentDescription = it
+                            },
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            shadow = Shadow(
+                                color = MaterialTheme.colorScheme.background.copy(
+                                    alpha = FloatingTitleTextShadowAlpha,
                                 ),
+                                offset = Offset.Zero,
+                                blurRadius = titleTextShadowRadius,
                             ),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
 
-                    if (endControlCount > 0) {
-                        Row(
-                            modifier = Modifier.align(Alignment.CenterEnd),
-                            horizontalArrangement = Arrangement.spacedBy(0.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            directActions.forEach { action ->
-                                FloatingTitleBarActionButton(action = action)
-                            }
-                            if (overflowActions.isNotEmpty()) {
-                                Box {
-                                    FloatingTitleBarActionButton(
-                                        action = FloatingTitleBarAction(
-                                            icon = Icons.Default.MoreVert,
-                                            label = strings.more,
-                                            onClick = {
-                                                setOverflowExpanded(true)
-                                            },
-                                        ),
-                                    )
-                                    FloatingDropdownMenu(
-                                        expanded = overflowExpanded,
-                                        onDismissRequest = {
-                                            setOverflowExpanded(false)
+                if (endControlCount > 0) {
+                    Row(
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        horizontalArrangement = Arrangement.spacedBy(0.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        directActions.forEach { action ->
+                            FloatingTitleBarActionButton(action = action)
+                        }
+                        if (overflowActions.isNotEmpty()) {
+                            Box {
+                                FloatingTitleBarActionButton(
+                                    action = FloatingTitleBarAction(
+                                        icon = Icons.Default.MoreVert,
+                                        label = strings.more,
+                                        onClick = {
+                                            setOverflowExpanded(true)
                                         },
-                                        offset = DpOffset(
-                                            x = 0.dp,
-                                            y = -dimensions.spaceExtraSmall,
-                                        ),
-                                    ) {
-                                        overflowActions.forEach { action ->
-                                            DropdownMenuItem(
-                                                text = {
-                                                    Text(
-                                                        text = action.label,
-                                                        maxLines = 1,
-                                                        overflow = TextOverflow.Ellipsis,
-                                                    )
-                                                },
-                                                onClick = {
-                                                    setOverflowExpanded(false)
-                                                    action.onClick()
-                                                },
-                                                contentPadding = PaddingValues(
-                                                    start = dimensions.spaceMedium,
-                                                    end = dimensions.spaceLarge,
-                                                ),
-                                                leadingIcon = {
-                                                    Icon(
-                                                        imageVector = action.icon,
-                                                        contentDescription = null,
-                                                        modifier = Modifier.size(
-                                                            dimensions.floatingActionIconSize,
-                                                        ),
-                                                    )
-                                                },
-                                            )
-                                        }
+                                    ),
+                                )
+                                FloatingDropdownMenu(
+                                    expanded = overflowExpanded,
+                                    onDismissRequest = {
+                                        setOverflowExpanded(false)
+                                    },
+                                    offset = DpOffset(
+                                        x = 0.dp,
+                                        y = -dimensions.spaceExtraSmall,
+                                    ),
+                                ) {
+                                    overflowActions.forEach { action ->
+                                        DropdownMenuItem(
+                                            text = {
+                                                Text(
+                                                    text = action.label,
+                                                    maxLines = 1,
+                                                    overflow = TextOverflow.Ellipsis,
+                                                )
+                                            },
+                                            onClick = {
+                                                setOverflowExpanded(false)
+                                                action.onClick()
+                                            },
+                                            contentPadding = PaddingValues(
+                                                start = dimensions.spaceMedium,
+                                                end = dimensions.spaceLarge,
+                                            ),
+                                            leadingIcon = {
+                                                Icon(
+                                                    imageVector = action.icon,
+                                                    contentDescription = null,
+                                                    modifier = Modifier.size(
+                                                        dimensions.floatingActionIconSize,
+                                                    ),
+                                                )
+                                            },
+                                        )
                                     }
                                 }
                             }
