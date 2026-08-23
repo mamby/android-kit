@@ -32,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -53,7 +52,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -72,8 +70,7 @@ public fun FloatingTitleBar(
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: List<FloatingTitleBarAction> = emptyList(),
-    autoHide: Boolean = false,
-    autoHideDelayMillis: Long = FloatingTitleBarDefaultAutoHideDelayMillis,
+    immersiveMode: Boolean = false,
     onOverflowExpandedChange: (Boolean) -> Unit = {},
     windowInsets: WindowInsets = WindowInsets.safeDrawing.only(
         WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
@@ -81,45 +78,25 @@ public fun FloatingTitleBar(
 ): Unit {
     if (title == null && onBack == null && actions.isEmpty()) return
 
-    require(autoHideDelayMillis > 0L) { "The title bar auto-hide delay must be positive." }
-
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
     val hasButtons = onBack != null || actions.isNotEmpty()
     val titleTextShadowRadius = with(LocalDensity.current) {
         dimensions.floatingTitleTextShadowRadius.toPx()
     }
-    var controlsVisible by rememberSaveable { mutableStateOf(true) }
-    var interactionVersion by remember { mutableIntStateOf(0) }
+    var controlsVisible by rememberSaveable(immersiveMode) { mutableStateOf(true) }
     var overflowExpanded by remember { mutableStateOf(false) }
-
-    fun registerInteraction() {
-        controlsVisible = true
-        interactionVersion += 1
-    }
 
     fun setOverflowExpanded(expanded: Boolean) {
         overflowExpanded = expanded
         onOverflowExpandedChange(expanded)
     }
 
-    LaunchedEffect(autoHide) {
-        if (!autoHide) controlsVisible = true
-    }
-    LaunchedEffect(
-        autoHide,
-        autoHideDelayMillis,
-        controlsVisible,
-        interactionVersion,
-        overflowExpanded,
-    ) {
-        if (autoHide && controlsVisible && !overflowExpanded) {
-            delay(autoHideDelayMillis)
-            controlsVisible = false
+    fun toggleControlsVisibility() {
+        controlsVisible = !controlsVisible
+        if (!controlsVisible) {
+            setOverflowExpanded(false)
         }
-    }
-    LaunchedEffect(controlsVisible) {
-        if (!controlsVisible) setOverflowExpanded(false)
     }
 
     Box(
@@ -128,16 +105,20 @@ public fun FloatingTitleBar(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .pointerInput(autoHide, controlsVisible) {
+                .pointerInput(immersiveMode, controlsVisible) {
                     detectTapGestures {
-                        if (autoHide) registerInteraction()
+                        if (immersiveMode) toggleControlsVisibility()
                     }
                 }
                 .clearAndSetSemantics {
-                    if (autoHide && !controlsVisible) {
-                        contentDescription = strings.showTitleBar
+                    if (immersiveMode) {
+                        contentDescription = if (controlsVisible) {
+                            strings.hideTitleBar
+                        } else {
+                            strings.showTitleBar
+                        }
                         onClick {
-                            registerInteraction()
+                            toggleControlsVisibility()
                             true
                         }
                     }
@@ -192,10 +173,7 @@ public fun FloatingTitleBar(
 
                     if (onBack != null) {
                         FloatingTitleBarBackButton(
-                            onClick = {
-                                registerInteraction()
-                                onBack()
-                            },
+                            onClick = onBack,
                             modifier = Modifier.align(Alignment.CenterStart),
                         )
                     }
@@ -233,10 +211,7 @@ public fun FloatingTitleBar(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             directActions.forEach { action ->
-                                FloatingTitleBarActionButton(
-                                    action = action,
-                                    onInteraction = ::registerInteraction,
-                                )
+                                FloatingTitleBarActionButton(action = action)
                             }
                             if (overflowActions.isNotEmpty()) {
                                 Box {
@@ -245,7 +220,6 @@ public fun FloatingTitleBar(
                                             icon = Icons.Default.MoreVert,
                                             label = strings.more,
                                             onClick = {
-                                                registerInteraction()
                                                 setOverflowExpanded(true)
                                             },
                                         ),
@@ -254,7 +228,6 @@ public fun FloatingTitleBar(
                                         expanded = overflowExpanded,
                                         onDismissRequest = {
                                             setOverflowExpanded(false)
-                                            registerInteraction()
                                         },
                                         offset = DpOffset(
                                             x = 0.dp,
@@ -272,7 +245,6 @@ public fun FloatingTitleBar(
                                                 },
                                                 onClick = {
                                                     setOverflowExpanded(false)
-                                                    registerInteraction()
                                                     action.onClick()
                                                 },
                                                 contentPadding = PaddingValues(
@@ -324,14 +296,10 @@ private fun FloatingTitleBarBackButton(
 @Composable
 private fun FloatingTitleBarActionButton(
     action: FloatingTitleBarAction,
-    onInteraction: () -> Unit = {},
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     FloatingSurfaceButton(
-        onClick = {
-            onInteraction()
-            action.onClick()
-        },
+        onClick = action.onClick,
         shape = CircleShape,
         visualSize = dimensions.floatingTitleBarButtonSize,
     ) {
@@ -366,8 +334,6 @@ private fun controlRowWidth(
 } else {
     dimensions.minimumTouchTarget * controlCount
 }
-
-public const val FloatingTitleBarDefaultAutoHideDelayMillis: Long = 4_000L
 
 private const val MaximumDirectTitleBarActions = 2
 private const val FloatingTitleTextShadowAlpha = 0.85f

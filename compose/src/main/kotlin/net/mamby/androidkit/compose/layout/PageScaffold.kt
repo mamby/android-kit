@@ -1,9 +1,6 @@
 package net.mamby.androidkit.compose.layout
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -17,13 +14,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -40,7 +30,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
-import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
 
 @Composable
 public fun PageScaffold(
@@ -48,7 +37,7 @@ public fun PageScaffold(
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: List<FloatingTitleBarAction> = emptyList(),
-    titleBarAutoHide: Boolean = false,
+    titleBarImmersiveMode: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ): Unit {
@@ -91,7 +80,7 @@ public fun PageScaffold(
                             title = title,
                             onBack = onBack,
                             actions = actions,
-                            autoHide = titleBarAutoHide,
+                            immersiveMode = titleBarImmersiveMode,
                         )
                     }
                 },
@@ -107,7 +96,11 @@ public fun PageScaffold(
                     ) {
                         content(
                             contentPadding.withAdditionalPadding(
-                                additionalTop = if (hasTitleBar) 0.dp else statusBarClearance,
+                                additionalTop = if (hasTitleBar) {
+                                    dimensions.spaceMedium
+                                } else {
+                                    statusBarClearance
+                                },
                                 additionalBottom = navigationBottomClearance +
                                     floatingActionClearance,
                             ),
@@ -136,74 +129,6 @@ public fun PageScaffold(
             }
         }
     }
-}
-
-@Composable
-public fun AdaptiveGridPage(
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-    minimumCardWidth: Dp = AndroidKitThemeTokens.dimensions.cardMinWidth,
-    content: LazyGridScope.() -> Unit,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val layoutDirection = LocalLayoutDirection.current
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minimumCardWidth),
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            start = contentPadding.calculateStartPadding(layoutDirection) + dimensions.screenPadding,
-            top = contentPadding.calculateTopPadding() + dimensions.spaceSmall,
-            end = contentPadding.calculateEndPadding(layoutDirection) + dimensions.screenPadding,
-            bottom = contentPadding.calculateBottomPadding() + dimensions.spaceExtraLarge,
-        ),
-        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-        verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-        content = content,
-    )
-}
-
-@Composable
-public fun DetailPage(
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-    maxWidth: Dp = AndroidKitThemeTokens.dimensions.detailMaxWidth,
-    content: @Composable ColumnScope.() -> Unit,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val layoutDirection = LocalLayoutDirection.current
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .widthIn(max = maxWidth)
-                .verticalScroll(rememberScrollState())
-                .padding(
-                    start = contentPadding.calculateStartPadding(layoutDirection) + dimensions.screenPadding,
-                    top = contentPadding.calculateTopPadding() + dimensions.screenPadding,
-                    end = contentPadding.calculateEndPadding(layoutDirection) + dimensions.screenPadding,
-                    bottom = contentPadding.calculateBottomPadding() + dimensions.screenPadding,
-                ),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-            content = content,
-        )
-    }
-}
-
-@Composable
-public fun PageFloatingAction(
-    onClick: () -> Unit,
-    content: @Composable () -> Unit,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    FloatingSurfaceButton(
-        onClick = onClick,
-        shape = CircleShape,
-        visualSize = dimensions.floatingAddButtonSize,
-        content = content,
-    )
 }
 
 @Composable

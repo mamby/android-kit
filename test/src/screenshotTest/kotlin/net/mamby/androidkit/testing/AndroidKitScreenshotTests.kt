@@ -3,13 +3,12 @@ package net.mamby.androidkit.testing
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
@@ -17,23 +16,21 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
-import net.mamby.androidkit.compose.action.FloatingAddButton
-import net.mamby.androidkit.compose.form.SwitchField
-import net.mamby.androidkit.compose.layout.AdaptiveGridPage
+import net.mamby.androidkit.compose.action.FloatingActionBar
+import net.mamby.androidkit.compose.action.FloatingButton
+import net.mamby.androidkit.compose.form.SettingsItem
 import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.navigation.AdaptiveNavigationScaffold
 import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
-import net.mamby.androidkit.compose.presentation.MetricCard
-import net.mamby.androidkit.compose.presentation.PresentationKind
+import net.mamby.androidkit.compose.navigation.FloatingNavigation
 import net.mamby.androidkit.compose.presentation.SectionCard
-import net.mamby.androidkit.compose.presentation.StatePresentation
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -185,7 +182,7 @@ private fun ScreenshotGallery(
         definition = theme,
         floatingSurfaceStyle = floatingSurfaceStyle,
     ) {
-        AdaptiveNavigationScaffold(
+        FloatingNavigation(
             items = screenshotNavigationItems,
             selectedKey = "home",
             onSelected = {},
@@ -194,42 +191,54 @@ private fun ScreenshotGallery(
             Box(modifier = Modifier.fillMaxSize()) {
                 PageScaffold(
                     title = "Android Kit",
-                    floatingActionButton = { FloatingAddButton(onClick = {}) },
+                    floatingActionButton = {
+                        FloatingButton(onClick = {}) {
+                            Icon(Icons.Default.Add, contentDescription = "Add")
+                        }
+                    },
                 ) { pagePadding ->
-                    AdaptiveGridPage(contentPadding = pagePadding) {
+                    val dimensions = AndroidKitThemeTokens.dimensions
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = dimensions.screenPadding),
+                        contentPadding = pagePadding,
+                        verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+                    ) {
                         item {
                             SectionCard(
                                 title = "Actions",
                                 supportingText = "Opinionated Material 3 defaults",
                             ) {
                                 Button(onClick = {}) { Text("Primary action") }
-                                SwitchField(
+                                SettingsItem(
                                     title = "Encrypted backups",
                                     supportingText = "Stored on this device",
-                                    checked = true,
-                                    onCheckedChange = {},
+                                    onClick = {},
+                                    trailingContent = {
+                                        Icon(Icons.Default.Settings, contentDescription = null)
+                                    },
                                 )
                             }
                         }
                         item {
-                            SectionCard(title = "Empty state") {
-                                StatePresentation(
-                                    kind = PresentationKind.Empty,
-                                    title = "Nothing here yet",
-                                    message = "Create the first item to get started.",
-                                    actionLabel = "Create item",
-                                    onAction = {},
-                                )
+                            SectionCard(title = "Floating action bar") {
+                                FloatingActionBar {
+                                    icon(
+                                        onClick = {},
+                                        icon = Icons.Default.Edit,
+                                        contentDescription = "Edit",
+                                    )
+                                    text(onClick = {}, label = "Save")
+                                }
                             }
                         }
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            val spacing = AndroidKitThemeTokens.dimensions.spaceMedium
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(spacing),
-                            ) {
-                                MetricCard("24", "Components", Modifier.weight(1f))
-                                MetricCard("2", "Shared themes", Modifier.weight(1f))
+                        item {
+                            SectionCard(title = "Scrollable content") {
+                                Text(
+                                    "A muted block verifies scrolling across the adaptive device matrix.\n\n" +
+                                        "Floating controls remain anchored while page content moves.",
+                                )
                             }
                         }
                     }

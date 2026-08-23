@@ -1,6 +1,8 @@
 package net.mamby.androidkit.compose.form
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -69,7 +71,7 @@ public fun AndroidKitModalSheet(
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: List<FloatingTitleBarAction> = emptyList(),
-    titleBarAutoHide: Boolean = false,
+    titleBarImmersiveMode: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -96,11 +98,12 @@ public fun AndroidKitModalSheet(
                         onClick = onDismissRequest,
                     ),
                 ) + actions,
-                autoHide = titleBarAutoHide,
+                immersiveMode = titleBarImmersiveMode,
             )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = dimensions.screenPadding)
                     .padding(bottom = dimensions.spaceExtraLarge),
                 verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),

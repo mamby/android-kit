@@ -4,145 +4,74 @@ import androidx.annotation.StringRes
 import kotlinx.serialization.Serializable
 import net.mamby.androidkit.demo.R
 
-enum class ComponentCategory(
-    @StringRes val labelResource: Int,
-) {
-    Layout(R.string.component_category_layout),
-    Presentation(R.string.component_category_presentation),
-    FormsAndSettings(R.string.component_category_forms_settings),
-    FloatingActions(R.string.component_category_floating_actions),
-    Navigation(R.string.component_category_navigation),
-}
-
 @Serializable
 enum class ComponentId(
     val apiName: String,
-    val category: ComponentCategory,
-    @StringRes val descriptionResource: Int,
 ) {
-    PageScaffold(
-        apiName = "PageScaffold",
-        category = ComponentCategory.Layout,
-        descriptionResource = R.string.component_page_scaffold_description,
+    PageScaffold("PageScaffold"),
+    FloatingTitleBar("FloatingTitleBar"),
+    FloatingButton("FloatingButton"),
+    SectionCard("SectionCard"),
+    SettingsItem("SettingsItem"),
+    AndroidKitModalSheet("AndroidKitModalSheet"),
+    FloatingActionBar("FloatingActionBar"),
+    FloatingDropdownMenu("FloatingDropdownMenu"),
+    FloatingNavigation("FloatingNavigation"),
+}
+
+@Serializable
+enum class ComponentDemo(
+    val component: ComponentId,
+    @StringRes val titleResource: Int,
+) {
+    PageScaffoldBasic(ComponentId.PageScaffold, R.string.variation_basic),
+    PageScaffoldTitle(ComponentId.PageScaffold, R.string.variation_with_title),
+    PageScaffoldFloatingButton(
+        ComponentId.PageScaffold,
+        R.string.variation_with_floating_button,
     ),
-    FloatingTitleBar(
-        apiName = "FloatingTitleBar",
-        category = ComponentCategory.Layout,
-        descriptionResource = R.string.component_floating_title_bar_description,
+
+    FloatingTitleBarBackOnly(ComponentId.FloatingTitleBar, R.string.variation_back_only),
+    FloatingTitleBarBackTitle(ComponentId.FloatingTitleBar, R.string.variation_back_title),
+    FloatingTitleBarBackTitleActions(
+        ComponentId.FloatingTitleBar,
+        R.string.variation_back_title_actions,
     ),
-    AdaptiveGridPage(
-        apiName = "AdaptiveGridPage",
-        category = ComponentCategory.Layout,
-        descriptionResource = R.string.component_adaptive_grid_page_description,
+    FloatingTitleBarImmersiveMode(ComponentId.FloatingTitleBar, R.string.variation_immersive_mode),
+
+    FloatingButtonTopStart(ComponentId.FloatingButton, R.string.variation_top_start),
+    FloatingButtonTopCenter(ComponentId.FloatingButton, R.string.variation_top_center),
+    FloatingButtonTopEnd(ComponentId.FloatingButton, R.string.variation_top_end),
+    FloatingButtonBottomStart(ComponentId.FloatingButton, R.string.variation_bottom_start),
+    FloatingButtonBottomCenter(ComponentId.FloatingButton, R.string.variation_bottom_center),
+    FloatingButtonBottomEnd(ComponentId.FloatingButton, R.string.variation_bottom_end),
+
+    SectionCardBasic(ComponentId.SectionCard, R.string.variation_basic),
+    SectionCardSupportingText(ComponentId.SectionCard, R.string.variation_supporting_text),
+    SectionCardRichContent(ComponentId.SectionCard, R.string.variation_rich_content),
+
+    SettingsItemBasic(ComponentId.SettingsItem, R.string.variation_basic),
+    SettingsItemSupportingText(ComponentId.SettingsItem, R.string.variation_supporting_text),
+    SettingsItemAccessories(ComponentId.SettingsItem, R.string.variation_leading_trailing),
+
+    ModalSheetTitleless(ComponentId.AndroidKitModalSheet, R.string.variation_titleless),
+    ModalSheetTitled(ComponentId.AndroidKitModalSheet, R.string.variation_with_title),
+    ModalSheetBackAndActions(
+        ComponentId.AndroidKitModalSheet,
+        R.string.variation_back_title_actions,
     ),
-    DetailPage(
-        apiName = "DetailPage",
-        category = ComponentCategory.Layout,
-        descriptionResource = R.string.component_detail_page_description,
+
+    FloatingActionBarIcons(ComponentId.FloatingActionBar, R.string.variation_icons_only),
+    FloatingActionBarIconsAndLabels(
+        ComponentId.FloatingActionBar,
+        R.string.variation_icons_labels,
     ),
-    PageFloatingAction(
-        apiName = "PageFloatingAction",
-        category = ComponentCategory.Layout,
-        descriptionResource = R.string.component_page_floating_action_description,
-    ),
-    StatePresentation(
-        apiName = "StatePresentation",
-        category = ComponentCategory.Presentation,
-        descriptionResource = R.string.component_state_presentation_description,
-    ),
-    SectionCard(
-        apiName = "SectionCard",
-        category = ComponentCategory.Presentation,
-        descriptionResource = R.string.component_section_card_description,
-    ),
-    LabeledValue(
-        apiName = "LabeledValue",
-        category = ComponentCategory.Presentation,
-        descriptionResource = R.string.component_labeled_value_description,
-    ),
-    MetricCard(
-        apiName = "MetricCard",
-        category = ComponentCategory.Presentation,
-        descriptionResource = R.string.component_metric_card_description,
-    ),
-    EditorSection(
-        apiName = "EditorSection",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_editor_section_description,
-    ),
-    EditorFieldPair(
-        apiName = "EditorFieldPair",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_editor_field_pair_description,
-    ),
-    SwitchField(
-        apiName = "SwitchField",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_switch_field_description,
-    ),
-    ReadOnlyPickerField(
-        apiName = "ReadOnlyPickerField",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_read_only_picker_field_description,
-    ),
-    StringListEditor(
-        apiName = "StringListEditor",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_string_list_editor_description,
-    ),
-    FormDialog(
-        apiName = "FormDialog",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_form_dialog_description,
-    ),
-    SettingsItem(
-        apiName = "SettingsItem",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_settings_item_description,
-    ),
-    AndroidKitModalSheet(
-        apiName = "AndroidKitModalSheet",
-        category = ComponentCategory.FormsAndSettings,
-        descriptionResource = R.string.component_modal_sheet_description,
-    ),
-    FloatingAddButton(
-        apiName = "FloatingAddButton",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_add_button_description,
-    ),
-    FloatingActionBar(
-        apiName = "FloatingActionBar",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_action_bar_description,
-    ),
-    FloatingActionBarIconItem(
-        apiName = "FloatingActionBarIconItem",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_action_bar_icon_item_description,
-    ),
-    FloatingActionBarIconLabelItem(
-        apiName = "FloatingActionBarIconLabelItem",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_action_bar_icon_label_item_description,
-    ),
-    FloatingActionBarTextItem(
-        apiName = "FloatingActionBarTextItem",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_action_bar_text_item_description,
-    ),
-    FloatingActionBarFlyout(
-        apiName = "FloatingActionBarFlyout",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_action_bar_flyout_description,
-    ),
-    FloatingDropdownMenu(
-        apiName = "FloatingDropdownMenu",
-        category = ComponentCategory.FloatingActions,
-        descriptionResource = R.string.component_floating_dropdown_menu_description,
-    ),
-    AdaptiveNavigationScaffold(
-        apiName = "AdaptiveNavigationScaffold",
-        category = ComponentCategory.Navigation,
-        descriptionResource = R.string.component_adaptive_navigation_scaffold_description,
-    ),
+    FloatingActionBarText(ComponentId.FloatingActionBar, R.string.variation_text_only),
+    FloatingActionBarWithFlyout(ComponentId.FloatingActionBar, R.string.variation_with_flyout),
+
+    FloatingDropdownMenuText(ComponentId.FloatingDropdownMenu, R.string.variation_text_items),
+    FloatingDropdownMenuIcons(ComponentId.FloatingDropdownMenu, R.string.variation_icon_items),
+
+    FloatingNavigationLabels(ComponentId.FloatingNavigation, R.string.variation_label_toggle),
+    FloatingNavigationOverflow(ComponentId.FloatingNavigation, R.string.variation_overflow),
 }

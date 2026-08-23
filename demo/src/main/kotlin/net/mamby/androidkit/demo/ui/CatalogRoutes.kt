@@ -11,35 +11,13 @@ sealed interface CatalogRootRoute : CatalogRoute
 data object ComponentsRoute : CatalogRootRoute
 
 @Serializable
-data object LayoutsRoute : CatalogRootRoute
-
-@Serializable
-data object FormsRoute : CatalogRootRoute
-
-@Serializable
-data object FloatingRoute : CatalogRootRoute
-
-@Serializable
 data object LocalizationRoute : CatalogRootRoute
 
 @Serializable
 data object SettingsRoute : CatalogRootRoute
 
 @Serializable
-data class ComponentDetailRoute(val componentId: ComponentId) : CatalogRoute
+data class DemoRootRoute(val index: Int) : CatalogRootRoute
 
 @Serializable
-data class LayoutDetailRoute(val sampleId: Int) : CatalogRoute
-
-@Serializable
-data class FloatingNavigationDemoRoute(val showLabels: Boolean) : CatalogRoute
-
-@Serializable
-data class FloatingActionsDemoRoute(val variant: FloatingActionDemoVariant) : CatalogRoute
-
-@Serializable
-enum class FloatingActionDemoVariant {
-    IconAndText,
-    IconsOnly,
-    TextOnly,
-}
+data class ComponentDemoRoute(val demo: ComponentDemo) : CatalogRoute

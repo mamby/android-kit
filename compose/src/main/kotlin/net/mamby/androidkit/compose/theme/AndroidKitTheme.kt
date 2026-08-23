@@ -45,9 +45,7 @@ public data class AndroidKitDimensions(
     public val spaceLarge: Dp = 24.dp,
     public val spaceExtraLarge: Dp = 32.dp,
     public val screenPadding: Dp = 20.dp,
-    public val cardMinWidth: Dp = 280.dp,
     public val contentMaxWidth: Dp = 1_200.dp,
-    public val detailMaxWidth: Dp = 760.dp,
     public val minimumTouchTarget: Dp = 48.dp,
     public val floatingNavigationMargin: Dp = 8.dp,
     public val floatingNavigationMaxWidth: Dp = 560.dp,
@@ -55,8 +53,8 @@ public data class AndroidKitDimensions(
     public val floatingNavigationIndicatorSize: Dp = 40.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
     public val floatingTitleBarButtonSize: Dp = 44.dp,
-    public val floatingTitleBarVerticalPadding: Dp = 0.dp,
-    public val floatingAddButtonSize: Dp = 56.dp,
+    public val floatingTitleBarVerticalPadding: Dp = spaceSmall,
+    public val floatingButtonSize: Dp = 56.dp,
     public val floatingActionIconSize: Dp = 20.dp,
     public val floatingSurfaceBorderWidth: Dp = 1.dp,
     public val floatingSurfaceShadowRadius: Dp = 10.dp,
@@ -82,6 +80,7 @@ public data class AndroidKitStrings(
     public val cancel: String,
     public val confirm: String,
     public val save: String,
+    public val hideTitleBar: String = "Hide title bar",
     public val showTitleBar: String = "Show title bar",
 ) {
     public companion object {
@@ -94,6 +93,7 @@ public data class AndroidKitStrings(
             cancel = "Cancel",
             confirm = "Confirm",
             save = "Save",
+            hideTitleBar = "Hide title bar",
             showTitleBar = "Show title bar",
         )
     }

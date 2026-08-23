@@ -75,7 +75,7 @@ public class AndroidKitNavigationItem<Key : Any>(
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-public fun <Key : Any> AdaptiveNavigationScaffold(
+public fun <Key : Any> FloatingNavigation(
     items: List<AndroidKitNavigationItem<Key>>,
     selectedKey: Key,
     onSelected: (Key) -> Unit,

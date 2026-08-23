@@ -67,5 +67,6 @@ fun androidKitStrings(): AndroidKitStrings = AndroidKitStrings(
     cancel = stringResource(R.string.action_cancel),
     confirm = stringResource(R.string.action_confirm),
     save = stringResource(R.string.action_save),
+    hideTitleBar = stringResource(R.string.action_hide_title_bar),
     showTitleBar = stringResource(R.string.action_show_title_bar),
 )

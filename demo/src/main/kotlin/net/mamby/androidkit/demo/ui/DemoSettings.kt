@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 internal data class DemoSettings(
     val themeChoice: DemoThemeChoice = DemoThemeChoice.Light,
     val floatingSurfacesTransparent: Boolean = true,
+    val showCompactNavigationLabels: Boolean = false,
 )
 
 internal class DemoSettingsRepository(context: Context) {
@@ -40,6 +41,7 @@ internal class DemoSettingsRepository(context: Context) {
                     preferences[ThemeChoiceKey],
                 ),
                 floatingSurfacesTransparent = preferences[FloatingSurfacesTransparentKey] ?: true,
+                showCompactNavigationLabels = preferences[ShowCompactNavigationLabelsKey] ?: false,
             )
         }
 
@@ -52,6 +54,12 @@ internal class DemoSettingsRepository(context: Context) {
     suspend fun setFloatingSurfacesTransparent(transparent: Boolean) {
         dataStore.edit { preferences ->
             preferences[FloatingSurfacesTransparentKey] = transparent
+        }
+    }
+
+    suspend fun setShowCompactNavigationLabels(showLabels: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[ShowCompactNavigationLabelsKey] = showLabels
         }
     }
 }
@@ -76,6 +84,12 @@ internal class DemoSettingsViewModel(
             repository.setFloatingSurfacesTransparent(transparent)
         }
     }
+
+    fun setShowCompactNavigationLabels(showLabels: Boolean) {
+        viewModelScope.launch {
+            repository.setShowCompactNavigationLabels(showLabels)
+        }
+    }
 }
 
 private val Context.demoSettingsDataStore: DataStore<Preferences> by preferencesDataStore(
@@ -85,4 +99,7 @@ private val Context.demoSettingsDataStore: DataStore<Preferences> by preferences
 private val ThemeChoiceKey = stringPreferencesKey("theme_choice")
 private val FloatingSurfacesTransparentKey = booleanPreferencesKey(
     "floating_surfaces_transparent",
+)
+private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
+    "show_compact_navigation_labels",
 )

@@ -11,36 +11,25 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.WindowSize
-import androidx.compose.ui.test.assertIsOn
-import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasScrollAction
-import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isPopup
-import androidx.compose.ui.test.isToggleable
-import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.action.FloatingAddButton
-import net.mamby.androidkit.compose.form.StringListEditor
-import net.mamby.androidkit.compose.form.SwitchField
+import net.mamby.androidkit.compose.action.FloatingButton
 import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.navigation.AdaptiveNavigationScaffold
 import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
-import net.mamby.androidkit.compose.presentation.PresentationKind
-import net.mamby.androidkit.compose.presentation.StatePresentation
+import net.mamby.androidkit.compose.navigation.FloatingNavigation
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -51,63 +40,6 @@ import kotlin.math.abs
 class ComposeBehaviorTest {
     @get:Rule
     val composeRule = createComposeRule()
-
-    @Test
-    fun statePresentationDispatchesItsAction() {
-        var actions = 0
-        composeRule.setContent {
-            AndroidKitTheme {
-                StatePresentation(
-                    kind = PresentationKind.Error,
-                    title = "Could not load",
-                    message = "Check your connection",
-                    actionLabel = "Try again",
-                    onAction = { actions += 1 },
-                )
-            }
-        }
-
-        composeRule.onNodeWithText("Try again").performClick()
-
-        composeRule.runOnIdle { assertEquals(1, actions) }
-    }
-
-    @Test
-    fun switchFieldTogglesFromItsWholeRow() {
-        composeRule.setContent {
-            var enabled by rememberSaveable { mutableStateOf(false) }
-            AndroidKitTheme {
-                SwitchField(
-                    title = "Encrypted backups",
-                    checked = enabled,
-                    onCheckedChange = { enabled = it },
-                )
-            }
-        }
-
-        composeRule.onNodeWithText("Encrypted backups").performClick()
-
-        composeRule.onNode(isToggleable()).assertIsOn()
-    }
-
-    @Test
-    fun stringEditorRestoresAnUncommittedValue() {
-        val restorationTester = StateRestorationTester(composeRule)
-        restorationTester.setContent {
-            AndroidKitTheme {
-                StringListEditor(
-                    values = emptyList(),
-                    label = "New tag",
-                    onValuesChange = {},
-                )
-            }
-        }
-
-        composeRule.onNode(hasSetTextAction()).performTextInput("urgent")
-        restorationTester.emulateSavedInstanceStateRestore()
-
-        composeRule.onNode(hasSetTextAction()).assertTextContains("urgent")
-    }
 
     @Test
     fun compactNavigationShowsAndSelectsEveryPrimaryDestination() {
@@ -123,7 +55,7 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme {
-                    AdaptiveNavigationScaffold(
+                    FloatingNavigation(
                         items = destinations.map { (key, label, icon) ->
                             AndroidKitNavigationItem(key, label, icon)
                         },
@@ -154,7 +86,7 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme {
-                    AdaptiveNavigationScaffold(
+                    FloatingNavigation(
                         items = listOf(
                             AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
                             AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
@@ -182,7 +114,7 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 360.dp)),
             ) {
                 AndroidKitTheme {
-                    AdaptiveNavigationScaffold(
+                    FloatingNavigation(
                         items = listOf(
                             AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
                             AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
@@ -193,7 +125,7 @@ class ComposeBehaviorTest {
                     ) {
                         PageScaffold(
                             title = "Clearance",
-                            floatingActionButton = { FloatingAddButton(onClick = {}) },
+                            floatingActionButton = { FloatingButton(onClick = {}) {} },
                         ) { contentPadding ->
                             bottomPadding = contentPadding.calculateBottomPadding()
                             Box(Modifier.fillMaxSize())
@@ -220,7 +152,7 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme {
-                    AdaptiveNavigationScaffold(
+                    FloatingNavigation(
                         items = listOf(
                             AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
                             AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
@@ -254,7 +186,7 @@ class ComposeBehaviorTest {
             ) {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     AndroidKitTheme {
-                        AdaptiveNavigationScaffold(
+                    FloatingNavigation(
                             items = listOf(
                                 AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
                                 AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
@@ -299,7 +231,7 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 360.dp)),
             ) {
                 AndroidKitTheme {
-                    AdaptiveNavigationScaffold(
+                    FloatingNavigation(
                         items = listOf(
                             AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
                             AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
