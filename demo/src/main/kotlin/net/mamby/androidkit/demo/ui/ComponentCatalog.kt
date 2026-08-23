@@ -11,7 +11,7 @@ enum class ComponentId(
     PageScaffold("PageScaffold"),
     FloatingTitleBar("FloatingTitleBar"),
     FloatingButton("FloatingButton"),
-    SectionCard("SectionCard"),
+    AndroidKitCard("AndroidKitCard"),
     SettingsItem("SettingsItem"),
     AndroidKitModalSheet("AndroidKitModalSheet"),
     FloatingActionBar("FloatingActionBar"),
@@ -46,9 +46,10 @@ enum class ComponentDemo(
     FloatingButtonBottomCenter(ComponentId.FloatingButton, R.string.variation_bottom_center),
     FloatingButtonBottomEnd(ComponentId.FloatingButton, R.string.variation_bottom_end),
 
-    SectionCardBasic(ComponentId.SectionCard, R.string.variation_basic),
-    SectionCardSupportingText(ComponentId.SectionCard, R.string.variation_supporting_text),
-    SectionCardRichContent(ComponentId.SectionCard, R.string.variation_rich_content),
+    AndroidKitCardBasic(ComponentId.AndroidKitCard, R.string.variation_basic),
+    AndroidKitCardSupportingText(ComponentId.AndroidKitCard, R.string.variation_supporting_text),
+    AndroidKitCardRichContent(ComponentId.AndroidKitCard, R.string.variation_rich_content),
+    AndroidKitCardOverflow(ComponentId.AndroidKitCard, R.string.variation_overflow),
 
     SettingsItemBasic(ComponentId.SettingsItem, R.string.variation_basic),
     SettingsItemSupportingText(ComponentId.SettingsItem, R.string.variation_supporting_text),

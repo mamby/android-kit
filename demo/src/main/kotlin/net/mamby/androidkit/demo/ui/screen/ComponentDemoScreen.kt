@@ -39,7 +39,8 @@ import net.mamby.androidkit.compose.form.AndroidKitModalSheet
 import net.mamby.androidkit.compose.form.SettingsItem
 import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.presentation.SectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitCard
+import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.ComponentDemo
@@ -112,9 +113,14 @@ private fun PageScaffoldDemo(
     ) { contentPadding ->
         DemoList(contentPadding) {
             item {
-                SectionCard(
-                    title = demo.component.apiName,
-                    supportingText = stringResource(demo.titleResource),
+                AndroidKitCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    header = {
+                        DemoCardHeader(
+                            title = demo.component.apiName,
+                            supportingText = stringResource(demo.titleResource),
+                        )
+                    },
                 ) {
                     Text(stringResource(R.string.action_count, actionCount))
                 }
@@ -230,16 +236,25 @@ private fun StandardComponentDemo(
                         demo = demo,
                         actionCount = actionCount,
                     )
-                    ComponentId.SectionCard -> SectionCardDemo(demo)
+                    ComponentId.AndroidKitCard -> AndroidKitCardDemo(
+                        demo = demo,
+                        actionCount = actionCount,
+                        onAction = { actionCount += 1 },
+                    )
                     ComponentId.SettingsItem -> SettingsItemDemo(
                         demo = demo,
                         onAction = { actionCount += 1 },
                     )
 
                     ComponentId.AndroidKitModalSheet -> ModalSheetDemo(demo)
-                    ComponentId.FloatingActionBar -> SectionCard(
-                        title = stringResource(R.string.active_variation),
-                        supportingText = stringResource(demo.titleResource),
+                    ComponentId.FloatingActionBar -> AndroidKitCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        header = {
+                            DemoCardHeader(
+                                title = stringResource(R.string.active_variation),
+                                supportingText = stringResource(demo.titleResource),
+                            )
+                        },
                     ) {
                         Text(stringResource(R.string.action_count, actionCount))
                     }
@@ -281,16 +296,50 @@ private fun FloatingTitleBarDemoContent(
 }
 
 @Composable
-private fun SectionCardDemo(demo: ComponentDemo) {
-    SectionCard(
-        title = stringResource(R.string.demo_section_title),
-        supportingText = stringResource(R.string.demo_supporting_text).takeIf {
-            demo != ComponentDemo.SectionCardBasic
+private fun AndroidKitCardDemo(
+    demo: ComponentDemo,
+    actionCount: Int,
+    onAction: () -> Unit,
+) {
+    val hasOverflow = demo == ComponentDemo.AndroidKitCardOverflow
+    AndroidKitCard(
+        modifier = Modifier.fillMaxWidth(),
+        menuItems = if (hasOverflow) {
+            listOf(
+                AndroidKitCardMenuItem(
+                    label = stringResource(R.string.action_edit),
+                    onClick = onAction,
+                    icon = Icons.Default.Edit,
+                ),
+                AndroidKitCardMenuItem(
+                    label = stringResource(R.string.action_share),
+                    onClick = onAction,
+                    icon = Icons.Default.Share,
+                ),
+                AndroidKitCardMenuItem(
+                    label = stringResource(R.string.action_delete),
+                    onClick = onAction,
+                    icon = Icons.Default.Delete,
+                ),
+            )
+        } else {
+            emptyList()
+        },
+        header = {
+            DemoCardHeader(
+                title = stringResource(R.string.demo_section_title),
+                supportingText = stringResource(R.string.demo_supporting_text).takeIf {
+                    demo != ComponentDemo.AndroidKitCardBasic
+                },
+            )
         },
     ) {
         Text(stringResource(R.string.demo_section_body))
-        if (demo == ComponentDemo.SectionCardRichContent) {
+        if (demo == ComponentDemo.AndroidKitCardRichContent) {
             Button(onClick = {}) { Text(stringResource(R.string.primary_action)) }
+        }
+        if (hasOverflow) {
+            Text(stringResource(R.string.action_count, actionCount))
         }
     }
 }
@@ -300,7 +349,12 @@ private fun SettingsItemDemo(
     demo: ComponentDemo,
     onAction: () -> Unit,
 ) {
-    SectionCard(title = stringResource(R.string.active_variation)) {
+    AndroidKitCard(
+        modifier = Modifier.fillMaxWidth(),
+        header = {
+            DemoCardHeader(title = stringResource(R.string.active_variation))
+        },
+    ) {
         SettingsItem(
             title = stringResource(R.string.demo_setting_title),
             supportingText = stringResource(R.string.demo_supporting_text).takeIf {
@@ -432,9 +486,14 @@ private fun FloatingNavigationDemo(
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
 ) {
-    SectionCard(
-        title = stringResource(R.string.active_variation),
-        supportingText = stringResource(demo.titleResource),
+    AndroidKitCard(
+        modifier = Modifier.fillMaxWidth(),
+        header = {
+            DemoCardHeader(
+                title = stringResource(R.string.active_variation),
+                supportingText = stringResource(demo.titleResource),
+            )
+        },
     ) {
         if (demo == ComponentDemo.FloatingNavigationLabels) {
             SettingsItem(

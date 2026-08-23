@@ -4,6 +4,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.form.SettingsItem
 import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.presentation.SectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
@@ -37,9 +38,16 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
         ) {
             item {
-                SectionCard(
-                    title = stringResource(R.string.appearance_section),
-                    supportingText = stringResource(R.string.appearance_section_description),
+                AndroidKitCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    header = {
+                        DemoCardHeader(
+                            title = stringResource(R.string.appearance_section),
+                            supportingText = stringResource(
+                                R.string.appearance_section_description,
+                            ),
+                        )
+                    },
                 ) {
                     Row(
                         modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -83,9 +91,14 @@ fun SettingsScreen(
                 }
             }
             item {
-                SectionCard(
-                    title = stringResource(R.string.about_section),
-                    supportingText = stringResource(R.string.about_body),
+                AndroidKitCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    header = {
+                        DemoCardHeader(
+                            title = stringResource(R.string.about_section),
+                            supportingText = stringResource(R.string.about_body),
+                        )
+                    },
                 ) {}
             }
             item { DemoScrollContent() }

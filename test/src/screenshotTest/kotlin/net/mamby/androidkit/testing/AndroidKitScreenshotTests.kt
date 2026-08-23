@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,7 +32,7 @@ import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.PageScaffold
 import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
 import net.mamby.androidkit.compose.navigation.FloatingNavigation
-import net.mamby.androidkit.compose.presentation.SectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -206,9 +208,19 @@ private fun ScreenshotGallery(
                         verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
                     ) {
                         item {
-                            SectionCard(
-                                title = "Actions",
-                                supportingText = "Opinionated Material 3 defaults",
+                            AndroidKitCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                header = {
+                                    Text(
+                                        text = "Actions",
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
+                                    Text(
+                                        text = "Opinionated Material 3 defaults",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                },
                             ) {
                                 Button(onClick = {}) { Text("Primary action") }
                                 SettingsItem(
@@ -222,7 +234,15 @@ private fun ScreenshotGallery(
                             }
                         }
                         item {
-                            SectionCard(title = "Floating action bar") {
+                            AndroidKitCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                header = {
+                                    Text(
+                                        text = "Floating action bar",
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
+                                },
+                            ) {
                                 FloatingActionBar {
                                     icon(
                                         onClick = {},
@@ -234,7 +254,15 @@ private fun ScreenshotGallery(
                             }
                         }
                         item {
-                            SectionCard(title = "Scrollable content") {
+                            AndroidKitCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                header = {
+                                    Text(
+                                        text = "Scrollable content",
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
+                                },
+                            ) {
                                 Text(
                                     "A muted block verifies scrolling across the adaptive device matrix.\n\n" +
                                         "Floating controls remain anchored while page content moves.",

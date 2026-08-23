@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.presentation.SectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.localization.AppLocaleManager
@@ -60,9 +60,14 @@ internal fun LocalizationContent() {
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
     ) {
-        SectionCard(
-            title = stringResource(R.string.language_section),
-            supportingText = stringResource(R.string.language_section_description),
+        AndroidKitCard(
+            modifier = Modifier.fillMaxWidth(),
+            header = {
+                DemoCardHeader(
+                    title = stringResource(R.string.language_section),
+                    supportingText = stringResource(R.string.language_section_description),
+                )
+            },
         ) {
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -84,9 +89,14 @@ internal fun LocalizationContent() {
                 }
             }
         }
-        SectionCard(
-            title = stringResource(R.string.format_section),
-            supportingText = stringResource(R.string.format_section_description),
+        AndroidKitCard(
+            modifier = Modifier.fillMaxWidth(),
+            header = {
+                DemoCardHeader(
+                    title = stringResource(R.string.format_section),
+                    supportingText = stringResource(R.string.format_section_description),
+                )
+            },
         ) {
             listOf(
                 stringResource(R.string.format_date) to
