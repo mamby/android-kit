@@ -117,9 +117,10 @@ internal fun LocalizationContent() {
                 ),
             ).forEach { (label, value) ->
                 ListItem(
-                    headlineContent = { Text(value) },
                     overlineContent = { Text(label) },
-                )
+                ) {
+                    Text(value)
+                }
             }
         }
     }

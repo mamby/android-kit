@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -57,8 +59,11 @@ public fun AndroidKitCard(
             if (header != null || menuItems.isNotEmpty()) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
-                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        space = dimensions.spaceSmall,
+                        alignment = Alignment.End,
+                    ),
+                    verticalAlignment = Alignment.Top,
                 ) {
                     if (header == null) {
                         Spacer(modifier = Modifier.weight(1f))
@@ -83,7 +88,14 @@ public fun AndroidKitCard(
 private fun AndroidKitCardOverflowMenu(items: List<AndroidKitCardMenuItem>): Unit {
     var expanded by remember { mutableStateOf(false) }
     Box {
-        IconButton(onClick = { expanded = true }) {
+        IconButton(
+            onClick = { expanded = true },
+            modifier = Modifier.size(
+                IconButtonDefaults.smallContainerSize(
+                    IconButtonDefaults.IconButtonWidthOption.Narrow,
+                ),
+            ),
+        ) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = AndroidKitThemeTokens.strings.more,

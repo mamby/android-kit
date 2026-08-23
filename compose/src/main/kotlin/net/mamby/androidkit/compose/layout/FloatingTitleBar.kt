@@ -40,6 +40,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -168,6 +170,13 @@ public fun FloatingTitleBar(
                             },
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleMedium.copy(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false,
+                            ),
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.None,
+                            ),
                             shadow = Shadow(
                                 color = MaterialTheme.colorScheme.background.copy(
                                     alpha = FloatingTitleTextShadowAlpha,

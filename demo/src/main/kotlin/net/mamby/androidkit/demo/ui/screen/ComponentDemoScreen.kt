@@ -150,16 +150,12 @@ private fun FloatingButtonDemo(
         title = componentDemoTitle(demo),
         onBack = listDetailBackAction(onBack),
     ) { contentPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding),
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = dimensions.screenPadding),
-                contentPadding = PaddingValues(vertical = dimensions.screenPadding),
+                contentPadding = contentPadding,
                 verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
             ) {
                 item {
@@ -167,16 +163,22 @@ private fun FloatingButtonDemo(
                 }
                 item { DemoScrollContent() }
             }
-            FloatingButton(
-                onClick = { actionCount += 1 },
+            Box(
                 modifier = Modifier
-                    .align(alignment)
-                    .padding(dimensions.screenPadding),
+                    .fillMaxSize()
+                    .padding(contentPadding),
             ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.action_edit),
-                )
+                FloatingButton(
+                    onClick = { actionCount += 1 },
+                    modifier = Modifier
+                        .align(alignment)
+                        .padding(dimensions.screenPadding),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = stringResource(R.string.action_edit),
+                    )
+                }
             }
         }
     }
