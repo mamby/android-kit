@@ -25,7 +25,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -57,84 +56,70 @@ public fun PageScaffold(
     } else {
         floatingActionHeight + dimensions.spaceMedium
     }
-    val pageColorScheme = MaterialTheme.colorScheme.copy(
-        background = PageNeutral50,
-        onBackground = PageNeutral900,
-        surface = Color.White,
-        onSurface = PageNeutral900,
-        surfaceVariant = PageNeutral100,
-        onSurfaceVariant = PageNeutral600,
-        outline = PageNeutral500,
-        outlineVariant = PageNeutral200,
-    )
-    MaterialTheme(
-        colorScheme = pageColorScheme,
-    ) {
-        Box(
-            modifier = modifier
-                .toggleTitleBarOnUnconsumedTap(
-                    enabled = titleBarImmersiveMode && hasTitleBar,
-                    titleBarVisible = titleBarVisible,
-                    onTitleBarVisibilityChange = { titleBarVisible = it },
-                )
-                .imePadding(),
-        ) {
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                containerColor = MaterialTheme.colorScheme.background,
-                contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
-                topBar = {
-                    if (hasTitleBar) {
-                        FloatingTitleBar(
-                            title = title,
-                            onBack = onBack,
-                            actions = actions,
-                            visible = titleBarVisible,
-                        )
-                    }
-                },
-                content = { contentPadding ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .statusBarEdgeProtection(
-                                statusBarInsets = WindowInsets.statusBars,
-                                fadeLength = dimensions.contentProtectionFadeLength,
-                                protectionColor = MaterialTheme.colorScheme.background,
-                            ),
-                    ) {
-                        content(
-                            contentPadding.withAdditionalPadding(
-                                additionalTop = if (hasTitleBar) {
-                                    dimensions.spaceMedium
-                                } else {
-                                    statusBarClearance
-                                },
-                                additionalBottom = navigationBottomClearance +
-                                    floatingActionClearance,
-                            ),
-                        )
-                    }
-                },
+    Box(
+        modifier = modifier
+            .toggleTitleBarOnUnconsumedTap(
+                enabled = titleBarImmersiveMode && hasTitleBar,
+                titleBarVisible = titleBarVisible,
+                onTitleBarVisibilityChange = { titleBarVisible = it },
             )
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .windowInsetsPadding(
-                        measuredContentInsets.only(
-                            WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+            .imePadding(),
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = MaterialTheme.colorScheme.background,
+            contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
+            topBar = {
+                if (hasTitleBar) {
+                    FloatingTitleBar(
+                        title = title,
+                        onBack = onBack,
+                        actions = actions,
+                        visible = titleBarVisible,
+                    )
+                }
+            },
+            content = { contentPadding ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .statusBarEdgeProtection(
+                            statusBarInsets = WindowInsets.statusBars,
+                            fadeLength = dimensions.contentProtectionFadeLength,
+                            protectionColor = MaterialTheme.colorScheme.background,
+                        ),
+                ) {
+                    content(
+                        contentPadding.withAdditionalPadding(
+                            additionalTop = if (hasTitleBar) {
+                                dimensions.spaceMedium
+                            } else {
+                                statusBarClearance
+                            },
+                            additionalBottom = navigationBottomClearance +
+                                floatingActionClearance,
                         ),
                     )
-                    .padding(dimensions.spaceMedium),
+                }
+            },
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .windowInsetsPadding(
+                    measuredContentInsets.only(
+                        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+                    ),
+                )
+                .padding(dimensions.spaceMedium),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(
+                modifier = Modifier.onSizeChanged { floatingActionHeightPx = it.height },
                 contentAlignment = Alignment.Center,
             ) {
-                Box(
-                    modifier = Modifier.onSizeChanged { floatingActionHeightPx = it.height },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    floatingActionButton()
-                }
+                floatingActionButton()
             }
         }
     }
@@ -153,10 +138,3 @@ private fun PaddingValues.withAdditionalPadding(
         bottom = calculateBottomPadding() + additionalBottom,
     )
 }
-
-private val PageNeutral50 = Color(0xFFF7F7F7)
-private val PageNeutral100 = Color(0xFFF5F5F5)
-private val PageNeutral200 = Color(0xFFE2E2E2)
-private val PageNeutral500 = Color(0xFF737373)
-private val PageNeutral600 = Color(0xFF525252)
-private val PageNeutral900 = Color(0xFF171717)

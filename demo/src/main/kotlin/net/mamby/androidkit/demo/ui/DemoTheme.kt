@@ -47,6 +47,7 @@ val PrismThemeDefinition = AndroidKitThemeDefinition(
         error = Color(0xFFFFB4AB),
         onError = Color(0xFF690005),
     ),
+    isDark = true,
     typography = AndroidKitDefaults.typography,
     shapes = AndroidKitDefaults.shapes,
 )

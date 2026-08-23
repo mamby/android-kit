@@ -17,6 +17,7 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -43,12 +44,18 @@ import net.mamby.androidkit.navigation3.rememberMultiBackStackNavigationState
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun AndroidKitCatalogApp() {
+fun AndroidKitCatalogApp(
+    onThemeDarknessChanged: (Boolean) -> Unit,
+) {
     val applicationContext = LocalContext.current.applicationContext
     val settingsViewModel: DemoSettingsViewModel = viewModel {
         DemoSettingsViewModel(DemoSettingsRepository(applicationContext))
     }
     val settings by settingsViewModel.settings.collectAsStateWithLifecycle()
+    val themeDefinition = settings.themeChoice.definition()
+    LaunchedEffect(themeDefinition.isDark) {
+        onThemeDarknessChanged(themeDefinition.isDark)
+    }
     val roots: List<CatalogRootRoute> = remember {
         listOf<CatalogRootRoute>(
             ComponentsRoute,
@@ -59,7 +66,7 @@ fun AndroidKitCatalogApp() {
     val navigation = rememberMultiBackStackNavigationState(roots)
 
     AndroidKitTheme(
-        definition = settings.themeChoice.definition(),
+        definition = themeDefinition,
         strings = androidKitStrings(),
         floatingSurfaceStyle = FloatingSurfaceStyle(
             opacity = if (settings.floatingSurfacesTransparent) {

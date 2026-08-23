@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 @Immutable
 public data class AndroidKitThemeDefinition(
     public val colorScheme: ColorScheme,
+    public val isDark: Boolean,
     public val typography: Typography = AndroidKitDefaults.typography,
     public val shapes: Shapes = AndroidKitDefaults.shapes,
     public val dimensions: AndroidKitDimensions = AndroidKitDimensions(),
@@ -114,17 +115,18 @@ public object AndroidKitThemes {
             onTertiary = Color.White,
             tertiaryContainer = Color(0xFFFFD9E4),
             onTertiaryContainer = Color(0xFF3E001E),
-            background = Neutral50,
-            onBackground = Color(0xFF1C1B20),
+            background = Color(0xFFF7F7F7),
+            onBackground = Color(0xFF171717),
             surface = Color.White,
-            onSurface = Color(0xFF1C1B20),
-            surfaceVariant = Color(0xFFE6E0EC),
-            onSurfaceVariant = Color(0xFF48454F),
-            outline = Color(0xFF79747E),
-            outlineVariant = Color(0xFFCAC4D0),
+            onSurface = Color(0xFF171717),
+            surfaceVariant = Color(0xFFF5F5F5),
+            onSurfaceVariant = Color(0xFF525252),
+            outline = Color(0xFF737373),
+            outlineVariant = Color(0xFFE2E2E2),
             error = Color(0xFFBA1A1A),
             onError = Color.White,
         ),
+        isDark = false,
     )
 
     public val Dark: AndroidKitThemeDefinition = AndroidKitThemeDefinition(
@@ -152,10 +154,9 @@ public object AndroidKitThemes {
             error = Color(0xFFFFB4AB),
             onError = Color(0xFF690005),
         ),
+        isDark = true,
     )
 }
-
-private val Neutral50: Color = Color(0xFFFAFAFA)
 
 public object AndroidKitDefaults {
     public val typography: Typography = Typography(
