@@ -119,6 +119,8 @@ public fun FloatingTitleBar(
                 val directActionCount = directTitleBarActionCount(
                     actionCount = actions.size,
                     availableWidth = maxWidth,
+                    hasTitle = title != null,
+                    hasNavigation = onBack != null,
                     dimensions = dimensions,
                 )
                 val directActions = actions.take(directActionCount)
@@ -132,10 +134,16 @@ public fun FloatingTitleBar(
                     dimensions = dimensions,
                 )
                 val endWidth = controlRowWidth(endControlCount, dimensions)
-                val sideWidth = maxOf(leadingWidth, endWidth)
-                val titleWidth = (
-                    maxWidth - ((sideWidth + dimensions.spaceExtraSmall) * 2)
-                ).coerceAtLeast(0.dp)
+                val titleStartPadding = leadingWidth + if (leadingWidth > 0.dp) {
+                    dimensions.spaceExtraSmall
+                } else {
+                    0.dp
+                }
+                val titleEndPadding = endWidth + if (endWidth > 0.dp) {
+                    dimensions.spaceExtraSmall
+                } else {
+                    0.dp
+                }
 
                 if (onBack != null) {
                     FloatingTitleBarBackButton(
@@ -148,14 +156,17 @@ public fun FloatingTitleBar(
                     Text(
                         text = it,
                         modifier = Modifier
-                            .align(Alignment.Center)
+                            .align(Alignment.CenterStart)
                             .fillMaxWidth()
-                            .padding(horizontal = (maxWidth - titleWidth) / 2)
+                            .padding(
+                                start = titleStartPadding,
+                                end = titleEndPadding,
+                            )
                             .clearAndSetSemantics {
                                 heading()
                                 contentDescription = it
                             },
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleMedium.copy(
                             shadow = Shadow(
                                 color = MaterialTheme.colorScheme.background.copy(
@@ -279,15 +290,27 @@ private fun FloatingTitleBarActionButton(
 private fun directTitleBarActionCount(
     actionCount: Int,
     availableWidth: Dp,
+    hasTitle: Boolean,
+    hasNavigation: Boolean,
     dimensions: AndroidKitDimensions,
 ): Int {
-    val allowedSideWidth = (
-        ((availableWidth - dimensions.floatingTitleMinimumWidth) / 2) -
-            dimensions.spaceExtraSmall
-    ).coerceAtLeast(0.dp)
+    val navigationWidth = controlRowWidth(
+        controlCount = if (hasNavigation) 1 else 0,
+        dimensions = dimensions,
+    )
+    val minimumTitleWidth = if (hasTitle) dimensions.floatingTitleMinimumWidth else 0.dp
+    val titleStartSpacing = if (hasTitle && hasNavigation) dimensions.spaceExtraSmall else 0.dp
+
     return (minOf(MaximumDirectTitleBarActions, actionCount) downTo 0).firstOrNull { directCount ->
-        val controlCount = directCount + if (actionCount > directCount) 1 else 0
-        controlRowWidth(controlCount, dimensions) <= allowedSideWidth
+        val endControlCount = directCount + if (actionCount > directCount) 1 else 0
+        val endWidth = controlRowWidth(endControlCount, dimensions)
+        val titleEndSpacing = if (hasTitle && endControlCount > 0) {
+            dimensions.spaceExtraSmall
+        } else {
+            0.dp
+        }
+        navigationWidth + titleStartSpacing + minimumTitleWidth + titleEndSpacing + endWidth <=
+            availableWidth
     } ?: 0
 }
 
