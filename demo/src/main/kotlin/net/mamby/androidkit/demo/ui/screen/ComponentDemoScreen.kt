@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
@@ -33,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.action.FloatingActionBar
+import net.mamby.androidkit.compose.action.FloatingActionBarFlyoutStyle
 import net.mamby.androidkit.compose.action.FloatingButton
 import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.form.AndroidKitModalSheet
@@ -420,30 +424,56 @@ private fun FloatingActionBarDemo(
     demo: ComponentDemo,
     onAction: () -> Unit,
 ) {
+    val edit = stringResource(R.string.action_edit)
     val add = stringResource(R.string.action_add)
+    val close = stringResource(R.string.action_close)
+    val retry = stringResource(R.string.action_retry)
+    val cancel = stringResource(R.string.action_cancel)
+    val confirm = stringResource(R.string.action_confirm)
     val save = stringResource(R.string.action_save)
     val share = stringResource(R.string.action_share)
     val delete = stringResource(R.string.action_delete)
+    val flyoutItems = listOf(
+        Icons.Default.Add to add,
+        Icons.Default.Close to close,
+        Icons.Default.Refresh to retry,
+        Icons.Default.Close to cancel,
+        Icons.Default.Check to confirm,
+        Icons.Default.Delete to delete,
+    )
     FloatingActionBar {
         when (demo) {
             ComponentDemo.FloatingActionBarIcons -> {
-                icon(onClick = onAction, icon = Icons.Default.Edit, contentDescription = add)
+                icon(onClick = onAction, icon = Icons.Default.Edit, contentDescription = edit)
                 icon(onClick = onAction, icon = Icons.Default.Save, contentDescription = save)
+                icon(onClick = onAction, icon = Icons.Default.Share, contentDescription = share)
+                flyout(style = FloatingActionBarFlyoutStyle.Icon) {
+                    flyoutItems.forEach { (icon, label) ->
+                        item(icon = icon, label = label, onClick = onAction)
+                    }
+                }
             }
 
             ComponentDemo.FloatingActionBarIconsAndLabels -> {
-                iconAndLabel(onClick = onAction, icon = Icons.Default.Edit, label = add)
+                iconAndLabel(onClick = onAction, icon = Icons.Default.Edit, label = edit)
                 iconAndLabel(onClick = onAction, icon = Icons.Default.Save, label = save)
+                iconAndLabel(onClick = onAction, icon = Icons.Default.Share, label = share)
+                flyout(style = FloatingActionBarFlyoutStyle.IconAndLabel) {
+                    flyoutItems.forEach { (icon, label) ->
+                        item(icon = icon, label = label, onClick = onAction)
+                    }
+                }
             }
 
             ComponentDemo.FloatingActionBarText -> {
-                text(onClick = onAction, label = add)
+                text(onClick = onAction, label = edit)
                 text(onClick = onAction, label = save)
-            }
-
-            ComponentDemo.FloatingActionBarWithFlyout -> flyout {
-                item(icon = Icons.Default.Share, label = share, onClick = onAction)
-                item(icon = Icons.Default.Delete, label = delete, onClick = onAction)
+                text(onClick = onAction, label = share)
+                flyout(style = FloatingActionBarFlyoutStyle.Text) {
+                    flyoutItems.forEach { (icon, label) ->
+                        item(icon = icon, label = label, onClick = onAction)
+                    }
+                }
             }
 
             else -> error("Unexpected FloatingActionBar demo: $demo")

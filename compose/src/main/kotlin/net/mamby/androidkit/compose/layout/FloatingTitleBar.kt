@@ -36,10 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -53,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.FloatingDropdownMenu
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
 
 @Immutable
@@ -79,9 +77,6 @@ public fun FloatingTitleBar(
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
     val hasButtons = onBack != null || actions.isNotEmpty()
-    val titleTextShadowRadius = with(LocalDensity.current) {
-        dimensions.floatingTitleTextShadowRadius.toPx()
-    }
     var overflowExpanded by remember { mutableStateOf(false) }
 
     fun setOverflowExpanded(expanded: Boolean) {
@@ -155,39 +150,40 @@ public fun FloatingTitleBar(
                 }
 
                 title?.let {
-                    Text(
-                        text = it,
+                    FloatingSurface(
+                        shape = CircleShape,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
-                            .fillMaxWidth()
                             .padding(
                                 start = titleStartPadding,
                                 end = titleEndPadding,
-                            )
-                            .clearAndSetSemantics {
-                                heading()
-                                contentDescription = it
-                            },
-                        textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            platformStyle = PlatformTextStyle(
-                                includeFontPadding = false,
                             ),
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.None,
-                            ),
-                            shadow = Shadow(
-                                color = MaterialTheme.colorScheme.background.copy(
-                                    alpha = FloatingTitleTextShadowAlpha,
+                    ) {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = dimensions.spaceMedium,
+                                    vertical = dimensions.spaceSmall,
+                                )
+                                .clearAndSetSemantics {
+                                    heading()
+                                    contentDescription = it
+                                },
+                            textAlign = TextAlign.Start,
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                platformStyle = PlatformTextStyle(
+                                    includeFontPadding = false,
                                 ),
-                                offset = Offset.Zero,
-                                blurRadius = titleTextShadowRadius,
+                                lineHeightStyle = LineHeightStyle(
+                                    alignment = LineHeightStyle.Alignment.Center,
+                                    trim = LineHeightStyle.Trim.None,
+                                ),
                             ),
-                        ),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
                 }
 
                 if (endControlCount > 0) {
@@ -333,4 +329,3 @@ private fun controlRowWidth(
 }
 
 private const val MaximumDirectTitleBarActions = 2
-private const val FloatingTitleTextShadowAlpha = 0.85f

@@ -65,6 +65,7 @@ public data class AndroidKitDimensions(
     public val floatingDropdownShadowElevation: Dp = 1.dp,
     public val floatingTitleBarHeight: Dp = 0.dp,
     public val floatingTitleMinimumWidth: Dp = 48.dp,
+    @Deprecated("Floating titles now use a surface capsule instead of a text shadow.")
     public val floatingTitleTextShadowRadius: Dp = 2.dp,
     @Deprecated("Content protection now uses a background gradient instead of blur.")
     public val contentProtectionBlurRadius: Dp = 0.dp,

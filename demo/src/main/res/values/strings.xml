@@ -73,7 +73,6 @@
     <string name="variation_icons_only">Icons only</string>
     <string name="variation_icons_labels">Icons and labels</string>
     <string name="variation_text_only">Text only</string>
-    <string name="variation_with_flyout">With flyout</string>
     <string name="variation_text_items">Text items</string>
     <string name="variation_icon_items">Icon items</string>
     <string name="variation_label_toggle">Label toggle</string>

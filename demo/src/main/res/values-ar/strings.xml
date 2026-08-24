@@ -72,7 +72,6 @@
     <string name="variation_icons_only">أيقونات فقط</string>
     <string name="variation_icons_labels">أيقونات وتسميات</string>
     <string name="variation_text_only">نص فقط</string>
-    <string name="variation_with_flyout">مع قائمة منبثقة</string>
     <string name="variation_text_items">عناصر نصية</string>
     <string name="variation_icon_items">عناصر بأيقونات</string>
     <string name="variation_label_toggle">تبديل التسميات</string>

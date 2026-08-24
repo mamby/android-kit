@@ -68,7 +68,6 @@ enum class ComponentDemo(
         R.string.variation_icons_labels,
     ),
     FloatingActionBarText(ComponentId.FloatingActionBar, R.string.variation_text_only),
-    FloatingActionBarWithFlyout(ComponentId.FloatingActionBar, R.string.variation_with_flyout),
 
     FloatingDropdownMenuText(ComponentId.FloatingDropdownMenu, R.string.variation_text_items),
     FloatingDropdownMenuIcons(ComponentId.FloatingDropdownMenu, R.string.variation_icon_items),
