@@ -25,6 +25,7 @@ internal data class FloatingSurfaceVisuals(
     val contentColor: Color,
     val border: BorderStroke,
     val shadow: Shadow,
+    val buttonShadow: Shadow,
 )
 
 @Composable
@@ -43,6 +44,11 @@ internal fun floatingSurfaceVisuals(): FloatingSurfaceVisuals {
             radius = dimensions.floatingSurfaceShadowRadius,
             color = scheme.scrim.copy(alpha = FloatingSurfaceShadowAlpha),
             offset = DpOffset(x = 0.dp, y = dimensions.floatingSurfaceShadowOffsetY),
+        ),
+        buttonShadow = Shadow(
+            radius = dimensions.floatingSurfaceButtonShadowRadius,
+            color = scheme.scrim.copy(alpha = FloatingSurfaceShadowAlpha),
+            offset = DpOffset(x = 0.dp, y = dimensions.floatingSurfaceButtonShadowOffsetY),
         ),
     )
 }
@@ -78,7 +84,7 @@ internal fun FloatingSurfaceButton(
         modifier = modifier
             .minimumInteractiveComponentSize()
             .size(visualSize)
-            .dropShadow(shape, visuals.shadow),
+            .dropShadow(shape, visuals.buttonShadow),
         shape = shape,
         color = visuals.containerColor,
         contentColor = visuals.contentColor,
@@ -94,4 +100,4 @@ internal fun FloatingSurfaceButton(
 }
 
 private const val FloatingSurfaceBorderAlpha = 0.45f
-private const val FloatingSurfaceShadowAlpha = 0.08f
+private const val FloatingSurfaceShadowAlpha = 0.03f
