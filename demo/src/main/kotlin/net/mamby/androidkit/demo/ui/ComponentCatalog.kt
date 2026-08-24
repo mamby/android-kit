@@ -51,9 +51,9 @@ enum class ComponentDemo(
     AndroidKitCardRichContent(ComponentId.AndroidKitCard, R.string.variation_rich_content),
     AndroidKitCardOverflow(ComponentId.AndroidKitCard, R.string.variation_overflow),
 
-    SettingsItemBasic(ComponentId.SettingsItem, R.string.variation_basic),
-    SettingsItemSupportingText(ComponentId.SettingsItem, R.string.variation_supporting_text),
-    SettingsItemAccessories(ComponentId.SettingsItem, R.string.variation_leading_trailing),
+    SettingsItemButton(ComponentId.SettingsItem, R.string.variation_button_entry),
+    SettingsItemToggle(ComponentId.SettingsItem, R.string.variation_toggle_entry),
+    SettingsItemGrouped(ComponentId.SettingsItem, R.string.variation_grouped_entries),
 
     ModalSheetTitleless(ComponentId.AndroidKitModalSheet, R.string.variation_titleless),
     ModalSheetTitled(ComponentId.AndroidKitModalSheet, R.string.variation_with_title),

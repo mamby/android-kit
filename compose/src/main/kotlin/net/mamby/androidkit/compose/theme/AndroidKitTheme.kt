@@ -48,6 +48,7 @@ public data class AndroidKitDimensions(
     public val screenPadding: Dp = 20.dp,
     public val contentMaxWidth: Dp = 1_200.dp,
     public val minimumTouchTarget: Dp = 48.dp,
+    public val settingsItemVerticalPadding: Dp = 12.dp,
     public val floatingNavigationMargin: Dp = 8.dp,
     public val floatingNavigationMaxWidth: Dp = 560.dp,
     public val floatingNavigationIconSize: Dp = 24.dp,

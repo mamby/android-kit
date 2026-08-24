@@ -24,7 +24,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -355,34 +354,51 @@ private fun SettingsItemDemo(
     demo: ComponentDemo,
     onAction: () -> Unit,
 ) {
-    AndroidKitCard(
-        modifier = Modifier.fillMaxWidth(),
-        header = {
-            DemoCardHeader(title = stringResource(R.string.active_variation))
-        },
+    var checked by rememberSaveable(demo) { mutableStateOf(false) }
+    val activeVariation = stringResource(R.string.active_variation)
+    val settingLabel = stringResource(R.string.demo_setting_title)
+    val actionLabel = stringResource(R.string.primary_action)
+    val description = stringResource(R.string.demo_supporting_text)
+    val entrySupportingText = stringResource(R.string.demo_setting_supporting_text)
+    SettingsItem(
+        label = activeVariation.takeUnless { demo == ComponentDemo.SettingsItemButton },
+        description = description.takeIf { demo == ComponentDemo.SettingsItemGrouped },
     ) {
-        SettingsItem(
-            title = stringResource(R.string.demo_setting_title),
-            supportingText = stringResource(R.string.demo_supporting_text).takeIf {
-                demo != ComponentDemo.SettingsItemBasic
-            },
-            onClick = onAction,
-            leadingContent = if (demo == ComponentDemo.SettingsItemAccessories) {
-                {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = null,
-                    )
-                }
-            } else {
-                null
-            },
-            trailingContent = if (demo == ComponentDemo.SettingsItemAccessories) {
-                { Icon(imageVector = Icons.Default.Check, contentDescription = null) }
-            } else {
-                null
-            },
-        )
+        when (demo) {
+            ComponentDemo.SettingsItemButton -> button(
+                label = settingLabel,
+                onClick = onAction,
+            )
+
+            ComponentDemo.SettingsItemToggle -> toggle(
+                label = settingLabel,
+                checked = checked,
+                onCheckedChange = {
+                    checked = it
+                    onAction()
+                },
+            )
+
+            ComponentDemo.SettingsItemGrouped -> {
+                toggle(
+                    label = settingLabel,
+                    checked = checked,
+                    onCheckedChange = {
+                        checked = it
+                        onAction()
+                    },
+                    supportingText = entrySupportingText,
+                    icon = Icons.Default.Settings,
+                )
+                button(
+                    label = actionLabel,
+                    onClick = onAction,
+                    icon = Icons.Default.Check,
+                )
+            }
+
+            else -> error("Unexpected SettingsItem demo: $demo")
+        }
     }
 }
 
@@ -518,30 +534,28 @@ private fun FloatingNavigationDemo(
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
 ) {
-    AndroidKitCard(
-        modifier = Modifier.fillMaxWidth(),
-        header = {
-            DemoCardHeader(
-                title = stringResource(R.string.active_variation),
-                supportingText = stringResource(demo.titleResource),
+    if (demo == ComponentDemo.FloatingNavigationLabels) {
+        val entryLabel = stringResource(R.string.floating_navigation_labels_title)
+        SettingsItem(
+            label = stringResource(R.string.active_variation),
+            description = stringResource(R.string.floating_navigation_labels_description),
+        ) {
+            toggle(
+                label = entryLabel,
+                checked = showCompactNavigationLabels,
+                onCheckedChange = onShowCompactNavigationLabelsChange,
             )
-        },
-    ) {
-        if (demo == ComponentDemo.FloatingNavigationLabels) {
-            SettingsItem(
-                title = stringResource(R.string.floating_navigation_labels_title),
-                supportingText = stringResource(R.string.floating_navigation_labels_description),
-                onClick = {
-                    onShowCompactNavigationLabelsChange(!showCompactNavigationLabels)
-                },
-                trailingContent = {
-                    Switch(
-                        checked = showCompactNavigationLabels,
-                        onCheckedChange = null,
-                    )
-                },
-            )
-        } else {
+        }
+    } else {
+        AndroidKitCard(
+            modifier = Modifier.fillMaxWidth(),
+            header = {
+                DemoCardHeader(
+                    title = stringResource(R.string.active_variation),
+                    supportingText = stringResource(demo.titleResource),
+                )
+            },
+        ) {
             Text(stringResource(R.string.floating_navigation_overflow_instruction))
         }
     }

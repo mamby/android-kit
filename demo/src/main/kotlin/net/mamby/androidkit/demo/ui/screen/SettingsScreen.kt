@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -73,20 +72,19 @@ fun SettingsScreen(
                         )
                     }
                     Text(stringResource(R.string.theme_prism_description))
-                    SettingsItem(
-                        title = stringResource(R.string.floating_surface_transparency),
-                        supportingText = stringResource(
-                            R.string.floating_surface_transparency_description,
-                        ),
-                        onClick = {
-                            onFloatingSurfacesTransparent(!floatingSurfacesTransparent)
-                        },
-                        trailingContent = {
-                            Switch(
-                                checked = floatingSurfacesTransparent,
-                                onCheckedChange = null,
-                            )
-                        },
+                }
+            }
+            item {
+                val transparencyLabel = stringResource(R.string.floating_surface_transparency)
+                SettingsItem(
+                    description = stringResource(
+                        R.string.floating_surface_transparency_description,
+                    ),
+                ) {
+                    toggle(
+                        label = transparencyLabel,
+                        checked = floatingSurfacesTransparent,
+                        onCheckedChange = onFloatingSurfacesTransparent,
                     )
                 }
             }

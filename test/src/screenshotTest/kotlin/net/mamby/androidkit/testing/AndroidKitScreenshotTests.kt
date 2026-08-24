@@ -16,7 +16,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -208,28 +207,17 @@ private fun ScreenshotGallery(
                         verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
                     ) {
                         item {
-                            AndroidKitCard(
-                                modifier = Modifier.fillMaxWidth(),
-                                header = {
-                                    Text(
-                                        text = "Actions",
-                                        style = MaterialTheme.typography.titleMedium,
-                                    )
-                                    Text(
-                                        text = "Opinionated Material 3 defaults",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                },
+                            SettingsItem(
+                                label = "Actions",
+                                description = "Opinionated Material 3 defaults",
                             ) {
-                                Button(onClick = {}) { Text("Primary action") }
-                                SettingsItem(
-                                    title = "Encrypted backups",
+                                button(label = "Primary action", onClick = {})
+                                toggle(
+                                    label = "Encrypted backups",
+                                    checked = true,
+                                    onCheckedChange = {},
                                     supportingText = "Stored on this device",
-                                    onClick = {},
-                                    trailingContent = {
-                                        Icon(Icons.Default.Settings, contentDescription = null)
-                                    },
+                                    icon = Icons.Default.Settings,
                                 )
                             }
                         }
