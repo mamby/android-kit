@@ -55,7 +55,7 @@
     <string name="about_body">The catalog consumes the same public artifacts intended for external open-source apps.</string>
     <string name="variation_basic">Basic</string>
     <string name="variation_with_title">With title</string>
-    <string name="variation_with_floating_button">With floating button</string>
+    <string name="variation_with_floating_action_button">With floating action button</string>
     <string name="variation_back_only">Back only</string>
     <string name="variation_back_title">Back and title</string>
     <string name="variation_back_title_actions">Back, title and actions</string>

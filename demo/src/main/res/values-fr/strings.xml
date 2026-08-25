@@ -54,7 +54,7 @@
     <string name="about_body">Le catalogue consomme les mêmes artefacts publics destinés aux applications open source externes.</string>
     <string name="variation_basic">Simple</string>
     <string name="variation_with_title">Avec titre</string>
-    <string name="variation_with_floating_button">Avec bouton flottant</string>
+    <string name="variation_with_floating_action_button">Avec bouton flottant</string>
     <string name="variation_back_only">Retour uniquement</string>
     <string name="variation_back_title">Retour et titre</string>
     <string name="variation_back_title_actions">Retour, titre et actions</string>

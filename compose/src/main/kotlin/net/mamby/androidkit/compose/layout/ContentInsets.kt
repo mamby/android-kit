@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 
-internal val LocalAndroidKitNavigationInsets = staticCompositionLocalOf<WindowInsets> {
+internal val LocalAndroidKitFloatingNavigationInsets = staticCompositionLocalOf<WindowInsets> {
     WindowInsets(0, 0, 0, 0)
 }
 
@@ -16,4 +16,4 @@ internal val LocalAndroidKitNavigationInsets = staticCompositionLocalOf<WindowIn
 public fun androidKitContentWindowInsets(): WindowInsets =
     WindowInsets.safeDrawing
         .exclude(WindowInsets.ime)
-        .union(LocalAndroidKitNavigationInsets.current)
+        .union(LocalAndroidKitFloatingNavigationInsets.current)

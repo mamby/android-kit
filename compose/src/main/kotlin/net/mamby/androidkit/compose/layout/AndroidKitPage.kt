@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 @Composable
-public fun PageScaffold(
+public fun AndroidKitPage(
     title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
-    actions: List<FloatingTitleBarAction> = emptyList(),
+    actions: List<AndroidKitFloatingTitleBarAction> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
@@ -71,7 +71,7 @@ public fun PageScaffold(
             contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
             topBar = {
                 if (hasTitleBar) {
-                    FloatingTitleBar(
+                    AndroidKitFloatingTitleBar(
                         title = title,
                         onBack = onBack,
                         actions = actions,

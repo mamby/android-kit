@@ -34,14 +34,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import net.mamby.androidkit.compose.action.FloatingActionBar
-import net.mamby.androidkit.compose.action.FloatingActionBarFlyoutStyle
-import net.mamby.androidkit.compose.action.FloatingButton
-import net.mamby.androidkit.compose.action.FloatingDropdownMenu
-import net.mamby.androidkit.compose.form.AndroidKitModalSheet
-import net.mamby.androidkit.compose.form.SettingsItem
-import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
-import net.mamby.androidkit.compose.layout.PageScaffold
+import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
+import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarFlyoutStyle
+import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
+import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
+import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
+import net.mamby.androidkit.compose.form.AndroidKitSettingSection
+import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
+import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -52,7 +52,7 @@ import net.mamby.androidkit.navigation3.listDetailBackAction
 
 @Composable
 fun ComponentPlaceholder() {
-    PageScaffold { contentPadding ->
+    AndroidKitPage { contentPadding ->
         DemoList(contentPadding) {
             item {
                 Text(
@@ -77,8 +77,11 @@ fun ComponentDemoScreen(
     onBack: () -> Unit,
 ) {
     when (demo.component) {
-        ComponentId.PageScaffold -> PageScaffoldDemo(demo = demo, onBack = onBack)
-        ComponentId.FloatingButton -> FloatingButtonDemo(demo = demo, onBack = onBack)
+        ComponentId.AndroidKitPage -> AndroidKitPageDemo(demo = demo, onBack = onBack)
+        ComponentId.AndroidKitFloatingActionButton -> AndroidKitFloatingActionButtonDemo(
+            demo = demo,
+            onBack = onBack,
+        )
         else -> StandardComponentDemo(
             demo = demo,
             showCompactNavigationLabels = showCompactNavigationLabels,
@@ -89,23 +92,23 @@ fun ComponentDemoScreen(
 }
 
 @Composable
-private fun PageScaffoldDemo(
+private fun AndroidKitPageDemo(
     demo: ComponentDemo,
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
     val title = when (demo) {
-        ComponentDemo.PageScaffoldBasic -> null
-        ComponentDemo.PageScaffoldTitle -> stringResource(R.string.demo_page_title)
-        ComponentDemo.PageScaffoldFloatingButton -> stringResource(R.string.demo_page_title)
-        else -> error("Unexpected PageScaffold demo: $demo")
+        ComponentDemo.AndroidKitPageBasic -> null
+        ComponentDemo.AndroidKitPageTitle -> stringResource(R.string.demo_page_title)
+        ComponentDemo.AndroidKitPageFloatingActionButton -> stringResource(R.string.demo_page_title)
+        else -> error("Unexpected AndroidKitPage demo: $demo")
     }
-    PageScaffold(
+    AndroidKitPage(
         title = title,
         onBack = listDetailBackAction(onBack),
         floatingActionButton = {
-            if (demo == ComponentDemo.PageScaffoldFloatingButton) {
-                FloatingButton(onClick = { actionCount += 1 }) {
+            if (demo == ComponentDemo.AndroidKitPageFloatingActionButton) {
+                AndroidKitFloatingActionButton(onClick = { actionCount += 1 }) {
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = stringResource(R.string.action_confirm),
@@ -134,22 +137,22 @@ private fun PageScaffoldDemo(
 }
 
 @Composable
-private fun FloatingButtonDemo(
+private fun AndroidKitFloatingActionButtonDemo(
     demo: ComponentDemo,
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
     val alignment = when (demo) {
-        ComponentDemo.FloatingButtonTopStart -> Alignment.TopStart
-        ComponentDemo.FloatingButtonTopCenter -> Alignment.TopCenter
-        ComponentDemo.FloatingButtonTopEnd -> Alignment.TopEnd
-        ComponentDemo.FloatingButtonBottomStart -> Alignment.BottomStart
-        ComponentDemo.FloatingButtonBottomCenter -> Alignment.BottomCenter
-        ComponentDemo.FloatingButtonBottomEnd -> Alignment.BottomEnd
-        else -> error("Unexpected FloatingButton demo: $demo")
+        ComponentDemo.AndroidKitFloatingActionButtonTopStart -> Alignment.TopStart
+        ComponentDemo.AndroidKitFloatingActionButtonTopCenter -> Alignment.TopCenter
+        ComponentDemo.AndroidKitFloatingActionButtonTopEnd -> Alignment.TopEnd
+        ComponentDemo.AndroidKitFloatingActionButtonBottomStart -> Alignment.BottomStart
+        ComponentDemo.AndroidKitFloatingActionButtonBottomCenter -> Alignment.BottomCenter
+        ComponentDemo.AndroidKitFloatingActionButtonBottomEnd -> Alignment.BottomEnd
+        else -> error("Unexpected AndroidKitFloatingActionButton demo: $demo")
     }
     val dimensions = AndroidKitThemeTokens.dimensions
-    PageScaffold(
+    AndroidKitPage(
         title = componentDemoTitle(demo),
         onBack = listDetailBackAction(onBack),
     ) { contentPadding ->
@@ -171,7 +174,7 @@ private fun FloatingButtonDemo(
                     .fillMaxSize()
                     .padding(contentPadding),
             ) {
-                FloatingButton(
+                AndroidKitFloatingActionButton(
                     onClick = { actionCount += 1 },
                     modifier = Modifier
                         .align(alignment)
@@ -195,19 +198,19 @@ private fun StandardComponentDemo(
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
-    val actionBar = demo.takeIf { it.component == ComponentId.FloatingActionBar }
-    val titleBarDemo = demo.takeIf { it.component == ComponentId.FloatingTitleBar }
+    val actionBar = demo.takeIf { it.component == ComponentId.AndroidKitFloatingActionBar }
+    val titleBarDemo = demo.takeIf { it.component == ComponentId.AndroidKitFloatingTitleBar }
     val titleBarActions = if (
-        titleBarDemo == ComponentDemo.FloatingTitleBarBackTitleActions ||
-        titleBarDemo == ComponentDemo.FloatingTitleBarImmersiveMode
+        titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarBackTitleActions ||
+        titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarImmersiveMode
     ) {
         listOf(
-            FloatingTitleBarAction(
+            AndroidKitFloatingTitleBarAction(
                 icon = Icons.Default.Save,
                 label = stringResource(R.string.action_save),
                 onClick = { actionCount += 1 },
             ),
-            FloatingTitleBarAction(
+            AndroidKitFloatingTitleBarAction(
                 icon = Icons.Default.Share,
                 label = stringResource(R.string.action_share),
                 onClick = { actionCount += 1 },
@@ -216,18 +219,19 @@ private fun StandardComponentDemo(
     } else {
         emptyList()
     }
-    PageScaffold(
-        title = if (titleBarDemo == ComponentDemo.FloatingTitleBarBackOnly) {
+    AndroidKitPage(
+        title = if (titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarBackOnly) {
             null
         } else {
             componentDemoTitle(demo)
         },
         onBack = listDetailBackAction(onBack),
         actions = titleBarActions,
-        titleBarImmersiveMode = titleBarDemo == ComponentDemo.FloatingTitleBarImmersiveMode,
+        titleBarImmersiveMode =
+            titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarImmersiveMode,
         floatingActionButton = {
             actionBar?.let {
-                FloatingActionBarDemo(
+                AndroidKitFloatingActionBarDemo(
                     demo = it,
                     onAction = { actionCount += 1 },
                 )
@@ -237,7 +241,8 @@ private fun StandardComponentDemo(
         DemoList(contentPadding) {
             item {
                 when (demo.component) {
-                    ComponentId.FloatingTitleBar -> FloatingTitleBarDemoContent(
+                    ComponentId.AndroidKitFloatingTitleBar ->
+                        AndroidKitFloatingTitleBarDemoContent(
                         demo = demo,
                         actionCount = actionCount,
                     )
@@ -246,13 +251,13 @@ private fun StandardComponentDemo(
                         actionCount = actionCount,
                         onAction = { actionCount += 1 },
                     )
-                    ComponentId.SettingsItem -> SettingsItemDemo(
+                    ComponentId.AndroidKitSettingSection -> AndroidKitSettingSectionDemo(
                         demo = demo,
                         onAction = { actionCount += 1 },
                     )
 
-                    ComponentId.AndroidKitModalSheet -> ModalSheetDemo(demo)
-                    ComponentId.FloatingActionBar -> AndroidKitCard(
+                    ComponentId.AndroidKitBottomSheet -> AndroidKitBottomSheetDemo(demo)
+                    ComponentId.AndroidKitFloatingActionBar -> AndroidKitCard(
                         modifier = Modifier.fillMaxWidth(),
                         header = {
                             DemoCardHeader(
@@ -264,16 +269,17 @@ private fun StandardComponentDemo(
                         Text(stringResource(R.string.action_count, actionCount))
                     }
 
-                    ComponentId.FloatingDropdownMenu -> FloatingDropdownMenuDemo(demo)
-                    ComponentId.FloatingNavigation -> FloatingNavigationDemo(
+                    ComponentId.AndroidKitFloatingDropdownMenu ->
+                        AndroidKitFloatingDropdownMenuDemo(demo)
+                    ComponentId.AndroidKitFloatingNavigation -> AndroidKitFloatingNavigationDemo(
                         demo = demo,
                         showCompactNavigationLabels = showCompactNavigationLabels,
                         onShowCompactNavigationLabelsChange =
                             onShowCompactNavigationLabelsChange,
                     )
 
-                    ComponentId.PageScaffold,
-                    ComponentId.FloatingButton,
+                    ComponentId.AndroidKitPage,
+                    ComponentId.AndroidKitFloatingActionButton,
                     -> error("Handled by a dedicated demo screen")
                 }
             }
@@ -283,7 +289,7 @@ private fun StandardComponentDemo(
 }
 
 @Composable
-private fun FloatingTitleBarDemoContent(
+private fun AndroidKitFloatingTitleBarDemoContent(
     demo: ComponentDemo,
     actionCount: Int,
 ) {
@@ -292,8 +298,8 @@ private fun FloatingTitleBarDemoContent(
     ) {
         Text(stringResource(R.string.floating_title_bar_demo_instruction))
         if (
-            demo == ComponentDemo.FloatingTitleBarBackTitleActions ||
-            demo == ComponentDemo.FloatingTitleBarImmersiveMode
+            demo == ComponentDemo.AndroidKitFloatingTitleBarBackTitleActions ||
+            demo == ComponentDemo.AndroidKitFloatingTitleBarImmersiveMode
         ) {
             Text(stringResource(R.string.action_count, actionCount))
         }
@@ -350,7 +356,7 @@ private fun AndroidKitCardDemo(
 }
 
 @Composable
-private fun SettingsItemDemo(
+private fun AndroidKitSettingSectionDemo(
     demo: ComponentDemo,
     onAction: () -> Unit,
 ) {
@@ -360,17 +366,21 @@ private fun SettingsItemDemo(
     val actionLabel = stringResource(R.string.primary_action)
     val description = stringResource(R.string.demo_supporting_text)
     val entrySupportingText = stringResource(R.string.demo_setting_supporting_text)
-    SettingsItem(
-        label = activeVariation.takeUnless { demo == ComponentDemo.SettingsItemButton },
-        description = description.takeIf { demo == ComponentDemo.SettingsItemGrouped },
+    AndroidKitSettingSection(
+        label = activeVariation.takeUnless {
+            demo == ComponentDemo.AndroidKitSettingSectionButton
+        },
+        description = description.takeIf {
+            demo == ComponentDemo.AndroidKitSettingSectionGrouped
+        },
     ) {
         when (demo) {
-            ComponentDemo.SettingsItemButton -> button(
+            ComponentDemo.AndroidKitSettingSectionButton -> button(
                 label = settingLabel,
                 onClick = onAction,
             )
 
-            ComponentDemo.SettingsItemToggle -> toggle(
+            ComponentDemo.AndroidKitSettingSectionToggle -> toggle(
                 label = settingLabel,
                 checked = checked,
                 onCheckedChange = {
@@ -379,7 +389,7 @@ private fun SettingsItemDemo(
                 },
             )
 
-            ComponentDemo.SettingsItemGrouped -> {
+            ComponentDemo.AndroidKitSettingSectionGrouped -> {
                 toggle(
                     label = settingLabel,
                     checked = checked,
@@ -397,29 +407,29 @@ private fun SettingsItemDemo(
                 )
             }
 
-            else -> error("Unexpected SettingsItem demo: $demo")
+            else -> error("Unexpected AndroidKitSettingSection demo: $demo")
         }
     }
 }
 
 @Composable
-private fun ModalSheetDemo(demo: ComponentDemo) {
+private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     var visible by rememberSaveable { mutableStateOf(false) }
     Button(onClick = { visible = true }) {
         Text(stringResource(R.string.open_sheet))
     }
     if (visible) {
-        AndroidKitModalSheet(
+        AndroidKitBottomSheet(
             title = stringResource(R.string.sheet_title).takeUnless {
-                demo == ComponentDemo.ModalSheetTitleless
+                demo == ComponentDemo.AndroidKitBottomSheetTitleless
             },
             onDismissRequest = { visible = false },
             onBack = ({ visible = false }).takeIf {
-                demo == ComponentDemo.ModalSheetBackAndActions
+                demo == ComponentDemo.AndroidKitBottomSheetBackAndActions
             },
-            actions = if (demo == ComponentDemo.ModalSheetBackAndActions) {
+            actions = if (demo == ComponentDemo.AndroidKitBottomSheetBackAndActions) {
                 listOf(
-                    FloatingTitleBarAction(
+                    AndroidKitFloatingTitleBarAction(
                         icon = Icons.Default.Save,
                         label = stringResource(R.string.action_save),
                         onClick = { visible = false },
@@ -436,7 +446,7 @@ private fun ModalSheetDemo(demo: ComponentDemo) {
 }
 
 @Composable
-private fun FloatingActionBarDemo(
+private fun AndroidKitFloatingActionBarDemo(
     demo: ComponentDemo,
     onAction: () -> Unit,
 ) {
@@ -457,55 +467,55 @@ private fun FloatingActionBarDemo(
         Icons.Default.Check to confirm,
         Icons.Default.Delete to delete,
     )
-    FloatingActionBar {
+    AndroidKitFloatingActionBar {
         when (demo) {
-            ComponentDemo.FloatingActionBarIcons -> {
+            ComponentDemo.AndroidKitFloatingActionBarIcons -> {
                 icon(onClick = onAction, icon = Icons.Default.Edit, contentDescription = edit)
                 icon(onClick = onAction, icon = Icons.Default.Save, contentDescription = save)
                 icon(onClick = onAction, icon = Icons.Default.Share, contentDescription = share)
-                flyout(style = FloatingActionBarFlyoutStyle.Icon) {
+                flyout(style = AndroidKitFloatingActionBarFlyoutStyle.Icon) {
                     flyoutItems.forEach { (icon, label) ->
                         item(icon = icon, label = label, onClick = onAction)
                     }
                 }
             }
 
-            ComponentDemo.FloatingActionBarIconsAndLabels -> {
+            ComponentDemo.AndroidKitFloatingActionBarIconsAndLabels -> {
                 iconAndLabel(onClick = onAction, icon = Icons.Default.Edit, label = edit)
                 iconAndLabel(onClick = onAction, icon = Icons.Default.Save, label = save)
                 iconAndLabel(onClick = onAction, icon = Icons.Default.Share, label = share)
-                flyout(style = FloatingActionBarFlyoutStyle.IconAndLabel) {
+                flyout(style = AndroidKitFloatingActionBarFlyoutStyle.IconAndLabel) {
                     flyoutItems.forEach { (icon, label) ->
                         item(icon = icon, label = label, onClick = onAction)
                     }
                 }
             }
 
-            ComponentDemo.FloatingActionBarText -> {
+            ComponentDemo.AndroidKitFloatingActionBarText -> {
                 text(onClick = onAction, label = edit)
                 text(onClick = onAction, label = save)
                 text(onClick = onAction, label = share)
-                flyout(style = FloatingActionBarFlyoutStyle.Text) {
+                flyout(style = AndroidKitFloatingActionBarFlyoutStyle.Text) {
                     flyoutItems.forEach { (icon, label) ->
                         item(icon = icon, label = label, onClick = onAction)
                     }
                 }
             }
 
-            else -> error("Unexpected FloatingActionBar demo: $demo")
+            else -> error("Unexpected AndroidKitFloatingActionBar demo: $demo")
         }
     }
 }
 
 @Composable
-private fun FloatingDropdownMenuDemo(demo: ComponentDemo) {
+private fun AndroidKitFloatingDropdownMenuDemo(demo: ComponentDemo) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     Box {
         Button(onClick = { expanded = true }) {
             Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
             Text(stringResource(R.string.action_more))
         }
-        FloatingDropdownMenu(
+        AndroidKitFloatingDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
@@ -517,7 +527,9 @@ private fun FloatingDropdownMenuDemo(demo: ComponentDemo) {
                 DropdownMenuItem(
                     text = { Text(stringResource(labelResource)) },
                     onClick = { expanded = false },
-                    leadingIcon = if (demo == ComponentDemo.FloatingDropdownMenuIcons) {
+                    leadingIcon = if (
+                        demo == ComponentDemo.AndroidKitFloatingDropdownMenuIcons
+                    ) {
                         { Icon(imageVector = icon, contentDescription = null) }
                     } else {
                         null
@@ -529,14 +541,14 @@ private fun FloatingDropdownMenuDemo(demo: ComponentDemo) {
 }
 
 @Composable
-private fun FloatingNavigationDemo(
+private fun AndroidKitFloatingNavigationDemo(
     demo: ComponentDemo,
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
 ) {
-    if (demo == ComponentDemo.FloatingNavigationLabels) {
+    if (demo == ComponentDemo.AndroidKitFloatingNavigationLabels) {
         val entryLabel = stringResource(R.string.floating_navigation_labels_title)
-        SettingsItem(
+        AndroidKitSettingSection(
             label = stringResource(R.string.active_variation),
             description = stringResource(R.string.floating_navigation_labels_description),
         ) {

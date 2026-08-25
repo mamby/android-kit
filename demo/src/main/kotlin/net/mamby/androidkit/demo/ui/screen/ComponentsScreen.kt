@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import net.mamby.androidkit.compose.layout.PageScaffold
+import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
@@ -29,7 +29,7 @@ import net.mamby.androidkit.demo.ui.ComponentId
 @Composable
 fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
     val dimensions = AndroidKitThemeTokens.dimensions
-    PageScaffold { contentPadding ->
+    AndroidKitPage { contentPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

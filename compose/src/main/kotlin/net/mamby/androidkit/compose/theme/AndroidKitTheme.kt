@@ -30,7 +30,7 @@ public data class AndroidKitThemeDefinition(
 )
 
 @Immutable
-public data class FloatingSurfaceStyle(
+public data class AndroidKitFloatingSurfaceStyle(
     public val opacity: Float = 0.8f,
 ) {
     init {
@@ -48,7 +48,7 @@ public data class AndroidKitDimensions(
     public val screenPadding: Dp = 20.dp,
     public val contentMaxWidth: Dp = 1_200.dp,
     public val minimumTouchTarget: Dp = 48.dp,
-    public val settingsItemVerticalPadding: Dp = 12.dp,
+    public val settingSectionEntryVerticalPadding: Dp = 12.dp,
     public val floatingNavigationMargin: Dp = 8.dp,
     public val floatingNavigationMaxWidth: Dp = 560.dp,
     public val floatingNavigationIconSize: Dp = 24.dp,
@@ -56,7 +56,7 @@ public data class AndroidKitDimensions(
     public val floatingActionBarIconSize: Dp = 18.dp,
     public val floatingTitleBarButtonSize: Dp = 44.dp,
     public val floatingTitleBarVerticalPadding: Dp = spaceSmall,
-    public val floatingButtonSize: Dp = 56.dp,
+    public val floatingActionButtonSize: Dp = 56.dp,
     public val floatingActionIconSize: Dp = 20.dp,
     public val floatingSurfaceBorderWidth: Dp = 1.dp,
     public val floatingSurfaceShadowRadius: Dp = 6.dp,
@@ -213,7 +213,7 @@ public object AndroidKitDefaults {
 
 private val LocalAndroidKitDimensions = staticCompositionLocalOf { AndroidKitDimensions() }
 private val LocalAndroidKitStrings = staticCompositionLocalOf { AndroidKitStrings.English }
-private val LocalFloatingSurfaceStyle = staticCompositionLocalOf { FloatingSurfaceStyle() }
+private val LocalFloatingSurfaceStyle = staticCompositionLocalOf { AndroidKitFloatingSurfaceStyle() }
 
 public object AndroidKitThemeTokens {
     public val dimensions: AndroidKitDimensions
@@ -226,7 +226,7 @@ public object AndroidKitThemeTokens {
         @ReadOnlyComposable
         get() = LocalAndroidKitStrings.current
 
-    public val floatingSurfaceStyle: FloatingSurfaceStyle
+    public val floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalFloatingSurfaceStyle.current
@@ -240,7 +240,7 @@ public fun AndroidKitTheme(
         AndroidKitThemes.Light
     },
     strings: AndroidKitStrings = AndroidKitStrings.English,
-    floatingSurfaceStyle: FloatingSurfaceStyle = FloatingSurfaceStyle(),
+    floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(),
     content: @Composable () -> Unit,
 ): Unit {
     CompositionLocalProvider(

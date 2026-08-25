@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import net.mamby.androidkit.compose.layout.PageScaffold
+import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
@@ -17,7 +17,7 @@ import net.mamby.androidkit.demo.R
 @Composable
 fun DummyNavigationScreen(index: Int) {
     val dimensions = AndroidKitThemeTokens.dimensions
-    PageScaffold(title = stringResource(R.string.nav_demo, index)) { contentPadding ->
+    AndroidKitPage(title = stringResource(R.string.nav_demo, index)) { contentPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

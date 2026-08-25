@@ -2,50 +2,33 @@ package net.mamby.androidkit.compose.form
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
-import net.mamby.androidkit.compose.layout.FloatingTitleBar
-import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
-import net.mamby.androidkit.compose.layout.toggleTitleBarOnUnconsumedTap
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 @DslMarker
-public annotation class SettingsItemDsl
+public annotation class AndroidKitSettingSectionDsl
 
-@SettingsItemDsl
-public interface SettingsItemScope {
+@AndroidKitSettingSectionDsl
+public interface AndroidKitSettingSectionScope {
     public fun button(
         label: String,
         onClick: () -> Unit,
@@ -65,14 +48,14 @@ public interface SettingsItemScope {
 }
 
 @Composable
-public fun SettingsItem(
+public fun AndroidKitSettingSection(
     modifier: Modifier = Modifier,
     label: String? = null,
     description: String? = null,
-    content: SettingsItemScope.() -> Unit,
+    content: AndroidKitSettingSectionScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val scope = SettingsItemScopeImpl().apply(content)
+    val scope = SettingSectionScopeImpl().apply(content)
     require(scope.entries.isNotEmpty()) { "At least one settings entry is required." }
 
     Column(
@@ -115,7 +98,7 @@ public fun SettingsItem(
     }
 }
 
-private class SettingsItemScopeImpl : SettingsItemScope {
+private class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
     val entries: MutableList<SettingsEntryDefinition> = mutableListOf()
 
     override fun button(
@@ -238,7 +221,7 @@ private fun SettingsEntryContent(
     Row(
         modifier = modifier.padding(
             horizontal = dimensions.spaceMedium,
-            vertical = dimensions.settingsItemVerticalPadding,
+            vertical = dimensions.settingSectionEntryVerticalPadding,
         ),
         horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
         verticalAlignment = Alignment.CenterVertically,
@@ -266,63 +249,5 @@ private fun SettingsEntryContent(
             }
         }
         trailingContent()
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-public fun AndroidKitModalSheet(
-    title: String? = null,
-    onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier,
-    onBack: (() -> Unit)? = null,
-    actions: List<FloatingTitleBarAction> = emptyList(),
-    titleBarImmersiveMode: Boolean = false,
-    content: @Composable ColumnScope.() -> Unit,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val strings = AndroidKitThemeTokens.strings
-    var titleBarVisible by rememberSaveable(titleBarImmersiveMode) { mutableStateOf(true) }
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        modifier = modifier,
-        contentWindowInsets = {
-            WindowInsets.safeDrawing.only(
-                WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
-            )
-        },
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .toggleTitleBarOnUnconsumedTap(
-                    enabled = titleBarImmersiveMode,
-                    titleBarVisible = titleBarVisible,
-                    onTitleBarVisibilityChange = { titleBarVisible = it },
-                ),
-        ) {
-            FloatingTitleBar(
-                title = title,
-                onBack = onBack,
-                actions = listOf(
-                    FloatingTitleBarAction(
-                        icon = Icons.Default.Close,
-                        label = strings.close,
-                        onClick = onDismissRequest,
-                    ),
-                ) + actions,
-                visible = titleBarVisible,
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = dimensions.screenPadding)
-                    .padding(bottom = dimensions.spaceExtraLarge),
-                verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-            ) {
-                content()
-            }
-        }
     }
 }

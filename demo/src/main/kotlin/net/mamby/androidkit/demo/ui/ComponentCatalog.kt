@@ -8,15 +8,15 @@ import net.mamby.androidkit.demo.R
 enum class ComponentId(
     val apiName: String,
 ) {
-    PageScaffold("PageScaffold"),
-    FloatingTitleBar("FloatingTitleBar"),
-    FloatingButton("FloatingButton"),
+    AndroidKitPage("AndroidKitPage"),
+    AndroidKitFloatingTitleBar("AndroidKitFloatingTitleBar"),
+    AndroidKitFloatingActionButton("AndroidKitFloatingActionButton"),
     AndroidKitCard("AndroidKitCard"),
-    SettingsItem("SettingsItem"),
-    AndroidKitModalSheet("AndroidKitModalSheet"),
-    FloatingActionBar("FloatingActionBar"),
-    FloatingDropdownMenu("FloatingDropdownMenu"),
-    FloatingNavigation("FloatingNavigation"),
+    AndroidKitSettingSection("AndroidKitSettingSection"),
+    AndroidKitBottomSheet("AndroidKitBottomSheet"),
+    AndroidKitFloatingActionBar("AndroidKitFloatingActionBar"),
+    AndroidKitFloatingDropdownMenu("AndroidKitFloatingDropdownMenu"),
+    AndroidKitFloatingNavigation("AndroidKitFloatingNavigation"),
 }
 
 @Serializable
@@ -24,54 +24,108 @@ enum class ComponentDemo(
     val component: ComponentId,
     @StringRes val titleResource: Int,
 ) {
-    PageScaffoldBasic(ComponentId.PageScaffold, R.string.variation_basic),
-    PageScaffoldTitle(ComponentId.PageScaffold, R.string.variation_with_title),
-    PageScaffoldFloatingButton(
-        ComponentId.PageScaffold,
-        R.string.variation_with_floating_button,
+    AndroidKitPageBasic(ComponentId.AndroidKitPage, R.string.variation_basic),
+    AndroidKitPageTitle(ComponentId.AndroidKitPage, R.string.variation_with_title),
+    AndroidKitPageFloatingActionButton(
+        ComponentId.AndroidKitPage,
+        R.string.variation_with_floating_action_button,
     ),
 
-    FloatingTitleBarBackOnly(ComponentId.FloatingTitleBar, R.string.variation_back_only),
-    FloatingTitleBarBackTitle(ComponentId.FloatingTitleBar, R.string.variation_back_title),
-    FloatingTitleBarBackTitleActions(
-        ComponentId.FloatingTitleBar,
+    AndroidKitFloatingTitleBarBackOnly(
+        ComponentId.AndroidKitFloatingTitleBar,
+        R.string.variation_back_only,
+    ),
+    AndroidKitFloatingTitleBarBackTitle(
+        ComponentId.AndroidKitFloatingTitleBar,
+        R.string.variation_back_title,
+    ),
+    AndroidKitFloatingTitleBarBackTitleActions(
+        ComponentId.AndroidKitFloatingTitleBar,
         R.string.variation_back_title_actions,
     ),
-    FloatingTitleBarImmersiveMode(ComponentId.FloatingTitleBar, R.string.variation_immersive_mode),
+    AndroidKitFloatingTitleBarImmersiveMode(
+        ComponentId.AndroidKitFloatingTitleBar,
+        R.string.variation_immersive_mode,
+    ),
 
-    FloatingButtonTopStart(ComponentId.FloatingButton, R.string.variation_top_start),
-    FloatingButtonTopCenter(ComponentId.FloatingButton, R.string.variation_top_center),
-    FloatingButtonTopEnd(ComponentId.FloatingButton, R.string.variation_top_end),
-    FloatingButtonBottomStart(ComponentId.FloatingButton, R.string.variation_bottom_start),
-    FloatingButtonBottomCenter(ComponentId.FloatingButton, R.string.variation_bottom_center),
-    FloatingButtonBottomEnd(ComponentId.FloatingButton, R.string.variation_bottom_end),
+    AndroidKitFloatingActionButtonTopStart(
+        ComponentId.AndroidKitFloatingActionButton,
+        R.string.variation_top_start,
+    ),
+    AndroidKitFloatingActionButtonTopCenter(
+        ComponentId.AndroidKitFloatingActionButton,
+        R.string.variation_top_center,
+    ),
+    AndroidKitFloatingActionButtonTopEnd(
+        ComponentId.AndroidKitFloatingActionButton,
+        R.string.variation_top_end,
+    ),
+    AndroidKitFloatingActionButtonBottomStart(
+        ComponentId.AndroidKitFloatingActionButton,
+        R.string.variation_bottom_start,
+    ),
+    AndroidKitFloatingActionButtonBottomCenter(
+        ComponentId.AndroidKitFloatingActionButton,
+        R.string.variation_bottom_center,
+    ),
+    AndroidKitFloatingActionButtonBottomEnd(
+        ComponentId.AndroidKitFloatingActionButton,
+        R.string.variation_bottom_end,
+    ),
 
     AndroidKitCardBasic(ComponentId.AndroidKitCard, R.string.variation_basic),
     AndroidKitCardSupportingText(ComponentId.AndroidKitCard, R.string.variation_supporting_text),
     AndroidKitCardRichContent(ComponentId.AndroidKitCard, R.string.variation_rich_content),
     AndroidKitCardOverflow(ComponentId.AndroidKitCard, R.string.variation_overflow),
 
-    SettingsItemButton(ComponentId.SettingsItem, R.string.variation_button_entry),
-    SettingsItemToggle(ComponentId.SettingsItem, R.string.variation_toggle_entry),
-    SettingsItemGrouped(ComponentId.SettingsItem, R.string.variation_grouped_entries),
+    AndroidKitSettingSectionButton(
+        ComponentId.AndroidKitSettingSection,
+        R.string.variation_button_entry,
+    ),
+    AndroidKitSettingSectionToggle(
+        ComponentId.AndroidKitSettingSection,
+        R.string.variation_toggle_entry,
+    ),
+    AndroidKitSettingSectionGrouped(
+        ComponentId.AndroidKitSettingSection,
+        R.string.variation_grouped_entries,
+    ),
 
-    ModalSheetTitleless(ComponentId.AndroidKitModalSheet, R.string.variation_titleless),
-    ModalSheetTitled(ComponentId.AndroidKitModalSheet, R.string.variation_with_title),
-    ModalSheetBackAndActions(
-        ComponentId.AndroidKitModalSheet,
+    AndroidKitBottomSheetTitleless(ComponentId.AndroidKitBottomSheet, R.string.variation_titleless),
+    AndroidKitBottomSheetTitled(ComponentId.AndroidKitBottomSheet, R.string.variation_with_title),
+    AndroidKitBottomSheetBackAndActions(
+        ComponentId.AndroidKitBottomSheet,
         R.string.variation_back_title_actions,
     ),
 
-    FloatingActionBarIcons(ComponentId.FloatingActionBar, R.string.variation_icons_only),
-    FloatingActionBarIconsAndLabels(
-        ComponentId.FloatingActionBar,
+    AndroidKitFloatingActionBarIcons(
+        ComponentId.AndroidKitFloatingActionBar,
+        R.string.variation_icons_only,
+    ),
+    AndroidKitFloatingActionBarIconsAndLabels(
+        ComponentId.AndroidKitFloatingActionBar,
         R.string.variation_icons_labels,
     ),
-    FloatingActionBarText(ComponentId.FloatingActionBar, R.string.variation_text_only),
+    AndroidKitFloatingActionBarText(
+        ComponentId.AndroidKitFloatingActionBar,
+        R.string.variation_text_only,
+    ),
 
-    FloatingDropdownMenuText(ComponentId.FloatingDropdownMenu, R.string.variation_text_items),
-    FloatingDropdownMenuIcons(ComponentId.FloatingDropdownMenu, R.string.variation_icon_items),
+    AndroidKitFloatingDropdownMenuText(
+        ComponentId.AndroidKitFloatingDropdownMenu,
+        R.string.variation_text_items,
+    ),
+    AndroidKitFloatingDropdownMenuIcons(
+        ComponentId.AndroidKitFloatingDropdownMenu,
+        R.string.variation_icon_items,
+    ),
 
-    FloatingNavigationLabels(ComponentId.FloatingNavigation, R.string.variation_label_toggle),
-    FloatingNavigationOverflow(ComponentId.FloatingNavigation, R.string.variation_overflow),
+    AndroidKitFloatingNavigationLabels(
+        ComponentId.AndroidKitFloatingNavigation,
+        R.string.variation_label_toggle,
+    ),
+    AndroidKitFloatingNavigationOverflow(
+        ComponentId.AndroidKitFloatingNavigation,
+        R.string.variation_overflow,
+    ),
 }

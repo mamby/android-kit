@@ -54,7 +54,7 @@
     <string name="about_body">يستهلك الدليل نفس الحزم العامة المخصصة لتطبيقات المصادر المفتوحة الخارجية.</string>
     <string name="variation_basic">أساسي</string>
     <string name="variation_with_title">مع عنوان</string>
-    <string name="variation_with_floating_button">مع زر عائم</string>
+    <string name="variation_with_floating_action_button">مع زر عائم</string>
     <string name="variation_back_only">رجوع فقط</string>
     <string name="variation_back_title">رجوع وعنوان</string>
     <string name="variation_back_title_actions">رجوع وعنوان وإجراءات</string>

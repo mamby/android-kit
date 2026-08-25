@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 
 @Composable
-public fun FloatingDropdownMenu(
+public fun AndroidKitFloatingDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
@@ -24,7 +24,7 @@ public fun FloatingDropdownMenu(
 )
 
 @Composable
-public fun FloatingDropdownMenu(
+public fun AndroidKitFloatingDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     offset: DpOffset,

@@ -26,10 +26,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.action.FloatingButton
-import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
-import net.mamby.androidkit.compose.navigation.FloatingNavigation
+import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
+import net.mamby.androidkit.compose.layout.AndroidKitPage
+import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
+import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -55,9 +55,9 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme {
-                    FloatingNavigation(
+                    AndroidKitFloatingNavigation(
                         items = destinations.map { (key, label, icon) ->
-                            AndroidKitNavigationItem(key, label, icon)
+                            AndroidKitFloatingNavigationItem(key, label, icon)
                         },
                         selectedKey = selected,
                         onSelected = { selected = it },
@@ -86,10 +86,14 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme {
-                    FloatingNavigation(
+                    AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
-                            AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
+                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "settings",
+                                "Settings",
+                                Icons.Default.Settings,
+                            ),
                         ),
                         selectedKey = "home",
                         onSelected = {},
@@ -106,7 +110,7 @@ class ComposeBehaviorTest {
     }
 
     @Test
-    fun pageScaffoldIncludesMeasuredNavigationAndActionClearance() {
+    fun androidKitPageIncludesMeasuredNavigationAndActionClearance() {
         var showLabels by mutableStateOf(false)
         var bottomPadding = 0.dp
         composeRule.setContent {
@@ -114,18 +118,24 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 360.dp)),
             ) {
                 AndroidKitTheme {
-                    FloatingNavigation(
+                    AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
-                            AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
+                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "settings",
+                                "Settings",
+                                Icons.Default.Settings,
+                            ),
                         ),
                         selectedKey = "home",
                         onSelected = {},
                         showCompactLabels = showLabels,
                     ) {
-                        PageScaffold(
+                        AndroidKitPage(
                             title = "Clearance",
-                            floatingActionButton = { FloatingButton(onClick = {}) {} },
+                            floatingActionButton = {
+                                AndroidKitFloatingActionButton(onClick = {}) {}
+                            },
                         ) { contentPadding ->
                             bottomPadding = contentPadding.calculateBottomPadding()
                             Box(Modifier.fillMaxSize())
@@ -152,13 +162,25 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme {
-                    FloatingNavigation(
+                    AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
-                            AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
-                            AndroidKitNavigationItem("edit", "Editor", Icons.Default.Edit),
-                            AndroidKitNavigationItem("language", "Language", Icons.Default.Language),
-                            AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
+                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "list",
+                                "Lists",
+                                Icons.AutoMirrored.Filled.List,
+                            ),
+                            AndroidKitFloatingNavigationItem("edit", "Editor", Icons.Default.Edit),
+                            AndroidKitFloatingNavigationItem(
+                                "language",
+                                "Language",
+                                Icons.Default.Language,
+                            ),
+                            AndroidKitFloatingNavigationItem(
+                                "settings",
+                                "Settings",
+                                Icons.Default.Settings,
+                            ),
                         ),
                         selectedKey = selected,
                         onSelected = { selected = it },
@@ -186,13 +208,33 @@ class ComposeBehaviorTest {
             ) {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     AndroidKitTheme {
-                    FloatingNavigation(
+                    AndroidKitFloatingNavigation(
                             items = listOf(
-                                AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
-                                AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
-                                AndroidKitNavigationItem("edit", "Editor", Icons.Default.Edit),
-                                AndroidKitNavigationItem("language", "Language", Icons.Default.Language),
-                                AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
+                                AndroidKitFloatingNavigationItem(
+                                    "home",
+                                    "Home",
+                                    Icons.Default.Home,
+                                ),
+                                AndroidKitFloatingNavigationItem(
+                                    "list",
+                                    "Lists",
+                                    Icons.AutoMirrored.Filled.List,
+                                ),
+                                AndroidKitFloatingNavigationItem(
+                                    "edit",
+                                    "Editor",
+                                    Icons.Default.Edit,
+                                ),
+                                AndroidKitFloatingNavigationItem(
+                                    "language",
+                                    "Language",
+                                    Icons.Default.Language,
+                                ),
+                                AndroidKitFloatingNavigationItem(
+                                    "settings",
+                                    "Settings",
+                                    Icons.Default.Settings,
+                                ),
                             ),
                             selectedKey = "home",
                             onSelected = {},
@@ -231,16 +273,36 @@ class ComposeBehaviorTest {
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 360.dp)),
             ) {
                 AndroidKitTheme {
-                    FloatingNavigation(
+                    AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
-                            AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
-                            AndroidKitNavigationItem("edit", "Editor", Icons.Default.Edit),
-                            AndroidKitNavigationItem("one", "Overflow 1", Icons.Default.Language),
-                            AndroidKitNavigationItem("two", "Overflow 2", Icons.Default.Language),
-                            AndroidKitNavigationItem("three", "Overflow 3", Icons.Default.Language),
-                            AndroidKitNavigationItem("four", "Overflow 4", Icons.Default.Language),
-                            AndroidKitNavigationItem(
+                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "list",
+                                "Lists",
+                                Icons.AutoMirrored.Filled.List,
+                            ),
+                            AndroidKitFloatingNavigationItem("edit", "Editor", Icons.Default.Edit),
+                            AndroidKitFloatingNavigationItem(
+                                "one",
+                                "Overflow 1",
+                                Icons.Default.Language,
+                            ),
+                            AndroidKitFloatingNavigationItem(
+                                "two",
+                                "Overflow 2",
+                                Icons.Default.Language,
+                            ),
+                            AndroidKitFloatingNavigationItem(
+                                "three",
+                                "Overflow 3",
+                                Icons.Default.Language,
+                            ),
+                            AndroidKitFloatingNavigationItem(
+                                "four",
+                                "Overflow 4",
+                                Icons.Default.Language,
+                            ),
+                            AndroidKitFloatingNavigationItem(
                                 key = "settings",
                                 label = "Settings",
                                 icon = Icons.Default.Settings,
@@ -272,6 +334,6 @@ class ComposeBehaviorTest {
         assertTrue(settingsBounds.top < firstOverflowBounds.top)
         assertTrue(popupBounds.bottom <= moreBounds.top)
         composeRule.onNode(hasScrollAction()).assertExists()
-        composeRule.onNodeWithTag("androidKitNavigationFlyoutDivider").assertExists()
+        composeRule.onNodeWithTag("androidKitFloatingNavigationFlyoutDivider").assertExists()
     }
 }

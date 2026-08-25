@@ -13,8 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import net.mamby.androidkit.compose.form.SettingsItem
-import net.mamby.androidkit.compose.layout.PageScaffold
+import net.mamby.androidkit.compose.form.AndroidKitSettingSection
+import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
@@ -28,7 +28,7 @@ fun SettingsScreen(
     onFloatingSurfacesTransparent: (Boolean) -> Unit,
 ) {
     val dimensions = AndroidKitThemeTokens.dimensions
-    PageScaffold(title = stringResource(R.string.settings_title)) { contentPadding ->
+    AndroidKitPage(title = stringResource(R.string.settings_title)) { contentPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,7 +76,7 @@ fun SettingsScreen(
             }
             item {
                 val transparencyLabel = stringResource(R.string.floating_surface_transparency)
-                SettingsItem(
+                AndroidKitSettingSection(
                     description = stringResource(
                         R.string.floating_surface_transparency_description,
                     ),

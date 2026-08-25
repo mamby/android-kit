@@ -24,19 +24,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
-import net.mamby.androidkit.compose.action.FloatingActionBar
-import net.mamby.androidkit.compose.action.FloatingButton
-import net.mamby.androidkit.compose.form.SettingsItem
-import net.mamby.androidkit.compose.layout.FloatingTitleBarAction
-import net.mamby.androidkit.compose.layout.PageScaffold
-import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
-import net.mamby.androidkit.compose.navigation.FloatingNavigation
+import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
+import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
+import net.mamby.androidkit.compose.form.AndroidKitSettingSection
+import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
+import net.mamby.androidkit.compose.layout.AndroidKitPage
+import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
+import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
-import net.mamby.androidkit.compose.theme.FloatingSurfaceStyle
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
 
 @PreviewTest
 @AdaptiveDeviceMatrix
@@ -86,13 +86,13 @@ fun androidKitCompactLabelsStress() {
 @Composable
 fun androidKitFloatingTitleActions() {
     AndroidKitTheme(definition = AndroidKitThemes.Light) {
-        PageScaffold(
+        AndroidKitPage(
             title = "A centered page title that must ellipsize",
             onBack = {},
             actions = listOf(
-                FloatingTitleBarAction(Icons.Default.Edit, "Edit", {}),
-                FloatingTitleBarAction(Icons.Default.Share, "Share", {}),
-                FloatingTitleBarAction(Icons.Default.Delete, "Delete", {}),
+                AndroidKitFloatingTitleBarAction(Icons.Default.Edit, "Edit", {}),
+                AndroidKitFloatingTitleBarAction(Icons.Default.Share, "Share", {}),
+                AndroidKitFloatingTitleBarAction(Icons.Default.Delete, "Delete", {}),
             ),
         ) { contentPadding ->
             Box(
@@ -126,7 +126,7 @@ fun androidKitRtl() {
 fun androidKitFloatingTransparent() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Light,
-        floatingSurfaceStyle = FloatingSurfaceStyle(opacity = 0f),
+        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(opacity = 0f),
     )
 }
 
@@ -136,7 +136,7 @@ fun androidKitFloatingTransparent() {
 fun androidKitFloatingOpaque() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Light,
-        floatingSurfaceStyle = FloatingSurfaceStyle(opacity = 1f),
+        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(opacity = 1f),
     )
 }
 
@@ -146,7 +146,7 @@ fun androidKitFloatingOpaque() {
 fun androidKitDarkSurfaceTransparent() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Dark,
-        floatingSurfaceStyle = FloatingSurfaceStyle(
+        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
             opacity = 0f,
         ),
     )
@@ -167,7 +167,7 @@ fun androidKitDarkSurfaceDefault() {
 fun androidKitDarkSurfaceOpaque() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Dark,
-        floatingSurfaceStyle = FloatingSurfaceStyle(
+        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
             opacity = 1f,
         ),
     )
@@ -176,24 +176,24 @@ fun androidKitDarkSurfaceOpaque() {
 @Composable
 private fun ScreenshotGallery(
     theme: AndroidKitThemeDefinition,
-    floatingSurfaceStyle: FloatingSurfaceStyle = FloatingSurfaceStyle(),
+    floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(),
     showCompactLabels: Boolean = false,
 ) {
     AndroidKitTheme(
         definition = theme,
         floatingSurfaceStyle = floatingSurfaceStyle,
     ) {
-        FloatingNavigation(
+        AndroidKitFloatingNavigation(
             items = screenshotNavigationItems,
             selectedKey = "home",
             onSelected = {},
             showCompactLabels = showCompactLabels,
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                PageScaffold(
+                AndroidKitPage(
                     title = "Android Kit",
                     floatingActionButton = {
-                        FloatingButton(onClick = {}) {
+                        AndroidKitFloatingActionButton(onClick = {}) {
                             Icon(Icons.Default.Add, contentDescription = "Add")
                         }
                     },
@@ -207,7 +207,7 @@ private fun ScreenshotGallery(
                         verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
                     ) {
                         item {
-                            SettingsItem(
+                            AndroidKitSettingSection(
                                 label = "Actions",
                                 description = "Opinionated Material 3 defaults",
                             ) {
@@ -231,7 +231,7 @@ private fun ScreenshotGallery(
                                     )
                                 },
                             ) {
-                                FloatingActionBar {
+                                AndroidKitFloatingActionBar {
                                     icon(
                                         onClick = {},
                                         icon = Icons.Default.Edit,
@@ -265,11 +265,11 @@ private fun ScreenshotGallery(
 }
 
 private val screenshotNavigationItems = listOf(
-    AndroidKitNavigationItem("home", "Home", Icons.Default.Home),
-    AndroidKitNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
-    AndroidKitNavigationItem("edit", "Editor", Icons.Default.Edit),
-    AndroidKitNavigationItem("language", "Language", Icons.Default.Language),
-    AndroidKitNavigationItem("settings", "Settings", Icons.Default.Settings),
+    AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+    AndroidKitFloatingNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
+    AndroidKitFloatingNavigationItem("edit", "Editor", Icons.Default.Edit),
+    AndroidKitFloatingNavigationItem("language", "Language", Icons.Default.Language),
+    AndroidKitFloatingNavigationItem("settings", "Settings", Icons.Default.Settings),
 )
 
 @Target(AnnotationTarget.FUNCTION)

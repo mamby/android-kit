@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
@@ -31,28 +30,12 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
-import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
-
-@Composable
-public fun FloatingButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-): Unit {
-    FloatingSurfaceButton(
-        onClick = onClick,
-        shape = CircleShape,
-        visualSize = AndroidKitThemeTokens.dimensions.floatingButtonSize,
-        modifier = modifier,
-        content = content,
-    )
-}
 
 @DslMarker
-public annotation class FloatingActionBarDsl
+public annotation class AndroidKitFloatingActionBarDsl
 
-@FloatingActionBarDsl
-public interface FloatingActionBarScope {
+@AndroidKitFloatingActionBarDsl
+public interface AndroidKitFloatingActionBarScope {
     public fun icon(
         onClick: () -> Unit,
         icon: ImageVector,
@@ -75,14 +58,14 @@ public interface FloatingActionBarScope {
 
     public fun flyout(
         modifier: Modifier = Modifier,
-        style: FloatingActionBarFlyoutStyle = FloatingActionBarFlyoutStyle.Icon,
+        style: AndroidKitFloatingActionBarFlyoutStyle = AndroidKitFloatingActionBarFlyoutStyle.Icon,
         contentDescription: String? = null,
-        content: FloatingActionBarFlyoutScope.() -> Unit,
+        content: AndroidKitFloatingActionBarFlyoutScope.() -> Unit,
     ): Unit
 }
 
-@FloatingActionBarDsl
-public interface FloatingActionBarFlyoutScope {
+@AndroidKitFloatingActionBarDsl
+public interface AndroidKitFloatingActionBarFlyoutScope {
     public fun item(
         icon: ImageVector,
         label: String,
@@ -90,16 +73,16 @@ public interface FloatingActionBarFlyoutScope {
     ): Unit
 }
 
-public enum class FloatingActionBarFlyoutStyle {
+public enum class AndroidKitFloatingActionBarFlyoutStyle {
     Icon,
     IconAndLabel,
     Text,
 }
 
 @Composable
-public fun FloatingActionBar(
+public fun AndroidKitFloatingActionBar(
     modifier: Modifier = Modifier,
-    content: FloatingActionBarScope.() -> Unit,
+    content: AndroidKitFloatingActionBarScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val scope = FloatingActionBarScopeImpl().apply(content)
@@ -120,7 +103,7 @@ public fun FloatingActionBar(
     }
 }
 
-private class FloatingActionBarScopeImpl : FloatingActionBarScope {
+private class FloatingActionBarScopeImpl : AndroidKitFloatingActionBarScope {
     val items: MutableList<FloatingActionBarItemDefinition> = mutableListOf()
 
     override fun icon(
@@ -165,9 +148,9 @@ private class FloatingActionBarScopeImpl : FloatingActionBarScope {
 
     override fun flyout(
         modifier: Modifier,
-        style: FloatingActionBarFlyoutStyle,
+        style: AndroidKitFloatingActionBarFlyoutStyle,
         contentDescription: String?,
-        content: FloatingActionBarFlyoutScope.() -> Unit,
+        content: AndroidKitFloatingActionBarFlyoutScope.() -> Unit,
     ) {
         val flyoutScope = FloatingActionBarFlyoutScopeImpl().apply(content)
         require(flyoutScope.items.isNotEmpty()) { "At least one flyout item is required." }
@@ -180,7 +163,7 @@ private class FloatingActionBarScopeImpl : FloatingActionBarScope {
     }
 }
 
-private class FloatingActionBarFlyoutScopeImpl : FloatingActionBarFlyoutScope {
+private class FloatingActionBarFlyoutScopeImpl : AndroidKitFloatingActionBarFlyoutScope {
     val items: MutableList<FloatingActionBarFlyoutItem> = mutableListOf()
 
     override fun item(
@@ -221,7 +204,7 @@ private sealed interface FloatingActionBarItemDefinition {
 
     class Flyout(
         val items: List<FloatingActionBarFlyoutItem>,
-        val style: FloatingActionBarFlyoutStyle,
+        val style: AndroidKitFloatingActionBarFlyoutStyle,
         override val modifier: Modifier,
         val contentDescription: String?,
     ) : FloatingActionBarItemDefinition
@@ -274,7 +257,7 @@ private fun FloatingActionBarItem(item: FloatingActionBarItemDefinition) {
 private fun FloatingActionBarFlyoutContent(
     items: List<FloatingActionBarFlyoutItem>,
     modifier: Modifier,
-    style: FloatingActionBarFlyoutStyle,
+    style: AndroidKitFloatingActionBarFlyoutStyle,
     contentDescription: String,
 ): Unit {
     var expanded by remember { mutableStateOf(false) }
@@ -286,11 +269,11 @@ private fun FloatingActionBarFlyoutContent(
             label = contentDescription,
             modifier = Modifier,
             icon = Icons.Default.MoreVert.takeUnless {
-                style == FloatingActionBarFlyoutStyle.Text
+                style == AndroidKitFloatingActionBarFlyoutStyle.Text
             },
-            showLabel = style != FloatingActionBarFlyoutStyle.Icon,
+            showLabel = style != AndroidKitFloatingActionBarFlyoutStyle.Icon,
         )
-        FloatingDropdownMenu(
+        AndroidKitFloatingDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             offset = DpOffset(x = 0.dp, y = dimensions.spaceExtraSmall),

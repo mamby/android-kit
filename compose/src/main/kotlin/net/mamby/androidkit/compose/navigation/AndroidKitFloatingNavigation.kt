@@ -59,13 +59,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.action.FloatingDropdownMenu
-import net.mamby.androidkit.compose.layout.LocalAndroidKitNavigationInsets
+import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
+import net.mamby.androidkit.compose.layout.LocalAndroidKitFloatingNavigationInsets
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 
-public class AndroidKitNavigationItem<Key : Any>(
+public class AndroidKitFloatingNavigationItem<Key : Any>(
     public val key: Key,
     public val label: String,
     public val icon: ImageVector,
@@ -75,8 +75,8 @@ public class AndroidKitNavigationItem<Key : Any>(
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-public fun <Key : Any> FloatingNavigation(
-    items: List<AndroidKitNavigationItem<Key>>,
+public fun <Key : Any> AndroidKitFloatingNavigation(
+    items: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onSelected: (Key) -> Unit,
     modifier: Modifier = Modifier,
@@ -121,7 +121,7 @@ public fun <Key : Any> FloatingNavigation(
         )
     } else {
         CompositionLocalProvider(
-            LocalAndroidKitNavigationInsets provides WindowInsets(0, 0, 0, 0),
+            LocalAndroidKitFloatingNavigationInsets provides WindowInsets(0, 0, 0, 0),
         ) {
             NavigationSuiteScaffold(
                 navigationSuiteItems = {
@@ -170,7 +170,7 @@ private fun CompactNavigationLayout(
         val navigationHeight = navigationPlaceables.maxOfOrNull { it.height } ?: 0
         val contentPlaceables = subcompose(CompactNavigationSlot.Content) {
             CompositionLocalProvider(
-                LocalAndroidKitNavigationInsets provides WindowInsets(
+                LocalAndroidKitFloatingNavigationInsets provides WindowInsets(
                     left = 0,
                     top = 0,
                     right = 0,
@@ -200,8 +200,8 @@ private enum class CompactNavigationSlot {
 
 @Composable
 private fun <Key : Any> FloatingNavigationBar(
-    items: List<AndroidKitNavigationItem<Key>>,
-    overflowItems: List<AndroidKitNavigationItem<Key>>,
+    items: List<AndroidKitFloatingNavigationItem<Key>>,
+    overflowItems: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onSelected: (Key) -> Unit,
     overflowSelected: Boolean,
@@ -385,14 +385,14 @@ private fun CompactNavigationItemContent(
 @Composable
 private fun <Key : Any> NavigationFlyout(
     expanded: Boolean,
-    items: List<AndroidKitNavigationItem<Key>>,
+    items: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onDismissRequest: () -> Unit,
     onSelected: (Key) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val visuals = floatingSurfaceVisuals()
-    FloatingDropdownMenu(
+    AndroidKitFloatingDropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
         offset = DpOffset(x = 0.dp, y = dimensions.spaceExtraSmall),
@@ -446,7 +446,7 @@ private fun <Key : Any> NavigationFlyout(
     }
 }
 
-private const val FlyoutDividerTestTag = "androidKitNavigationFlyoutDivider"
+private const val FlyoutDividerTestTag = "androidKitFloatingNavigationFlyoutDivider"
 
 private fun androidKitNavigationSuiteType(adaptiveInfo: WindowAdaptiveInfo): NavigationSuiteType =
     when (val recommended = NavigationSuiteScaffoldDefaults.navigationSuiteType(adaptiveInfo)) {

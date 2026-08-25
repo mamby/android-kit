@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
-import net.mamby.androidkit.compose.action.FloatingDropdownMenu
+import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
@@ -101,7 +101,7 @@ private fun AndroidKitCardOverflowMenu(items: List<AndroidKitCardMenuItem>): Uni
                 contentDescription = AndroidKitThemeTokens.strings.more,
             )
         }
-        FloatingDropdownMenu(
+        AndroidKitFloatingDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {

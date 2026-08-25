@@ -29,10 +29,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import net.mamby.androidkit.compose.navigation.AndroidKitNavigationItem
-import net.mamby.androidkit.compose.navigation.FloatingNavigation
+import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
+import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
-import net.mamby.androidkit.compose.theme.FloatingSurfaceStyle
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.screen.ComponentDemoScreen
 import net.mamby.androidkit.demo.ui.screen.ComponentPlaceholder
@@ -68,7 +68,7 @@ fun AndroidKitCatalogApp(
     AndroidKitTheme(
         definition = themeDefinition,
         strings = androidKitStrings(),
-        floatingSurfaceStyle = FloatingSurfaceStyle(
+        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
             opacity = if (settings.floatingSurfacesTransparent) {
                 TransparentFloatingSurfaceOpacity
             } else {
@@ -85,26 +85,26 @@ fun AndroidKitCatalogApp(
             Icons.Default.Info,
             Icons.Default.DashboardCustomize,
         )
-        val navigationItems: List<AndroidKitNavigationItem<CatalogRootRoute>> =
+        val navigationItems: List<AndroidKitFloatingNavigationItem<CatalogRootRoute>> =
             listOf(
-                AndroidKitNavigationItem<CatalogRootRoute>(
+                AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = ComponentsRoute,
                     label = stringResource(R.string.nav_components),
                     icon = Icons.Default.DashboardCustomize,
                 ),
-                AndroidKitNavigationItem<CatalogRootRoute>(
+                AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = LocalizationRoute,
                     label = stringResource(R.string.nav_localization),
                     icon = Icons.Default.Language,
                 ),
-                AndroidKitNavigationItem<CatalogRootRoute>(
+                AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = SettingsRoute,
                     label = stringResource(R.string.nav_settings),
                     icon = Icons.Default.Settings,
                     showDividerAfterInFlyout = true,
                 ),
             ) + roots.filterIsInstance<DemoRootRoute>().map { route ->
-                AndroidKitNavigationItem<CatalogRootRoute>(
+                AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = route,
                     label = stringResource(R.string.nav_demo, route.index),
                     icon = dummyNavigationIcons[route.index - 1],
@@ -116,7 +116,7 @@ fun AndroidKitCatalogApp(
             navigation.goBack()
         }
 
-        FloatingNavigation(
+        AndroidKitFloatingNavigation(
             items = navigationItems,
             selectedKey = navigation.selectedRoot,
             onSelected = navigation::openRoot,

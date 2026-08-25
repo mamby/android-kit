@@ -47,25 +47,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.action.FloatingDropdownMenu
+import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
 
 @Immutable
-public class FloatingTitleBarAction(
+public class AndroidKitFloatingTitleBarAction(
     public val icon: ImageVector,
     public val label: String,
     public val onClick: () -> Unit,
 )
 
 @Composable
-public fun FloatingTitleBar(
+public fun AndroidKitFloatingTitleBar(
     title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
-    actions: List<FloatingTitleBarAction> = emptyList(),
+    actions: List<AndroidKitFloatingTitleBarAction> = emptyList(),
     visible: Boolean = true,
     onOverflowExpandedChange: (Boolean) -> Unit = {},
     windowInsets: WindowInsets = WindowInsets.safeDrawing.only(
@@ -198,7 +198,7 @@ public fun FloatingTitleBar(
                         if (overflowActions.isNotEmpty()) {
                             Box {
                                 FloatingTitleBarActionButton(
-                                    action = FloatingTitleBarAction(
+                                    action = AndroidKitFloatingTitleBarAction(
                                         icon = Icons.Default.MoreVert,
                                         label = strings.more,
                                         onClick = {
@@ -206,7 +206,7 @@ public fun FloatingTitleBar(
                                         },
                                     ),
                                 )
-                                FloatingDropdownMenu(
+                                AndroidKitFloatingDropdownMenu(
                                     expanded = overflowExpanded,
                                     onDismissRequest = {
                                         setOverflowExpanded(false)
@@ -276,7 +276,7 @@ private fun FloatingTitleBarBackButton(
 
 @Composable
 private fun FloatingTitleBarActionButton(
-    action: FloatingTitleBarAction,
+    action: AndroidKitFloatingTitleBarAction,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     FloatingSurfaceButton(
