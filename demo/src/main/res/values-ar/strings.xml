@@ -45,8 +45,9 @@
     <string name="theme_dark">داكن</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">سمة ملوّنة يعرّفها التطبيق لإثبات نقطة التوسعة العامة.</string>
-    <string name="floating_surface_transparency">أسطح عائمة شفافة</string>
-    <string name="floating_surface_transparency_description" formatted="false">تستخدم عتامة بنسبة 80٪. عطّل هذا الخيار لاستخدام لون السطح المعتم للسمة النشطة.</string>
+    <string name="floating_surface_opacity">عتامة الأسطح العائمة</string>
+    <string name="floating_surface_opacity_description">يضبط الأسطح العائمة من شفافة بالكامل إلى معتمة بالكامل.</string>
+    <string name="floating_surface_opacity_value">%1$d٪</string>
     <string name="open_sheet">فتح لوحة المثال</string>
     <string name="sheet_title">لوحة قابلة لإعادة الاستخدام</string>
     <string name="sheet_body">يمتلك المستدعي الرؤية والمحتوى. ويوفر Android Kit الشريط المتكيّف والمسافات وتسميات إمكانية الوصول.</string>

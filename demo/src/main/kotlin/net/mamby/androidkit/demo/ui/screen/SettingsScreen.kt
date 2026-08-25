@@ -11,23 +11,33 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import kotlin.math.roundToInt
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
+import net.mamby.androidkit.demo.ui.MaximumFloatingSurfaceOpacity
+import net.mamby.androidkit.demo.ui.MinimumFloatingSurfaceOpacity
 
 @Composable
 fun SettingsScreen(
     themeChoice: DemoThemeChoice,
     onThemeChoice: (DemoThemeChoice) -> Unit,
-    floatingSurfacesTransparent: Boolean,
-    onFloatingSurfacesTransparent: (Boolean) -> Unit,
+    floatingSurfaceOpacity: Float,
+    onFloatingSurfaceOpacityChange: (Float) -> Unit,
 ) {
     val dimensions = AndroidKitThemeTokens.dimensions
+    var pendingFloatingSurfaceOpacity by remember(floatingSurfaceOpacity) {
+        mutableFloatStateOf(floatingSurfaceOpacity)
+    }
     AndroidKitPage(title = stringResource(R.string.settings_title)) { contentPadding ->
         LazyColumn(
             modifier = Modifier
@@ -75,16 +85,26 @@ fun SettingsScreen(
                 }
             }
             item {
-                val transparencyLabel = stringResource(R.string.floating_surface_transparency)
+                val opacityLabel = stringResource(R.string.floating_surface_opacity)
+                val opacityValueLabel = stringResource(
+                    R.string.floating_surface_opacity_value,
+                    (pendingFloatingSurfaceOpacity * PercentageScale).roundToInt(),
+                )
                 AndroidKitSettingSection(
                     description = stringResource(
-                        R.string.floating_surface_transparency_description,
+                        R.string.floating_surface_opacity_description,
                     ),
                 ) {
-                    toggle(
-                        label = transparencyLabel,
-                        checked = floatingSurfacesTransparent,
-                        onCheckedChange = onFloatingSurfacesTransparent,
+                    slider(
+                        label = opacityLabel,
+                        value = pendingFloatingSurfaceOpacity,
+                        onValueChange = { pendingFloatingSurfaceOpacity = it },
+                        valueRange = MinimumFloatingSurfaceOpacity..MaximumFloatingSurfaceOpacity,
+                        steps = FloatingSurfaceOpacitySliderSteps,
+                        onValueChangeFinished = {
+                            onFloatingSurfaceOpacityChange(pendingFloatingSurfaceOpacity)
+                        },
+                        valueLabel = opacityValueLabel,
                     )
                 }
             }
@@ -103,6 +123,9 @@ fun SettingsScreen(
         }
     }
 }
+
+private const val FloatingSurfaceOpacitySliderSteps = 99
+private const val PercentageScale = 100
 
 @Composable
 private fun ThemeChip(

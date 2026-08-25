@@ -45,8 +45,9 @@
     <string name="theme_dark">Sombre</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">Un thème coloré défini par l’application qui valide le point d’extension public.</string>
-    <string name="floating_surface_transparency">Surfaces flottantes transparentes</string>
-    <string name="floating_surface_transparency_description" formatted="false">Utilise une opacité de 80 %. Désactivez cette option pour utiliser la couleur de surface opaque du thème actif.</string>
+    <string name="floating_surface_opacity">Opacité des surfaces flottantes</string>
+    <string name="floating_surface_opacity_description">Ajuste les surfaces flottantes de totalement transparentes à totalement opaques.</string>
+    <string name="floating_surface_opacity_value">%1$d %%</string>
     <string name="open_sheet">Ouvrir la feuille d’exemple</string>
     <string name="sheet_title">Feuille réutilisable</string>
     <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>

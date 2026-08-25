@@ -14,6 +14,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
@@ -44,6 +47,19 @@ public interface AndroidKitSettingSectionScope {
         modifier: Modifier = Modifier,
         supportingText: String? = null,
         icon: ImageVector? = null,
+    ): Unit
+
+    public fun slider(
+        label: String,
+        value: Float,
+        onValueChange: (Float) -> Unit,
+        modifier: Modifier = Modifier,
+        valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+        steps: Int = 0,
+        onValueChangeFinished: (() -> Unit)? = null,
+        supportingText: String? = null,
+        icon: ImageVector? = null,
+        valueLabel: String? = null,
     ): Unit
 }
 
@@ -134,6 +150,32 @@ private class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
             icon = icon,
         )
     }
+
+    override fun slider(
+        label: String,
+        value: Float,
+        onValueChange: (Float) -> Unit,
+        modifier: Modifier,
+        valueRange: ClosedFloatingPointRange<Float>,
+        steps: Int,
+        onValueChangeFinished: (() -> Unit)?,
+        supportingText: String?,
+        icon: ImageVector?,
+        valueLabel: String?,
+    ) {
+        entries += SettingsEntryDefinition.Slider(
+            label = label,
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            valueRange = valueRange,
+            steps = steps,
+            onValueChangeFinished = onValueChangeFinished,
+            supportingText = supportingText,
+            icon = icon,
+            valueLabel = valueLabel,
+        )
+    }
 }
 
 private sealed interface SettingsEntryDefinition {
@@ -158,11 +200,25 @@ private sealed interface SettingsEntryDefinition {
         override val supportingText: String?,
         override val icon: ImageVector?,
     ) : SettingsEntryDefinition
+
+    class Slider(
+        override val label: String,
+        val value: Float,
+        val onValueChange: (Float) -> Unit,
+        override val modifier: Modifier,
+        val valueRange: ClosedFloatingPointRange<Float>,
+        val steps: Int,
+        val onValueChangeFinished: (() -> Unit)?,
+        override val supportingText: String?,
+        override val icon: ImageVector?,
+        val valueLabel: String?,
+    ) : SettingsEntryDefinition
 }
 
 @Composable
 private fun SettingsEntry(entry: SettingsEntryDefinition): Unit = when (entry) {
     is SettingsEntryDefinition.Button -> SettingsButtonEntry(entry)
+    is SettingsEntryDefinition.Slider -> SettingsSliderEntry(entry)
     is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry)
 }
 
@@ -205,6 +261,65 @@ private fun SettingsToggleEntry(entry: SettingsEntryDefinition.Toggle): Unit {
         Switch(
             checked = entry.checked,
             onCheckedChange = null,
+        )
+    }
+}
+
+@Composable
+private fun SettingsSliderEntry(entry: SettingsEntryDefinition.Slider): Unit {
+    val dimensions = AndroidKitThemeTokens.dimensions
+    Column(
+        modifier = entry.modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = dimensions.spaceMedium,
+                vertical = dimensions.settingSectionEntryVerticalPadding,
+            ),
+        verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            entry.icon?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                )
+            }
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            ) {
+                Text(
+                    text = entry.label,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                entry.supportingText?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            entry.valueLabel?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        Slider(
+            value = entry.value,
+            onValueChange = entry.onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = entry.label },
+            valueRange = entry.valueRange,
+            steps = entry.steps,
+            onValueChangeFinished = entry.onValueChangeFinished,
         )
     }
 }

@@ -46,8 +46,9 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">A colorful app-defined theme that proves the public extension point.</string>
-    <string name="floating_surface_transparency">Transparent floating surfaces</string>
-    <string name="floating_surface_transparency_description" formatted="false">Uses 80% opacity. Turn off for the active theme’s opaque surface color.</string>
+    <string name="floating_surface_opacity">Floating surface opacity</string>
+    <string name="floating_surface_opacity_description">Adjusts floating surfaces from fully transparent to fully opaque.</string>
+    <string name="floating_surface_opacity_value">%1$d%%</string>
     <string name="open_sheet">Open example sheet</string>
     <string name="sheet_title">Reusable sheet</string>
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>

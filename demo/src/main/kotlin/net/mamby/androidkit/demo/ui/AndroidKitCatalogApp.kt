@@ -69,11 +69,7 @@ fun AndroidKitCatalogApp(
         definition = themeDefinition,
         strings = androidKitStrings(),
         floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
-            opacity = if (settings.floatingSurfacesTransparent) {
-                TransparentFloatingSurfaceOpacity
-            } else {
-                OpaqueFloatingSurfaceOpacity
-            },
+            opacity = settings.floatingSurfaceOpacity,
         ),
     ) {
         val dummyNavigationIcons = listOf(
@@ -162,10 +158,9 @@ fun AndroidKitCatalogApp(
                             SettingsScreen(
                                 themeChoice = settings.themeChoice,
                                 onThemeChoice = settingsViewModel::setThemeChoice,
-                                floatingSurfacesTransparent =
-                                    settings.floatingSurfacesTransparent,
-                                onFloatingSurfacesTransparent =
-                                    settingsViewModel::setFloatingSurfacesTransparent,
+                                floatingSurfaceOpacity = settings.floatingSurfaceOpacity,
+                                onFloatingSurfaceOpacityChange =
+                                    settingsViewModel::setFloatingSurfaceOpacity,
                             )
                         }
                         entry<DemoRootRoute> { route ->
@@ -178,8 +173,6 @@ fun AndroidKitCatalogApp(
     }
 }
 
-private const val TransparentFloatingSurfaceOpacity = 0.8f
-private const val OpaqueFloatingSurfaceOpacity = 1f
 private const val DummyNavigationDestinationCount = 7
 private const val CompactLabeledDestinationCount = 2
 private const val CompactIconDestinationCount = 4
