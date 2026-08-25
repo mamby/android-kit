@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
@@ -48,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -297,26 +297,34 @@ private fun CompactNavigationBarItem(
     showLabel: Boolean,
     modifier: Modifier = Modifier,
 ): Unit {
+    val dimensions = AndroidKitThemeTokens.dimensions
     val visuals = floatingSurfaceVisuals()
     val contentColor by animateColorAsState(
         targetValue = if (selected) MaterialTheme.colorScheme.primary else visuals.contentColor,
         label = "compact navigation item content",
     )
+    val containerColor by animateColorAsState(
+        targetValue = if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
+        label = "compact navigation selection indicator",
+    )
+    val indicatorShape = MaterialTheme.shapes.extraLarge
     Box(
         modifier = modifier
-            .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
+            .heightIn(min = dimensions.minimumTouchTarget)
             .minimumInteractiveComponentSize()
+            .clip(indicatorShape)
+            .background(containerColor)
             .selectable(
                 selected = selected,
                 onClick = onClick,
                 role = Role.Tab,
-            ),
+            )
+            .padding(dimensions.spaceExtraSmall),
         contentAlignment = Alignment.Center,
     ) {
         CompactNavigationItemContent(
             icon = icon,
             label = label,
-            selected = selected,
             showLabel = showLabel,
             contentColor = contentColor,
         )
@@ -327,25 +335,13 @@ private fun CompactNavigationBarItem(
 private fun CompactNavigationItemContent(
     icon: ImageVector,
     label: String,
-    selected: Boolean,
     showLabel: Boolean,
     contentColor: Color,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val containerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
-        label = "compact navigation selection indicator",
-    )
     if (showLabel) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = dimensions.spaceExtraSmall)
-                .background(containerColor, MaterialTheme.shapes.extraLarge)
-                .padding(
-                    horizontal = dimensions.spaceExtraSmall,
-                    vertical = dimensions.spaceExtraSmall,
-                ),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
         ) {
@@ -367,9 +363,7 @@ private fun CompactNavigationItemContent(
         }
     } else {
         Box(
-            modifier = Modifier
-                .size(dimensions.floatingNavigationIndicatorSize)
-                .background(containerColor, CircleShape),
+            modifier = Modifier.size(dimensions.floatingNavigationIndicatorSize),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
