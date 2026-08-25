@@ -1,13 +1,21 @@
 package net.mamby.androidkit.compose.action
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorPosition
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
+import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.FloatingSurface
 
 @Composable
 public fun AndroidKitFloatingDropdownMenu(
@@ -46,18 +54,29 @@ private fun FloatingDropdownMenuContent(
     offset: DpOffset,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
-    val visuals = floatingSurfaceVisuals()
+    val dimensions = AndroidKitThemeTokens.dimensions
     val shape = MaterialTheme.shapes.extraLarge
-    DropdownMenu(
+    val scrollState = rememberScrollState()
+    val positionProvider = MenuDefaults.rememberDropdownMenuPopupPositionProvider(
+        dropdownMenuAnchorPosition = MenuAnchorPosition.Below,
+        offset = offset,
+    )
+    DropdownMenuPopup(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
-        modifier = modifier,
-        offset = offset,
-        shape = shape,
-        containerColor = visuals.containerColor,
-        tonalElevation = 0.dp,
-        shadowElevation = 0.dp,
-        border = visuals.border,
-        content = content,
-    )
+        popupPositionProvider = positionProvider,
+    ) {
+        FloatingSurface(
+            shape = shape,
+            modifier = modifier,
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(vertical = dimensions.spaceSmall)
+                    .width(IntrinsicSize.Max)
+                    .verticalScroll(scrollState),
+                content = content,
+            )
+        }
+    }
 }

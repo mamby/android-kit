@@ -19,7 +19,9 @@ import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneSt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -52,6 +54,12 @@ fun AndroidKitCatalogApp(
         DemoSettingsViewModel(DemoSettingsRepository(applicationContext))
     }
     val settings by settingsViewModel.settings.collectAsStateWithLifecycle()
+    var previewedFloatingSurfaceOpacity by remember {
+        mutableFloatStateOf(settings.floatingSurfaceOpacity)
+    }
+    LaunchedEffect(settings.floatingSurfaceOpacity) {
+        previewedFloatingSurfaceOpacity = settings.floatingSurfaceOpacity
+    }
     val themeDefinition = settings.themeChoice.definition()
     LaunchedEffect(themeDefinition.isDark) {
         onThemeDarknessChanged(themeDefinition.isDark)
@@ -69,7 +77,7 @@ fun AndroidKitCatalogApp(
         definition = themeDefinition,
         strings = androidKitStrings(),
         floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
-            opacity = settings.floatingSurfaceOpacity,
+            opacity = previewedFloatingSurfaceOpacity,
         ),
     ) {
         val dummyNavigationIcons = listOf(
@@ -158,9 +166,15 @@ fun AndroidKitCatalogApp(
                             SettingsScreen(
                                 themeChoice = settings.themeChoice,
                                 onThemeChoice = settingsViewModel::setThemeChoice,
-                                floatingSurfaceOpacity = settings.floatingSurfaceOpacity,
-                                onFloatingSurfaceOpacityChange =
-                                    settingsViewModel::setFloatingSurfaceOpacity,
+                                floatingSurfaceOpacity = previewedFloatingSurfaceOpacity,
+                                onFloatingSurfaceOpacityChange = { opacity ->
+                                    previewedFloatingSurfaceOpacity = opacity
+                                },
+                                onFloatingSurfaceOpacityChangeFinished = {
+                                    settingsViewModel.setFloatingSurfaceOpacity(
+                                        previewedFloatingSurfaceOpacity,
+                                    )
+                                },
                             )
                         }
                         entry<DemoRootRoute> { route ->

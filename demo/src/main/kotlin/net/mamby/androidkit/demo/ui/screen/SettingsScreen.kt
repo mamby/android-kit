@@ -11,10 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import kotlin.math.roundToInt
@@ -33,11 +29,9 @@ fun SettingsScreen(
     onThemeChoice: (DemoThemeChoice) -> Unit,
     floatingSurfaceOpacity: Float,
     onFloatingSurfaceOpacityChange: (Float) -> Unit,
+    onFloatingSurfaceOpacityChangeFinished: () -> Unit,
 ) {
     val dimensions = AndroidKitThemeTokens.dimensions
-    var pendingFloatingSurfaceOpacity by remember(floatingSurfaceOpacity) {
-        mutableFloatStateOf(floatingSurfaceOpacity)
-    }
     AndroidKitPage(title = stringResource(R.string.settings_title)) { contentPadding ->
         LazyColumn(
             modifier = Modifier
@@ -88,7 +82,7 @@ fun SettingsScreen(
                 val opacityLabel = stringResource(R.string.floating_surface_opacity)
                 val opacityValueLabel = stringResource(
                     R.string.floating_surface_opacity_value,
-                    (pendingFloatingSurfaceOpacity * PercentageScale).roundToInt(),
+                    (floatingSurfaceOpacity * PercentageScale).roundToInt(),
                 )
                 AndroidKitSettingSection(
                     description = stringResource(
@@ -97,13 +91,11 @@ fun SettingsScreen(
                 ) {
                     slider(
                         label = opacityLabel,
-                        value = pendingFloatingSurfaceOpacity,
-                        onValueChange = { pendingFloatingSurfaceOpacity = it },
+                        value = floatingSurfaceOpacity,
+                        onValueChange = onFloatingSurfaceOpacityChange,
                         valueRange = MinimumFloatingSurfaceOpacity..MaximumFloatingSurfaceOpacity,
                         steps = FloatingSurfaceOpacitySliderSteps,
-                        onValueChangeFinished = {
-                            onFloatingSurfaceOpacityChange(pendingFloatingSurfaceOpacity)
-                        },
+                        onValueChangeFinished = onFloatingSurfaceOpacityChangeFinished,
                         valueLabel = opacityValueLabel,
                     )
                 }
