@@ -55,7 +55,7 @@ public fun AndroidKitBottomSheet(
                 .toggleTitleBarOnUnconsumedTap(
                     enabled = titleBarImmersiveMode,
                     titleBarVisible = titleBarVisible,
-                    onTitleBarVisibilityChange = { titleBarVisible = it },
+                    onToggleTitleBar = { titleBarVisible = !titleBarVisible },
                 ),
         ) {
             AndroidKitFloatingTitleBar(

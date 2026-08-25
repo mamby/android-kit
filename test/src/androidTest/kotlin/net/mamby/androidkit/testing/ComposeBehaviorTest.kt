@@ -1,20 +1,27 @@
 package net.mamby.androidkit.testing
 
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.WindowSize
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.junit4.v2.createComposeRule
@@ -22,11 +29,15 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
+import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
@@ -152,6 +163,95 @@ class ComposeBehaviorTest {
 
         assertTrue(iconOnlyBottomPadding > 100.dp)
         assertTrue(bottomPadding > 100.dp)
+    }
+
+    @Test
+    fun immersiveTitleBarTogglesWhenContentConsumesOnlyTheInitialDown() {
+        composeRule.setContent {
+            AndroidKitTheme {
+                AndroidKitPage(
+                    title = "Immersive title",
+                    titleBarImmersiveMode = true,
+                ) { contentPadding ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(contentPadding)
+                            .testTag(ImmersiveContentTestTag)
+                            .consumeInitialDownForTest(),
+                    )
+                }
+            }
+        }
+
+        composeRule.onNodeWithTag(ImmersiveContentTestTag).performTouchInput { click() }
+        composeRule.onNodeWithContentDescription("Immersive title").assertDoesNotExist()
+
+        composeRule.onNodeWithTag(ImmersiveContentTestTag).performTouchInput { click() }
+        composeRule.onNodeWithContentDescription("Immersive title").assertExists()
+    }
+
+    @Test
+    fun immersiveTitleBarRemainsVisibleWhenAnActionIsTapped() {
+        var actionCount = 0
+        composeRule.setContent {
+            AndroidKitTheme {
+                AndroidKitPage(
+                    title = "Immersive title",
+                    actions = listOf(
+                        AndroidKitFloatingTitleBarAction(
+                            icon = Icons.Default.Edit,
+                            label = "Edit",
+                            onClick = { actionCount += 1 },
+                        ),
+                    ),
+                    titleBarImmersiveMode = true,
+                ) { contentPadding ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(contentPadding),
+                    )
+                }
+            }
+        }
+
+        composeRule
+            .onNodeWithContentDescription("Edit", useUnmergedTree = true)
+            .performTouchInput { click() }
+
+        composeRule.runOnIdle { assertEquals(1, actionCount) }
+        composeRule.onNodeWithContentDescription("Immersive title").assertExists()
+    }
+
+    @Test
+    fun immersiveTitleBarRemainsVisibleWhileContentScrolls() {
+        composeRule.setContent {
+            AndroidKitTheme {
+                AndroidKitPage(
+                    title = "Immersive title",
+                    titleBarImmersiveMode = true,
+                ) { contentPadding ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .testTag(ImmersiveContentTestTag),
+                        contentPadding = contentPadding,
+                    ) {
+                        items(50) { index ->
+                            Text(
+                                text = "Item $index",
+                                modifier = Modifier.padding(24.dp),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        composeRule.onNodeWithTag(ImmersiveContentTestTag).performTouchInput { swipeUp() }
+
+        composeRule.onNodeWithContentDescription("Immersive title").assertExists()
     }
 
     @Test
@@ -337,3 +437,14 @@ class ComposeBehaviorTest {
         composeRule.onNodeWithTag("androidKitFloatingNavigationFlyoutDivider").assertExists()
     }
 }
+
+private fun Modifier.consumeInitialDownForTest(): Modifier = pointerInput(Unit) {
+    awaitEachGesture {
+        awaitFirstDown(requireUnconsumed = false).consume()
+        while (awaitPointerEvent().changes.any { it.pressed }) {
+            // Leave the release unconsumed, matching a scrollable that only stops an active fling.
+        }
+    }
+}
+
+private const val ImmersiveContentTestTag = "immersiveContent"

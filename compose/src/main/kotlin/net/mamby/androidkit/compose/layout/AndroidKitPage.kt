@@ -61,7 +61,7 @@ public fun AndroidKitPage(
             .toggleTitleBarOnUnconsumedTap(
                 enabled = titleBarImmersiveMode && hasTitleBar,
                 titleBarVisible = titleBarVisible,
-                onTitleBarVisibilityChange = { titleBarVisible = it },
+                onToggleTitleBar = { titleBarVisible = !titleBarVisible },
             )
             .imePadding(),
     ) {
