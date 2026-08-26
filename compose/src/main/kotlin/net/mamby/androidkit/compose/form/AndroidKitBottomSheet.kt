@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -33,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -79,7 +84,7 @@ public fun AndroidKitBottomSheet(
     closeContentDescription: String? = null,
     backContentDescription: String? = null,
     onBack: (() -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit,
+    content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val style = AndroidKitThemeTokens.bottomSheetStyle
@@ -139,7 +144,7 @@ public fun AndroidKitBottomSheet(
             topStart = dimensions.bottomSheetCornerRadius,
             topEnd = dimensions.bottomSheetCornerRadius,
         ),
-        containerColor = style.containerColor.copy(alpha = floatingSurfaceStyle.opacity),
+        containerColor = style.containerColor,
         contentColor = style.contentColor,
         tonalElevation = 0.dp,
         scrimColor = style.scrimColor,
@@ -156,6 +161,16 @@ public fun AndroidKitBottomSheet(
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
             val safeSheetHeight = (maxHeight - safeDrawingTopPadding).coerceAtLeast(0.dp)
             val maxSheetHeight = minOf(maxHeight * cappedHeightFraction, safeSheetHeight)
+            var chromeHeightPx by remember { mutableIntStateOf(0) }
+            val chromeContentPadding = PaddingValues(
+                top = if (showChrome) {
+                    with(LocalDensity.current) { chromeHeightPx.toDp() } +
+                        dimensions.bottomSheetChromeContentSpacing
+                } else {
+                    0.dp
+                },
+                bottom = dimensions.bottomSheetBottomPadding,
+            )
 
             Column(
                 modifier = Modifier
@@ -173,43 +188,64 @@ public fun AndroidKitBottomSheet(
                 )
                 Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
 
-                if (showChrome) {
-                    BottomSheetChrome(
-                        title = title,
-                        style = style,
-                        dimensions = dimensions,
-                        backContentDescription = backContentDescription ?: strings.back,
-                        onBack = onBack,
-                        closeContentDescription = closeContentDescription ?: strings.close,
-                        onClose = ::dismissWithAnimation,
-                    )
-                    Spacer(modifier = Modifier.height(dimensions.bottomSheetChromeContentSpacing))
-                }
+                Box(
+                    modifier = if (fitContent) {
+                        Modifier.fillMaxWidth()
+                    } else {
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    },
+                ) {
+                    when (scrollMode) {
+                        AndroidKitBottomSheetScrollMode.VerticalScroll -> Column(
+                            modifier = (if (fitContent) {
+                                Modifier.fillMaxWidth()
+                            } else {
+                                Modifier.fillMaxSize()
+                            }).verticalScroll(verticalScrollState),
+                        ) {
+                            Spacer(
+                                modifier = Modifier.height(
+                                    chromeContentPadding.calculateTopPadding(),
+                                ),
+                            )
+                            content(chromeContentPadding)
+                            Spacer(
+                                modifier = Modifier.height(
+                                    chromeContentPadding.calculateBottomPadding(),
+                                ),
+                            )
+                        }
 
-                when (scrollMode) {
-                    AndroidKitBottomSheetScrollMode.VerticalScroll -> Column(
-                        modifier = (if (fitContent) {
-                            Modifier.fillMaxWidth()
-                        } else {
-                            Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        }).verticalScroll(verticalScrollState),
-                    ) {
-                        content()
-                        Spacer(modifier = Modifier.height(dimensions.bottomSheetBottomPadding))
+                        AndroidKitBottomSheetScrollMode.ContentManaged -> Column(
+                            modifier = if (fitContent) {
+                                Modifier.fillMaxWidth()
+                            } else {
+                                Modifier.fillMaxSize()
+                            },
+                        ) {
+                            content(chromeContentPadding)
+                        }
                     }
 
-                    AndroidKitBottomSheetScrollMode.ContentManaged -> Column(
-                        modifier = if (fitContent) {
-                            Modifier.fillMaxWidth()
-                        } else {
-                            Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        },
-                        content = content,
-                    )
+                    if (showChrome) {
+                        BottomSheetChrome(
+                            title = title,
+                            style = style,
+                            dimensions = dimensions,
+                            backContentDescription = backContentDescription ?: strings.back,
+                            onBack = onBack,
+                            closeContentDescription = closeContentDescription ?: strings.close,
+                            onClose = ::dismissWithAnimation,
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .onSizeChanged { chromeHeightPx = it.height },
+                            containerColor = style.containerColor.copy(
+                                alpha = floatingSurfaceStyle.opacity,
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -240,9 +276,14 @@ private fun BottomSheetChrome(
     onBack: (() -> Unit)?,
     closeContentDescription: String,
     onClose: () -> Unit,
+    containerColor: Color,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(containerColor)
+            .padding(vertical = dimensions.spaceExtraSmall),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (onBack != null) {
@@ -264,7 +305,7 @@ private fun BottomSheetChrome(
                 text = title,
                 modifier = Modifier.semantics { heading() },
                 color = style.contentColor,
-                style = AndroidKitThemeTokens.typography.titleLarge,
+                style = AndroidKitThemeTokens.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

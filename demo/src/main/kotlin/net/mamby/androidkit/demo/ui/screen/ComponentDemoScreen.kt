@@ -447,15 +447,13 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
         } else {
             AndroidKitBottomSheetScrollMode.VerticalScroll
         },
-    ) {
+    ) { managedContentPadding ->
         if (isContentManaged) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                contentPadding = PaddingValues(
-                    bottom = AndroidKitThemeTokens.dimensions.bottomSheetBottomPadding,
-                ),
+                contentPadding = managedContentPadding,
                 verticalArrangement = Arrangement.spacedBy(
                     AndroidKitThemeTokens.dimensions.spaceSmall,
                 ),
