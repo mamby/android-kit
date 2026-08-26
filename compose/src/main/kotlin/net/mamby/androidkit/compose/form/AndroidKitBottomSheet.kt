@@ -41,17 +41,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetStyle
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -250,7 +247,7 @@ private fun BottomSheetChrome(
     ) {
         if (onBack != null) {
             BottomSheetIconButton(
-                icon = BottomSheetBackIcon,
+                icon = AndroidKitIcons.ArrowBack,
                 contentDescription = backContentDescription,
                 tint = style.contentColor,
                 dimensions = dimensions,
@@ -275,7 +272,7 @@ private fun BottomSheetChrome(
 
         Spacer(modifier = Modifier.width(dimensions.bottomSheetHeaderCloseSpacing))
         BottomSheetIconButton(
-            icon = BottomSheetCloseIcon,
+            icon = AndroidKitIcons.Close,
             contentDescription = closeContentDescription,
             tint = style.contentColor,
             dimensions = dimensions,
@@ -308,47 +305,3 @@ private fun BottomSheetIconButton(
         }
     }
 }
-
-private val BottomSheetBackIcon: ImageVector = ImageVector.Builder(
-    name = "AndroidKitBottomSheetBack",
-    defaultWidth = 24.dp,
-    defaultHeight = 24.dp,
-    viewportWidth = 24f,
-    viewportHeight = 24f,
-    autoMirror = true,
-).apply {
-    path(
-        fill = null,
-        stroke = SolidColor(Color.Black),
-        strokeLineWidth = 2.4f,
-        strokeLineCap = StrokeCap.Round,
-        strokeLineJoin = StrokeJoin.Round,
-    ) {
-        moveTo(20f, 12f)
-        lineTo(4f, 12f)
-        moveTo(11.5f, 4.5f)
-        lineTo(4f, 12f)
-        lineTo(11.5f, 19.5f)
-    }
-}.build()
-
-private val BottomSheetCloseIcon: ImageVector = ImageVector.Builder(
-    name = "AndroidKitBottomSheetClose",
-    defaultWidth = 24.dp,
-    defaultHeight = 24.dp,
-    viewportWidth = 24f,
-    viewportHeight = 24f,
-).apply {
-    path(
-        fill = null,
-        stroke = SolidColor(Color.Black),
-        strokeLineWidth = 1.9f,
-        strokeLineCap = StrokeCap.Round,
-        strokeLineJoin = StrokeJoin.Round,
-    ) {
-        moveTo(6.75f, 6.75f)
-        lineTo(17.25f, 17.25f)
-        moveTo(17.25f, 6.75f)
-        lineTo(6.75f, 17.25f)
-    }
-}.build()

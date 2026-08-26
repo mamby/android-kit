@@ -20,9 +20,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -47,6 +44,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
+import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
@@ -198,7 +196,7 @@ public fun AndroidKitFloatingTitleBar(
                             Box {
                                 FloatingTitleBarActionButton(
                                     action = AndroidKitFloatingTitleBarAction(
-                                        icon = Icons.Default.MoreVert,
+                                        icon = AndroidKitIcons.More,
                                         label = strings.more,
                                         onClick = {
                                             setOverflowExpanded(true)
@@ -266,7 +264,7 @@ private fun FloatingTitleBarBackButton(
         modifier = modifier,
     ) {
         Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            imageVector = AndroidKitIcons.ArrowBack,
             contentDescription = AndroidKitThemeTokens.strings.back,
             modifier = Modifier.size(dimensions.floatingActionIconSize),
         )

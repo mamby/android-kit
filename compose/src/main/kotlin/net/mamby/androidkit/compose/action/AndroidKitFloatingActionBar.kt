@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -27,6 +25,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 
@@ -267,7 +266,7 @@ private fun FloatingActionBarFlyoutContent(
             onClick = { expanded = !expanded },
             label = contentDescription,
             modifier = Modifier,
-            icon = Icons.Default.MoreVert.takeUnless {
+            icon = AndroidKitIcons.More.takeUnless {
                 style == AndroidKitFloatingActionBarFlyoutStyle.Text
             },
             showLabel = style != AndroidKitFloatingActionBarFlyoutStyle.Icon,

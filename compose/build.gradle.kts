@@ -52,7 +52,6 @@ dependencies {
     api(libs.compose.ui)
     implementation(libs.activity.compose)
     implementation(libs.compose.animation)
-    implementation(libs.compose.material.icons.core)
     implementation(libs.material3.adaptive)
     implementation(libs.material3.adaptive.layout)
     implementation(libs.material3.adaptive.navigation.suite)
