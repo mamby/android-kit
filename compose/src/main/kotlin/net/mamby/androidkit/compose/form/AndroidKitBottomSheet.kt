@@ -23,12 +23,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -84,6 +86,7 @@ public fun AndroidKitBottomSheet(
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val style = AndroidKitThemeTokens.bottomSheetStyle
+    val floatingSurfaceStyle = AndroidKitThemeTokens.floatingSurfaceStyle
     val strings = AndroidKitThemeTokens.strings
     var renderSheet by remember { mutableStateOf(visible) }
 
@@ -139,7 +142,7 @@ public fun AndroidKitBottomSheet(
             topStart = dimensions.bottomSheetCornerRadius,
             topEnd = dimensions.bottomSheetCornerRadius,
         ),
-        containerColor = style.containerColor,
+        containerColor = style.containerColor.copy(alpha = floatingSurfaceStyle.opacity),
         contentColor = style.contentColor,
         tonalElevation = 0.dp,
         scrimColor = style.scrimColor,
@@ -289,18 +292,20 @@ private fun BottomSheetIconButton(
     dimensions: AndroidKitDimensions,
     onClick: () -> Unit,
 ) {
-    IconButton(
-        onClick = onClick,
-        modifier = Modifier.size(
-            dimensions.bottomSheetIconButtonSize.coerceAtLeast(dimensions.minimumTouchTarget),
-        ),
+    CompositionLocalProvider(
+        LocalMinimumInteractiveComponentSize provides dimensions.bottomSheetIconButtonSize,
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = contentDescription,
-            modifier = Modifier.size(dimensions.bottomSheetIconSize),
-            tint = tint,
-        )
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier.size(dimensions.bottomSheetIconButtonSize),
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription,
+                modifier = Modifier.size(dimensions.bottomSheetIconSize),
+                tint = tint,
+            )
+        }
     }
 }
 

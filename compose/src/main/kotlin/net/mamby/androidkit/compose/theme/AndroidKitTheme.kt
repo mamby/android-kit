@@ -86,12 +86,12 @@ public data class AndroidKitDimensions(
     public val bottomSheetDragHandleWidth: Dp = 44.dp,
     public val bottomSheetDragHandleHeight: Dp = 3.dp,
     public val bottomSheetDragHandleRadius: Dp = 1.5.dp,
-    public val bottomSheetDragHandleBottomSpacing: Dp = 12.dp,
+    public val bottomSheetDragHandleBottomSpacing: Dp = spaceSmall,
     public val bottomSheetBackTitleSpacing: Dp = 6.dp,
     public val bottomSheetHeaderCloseSpacing: Dp = 12.dp,
-    public val bottomSheetChromeContentSpacing: Dp = 18.dp,
-    public val bottomSheetIconButtonSize: Dp = minimumTouchTarget,
-    public val bottomSheetIconSize: Dp = 26.dp,
+    public val bottomSheetChromeContentSpacing: Dp = 12.dp,
+    public val bottomSheetIconButtonSize: Dp = 40.dp,
+    public val bottomSheetIconSize: Dp = 24.dp,
     @Deprecated("Floating titles now use a surface capsule instead of a text shadow.")
     public val floatingTitleTextShadowRadius: Dp = 2.dp,
     @Deprecated("Content protection now uses a background gradient instead of blur.")
