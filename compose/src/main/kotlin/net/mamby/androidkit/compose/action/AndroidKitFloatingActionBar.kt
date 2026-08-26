@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -88,7 +88,7 @@ public fun AndroidKitFloatingActionBar(
     val scope = FloatingActionBarScopeImpl().apply(content)
     FloatingSurface(
         modifier = modifier,
-        shape = MaterialTheme.shapes.extraLarge,
+        shape = AndroidKitThemeTokens.shapes.extraLarge,
     ) {
         Row(
             modifier = Modifier.padding(
@@ -283,7 +283,7 @@ private fun FloatingActionBarFlyoutContent(
                     text = {
                         Text(
                             text = item.label,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = AndroidKitThemeTokens.typography.labelSmall,
                         )
                     },
                     onClick = {
@@ -318,8 +318,9 @@ private fun FloatingActionBarItemContent(
     val dimensions = AndroidKitThemeTokens.dimensions
     Column(
         modifier = modifier
+            .heightIn(min = dimensions.minimumTouchTarget)
             .minimumInteractiveComponentSize()
-            .clip(MaterialTheme.shapes.large)
+            .clip(AndroidKitThemeTokens.shapes.extraLarge)
             .clickable(role = Role.Button, onClick = onClick)
             .padding(horizontal = dimensions.spaceSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -335,7 +336,7 @@ private fun FloatingActionBarItemContent(
         if (showLabel) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
+                style = AndroidKitThemeTokens.typography.labelSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

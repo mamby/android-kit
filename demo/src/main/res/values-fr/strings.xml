@@ -45,12 +45,13 @@
     <string name="theme_dark">Sombre</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">Un thème coloré défini par l’application qui valide le point d’extension public.</string>
-    <string name="floating_surface_opacity">Opacité des surfaces flottantes</string>
-    <string name="floating_surface_opacity_description">Ajuste les surfaces flottantes de totalement transparentes à totalement opaques.</string>
-    <string name="floating_surface_opacity_value">%1$d %%</string>
+    <string name="floating_surface_transparency">Surfaces flottantes transparentes</string>
+    <string name="floating_surface_transparency_description">Utilise une opacité de 92 %. Désactivez cette option pour utiliser la couleur de surface opaque du thème actif.</string>
     <string name="open_sheet">Ouvrir la feuille d’exemple</string>
     <string name="sheet_title">Feuille réutilisable</string>
+    <string name="sheet_detail_title">Détail de la feuille</string>
     <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>
+    <string name="sheet_list_item">Élément à défilement géré %1$d</string>
     <string name="about_section">À propos du catalogue</string>
     <string name="about_body">Le catalogue consomme les mêmes artefacts publics destinés aux applications open source externes.</string>
     <string name="variation_basic">Simple</string>
@@ -72,6 +73,10 @@
     <string name="variation_toggle_entry">Entrée interrupteur</string>
     <string name="variation_grouped_entries">Entrées groupées</string>
     <string name="variation_titleless">Sans titre</string>
+    <string name="variation_standard">Standard</string>
+    <string name="variation_back_navigation">Navigation retour</string>
+    <string name="variation_chromeless_fit_content">Contenu ajusté sans chrome</string>
+    <string name="variation_content_managed">Défilement géré par le contenu</string>
     <string name="variation_icons_only">Icônes uniquement</string>
     <string name="variation_icons_labels">Icônes et libellés</string>
     <string name="variation_text_only">Texte uniquement</string>

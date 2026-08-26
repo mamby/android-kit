@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -32,7 +31,7 @@ internal data class FloatingSurfaceVisuals(
 internal fun floatingSurfaceVisuals(): FloatingSurfaceVisuals {
     val style = AndroidKitThemeTokens.floatingSurfaceStyle
     val dimensions = AndroidKitThemeTokens.dimensions
-    val scheme = MaterialTheme.colorScheme
+    val scheme = AndroidKitThemeTokens.colorScheme
     return FloatingSurfaceVisuals(
         containerColor = scheme.surface.copy(alpha = style.opacity),
         contentColor = scheme.onSurface,

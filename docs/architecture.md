@@ -19,6 +19,12 @@ The APIs own presentation policy but not app data. Inputs are typed values,
 immutable state and callbacks; consumers retain navigation routes, ViewModels,
 repositories and side effects.
 
+`AndroidKitTheme` is a required boundary for every shared Compose component.
+Components read colors, typography, shapes, dimensions and component styles
+from its `AndroidKitThemeDefinition`; they do not silently inherit an ambient
+destination-app `MaterialTheme`. Missing the kit theme fails immediately with a
+clear integration error.
+
 ## Demo-owned surface
 
 The demo owns its Prism theme, launcher branding, routes, catalog copy and sample

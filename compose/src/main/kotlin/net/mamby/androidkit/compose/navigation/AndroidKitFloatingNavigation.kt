@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -84,6 +83,7 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
     showCompactLabels: Boolean = false,
     content: @Composable () -> Unit,
 ): Unit {
+    val colorScheme = AndroidKitThemeTokens.colorScheme
     require(items.isNotEmpty()) { "At least one navigation item is required." }
     require(items.map { it.key }.distinct().size == items.size) { "Navigation item keys must be unique." }
     require(items.any { it.key == selectedKey }) { "The selected navigation key is not registered." }
@@ -104,7 +104,7 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
             modifier = modifier
                 .fillMaxSize()
                 .imePadding()
-                .background(MaterialTheme.colorScheme.background),
+                .background(colorScheme.background),
             navigation = {
                 FloatingNavigationBar(
                     items = primaryItems,
@@ -143,11 +143,11 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
                     .fillMaxSize()
                     .imePadding(),
                 layoutType = layoutType,
-                containerColor = MaterialTheme.colorScheme.background,
+                containerColor = colorScheme.background,
                 navigationSuiteColors = NavigationSuiteDefaults.colors(
-                    navigationBarContainerColor = MaterialTheme.colorScheme.surface,
-                    navigationRailContainerColor = MaterialTheme.colorScheme.surface,
-                    navigationDrawerContainerColor = MaterialTheme.colorScheme.surface,
+                    navigationBarContainerColor = colorScheme.surface,
+                    navigationRailContainerColor = colorScheme.surface,
+                    navigationDrawerContainerColor = colorScheme.surface,
                 ),
             ) {
                 content()
@@ -238,7 +238,7 @@ private fun <Key : Any> FloatingNavigationBar(
             ) {
                 FloatingSurface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.extraLarge,
+                    shape = AndroidKitThemeTokens.shapes.extraLarge,
                 ) {
                     Row(
                         modifier = Modifier
@@ -300,14 +300,24 @@ private fun CompactNavigationBarItem(
     val dimensions = AndroidKitThemeTokens.dimensions
     val visuals = floatingSurfaceVisuals()
     val contentColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primary else visuals.contentColor,
+        targetValue = if (selected) {
+            AndroidKitThemeTokens.colorScheme.primary
+        } else {
+            visuals.contentColor
+        },
         label = "compact navigation item content",
     )
     val containerColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
+        targetValue = if (selected) {
+            AndroidKitThemeTokens.colorScheme.secondaryContainer.copy(
+                alpha = visuals.containerColor.alpha,
+            )
+        } else {
+            Color.Transparent
+        },
         label = "compact navigation selection indicator",
     )
-    val indicatorShape = MaterialTheme.shapes.extraLarge
+    val indicatorShape = AndroidKitThemeTokens.shapes.extraLarge
     Box(
         modifier = modifier
             .heightIn(min = dimensions.minimumTouchTarget)
@@ -355,7 +365,7 @@ private fun CompactNavigationItemContent(
                 text = label,
                 modifier = Modifier.fillMaxWidth(),
                 color = contentColor,
-                style = MaterialTheme.typography.labelSmall,
+                style = AndroidKitThemeTokens.typography.labelSmall,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -395,7 +405,7 @@ private fun <Key : Any> NavigationFlyout(
         displayedItems.forEachIndexed { index, item ->
             val selected = item.key == selectedKey
             val itemColor = if (selected) {
-                MaterialTheme.colorScheme.primary
+                AndroidKitThemeTokens.colorScheme.primary
             } else {
                 visuals.contentColor
             }
@@ -432,7 +442,7 @@ private fun <Key : Any> NavigationFlyout(
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = dimensions.spaceMedium),
                         thickness = Dp.Hairline,
-                        color = MaterialTheme.colorScheme.outlineVariant,
+                        color = AndroidKitThemeTokens.colorScheme.outlineVariant,
                     )
                 }
             }

@@ -46,12 +46,13 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">A colorful app-defined theme that proves the public extension point.</string>
-    <string name="floating_surface_opacity">Floating surface opacity</string>
-    <string name="floating_surface_opacity_description">Adjusts floating surfaces from fully transparent to fully opaque.</string>
-    <string name="floating_surface_opacity_value">%1$d%%</string>
+    <string name="floating_surface_transparency">Transparent floating surfaces</string>
+    <string name="floating_surface_transparency_description">Uses 92% opacity. Turn off for the active theme’s opaque surface color.</string>
     <string name="open_sheet">Open example sheet</string>
     <string name="sheet_title">Reusable sheet</string>
+    <string name="sheet_detail_title">Sheet detail</string>
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
+    <string name="sheet_list_item">Content-managed item %1$d</string>
     <string name="about_section">About this catalog</string>
     <string name="about_body">The catalog consumes the same public artifacts intended for external open-source apps.</string>
     <string name="variation_basic">Basic</string>
@@ -73,6 +74,10 @@
     <string name="variation_toggle_entry">Toggle entry</string>
     <string name="variation_grouped_entries">Grouped entries</string>
     <string name="variation_titleless">Titleless</string>
+    <string name="variation_standard">Standard</string>
+    <string name="variation_back_navigation">Back navigation</string>
+    <string name="variation_chromeless_fit_content">Chromeless fit content</string>
+    <string name="variation_content_managed">Content-managed scrolling</string>
     <string name="variation_icons_only">Icons only</string>
     <string name="variation_icons_labels">Icons and labels</string>
     <string name="variation_text_only">Text only</string>

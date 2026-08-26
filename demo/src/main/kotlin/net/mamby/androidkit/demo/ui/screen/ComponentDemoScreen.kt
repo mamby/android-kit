@@ -39,6 +39,7 @@ import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarFlyoutStyl
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
+import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
 import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.AndroidKitPage
@@ -415,32 +416,57 @@ private fun AndroidKitSettingSectionDemo(
 @Composable
 private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     var visible by rememberSaveable { mutableStateOf(false) }
-    Button(onClick = { visible = true }) {
+    var showingDetail by rememberSaveable { mutableStateOf(true) }
+    Button(
+        onClick = {
+            showingDetail = true
+            visible = true
+        },
+    ) {
         Text(stringResource(R.string.open_sheet))
     }
-    if (visible) {
-        AndroidKitBottomSheet(
-            title = stringResource(R.string.sheet_title).takeUnless {
-                demo == ComponentDemo.AndroidKitBottomSheetTitleless
-            },
-            onDismissRequest = { visible = false },
-            onBack = ({ visible = false }).takeIf {
-                demo == ComponentDemo.AndroidKitBottomSheetBackAndActions
-            },
-            actions = if (demo == ComponentDemo.AndroidKitBottomSheetBackAndActions) {
-                listOf(
-                    AndroidKitFloatingTitleBarAction(
-                        icon = Icons.Default.Save,
-                        label = stringResource(R.string.action_save),
-                        onClick = { visible = false },
-                    ),
-                )
-            } else {
-                emptyList()
-            },
-        ) {
+
+    val isBackNavigation = demo == ComponentDemo.AndroidKitBottomSheetBackNavigation
+    val isChromeless = demo == ComponentDemo.AndroidKitBottomSheetChromelessFitContent
+    val isContentManaged = demo == ComponentDemo.AndroidKitBottomSheetContentManaged
+    AndroidKitBottomSheet(
+        visible = visible,
+        title = if (isBackNavigation && showingDetail) {
+            stringResource(R.string.sheet_detail_title)
+        } else {
+            stringResource(R.string.sheet_title)
+        },
+        onDismiss = { visible = false },
+        onBack = ({ showingDetail = false }).takeIf {
+            isBackNavigation && showingDetail
+        },
+        fitContent = isChromeless,
+        showChrome = !isChromeless,
+        scrollMode = if (isContentManaged) {
+            AndroidKitBottomSheetScrollMode.ContentManaged
+        } else {
+            AndroidKitBottomSheetScrollMode.VerticalScroll
+        },
+    ) {
+        if (isContentManaged) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentPadding = PaddingValues(
+                    bottom = AndroidKitThemeTokens.dimensions.bottomSheetBottomPadding,
+                ),
+                verticalArrangement = Arrangement.spacedBy(
+                    AndroidKitThemeTokens.dimensions.spaceSmall,
+                ),
+            ) {
+                items(24) { index ->
+                    Text(stringResource(R.string.sheet_list_item, index + 1))
+                }
+            }
+        } else {
             Text(stringResource(R.string.sheet_body))
-            DemoScrollContent()
+            if (!isChromeless) DemoScrollContent()
         }
     }
 }

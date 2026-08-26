@@ -27,6 +27,19 @@ public data class AndroidKitThemeDefinition(
     public val typography: Typography = AndroidKitDefaults.typography,
     public val shapes: Shapes = AndroidKitDefaults.shapes,
     public val dimensions: AndroidKitDimensions = AndroidKitDimensions(),
+    public val bottomSheetStyle: AndroidKitBottomSheetStyle = AndroidKitBottomSheetStyle(
+        containerColor = colorScheme.surface,
+        contentColor = colorScheme.onSurface,
+        dragHandleColor = colorScheme.outline,
+    ),
+)
+
+@Immutable
+public data class AndroidKitBottomSheetStyle(
+    public val containerColor: Color,
+    public val contentColor: Color,
+    public val dragHandleColor: Color,
+    public val scrimColor: Color = Color(0x66000000),
 )
 
 @Immutable
@@ -66,6 +79,19 @@ public data class AndroidKitDimensions(
     public val floatingDropdownShadowElevation: Dp = 1.dp,
     public val floatingTitleBarHeight: Dp = 0.dp,
     public val floatingTitleMinimumWidth: Dp = 48.dp,
+    public val bottomSheetCornerRadius: Dp = 24.dp,
+    public val bottomSheetHorizontalPadding: Dp = 12.dp,
+    public val bottomSheetTopPadding: Dp = 10.dp,
+    public val bottomSheetBottomPadding: Dp = 20.dp,
+    public val bottomSheetDragHandleWidth: Dp = 44.dp,
+    public val bottomSheetDragHandleHeight: Dp = 3.dp,
+    public val bottomSheetDragHandleRadius: Dp = 1.5.dp,
+    public val bottomSheetDragHandleBottomSpacing: Dp = 12.dp,
+    public val bottomSheetBackTitleSpacing: Dp = 6.dp,
+    public val bottomSheetHeaderCloseSpacing: Dp = 12.dp,
+    public val bottomSheetChromeContentSpacing: Dp = 18.dp,
+    public val bottomSheetIconButtonSize: Dp = minimumTouchTarget,
+    public val bottomSheetIconSize: Dp = 26.dp,
     @Deprecated("Floating titles now use a surface capsule instead of a text shadow.")
     public val floatingTitleTextShadowRadius: Dp = 2.dp,
     @Deprecated("Content protection now uses a background gradient instead of blur.")
@@ -131,6 +157,11 @@ public object AndroidKitThemes {
             onError = Color.White,
         ),
         isDark = false,
+        bottomSheetStyle = AndroidKitBottomSheetStyle(
+            containerColor = Color.White,
+            contentColor = Color(0xFF171A21),
+            dragHandleColor = Color(0xFFC1C7D2),
+        ),
     )
 
     public val Dark: AndroidKitThemeDefinition = AndroidKitThemeDefinition(
@@ -159,6 +190,11 @@ public object AndroidKitThemes {
             onError = Color(0xFF690005),
         ),
         isDark = true,
+        bottomSheetStyle = AndroidKitBottomSheetStyle(
+            containerColor = Color(0xFF090B11),
+            contentColor = Color(0xFFF5F7FB),
+            dragHandleColor = Color(0xFF93A0B7),
+        ),
     )
 }
 
@@ -211,15 +247,43 @@ public object AndroidKitDefaults {
     public val shapes: Shapes = Shapes()
 }
 
-private val LocalAndroidKitDimensions = staticCompositionLocalOf { AndroidKitDimensions() }
-private val LocalAndroidKitStrings = staticCompositionLocalOf { AndroidKitStrings.English }
-private val LocalFloatingSurfaceStyle = staticCompositionLocalOf { AndroidKitFloatingSurfaceStyle() }
+private const val MissingAndroidKitThemeMessage =
+    "Android Kit components must be wrapped in AndroidKitTheme."
 
+private fun missingAndroidKitTheme(): Nothing = error(MissingAndroidKitThemeMessage)
+
+private val LocalAndroidKitThemeDefinition =
+    staticCompositionLocalOf<AndroidKitThemeDefinition> { missingAndroidKitTheme() }
+private val LocalAndroidKitStrings =
+    staticCompositionLocalOf<AndroidKitStrings> { missingAndroidKitTheme() }
+private val LocalFloatingSurfaceStyle =
+    staticCompositionLocalOf<AndroidKitFloatingSurfaceStyle> { missingAndroidKitTheme() }
+
+/**
+ * Theme values supplied by the nearest [AndroidKitTheme].
+ *
+ * Access outside an [AndroidKitTheme] fails immediately instead of silently using fallback styles.
+ */
 public object AndroidKitThemeTokens {
+    public val colorScheme: ColorScheme
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.colorScheme
+
+    public val typography: Typography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.typography
+
+    public val shapes: Shapes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.shapes
+
     public val dimensions: AndroidKitDimensions
         @Composable
         @ReadOnlyComposable
-        get() = LocalAndroidKitDimensions.current
+        get() = LocalAndroidKitThemeDefinition.current.dimensions
 
     public val strings: AndroidKitStrings
         @Composable
@@ -230,8 +294,19 @@ public object AndroidKitThemeTokens {
         @Composable
         @ReadOnlyComposable
         get() = LocalFloatingSurfaceStyle.current
+
+    public val bottomSheetStyle: AndroidKitBottomSheetStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.bottomSheetStyle
 }
 
+/**
+ * Required theme boundary for Android Kit Compose components.
+ *
+ * Supply a custom [AndroidKitThemeDefinition] to customize component colors, typography, shapes,
+ * dimensions, and component-specific styles consistently.
+ */
 @Composable
 public fun AndroidKitTheme(
     definition: AndroidKitThemeDefinition = if (isSystemInDarkTheme()) {
@@ -244,7 +319,7 @@ public fun AndroidKitTheme(
     content: @Composable () -> Unit,
 ): Unit {
     CompositionLocalProvider(
-        LocalAndroidKitDimensions provides definition.dimensions,
+        LocalAndroidKitThemeDefinition provides definition,
         LocalAndroidKitStrings provides strings,
         LocalFloatingSurfaceStyle provides floatingSurfaceStyle,
     ) {

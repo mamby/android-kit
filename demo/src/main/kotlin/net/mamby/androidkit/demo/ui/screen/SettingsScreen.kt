@@ -13,23 +13,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import kotlin.math.roundToInt
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
-import net.mamby.androidkit.demo.ui.MaximumFloatingSurfaceOpacity
-import net.mamby.androidkit.demo.ui.MinimumFloatingSurfaceOpacity
 
 @Composable
 fun SettingsScreen(
     themeChoice: DemoThemeChoice,
     onThemeChoice: (DemoThemeChoice) -> Unit,
-    floatingSurfaceOpacity: Float,
-    onFloatingSurfaceOpacityChange: (Float) -> Unit,
-    onFloatingSurfaceOpacityChangeFinished: () -> Unit,
+    floatingSurfacesTransparent: Boolean,
+    onFloatingSurfacesTransparentChange: (Boolean) -> Unit,
 ) {
     val dimensions = AndroidKitThemeTokens.dimensions
     AndroidKitPage(title = stringResource(R.string.settings_title)) { contentPadding ->
@@ -79,24 +75,18 @@ fun SettingsScreen(
                 }
             }
             item {
-                val opacityLabel = stringResource(R.string.floating_surface_opacity)
-                val opacityValueLabel = stringResource(
-                    R.string.floating_surface_opacity_value,
-                    (floatingSurfaceOpacity * PercentageScale).roundToInt(),
+                val floatingSurfaceLabel = stringResource(
+                    R.string.floating_surface_transparency,
                 )
                 AndroidKitSettingSection(
                     description = stringResource(
-                        R.string.floating_surface_opacity_description,
+                        R.string.floating_surface_transparency_description,
                     ),
                 ) {
-                    slider(
-                        label = opacityLabel,
-                        value = floatingSurfaceOpacity,
-                        onValueChange = onFloatingSurfaceOpacityChange,
-                        valueRange = MinimumFloatingSurfaceOpacity..MaximumFloatingSurfaceOpacity,
-                        steps = FloatingSurfaceOpacitySliderSteps,
-                        onValueChangeFinished = onFloatingSurfaceOpacityChangeFinished,
-                        valueLabel = opacityValueLabel,
+                    toggle(
+                        label = floatingSurfaceLabel,
+                        checked = floatingSurfacesTransparent,
+                        onCheckedChange = onFloatingSurfacesTransparentChange,
                     )
                 }
             }
@@ -115,9 +105,6 @@ fun SettingsScreen(
         }
     }
 }
-
-private const val FloatingSurfaceOpacitySliderSteps = 99
-private const val PercentageScale = 100
 
 @Composable
 private fun ThemeChip(

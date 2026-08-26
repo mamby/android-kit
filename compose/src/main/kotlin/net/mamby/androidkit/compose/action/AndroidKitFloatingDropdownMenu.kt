@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuPopup
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorPosition
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
@@ -55,7 +54,7 @@ private fun FloatingDropdownMenuContent(
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val shape = MaterialTheme.shapes.extraLarge
+    val shape = AndroidKitThemeTokens.shapes.extraLarge
     val scrollState = rememberScrollState()
     val positionProvider = MenuDefaults.rememberDropdownMenuPopupPositionProvider(
         dropdownMenuAnchorPosition = MenuAnchorPosition.Below,

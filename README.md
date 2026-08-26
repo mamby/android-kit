@@ -26,6 +26,11 @@ themes plus a third, demo-owned Prism theme that proves app-defined theming.
 The sharing boundaries and stabilization order are recorded in
 [docs/architecture.md](docs/architecture.md).
 
+All Android Kit Compose components must be descendants of `AndroidKitTheme`.
+They fail fast when the theme is missing, and consumer styling is supplied as a
+custom `AndroidKitThemeDefinition` so every component uses one coherent design
+system.
+
 ## Build the catalog
 
 ```powershell

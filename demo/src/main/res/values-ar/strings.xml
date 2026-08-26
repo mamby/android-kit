@@ -45,12 +45,13 @@
     <string name="theme_dark">داكن</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">سمة ملوّنة يعرّفها التطبيق لإثبات نقطة التوسعة العامة.</string>
-    <string name="floating_surface_opacity">عتامة الأسطح العائمة</string>
-    <string name="floating_surface_opacity_description">يضبط الأسطح العائمة من شفافة بالكامل إلى معتمة بالكامل.</string>
-    <string name="floating_surface_opacity_value">%1$d٪</string>
+    <string name="floating_surface_transparency">أسطح عائمة شفافة</string>
+    <string name="floating_surface_transparency_description">تستخدم عتامة بنسبة ٩٢٪. عطّل هذا الخيار لاستخدام لون السطح المعتم للسمة النشطة.</string>
     <string name="open_sheet">فتح لوحة المثال</string>
     <string name="sheet_title">لوحة قابلة لإعادة الاستخدام</string>
+    <string name="sheet_detail_title">تفاصيل اللوحة</string>
     <string name="sheet_body">يمتلك المستدعي الرؤية والمحتوى. ويوفر Android Kit الشريط المتكيّف والمسافات وتسميات إمكانية الوصول.</string>
+    <string name="sheet_list_item">عنصر يدير المحتوى تمريره %1$d</string>
     <string name="about_section">حول هذا الدليل</string>
     <string name="about_body">يستهلك الدليل نفس الحزم العامة المخصصة لتطبيقات المصادر المفتوحة الخارجية.</string>
     <string name="variation_basic">أساسي</string>
@@ -72,6 +73,10 @@
     <string name="variation_toggle_entry">عنصر تبديل</string>
     <string name="variation_grouped_entries">عناصر مجمّعة</string>
     <string name="variation_titleless">بلا عنوان</string>
+    <string name="variation_standard">قياسي</string>
+    <string name="variation_back_navigation">التنقل بالرجوع</string>
+    <string name="variation_chromeless_fit_content">محتوى ملائم بلا إطار</string>
+    <string name="variation_content_managed">تمرير يديره المحتوى</string>
     <string name="variation_icons_only">أيقونات فقط</string>
     <string name="variation_icons_labels">أيقونات وتسميات</string>
     <string name="variation_text_only">نص فقط</string>

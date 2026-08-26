@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +44,7 @@ public fun AndroidKitPage(
     var floatingActionHeightPx by remember { mutableIntStateOf(0) }
     var titleBarVisible by rememberSaveable(titleBarImmersiveMode) { mutableStateOf(true) }
     val floatingActionHeight = with(LocalDensity.current) { floatingActionHeightPx.toDp() }
+    val colorScheme = AndroidKitThemeTokens.colorScheme
     val dimensions = AndroidKitThemeTokens.dimensions
     val measuredContentInsets = androidKitContentWindowInsets()
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
@@ -67,7 +67,7 @@ public fun AndroidKitPage(
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = colorScheme.background,
             contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
             topBar = {
                 if (hasTitleBar) {
@@ -86,7 +86,7 @@ public fun AndroidKitPage(
                         .statusBarEdgeProtection(
                             statusBarInsets = WindowInsets.statusBars,
                             fadeLength = dimensions.contentProtectionFadeLength,
-                            protectionColor = MaterialTheme.colorScheme.background,
+                            protectionColor = colorScheme.background,
                         ),
                 ) {
                     content(

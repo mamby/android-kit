@@ -16,7 +16,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -50,7 +49,7 @@ public fun AndroidKitCard(
     val dimensions = AndroidKitThemeTokens.dimensions
     Card(
         modifier = modifier,
-        shape = MaterialTheme.shapes.extraLarge,
+        shape = AndroidKitThemeTokens.shapes.extraLarge,
         colors = AndroidKitCardDefaults.colors(),
         border = AndroidKitCardDefaults.border(),
     ) {

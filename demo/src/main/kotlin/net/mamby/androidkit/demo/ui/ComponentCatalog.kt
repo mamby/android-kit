@@ -91,11 +91,21 @@ enum class ComponentDemo(
         R.string.variation_grouped_entries,
     ),
 
-    AndroidKitBottomSheetTitleless(ComponentId.AndroidKitBottomSheet, R.string.variation_titleless),
-    AndroidKitBottomSheetTitled(ComponentId.AndroidKitBottomSheet, R.string.variation_with_title),
-    AndroidKitBottomSheetBackAndActions(
+    AndroidKitBottomSheetStandard(
         ComponentId.AndroidKitBottomSheet,
-        R.string.variation_back_title_actions,
+        R.string.variation_standard,
+    ),
+    AndroidKitBottomSheetBackNavigation(
+        ComponentId.AndroidKitBottomSheet,
+        R.string.variation_back_navigation,
+    ),
+    AndroidKitBottomSheetChromelessFitContent(
+        ComponentId.AndroidKitBottomSheet,
+        R.string.variation_chromeless_fit_content,
+    ),
+    AndroidKitBottomSheetContentManaged(
+        ComponentId.AndroidKitBottomSheet,
+        R.string.variation_content_managed,
     ),
 
     AndroidKitFloatingActionBarIcons(

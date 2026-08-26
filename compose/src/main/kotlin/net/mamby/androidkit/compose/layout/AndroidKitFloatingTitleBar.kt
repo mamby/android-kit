@@ -25,7 +25,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -72,10 +71,10 @@ public fun AndroidKitFloatingTitleBar(
         WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
     ),
 ): Unit {
-    if (title == null && onBack == null && actions.isEmpty()) return
-
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
+    if (title == null && onBack == null && actions.isEmpty()) return
+
     val hasButtons = onBack != null || actions.isNotEmpty()
     var overflowExpanded by remember { mutableStateOf(false) }
 
@@ -171,7 +170,7 @@ public fun AndroidKitFloatingTitleBar(
                                     contentDescription = it
                                 },
                             textAlign = TextAlign.Start,
-                            style = MaterialTheme.typography.titleMedium.copy(
+                            style = AndroidKitThemeTokens.typography.titleMedium.copy(
                                 platformStyle = PlatformTextStyle(
                                     includeFontPadding = false,
                                 ),

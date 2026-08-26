@@ -50,6 +50,7 @@ dependencies {
     api(libs.compose.foundation)
     api(libs.compose.material3)
     api(libs.compose.ui)
+    implementation(libs.activity.compose)
     implementation(libs.compose.animation)
     implementation(libs.compose.material.icons.core)
     implementation(libs.material3.adaptive)

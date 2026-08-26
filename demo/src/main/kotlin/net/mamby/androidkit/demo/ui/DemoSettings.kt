@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 internal data class DemoSettings(
     val themeChoice: DemoThemeChoice = DemoThemeChoice.Light,
-    val floatingSurfaceOpacity: Float = DefaultFloatingSurfaceOpacity,
+    val floatingSurfacesTransparent: Boolean = false,
     val showCompactNavigationLabels: Boolean = false,
 )
 
@@ -41,16 +41,11 @@ internal class DemoSettingsRepository(context: Context) {
                 themeChoice = DemoThemeChoice.fromStoredValue(
                     preferences[ThemeChoiceKey],
                 ),
-                floatingSurfaceOpacity = preferences[FloatingSurfaceOpacityKey]
-                    ?.coerceIn(MinimumFloatingSurfaceOpacity, MaximumFloatingSurfaceOpacity)
-                    ?: preferences[FloatingSurfacesTransparentKey]?.let { wasTransparent ->
-                        if (wasTransparent) {
-                            DefaultFloatingSurfaceOpacity
-                        } else {
-                            MaximumFloatingSurfaceOpacity
-                        }
+                floatingSurfacesTransparent = preferences[FloatingSurfacesTransparentKey]
+                    ?: preferences[FloatingSurfaceOpacityKey]?.let { opacity ->
+                        opacity < OpaqueFloatingSurfaceOpacity
                     }
-                    ?: DefaultFloatingSurfaceOpacity,
+                    ?: false,
                 showCompactNavigationLabels = preferences[ShowCompactNavigationLabelsKey] ?: false,
             )
         }
@@ -61,13 +56,10 @@ internal class DemoSettingsRepository(context: Context) {
         }
     }
 
-    suspend fun setFloatingSurfaceOpacity(opacity: Float) {
+    suspend fun setFloatingSurfacesTransparent(isTransparent: Boolean) {
         dataStore.edit { preferences ->
-            preferences[FloatingSurfaceOpacityKey] = opacity.coerceIn(
-                MinimumFloatingSurfaceOpacity,
-                MaximumFloatingSurfaceOpacity,
-            )
-            preferences.remove(FloatingSurfacesTransparentKey)
+            preferences[FloatingSurfacesTransparentKey] = isTransparent
+            preferences.remove(FloatingSurfaceOpacityKey)
         }
     }
 
@@ -93,9 +85,9 @@ internal class DemoSettingsViewModel(
         }
     }
 
-    fun setFloatingSurfaceOpacity(opacity: Float) {
+    fun setFloatingSurfacesTransparent(isTransparent: Boolean) {
         viewModelScope.launch {
-            repository.setFloatingSurfaceOpacity(opacity)
+            repository.setFloatingSurfacesTransparent(isTransparent)
         }
     }
 
@@ -119,6 +111,5 @@ private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
     "show_compact_navigation_labels",
 )
 
-internal const val MinimumFloatingSurfaceOpacity = 0f
-internal const val MaximumFloatingSurfaceOpacity = 1f
-internal const val DefaultFloatingSurfaceOpacity = 0.7f
+internal const val TransparentFloatingSurfaceOpacity = 0.92f
+internal const val OpaqueFloatingSurfaceOpacity = 1f

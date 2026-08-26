@@ -13,7 +13,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -71,6 +70,9 @@ public fun AndroidKitSettingSection(
     content: AndroidKitSettingSectionScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
+    val colorScheme = AndroidKitThemeTokens.colorScheme
+    val typography = AndroidKitThemeTokens.typography
+    val shapes = AndroidKitThemeTokens.shapes
     val scope = SettingSectionScopeImpl().apply(content)
     require(scope.entries.isNotEmpty()) { "At least one settings entry is required." }
 
@@ -82,13 +84,13 @@ public fun AndroidKitSettingSection(
             Text(
                 text = it,
                 modifier = Modifier.padding(horizontal = dimensions.spaceMedium),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = typography.labelLarge,
+                color = colorScheme.onSurfaceVariant,
             )
         }
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.extraLarge,
+            shape = shapes.extraLarge,
             colors = AndroidKitCardDefaults.colors(),
             border = AndroidKitCardDefaults.border(),
         ) {
@@ -107,8 +109,8 @@ public fun AndroidKitSettingSection(
             Text(
                 text = it,
                 modifier = Modifier.padding(horizontal = dimensions.spaceMedium),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = typography.bodyMedium,
+                color = colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -237,7 +239,7 @@ private fun SettingsButtonEntry(entry: SettingsEntryDefinition.Button): Unit {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = AndroidKitThemeTokens.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -268,6 +270,8 @@ private fun SettingsToggleEntry(entry: SettingsEntryDefinition.Toggle): Unit {
 @Composable
 private fun SettingsSliderEntry(entry: SettingsEntryDefinition.Slider): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
+    val colorScheme = AndroidKitThemeTokens.colorScheme
+    val typography = AndroidKitThemeTokens.typography
     Column(
         modifier = entry.modifier
             .fillMaxWidth()
@@ -293,21 +297,21 @@ private fun SettingsSliderEntry(entry: SettingsEntryDefinition.Slider): Unit {
             ) {
                 Text(
                     text = entry.label,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = typography.bodyLarge,
                 )
                 entry.supportingText?.let {
                     Text(
                         text = it,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = typography.bodyMedium,
+                        color = colorScheme.onSurfaceVariant,
                     )
                 }
             }
             entry.valueLabel?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = typography.labelLarge,
+                    color = colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -333,6 +337,8 @@ private fun SettingsEntryContent(
     trailingContent: @Composable () -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
+    val colorScheme = AndroidKitThemeTokens.colorScheme
+    val typography = AndroidKitThemeTokens.typography
     Row(
         modifier = modifier.padding(
             horizontal = dimensions.spaceMedium,
@@ -353,13 +359,13 @@ private fun SettingsEntryContent(
         ) {
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodyLarge,
+                style = typography.bodyLarge,
             )
             supportingText?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = typography.bodyMedium,
+                    color = colorScheme.onSurfaceVariant,
                 )
             }
         }
