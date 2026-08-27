@@ -10,3 +10,13 @@ tests inside published modules.
 
 Never copy code directly from the inspiration applications. Generalize useful
 patterns behind small, typed APIs and prove them in the demo catalog first.
+
+## Dependency version policy
+
+When any repository-managed dependency, package, Gradle plugin, build tool, or
+toolchain currently using a prerelease version reaches stable, upgrade to that
+stable release. Afterward, remain on stable releases and do not move to a later
+alpha, beta, RC, preview, or other prerelease version unless explicitly
+requested. This policy applies to AndroidX and non-AndroidX components,
+including AGP, Kotlin, Kotlin serialization, screenshot tooling, test
+frameworks, and the Gradle wrapper.

@@ -1,10 +1,5 @@
 package net.mamby.androidkit.compose.navigation
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +48,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -203,10 +197,6 @@ private enum class CompactNavigationSlot {
     Navigation,
 }
 
-private const val SelectionIndicatorFadeInDurationMillis = 280
-private const val SelectionIndicatorFadeOutDurationMillis = 180
-private const val SelectionIndicatorRestingScale = 0.96f
-
 @Composable
 private fun <Key : Any> FloatingNavigationBar(
     items: List<AndroidKitFloatingNavigationItem<Key>>,
@@ -260,10 +250,11 @@ private fun <Key : Any> FloatingNavigationBar(
                         items.forEach { item ->
                             val selected = item.key == selectedKey
                             Box(modifier = Modifier.weight(1f)) {
-                                CompactNavigationSelectionIndicator(
-                                    selected = selected,
-                                    modifier = Modifier.matchParentSize(),
-                                )
+                                if (selected) {
+                                    CompactNavigationSelectionIndicator(
+                                        modifier = Modifier.matchParentSize(),
+                                    )
+                                }
                                 CompactNavigationBarItem(
                                     selected = selected,
                                     onClick = { onSelected(item.key) },
@@ -276,10 +267,11 @@ private fun <Key : Any> FloatingNavigationBar(
                         }
                         if (overflowItems.isNotEmpty()) {
                             Box(modifier = Modifier.weight(1f)) {
-                                CompactNavigationSelectionIndicator(
-                                    selected = overflowSelected,
-                                    modifier = Modifier.matchParentSize(),
-                                )
+                                if (overflowSelected) {
+                                    CompactNavigationSelectionIndicator(
+                                        modifier = Modifier.matchParentSize(),
+                                    )
+                                }
                                 CompactNavigationBarItem(
                                     selected = overflowSelected,
                                     onClick = { onFlyoutVisibleChange(true) },
@@ -309,38 +301,11 @@ private fun <Key : Any> FloatingNavigationBar(
 
 @Composable
 private fun CompactNavigationSelectionIndicator(
-    selected: Boolean,
     modifier: Modifier = Modifier,
 ): Unit {
     val visuals = floatingSurfaceVisuals()
-    val durationMillis = if (selected) {
-        SelectionIndicatorFadeInDurationMillis
-    } else {
-        SelectionIndicatorFadeOutDurationMillis
-    }
-    val indicatorAlpha = animateFloatAsState(
-        targetValue = if (selected) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = durationMillis,
-            easing = if (selected) FastOutSlowInEasing else FastOutLinearInEasing,
-        ),
-        label = "compact navigation selection indicator alpha",
-    )
-    val indicatorScale = animateFloatAsState(
-        targetValue = if (selected) 1f else SelectionIndicatorRestingScale,
-        animationSpec = tween(
-            durationMillis = durationMillis,
-            easing = FastOutSlowInEasing,
-        ),
-        label = "compact navigation selection indicator scale",
-    )
     Box(
         modifier = modifier
-            .graphicsLayer {
-                alpha = indicatorAlpha.value
-                scaleX = indicatorScale.value
-                scaleY = indicatorScale.value
-            }
             .clip(AndroidKitThemeTokens.shapes.extraLarge)
             .background(
                 AndroidKitThemeTokens.colorScheme.secondaryContainer.copy(
@@ -361,14 +326,11 @@ private fun CompactNavigationBarItem(
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val visuals = floatingSurfaceVisuals()
-    val contentColor by animateColorAsState(
-        targetValue = if (selected) {
-            AndroidKitThemeTokens.colorScheme.primary
-        } else {
-            visuals.contentColor
-        },
-        label = "compact navigation item content",
-    )
+    val contentColor = if (selected) {
+        AndroidKitThemeTokens.colorScheme.primary
+    } else {
+        visuals.contentColor
+    }
     val indicatorShape = AndroidKitThemeTokens.shapes.extraLarge
     Box(
         modifier = modifier
@@ -451,7 +413,7 @@ private fun <Key : Any> NavigationFlyout(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
         dropdownMenuAnchorPosition = MenuAnchorPosition.Above,
-        offset = DpOffset(x = 0.dp, y = -dimensions.spaceExtraSmall),
+        offset = DpOffset.Zero,
     ) {
         val displayedItems = items.asReversed()
         displayedItems.forEachIndexed { index, item ->
