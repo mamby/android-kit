@@ -1,6 +1,10 @@
 package net.mamby.androidkit.compose.navigation
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.animateBounds
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +43,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -209,6 +215,30 @@ private fun <Key : Any> FloatingNavigationBar(
     showLabels: Boolean,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
+    val indicatorBoundsTransform = remember {
+        BoundsTransform { _, _ ->
+            spring(
+                dampingRatio = Spring.DampingRatioNoBouncy,
+                stiffness = Spring.StiffnessMediumLow,
+            )
+        }
+    }
+    val selectionIndicator = remember {
+        movableContentOf<Modifier> { modifier ->
+            val visuals = floatingSurfaceVisuals()
+            val indicatorColor by animateColorAsState(
+                targetValue = AndroidKitThemeTokens.colorScheme.secondaryContainer.copy(
+                    alpha = visuals.containerColor.alpha,
+                ),
+                label = "compact navigation selection indicator color",
+            )
+            Box(
+                modifier = modifier
+                    .clip(AndroidKitThemeTokens.shapes.extraLarge)
+                    .background(indicatorColor),
+            )
+        }
+    }
     Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -239,45 +269,69 @@ private fun <Key : Any> FloatingNavigationBar(
                     modifier = Modifier.fillMaxWidth(),
                     shape = AndroidKitThemeTokens.shapes.extraLarge,
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(dimensions.spaceExtraSmall)
-                            .heightIn(min = dimensions.minimumTouchTarget)
-                            .selectableGroup(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        items.forEach { item ->
-                            val selected = item.key == selectedKey
-                            CompactNavigationBarItem(
-                                selected = selected,
-                                onClick = { onSelected(item.key) },
-                                icon = if (selected) item.selectedIcon else item.icon,
-                                label = item.label,
-                                showLabel = showLabels,
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                        if (overflowItems.isNotEmpty()) {
-                            Box(modifier = Modifier.weight(1f)) {
-                                CompactNavigationBarItem(
-                                    selected = overflowSelected,
-                                    onClick = { onFlyoutVisibleChange(true) },
-                                    icon = AndroidKitIcons.More,
-                                    label = AndroidKitThemeTokens.strings.more,
-                                    showLabel = showLabels,
-                                    modifier = Modifier.fillMaxWidth(),
-                                )
-                                NavigationFlyout(
-                                    expanded = flyoutVisible,
-                                    items = overflowItems,
-                                    selectedKey = selectedKey,
-                                    onDismissRequest = { onFlyoutVisibleChange(false) },
-                                    onSelected = { key ->
-                                        onFlyoutVisibleChange(false)
-                                        onSelected(key)
-                                    },
-                                )
+                    LookaheadScope {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(dimensions.spaceExtraSmall)
+                                .heightIn(min = dimensions.minimumTouchTarget)
+                                .selectableGroup(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            items.forEach { item ->
+                                val selected = item.key == selectedKey
+                                Box(modifier = Modifier.weight(1f)) {
+                                    if (selected) {
+                                        selectionIndicator(
+                                            Modifier
+                                                .matchParentSize()
+                                                .animateBounds(
+                                                    lookaheadScope = this@LookaheadScope,
+                                                    boundsTransform = indicatorBoundsTransform,
+                                                ),
+                                        )
+                                    }
+                                    CompactNavigationBarItem(
+                                        selected = selected,
+                                        onClick = { onSelected(item.key) },
+                                        icon = if (selected) item.selectedIcon else item.icon,
+                                        label = item.label,
+                                        showLabel = showLabels,
+                                        modifier = Modifier.fillMaxWidth(),
+                                    )
+                                }
+                            }
+                            if (overflowItems.isNotEmpty()) {
+                                Box(modifier = Modifier.weight(1f)) {
+                                    if (overflowSelected) {
+                                        selectionIndicator(
+                                            Modifier
+                                                .matchParentSize()
+                                                .animateBounds(
+                                                    lookaheadScope = this@LookaheadScope,
+                                                    boundsTransform = indicatorBoundsTransform,
+                                                ),
+                                        )
+                                    }
+                                    CompactNavigationBarItem(
+                                        selected = overflowSelected,
+                                        onClick = { onFlyoutVisibleChange(true) },
+                                        icon = AndroidKitIcons.More,
+                                        label = AndroidKitThemeTokens.strings.more,
+                                        showLabel = showLabels,
+                                        modifier = Modifier.fillMaxWidth(),
+                                    )
+                                    NavigationFlyout(
+                                        expanded = flyoutVisible,
+                                        items = overflowItems,
+                                        selectedKey = selectedKey,
+                                        onDismissRequest = { onFlyoutVisibleChange(false) },
+                                        onSelected = { key ->
+                                            onFlyoutVisibleChange(false)
+                                            onSelected(key)
+                                        },
+                                    )
+                                }
                             }
                         }
                     }
@@ -306,23 +360,12 @@ private fun CompactNavigationBarItem(
         },
         label = "compact navigation item content",
     )
-    val containerColor by animateColorAsState(
-        targetValue = if (selected) {
-            AndroidKitThemeTokens.colorScheme.secondaryContainer.copy(
-                alpha = visuals.containerColor.alpha,
-            )
-        } else {
-            Color.Transparent
-        },
-        label = "compact navigation selection indicator",
-    )
     val indicatorShape = AndroidKitThemeTokens.shapes.extraLarge
     Box(
         modifier = modifier
             .heightIn(min = dimensions.minimumTouchTarget)
             .minimumInteractiveComponentSize()
             .clip(indicatorShape)
-            .background(containerColor)
             .selectable(
                 selected = selected,
                 onClick = onClick,

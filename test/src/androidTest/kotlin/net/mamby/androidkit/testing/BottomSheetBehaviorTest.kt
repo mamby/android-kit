@@ -26,6 +26,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.test.platform.app.InstrumentationRegistry
@@ -225,6 +228,51 @@ class BottomSheetBehaviorTest {
         composeRule.onNodeWithTag(ManagedScrollTag)
             .performScrollToNode(hasTextExactly("Managed 40"))
         composeRule.onNodeWithText("Managed 40").assertExists()
+    }
+
+    @Test
+    fun contentPullMustEndBeforeAFreshPullCanDismissTheSheet() {
+        var visible by mutableStateOf(true)
+        var dismissCount by mutableIntStateOf(0)
+        composeRule.setContent {
+            AndroidKitTheme {
+                AndroidKitBottomSheet(
+                    visible = visible,
+                    title = SheetTitle,
+                    onDismiss = {
+                        dismissCount += 1
+                        visible = false
+                    },
+                ) {
+                    repeat(40) { index ->
+                        Text("Scrollable $index", modifier = Modifier.height(48.dp))
+                    }
+                }
+            }
+        }
+
+        val scrollableContent = composeRule.onNode(hasScrollAction())
+        scrollableContent.performTouchInput {
+            swipeUp(
+                startY = centerY + height * 0.15f,
+                endY = centerY - height * 0.15f,
+                durationMillis = 500,
+            )
+        }
+        scrollableContent.performTouchInput {
+            swipeDown(durationMillis = 1_000)
+        }
+
+        composeRule.waitForIdle()
+        composeRule.runOnIdle { assertEquals(0, dismissCount) }
+        composeRule.onNodeWithText(SheetTitle).assertExists()
+
+        scrollableContent.performTouchInput {
+            swipeDown(durationMillis = 1_000)
+        }
+
+        composeRule.waitUntil(timeoutMillis = 5_000) { dismissCount == 1 }
+        composeRule.onNodeWithText(SheetTitle).assertDoesNotExist()
     }
 
     @Test

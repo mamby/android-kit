@@ -2,6 +2,8 @@ package net.mamby.androidkit.compose.form
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -43,14 +45,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
@@ -104,6 +114,7 @@ public fun AndroidKitBottomSheet(
     )
     val scope = rememberCoroutineScope()
     val verticalScrollState = rememberScrollState()
+    val contentScrollHandoff = remember { BottomSheetContentScrollHandoff() }
     val cappedHeightFraction = maxHeightFraction.coerceIn(
         minimumValue = 0f,
         maximumValue = AndroidKitBottomSheetDefaults.MaximumHeightFraction,
@@ -111,10 +122,7 @@ public fun AndroidKitBottomSheet(
     val safeDrawingTopPadding = WindowInsets.safeDrawing
         .asPaddingValues()
         .calculateTopPadding()
-    val sheetDismissGesturesEnabled = gesturesEnabled &&
-        dismissGesturesEnabled &&
-        (scrollMode != AndroidKitBottomSheetScrollMode.VerticalScroll ||
-            verticalScrollState.value == 0)
+    val sheetDismissGesturesEnabled = gesturesEnabled && dismissGesturesEnabled
 
     fun dismissWithAnimation() {
         if (!gesturesEnabled) return
@@ -189,13 +197,23 @@ public fun AndroidKitBottomSheet(
                 Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
 
                 Box(
-                    modifier = if (fitContent) {
+                    modifier = (if (fitContent) {
                         Modifier.fillMaxWidth()
                     } else {
                         Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                    },
+                    })
+                        .nestedScroll(contentScrollHandoff)
+                        .pointerInput(contentScrollHandoff) {
+                            awaitEachGesture {
+                                awaitFirstDown(
+                                    requireUnconsumed = false,
+                                    pass = PointerEventPass.Initial,
+                                )
+                                contentScrollHandoff.onGestureStarted()
+                            }
+                        },
                 ) {
                     when (scrollMode) {
                         AndroidKitBottomSheetScrollMode.VerticalScroll -> Column(
@@ -252,6 +270,40 @@ public fun AndroidKitBottomSheet(
     }
 }
 
+private class BottomSheetContentScrollHandoff : NestedScrollConnection {
+    private var contentConsumedDownwardPull = false
+
+    fun onGestureStarted() {
+        contentConsumedDownwardPull = false
+    }
+
+    override fun onPostScroll(
+        consumed: Offset,
+        available: Offset,
+        source: NestedScrollSource,
+    ): Offset {
+        if (source != NestedScrollSource.UserInput) return Offset.Zero
+
+        contentConsumedDownwardPull =
+            contentConsumedDownwardPull || consumed.y > 0f
+
+        return if (contentConsumedDownwardPull && available.y > 0f) {
+            Offset(x = 0f, y = available.y)
+        } else {
+            Offset.Zero
+        }
+    }
+
+    override suspend fun onPostFling(
+        consumed: Velocity,
+        available: Velocity,
+    ): Velocity = if (contentConsumedDownwardPull && available.y > 0f) {
+        Velocity(x = 0f, y = available.y)
+    } else {
+        Velocity.Zero
+    }
+}
+
 @Composable
 private fun ColumnScope.BottomSheetDragHandle(
     dimensions: AndroidKitDimensions,
@@ -305,7 +357,9 @@ private fun BottomSheetChrome(
                 text = title,
                 modifier = Modifier.semantics { heading() },
                 color = style.contentColor,
-                style = AndroidKitThemeTokens.typography.titleMedium,
+                style = AndroidKitThemeTokens.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                ),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
