@@ -26,6 +26,7 @@ public fun AndroidKitFloatingDropdownMenu(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
     modifier = modifier,
+    dropdownMenuAnchorPosition = MenuAnchorPosition.Below,
     offset = DpOffset.Zero,
     content = content,
 )
@@ -41,6 +42,24 @@ public fun AndroidKitFloatingDropdownMenu(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
     modifier = modifier,
+    dropdownMenuAnchorPosition = MenuAnchorPosition.Below,
+    offset = offset,
+    content = content,
+)
+
+@Composable
+internal fun AndroidKitFloatingDropdownMenu(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    dropdownMenuAnchorPosition: MenuAnchorPosition,
+    offset: DpOffset,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+): Unit = FloatingDropdownMenuContent(
+    expanded = expanded,
+    onDismissRequest = onDismissRequest,
+    modifier = modifier,
+    dropdownMenuAnchorPosition = dropdownMenuAnchorPosition,
     offset = offset,
     content = content,
 )
@@ -50,6 +69,7 @@ private fun FloatingDropdownMenuContent(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier,
+    dropdownMenuAnchorPosition: MenuAnchorPosition,
     offset: DpOffset,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
@@ -57,7 +77,7 @@ private fun FloatingDropdownMenuContent(
     val shape = AndroidKitThemeTokens.shapes.extraLarge
     val scrollState = rememberScrollState()
     val positionProvider = MenuDefaults.rememberDropdownMenuPopupPositionProvider(
-        dropdownMenuAnchorPosition = MenuAnchorPosition.Below,
+        dropdownMenuAnchorPosition = dropdownMenuAnchorPosition,
         offset = offset,
     )
     DropdownMenuPopup(

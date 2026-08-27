@@ -1,6 +1,8 @@
 package net.mamby.androidkit.compose.navigation
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -29,6 +31,7 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MenuAnchorPosition
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -200,6 +203,10 @@ private enum class CompactNavigationSlot {
     Navigation,
 }
 
+private const val SelectionIndicatorFadeInDurationMillis = 280
+private const val SelectionIndicatorFadeOutDurationMillis = 180
+private const val SelectionIndicatorRestingScale = 0.96f
+
 @Composable
 private fun <Key : Any> FloatingNavigationBar(
     items: List<AndroidKitFloatingNavigationItem<Key>>,
@@ -306,15 +313,33 @@ private fun CompactNavigationSelectionIndicator(
     modifier: Modifier = Modifier,
 ): Unit {
     val visuals = floatingSurfaceVisuals()
+    val durationMillis = if (selected) {
+        SelectionIndicatorFadeInDurationMillis
+    } else {
+        SelectionIndicatorFadeOutDurationMillis
+    }
     val indicatorAlpha = animateFloatAsState(
         targetValue = if (selected) 1f else 0f,
-        animationSpec = tween(),
+        animationSpec = tween(
+            durationMillis = durationMillis,
+            easing = if (selected) FastOutSlowInEasing else FastOutLinearInEasing,
+        ),
         label = "compact navigation selection indicator alpha",
+    )
+    val indicatorScale = animateFloatAsState(
+        targetValue = if (selected) 1f else SelectionIndicatorRestingScale,
+        animationSpec = tween(
+            durationMillis = durationMillis,
+            easing = FastOutSlowInEasing,
+        ),
+        label = "compact navigation selection indicator scale",
     )
     Box(
         modifier = modifier
             .graphicsLayer {
                 alpha = indicatorAlpha.value
+                scaleX = indicatorScale.value
+                scaleY = indicatorScale.value
             }
             .clip(AndroidKitThemeTokens.shapes.extraLarge)
             .background(
@@ -425,7 +450,8 @@ private fun <Key : Any> NavigationFlyout(
     AndroidKitFloatingDropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
-        offset = DpOffset(x = 0.dp, y = dimensions.spaceExtraSmall),
+        dropdownMenuAnchorPosition = MenuAnchorPosition.Above,
+        offset = DpOffset(x = 0.dp, y = -dimensions.spaceExtraSmall),
     ) {
         val displayedItems = items.asReversed()
         displayedItems.forEachIndexed { index, item ->
