@@ -37,7 +37,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,8 +52,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -169,16 +167,6 @@ public fun AndroidKitBottomSheet(
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
             val safeSheetHeight = (maxHeight - safeDrawingTopPadding).coerceAtLeast(0.dp)
             val maxSheetHeight = minOf(maxHeight * cappedHeightFraction, safeSheetHeight)
-            var chromeHeightPx by remember { mutableIntStateOf(0) }
-            val chromeContentPadding = PaddingValues(
-                top = if (showChrome) {
-                    with(LocalDensity.current) { chromeHeightPx.toDp() } +
-                        dimensions.bottomSheetChromeContentSpacing
-                } else {
-                    0.dp
-                },
-                bottom = dimensions.bottomSheetBottomPadding,
-            )
 
             Column(
                 modifier = Modifier
@@ -196,7 +184,7 @@ public fun AndroidKitBottomSheet(
                 )
                 Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
 
-                Box(
+                BottomSheetContentLayout(
                     modifier = (if (fitContent) {
                         Modifier.fillMaxWidth()
                     } else {
@@ -214,7 +202,24 @@ public fun AndroidKitBottomSheet(
                                 contentScrollHandoff.onGestureStarted()
                             }
                         },
-                ) {
+                    showChrome = showChrome,
+                    chromeContentSpacing = dimensions.bottomSheetChromeContentSpacing,
+                    contentBottomPadding = dimensions.bottomSheetBottomPadding,
+                    chrome = {
+                        BottomSheetChrome(
+                            title = title,
+                            style = style,
+                            dimensions = dimensions,
+                            backContentDescription = backContentDescription ?: strings.back,
+                            onBack = onBack,
+                            closeContentDescription = closeContentDescription ?: strings.close,
+                            onClose = ::dismissWithAnimation,
+                            containerColor = style.containerColor.copy(
+                                alpha = floatingSurfaceStyle.opacity,
+                            ),
+                        )
+                    },
+                ) { chromeContentPadding ->
                     when (scrollMode) {
                         AndroidKitBottomSheetScrollMode.VerticalScroll -> Column(
                             modifier = (if (fitContent) {
@@ -246,28 +251,58 @@ public fun AndroidKitBottomSheet(
                             content(chromeContentPadding)
                         }
                     }
-
-                    if (showChrome) {
-                        BottomSheetChrome(
-                            title = title,
-                            style = style,
-                            dimensions = dimensions,
-                            backContentDescription = backContentDescription ?: strings.back,
-                            onBack = onBack,
-                            closeContentDescription = closeContentDescription ?: strings.close,
-                            onClose = ::dismissWithAnimation,
-                            modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .onSizeChanged { chromeHeightPx = it.height },
-                            containerColor = style.containerColor.copy(
-                                alpha = floatingSurfaceStyle.opacity,
-                            ),
-                        )
-                    }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun BottomSheetContentLayout(
+    showChrome: Boolean,
+    chromeContentSpacing: Dp,
+    contentBottomPadding: Dp,
+    chrome: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable (PaddingValues) -> Unit,
+) {
+    SubcomposeLayout(modifier = modifier) { constraints ->
+        val chromePlaceables = if (showChrome) {
+            subcompose(BottomSheetContentSlot.Chrome, chrome).map { measurable ->
+                measurable.measure(constraints.copy(minHeight = 0))
+            }
+        } else {
+            emptyList()
+        }
+        val chromeHeight = chromePlaceables.maxOfOrNull { it.height } ?: 0
+        val contentPadding = PaddingValues(
+            top = if (showChrome) chromeHeight.toDp() + chromeContentSpacing else 0.dp,
+            bottom = contentBottomPadding,
+        )
+        val contentPlaceables = subcompose(BottomSheetContentSlot.Content) {
+            content(contentPadding)
+        }.map { measurable -> measurable.measure(constraints) }
+        val width = maxOf(
+            chromePlaceables.maxOfOrNull { it.width } ?: 0,
+            contentPlaceables.maxOfOrNull { it.width } ?: 0,
+        ).coerceIn(constraints.minWidth, constraints.maxWidth)
+        val height = maxOf(
+            chromeHeight,
+            contentPlaceables.maxOfOrNull { it.height } ?: 0,
+        ).coerceIn(constraints.minHeight, constraints.maxHeight)
+
+        layout(width, height) {
+            contentPlaceables.forEach { it.placeRelative(0, 0) }
+            chromePlaceables.forEach { placeable ->
+                placeable.placeRelative(x = (width - placeable.width) / 2, y = 0)
+            }
+        }
+    }
+}
+
+private enum class BottomSheetContentSlot {
+    Chrome,
+    Content,
 }
 
 private class BottomSheetContentScrollHandoff : NestedScrollConnection {

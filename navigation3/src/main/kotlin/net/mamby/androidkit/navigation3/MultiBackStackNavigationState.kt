@@ -4,7 +4,6 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.LocalListDetailSceneScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
@@ -15,7 +14,6 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 
-@Stable
 public class MultiBackStackNavigationState<Root : NavKey> internal constructor(
     public val roots: List<Root>,
     selectedRootIndex: MutableIntState,
@@ -101,16 +99,15 @@ public fun <Root : NavKey> rememberMultiBackStackNavigationState(
     val initialIndex = roots.indexOf(startRoot)
     require(initialIndex >= 0) { "The start root is not registered." }
 
-    val selectedIndex = rememberSaveable(roots) { mutableIntStateOf(initialIndex) }
-    val stacks = linkedMapOf<Root, NavBackStack<NavKey>>()
-    roots.forEach { root ->
-        stacks[root] = key(root) { rememberNavBackStack(root) }
+    val selectedIndex = rememberSaveable(roots, startRoot) { mutableIntStateOf(initialIndex) }
+    val stacks = roots.associateWith { root ->
+        key(root) { rememberNavBackStack(root) }
     }
-    return remember(roots, selectedIndex, stacks.values.toList()) {
+    return remember(roots, selectedIndex) {
         MultiBackStackNavigationState(
             roots = roots.toList(),
             selectedRootIndex = selectedIndex,
-            backStacks = stacks.toMap(),
+            backStacks = stacks,
         )
     }
 }

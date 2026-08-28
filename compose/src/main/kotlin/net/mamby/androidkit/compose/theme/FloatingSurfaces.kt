@@ -8,6 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
@@ -32,24 +33,26 @@ internal fun floatingSurfaceVisuals(): FloatingSurfaceVisuals {
     val style = AndroidKitThemeTokens.floatingSurfaceStyle
     val dimensions = AndroidKitThemeTokens.dimensions
     val scheme = AndroidKitThemeTokens.colorScheme
-    return FloatingSurfaceVisuals(
-        containerColor = scheme.surface.copy(alpha = style.opacity),
-        contentColor = scheme.onSurface,
-        border = BorderStroke(
-            width = dimensions.floatingSurfaceBorderWidth,
-            color = scheme.outlineVariant.copy(alpha = FloatingSurfaceBorderAlpha),
-        ),
-        shadow = Shadow(
-            radius = dimensions.floatingSurfaceShadowRadius,
-            color = scheme.scrim.copy(alpha = FloatingSurfaceShadowAlpha),
-            offset = DpOffset(x = 0.dp, y = dimensions.floatingSurfaceShadowOffsetY),
-        ),
-        buttonShadow = Shadow(
-            radius = dimensions.floatingSurfaceButtonShadowRadius,
-            color = scheme.scrim.copy(alpha = FloatingSurfaceShadowAlpha),
-            offset = DpOffset(x = 0.dp, y = dimensions.floatingSurfaceButtonShadowOffsetY),
-        ),
-    )
+    return remember(style, dimensions, scheme) {
+        FloatingSurfaceVisuals(
+            containerColor = scheme.surface.copy(alpha = style.opacity),
+            contentColor = scheme.onSurface,
+            border = BorderStroke(
+                width = dimensions.floatingSurfaceBorderWidth,
+                color = scheme.outlineVariant.copy(alpha = FloatingSurfaceBorderAlpha),
+            ),
+            shadow = Shadow(
+                radius = dimensions.floatingSurfaceShadowRadius,
+                color = scheme.scrim.copy(alpha = FloatingSurfaceShadowAlpha),
+                offset = DpOffset(x = 0.dp, y = dimensions.floatingSurfaceShadowOffsetY),
+            ),
+            buttonShadow = Shadow(
+                radius = dimensions.floatingSurfaceButtonShadowRadius,
+                color = scheme.scrim.copy(alpha = FloatingSurfaceShadowAlpha),
+                offset = DpOffset(x = 0.dp, y = dimensions.floatingSurfaceButtonShadowOffsetY),
+            ),
+        )
+    }
 }
 
 @Composable
