@@ -45,7 +45,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.MAVEN_SIGNING_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew clean publishAllPublicationsToStagingRepository
+          ./gradlew --dependency-verification strict clean publishAllPublicationsToStagingRepository
       - name: Create Central deployment bundle
         shell: bash
         run: |

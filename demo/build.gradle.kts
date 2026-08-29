@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.baseline.profile)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -72,7 +73,6 @@ dependencies {
     implementation(libs.compose.animation)
     implementation(libs.compose.foundation)
     implementation(libs.compose.material3)
-    implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.datastore.preferences)
@@ -83,7 +83,10 @@ dependencies {
     implementation(libs.material3.adaptive.navigation3)
     implementation(libs.navigation3.runtime)
     implementation(libs.navigation3.ui)
+    implementation(libs.profile.installer)
     implementation(libs.kotlinx.serialization.core)
+
+    baselineProfile(project(":test:performance"))
 
     debugImplementation(libs.compose.ui.tooling)
 }

@@ -6,12 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -56,20 +50,40 @@ class ComposeBehaviorTest {
     fun compactNavigationShowsAndSelectsEveryPrimaryDestination() {
         var selected by mutableStateOf("home")
         val destinations = listOf(
-            Triple("home", "Home", Icons.Default.Home),
-            Triple("list", "Lists", Icons.AutoMirrored.Filled.List),
-            Triple("edit", "Editor", Icons.Default.Edit),
-            Triple("settings", "Settings", Icons.Default.Settings),
+            "home" to "Home",
+            "list" to "Lists",
+            "edit" to "Editor",
+            "settings" to "Settings",
         )
         composeRule.setContent {
+            val navigationItems = listOf(
+                AndroidKitFloatingNavigationItem(
+                    "home",
+                    "Home",
+                    materialSymbol(R.drawable.ic_symbol_home),
+                ),
+                AndroidKitFloatingNavigationItem(
+                    "list",
+                    "Lists",
+                    materialSymbol(R.drawable.ic_symbol_list),
+                ),
+                AndroidKitFloatingNavigationItem(
+                    "edit",
+                    "Editor",
+                    materialSymbol(R.drawable.ic_symbol_edit),
+                ),
+                AndroidKitFloatingNavigationItem(
+                    "settings",
+                    "Settings",
+                    materialSymbol(R.drawable.ic_symbol_settings),
+                ),
+            )
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme {
                     AndroidKitFloatingNavigation(
-                        items = destinations.map { (key, label, icon) ->
-                            AndroidKitFloatingNavigationItem(key, label, icon)
-                        },
+                        items = navigationItems,
                         selectedKey = selected,
                         onSelected = { selected = it },
                     ) {
@@ -99,11 +113,15 @@ class ComposeBehaviorTest {
                 AndroidKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "home",
+                                "Home",
+                                materialSymbol(R.drawable.ic_symbol_home),
+                            ),
                             AndroidKitFloatingNavigationItem(
                                 "settings",
                                 "Settings",
-                                Icons.Default.Settings,
+                                materialSymbol(R.drawable.ic_symbol_settings),
                             ),
                         ),
                         selectedKey = "home",
@@ -131,11 +149,15 @@ class ComposeBehaviorTest {
                 AndroidKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "home",
+                                "Home",
+                                materialSymbol(R.drawable.ic_symbol_home),
+                            ),
                             AndroidKitFloatingNavigationItem(
                                 "settings",
                                 "Settings",
-                                Icons.Default.Settings,
+                                materialSymbol(R.drawable.ic_symbol_settings),
                             ),
                         ),
                         selectedKey = "home",
@@ -200,7 +222,7 @@ class ComposeBehaviorTest {
                     title = "Immersive title",
                     actions = listOf(
                         AndroidKitFloatingTitleBarAction(
-                            icon = Icons.Default.Edit,
+                            icon = materialSymbol(R.drawable.ic_symbol_edit),
                             label = "Edit",
                             onClick = { actionCount += 1 },
                         ),
@@ -264,22 +286,30 @@ class ComposeBehaviorTest {
                 AndroidKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "home",
+                                "Home",
+                                materialSymbol(R.drawable.ic_symbol_home),
+                            ),
                             AndroidKitFloatingNavigationItem(
                                 "list",
                                 "Lists",
-                                Icons.AutoMirrored.Filled.List,
+                                materialSymbol(R.drawable.ic_symbol_list),
                             ),
-                            AndroidKitFloatingNavigationItem("edit", "Editor", Icons.Default.Edit),
+                            AndroidKitFloatingNavigationItem(
+                                "edit",
+                                "Editor",
+                                materialSymbol(R.drawable.ic_symbol_edit),
+                            ),
                             AndroidKitFloatingNavigationItem(
                                 "language",
                                 "Language",
-                                Icons.Default.Language,
+                                materialSymbol(R.drawable.ic_symbol_language),
                             ),
                             AndroidKitFloatingNavigationItem(
                                 "settings",
                                 "Settings",
-                                Icons.Default.Settings,
+                                materialSymbol(R.drawable.ic_symbol_settings),
                             ),
                         ),
                         selectedKey = selected,
@@ -313,27 +343,27 @@ class ComposeBehaviorTest {
                                 AndroidKitFloatingNavigationItem(
                                     "home",
                                     "Home",
-                                    Icons.Default.Home,
+                                    materialSymbol(R.drawable.ic_symbol_home),
                                 ),
                                 AndroidKitFloatingNavigationItem(
                                     "list",
                                     "Lists",
-                                    Icons.AutoMirrored.Filled.List,
+                                    materialSymbol(R.drawable.ic_symbol_list),
                                 ),
                                 AndroidKitFloatingNavigationItem(
                                     "edit",
                                     "Editor",
-                                    Icons.Default.Edit,
+                                    materialSymbol(R.drawable.ic_symbol_edit),
                                 ),
                                 AndroidKitFloatingNavigationItem(
                                     "language",
                                     "Language",
-                                    Icons.Default.Language,
+                                    materialSymbol(R.drawable.ic_symbol_language),
                                 ),
                                 AndroidKitFloatingNavigationItem(
                                     "settings",
                                     "Settings",
-                                    Icons.Default.Settings,
+                                    materialSymbol(R.drawable.ic_symbol_settings),
                                 ),
                             ),
                             selectedKey = "home",
@@ -375,37 +405,45 @@ class ComposeBehaviorTest {
                 AndroidKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
-                            AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
+                            AndroidKitFloatingNavigationItem(
+                                "home",
+                                "Home",
+                                materialSymbol(R.drawable.ic_symbol_home),
+                            ),
                             AndroidKitFloatingNavigationItem(
                                 "list",
                                 "Lists",
-                                Icons.AutoMirrored.Filled.List,
+                                materialSymbol(R.drawable.ic_symbol_list),
                             ),
-                            AndroidKitFloatingNavigationItem("edit", "Editor", Icons.Default.Edit),
+                            AndroidKitFloatingNavigationItem(
+                                "edit",
+                                "Editor",
+                                materialSymbol(R.drawable.ic_symbol_edit),
+                            ),
                             AndroidKitFloatingNavigationItem(
                                 "one",
                                 "Overflow 1",
-                                Icons.Default.Language,
+                                materialSymbol(R.drawable.ic_symbol_language),
                             ),
                             AndroidKitFloatingNavigationItem(
                                 "two",
                                 "Overflow 2",
-                                Icons.Default.Language,
+                                materialSymbol(R.drawable.ic_symbol_language),
                             ),
                             AndroidKitFloatingNavigationItem(
                                 "three",
                                 "Overflow 3",
-                                Icons.Default.Language,
+                                materialSymbol(R.drawable.ic_symbol_language),
                             ),
                             AndroidKitFloatingNavigationItem(
                                 "four",
                                 "Overflow 4",
-                                Icons.Default.Language,
+                                materialSymbol(R.drawable.ic_symbol_language),
                             ),
                             AndroidKitFloatingNavigationItem(
                                 key = "settings",
                                 label = "Settings",
-                                icon = Icons.Default.Settings,
+                                icon = materialSymbol(R.drawable.ic_symbol_settings),
                                 showDividerAfterInFlyout = true,
                             ),
                         ),

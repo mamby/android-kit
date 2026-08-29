@@ -46,4 +46,5 @@ include(
     ":localization",
     ":navigation3",
     ":test",
+    ":test:performance",
 )

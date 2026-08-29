@@ -9,17 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -33,7 +22,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarFlyoutStyle
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
@@ -49,6 +41,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.ComponentDemo
 import net.mamby.androidkit.demo.ui.ComponentId
+import net.mamby.androidkit.demo.ui.materialSymbol
 import net.mamby.androidkit.navigation3.listDetailBackAction
 
 @Composable
@@ -111,7 +104,7 @@ private fun AndroidKitPageDemo(
             if (demo == ComponentDemo.AndroidKitPageFloatingActionButton) {
                 AndroidKitFloatingActionButton(onClick = { actionCount += 1 }) {
                     Icon(
-                        imageVector = Icons.Default.Check,
+                        imageVector = materialSymbol(R.drawable.ic_symbol_check),
                         contentDescription = stringResource(R.string.action_confirm),
                     )
                 }
@@ -182,7 +175,7 @@ private fun AndroidKitFloatingActionButtonDemo(
                         .padding(dimensions.screenPadding),
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        imageVector = materialSymbol(R.drawable.ic_symbol_edit),
                         contentDescription = stringResource(R.string.action_edit),
                     )
                 }
@@ -207,12 +200,12 @@ private fun StandardComponentDemo(
     ) {
         listOf(
             AndroidKitFloatingTitleBarAction(
-                icon = Icons.Default.Save,
+                icon = materialSymbol(R.drawable.ic_symbol_save),
                 label = stringResource(R.string.action_save),
                 onClick = { actionCount += 1 },
             ),
             AndroidKitFloatingTitleBarAction(
-                icon = Icons.Default.Share,
+                icon = materialSymbol(R.drawable.ic_symbol_share),
                 label = stringResource(R.string.action_share),
                 onClick = { actionCount += 1 },
             ),
@@ -321,17 +314,17 @@ private fun AndroidKitCardDemo(
                 AndroidKitCardMenuItem(
                     label = stringResource(R.string.action_edit),
                     onClick = onAction,
-                    icon = Icons.Default.Edit,
+                    icon = materialSymbol(R.drawable.ic_symbol_edit),
                 ),
                 AndroidKitCardMenuItem(
                     label = stringResource(R.string.action_share),
                     onClick = onAction,
-                    icon = Icons.Default.Share,
+                    icon = materialSymbol(R.drawable.ic_symbol_share),
                 ),
                 AndroidKitCardMenuItem(
                     label = stringResource(R.string.action_delete),
                     onClick = onAction,
-                    icon = Icons.Default.Delete,
+                    icon = materialSymbol(R.drawable.ic_symbol_delete),
                 ),
             )
         } else {
@@ -367,6 +360,8 @@ private fun AndroidKitSettingSectionDemo(
     val actionLabel = stringResource(R.string.primary_action)
     val description = stringResource(R.string.demo_supporting_text)
     val entrySupportingText = stringResource(R.string.demo_setting_supporting_text)
+    val settingsIcon = materialSymbol(R.drawable.ic_symbol_settings)
+    val checkIcon = materialSymbol(R.drawable.ic_symbol_check)
     AndroidKitSettingSection(
         label = activeVariation.takeUnless {
             demo == ComponentDemo.AndroidKitSettingSectionButton
@@ -399,12 +394,12 @@ private fun AndroidKitSettingSectionDemo(
                         onAction()
                     },
                     supportingText = entrySupportingText,
-                    icon = Icons.Default.Settings,
+                    icon = settingsIcon,
                 )
                 button(
                     label = actionLabel,
                     onClick = onAction,
-                    icon = Icons.Default.Check,
+                    icon = checkIcon,
                 )
             }
 
@@ -418,6 +413,7 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     var visible by rememberSaveable { mutableStateOf(false) }
     var showingDetail by rememberSaveable { mutableStateOf(true) }
     Button(
+        modifier = Modifier.testTag("open_bottom_sheet"),
         onClick = {
             showingDetail = true
             visible = true
@@ -437,6 +433,9 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
             stringResource(R.string.sheet_title)
         },
         onDismiss = { visible = false },
+        modifier = Modifier
+            .testTag("bottom_sheet")
+            .semantics { testTagsAsResourceId = true },
         onBack = ({ showingDetail = false }).takeIf {
             isBackNavigation && showingDetail
         },
@@ -483,20 +482,35 @@ private fun AndroidKitFloatingActionBarDemo(
     val save = stringResource(R.string.action_save)
     val share = stringResource(R.string.action_share)
     val delete = stringResource(R.string.action_delete)
+    val editIcon = materialSymbol(R.drawable.ic_symbol_edit)
+    val saveIcon = materialSymbol(R.drawable.ic_symbol_save)
+    val shareIcon = materialSymbol(R.drawable.ic_symbol_share)
     val flyoutItems = listOf(
-        Icons.Default.Add to add,
-        Icons.Default.Close to close,
-        Icons.Default.Refresh to retry,
-        Icons.Default.Close to cancel,
-        Icons.Default.Check to confirm,
-        Icons.Default.Delete to delete,
+        materialSymbol(R.drawable.ic_symbol_add) to add,
+        materialSymbol(R.drawable.ic_symbol_close) to close,
+        materialSymbol(R.drawable.ic_symbol_refresh) to retry,
+        materialSymbol(R.drawable.ic_symbol_close) to cancel,
+        materialSymbol(R.drawable.ic_symbol_check) to confirm,
+        materialSymbol(R.drawable.ic_symbol_delete) to delete,
     )
     AndroidKitFloatingActionBar {
         when (demo) {
             ComponentDemo.AndroidKitFloatingActionBarIcons -> {
-                icon(onClick = onAction, icon = Icons.Default.Edit, contentDescription = edit)
-                icon(onClick = onAction, icon = Icons.Default.Save, contentDescription = save)
-                icon(onClick = onAction, icon = Icons.Default.Share, contentDescription = share)
+                icon(
+                    onClick = onAction,
+                    icon = editIcon,
+                    contentDescription = edit,
+                )
+                icon(
+                    onClick = onAction,
+                    icon = saveIcon,
+                    contentDescription = save,
+                )
+                icon(
+                    onClick = onAction,
+                    icon = shareIcon,
+                    contentDescription = share,
+                )
                 flyout(style = AndroidKitFloatingActionBarFlyoutStyle.Icon) {
                     flyoutItems.forEach { (icon, label) ->
                         item(icon = icon, label = label, onClick = onAction)
@@ -505,9 +519,21 @@ private fun AndroidKitFloatingActionBarDemo(
             }
 
             ComponentDemo.AndroidKitFloatingActionBarIconsAndLabels -> {
-                iconAndLabel(onClick = onAction, icon = Icons.Default.Edit, label = edit)
-                iconAndLabel(onClick = onAction, icon = Icons.Default.Save, label = save)
-                iconAndLabel(onClick = onAction, icon = Icons.Default.Share, label = share)
+                iconAndLabel(
+                    onClick = onAction,
+                    icon = editIcon,
+                    label = edit,
+                )
+                iconAndLabel(
+                    onClick = onAction,
+                    icon = saveIcon,
+                    label = save,
+                )
+                iconAndLabel(
+                    onClick = onAction,
+                    icon = shareIcon,
+                    label = share,
+                )
                 flyout(style = AndroidKitFloatingActionBarFlyoutStyle.IconAndLabel) {
                     flyoutItems.forEach { (icon, label) ->
                         item(icon = icon, label = label, onClick = onAction)
@@ -536,7 +562,10 @@ private fun AndroidKitFloatingDropdownMenuDemo(demo: ComponentDemo) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     Box {
         Button(onClick = { expanded = true }) {
-            Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
+            Icon(
+                imageVector = materialSymbol(R.drawable.ic_symbol_more_vert),
+                contentDescription = null,
+            )
             Text(stringResource(R.string.action_more))
         }
         AndroidKitFloatingDropdownMenu(
@@ -544,9 +573,9 @@ private fun AndroidKitFloatingDropdownMenuDemo(demo: ComponentDemo) {
             onDismissRequest = { expanded = false },
         ) {
             listOf(
-                Icons.Default.Edit to R.string.action_edit,
-                Icons.Default.Share to R.string.action_share,
-                Icons.Default.Delete to R.string.action_delete,
+                materialSymbol(R.drawable.ic_symbol_edit) to R.string.action_edit,
+                materialSymbol(R.drawable.ic_symbol_share) to R.string.action_share,
+                materialSymbol(R.drawable.ic_symbol_delete) to R.string.action_delete,
             ).forEach { (icon, labelResource) ->
                 DropdownMenuItem(
                     text = { Text(stringResource(labelResource)) },

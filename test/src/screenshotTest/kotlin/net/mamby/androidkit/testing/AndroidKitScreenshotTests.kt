@@ -7,15 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -90,9 +81,21 @@ fun androidKitFloatingTitleActions() {
             title = "A centered page title that must ellipsize",
             onBack = {},
             actions = listOf(
-                AndroidKitFloatingTitleBarAction(Icons.Default.Edit, "Edit", {}),
-                AndroidKitFloatingTitleBarAction(Icons.Default.Share, "Share", {}),
-                AndroidKitFloatingTitleBarAction(Icons.Default.Delete, "Delete", {}),
+                AndroidKitFloatingTitleBarAction(
+                    materialSymbol(R.drawable.ic_symbol_edit),
+                    "Edit",
+                    {},
+                ),
+                AndroidKitFloatingTitleBarAction(
+                    materialSymbol(R.drawable.ic_symbol_share),
+                    "Share",
+                    {},
+                ),
+                AndroidKitFloatingTitleBarAction(
+                    materialSymbol(R.drawable.ic_symbol_delete),
+                    "Delete",
+                    {},
+                ),
             ),
         ) { contentPadding ->
             Box(
@@ -179,12 +182,15 @@ private fun ScreenshotGallery(
     floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(),
     showCompactLabels: Boolean = false,
 ) {
+    val addIcon = materialSymbol(R.drawable.ic_symbol_add)
+    val settingsIcon = materialSymbol(R.drawable.ic_symbol_settings)
+    val editIcon = materialSymbol(R.drawable.ic_symbol_edit)
     AndroidKitTheme(
         definition = theme,
         floatingSurfaceStyle = floatingSurfaceStyle,
     ) {
         AndroidKitFloatingNavigation(
-            items = screenshotNavigationItems,
+            items = screenshotNavigationItems(),
             selectedKey = "home",
             onSelected = {},
             showCompactLabels = showCompactLabels,
@@ -194,7 +200,10 @@ private fun ScreenshotGallery(
                     title = "Android Kit",
                     floatingActionButton = {
                         AndroidKitFloatingActionButton(onClick = {}) {
-                            Icon(Icons.Default.Add, contentDescription = "Add")
+                            Icon(
+                                addIcon,
+                                contentDescription = "Add",
+                            )
                         }
                     },
                 ) { pagePadding ->
@@ -217,7 +226,7 @@ private fun ScreenshotGallery(
                                     checked = true,
                                     onCheckedChange = {},
                                     supportingText = "Stored on this device",
-                                    icon = Icons.Default.Settings,
+                                    icon = settingsIcon,
                                 )
                             }
                         }
@@ -234,7 +243,7 @@ private fun ScreenshotGallery(
                                 AndroidKitFloatingActionBar {
                                     icon(
                                         onClick = {},
-                                        icon = Icons.Default.Edit,
+                                        icon = editIcon,
                                         contentDescription = "Edit",
                                     )
                                     text(onClick = {}, label = "Save")
@@ -264,12 +273,33 @@ private fun ScreenshotGallery(
     }
 }
 
-private val screenshotNavigationItems = listOf(
-    AndroidKitFloatingNavigationItem("home", "Home", Icons.Default.Home),
-    AndroidKitFloatingNavigationItem("list", "Lists", Icons.AutoMirrored.Filled.List),
-    AndroidKitFloatingNavigationItem("edit", "Editor", Icons.Default.Edit),
-    AndroidKitFloatingNavigationItem("language", "Language", Icons.Default.Language),
-    AndroidKitFloatingNavigationItem("settings", "Settings", Icons.Default.Settings),
+@Composable
+private fun screenshotNavigationItems() = listOf(
+    AndroidKitFloatingNavigationItem(
+        "home",
+        "Home",
+        materialSymbol(R.drawable.ic_symbol_home),
+    ),
+    AndroidKitFloatingNavigationItem(
+        "list",
+        "Lists",
+        materialSymbol(R.drawable.ic_symbol_list),
+    ),
+    AndroidKitFloatingNavigationItem(
+        "edit",
+        "Editor",
+        materialSymbol(R.drawable.ic_symbol_edit),
+    ),
+    AndroidKitFloatingNavigationItem(
+        "language",
+        "Language",
+        materialSymbol(R.drawable.ic_symbol_language),
+    ),
+    AndroidKitFloatingNavigationItem(
+        "settings",
+        "Settings",
+        materialSymbol(R.drawable.ic_symbol_settings),
+    ),
 )
 
 @Target(AnnotationTarget.FUNCTION)

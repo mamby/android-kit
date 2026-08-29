@@ -3,16 +3,6 @@ package net.mamby.androidkit.demo.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DashboardCustomize
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
@@ -23,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
@@ -77,30 +69,30 @@ fun AndroidKitCatalogApp(
         ),
     ) {
         val dummyNavigationIcons = listOf(
-            Icons.Default.Home,
-            Icons.Default.Favorite,
-            Icons.Default.Notifications,
-            Icons.Default.Person,
-            Icons.Default.Search,
-            Icons.Default.Info,
-            Icons.Default.DashboardCustomize,
+            materialSymbol(R.drawable.ic_symbol_home),
+            materialSymbol(R.drawable.ic_symbol_favorite),
+            materialSymbol(R.drawable.ic_symbol_notifications),
+            materialSymbol(R.drawable.ic_symbol_person),
+            materialSymbol(R.drawable.ic_symbol_search),
+            materialSymbol(R.drawable.ic_symbol_info),
+            materialSymbol(R.drawable.ic_symbol_dashboard_customize),
         )
         val navigationItems: List<AndroidKitFloatingNavigationItem<CatalogRootRoute>> =
             listOf(
                 AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = ComponentsRoute,
                     label = stringResource(R.string.nav_components),
-                    icon = Icons.Default.DashboardCustomize,
+                    icon = materialSymbol(R.drawable.ic_symbol_dashboard_customize),
                 ),
                 AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = LocalizationRoute,
                     label = stringResource(R.string.nav_localization),
-                    icon = Icons.Default.Language,
+                    icon = materialSymbol(R.drawable.ic_symbol_language),
                 ),
                 AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = SettingsRoute,
                     label = stringResource(R.string.nav_settings),
-                    icon = Icons.Default.Settings,
+                    icon = materialSymbol(R.drawable.ic_symbol_settings),
                     showDividerAfterInFlyout = true,
                 ),
             ) + roots.filterIsInstance<DemoRootRoute>().map { route ->
@@ -120,6 +112,7 @@ fun AndroidKitCatalogApp(
             items = navigationItems,
             selectedKey = navigation.selectedRoot,
             onSelected = navigation::openRoot,
+            modifier = Modifier.semantics { testTagsAsResourceId = true },
             compactVisibleDestinationCount = if (settings.showCompactNavigationLabels) {
                 CompactLabeledDestinationCount
             } else {

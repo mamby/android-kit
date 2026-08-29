@@ -26,7 +26,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuAnchorPosition
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -412,7 +411,6 @@ private fun <Key : Any> NavigationFlyout(
     AndroidKitFloatingDropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
-        dropdownMenuAnchorPosition = MenuAnchorPosition.Above,
         offset = DpOffset.Zero,
     ) {
         val displayedItems = items.asReversed()

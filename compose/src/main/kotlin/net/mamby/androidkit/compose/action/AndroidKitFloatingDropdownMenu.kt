@@ -1,20 +1,17 @@
 package net.mamby.androidkit.compose.action
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenuPopup
-import androidx.compose.material3.MenuAnchorPosition
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
-import net.mamby.androidkit.compose.theme.FloatingSurface
+import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 
 @Composable
 public fun AndroidKitFloatingDropdownMenu(
@@ -26,7 +23,6 @@ public fun AndroidKitFloatingDropdownMenu(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
     modifier = modifier,
-    dropdownMenuAnchorPosition = MenuAnchorPosition.Below,
     offset = DpOffset.Zero,
     content = content,
 )
@@ -42,24 +38,6 @@ public fun AndroidKitFloatingDropdownMenu(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
     modifier = modifier,
-    dropdownMenuAnchorPosition = MenuAnchorPosition.Below,
-    offset = offset,
-    content = content,
-)
-
-@Composable
-internal fun AndroidKitFloatingDropdownMenu(
-    expanded: Boolean,
-    onDismissRequest: () -> Unit,
-    dropdownMenuAnchorPosition: MenuAnchorPosition,
-    offset: DpOffset,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-): Unit = FloatingDropdownMenuContent(
-    expanded = expanded,
-    onDismissRequest = onDismissRequest,
-    modifier = modifier,
-    dropdownMenuAnchorPosition = dropdownMenuAnchorPosition,
     offset = offset,
     content = content,
 )
@@ -69,33 +47,24 @@ private fun FloatingDropdownMenuContent(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier,
-    dropdownMenuAnchorPosition: MenuAnchorPosition,
     offset: DpOffset,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
     val shape = AndroidKitThemeTokens.shapes.extraLarge
-    val scrollState = rememberScrollState()
-    val positionProvider = MenuDefaults.rememberDropdownMenuPopupPositionProvider(
-        dropdownMenuAnchorPosition = dropdownMenuAnchorPosition,
-        offset = offset,
-    )
-    DropdownMenuPopup(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest,
-        popupPositionProvider = positionProvider,
-    ) {
-        FloatingSurface(
-            shape = shape,
+    val visuals = floatingSurfaceVisuals()
+    CompositionLocalProvider(LocalContentColor provides visuals.contentColor) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = onDismissRequest,
             modifier = modifier,
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(vertical = dimensions.spaceSmall)
-                    .width(IntrinsicSize.Max)
-                    .verticalScroll(scrollState),
-                content = content,
-            )
-        }
+            offset = offset,
+            scrollState = rememberScrollState(),
+            shape = shape,
+            containerColor = visuals.containerColor,
+            tonalElevation = 0.dp,
+            shadowElevation = MenuDefaults.ShadowElevation,
+            border = visuals.border,
+            content = content,
+        )
     }
 }

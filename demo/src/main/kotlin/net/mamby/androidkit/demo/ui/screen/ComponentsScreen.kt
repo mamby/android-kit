@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,12 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.testTag
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.ComponentDemo
 import net.mamby.androidkit.demo.ui.ComponentId
+import net.mamby.androidkit.demo.ui.materialSymbol
 
 @Composable
 fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
@@ -33,6 +33,7 @@ fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .testTag("catalog_list")
                 .padding(horizontal = dimensions.screenPadding),
             contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
@@ -53,7 +54,9 @@ fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
                 ) { demo ->
                     Card(
                         onClick = { onSelected(demo) },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("component_demo_${demo.name.lowercase()}"),
                         colors = AndroidKitCardDefaults.colors(),
                         border = AndroidKitCardDefaults.border(),
                     ) {
@@ -70,7 +73,7 @@ fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
                                 style = MaterialTheme.typography.titleMedium,
                             )
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                imageVector = materialSymbol(R.drawable.ic_symbol_arrow_forward),
                                 contentDescription = null,
                             )
                         }

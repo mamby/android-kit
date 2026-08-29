@@ -1,6 +1,6 @@
 # Testing Android Kit
 
-All test source lives in the top-level `test` module so published artifacts do
+All test source lives under the top-level `test` area so published artifacts do
 not carry test-only dependencies or fixtures.
 
 ## Test layers
@@ -11,6 +11,8 @@ not carry test-only dependencies or fixtures.
 - `test/src/screenshotTest` contains host-side Compose screenshot tests. The
   matrix covers compact phones, landscape phones, folded and unfolded devices,
   portrait and landscape tablets, desktop windows, 1.5x font scale and RTL.
+- `test/performance` contains release-mode Macrobenchmark journeys and the
+  Baseline and Startup Profile generator for the demo catalog.
 - The demo application remains the end-to-end manual test surface for the two
   shared themes and its own Prism theme.
 
@@ -42,3 +44,25 @@ The validation report is generated under
 
 Do not update reference images merely to make a failure disappear. First decide
 whether the visual change is an intentional API or design change.
+
+## Baseline profiles and performance benchmarks
+
+Connect a physical device running Android 13 (API 33) or newer, then regenerate
+the demo's Baseline and Startup Profiles after changing a critical user journey:
+
+```powershell
+.\gradlew.bat :demo:generateBaselineProfile
+```
+
+The generated profiles are written under
+`demo/src/release/generated/baselineProfiles`. Review and commit them with the
+change that affected the journey.
+
+Run the release-mode startup, frame-timing and memory benchmarks with:
+
+```powershell
+.\gradlew.bat :test:performance:connectedBenchmarkReleaseAndroidTest
+```
+
+Benchmark results are written under
+`test/performance/build/outputs/connected_android_test_additional_output`.
