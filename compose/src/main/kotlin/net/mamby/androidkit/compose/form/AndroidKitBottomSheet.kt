@@ -82,6 +82,7 @@ public fun AndroidKitBottomSheet(
     title: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    style: AndroidKitBottomSheetStyle = AndroidKitThemeTokens.bottomSheetStyle,
     maxHeightFraction: Float = AndroidKitBottomSheetDefaults.DefaultMaxHeightFraction,
     scrollMode: AndroidKitBottomSheetScrollMode = AndroidKitBottomSheetScrollMode.VerticalScroll,
     fitContent: Boolean = false,
@@ -94,7 +95,6 @@ public fun AndroidKitBottomSheet(
     content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val style = AndroidKitThemeTokens.bottomSheetStyle
     val floatingSurfaceStyle = AndroidKitThemeTokens.floatingSurfaceStyle
     val strings = AndroidKitThemeTokens.strings
     var renderSheet by remember { mutableStateOf(visible) }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.exclude
@@ -24,9 +23,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -38,7 +37,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,38 +62,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuPosition
+import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.LocalAndroidKitFloatingNavigationInsets
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 
-@Immutable
-public data class AndroidKitFloatingNavigationFlyoutGroup(
-    public val label: String,
-) {
-    init {
-        require(label.isNotBlank()) { "A flyout group label cannot be blank." }
-    }
-}
-
 public class AndroidKitFloatingNavigationItem<Key : Any>(
     public val key: Key,
     public val label: String,
     public val icon: ImageVector,
     public val selectedIcon: ImageVector = icon,
-    @Deprecated(
-        message = "Use flyoutGroup. Group boundaries add separators automatically.",
-    )
-    public val showDividerAfterInFlyout: Boolean = false,
-    public val flyoutGroup: AndroidKitFloatingNavigationFlyoutGroup? = null,
 )
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -120,7 +102,7 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
     val adaptiveInfo = currentWindowAdaptiveInfoV2()
     val layoutType = remember(adaptiveInfo) { androidKitNavigationSuiteType(adaptiveInfo) }
     val compact = layoutType == NavigationSuiteType.ShortNavigationBarCompact
-    var flyoutVisible by remember { mutableStateOf(false) }
+    var overflowSheetVisible by remember { mutableStateOf(false) }
 
     if (compact) {
         CompactNavigationLayout(
@@ -133,8 +115,8 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
                     items = items,
                     selectedKey = selectedKey,
                     onSelected = onSelected,
-                    flyoutVisible = flyoutVisible,
-                    onFlyoutVisibleChange = { flyoutVisible = it },
+                    overflowSheetVisible = overflowSheetVisible,
+                    onOverflowSheetVisibleChange = { overflowSheetVisible = it },
                     showLabels = showCompactLabels,
                     visibleDestinationCount = compactVisibleDestinationCount,
                 )
@@ -229,8 +211,9 @@ private enum class CompactNavigationItemsSlot {
     MoreMeasure,
 }
 
-private class CompactNavigationBackgroundState {
+private class CompactNavigationLayoutState {
     var selectionBounds by mutableStateOf<IntRect?>(null)
+    var overflowStartIndex: Int = Int.MAX_VALUE
 }
 
 @Composable
@@ -238,15 +221,15 @@ private fun <Key : Any> FloatingNavigationBar(
     items: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onSelected: (Key) -> Unit,
-    flyoutVisible: Boolean,
-    onFlyoutVisibleChange: (Boolean) -> Unit,
+    overflowSheetVisible: Boolean,
+    onOverflowSheetVisibleChange: (Boolean) -> Unit,
     showLabels: Boolean,
     visibleDestinationCount: Int,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val colorScheme = AndroidKitThemeTokens.colorScheme
     val visuals = floatingSurfaceVisuals()
-    val backgroundState = remember { CompactNavigationBackgroundState() }
+    val layoutState = remember { CompactNavigationLayoutState() }
     Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -288,7 +271,7 @@ private fun <Key : Any> FloatingNavigationBar(
                     val selectionShape = AndroidKitThemeTokens.shapes.extraLarge
                     Canvas(modifier = backgroundModifier) {
                         drawRect(colorScheme.surface)
-                        backgroundState.selectionBounds?.let { bounds ->
+                        layoutState.selectionBounds?.let { bounds ->
                             val selectionSize = Size(
                                 width = bounds.width.toFloat(),
                                 height = bounds.height.toFloat(),
@@ -317,11 +300,10 @@ private fun <Key : Any> FloatingNavigationBar(
                         items = items,
                         selectedKey = selectedKey,
                         onSelected = onSelected,
-                        flyoutVisible = flyoutVisible,
-                        onFlyoutVisibleChange = onFlyoutVisibleChange,
+                        onOverflowSheetVisibleChange = onOverflowSheetVisibleChange,
                         showLabels = showLabels,
                         visibleDestinationCount = visibleDestinationCount,
-                        backgroundState = backgroundState,
+                        layoutState = layoutState,
                         backgroundContentPadding = dimensions.floatingNavigationContentPadding,
                         modifier = Modifier
                             .padding(dimensions.floatingNavigationContentPadding)
@@ -329,6 +311,18 @@ private fun <Key : Any> FloatingNavigationBar(
                     )
                 }
             }
+        }
+        if (overflowSheetVisible) {
+            NavigationOverflowSheet(
+                visible = true,
+                items = items.drop(layoutState.overflowStartIndex.coerceIn(0, items.size)),
+                selectedKey = selectedKey,
+                onDismissRequest = { onOverflowSheetVisibleChange(false) },
+                onSelected = { key ->
+                    onOverflowSheetVisibleChange(false)
+                    onSelected(key)
+                },
+            )
         }
     }
 }
@@ -338,11 +332,10 @@ private fun <Key : Any> CompactNavigationItemsLayout(
     items: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onSelected: (Key) -> Unit,
-    flyoutVisible: Boolean,
-    onFlyoutVisibleChange: (Boolean) -> Unit,
+    onOverflowSheetVisibleChange: (Boolean) -> Unit,
     showLabels: Boolean,
     visibleDestinationCount: Int,
-    backgroundState: CompactNavigationBackgroundState,
+    layoutState: CompactNavigationLayoutState,
     backgroundContentPadding: Dp,
     modifier: Modifier = Modifier,
 ): Unit {
@@ -406,21 +399,14 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                 Box {
                     CompactNavigationBarItem(
                         selected = overflowSelected,
-                        onClick = { onFlyoutVisibleChange(true) },
+                        onClick = {
+                            layoutState.overflowStartIndex = visibleCount
+                            onOverflowSheetVisibleChange(true)
+                        },
                         icon = AndroidKitIcons.More,
                         label = AndroidKitThemeTokens.strings.more,
                         showLabel = showLabels,
                         modifier = Modifier.widthIn(min = dimensions.minimumTouchTarget),
-                    )
-                    NavigationFlyout(
-                        expanded = flyoutVisible,
-                        items = overflowItems,
-                        selectedKey = selectedKey,
-                        onDismissRequest = { onFlyoutVisibleChange(false) },
-                        onSelected = { key ->
-                            onFlyoutVisibleChange(false)
-                            onSelected(key)
-                        },
                     )
                 }
             }.single().measure(naturalConstraints)
@@ -442,7 +428,7 @@ private fun <Key : Any> CompactNavigationItemsLayout(
             ?: visiblePlaceables.size.takeIf { overflowSelected }
         val backgroundPaddingPx = backgroundContentPadding.roundToPx()
         layout(width = layoutWidth, height = layoutHeight) {
-            backgroundState.selectionBounds = null
+            layoutState.selectionBounds = null
             var x = 0
             (visiblePlaceables + listOfNotNull(morePlaceable)).forEachIndexed { index, placeable ->
                 val y = (layoutHeight - placeable.height) / 2
@@ -451,7 +437,7 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                         LayoutDirection.Ltr -> x
                         LayoutDirection.Rtl -> layoutWidth - x - placeable.width
                     }
-                    backgroundState.selectionBounds = IntRect(
+                    layoutState.selectionBounds = IntRect(
                         offset = IntOffset(
                             x = relativeX + backgroundPaddingPx,
                             y = y + backgroundPaddingPx,
@@ -593,96 +579,58 @@ private fun CompactNavigationItemContent(
     }
 }
 
-@Suppress("DEPRECATION")
 @Composable
-private fun <Key : Any> NavigationFlyout(
-    expanded: Boolean,
+private fun <Key : Any> NavigationOverflowSheet(
+    visible: Boolean,
     items: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onDismissRequest: () -> Unit,
     onSelected: (Key) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
+    val colorScheme = AndroidKitThemeTokens.colorScheme
     val visuals = floatingSurfaceVisuals()
     val itemTextStyle = AndroidKitThemeTokens.typography.bodyLarge.copy(
         fontWeight = FontWeight.Normal,
     )
-    AndroidKitFloatingDropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest,
-        position = AndroidKitFloatingDropdownMenuPosition.Above,
-        offset = DpOffset.Zero,
+    val itemColors = NavigationDrawerItemDefaults.colors(
+        selectedContainerColor = colorScheme.secondaryContainer,
+        unselectedContainerColor = Color.Transparent,
+        selectedIconColor = colorScheme.primary,
+        unselectedIconColor = visuals.contentColor,
+        selectedTextColor = colorScheme.primary,
+        unselectedTextColor = visuals.contentColor,
+    )
+    AndroidKitBottomSheet(
+        visible = visible,
+        title = AndroidKitThemeTokens.strings.more,
+        onDismiss = onDismissRequest,
+        fitContent = true,
+        showChrome = false,
     ) {
-        val displayedItems = items.asReversed()
-        displayedItems.forEachIndexed { index, item ->
-            val previousGroup = displayedItems.getOrNull(index - 1)?.flyoutGroup
-            if (item.flyoutGroup != null && item.flyoutGroup != previousGroup) {
-                Text(
-                    text = item.flyoutGroup.label,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            start = dimensions.spaceMedium,
-                            top = dimensions.spaceSmall,
-                            end = dimensions.spaceLarge,
-                            bottom = dimensions.spaceExtraSmall,
-                        ),
-                    color = AndroidKitThemeTokens.colorScheme.outline,
-                    style = itemTextStyle,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+        items.forEach { item ->
             val selected = item.key == selectedKey
-            val itemColor = if (selected) {
-                AndroidKitThemeTokens.colorScheme.primary
-            } else {
-                visuals.contentColor
-            }
-            DropdownMenuItem(
-                modifier = Modifier.heightIn(min = dimensions.floatingNavigationFlyoutItemMinHeight),
-                text = {
+            NavigationDrawerItem(
+                modifier = Modifier.fillMaxWidth(),
+                label = {
                     Text(
                         text = item.label,
-                        color = itemColor,
                         style = itemTextStyle,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
                 },
+                selected = selected,
                 onClick = { onSelected(item.key) },
-                contentPadding = PaddingValues(
-                    start = dimensions.spaceMedium,
-                    end = dimensions.spaceLarge,
-                ),
-                leadingIcon = {
+                icon = {
                     Icon(
                         imageVector = if (selected) item.selectedIcon else item.icon,
                         contentDescription = null,
                         modifier = Modifier.size(dimensions.floatingNavigationIconSize),
-                        tint = itemColor,
                     )
                 },
+                colors = itemColors,
             )
-            val nextGroup = displayedItems.getOrNull(index + 1)?.flyoutGroup
-            val groupBoundary = nextGroup != item.flyoutGroup
-            if (
-                index != displayedItems.lastIndex &&
-                (groupBoundary || item.showDividerAfterInFlyout)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = dimensions.spaceExtraSmall)
-                        .testTag(FlyoutDividerTestTag),
-                ) {
-                    HorizontalDivider(
-                        modifier = Modifier.padding(horizontal = dimensions.spaceMedium),
-                        thickness = Dp.Hairline,
-                        color = AndroidKitThemeTokens.colorScheme.outlineVariant,
-                    )
-                }
-            }
         }
     }
 }
@@ -708,7 +656,6 @@ private fun DrawScope.drawNavigationSelectionOutline(
     )
 }
 
-private const val FlyoutDividerTestTag = "androidKitFloatingNavigationFlyoutDivider"
 private const val CompactNavigationBarTestTag = "androidKitFloatingNavigationBar"
 
 private fun androidKitNavigationSuiteType(adaptiveInfo: WindowAdaptiveInfo): NavigationSuiteType =

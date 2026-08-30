@@ -71,8 +71,6 @@ internal fun ComponentDemoScreen(
     onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
-    groupCompactNavigationFlyout: Boolean,
-    onGroupCompactNavigationFlyoutChange: (Boolean) -> Unit,
     onBack: () -> Unit,
 ) {
     when (demo.component) {
@@ -87,9 +85,6 @@ internal fun ComponentDemoScreen(
             onFloatingNavigationLayoutChange = onFloatingNavigationLayoutChange,
             showCompactNavigationLabels = showCompactNavigationLabels,
             onShowCompactNavigationLabelsChange = onShowCompactNavigationLabelsChange,
-            groupCompactNavigationFlyout = groupCompactNavigationFlyout,
-            onGroupCompactNavigationFlyoutChange =
-                onGroupCompactNavigationFlyoutChange,
             onBack = onBack,
         )
     }
@@ -201,8 +196,6 @@ private fun StandardComponentDemo(
     onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
-    groupCompactNavigationFlyout: Boolean,
-    onGroupCompactNavigationFlyoutChange: (Boolean) -> Unit,
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
@@ -286,8 +279,6 @@ private fun StandardComponentDemo(
                             onLayoutChange = onFloatingNavigationLayoutChange,
                             showLabels = showCompactNavigationLabels,
                             onShowLabelsChange = onShowCompactNavigationLabelsChange,
-                            groupFlyout = groupCompactNavigationFlyout,
-                            onGroupFlyoutChange = onGroupCompactNavigationFlyoutChange,
                         )
 
                     ComponentId.AndroidKitPage,
@@ -618,8 +609,6 @@ private fun AndroidKitFloatingNavigationDemo(
     onLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showLabels: Boolean,
     onShowLabelsChange: (Boolean) -> Unit,
-    groupFlyout: Boolean,
-    onGroupFlyoutChange: (Boolean) -> Unit,
 ) {
     val labelsTitle = stringResource(R.string.floating_navigation_labels_title)
     val labelsDescription = stringResource(R.string.floating_navigation_labels_description)
@@ -631,8 +620,6 @@ private fun AndroidKitFloatingNavigationDemo(
     val sevenItemsDescription = stringResource(
         R.string.floating_navigation_seven_items_description,
     )
-    val groupTitle = stringResource(R.string.floating_navigation_group_title)
-    val groupDescription = stringResource(R.string.floating_navigation_group_description)
     AndroidKitSettingSection(
         label = stringResource(demo.titleResource),
         description = stringResource(R.string.floating_navigation_scenario_instruction),
@@ -670,12 +657,6 @@ private fun AndroidKitFloatingNavigationDemo(
                     },
                 )
             },
-        )
-        toggle(
-            label = groupTitle,
-            supportingText = groupDescription,
-            checked = groupFlyout,
-            onCheckedChange = onGroupFlyoutChange,
         )
     }
 }

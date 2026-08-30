@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,17 +17,14 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.WindowSize
-import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasScrollAction
-import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.junit4.v2.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -36,13 +32,11 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
-import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationFlyoutGroup
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
@@ -450,7 +444,7 @@ class ComposeBehaviorTest {
     }
 
     @Test
-    fun compactNavigationFlyoutOpensDirectlyAboveMoreWhenSpacePermits() {
+    fun compactNavigationMoreOpensAChromelessBottomSheet() {
         composeRule.setContent {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
@@ -484,7 +478,7 @@ class ComposeBehaviorTest {
                                 materialSymbol(R.drawable.ic_symbol_settings),
                             ),
                         ),
-                        selectedKey = "home",
+                        selectedKey = "settings",
                         onSelected = {},
                     ) {
                         Box(Modifier.fillMaxSize())
@@ -497,23 +491,14 @@ class ComposeBehaviorTest {
             .onNodeWithContentDescription("More", useUnmergedTree = true)
             .performClick()
 
-        val moreNode = composeRule
-            .onNodeWithContentDescription("More")
-            .fetchSemanticsNode()
-        val popupNode = composeRule.onNode(isPopup()).fetchSemanticsNode()
-
-        val popupBottom = popupNode.positionOnScreen.y + popupNode.size.height
-        val anchorGap = abs(popupBottom - moreNode.positionOnScreen.y)
-        assertTrue(
-            "Expected the popup above More without a significant gap, but gap=$anchorGap, " +
-                "popupPosition=${popupNode.positionOnScreen}, " +
-                "morePosition=${moreNode.positionOnScreen}",
-            anchorGap <= moreNode.size.height * 0.1f,
-        )
+        composeRule.onNodeWithText("Language").assertExists()
+        composeRule.onNodeWithText("Settings").assertIsSelected()
+        composeRule.onNodeWithContentDescription("More").assertIsSelected()
+        composeRule.onNodeWithContentDescription("Close").assertDoesNotExist()
     }
 
     @Test
-    fun compactNavigationMovesDestinationsThatDoNotFitIntoFlyout() {
+    fun compactNavigationMovesDestinationsThatDoNotFitIntoBottomSheet() {
         composeRule.setContent {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(220.dp, 800.dp)),
@@ -558,80 +543,13 @@ class ComposeBehaviorTest {
     }
 
     @Test
-    fun compactNavigationFlyoutUsesRtlAwareAnchoringAndKeepsLabels() {
-        composeRule.setContent {
-            DeviceConfigurationOverride(
-                DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
-            ) {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                    AndroidKitTheme {
-                        AndroidKitFloatingNavigation(
-                            items = listOf(
-                                AndroidKitFloatingNavigationItem(
-                                    "home",
-                                    "Home",
-                                    materialSymbol(R.drawable.ic_symbol_home),
-                                ),
-                                AndroidKitFloatingNavigationItem(
-                                    "list",
-                                    "Lists",
-                                    materialSymbol(R.drawable.ic_symbol_list),
-                                ),
-                                AndroidKitFloatingNavigationItem(
-                                    "edit",
-                                    "Editor",
-                                    materialSymbol(R.drawable.ic_symbol_edit),
-                                ),
-                                AndroidKitFloatingNavigationItem(
-                                    "language",
-                                    "Language",
-                                    materialSymbol(R.drawable.ic_symbol_language),
-                                ),
-                                AndroidKitFloatingNavigationItem(
-                                    "settings",
-                                    "Settings",
-                                    materialSymbol(R.drawable.ic_symbol_settings),
-                                ),
-                            ),
-                            selectedKey = "home",
-                            onSelected = {},
-                        ) {
-                            Box(Modifier.fillMaxSize())
-                        }
-                    }
-                }
-            }
-        }
-
-        composeRule
-            .onNodeWithContentDescription("More", useUnmergedTree = true)
-            .performClick()
-
-        val settingsCenterX = composeRule.onNodeWithText("Settings").fetchSemanticsNode().boundsInRoot.center.x
-        val moreCenterX = composeRule
-            .onNodeWithContentDescription("More", useUnmergedTree = true)
-            .fetchSemanticsNode()
-            .boundsInRoot
-            .center.x
-        val homeCenterX = composeRule
-            .onNodeWithContentDescription("Home", useUnmergedTree = true)
-            .fetchSemanticsNode()
-            .boundsInRoot
-            .center.x
-
-        assertTrue(abs(settingsCenterX - moreCenterX) < abs(settingsCenterX - homeCenterX))
-    }
-
-    @Test
-    fun compactNavigationFlyoutReversesItemsAndScrollsAboveTheBar() {
+    fun compactNavigationBottomSheetKeepsNaturalOrderAndScrolls() {
         var selected by mutableStateOf("home")
         composeRule.setContent {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 360.dp)),
             ) {
                 AndroidKitTheme {
-                    val toolsGroup = AndroidKitFloatingNavigationFlyoutGroup("Tools")
-                    val accountGroup = AndroidKitFloatingNavigationFlyoutGroup("Account")
                     AndroidKitFloatingNavigation(
                         items = listOf(
                             AndroidKitFloatingNavigationItem(
@@ -653,32 +571,26 @@ class ComposeBehaviorTest {
                                 "one",
                                 "Overflow 1",
                                 materialSymbol(R.drawable.ic_symbol_language),
-                                flyoutGroup = toolsGroup,
                             ),
                             AndroidKitFloatingNavigationItem(
                                 "two",
                                 "Overflow 2",
                                 materialSymbol(R.drawable.ic_symbol_language),
-                                flyoutGroup = toolsGroup,
                             ),
                             AndroidKitFloatingNavigationItem(
                                 key = "three",
                                 label = "Overflow 3",
                                 icon = materialSymbol(R.drawable.ic_symbol_language),
-                                showDividerAfterInFlyout = true,
-                                flyoutGroup = accountGroup,
                             ),
                             AndroidKitFloatingNavigationItem(
                                 "four",
                                 "Overflow 4",
                                 materialSymbol(R.drawable.ic_symbol_language),
-                                flyoutGroup = accountGroup,
                             ),
                             AndroidKitFloatingNavigationItem(
                                 key = "settings",
                                 label = "Settings",
                                 icon = materialSymbol(R.drawable.ic_symbol_settings),
-                                flyoutGroup = accountGroup,
                             ),
                         ),
                         selectedKey = selected,
@@ -697,13 +609,8 @@ class ComposeBehaviorTest {
 
         val settingsBounds = composeRule.onNodeWithText("Settings").fetchSemanticsNode().boundsInRoot
         val firstOverflowBounds = composeRule.onNodeWithText("Overflow 1").fetchSemanticsNode().boundsInRoot
-        assertTrue(settingsBounds.top < firstOverflowBounds.top)
+        assertTrue(firstOverflowBounds.top < settingsBounds.top)
         composeRule.onNode(hasScrollAction()).assertExists()
-        composeRule.onNodeWithText("Account").assertExists()
-        composeRule.onNodeWithText("Tools").assertExists()
-        composeRule
-            .onAllNodesWithTag(FlyoutDividerTestTag)
-            .assertCountEquals(1)
     }
 }
 
@@ -732,6 +639,5 @@ private fun assertColorClose(
 private const val ImmersiveContentTestTag = "immersiveContent"
 private const val NavigationContentTestTag = "navigationContent"
 private const val FloatingNavigationBarTestTag = "androidKitFloatingNavigationBar"
-private const val FlyoutDividerTestTag = "androidKitFloatingNavigationFlyoutDivider"
 private const val ProductionTransparentSurfaceOpacity = 0.92f
 private const val ColorChannelTolerance = 0.015f

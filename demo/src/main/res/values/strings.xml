@@ -17,8 +17,6 @@
     <string name="nav_localization">Localization</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_demo">Demo %1$d</string>
-    <string name="nav_group_application">Application</string>
-    <string name="nav_group_demos">Demos</string>
     <string name="dummy_navigation_body">A placeholder destination used to exercise compact navigation overflow.</string>
     <string name="dummy_navigation_instruction">Open More when it is available to move between overflow destinations.</string>
     <string name="component_placeholder_body">Select a component variation to open its interactive demo.</string>
@@ -98,8 +96,6 @@
     <string name="floating_navigation_five_items_description">Turn off for 3 items without More.</string>
     <string name="floating_navigation_seven_items_title">7 items with More</string>
     <string name="floating_navigation_seven_items_description">Shows seven destinations; items that do not fit move into More.</string>
-    <string name="floating_navigation_group_title">Grouped More items</string>
-    <string name="floating_navigation_group_description">Adds muted group labels and separators inside More.</string>
     <string name="floating_navigation_scenario_instruction">These choices persist across destination changes.</string>
     <string name="demo_scroll_text">This muted block provides enough content to verify that the page scrolls while floating controls remain anchored.\n\nThe second paragraph makes line wrapping, text scaling, and spacing visible across compact and expanded windows.\n\nA third paragraph extends the page beyond the initial viewport without introducing another visual surface.\n\nThe fourth paragraph helps verify that scrolling remains smooth beneath floating title and action controls.\n\nThe fifth paragraph keeps the example neutral so attention remains on the component currently being demonstrated.\n\nThe sixth paragraph provides more distance for checking immersive title-bar visibility.\n\nThe seventh paragraph confirms that long content remains readable with larger accessibility text sizes.\n\nThe eighth paragraph makes bottom navigation clearance easier to inspect near the end of the page.\n\nThe ninth paragraph checks that spacing stays consistent after a longer continuous block of content.\n\nThe tenth and final paragraph confirms that all content remains reachable above navigation and system insets.</string>
 </resources>

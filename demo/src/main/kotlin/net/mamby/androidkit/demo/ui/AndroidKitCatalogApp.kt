@@ -22,7 +22,6 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
-import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationFlyoutGroup
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
@@ -79,12 +78,6 @@ fun AndroidKitCatalogApp(
             materialSymbol(R.drawable.ic_symbol_info),
             materialSymbol(R.drawable.ic_symbol_dashboard_customize),
         )
-        val applicationGroup = AndroidKitFloatingNavigationFlyoutGroup(
-            label = stringResource(R.string.nav_group_application),
-        )
-        val demosGroup = AndroidKitFloatingNavigationFlyoutGroup(
-            label = stringResource(R.string.nav_group_demos),
-        )
         val navigationItems: List<AndroidKitFloatingNavigationItem<CatalogRootRoute>> = (
             listOf(
                 AndroidKitFloatingNavigationItem<CatalogRootRoute>(
@@ -101,20 +94,12 @@ fun AndroidKitCatalogApp(
                     key = SettingsRoute,
                     label = stringResource(R.string.nav_settings),
                     icon = materialSymbol(R.drawable.ic_symbol_settings),
-                    flyoutGroup = applicationGroup.takeIf {
-                        navigationDemoConfiguration.groupedFlyout
-                    },
                 ),
             ) + roots.filterIsInstance<DemoRootRoute>().map { route ->
                 AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = route,
                     label = stringResource(R.string.nav_demo, route.index),
                     icon = dummyNavigationIcons[route.index - 1],
-                    flyoutGroup = when {
-                        !navigationDemoConfiguration.groupedFlyout -> null
-                        route.index <= FirstDemoGroupLastIndex -> applicationGroup
-                        else -> demosGroup
-                    },
                 )
             }
         ).take(navigationDemoConfiguration.itemCount)
@@ -163,10 +148,6 @@ fun AndroidKitCatalogApp(
                                     settings.showCompactNavigationLabels,
                                 onShowCompactNavigationLabelsChange =
                                     settingsViewModel::setShowCompactNavigationLabels,
-                                groupCompactNavigationFlyout =
-                                    settings.groupCompactNavigationFlyout,
-                                onGroupCompactNavigationFlyoutChange =
-                                    settingsViewModel::setGroupCompactNavigationFlyout,
                                 onBack = navigation::goBack,
                             )
                         }
@@ -192,13 +173,10 @@ fun AndroidKitCatalogApp(
 }
 
 private const val DummyNavigationDestinationCount = 7
-private const val FirstDemoGroupLastIndex = 3
-
 private data class FloatingNavigationDemoConfiguration(
     val itemCount: Int = 10,
     val visibleDestinationCount: Int = 4,
     val showLabels: Boolean = false,
-    val groupedFlyout: Boolean = false,
 )
 
 private fun floatingNavigationDemoConfiguration(
@@ -212,8 +190,5 @@ private fun floatingNavigationDemoConfiguration(
         DemoFloatingNavigationLayout.SevenItemsWithMore ->
             FloatingNavigationDemoConfiguration(itemCount = 7, visibleDestinationCount = 4)
     }
-    return layoutConfiguration.copy(
-        showLabels = settings.showCompactNavigationLabels,
-        groupedFlyout = settings.groupCompactNavigationFlyout,
-    )
+    return layoutConfiguration.copy(showLabels = settings.showCompactNavigationLabels)
 }

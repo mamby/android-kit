@@ -16,8 +16,6 @@
     <string name="nav_localization">Localisation</string>
     <string name="nav_settings">Réglages</string>
     <string name="nav_demo">Démo %1$d</string>
-    <string name="nav_group_application">Application</string>
-    <string name="nav_group_demos">Démos</string>
     <string name="dummy_navigation_body">Une destination fictive utilisée pour tester le débordement de la navigation compacte.</string>
     <string name="dummy_navigation_instruction">Ouvrez Plus lorsqu’il est disponible pour parcourir les destinations supplémentaires.</string>
     <string name="component_placeholder_body">Sélectionnez une variante de composant pour ouvrir sa démonstration interactive.</string>
@@ -97,8 +95,6 @@
     <string name="floating_navigation_five_items_description">Désactivez pour afficher 3 éléments sans Plus.</string>
     <string name="floating_navigation_seven_items_title">7 éléments avec Plus</string>
     <string name="floating_navigation_seven_items_description">Affiche sept destinations ; celles qui ne tiennent pas sont déplacées dans Plus.</string>
-    <string name="floating_navigation_group_title">Éléments Plus groupés</string>
-    <string name="floating_navigation_group_description">Ajoute des libellés de groupe discrets et des séparateurs dans Plus.</string>
     <string name="floating_navigation_scenario_instruction">Ces choix sont conservés lors des changements de destination.</string>
     <string name="demo_scroll_text">Ce bloc discret fournit assez de contenu pour vérifier que la page défile tandis que les commandes flottantes restent ancrées.\n\nLe deuxième paragraphe rend visibles le retour à la ligne, la mise à l’échelle du texte et les espacements sur les fenêtres compactes et étendues.\n\nUn troisième paragraphe prolonge la page au-delà de la fenêtre initiale sans ajouter une autre surface visuelle.\n\nLe quatrième paragraphe aide à vérifier que le défilement reste fluide sous le titre et les actions flottantes.\n\nLe cinquième paragraphe garde l’exemple neutre afin que l’attention reste portée sur le composant présenté.\n\nLe sixième paragraphe fournit davantage de distance pour tester la visibilité immersive de la barre de titre.\n\nLe septième paragraphe confirme que le contenu long reste lisible avec une taille de texte d’accessibilité plus grande.\n\nLe huitième paragraphe facilite l’inspection de l’espace réservé à la navigation près du bas de la page.\n\nLe neuvième paragraphe vérifie que les espacements restent cohérents après un long bloc de contenu continu.\n\nLe dixième et dernier paragraphe confirme que tout le contenu reste accessible au-dessus de la navigation et des marges système.</string>
 </resources>

@@ -72,7 +72,6 @@ public data class AndroidKitDimensions(
     public val floatingNavigationIconItemHorizontalPadding: Dp = 12.dp,
     public val floatingNavigationItemVerticalPadding: Dp = 0.dp,
     public val floatingNavigationLabelSpacing: Dp = 0.dp,
-    public val floatingNavigationFlyoutItemMinHeight: Dp = 56.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
     public val floatingTitleBarButtonSize: Dp = 44.dp,
     public val floatingTitleBarVerticalPadding: Dp = spaceSmall,
@@ -104,8 +103,6 @@ public data class AndroidKitDimensions(
     @Deprecated("Content protection now uses a background gradient instead of blur.")
     public val contentProtectionBlurRadius: Dp = 0.dp,
     public val contentProtectionFadeLength: Dp = 4.dp,
-    @Deprecated("Flyouts no longer expand page content protection.")
-    public val navigationFlyoutProtectionHeight: Dp = 0.dp,
 )
 
 @Immutable

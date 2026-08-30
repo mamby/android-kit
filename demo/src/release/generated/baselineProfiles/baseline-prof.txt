@@ -21013,7 +21013,6 @@ SPLnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt;->Comp
 SPLnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt;->CompactNavigationSelectionIndicator(Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 SPLnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt;->FloatingNavigationBar$lambda$0$1$0$0(Lnet/mamby/androidkit/compose/theme/AndroidKitDimensions;Ljava/util/List;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ZZLkotlin/jvm/functions/Function1;ZILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
 SPLnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt;->FloatingNavigationBar(Ljava/util/List;Ljava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ZZLkotlin/jvm/functions/Function1;ZLandroidx/compose/runtime/Composer;I)V
-SPLnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt;->NavigationFlyout(ZLjava/util/List;Ljava/lang/Object;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
 SPLnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt;->androidKitNavigationSuiteType(Landroidx/compose/material3/adaptive/WindowAdaptiveInfo;)Ljava/lang/String;
 Lnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt$$ExternalSyntheticLambda1;
 SPLnet/mamby/androidkit/compose/navigation/AndroidKitFloatingNavigationKt$$ExternalSyntheticLambda1;-><init>(Ljava/util/List;Ljava/util/List;Landroidx/compose/ui/unit/Constraints;)V
