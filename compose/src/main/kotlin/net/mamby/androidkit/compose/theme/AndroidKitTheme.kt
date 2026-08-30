@@ -1,6 +1,7 @@
 package net.mamby.androidkit.compose.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -13,9 +14,12 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +36,71 @@ public data class AndroidKitThemeDefinition(
         contentColor = colorScheme.onSurface,
         dragHandleColor = colorScheme.outline,
     ),
+    public val pageStyle: AndroidKitPageStyle = AndroidKitPageStyle(
+        containerColor = colorScheme.background,
+    ),
+    public val floatingTitleBarStyle: AndroidKitFloatingTitleBarStyle =
+        AndroidKitFloatingTitleBarStyle(
+            titleShape = CircleShape,
+            buttonShape = CircleShape,
+            titleTextStyle = typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+                platformStyle = PlatformTextStyle(includeFontPadding = false),
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Center,
+                    trim = LineHeightStyle.Trim.None,
+                ),
+            ),
+        ),
+    public val floatingActionButtonStyle: AndroidKitFloatingActionButtonStyle =
+        AndroidKitFloatingActionButtonStyle(
+            shape = CircleShape,
+            visualSize = dimensions.floatingActionButtonSize,
+        ),
+    public val cardStyle: AndroidKitCardStyle = AndroidKitCardStyle(
+        containerColor = colorScheme.surface,
+        contentColor = colorScheme.onSurface,
+        borderColor = colorScheme.outlineVariant,
+        borderWidth = dimensions.floatingSurfaceBorderWidth,
+        shape = shapes.extraLarge,
+    ),
+    public val settingSectionStyle: AndroidKitSettingSectionStyle = AndroidKitSettingSectionStyle(
+        containerColor = colorScheme.surface,
+        contentColor = colorScheme.onSurface,
+        borderColor = colorScheme.outlineVariant,
+        borderWidth = dimensions.floatingSurfaceBorderWidth,
+        dividerColor = colorScheme.outlineVariant,
+        secondaryContentColor = colorScheme.onSurfaceVariant,
+        shape = shapes.extraLarge,
+        sectionLabelTextStyle = typography.labelLarge,
+        descriptionTextStyle = typography.bodyMedium,
+        entryLabelTextStyle = typography.bodyLarge,
+        supportingTextStyle = typography.bodyMedium,
+        valueLabelTextStyle = typography.labelLarge,
+    ),
+    public val floatingActionBarStyle: AndroidKitFloatingActionBarStyle =
+        AndroidKitFloatingActionBarStyle(
+            shape = shapes.extraLarge,
+            itemShape = shapes.extraLarge,
+            labelTextStyle = typography.labelSmall,
+        ),
+    public val floatingDropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle =
+        AndroidKitFloatingDropdownMenuStyle(shape = shapes.extraLarge),
+    public val floatingNavigationStyle: AndroidKitFloatingNavigationStyle =
+        AndroidKitFloatingNavigationStyle(
+            containerColor = colorScheme.background,
+            navigationBarContainerColor = colorScheme.surface,
+            navigationRailContainerColor = colorScheme.surface,
+            navigationDrawerContainerColor = colorScheme.surface,
+            compactContainerColor = colorScheme.surface,
+            selectedContainerColor = colorScheme.secondaryContainer,
+            selectedContentColor = colorScheme.primary,
+            unselectedContentColor = colorScheme.onSurface,
+            barShape = shapes.extraLarge,
+            itemShape = shapes.extraLarge,
+            labelTextStyle = typography.labelSmall,
+            overflowItemTextStyle = typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
+        ),
 )
 
 @Immutable
@@ -40,11 +109,24 @@ public data class AndroidKitBottomSheetStyle(
     public val contentColor: Color,
     public val dragHandleColor: Color,
     public val scrimColor: Color = Color(0x66000000),
+    public val shape: Shape? = null,
+    public val tonalElevation: Dp = 0.dp,
+    public val chromeContainerColor: Color = Color.Unspecified,
+    public val titleTextStyle: TextStyle? = null,
 )
 
 @Immutable
 public data class AndroidKitFloatingSurfaceStyle(
     public val opacity: Float = 0.8f,
+    public val containerColor: Color = Color.Unspecified,
+    public val contentColor: Color = Color.Unspecified,
+    public val borderColor: Color = Color.Unspecified,
+    public val borderWidth: Dp = Dp.Unspecified,
+    public val shadowColor: Color = Color.Unspecified,
+    public val shadowRadius: Dp = Dp.Unspecified,
+    public val shadowOffsetY: Dp = Dp.Unspecified,
+    public val buttonShadowRadius: Dp = Dp.Unspecified,
+    public val buttonShadowOffsetY: Dp = Dp.Unspecified,
 ) {
     init {
         require(opacity in 0f..1f) { "Floating surface opacity must be between 0 and 1." }
@@ -303,6 +385,46 @@ public object AndroidKitThemeTokens {
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.bottomSheetStyle
+
+    public val pageStyle: AndroidKitPageStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.pageStyle
+
+    public val floatingTitleBarStyle: AndroidKitFloatingTitleBarStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.floatingTitleBarStyle
+
+    public val floatingActionButtonStyle: AndroidKitFloatingActionButtonStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.floatingActionButtonStyle
+
+    public val cardStyle: AndroidKitCardStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.cardStyle
+
+    public val settingSectionStyle: AndroidKitSettingSectionStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.settingSectionStyle
+
+    public val floatingActionBarStyle: AndroidKitFloatingActionBarStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.floatingActionBarStyle
+
+    public val floatingDropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.floatingDropdownMenuStyle
+
+    public val floatingNavigationStyle: AndroidKitFloatingNavigationStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.floatingNavigationStyle
 }
 
 /**

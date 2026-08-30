@@ -20,10 +20,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingTitleBarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 @Composable
@@ -34,16 +37,23 @@ public fun AndroidKitPage(
     actions: List<AndroidKitFloatingTitleBarAction> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
+    style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
+    titleBarStyle: AndroidKitFloatingTitleBarStyle =
+        AndroidKitThemeTokens.floatingTitleBarStyle,
+    contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
+    floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
+    applyImePadding: Boolean = true,
+    topBar: (@Composable (visible: Boolean) -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit,
 ): Unit {
     var titleBarVisible by rememberSaveable(titleBarImmersiveMode) { mutableStateOf(true) }
-    val colorScheme = AndroidKitThemeTokens.colorScheme
     val dimensions = AndroidKitThemeTokens.dimensions
-    val measuredContentInsets = androidKitContentWindowInsets()
+    val measuredContentInsets = contentWindowInsets
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
     val statusBarClearance = measuredContentPadding.calculateTopPadding()
     val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
-    val hasTitleBar = title != null || onBack != null || actions.isNotEmpty()
+    val hasTitleBar = topBar != null || title != null || onBack != null || actions.isNotEmpty()
     AndroidKitPageLayout(
         modifier = modifier
             .toggleTitleBarOnUnconsumedTap(
@@ -51,28 +61,34 @@ public fun AndroidKitPage(
                 titleBarVisible = titleBarVisible,
                 onToggleTitleBar = { titleBarVisible = !titleBarVisible },
             )
-            .imePadding(),
+            .then(if (applyImePadding) Modifier.imePadding() else Modifier),
         contentWindowInsets = measuredContentInsets,
-        floatingActionMargin = dimensions.spaceMedium,
+        floatingActionMargin = floatingActionMargin,
+        floatingActionAlignment = floatingActionAlignment,
         floatingActionButton = floatingActionButton,
     ) { floatingActionHeight ->
         val floatingActionClearance = if (floatingActionHeight == 0.dp) {
             0.dp
         } else {
-            floatingActionHeight + dimensions.spaceMedium
+            floatingActionHeight + floatingActionMargin
         }
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            containerColor = colorScheme.background,
+            containerColor = style.containerColor,
             contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
             topBar = {
                 if (hasTitleBar) {
-                    AndroidKitFloatingTitleBar(
-                        title = title,
-                        onBack = onBack,
-                        actions = actions,
-                        visible = titleBarVisible,
-                    )
+                    if (topBar != null) {
+                        topBar(titleBarVisible)
+                    } else {
+                        AndroidKitFloatingTitleBar(
+                            title = title,
+                            onBack = onBack,
+                            actions = actions,
+                            visible = titleBarVisible,
+                            style = titleBarStyle,
+                        )
+                    }
                 }
             },
             content = { contentPadding ->
@@ -82,7 +98,9 @@ public fun AndroidKitPage(
                         .statusBarEdgeProtection(
                             statusBarInsets = WindowInsets.statusBars,
                             fadeLength = dimensions.contentProtectionFadeLength,
-                            protectionColor = colorScheme.background,
+                            protectionColor = style.contentProtectionColor.takeIf {
+                                it != Color.Unspecified
+                            } ?: style.containerColor,
                         ),
                 ) {
                     content(
@@ -106,6 +124,7 @@ public fun AndroidKitPage(
 private fun AndroidKitPageLayout(
     contentWindowInsets: WindowInsets,
     floatingActionMargin: Dp,
+    floatingActionAlignment: Alignment.Horizontal,
     floatingActionButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable (floatingActionHeight: Dp) -> Unit,
@@ -149,17 +168,15 @@ private fun AndroidKitPageLayout(
         ).coerceIn(constraints.minHeight, constraints.maxHeight)
         val availableFloatingActionWidth =
             (width - leftInset - rightInset - margin * 2).coerceAtLeast(0)
-
         layout(width, height) {
             contentPlaceables.forEach { it.placeRelative(0, 0) }
             floatingActionPlaceables.forEach { placeable ->
                 placeable.place(
-                    x = leftInset + margin +
-                        Alignment.CenterHorizontally.align(
-                            size = placeable.width,
-                            space = availableFloatingActionWidth,
-                            layoutDirection = layoutDirection,
-                        ),
+                    x = leftInset + margin + floatingActionAlignment.align(
+                        size = placeable.width,
+                        space = availableFloatingActionWidth,
+                        layoutDirection = layoutDirection,
+                    ),
                     y = (height - bottomInset - margin - placeable.height).coerceAtLeast(0),
                 )
             }

@@ -92,6 +92,23 @@ public fun AndroidKitBottomSheet(
     closeContentDescription: String? = null,
     backContentDescription: String? = null,
     onBack: (() -> Unit)? = null,
+    sheetMaxWidth: Dp = Dp.Unspecified,
+    sheetContentPadding: PaddingValues = PaddingValues(
+        start = AndroidKitThemeTokens.dimensions.bottomSheetHorizontalPadding,
+        top = AndroidKitThemeTokens.dimensions.bottomSheetTopPadding,
+        end = AndroidKitThemeTokens.dimensions.bottomSheetHorizontalPadding,
+    ),
+    contentBottomPadding: Dp = AndroidKitThemeTokens.dimensions.bottomSheetBottomPadding,
+    chromeContentSpacing: Dp = AndroidKitThemeTokens.dimensions.bottomSheetChromeContentSpacing,
+    dragHandle: (@Composable ColumnScope.() -> Unit)? = {
+        val dimensions = AndroidKitThemeTokens.dimensions
+        BottomSheetDragHandle(dimensions = dimensions, color = style.dragHandleColor)
+        Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
+    },
+    header: (@Composable (onDismiss: () -> Unit) -> Unit)? = null,
+    contentWindowInsets: WindowInsets = WindowInsets(0.dp),
+    skipPartiallyExpanded: Boolean = true,
+    dismissOnBackPress: Boolean = onBack == null,
     content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -105,7 +122,9 @@ public fun AndroidKitBottomSheet(
 
     if (!renderSheet) return
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = skipPartiallyExpanded,
+    )
     val scope = rememberCoroutineScope()
     val verticalScrollState = rememberScrollState()
     val contentScrollHandoff = remember { BottomSheetContentScrollHandoff() }
@@ -117,6 +136,9 @@ public fun AndroidKitBottomSheet(
         .asPaddingValues()
         .calculateTopPadding()
     val sheetDismissGesturesEnabled = gesturesEnabled && dismissGesturesEnabled
+    val chromeContainerColor = style.chromeContainerColor.takeIf {
+        it != Color.Unspecified
+    } ?: style.containerColor.copy(alpha = floatingSurfaceStyle.opacity)
 
     fun dismissWithAnimation() {
         if (!gesturesEnabled) return
@@ -140,20 +162,20 @@ public fun AndroidKitBottomSheet(
         onDismissRequest = ::dismissWithAnimation,
         modifier = modifier,
         sheetState = sheetState,
-        sheetMaxWidth = Dp.Unspecified,
+        sheetMaxWidth = sheetMaxWidth,
         sheetGesturesEnabled = sheetDismissGesturesEnabled,
-        shape = RoundedCornerShape(
+        shape = style.shape ?: RoundedCornerShape(
             topStart = dimensions.bottomSheetCornerRadius,
             topEnd = dimensions.bottomSheetCornerRadius,
         ),
         containerColor = style.containerColor,
         contentColor = style.contentColor,
-        tonalElevation = 0.dp,
+        tonalElevation = style.tonalElevation,
         scrimColor = style.scrimColor,
         dragHandle = null,
-        contentWindowInsets = { WindowInsets(0.dp) },
+        contentWindowInsets = { contentWindowInsets },
         properties = ModalBottomSheetProperties(
-            shouldDismissOnBackPress = onBack == null,
+            shouldDismissOnBackPress = dismissOnBackPress,
         ),
     ) {
         BackHandler(enabled = visible && onBack != null) {
@@ -168,17 +190,9 @@ public fun AndroidKitBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(max = maxSheetHeight)
-                    .padding(
-                        start = dimensions.bottomSheetHorizontalPadding,
-                        top = dimensions.bottomSheetTopPadding,
-                        end = dimensions.bottomSheetHorizontalPadding,
-                    ),
+                    .padding(sheetContentPadding),
             ) {
-                BottomSheetDragHandle(
-                    dimensions = dimensions,
-                    color = style.dragHandleColor,
-                )
-                Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
+                dragHandle?.invoke(this)
 
                 BottomSheetContentLayout(
                     modifier = (if (fitContent) {
@@ -199,21 +213,29 @@ public fun AndroidKitBottomSheet(
                             }
                         },
                     showChrome = showChrome,
-                    chromeContentSpacing = dimensions.bottomSheetChromeContentSpacing,
-                    contentBottomPadding = dimensions.bottomSheetBottomPadding,
+                    chromeContentSpacing = chromeContentSpacing,
+                    contentBottomPadding = contentBottomPadding,
                     chrome = {
-                        BottomSheetChrome(
-                            title = title,
-                            style = style,
-                            dimensions = dimensions,
-                            backContentDescription = backContentDescription ?: strings.back,
-                            onBack = onBack,
-                            closeContentDescription = closeContentDescription ?: strings.close,
-                            onClose = ::dismissWithAnimation,
-                            containerColor = style.containerColor.copy(
-                                alpha = floatingSurfaceStyle.opacity,
-                            ),
-                        )
+                        if (header != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(chromeContainerColor),
+                            ) {
+                                header(::dismissWithAnimation)
+                            }
+                        } else {
+                            BottomSheetChrome(
+                                title = title,
+                                style = style,
+                                dimensions = dimensions,
+                                backContentDescription = backContentDescription ?: strings.back,
+                                onBack = onBack,
+                                closeContentDescription = closeContentDescription ?: strings.close,
+                                onClose = ::dismissWithAnimation,
+                                containerColor = chromeContainerColor,
+                            )
+                        }
                     },
                 ) { chromeContentPadding ->
                     when (scrollMode) {
@@ -388,9 +410,10 @@ private fun BottomSheetChrome(
                 text = title,
                 modifier = Modifier.semantics { heading() },
                 color = style.contentColor,
-                style = AndroidKitThemeTokens.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
-                ),
+                style = style.titleTextStyle
+                    ?: AndroidKitThemeTokens.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                    ),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

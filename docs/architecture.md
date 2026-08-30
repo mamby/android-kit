@@ -25,6 +25,12 @@ from its `AndroidKitThemeDefinition`; they do not silently inherit an ambient
 destination-app `MaterialTheme`. Missing the kit theme fails immediately with a
 clear integration error.
 
+The theme is the default styling source, not a restriction on local composition.
+Public components expose immutable per-instance styles, focused layout parameters
+and slots where content legitimately varies. Every override defaults to the
+theme-backed value, while touch targets, safe-area behavior, accessibility
+semantics and adaptive layout policy remain owned by the kit.
+
 ## Demo-owned surface
 
 The demo owns its Prism theme, launcher branding, routes, catalog copy and sample

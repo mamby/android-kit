@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,9 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -47,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
@@ -56,6 +53,7 @@ public class AndroidKitFloatingTitleBarAction(
     public val icon: ImageVector,
     public val label: String,
     public val onClick: () -> Unit,
+    public val enabled: Boolean = true,
 )
 
 @Composable
@@ -69,12 +67,18 @@ public fun AndroidKitFloatingTitleBar(
     windowInsets: WindowInsets = WindowInsets.safeDrawing.only(
         WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
     ),
+    style: AndroidKitFloatingTitleBarStyle = AndroidKitThemeTokens.floatingTitleBarStyle,
+    maximumDirectActions: Int = 2,
+    titleContent: (@Composable () -> Unit)? = null,
+    navigationIcon: (@Composable () -> Unit)? = null,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
-    if (title == null && onBack == null && actions.isEmpty()) return
+    require(maximumDirectActions >= 0) { "Maximum direct actions must not be negative." }
+    if (title == null && titleContent == null && onBack == null && actions.isEmpty()) return
 
     val hasButtons = onBack != null || actions.isNotEmpty()
+    val hasTitle = title != null || titleContent != null
     var overflowExpanded by remember { mutableStateOf(false) }
 
     fun setOverflowExpanded(expanded: Boolean) {
@@ -114,9 +118,10 @@ public fun AndroidKitFloatingTitleBar(
                 val directActionCount = directTitleBarActionCount(
                     actionCount = actions.size,
                     availableWidth = maxWidth,
-                    hasTitle = title != null,
+                    hasTitle = hasTitle,
                     hasNavigation = onBack != null,
                     dimensions = dimensions,
+                    maximumDirectActions = maximumDirectActions,
                 )
                 val directActions = actions.take(directActionCount)
                 val overflowActions = actions.drop(directActionCount)
@@ -144,44 +149,45 @@ public fun AndroidKitFloatingTitleBar(
                     FloatingTitleBarBackButton(
                         onClick = onBack,
                         modifier = Modifier.align(Alignment.CenterStart),
+                        style = style,
+                        content = navigationIcon,
                     )
                 }
 
-                title?.let {
+                if (hasTitle) {
                     FloatingSurface(
-                        shape = CircleShape,
+                        shape = style.titleShape,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
                             .padding(
                                 start = titleStartPadding,
                                 end = titleEndPadding,
                             ),
+                        style = style.titleSurfaceStyle
+                            ?: AndroidKitThemeTokens.floatingSurfaceStyle,
                     ) {
-                        Text(
-                            text = it,
-                            modifier = Modifier
-                                .padding(
-                                    horizontal = dimensions.spaceMedium,
-                                    vertical = dimensions.spaceSmall,
-                                )
-                                .clearAndSetSemantics {
-                                    heading()
-                                    contentDescription = it
-                                },
-                            textAlign = TextAlign.Start,
-                            style = AndroidKitThemeTokens.typography.titleMedium.copy(
-                                fontWeight = FontWeight.SemiBold,
-                                platformStyle = PlatformTextStyle(
-                                    includeFontPadding = false,
-                                ),
-                                lineHeightStyle = LineHeightStyle(
-                                    alignment = LineHeightStyle.Alignment.Center,
-                                    trim = LineHeightStyle.Trim.None,
-                                ),
+                        Box(
+                            modifier = Modifier.padding(
+                                horizontal = dimensions.spaceMedium,
+                                vertical = dimensions.spaceSmall,
                             ),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
+                        ) {
+                            if (titleContent != null) {
+                                titleContent()
+                            } else if (title != null) {
+                                Text(
+                                    text = title,
+                                    modifier = Modifier.clearAndSetSemantics {
+                                        heading()
+                                        contentDescription = title
+                                    },
+                                    textAlign = TextAlign.Start,
+                                    style = style.titleTextStyle,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -192,7 +198,7 @@ public fun AndroidKitFloatingTitleBar(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         directActions.forEach { action ->
-                            FloatingTitleBarActionButton(action = action)
+                            FloatingTitleBarActionButton(action = action, style = style)
                         }
                         if (overflowActions.isNotEmpty()) {
                             Box {
@@ -204,6 +210,7 @@ public fun AndroidKitFloatingTitleBar(
                                             setOverflowExpanded(true)
                                         },
                                     ),
+                                    style = style,
                                 )
                                 AndroidKitFloatingDropdownMenu(
                                     expanded = overflowExpanded,
@@ -214,6 +221,8 @@ public fun AndroidKitFloatingTitleBar(
                                         x = 0.dp,
                                         y = -dimensions.spaceExtraSmall,
                                     ),
+                                    style = style.dropdownMenuStyle
+                                        ?: AndroidKitThemeTokens.floatingDropdownMenuStyle,
                                 ) {
                                     overflowActions.forEach { action ->
                                         DropdownMenuItem(
@@ -228,6 +237,7 @@ public fun AndroidKitFloatingTitleBar(
                                                 setOverflowExpanded(false)
                                                 action.onClick()
                                             },
+                                            enabled = action.enabled,
                                             contentPadding = PaddingValues(
                                                 start = dimensions.spaceMedium,
                                                 end = dimensions.spaceLarge,
@@ -257,31 +267,41 @@ public fun AndroidKitFloatingTitleBar(
 private fun FloatingTitleBarBackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    style: AndroidKitFloatingTitleBarStyle,
+    content: (@Composable () -> Unit)?,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     FloatingSurfaceButton(
         onClick = onClick,
-        shape = CircleShape,
+        shape = style.buttonShape,
         visualSize = dimensions.floatingTitleBarButtonSize,
         modifier = modifier,
+        style = style.buttonSurfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
-        Icon(
-            imageVector = AndroidKitIcons.ArrowBack,
-            contentDescription = AndroidKitThemeTokens.strings.back,
-            modifier = Modifier.size(dimensions.floatingActionIconSize),
-        )
+        if (content != null) {
+            content()
+        } else {
+            Icon(
+                imageVector = AndroidKitIcons.ArrowBack,
+                contentDescription = AndroidKitThemeTokens.strings.back,
+                modifier = Modifier.size(dimensions.floatingActionIconSize),
+            )
+        }
     }
 }
 
 @Composable
 private fun FloatingTitleBarActionButton(
     action: AndroidKitFloatingTitleBarAction,
+    style: AndroidKitFloatingTitleBarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     FloatingSurfaceButton(
         onClick = action.onClick,
-        shape = CircleShape,
+        shape = style.buttonShape,
         visualSize = dimensions.floatingTitleBarButtonSize,
+        enabled = action.enabled,
+        style = style.buttonSurfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
         Icon(
             imageVector = action.icon,
@@ -297,6 +317,7 @@ private fun directTitleBarActionCount(
     hasTitle: Boolean,
     hasNavigation: Boolean,
     dimensions: AndroidKitDimensions,
+    maximumDirectActions: Int,
 ): Int {
     val navigationWidth = controlRowWidth(
         controlCount = if (hasNavigation) 1 else 0,
@@ -305,7 +326,7 @@ private fun directTitleBarActionCount(
     val minimumTitleWidth = if (hasTitle) dimensions.floatingTitleMinimumWidth else 0.dp
     val titleStartSpacing = if (hasTitle && hasNavigation) dimensions.spaceExtraSmall else 0.dp
 
-    return (minOf(MaximumDirectTitleBarActions, actionCount) downTo 0).firstOrNull { directCount ->
+    return (minOf(maximumDirectActions, actionCount) downTo 0).firstOrNull { directCount ->
         val endControlCount = directCount + if (actionCount > directCount) 1 else 0
         val endWidth = controlRowWidth(endControlCount, dimensions)
         val titleEndSpacing = if (hasTitle && endControlCount > 0) {
@@ -326,5 +347,3 @@ private fun controlRowWidth(
 } else {
     dimensions.minimumTouchTarget * controlCount
 }
-
-private const val MaximumDirectTitleBarActions = 2

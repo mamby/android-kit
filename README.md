@@ -29,7 +29,9 @@ The sharing boundaries and stabilization order are recorded in
 All Android Kit Compose components must be descendants of `AndroidKitTheme`.
 They fail fast when the theme is missing, and consumer styling is supplied as a
 custom `AndroidKitThemeDefinition` so every component uses one coherent design
-system.
+system. Public components also accept per-instance styles and focused layout or
+content overrides; those overrides default to the nearest Android Kit theme and
+do not change existing component appearance unless supplied explicitly.
 
 ## Build the catalog
 

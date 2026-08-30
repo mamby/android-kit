@@ -23,9 +23,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 
@@ -39,6 +41,7 @@ public interface AndroidKitFloatingActionBarScope {
         icon: ImageVector,
         contentDescription: String,
         modifier: Modifier = Modifier,
+        enabled: Boolean = true,
     ): Unit
 
     public fun iconAndLabel(
@@ -46,19 +49,27 @@ public interface AndroidKitFloatingActionBarScope {
         icon: ImageVector,
         label: String,
         modifier: Modifier = Modifier,
+        enabled: Boolean = true,
     ): Unit
 
     public fun text(
         onClick: () -> Unit,
         label: String,
         modifier: Modifier = Modifier,
+        enabled: Boolean = true,
     ): Unit
 
     public fun flyout(
         modifier: Modifier = Modifier,
         style: AndroidKitFloatingActionBarFlyoutStyle = AndroidKitFloatingActionBarFlyoutStyle.Icon,
         contentDescription: String? = null,
+        enabled: Boolean = true,
         content: AndroidKitFloatingActionBarFlyoutScope.() -> Unit,
+    ): Unit
+
+    public fun item(
+        modifier: Modifier = Modifier,
+        content: @Composable () -> Unit,
     ): Unit
 }
 
@@ -68,6 +79,7 @@ public interface AndroidKitFloatingActionBarFlyoutScope {
         icon: ImageVector,
         label: String,
         onClick: () -> Unit,
+        enabled: Boolean = true,
     ): Unit
 }
 
@@ -80,23 +92,26 @@ public enum class AndroidKitFloatingActionBarFlyoutStyle {
 @Composable
 public fun AndroidKitFloatingActionBar(
     modifier: Modifier = Modifier,
+    style: AndroidKitFloatingActionBarStyle = AndroidKitThemeTokens.floatingActionBarStyle,
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = AndroidKitThemeTokens.dimensions.spaceSmall,
+        vertical = AndroidKitThemeTokens.dimensions.spaceExtraSmall,
+    ),
+    itemSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
     content: AndroidKitFloatingActionBarScope.() -> Unit,
 ): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
     val scope = FloatingActionBarScopeImpl().apply(content)
     FloatingSurface(
         modifier = modifier,
-        shape = AndroidKitThemeTokens.shapes.extraLarge,
+        shape = style.shape,
+        style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
         Row(
-            modifier = Modifier.padding(
-                horizontal = dimensions.spaceSmall,
-                vertical = dimensions.spaceExtraSmall,
-            ),
-            horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+            modifier = Modifier.padding(contentPadding),
+            horizontalArrangement = Arrangement.spacedBy(itemSpacing),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            scope.items.forEach { item -> FloatingActionBarItem(item) }
+            scope.items.forEach { item -> FloatingActionBarItem(item, style) }
         }
     }
 }
@@ -109,12 +124,14 @@ private class FloatingActionBarScopeImpl : AndroidKitFloatingActionBarScope {
         icon: ImageVector,
         contentDescription: String,
         modifier: Modifier,
+        enabled: Boolean,
     ) {
         items += FloatingActionBarItemDefinition.Icon(
             onClick = onClick,
             icon = icon,
             label = contentDescription,
             modifier = modifier,
+            enabled = enabled,
         )
     }
 
@@ -123,12 +140,14 @@ private class FloatingActionBarScopeImpl : AndroidKitFloatingActionBarScope {
         icon: ImageVector,
         label: String,
         modifier: Modifier,
+        enabled: Boolean,
     ) {
         items += FloatingActionBarItemDefinition.IconAndLabel(
             onClick = onClick,
             icon = icon,
             label = label,
             modifier = modifier,
+            enabled = enabled,
         )
     }
 
@@ -136,11 +155,13 @@ private class FloatingActionBarScopeImpl : AndroidKitFloatingActionBarScope {
         onClick: () -> Unit,
         label: String,
         modifier: Modifier,
+        enabled: Boolean,
     ) {
         items += FloatingActionBarItemDefinition.Text(
             onClick = onClick,
             label = label,
             modifier = modifier,
+            enabled = enabled,
         )
     }
 
@@ -148,6 +169,7 @@ private class FloatingActionBarScopeImpl : AndroidKitFloatingActionBarScope {
         modifier: Modifier,
         style: AndroidKitFloatingActionBarFlyoutStyle,
         contentDescription: String?,
+        enabled: Boolean,
         content: AndroidKitFloatingActionBarFlyoutScope.() -> Unit,
     ) {
         val flyoutScope = FloatingActionBarFlyoutScopeImpl().apply(content)
@@ -157,6 +179,17 @@ private class FloatingActionBarScopeImpl : AndroidKitFloatingActionBarScope {
             style = style,
             modifier = modifier,
             contentDescription = contentDescription,
+            enabled = enabled,
+        )
+    }
+
+    override fun item(
+        modifier: Modifier,
+        content: @Composable () -> Unit,
+    ) {
+        items += FloatingActionBarItemDefinition.Custom(
+            modifier = modifier,
+            content = content,
         )
     }
 }
@@ -168,11 +201,13 @@ private class FloatingActionBarFlyoutScopeImpl : AndroidKitFloatingActionBarFlyo
         icon: ImageVector,
         label: String,
         onClick: () -> Unit,
+        enabled: Boolean,
     ) {
         items += FloatingActionBarFlyoutItem(
             icon = icon,
             label = label,
             onClick = onClick,
+            enabled = enabled,
         )
     }
 }
@@ -185,6 +220,7 @@ private sealed interface FloatingActionBarItemDefinition {
         val icon: ImageVector,
         val label: String,
         override val modifier: Modifier,
+        val enabled: Boolean,
     ) : FloatingActionBarItemDefinition
 
     class IconAndLabel(
@@ -192,12 +228,14 @@ private sealed interface FloatingActionBarItemDefinition {
         val icon: ImageVector,
         val label: String,
         override val modifier: Modifier,
+        val enabled: Boolean,
     ) : FloatingActionBarItemDefinition
 
     class Text(
         val onClick: () -> Unit,
         val label: String,
         override val modifier: Modifier,
+        val enabled: Boolean,
     ) : FloatingActionBarItemDefinition
 
     class Flyout(
@@ -205,6 +243,12 @@ private sealed interface FloatingActionBarItemDefinition {
         val style: AndroidKitFloatingActionBarFlyoutStyle,
         override val modifier: Modifier,
         val contentDescription: String?,
+        val enabled: Boolean,
+    ) : FloatingActionBarItemDefinition
+
+    class Custom(
+        override val modifier: Modifier,
+        val content: @Composable () -> Unit,
     ) : FloatingActionBarItemDefinition
 }
 
@@ -212,10 +256,14 @@ private class FloatingActionBarFlyoutItem(
     val icon: ImageVector,
     val label: String,
     val onClick: () -> Unit,
+    val enabled: Boolean,
 )
 
 @Composable
-private fun FloatingActionBarItem(item: FloatingActionBarItemDefinition) {
+private fun FloatingActionBarItem(
+    item: FloatingActionBarItemDefinition,
+    style: AndroidKitFloatingActionBarStyle,
+) {
     when (item) {
         is FloatingActionBarItemDefinition.Icon -> FloatingActionBarItemContent(
             onClick = item.onClick,
@@ -223,6 +271,8 @@ private fun FloatingActionBarItem(item: FloatingActionBarItemDefinition) {
             modifier = item.modifier,
             icon = item.icon,
             showLabel = false,
+            enabled = item.enabled,
+            style = style,
         )
 
         is FloatingActionBarItemDefinition.IconAndLabel -> FloatingActionBarItemContent(
@@ -231,6 +281,8 @@ private fun FloatingActionBarItem(item: FloatingActionBarItemDefinition) {
             modifier = item.modifier,
             icon = item.icon,
             showLabel = true,
+            enabled = item.enabled,
+            style = style,
         )
 
         is FloatingActionBarItemDefinition.Text -> FloatingActionBarItemContent(
@@ -239,6 +291,8 @@ private fun FloatingActionBarItem(item: FloatingActionBarItemDefinition) {
             modifier = item.modifier,
             icon = null,
             showLabel = true,
+            enabled = item.enabled,
+            style = style,
         )
 
         is FloatingActionBarItemDefinition.Flyout -> FloatingActionBarFlyoutContent(
@@ -247,7 +301,16 @@ private fun FloatingActionBarItem(item: FloatingActionBarItemDefinition) {
             style = item.style,
             contentDescription = item.contentDescription
                 ?: AndroidKitThemeTokens.strings.more,
+            enabled = item.enabled,
+            actionBarStyle = style,
         )
+
+        is FloatingActionBarItemDefinition.Custom -> Box(
+            modifier = item.modifier.minimumInteractiveComponentSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            item.content()
+        }
     }
 }
 
@@ -257,6 +320,8 @@ private fun FloatingActionBarFlyoutContent(
     modifier: Modifier,
     style: AndroidKitFloatingActionBarFlyoutStyle,
     contentDescription: String,
+    enabled: Boolean,
+    actionBarStyle: AndroidKitFloatingActionBarStyle,
 ): Unit {
     var expanded by remember { mutableStateOf(false) }
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -270,24 +335,29 @@ private fun FloatingActionBarFlyoutContent(
                 style == AndroidKitFloatingActionBarFlyoutStyle.Text
             },
             showLabel = style != AndroidKitFloatingActionBarFlyoutStyle.Icon,
+            enabled = enabled,
+            style = actionBarStyle,
         )
         AndroidKitFloatingDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             offset = DpOffset(x = 0.dp, y = dimensions.spaceExtraSmall),
+            style = actionBarStyle.dropdownMenuStyle
+                ?: AndroidKitThemeTokens.floatingDropdownMenuStyle,
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
                     text = {
                         Text(
                             text = item.label,
-                            style = AndroidKitThemeTokens.typography.labelSmall,
+                            style = actionBarStyle.labelTextStyle,
                         )
                     },
                     onClick = {
                         expanded = false
                         item.onClick()
                     },
+                    enabled = item.enabled,
                     contentPadding = PaddingValues(
                         start = dimensions.spaceMedium,
                         end = dimensions.spaceLarge,
@@ -312,12 +382,14 @@ private fun FloatingActionBarItemContent(
     modifier: Modifier,
     icon: ImageVector?,
     showLabel: Boolean,
+    enabled: Boolean,
+    style: AndroidKitFloatingActionBarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     Column(
         modifier = modifier
-            .clip(AndroidKitThemeTokens.shapes.extraLarge)
-            .clickable(role = Role.Button, onClick = onClick)
+            .clip(style.itemShape)
+            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
             .minimumInteractiveComponentSize()
             .padding(horizontal = dimensions.spaceSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -333,7 +405,7 @@ private fun FloatingActionBarItemContent(
         if (showLabel) {
             Text(
                 text = label,
-                style = AndroidKitThemeTokens.typography.labelSmall,
+                style = style.labelTextStyle,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

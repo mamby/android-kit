@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
+import net.mamby.androidkit.compose.theme.AndroidKitCardStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 @Immutable
@@ -41,44 +44,94 @@ public fun AndroidKitCard(
     modifier: Modifier = Modifier,
     menuItems: List<AndroidKitCardMenuItem> = emptyList(),
     header: (@Composable ColumnScope.() -> Unit)? = null,
+    style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
+    contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.dimensions.spaceMedium),
+    contentSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    content: @Composable ColumnScope.() -> Unit,
+): Unit {
+    Card(
+        modifier = modifier,
+        shape = style.shape,
+        colors = AndroidKitCardDefaults.colors(style),
+        border = AndroidKitCardDefaults.border(style),
+    ) {
+        AndroidKitCardContent(
+            menuItems = menuItems,
+            header = header,
+            contentPadding = contentPadding,
+            contentSpacing = contentSpacing,
+            content = content,
+        )
+    }
+}
+
+@Composable
+public fun AndroidKitCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    menuItems: List<AndroidKitCardMenuItem> = emptyList(),
+    header: (@Composable ColumnScope.() -> Unit)? = null,
+    style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
+    contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.dimensions.spaceMedium),
+    contentSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    content: @Composable ColumnScope.() -> Unit,
+): Unit {
+    Card(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        shape = style.shape,
+        colors = AndroidKitCardDefaults.colors(style),
+        border = AndroidKitCardDefaults.border(style),
+    ) {
+        AndroidKitCardContent(
+            menuItems = menuItems,
+            header = header,
+            contentPadding = contentPadding,
+            contentSpacing = contentSpacing,
+            content = content,
+        )
+    }
+}
+
+@Composable
+private fun AndroidKitCardContent(
+    menuItems: List<AndroidKitCardMenuItem>,
+    header: (@Composable ColumnScope.() -> Unit)?,
+    contentPadding: PaddingValues,
+    contentSpacing: Dp,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    Card(
-        modifier = modifier,
-        shape = AndroidKitThemeTokens.shapes.extraLarge,
-        colors = AndroidKitCardDefaults.colors(),
-        border = AndroidKitCardDefaults.border(),
+    Column(
+        modifier = Modifier.padding(contentPadding),
+        verticalArrangement = Arrangement.spacedBy(contentSpacing),
     ) {
-        Column(
-            modifier = Modifier.padding(dimensions.spaceMedium),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
-        ) {
-            if (header != null || menuItems.isNotEmpty()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        space = dimensions.spaceSmall,
-                        alignment = Alignment.End,
-                    ),
-                    verticalAlignment = Alignment.Top,
-                ) {
-                    if (header == null) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    } else {
-                        Column(
-                            modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
-                            content = header,
-                        )
-                    }
-                    if (menuItems.isNotEmpty()) {
-                        AndroidKitCardOverflowMenu(items = menuItems)
-                    }
+        if (header != null || menuItems.isNotEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = dimensions.spaceSmall,
+                    alignment = Alignment.End,
+                ),
+                verticalAlignment = Alignment.Top,
+            ) {
+                if (header == null) {
+                    Spacer(modifier = Modifier.weight(1f))
+                } else {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+                        content = header,
+                    )
+                }
+                if (menuItems.isNotEmpty()) {
+                    AndroidKitCardOverflowMenu(items = menuItems)
                 }
             }
-            content()
         }
+        content()
     }
 }
 

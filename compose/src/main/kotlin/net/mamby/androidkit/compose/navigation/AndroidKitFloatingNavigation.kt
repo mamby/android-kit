@@ -23,9 +23,12 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -34,6 +37,7 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -57,7 +61,6 @@ import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -69,6 +72,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.LocalAndroidKitFloatingNavigationInsets
+import net.mamby.androidkit.compose.theme.AndroidKitAdaptiveNavigationItemStyle
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingNavigationStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
@@ -78,6 +83,8 @@ public class AndroidKitFloatingNavigationItem<Key : Any>(
     public val label: String,
     public val icon: ImageVector,
     public val selectedIcon: ImageVector = icon,
+    public val contentDescription: String = label,
+    public val badge: (@Composable () -> Unit)? = null,
 )
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -89,9 +96,9 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
     modifier: Modifier = Modifier,
     compactVisibleDestinationCount: Int = 4,
     showCompactLabels: Boolean = false,
+    style: AndroidKitFloatingNavigationStyle = AndroidKitThemeTokens.floatingNavigationStyle,
     content: @Composable () -> Unit,
 ): Unit {
-    val colorScheme = AndroidKitThemeTokens.colorScheme
     require(items.isNotEmpty()) { "At least one navigation item is required." }
     require(items.map { it.key }.distinct().size == items.size) { "Navigation item keys must be unique." }
     require(items.any { it.key == selectedKey }) { "The selected navigation key is not registered." }
@@ -109,7 +116,7 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
             modifier = modifier
                 .fillMaxSize()
                 .imePadding()
-                .background(colorScheme.background),
+                .background(style.containerColor),
             navigation = {
                 FloatingNavigationBar(
                     items = items,
@@ -119,11 +126,15 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
                     onOverflowSheetVisibleChange = { overflowSheetVisible = it },
                     showLabels = showCompactLabels,
                     visibleDestinationCount = compactVisibleDestinationCount,
+                    style = style,
                 )
             },
             content = content,
         )
     } else {
+        val navigationSuiteItemColors = style.adaptiveItemStyle
+            ?.toNavigationSuiteItemColors()
+            ?: NavigationSuiteDefaults.itemColors()
         CompositionLocalProvider(
             LocalAndroidKitFloatingNavigationInsets provides WindowInsets(0, 0, 0, 0),
         ) {
@@ -136,10 +147,12 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
                             icon = {
                                 Icon(
                                     imageVector = if (item.key == selectedKey) item.selectedIcon else item.icon,
-                                    contentDescription = item.label,
+                                    contentDescription = item.contentDescription,
                                 )
                             },
                             label = { Text(item.label) },
+                            badge = item.badge,
+                            colors = navigationSuiteItemColors,
                         )
                     }
                 },
@@ -147,11 +160,11 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
                     .fillMaxSize()
                     .imePadding(),
                 layoutType = layoutType,
-                containerColor = colorScheme.background,
+                containerColor = style.containerColor,
                 navigationSuiteColors = NavigationSuiteDefaults.colors(
-                    navigationBarContainerColor = colorScheme.surface,
-                    navigationRailContainerColor = colorScheme.surface,
-                    navigationDrawerContainerColor = colorScheme.surface,
+                    navigationBarContainerColor = style.navigationBarContainerColor,
+                    navigationRailContainerColor = style.navigationRailContainerColor,
+                    navigationDrawerContainerColor = style.navigationDrawerContainerColor,
                 ),
             ) {
                 content()
@@ -225,10 +238,11 @@ private fun <Key : Any> FloatingNavigationBar(
     onOverflowSheetVisibleChange: (Boolean) -> Unit,
     showLabels: Boolean,
     visibleDestinationCount: Int,
+    style: AndroidKitFloatingNavigationStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val colorScheme = AndroidKitThemeTokens.colorScheme
-    val visuals = floatingSurfaceVisuals()
+    val surfaceStyle = style.compactSurfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle
+    val visuals = floatingSurfaceVisuals(surfaceStyle)
     val layoutState = remember { CompactNavigationLayoutState() }
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -257,8 +271,9 @@ private fun <Key : Any> FloatingNavigationBar(
                 modifier = Modifier
                     .widthIn(max = barMaxWidth)
                     .testTag(CompactNavigationBarTestTag),
-                shape = AndroidKitThemeTokens.shapes.extraLarge,
+                shape = style.barShape,
                 containerColor = Color.Transparent,
+                style = surfaceStyle,
             ) {
                 Box {
                     val backgroundModifier = Modifier.matchParentSize().let { modifier ->
@@ -268,9 +283,9 @@ private fun <Key : Any> FloatingNavigationBar(
                             modifier.graphicsLayer { alpha = visuals.opacity }
                         }
                     }
-                    val selectionShape = AndroidKitThemeTokens.shapes.extraLarge
+                    val selectionShape = style.itemShape
                     Canvas(modifier = backgroundModifier) {
-                        drawRect(colorScheme.surface)
+                        drawRect(style.compactContainerColor)
                         layoutState.selectionBounds?.let { bounds ->
                             val selectionSize = Size(
                                 width = bounds.width.toFloat(),
@@ -291,7 +306,7 @@ private fun <Key : Any> FloatingNavigationBar(
                             ) {
                                 drawNavigationSelectionOutline(
                                     outline = outline,
-                                    color = colorScheme.secondaryContainer,
+                                    color = style.selectedContainerColor,
                                 )
                             }
                         }
@@ -305,6 +320,7 @@ private fun <Key : Any> FloatingNavigationBar(
                         visibleDestinationCount = visibleDestinationCount,
                         layoutState = layoutState,
                         backgroundContentPadding = dimensions.floatingNavigationContentPadding,
+                        style = style,
                         modifier = Modifier
                             .padding(dimensions.floatingNavigationContentPadding)
                             .selectableGroup(),
@@ -322,6 +338,7 @@ private fun <Key : Any> FloatingNavigationBar(
                     onOverflowSheetVisibleChange(false)
                     onSelected(key)
                 },
+                style = style,
             )
         }
     }
@@ -337,6 +354,7 @@ private fun <Key : Any> CompactNavigationItemsLayout(
     visibleDestinationCount: Int,
     layoutState: CompactNavigationLayoutState,
     backgroundContentPadding: Dp,
+    style: AndroidKitFloatingNavigationStyle,
     modifier: Modifier = Modifier,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -353,6 +371,8 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                     icon = item.icon,
                     label = item.label,
                     showLabel = showLabels,
+                    badge = item.badge,
+                    style = style,
                 )
             }.single().measure(naturalConstraints)
         }
@@ -366,6 +386,8 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                     icon = AndroidKitIcons.More,
                     label = AndroidKitThemeTokens.strings.more,
                     showLabel = showLabels,
+                    badge = null,
+                    style = style,
                 )
             }.single().measure(naturalConstraints)
         } else {
@@ -387,7 +409,10 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                     onClick = { onSelected(item.key) },
                     icon = if (selected) item.selectedIcon else item.icon,
                     label = item.label,
+                    contentDescription = item.contentDescription,
                     showLabel = showLabels,
+                    badge = item.badge,
+                    style = style,
                     modifier = Modifier.widthIn(min = dimensions.minimumTouchTarget),
                 )
             }.single().measure(naturalConstraints)
@@ -405,7 +430,10 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                         },
                         icon = AndroidKitIcons.More,
                         label = AndroidKitThemeTokens.strings.more,
+                        contentDescription = AndroidKitThemeTokens.strings.more,
                         showLabel = showLabels,
+                        badge = null,
+                        style = style,
                         modifier = Modifier.widthIn(min = dimensions.minimumTouchTarget),
                     )
                 }
@@ -457,6 +485,8 @@ private fun CompactNavigationItemMeasurement(
     icon: ImageVector,
     label: String,
     showLabel: Boolean,
+    badge: (@Composable () -> Unit)?,
+    style: AndroidKitFloatingNavigationStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val horizontalPadding = if (showLabel) {
@@ -477,8 +507,11 @@ private fun CompactNavigationItemMeasurement(
         CompactNavigationItemContent(
             icon = icon,
             label = label,
+            contentDescription = label,
             showLabel = showLabel,
-            contentColor = AndroidKitThemeTokens.colorScheme.onSurface,
+            contentColor = style.unselectedContentColor,
+            badge = badge,
+            style = style,
             exposeSemantics = false,
         )
     }
@@ -490,15 +523,17 @@ private fun CompactNavigationBarItem(
     onClick: () -> Unit,
     icon: ImageVector,
     label: String,
+    contentDescription: String,
     showLabel: Boolean,
+    badge: (@Composable () -> Unit)?,
+    style: AndroidKitFloatingNavigationStyle,
     modifier: Modifier = Modifier,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val visuals = floatingSurfaceVisuals()
     val contentColor = if (selected) {
-        AndroidKitThemeTokens.colorScheme.primary
+        style.selectedContentColor
     } else {
-        visuals.contentColor
+        style.unselectedContentColor
     }
     val horizontalPadding = if (showLabel) {
         dimensions.floatingNavigationItemHorizontalPadding
@@ -509,7 +544,7 @@ private fun CompactNavigationBarItem(
         modifier = modifier
             .heightIn(min = dimensions.minimumTouchTarget)
             .minimumInteractiveComponentSize()
-            .clip(AndroidKitThemeTokens.shapes.extraLarge)
+            .clip(style.itemShape)
             .selectable(
                 selected = selected,
                 onClick = onClick,
@@ -524,8 +559,11 @@ private fun CompactNavigationBarItem(
         CompactNavigationItemContent(
             icon = icon,
             label = label,
+            contentDescription = contentDescription,
             showLabel = showLabel,
             contentColor = contentColor,
+            badge = badge,
+            style = style,
         )
     }
 }
@@ -534,8 +572,11 @@ private fun CompactNavigationBarItem(
 private fun CompactNavigationItemContent(
     icon: ImageVector,
     label: String,
+    contentDescription: String,
     showLabel: Boolean,
     contentColor: Color,
+    badge: (@Composable () -> Unit)?,
+    style: AndroidKitFloatingNavigationStyle,
     exposeSemantics: Boolean = true,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -544,10 +585,11 @@ private fun CompactNavigationItemContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(dimensions.floatingNavigationLabelSpacing),
         ) {
-            Icon(
-                imageVector = icon,
+            NavigationIcon(
+                icon = icon,
                 contentDescription = null,
-                modifier = Modifier.size(dimensions.floatingNavigationLabeledIconSize),
+                badge = badge,
+                size = dimensions.floatingNavigationLabeledIconSize,
                 tint = contentColor,
             )
             Text(
@@ -558,7 +600,7 @@ private fun CompactNavigationItemContent(
                     Modifier.clearAndSetSemantics {}
                 },
                 color = contentColor,
-                style = AndroidKitThemeTokens.typography.labelSmall,
+                style = style.labelTextStyle,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -569,13 +611,37 @@ private fun CompactNavigationItemContent(
             modifier = Modifier.size(dimensions.floatingNavigationIndicatorSize),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = label.takeIf { exposeSemantics },
-                modifier = Modifier.size(dimensions.floatingNavigationIconSize),
+            NavigationIcon(
+                icon = icon,
+                contentDescription = contentDescription.takeIf { exposeSemantics },
+                badge = badge,
+                size = dimensions.floatingNavigationIconSize,
                 tint = contentColor,
             )
         }
+    }
+}
+
+@Composable
+private fun NavigationIcon(
+    icon: ImageVector,
+    contentDescription: String?,
+    badge: (@Composable () -> Unit)?,
+    size: Dp,
+    tint: Color,
+): Unit {
+    val iconContent: @Composable () -> Unit = {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            modifier = Modifier.size(size),
+            tint = tint,
+        )
+    }
+    if (badge == null) {
+        iconContent()
+    } else {
+        BadgedBox(badge = { badge() }, content = { iconContent() })
     }
 }
 
@@ -586,20 +652,16 @@ private fun <Key : Any> NavigationOverflowSheet(
     selectedKey: Key,
     onDismissRequest: () -> Unit,
     onSelected: (Key) -> Unit,
+    style: AndroidKitFloatingNavigationStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val colorScheme = AndroidKitThemeTokens.colorScheme
-    val visuals = floatingSurfaceVisuals()
-    val itemTextStyle = AndroidKitThemeTokens.typography.bodyLarge.copy(
-        fontWeight = FontWeight.Normal,
-    )
     val itemColors = NavigationDrawerItemDefaults.colors(
-        selectedContainerColor = colorScheme.secondaryContainer,
+        selectedContainerColor = style.selectedContainerColor,
         unselectedContainerColor = Color.Transparent,
-        selectedIconColor = colorScheme.primary,
-        unselectedIconColor = visuals.contentColor,
-        selectedTextColor = colorScheme.primary,
-        unselectedTextColor = visuals.contentColor,
+        selectedIconColor = style.selectedContentColor,
+        unselectedIconColor = style.unselectedContentColor,
+        selectedTextColor = style.selectedContentColor,
+        unselectedTextColor = style.unselectedContentColor,
     )
     AndroidKitBottomSheet(
         visible = visible,
@@ -607,6 +669,7 @@ private fun <Key : Any> NavigationOverflowSheet(
         onDismiss = onDismissRequest,
         fitContent = true,
         showChrome = false,
+        style = style.overflowSheetStyle ?: AndroidKitThemeTokens.bottomSheetStyle,
     ) {
         items.forEach { item ->
             val selected = item.key == selectedKey
@@ -615,7 +678,7 @@ private fun <Key : Any> NavigationOverflowSheet(
                 label = {
                     Text(
                         text = item.label,
-                        style = itemTextStyle,
+                        style = style.overflowItemTextStyle,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -629,6 +692,7 @@ private fun <Key : Any> NavigationOverflowSheet(
                         modifier = Modifier.size(dimensions.floatingNavigationIconSize),
                     )
                 },
+                badge = item.badge,
                 colors = itemColors,
             )
         }
@@ -670,3 +734,61 @@ private fun androidKitNavigationSuiteType(adaptiveInfo: WindowAdaptiveInfo): Nav
 
         else -> recommended
     }
+
+@Composable
+private fun AndroidKitAdaptiveNavigationItemStyle.toNavigationSuiteItemColors(): NavigationSuiteItemColors {
+    val defaultDrawerColors = NavigationDrawerItemDefaults.colors()
+    val defaultSelectedDrawerContainer = defaultDrawerColors.containerColor(selected = true).value
+    val defaultUnselectedDrawerContainer = defaultDrawerColors.containerColor(selected = false).value
+    val defaultSelectedDrawerIcon = defaultDrawerColors.iconColor(selected = true).value
+    val defaultUnselectedDrawerIcon = defaultDrawerColors.iconColor(selected = false).value
+    val defaultSelectedDrawerText = defaultDrawerColors.textColor(selected = true).value
+    val defaultUnselectedDrawerText = defaultDrawerColors.textColor(selected = false).value
+    val defaultSelectedDrawerBadge = defaultDrawerColors.badgeColor(selected = true).value
+    val defaultUnselectedDrawerBadge = defaultDrawerColors.badgeColor(selected = false).value
+
+    val selectedDrawerText = selectedTextColor.orDefault(defaultSelectedDrawerText)
+    val unselectedDrawerText = unselectedTextColor.orDefault(defaultUnselectedDrawerText)
+
+    return NavigationSuiteDefaults.itemColors(
+        navigationBarItemColors = NavigationBarItemDefaults.colors(
+            selectedIconColor = selectedIconColor,
+            selectedTextColor = selectedTextColor,
+            indicatorColor = selectedIndicatorColor,
+            unselectedIconColor = unselectedIconColor,
+            unselectedTextColor = unselectedTextColor,
+            disabledIconColor = disabledIconColor,
+            disabledTextColor = disabledTextColor,
+        ),
+        navigationRailItemColors = NavigationRailItemDefaults.colors(
+            selectedIconColor = selectedIconColor,
+            selectedTextColor = selectedTextColor,
+            indicatorColor = selectedIndicatorColor,
+            unselectedIconColor = unselectedIconColor,
+            unselectedTextColor = unselectedTextColor,
+            disabledIconColor = disabledIconColor,
+            disabledTextColor = disabledTextColor,
+        ),
+        navigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
+            selectedContainerColor = drawerSelectedContainerColor.orDefault(
+                selectedIndicatorColor.orDefault(defaultSelectedDrawerContainer),
+            ),
+            unselectedContainerColor = drawerUnselectedContainerColor.orDefault(
+                defaultUnselectedDrawerContainer,
+            ),
+            selectedIconColor = selectedIconColor.orDefault(defaultSelectedDrawerIcon),
+            unselectedIconColor = unselectedIconColor.orDefault(defaultUnselectedDrawerIcon),
+            selectedTextColor = selectedDrawerText,
+            unselectedTextColor = unselectedDrawerText,
+            selectedBadgeColor = drawerSelectedBadgeColor.orDefault(
+                selectedTextColor.orDefault(defaultSelectedDrawerBadge),
+            ),
+            unselectedBadgeColor = drawerUnselectedBadgeColor.orDefault(
+                unselectedTextColor.orDefault(defaultUnselectedDrawerBadge),
+            ),
+        ),
+    )
+}
+
+private fun Color.orDefault(default: Color): Color =
+    if (this == Color.Unspecified) default else this

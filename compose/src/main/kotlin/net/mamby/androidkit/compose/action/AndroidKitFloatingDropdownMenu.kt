@@ -5,9 +5,11 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingDropdownMenuStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import kotlin.math.max
@@ -42,13 +45,25 @@ public fun AndroidKitFloatingDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    placement: AndroidKitFloatingDropdownMenuPlacement =
+        AndroidKitFloatingDropdownMenuPlacement.Below,
+    style: AndroidKitFloatingDropdownMenuStyle = AndroidKitThemeTokens.floatingDropdownMenuStyle,
+    contentPadding: PaddingValues = PaddingValues(
+        vertical = AndroidKitThemeTokens.dimensions.spaceSmall,
+    ),
+    properties: PopupProperties = PopupProperties(focusable = true),
+    scrollState: ScrollState = rememberScrollState(),
     content: @Composable ColumnScope.() -> Unit,
 ): Unit = FloatingDropdownMenuContent(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
     modifier = modifier,
-    position = AndroidKitFloatingDropdownMenuPosition.Below,
+    placement = placement,
     offset = DpOffset.Zero,
+    style = style,
+    contentPadding = contentPadding,
+    properties = properties,
+    scrollState = scrollState,
     content = content,
 )
 
@@ -58,54 +73,51 @@ public fun AndroidKitFloatingDropdownMenu(
     onDismissRequest: () -> Unit,
     offset: DpOffset,
     modifier: Modifier = Modifier,
+    placement: AndroidKitFloatingDropdownMenuPlacement =
+        AndroidKitFloatingDropdownMenuPlacement.Below,
+    style: AndroidKitFloatingDropdownMenuStyle = AndroidKitThemeTokens.floatingDropdownMenuStyle,
+    contentPadding: PaddingValues = PaddingValues(
+        vertical = AndroidKitThemeTokens.dimensions.spaceSmall,
+    ),
+    properties: PopupProperties = PopupProperties(focusable = true),
+    scrollState: ScrollState = rememberScrollState(),
     content: @Composable ColumnScope.() -> Unit,
 ): Unit = FloatingDropdownMenuContent(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
     modifier = modifier,
-    position = AndroidKitFloatingDropdownMenuPosition.Below,
+    placement = placement,
     offset = offset,
+    style = style,
+    contentPadding = contentPadding,
+    properties = properties,
+    scrollState = scrollState,
     content = content,
 )
 
-internal enum class AndroidKitFloatingDropdownMenuPosition {
+public enum class AndroidKitFloatingDropdownMenuPlacement {
     Above,
     Below,
 }
-
-@Composable
-internal fun AndroidKitFloatingDropdownMenu(
-    expanded: Boolean,
-    onDismissRequest: () -> Unit,
-    position: AndroidKitFloatingDropdownMenuPosition,
-    offset: DpOffset,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-): Unit = FloatingDropdownMenuContent(
-    expanded = expanded,
-    onDismissRequest = onDismissRequest,
-    modifier = modifier,
-    position = position,
-    offset = offset,
-    content = content,
-)
 
 @Composable
 private fun FloatingDropdownMenuContent(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier,
-    position: AndroidKitFloatingDropdownMenuPosition,
+    placement: AndroidKitFloatingDropdownMenuPlacement,
     offset: DpOffset,
+    style: AndroidKitFloatingDropdownMenuStyle,
+    contentPadding: PaddingValues,
+    properties: PopupProperties,
+    scrollState: ScrollState,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val shape = AndroidKitThemeTokens.shapes.extraLarge
     val density = LocalDensity.current
     val transformOriginState = remember { mutableStateOf(TransformOrigin.Center) }
-    val positionProvider = remember(position, offset, density) {
+    val positionProvider = remember(placement, offset, density) {
         FloatingDropdownMenuPositionProvider(
-            position = position,
+            placement = placement,
             offset = offset,
             density = density,
             onPositionCalculated = { anchorBounds, menuBounds ->
@@ -113,7 +125,6 @@ private fun FloatingDropdownMenuContent(
             },
         )
     }
-    val scrollState = rememberScrollState()
     val expandedState = remember { MutableTransitionState(false) }
     expandedState.targetState = expanded
 
@@ -121,19 +132,20 @@ private fun FloatingDropdownMenuContent(
         Popup(
             onDismissRequest = onDismissRequest,
             popupPositionProvider = positionProvider,
-            properties = PopupProperties(focusable = true),
+            properties = properties,
         ) {
             FloatingDropdownMenuAnimation(
                 expandedState = expandedState,
                 transformOriginState = transformOriginState,
             ) {
                 FloatingSurface(
-                    shape = shape,
+                    shape = style.shape,
                     modifier = modifier,
+                    style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
                 ) {
                     Column(
                         modifier = Modifier
-                            .padding(vertical = dimensions.spaceSmall)
+                            .padding(contentPadding)
                             .width(IntrinsicSize.Max)
                             .verticalScroll(scrollState),
                         content = content,
@@ -198,7 +210,7 @@ private fun FloatingDropdownMenuAnimation(
 }
 
 private data class FloatingDropdownMenuPositionProvider(
-    val position: AndroidKitFloatingDropdownMenuPosition,
+    val placement: AndroidKitFloatingDropdownMenuPlacement,
     val offset: DpOffset,
     val density: Density,
     val onPositionCalculated: (anchorBounds: IntRect, menuBounds: IntRect) -> Unit,
@@ -245,14 +257,14 @@ private data class FloatingDropdownMenuPositionProvider(
         } else {
             windowSize.height - verticalMargin - popupContentSize.height
         }
-        val verticalCandidates = when (position) {
-            AndroidKitFloatingDropdownMenuPosition.Above -> intArrayOf(
+        val verticalCandidates = when (placement) {
+            AndroidKitFloatingDropdownMenuPlacement.Above -> intArrayOf(
                 aboveAnchor,
                 belowAnchor,
                 centeredOnAnchorTop,
                 edgeAlignedY,
             )
-            AndroidKitFloatingDropdownMenuPosition.Below -> intArrayOf(
+            AndroidKitFloatingDropdownMenuPlacement.Below -> intArrayOf(
                 belowAnchor,
                 aboveAnchor,
                 centeredOnAnchorTop,

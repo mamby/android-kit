@@ -7,14 +7,18 @@ import androidx.compose.runtime.Composable
 
 public object AndroidKitCardDefaults {
     @Composable
-    public fun colors(): CardColors = CardDefaults.cardColors(
-        containerColor = AndroidKitThemeTokens.colorScheme.surface,
-        contentColor = AndroidKitThemeTokens.colorScheme.onSurface,
+    public fun colors(
+        style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
+    ): CardColors = CardDefaults.cardColors(
+        containerColor = style.containerColor,
+        contentColor = style.contentColor,
     )
 
     @Composable
-    public fun border(): BorderStroke = BorderStroke(
-        width = AndroidKitThemeTokens.dimensions.floatingSurfaceBorderWidth,
-        color = AndroidKitThemeTokens.colorScheme.outlineVariant,
+    public fun border(
+        style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
+    ): BorderStroke = BorderStroke(
+        width = style.borderWidth,
+        color = style.borderColor,
     )
 }
