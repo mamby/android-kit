@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 internal data class FloatingSurfaceVisuals(
+    val opacity: Float,
     val containerColor: Color,
     val contentColor: Color,
     val border: BorderStroke,
@@ -35,7 +36,12 @@ internal fun floatingSurfaceVisuals(): FloatingSurfaceVisuals {
     val scheme = AndroidKitThemeTokens.colorScheme
     return remember(style, dimensions, scheme) {
         FloatingSurfaceVisuals(
-            containerColor = scheme.surface.copy(alpha = style.opacity),
+            opacity = style.opacity,
+            containerColor = if (style.opacity == 1f) {
+                scheme.surface
+            } else {
+                scheme.surface.copy(alpha = style.opacity)
+            },
             contentColor = scheme.onSurface,
             border = BorderStroke(
                 width = dimensions.floatingSurfaceBorderWidth,
@@ -59,13 +65,14 @@ internal fun floatingSurfaceVisuals(): FloatingSurfaceVisuals {
 internal fun FloatingSurface(
     shape: Shape,
     modifier: Modifier = Modifier,
+    containerColor: Color? = null,
     content: @Composable () -> Unit,
 ): Unit {
     val visuals = floatingSurfaceVisuals()
     Surface(
         modifier = modifier.dropShadow(shape, visuals.shadow),
         shape = shape,
-        color = visuals.containerColor,
+        color = containerColor ?: visuals.containerColor,
         contentColor = visuals.contentColor,
         border = visuals.border,
         content = content,

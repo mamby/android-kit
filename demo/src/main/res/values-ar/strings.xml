@@ -16,12 +16,12 @@
     <string name="nav_localization">اللغة</string>
     <string name="nav_settings">الإعدادات</string>
     <string name="nav_demo">عرض %1$d</string>
+    <string name="nav_group_application">التطبيق</string>
+    <string name="nav_group_demos">العروض</string>
     <string name="dummy_navigation_body">وجهة تجريبية تُستخدم لاختبار قائمة التنقل المضغوطة الإضافية.</string>
-    <string name="dummy_navigation_instruction">افتح «المزيد» للتنقل بين الوجهات التجريبية الست في القائمة.</string>
+    <string name="dummy_navigation_instruction">افتح «المزيد» عند توفره للتنقل بين الوجهات الإضافية.</string>
     <string name="component_placeholder_body">اختر نسخة من المكوّن لفتح عرضها التفاعلي.</string>
     <string name="primary_action">إجراء أساسي</string>
-    <string name="floating_navigation_labels_title">أيقونات وتسميات</string>
-    <string name="floating_navigation_labels_description">تعرض الوجهات المدمجة الأيقونات والتسميات معاً.</string>
     <string name="active_variation">النسخة النشطة</string>
     <string name="action_count">عدد الإجراءات المنفذة: %1$d</string>
     <string name="localization_title">التعريب</string>
@@ -82,7 +82,7 @@
     <string name="variation_text_only">نص فقط</string>
     <string name="variation_text_items">عناصر نصية</string>
     <string name="variation_icon_items">عناصر بأيقونات</string>
-    <string name="variation_label_toggle">تبديل التسميات</string>
+    <string name="variation_interactive">سيناريوهات تفاعلية</string>
     <string name="variation_overflow">العناصر الإضافية</string>
     <string name="demo_page_title">صفحة توضيحية</string>
     <string name="demo_section_title">قسم توضيحي</string>
@@ -91,6 +91,14 @@
     <string name="demo_setting_title">إعداد توضيحي</string>
     <string name="demo_setting_supporting_text">يمكن لنص داعم اختياري توضيح إعداد فردي.</string>
     <string name="floating_title_bar_demo_instruction">استخدم عناصر التحكم الظاهرة. في الوضع الغامر، المس أي مكان في الصفحة باستثناء الإجراءات لإخفاء شريط العنوان أو إظهاره.</string>
-    <string name="floating_navigation_overflow_instruction">افتح «المزيد» في شريط التنقل المضغوط للوصول إلى الوجهات التجريبية الست في القائمة.</string>
+    <string name="floating_navigation_labels_title">أيقونات + تسميات</string>
+    <string name="floating_navigation_labels_description">عند التعطيل تظهر الأيقونات فقط. يبقى الاختيار نشطاً عند تغيير الوجهات.</string>
+    <string name="floating_navigation_five_items_title">٥ عناصر مع المزيد</string>
+    <string name="floating_navigation_five_items_description">عطّل الخيار لعرض ٣ عناصر بدون المزيد.</string>
+    <string name="floating_navigation_seven_items_title">٧ عناصر مع المزيد</string>
+    <string name="floating_navigation_seven_items_description">يعرض سبع وجهات، وتُنقل العناصر التي لا تتسع لها المساحة إلى «المزيد».</string>
+    <string name="floating_navigation_group_title">عناصر المزيد المجمّعة</string>
+    <string name="floating_navigation_group_description">يضيف تسميات مجموعات هادئة وفواصل داخل «المزيد».</string>
+    <string name="floating_navigation_scenario_instruction">يتم حفظ هذه الخيارات عند تغيير الوجهات.</string>
     <string name="demo_scroll_text">توفر هذه الكتلة الهادئة محتوى كافياً للتحقق من تمرير الصفحة مع بقاء عناصر التحكم العائمة ثابتة.\n\nتُظهر الفقرة الثانية التفاف الأسطر وتكبير النص والمسافات عبر النوافذ المضغوطة والموسعة.\n\nتُطيل الفقرة الثالثة الصفحة إلى ما بعد مساحة العرض الأولى دون إضافة سطح مرئي جديد.\n\nتساعد الفقرة الرابعة على التحقق من سلاسة التمرير أسفل العنوان والإجراءات العائمة.\n\nتحافظ الفقرة الخامسة على حياد المثال كي يبقى التركيز على المكوّن المعروض.\n\nتوفر الفقرة السادسة مسافة إضافية لاختبار ظهور شريط العنوان في الوضع الغامر.\n\nتؤكد الفقرة السابعة بقاء المحتوى الطويل مقروءاً مع أحجام نصوص إمكانية الوصول الأكبر.\n\nتسهّل الفقرة الثامنة فحص المساحة المحجوزة للتنقل قرب نهاية الصفحة.\n\nتتحقق الفقرة التاسعة من ثبات المسافات بعد كتلة طويلة ومتواصلة من المحتوى.\n\nتؤكد الفقرة العاشرة والأخيرة إمكانية الوصول إلى كل المحتوى فوق شريط التنقل وهوامش النظام.</string>
 </resources>

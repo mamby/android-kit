@@ -17,6 +17,10 @@ enum class ComponentId(
     AndroidKitFloatingActionBar("AndroidKitFloatingActionBar"),
     AndroidKitFloatingDropdownMenu("AndroidKitFloatingDropdownMenu"),
     AndroidKitFloatingNavigation("AndroidKitFloatingNavigation"),
+    ;
+
+    val catalogName: String
+        get() = apiName.removePrefix("AndroidKit")
 }
 
 @Serializable
@@ -130,12 +134,8 @@ enum class ComponentDemo(
         R.string.variation_icon_items,
     ),
 
-    AndroidKitFloatingNavigationLabels(
+    AndroidKitFloatingNavigationInteractive(
         ComponentId.AndroidKitFloatingNavigation,
-        R.string.variation_label_toggle,
-    ),
-    AndroidKitFloatingNavigationOverflow(
-        ComponentId.AndroidKitFloatingNavigation,
-        R.string.variation_overflow,
+        R.string.variation_interactive,
     ),
 }

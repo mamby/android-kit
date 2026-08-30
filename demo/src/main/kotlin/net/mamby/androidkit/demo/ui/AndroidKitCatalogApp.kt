@@ -22,6 +22,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
+import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationFlyoutGroup
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
@@ -56,6 +57,7 @@ fun AndroidKitCatalogApp(
         ) + (1..DummyNavigationDestinationCount).map(::DemoRootRoute)
     }
     val navigation = rememberMultiBackStackNavigationState(roots)
+    val navigationDemoConfiguration = floatingNavigationDemoConfiguration(settings)
 
     AndroidKitTheme(
         definition = themeDefinition,
@@ -77,7 +79,13 @@ fun AndroidKitCatalogApp(
             materialSymbol(R.drawable.ic_symbol_info),
             materialSymbol(R.drawable.ic_symbol_dashboard_customize),
         )
-        val navigationItems: List<AndroidKitFloatingNavigationItem<CatalogRootRoute>> =
+        val applicationGroup = AndroidKitFloatingNavigationFlyoutGroup(
+            label = stringResource(R.string.nav_group_application),
+        )
+        val demosGroup = AndroidKitFloatingNavigationFlyoutGroup(
+            label = stringResource(R.string.nav_group_demos),
+        )
+        val navigationItems: List<AndroidKitFloatingNavigationItem<CatalogRootRoute>> = (
             listOf(
                 AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = ComponentsRoute,
@@ -93,15 +101,23 @@ fun AndroidKitCatalogApp(
                     key = SettingsRoute,
                     label = stringResource(R.string.nav_settings),
                     icon = materialSymbol(R.drawable.ic_symbol_settings),
-                    showDividerAfterInFlyout = true,
+                    flyoutGroup = applicationGroup.takeIf {
+                        navigationDemoConfiguration.groupedFlyout
+                    },
                 ),
             ) + roots.filterIsInstance<DemoRootRoute>().map { route ->
                 AndroidKitFloatingNavigationItem<CatalogRootRoute>(
                     key = route,
                     label = stringResource(R.string.nav_demo, route.index),
                     icon = dummyNavigationIcons[route.index - 1],
+                    flyoutGroup = when {
+                        !navigationDemoConfiguration.groupedFlyout -> null
+                        route.index <= FirstDemoGroupLastIndex -> applicationGroup
+                        else -> demosGroup
+                    },
                 )
             }
+        ).take(navigationDemoConfiguration.itemCount)
         val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
         BackHandler(enabled = !navigation.isAtRoot || navigation.selectedRoot != roots.first()) {
@@ -113,12 +129,9 @@ fun AndroidKitCatalogApp(
             selectedKey = navigation.selectedRoot,
             onSelected = navigation::openRoot,
             modifier = Modifier.semantics { testTagsAsResourceId = true },
-            compactVisibleDestinationCount = if (settings.showCompactNavigationLabels) {
-                CompactLabeledDestinationCount
-            } else {
-                CompactIconDestinationCount
-            },
-            showCompactLabels = settings.showCompactNavigationLabels,
+            compactVisibleDestinationCount =
+                navigationDemoConfiguration.visibleDestinationCount,
+            showCompactLabels = navigationDemoConfiguration.showLabels,
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 NavDisplay(
@@ -143,10 +156,17 @@ fun AndroidKitCatalogApp(
                         ) { route ->
                             ComponentDemoScreen(
                                 demo = route.demo,
+                                floatingNavigationLayout = settings.floatingNavigationLayout,
+                                onFloatingNavigationLayoutChange =
+                                    settingsViewModel::setFloatingNavigationLayout,
                                 showCompactNavigationLabels =
                                     settings.showCompactNavigationLabels,
                                 onShowCompactNavigationLabelsChange =
                                     settingsViewModel::setShowCompactNavigationLabels,
+                                groupCompactNavigationFlyout =
+                                    settings.groupCompactNavigationFlyout,
+                                onGroupCompactNavigationFlyoutChange =
+                                    settingsViewModel::setGroupCompactNavigationFlyout,
                                 onBack = navigation::goBack,
                             )
                         }
@@ -172,5 +192,28 @@ fun AndroidKitCatalogApp(
 }
 
 private const val DummyNavigationDestinationCount = 7
-private const val CompactLabeledDestinationCount = 2
-private const val CompactIconDestinationCount = 4
+private const val FirstDemoGroupLastIndex = 3
+
+private data class FloatingNavigationDemoConfiguration(
+    val itemCount: Int = 10,
+    val visibleDestinationCount: Int = 4,
+    val showLabels: Boolean = false,
+    val groupedFlyout: Boolean = false,
+)
+
+private fun floatingNavigationDemoConfiguration(
+    settings: DemoSettings,
+): FloatingNavigationDemoConfiguration {
+    val layoutConfiguration = when (settings.floatingNavigationLayout) {
+        DemoFloatingNavigationLayout.ThreeItemsWithoutMore ->
+            FloatingNavigationDemoConfiguration(itemCount = 3, visibleDestinationCount = 3)
+        DemoFloatingNavigationLayout.FiveItemsWithMore ->
+            FloatingNavigationDemoConfiguration(itemCount = 10, visibleDestinationCount = 4)
+        DemoFloatingNavigationLayout.SevenItemsWithMore ->
+            FloatingNavigationDemoConfiguration(itemCount = 7, visibleDestinationCount = 4)
+    }
+    return layoutConfiguration.copy(
+        showLabels = settings.showCompactNavigationLabels,
+        groupedFlyout = settings.groupCompactNavigationFlyout,
+    )
+}

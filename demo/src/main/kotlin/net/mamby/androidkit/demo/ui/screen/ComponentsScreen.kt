@@ -41,7 +41,7 @@ fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
             ComponentId.entries.forEach { component ->
                 item(key = component.name) {
                     Text(
-                        text = component.apiName,
+                        text = component.catalogName,
                         modifier = Modifier
                             .padding(top = dimensions.spaceMedium)
                             .semantics { heading() },

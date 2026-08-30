@@ -16,12 +16,12 @@
     <string name="nav_localization">Localisation</string>
     <string name="nav_settings">Réglages</string>
     <string name="nav_demo">Démo %1$d</string>
+    <string name="nav_group_application">Application</string>
+    <string name="nav_group_demos">Démos</string>
     <string name="dummy_navigation_body">Une destination fictive utilisée pour tester le débordement de la navigation compacte.</string>
-    <string name="dummy_navigation_instruction">Ouvrez Plus pour parcourir les six destinations fictives du menu.</string>
+    <string name="dummy_navigation_instruction">Ouvrez Plus lorsqu’il est disponible pour parcourir les destinations supplémentaires.</string>
     <string name="component_placeholder_body">Sélectionnez une variante de composant pour ouvrir sa démonstration interactive.</string>
     <string name="primary_action">Action principale</string>
-    <string name="floating_navigation_labels_title">Icônes et libellés</string>
-    <string name="floating_navigation_labels_description">Les destinations compactes affichent leurs icônes et leurs libellés.</string>
     <string name="active_variation">Variante active</string>
     <string name="action_count">Actions déclenchées : %1$d</string>
     <string name="localization_title">Localisation</string>
@@ -82,7 +82,7 @@
     <string name="variation_text_only">Texte uniquement</string>
     <string name="variation_text_items">Éléments textuels</string>
     <string name="variation_icon_items">Éléments avec icône</string>
-    <string name="variation_label_toggle">Bouton des libellés</string>
+    <string name="variation_interactive">Scénarios interactifs</string>
     <string name="variation_overflow">Débordement</string>
     <string name="demo_page_title">Page de démonstration</string>
     <string name="demo_section_title">Section d’exemple</string>
@@ -91,6 +91,14 @@
     <string name="demo_setting_title">Réglage d’exemple</string>
     <string name="demo_setting_supporting_text">Un texte complémentaire facultatif peut expliquer un réglage individuel.</string>
     <string name="floating_title_bar_demo_instruction">Utilisez les commandes visibles. En mode immersif, touchez n’importe où sur la page sauf une action pour masquer ou afficher la barre de titre.</string>
-    <string name="floating_navigation_overflow_instruction">Ouvrez Plus dans la barre de navigation compacte pour atteindre les six destinations fictives du menu.</string>
+    <string name="floating_navigation_labels_title">Icônes + libellés</string>
+    <string name="floating_navigation_labels_description">Désactivé, seules les icônes sont affichées. Le choix reste actif lors des changements de destination.</string>
+    <string name="floating_navigation_five_items_title">5 éléments avec Plus</string>
+    <string name="floating_navigation_five_items_description">Désactivez pour afficher 3 éléments sans Plus.</string>
+    <string name="floating_navigation_seven_items_title">7 éléments avec Plus</string>
+    <string name="floating_navigation_seven_items_description">Affiche sept destinations ; celles qui ne tiennent pas sont déplacées dans Plus.</string>
+    <string name="floating_navigation_group_title">Éléments Plus groupés</string>
+    <string name="floating_navigation_group_description">Ajoute des libellés de groupe discrets et des séparateurs dans Plus.</string>
+    <string name="floating_navigation_scenario_instruction">Ces choix sont conservés lors des changements de destination.</string>
     <string name="demo_scroll_text">Ce bloc discret fournit assez de contenu pour vérifier que la page défile tandis que les commandes flottantes restent ancrées.\n\nLe deuxième paragraphe rend visibles le retour à la ligne, la mise à l’échelle du texte et les espacements sur les fenêtres compactes et étendues.\n\nUn troisième paragraphe prolonge la page au-delà de la fenêtre initiale sans ajouter une autre surface visuelle.\n\nLe quatrième paragraphe aide à vérifier que le défilement reste fluide sous le titre et les actions flottantes.\n\nLe cinquième paragraphe garde l’exemple neutre afin que l’attention reste portée sur le composant présenté.\n\nLe sixième paragraphe fournit davantage de distance pour tester la visibilité immersive de la barre de titre.\n\nLe septième paragraphe confirme que le contenu long reste lisible avec une taille de texte d’accessibilité plus grande.\n\nLe huitième paragraphe facilite l’inspection de l’espace réservé à la navigation près du bas de la page.\n\nLe neuvième paragraphe vérifie que les espacements restent cohérents après un long bloc de contenu continu.\n\nLe dixième et dernier paragraphe confirme que tout le contenu reste accessible au-dessus de la navigation et des marges système.</string>
 </resources>

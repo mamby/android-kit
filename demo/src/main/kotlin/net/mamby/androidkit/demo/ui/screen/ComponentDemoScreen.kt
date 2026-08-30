@@ -41,6 +41,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.ComponentDemo
 import net.mamby.androidkit.demo.ui.ComponentId
+import net.mamby.androidkit.demo.ui.DemoFloatingNavigationLayout
 import net.mamby.androidkit.demo.ui.materialSymbol
 import net.mamby.androidkit.navigation3.listDetailBackAction
 
@@ -64,10 +65,14 @@ fun ComponentPlaceholder() {
 }
 
 @Composable
-fun ComponentDemoScreen(
+internal fun ComponentDemoScreen(
     demo: ComponentDemo,
+    floatingNavigationLayout: DemoFloatingNavigationLayout,
+    onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
+    groupCompactNavigationFlyout: Boolean,
+    onGroupCompactNavigationFlyoutChange: (Boolean) -> Unit,
     onBack: () -> Unit,
 ) {
     when (demo.component) {
@@ -78,8 +83,13 @@ fun ComponentDemoScreen(
         )
         else -> StandardComponentDemo(
             demo = demo,
+            floatingNavigationLayout = floatingNavigationLayout,
+            onFloatingNavigationLayoutChange = onFloatingNavigationLayoutChange,
             showCompactNavigationLabels = showCompactNavigationLabels,
             onShowCompactNavigationLabelsChange = onShowCompactNavigationLabelsChange,
+            groupCompactNavigationFlyout = groupCompactNavigationFlyout,
+            onGroupCompactNavigationFlyoutChange =
+                onGroupCompactNavigationFlyoutChange,
             onBack = onBack,
         )
     }
@@ -187,8 +197,12 @@ private fun AndroidKitFloatingActionButtonDemo(
 @Composable
 private fun StandardComponentDemo(
     demo: ComponentDemo,
+    floatingNavigationLayout: DemoFloatingNavigationLayout,
+    onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
+    groupCompactNavigationFlyout: Boolean,
+    onGroupCompactNavigationFlyoutChange: (Boolean) -> Unit,
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
@@ -265,12 +279,16 @@ private fun StandardComponentDemo(
 
                     ComponentId.AndroidKitFloatingDropdownMenu ->
                         AndroidKitFloatingDropdownMenuDemo(demo)
-                    ComponentId.AndroidKitFloatingNavigation -> AndroidKitFloatingNavigationDemo(
-                        demo = demo,
-                        showCompactNavigationLabels = showCompactNavigationLabels,
-                        onShowCompactNavigationLabelsChange =
-                            onShowCompactNavigationLabelsChange,
-                    )
+                    ComponentId.AndroidKitFloatingNavigation ->
+                        AndroidKitFloatingNavigationDemo(
+                            demo = demo,
+                            layout = floatingNavigationLayout,
+                            onLayoutChange = onFloatingNavigationLayoutChange,
+                            showLabels = showCompactNavigationLabels,
+                            onShowLabelsChange = onShowCompactNavigationLabelsChange,
+                            groupFlyout = groupCompactNavigationFlyout,
+                            onGroupFlyoutChange = onGroupCompactNavigationFlyoutChange,
+                        )
 
                     ComponentId.AndroidKitPage,
                     ComponentId.AndroidKitFloatingActionButton,
@@ -596,33 +614,69 @@ private fun AndroidKitFloatingDropdownMenuDemo(demo: ComponentDemo) {
 @Composable
 private fun AndroidKitFloatingNavigationDemo(
     demo: ComponentDemo,
-    showCompactNavigationLabels: Boolean,
-    onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
+    layout: DemoFloatingNavigationLayout,
+    onLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
+    showLabels: Boolean,
+    onShowLabelsChange: (Boolean) -> Unit,
+    groupFlyout: Boolean,
+    onGroupFlyoutChange: (Boolean) -> Unit,
 ) {
-    if (demo == ComponentDemo.AndroidKitFloatingNavigationLabels) {
-        val entryLabel = stringResource(R.string.floating_navigation_labels_title)
-        AndroidKitSettingSection(
-            label = stringResource(R.string.active_variation),
-            description = stringResource(R.string.floating_navigation_labels_description),
-        ) {
-            toggle(
-                label = entryLabel,
-                checked = showCompactNavigationLabels,
-                onCheckedChange = onShowCompactNavigationLabelsChange,
-            )
-        }
-    } else {
-        AndroidKitCard(
-            modifier = Modifier.fillMaxWidth(),
-            header = {
-                DemoCardHeader(
-                    title = stringResource(R.string.active_variation),
-                    supportingText = stringResource(demo.titleResource),
+    val labelsTitle = stringResource(R.string.floating_navigation_labels_title)
+    val labelsDescription = stringResource(R.string.floating_navigation_labels_description)
+    val fiveItemsTitle = stringResource(R.string.floating_navigation_five_items_title)
+    val fiveItemsDescription = stringResource(
+        R.string.floating_navigation_five_items_description,
+    )
+    val sevenItemsTitle = stringResource(R.string.floating_navigation_seven_items_title)
+    val sevenItemsDescription = stringResource(
+        R.string.floating_navigation_seven_items_description,
+    )
+    val groupTitle = stringResource(R.string.floating_navigation_group_title)
+    val groupDescription = stringResource(R.string.floating_navigation_group_description)
+    AndroidKitSettingSection(
+        label = stringResource(demo.titleResource),
+        description = stringResource(R.string.floating_navigation_scenario_instruction),
+    ) {
+        toggle(
+            label = labelsTitle,
+            supportingText = labelsDescription,
+            checked = showLabels,
+            onCheckedChange = onShowLabelsChange,
+        )
+        toggle(
+            label = fiveItemsTitle,
+            supportingText = fiveItemsDescription,
+            checked = layout == DemoFloatingNavigationLayout.FiveItemsWithMore,
+            onCheckedChange = { useFiveItems ->
+                onLayoutChange(
+                    if (useFiveItems) {
+                        DemoFloatingNavigationLayout.FiveItemsWithMore
+                    } else {
+                        DemoFloatingNavigationLayout.ThreeItemsWithoutMore
+                    },
                 )
             },
-        ) {
-            Text(stringResource(R.string.floating_navigation_overflow_instruction))
-        }
+        )
+        toggle(
+            label = sevenItemsTitle,
+            supportingText = sevenItemsDescription,
+            checked = layout == DemoFloatingNavigationLayout.SevenItemsWithMore,
+            onCheckedChange = { useSevenItems ->
+                onLayoutChange(
+                    if (useSevenItems) {
+                        DemoFloatingNavigationLayout.SevenItemsWithMore
+                    } else {
+                        DemoFloatingNavigationLayout.ThreeItemsWithoutMore
+                    },
+                )
+            },
+        )
+        toggle(
+            label = groupTitle,
+            supportingText = groupDescription,
+            checked = groupFlyout,
+            onCheckedChange = onGroupFlyoutChange,
+        )
     }
 }
 

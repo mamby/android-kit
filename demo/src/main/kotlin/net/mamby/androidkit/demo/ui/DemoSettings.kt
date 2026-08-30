@@ -22,8 +22,32 @@ import kotlinx.coroutines.launch
 internal data class DemoSettings(
     val themeChoice: DemoThemeChoice = DemoThemeChoice.Light,
     val floatingSurfacesTransparent: Boolean = false,
+    val floatingNavigationLayout: DemoFloatingNavigationLayout =
+        DemoFloatingNavigationLayout.FiveItemsWithMore,
     val showCompactNavigationLabels: Boolean = false,
+    val groupCompactNavigationFlyout: Boolean = false,
 )
+
+internal enum class DemoFloatingNavigationLayout(
+    val storedValue: String,
+) {
+    ThreeItemsWithoutMore("three_items_without_more"),
+    FiveItemsWithMore("five_items_with_more"),
+    SevenItemsWithMore("seven_items_with_more"),
+    ;
+
+    companion object {
+        fun fromStoredValue(value: String?): DemoFloatingNavigationLayout = when (value) {
+            ThreeItemsWithoutMore.storedValue,
+            "three_destinations",
+            -> ThreeItemsWithoutMore
+
+            SevenItemsWithMore.storedValue -> SevenItemsWithMore
+
+            else -> FiveItemsWithMore
+        }
+    }
+}
 
 internal class DemoSettingsRepository(context: Context) {
     private val dataStore = context.applicationContext.demoSettingsDataStore
@@ -46,7 +70,13 @@ internal class DemoSettingsRepository(context: Context) {
                         opacity < OpaqueFloatingSurfaceOpacity
                     }
                     ?: false,
-                showCompactNavigationLabels = preferences[ShowCompactNavigationLabelsKey] ?: false,
+                floatingNavigationLayout = DemoFloatingNavigationLayout.fromStoredValue(
+                    preferences[FloatingNavigationLayoutKey],
+                ),
+                showCompactNavigationLabels = preferences[ShowCompactNavigationLabelsKey]
+                    ?: false,
+                groupCompactNavigationFlyout = preferences[GroupCompactNavigationFlyoutKey]
+                    ?: false,
             )
         }
 
@@ -63,9 +93,21 @@ internal class DemoSettingsRepository(context: Context) {
         }
     }
 
+    suspend fun setFloatingNavigationLayout(layout: DemoFloatingNavigationLayout) {
+        dataStore.edit { preferences ->
+            preferences[FloatingNavigationLayoutKey] = layout.storedValue
+        }
+    }
+
     suspend fun setShowCompactNavigationLabels(showLabels: Boolean) {
         dataStore.edit { preferences ->
             preferences[ShowCompactNavigationLabelsKey] = showLabels
+        }
+    }
+
+    suspend fun setGroupCompactNavigationFlyout(groupFlyout: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[GroupCompactNavigationFlyoutKey] = groupFlyout
         }
     }
 }
@@ -91,9 +133,21 @@ internal class DemoSettingsViewModel(
         }
     }
 
+    fun setFloatingNavigationLayout(layout: DemoFloatingNavigationLayout) {
+        viewModelScope.launch {
+            repository.setFloatingNavigationLayout(layout)
+        }
+    }
+
     fun setShowCompactNavigationLabels(showLabels: Boolean) {
         viewModelScope.launch {
             repository.setShowCompactNavigationLabels(showLabels)
+        }
+    }
+
+    fun setGroupCompactNavigationFlyout(groupFlyout: Boolean) {
+        viewModelScope.launch {
+            repository.setGroupCompactNavigationFlyout(groupFlyout)
         }
     }
 }
@@ -107,9 +161,14 @@ private val FloatingSurfaceOpacityKey = floatPreferencesKey("floating_surface_op
 private val FloatingSurfacesTransparentKey = booleanPreferencesKey(
     "floating_surfaces_transparent",
 )
+private val FloatingNavigationLayoutKey = stringPreferencesKey(
+    "floating_navigation_layout",
+)
 private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
     "show_compact_navigation_labels",
 )
-
+private val GroupCompactNavigationFlyoutKey = booleanPreferencesKey(
+    "group_compact_navigation_flyout",
+)
 internal const val TransparentFloatingSurfaceOpacity = 0.92f
 internal const val OpaqueFloatingSurfaceOpacity = 1f
