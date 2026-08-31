@@ -30,6 +30,7 @@ public fun AndroidKitFloatingActionBar(
         style = style.asFloatingToolbarStyle(),
         contentPadding = contentPadding,
         itemSpacing = itemSpacing,
+        flyoutAnchor = AndroidKitFloatingToolbarFlyoutAnchor.Toolbar,
         content = content,
     )
 }

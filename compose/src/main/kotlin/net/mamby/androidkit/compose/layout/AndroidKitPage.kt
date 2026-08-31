@@ -32,19 +32,25 @@ import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 @Immutable
+public sealed interface AndroidKitPageActionItem
+
+@Immutable
 public class AndroidKitPageAction(
     public val icon: ImageVector,
     public val label: String,
     public val onClick: () -> Unit,
     public val enabled: Boolean = true,
-)
+) : AndroidKitPageActionItem
+
+@Immutable
+public data object AndroidKitPageActionSeparator : AndroidKitPageActionItem
 
 @Composable
 public fun AndroidKitPage(
     title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
-    actions: List<AndroidKitPageAction> = emptyList(),
+    actions: List<AndroidKitPageActionItem> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
     style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
@@ -62,7 +68,10 @@ public fun AndroidKitPage(
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
     val statusBarClearance = measuredContentPadding.calculateTopPadding()
     val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
-    val hasTitleBar = topBar != null || title != null || onBack != null || actions.isNotEmpty()
+    val hasTitleBar = topBar != null ||
+        title != null ||
+        onBack != null ||
+        actions.any { it is AndroidKitPageAction }
     AndroidKitPageLayout(
         modifier = modifier
             .toggleTitleBarOnUnconsumedTap(

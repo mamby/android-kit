@@ -47,6 +47,8 @@ public fun AndroidKitFloatingDropdownMenu(
     modifier: Modifier = Modifier,
     placement: AndroidKitFloatingDropdownMenuPlacement =
         AndroidKitFloatingDropdownMenuPlacement.Below,
+    horizontalAlignment: AndroidKitFloatingDropdownMenuHorizontalAlignment =
+        AndroidKitFloatingDropdownMenuHorizontalAlignment.Start,
     style: AndroidKitFloatingDropdownMenuStyle = AndroidKitThemeTokens.floatingDropdownMenuStyle,
     contentPadding: PaddingValues = PaddingValues(
         vertical = AndroidKitThemeTokens.dimensions.spaceSmall,
@@ -59,6 +61,7 @@ public fun AndroidKitFloatingDropdownMenu(
     onDismissRequest = onDismissRequest,
     modifier = modifier,
     placement = placement,
+    horizontalAlignment = horizontalAlignment,
     offset = DpOffset.Zero,
     style = style,
     contentPadding = contentPadding,
@@ -75,6 +78,8 @@ public fun AndroidKitFloatingDropdownMenu(
     modifier: Modifier = Modifier,
     placement: AndroidKitFloatingDropdownMenuPlacement =
         AndroidKitFloatingDropdownMenuPlacement.Below,
+    horizontalAlignment: AndroidKitFloatingDropdownMenuHorizontalAlignment =
+        AndroidKitFloatingDropdownMenuHorizontalAlignment.Start,
     style: AndroidKitFloatingDropdownMenuStyle = AndroidKitThemeTokens.floatingDropdownMenuStyle,
     contentPadding: PaddingValues = PaddingValues(
         vertical = AndroidKitThemeTokens.dimensions.spaceSmall,
@@ -87,6 +92,7 @@ public fun AndroidKitFloatingDropdownMenu(
     onDismissRequest = onDismissRequest,
     modifier = modifier,
     placement = placement,
+    horizontalAlignment = horizontalAlignment,
     offset = offset,
     style = style,
     contentPadding = contentPadding,
@@ -100,12 +106,18 @@ public enum class AndroidKitFloatingDropdownMenuPlacement {
     Below,
 }
 
+public enum class AndroidKitFloatingDropdownMenuHorizontalAlignment {
+    Start,
+    End,
+}
+
 @Composable
 private fun FloatingDropdownMenuContent(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     modifier: Modifier,
     placement: AndroidKitFloatingDropdownMenuPlacement,
+    horizontalAlignment: AndroidKitFloatingDropdownMenuHorizontalAlignment,
     offset: DpOffset,
     style: AndroidKitFloatingDropdownMenuStyle,
     contentPadding: PaddingValues,
@@ -115,9 +127,10 @@ private fun FloatingDropdownMenuContent(
 ): Unit {
     val density = LocalDensity.current
     val transformOriginState = remember { mutableStateOf(TransformOrigin.Center) }
-    val positionProvider = remember(placement, offset, density) {
+    val positionProvider = remember(placement, horizontalAlignment, offset, density) {
         FloatingDropdownMenuPositionProvider(
             placement = placement,
+            horizontalAlignment = horizontalAlignment,
             offset = offset,
             density = density,
             onPositionCalculated = { anchorBounds, menuBounds ->
@@ -211,6 +224,7 @@ private fun FloatingDropdownMenuAnimation(
 
 private data class FloatingDropdownMenuPositionProvider(
     val placement: AndroidKitFloatingDropdownMenuPlacement,
+    val horizontalAlignment: AndroidKitFloatingDropdownMenuHorizontalAlignment,
     val offset: DpOffset,
     val density: Density,
     val onPositionCalculated: (anchorBounds: IntRect, menuBounds: IntRect) -> Unit,
@@ -240,8 +254,20 @@ private data class FloatingDropdownMenuPositionProvider(
         } else {
             windowSize.width - horizontalMargin - popupContentSize.width
         }
+        val horizontalCandidates = when (horizontalAlignment) {
+            AndroidKitFloatingDropdownMenuHorizontalAlignment.Start -> intArrayOf(
+                startAlignedX,
+                endAlignedX,
+                edgeAlignedX,
+            )
+            AndroidKitFloatingDropdownMenuHorizontalAlignment.End -> intArrayOf(
+                endAlignedX,
+                startAlignedX,
+                edgeAlignedX,
+            )
+        }
         val x = firstFittingCandidate(
-            candidates = intArrayOf(startAlignedX, endAlignedX, edgeAlignedX),
+            candidates = horizontalCandidates,
             size = popupContentSize.width,
             availableSize = windowSize.width,
             margin = horizontalMargin,
@@ -257,26 +283,26 @@ private data class FloatingDropdownMenuPositionProvider(
         } else {
             windowSize.height - verticalMargin - popupContentSize.height
         }
-        val verticalCandidates = when (placement) {
-            AndroidKitFloatingDropdownMenuPlacement.Above -> intArrayOf(
-                aboveAnchor,
-                belowAnchor,
-                centeredOnAnchorTop,
-                edgeAlignedY,
-            )
-            AndroidKitFloatingDropdownMenuPlacement.Below -> intArrayOf(
-                belowAnchor,
-                aboveAnchor,
-                centeredOnAnchorTop,
-                edgeAlignedY,
-            )
+        val aboveFits = aboveAnchor >= verticalMargin &&
+            aboveAnchor + popupContentSize.height <= windowSize.height
+        val belowFits = belowAnchor >= 0 &&
+            belowAnchor + popupContentSize.height <= windowSize.height - verticalMargin
+        val centeredFits = centeredOnAnchorTop >= verticalMargin &&
+            centeredOnAnchorTop + popupContentSize.height <= windowSize.height - verticalMargin
+        val y = when (placement) {
+            AndroidKitFloatingDropdownMenuPlacement.Above -> when {
+                aboveFits -> aboveAnchor
+                belowFits -> belowAnchor
+                centeredFits -> centeredOnAnchorTop
+                else -> edgeAlignedY
+            }
+            AndroidKitFloatingDropdownMenuPlacement.Below -> when {
+                belowFits -> belowAnchor
+                aboveFits -> aboveAnchor
+                centeredFits -> centeredOnAnchorTop
+                else -> edgeAlignedY
+            }
         }
-        val y = firstFittingCandidate(
-            candidates = verticalCandidates,
-            size = popupContentSize.height,
-            availableSize = windowSize.height,
-            margin = verticalMargin,
-        )
         val menuOffset = IntOffset(x, y)
         onPositionCalculated(
             anchorBounds,

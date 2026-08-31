@@ -110,6 +110,6 @@ public data class AndroidKitFloatingNavigationStyle(
     public val itemShape: Shape,
     public val labelTextStyle: TextStyle,
     public val overflowItemTextStyle: TextStyle,
-    public val overflowSheetStyle: AndroidKitBottomSheetStyle? = null,
+    public val overflowFlyoutStyle: AndroidKitFloatingDropdownMenuStyle? = null,
     public val adaptiveItemStyle: AndroidKitAdaptiveNavigationItemStyle? = null,
 )

@@ -90,6 +90,11 @@ public interface AndroidKitFloatingToolbarFlyoutScope {
     ): Unit
 }
 
+public enum class AndroidKitFloatingToolbarFlyoutAnchor {
+    Item,
+    Toolbar,
+}
+
 @Composable
 public fun AndroidKitFloatingToolbar(
     modifier: Modifier = Modifier,
@@ -99,20 +104,70 @@ public fun AndroidKitFloatingToolbar(
         vertical = AndroidKitThemeTokens.dimensions.spaceExtraSmall,
     ),
     itemSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    flyoutAnchor: AndroidKitFloatingToolbarFlyoutAnchor =
+        AndroidKitFloatingToolbarFlyoutAnchor.Item,
     content: AndroidKitFloatingToolbarScope.() -> Unit,
 ): Unit {
     val scope = FloatingToolbarScopeImpl().apply(content)
+    var expandedToolbarFlyoutIndex by remember { mutableStateOf<Int?>(null) }
+    val flyoutAvailability = scope.items.map { item ->
+        (item as? FloatingToolbarItemDefinition.Flyout)?.enabled == true
+    }
+
+    LaunchedEffect(flyoutAnchor, flyoutAvailability) {
+        val expandedIndex = expandedToolbarFlyoutIndex
+        if (
+            flyoutAnchor != AndroidKitFloatingToolbarFlyoutAnchor.Toolbar ||
+            expandedIndex == null ||
+            flyoutAvailability.getOrNull(expandedIndex) != true
+        ) {
+            expandedToolbarFlyoutIndex = null
+        }
+    }
+
     FloatingSurface(
         modifier = modifier,
         shape = style.shape,
         style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
-        Row(
-            modifier = Modifier.padding(contentPadding),
-            horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            scope.items.forEach { item -> FloatingToolbarItem(item, style) }
+        Box {
+            Row(
+                modifier = Modifier.padding(contentPadding),
+                horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                scope.items.forEachIndexed { index, item ->
+                    FloatingToolbarItem(
+                        item = item,
+                        style = style,
+                        flyoutAnchor = flyoutAnchor,
+                        toolbarFlyoutExpanded = expandedToolbarFlyoutIndex == index,
+                        onToolbarFlyoutExpandedChange = { expanded ->
+                            expandedToolbarFlyoutIndex = if (expanded) index else null
+                        },
+                    )
+                }
+            }
+            if (flyoutAnchor == AndroidKitFloatingToolbarFlyoutAnchor.Toolbar) {
+                scope.items.forEachIndexed { index, item ->
+                    if (item is FloatingToolbarItemDefinition.Flyout) {
+                        FloatingToolbarFlyoutPopup(
+                            items = item.items,
+                            expanded = expandedToolbarFlyoutIndex == index,
+                            onDismissRequest = {
+                                if (expandedToolbarFlyoutIndex == index) {
+                                    expandedToolbarFlyoutIndex = null
+                                }
+                            },
+                            enabled = item.enabled,
+                            placement = item.placement,
+                            horizontalAlignment =
+                                AndroidKitFloatingDropdownMenuHorizontalAlignment.End,
+                            toolbarStyle = style,
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -288,6 +343,9 @@ private sealed interface FloatingToolbarFlyoutItem {
 private fun FloatingToolbarItem(
     item: FloatingToolbarItemDefinition,
     style: AndroidKitFloatingToolbarStyle,
+    flyoutAnchor: AndroidKitFloatingToolbarFlyoutAnchor,
+    toolbarFlyoutExpanded: Boolean,
+    onToolbarFlyoutExpandedChange: (Boolean) -> Unit,
 ): Unit {
     when (item) {
         is FloatingToolbarItemDefinition.Icon -> FloatingToolbarItemContent(
@@ -325,15 +383,28 @@ private fun FloatingToolbarItem(
             style = style,
         )
 
-        is FloatingToolbarItemDefinition.Flyout -> FloatingToolbarFlyoutContent(
-            items = item.items,
-            modifier = item.modifier,
-            contentDescription = item.contentDescription
-                ?: AndroidKitThemeTokens.strings.more,
-            enabled = item.enabled,
-            placement = item.placement,
-            toolbarStyle = style,
-        )
+        is FloatingToolbarItemDefinition.Flyout -> when (flyoutAnchor) {
+            AndroidKitFloatingToolbarFlyoutAnchor.Item -> FloatingToolbarItemAnchoredFlyout(
+                items = item.items,
+                modifier = item.modifier,
+                contentDescription = item.contentDescription
+                    ?: AndroidKitThemeTokens.strings.more,
+                enabled = item.enabled,
+                placement = item.placement,
+                toolbarStyle = style,
+            )
+
+            AndroidKitFloatingToolbarFlyoutAnchor.Toolbar -> FloatingToolbarFlyoutTrigger(
+                onClick = {
+                    onToolbarFlyoutExpandedChange(!toolbarFlyoutExpanded)
+                },
+                contentDescription = item.contentDescription
+                    ?: AndroidKitThemeTokens.strings.more,
+                modifier = item.modifier,
+                enabled = item.enabled,
+                toolbarStyle = style,
+            )
+        }
 
         is FloatingToolbarItemDefinition.Custom -> Box(
             modifier = item.modifier.minimumInteractiveComponentSize(),
@@ -345,7 +416,7 @@ private fun FloatingToolbarItem(
 }
 
 @Composable
-private fun FloatingToolbarFlyoutContent(
+private fun FloatingToolbarItemAnchoredFlyout(
     items: List<FloatingToolbarFlyoutItem>,
     modifier: Modifier,
     contentDescription: String,
@@ -354,66 +425,108 @@ private fun FloatingToolbarFlyoutContent(
     toolbarStyle: AndroidKitFloatingToolbarStyle,
 ): Unit {
     var expanded by remember { mutableStateOf(false) }
-    val dimensions = AndroidKitThemeTokens.dimensions
 
     LaunchedEffect(enabled) {
         if (!enabled) expanded = false
     }
 
     Box(modifier = modifier) {
-        FloatingToolbarItemContent(
+        FloatingToolbarFlyoutTrigger(
             onClick = { expanded = !expanded },
-            label = contentDescription,
+            contentDescription = contentDescription,
             modifier = Modifier,
-            icon = AndroidKitIcons.More,
-            showLabel = false,
             enabled = enabled,
-            style = toolbarStyle,
+            toolbarStyle = toolbarStyle,
         )
-        AndroidKitFloatingDropdownMenu(
+        FloatingToolbarFlyoutPopup(
+            items = items,
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            enabled = enabled,
             placement = placement,
-            style = toolbarStyle.dropdownMenuStyle
-                ?: AndroidKitThemeTokens.floatingDropdownMenuStyle,
-        ) {
-            items.forEach { item ->
-                when (item) {
-                    is FloatingToolbarFlyoutItem.Action -> DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = item.label,
-                                style = toolbarStyle.labelTextStyle,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        },
-                        onClick = {
-                            expanded = false
-                            item.onClick()
-                        },
-                        enabled = item.enabled,
-                        contentPadding = PaddingValues(
-                            start = dimensions.spaceMedium,
-                            end = dimensions.spaceLarge,
-                        ),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = null,
-                                modifier = Modifier.size(toolbarStyle.iconSize),
-                            )
-                        },
-                    )
+            horizontalAlignment = AndroidKitFloatingDropdownMenuHorizontalAlignment.Start,
+            toolbarStyle = toolbarStyle,
+        )
+    }
+}
 
-                    is FloatingToolbarFlyoutItem.Separator -> HorizontalDivider(
-                        modifier = item.modifier.padding(
-                            horizontal = dimensions.spaceMedium,
-                            vertical = dimensions.spaceExtraSmall,
-                        ),
-                        color = toolbarStyle.separatorColor,
-                    )
-                }
+@Composable
+private fun FloatingToolbarFlyoutTrigger(
+    onClick: () -> Unit,
+    contentDescription: String,
+    modifier: Modifier,
+    enabled: Boolean,
+    toolbarStyle: AndroidKitFloatingToolbarStyle,
+): Unit = FloatingToolbarItemContent(
+    onClick = onClick,
+    label = contentDescription,
+    modifier = modifier,
+    icon = AndroidKitIcons.More,
+    showLabel = false,
+    enabled = enabled,
+    style = toolbarStyle,
+)
+
+@Composable
+private fun FloatingToolbarFlyoutPopup(
+    items: List<FloatingToolbarFlyoutItem>,
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    enabled: Boolean,
+    placement: AndroidKitFloatingDropdownMenuPlacement,
+    horizontalAlignment: AndroidKitFloatingDropdownMenuHorizontalAlignment,
+    toolbarStyle: AndroidKitFloatingToolbarStyle,
+): Unit {
+    val dimensions = AndroidKitThemeTokens.dimensions
+
+    LaunchedEffect(enabled) {
+        if (!enabled && expanded) onDismissRequest()
+    }
+
+    AndroidKitFloatingDropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        placement = placement,
+        horizontalAlignment = horizontalAlignment,
+        style = toolbarStyle.dropdownMenuStyle
+            ?: AndroidKitThemeTokens.floatingDropdownMenuStyle,
+    ) {
+        items.forEach { item ->
+            when (item) {
+                is FloatingToolbarFlyoutItem.Action -> DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = item.label,
+                            style = toolbarStyle.labelTextStyle,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
+                    onClick = {
+                        onDismissRequest()
+                        item.onClick()
+                    },
+                    enabled = item.enabled,
+                    contentPadding = PaddingValues(
+                        start = dimensions.spaceMedium,
+                        end = dimensions.spaceLarge,
+                    ),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(toolbarStyle.iconSize),
+                        )
+                    },
+                )
+
+                is FloatingToolbarFlyoutItem.Separator -> HorizontalDivider(
+                    modifier = item.modifier.padding(
+                        horizontal = dimensions.spaceMedium,
+                        vertical = dimensions.spaceExtraSmall,
+                    ),
+                    color = toolbarStyle.separatorColor,
+                )
             }
         }
     }

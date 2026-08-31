@@ -34,6 +34,7 @@ import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.layout.AndroidKitPageAction
+import net.mamby.androidkit.compose.layout.AndroidKitPageActionSeparator
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -113,6 +114,7 @@ private fun AndroidKitPageDemo(
                 label = stringResource(R.string.action_save),
                 onClick = { actionCount += 1 },
             ),
+            AndroidKitPageActionSeparator,
             AndroidKitPageAction(
                 icon = materialSymbol(R.drawable.ic_symbol_share),
                 label = stringResource(R.string.action_share),
@@ -128,6 +130,7 @@ private fun AndroidKitPageDemo(
                 label = stringResource(R.string.action_retry),
                 onClick = { actionCount += 1 },
             ),
+            AndroidKitPageActionSeparator,
             AndroidKitPageAction(
                 icon = materialSymbol(R.drawable.ic_symbol_delete),
                 label = stringResource(R.string.action_delete),
@@ -330,12 +333,16 @@ private fun AndroidKitCardDemo(
             emptyList()
         },
         header = {
-            DemoCardHeader(
-                title = stringResource(R.string.demo_section_title),
-                supportingText = stringResource(R.string.demo_supporting_text).takeIf {
-                    demo != ComponentDemo.AndroidKitCardBasic
-                },
-            )
+            DemoCardHeaderTitle(stringResource(R.string.demo_section_title))
+        },
+        headerSupportingContent = if (demo != ComponentDemo.AndroidKitCardBasic) {
+            {
+                DemoCardHeaderSupportingContent(
+                    stringResource(R.string.demo_supporting_text),
+                )
+            }
+        } else {
+            null
         },
     ) {
         Text(stringResource(R.string.demo_section_body))
