@@ -264,7 +264,7 @@ private fun List<AndroidKitPageActionItem>.normalizedPageTitleBarItems(): List<A
                 }
             }
         }
-        if (lastOrNull() === AndroidKitPageActionSeparator) removeLast()
+        if (lastOrNull() === AndroidKitPageActionSeparator) removeAt(lastIndex)
     }
 
 private fun directPageTitleBarActionCount(
