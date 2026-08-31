@@ -25,9 +25,10 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
@@ -67,6 +68,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -654,13 +658,15 @@ private fun <Key : Any> NavigationOverflowFlyout(
     var flyoutBounds by remember { mutableStateOf<IntRect?>(null) }
     var selectedItemBounds by remember(selectedKey, items) { mutableStateOf<IntRect?>(null) }
     val relativeSelectionBounds = selectedItemBounds.relativeTo(flyoutBounds)
-    val itemColors = NavigationDrawerItemDefaults.colors(
-        selectedContainerColor = Color.Transparent,
-        unselectedContainerColor = Color.Transparent,
-        selectedIconColor = style.selectedContentColor,
-        unselectedIconColor = style.unselectedContentColor,
-        selectedTextColor = style.selectedContentColor,
-        unselectedTextColor = style.unselectedContentColor,
+    val selectedItemColors = MenuDefaults.itemColors(
+        textColor = style.selectedContentColor,
+        leadingIconColor = style.selectedContentColor,
+        trailingIconColor = style.selectedContentColor,
+    )
+    val unselectedItemColors = MenuDefaults.itemColors(
+        textColor = style.unselectedContentColor,
+        leadingIconColor = style.unselectedContentColor,
+        trailingIconColor = style.unselectedContentColor,
     )
     AndroidKitFloatingDropdownMenu(
         expanded = true,
@@ -688,9 +694,14 @@ private fun <Key : Any> NavigationOverflowFlyout(
             ) {
                 items.forEach { item ->
                     val selected = item.key == selectedKey
-                    NavigationDrawerItem(
+                    DropdownMenuItem(
                         modifier = Modifier
+                            .clip(style.itemShape)
                             .fillMaxWidth()
+                            .semantics {
+                                role = Role.Tab
+                                this.selected = selected
+                            }
                             .then(
                                 if (selected) {
                                     Modifier.onGloballyPositioned { coordinates ->
@@ -700,7 +711,7 @@ private fun <Key : Any> NavigationOverflowFlyout(
                                     Modifier
                                 },
                             ),
-                        label = {
+                        text = {
                             Text(
                                 text = item.label,
                                 style = style.overflowItemTextStyle,
@@ -708,18 +719,17 @@ private fun <Key : Any> NavigationOverflowFlyout(
                                 overflow = TextOverflow.Ellipsis,
                             )
                         },
-                        selected = selected,
                         onClick = { onSelected(item.key) },
-                        shape = style.itemShape,
-                        icon = {
+                        leadingIcon = {
                             Icon(
                                 imageVector = if (selected) item.selectedIcon else item.icon,
                                 contentDescription = null,
                                 modifier = Modifier.size(dimensions.floatingNavigationIconSize),
                             )
                         },
-                        badge = item.badge,
-                        colors = itemColors,
+                        trailingIcon = item.badge,
+                        colors = if (selected) selectedItemColors else unselectedItemColors,
+                        contentPadding = MenuDefaults.DropdownMenuItemContentPadding,
                     )
                 }
             }
