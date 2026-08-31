@@ -18,8 +18,8 @@ import com.android.tools.screenshot.PreviewTest
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
-import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.AndroidKitPage
+import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
@@ -81,17 +81,17 @@ fun androidKitFloatingTitleActions() {
             title = "A centered page title that must ellipsize",
             onBack = {},
             actions = listOf(
-                AndroidKitFloatingTitleBarAction(
+                AndroidKitPageAction(
                     materialSymbol(R.drawable.ic_symbol_edit),
                     "Edit",
                     {},
                 ),
-                AndroidKitFloatingTitleBarAction(
+                AndroidKitPageAction(
                     materialSymbol(R.drawable.ic_symbol_share),
                     "Share",
                     {},
                 ),
-                AndroidKitFloatingTitleBarAction(
+                AndroidKitPageAction(
                     materialSymbol(R.drawable.ic_symbol_delete),
                     "Delete",
                     {},

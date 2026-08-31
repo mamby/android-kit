@@ -89,7 +89,7 @@
     <string name="demo_section_body">The caller provides the section’s content.</string>
     <string name="demo_setting_title">Example setting</string>
     <string name="demo_setting_supporting_text">Optional supporting text can explain an individual setting.</string>
-    <string name="floating_title_bar_demo_instruction">Use the visible controls. In immersive mode, tap anywhere on the page except an action to hide or show the title bar.</string>
+    <string name="page_title_bar_demo_instruction">Use the visible controls. In immersive mode, tap anywhere on the page except an action to hide or show the title bar.</string>
     <string name="floating_navigation_labels_title">Icons + labels</string>
     <string name="floating_navigation_labels_description">Off shows icons only. The choice remains active when changing destinations.</string>
     <string name="floating_navigation_five_items_title">5 items with More</string>

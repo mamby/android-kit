@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,25 +22,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
+import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+
+@Immutable
+public class AndroidKitPageAction(
+    public val icon: ImageVector,
+    public val label: String,
+    public val onClick: () -> Unit,
+    public val enabled: Boolean = true,
+)
 
 @Composable
 public fun AndroidKitPage(
     title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
-    actions: List<AndroidKitFloatingTitleBarAction> = emptyList(),
+    actions: List<AndroidKitPageAction> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
     style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
-    titleBarStyle: AndroidKitFloatingTitleBarStyle =
-        AndroidKitThemeTokens.floatingTitleBarStyle,
+    titleBarStyle: AndroidKitPageTitleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
@@ -81,7 +90,7 @@ public fun AndroidKitPage(
                     if (topBar != null) {
                         topBar(titleBarVisible)
                     } else {
-                        AndroidKitFloatingTitleBar(
+                        AndroidKitPageTitleBar(
                             title = title,
                             onBack = onBack,
                             actions = actions,

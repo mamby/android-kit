@@ -88,7 +88,7 @@
     <string name="demo_section_body">L’appelant fournit le contenu de la section.</string>
     <string name="demo_setting_title">Réglage d’exemple</string>
     <string name="demo_setting_supporting_text">Un texte complémentaire facultatif peut expliquer un réglage individuel.</string>
-    <string name="floating_title_bar_demo_instruction">Utilisez les commandes visibles. En mode immersif, touchez n’importe où sur la page sauf une action pour masquer ou afficher la barre de titre.</string>
+    <string name="page_title_bar_demo_instruction">Utilisez les commandes visibles. En mode immersif, touchez n’importe où sur la page sauf une action pour masquer ou afficher la barre de titre.</string>
     <string name="floating_navigation_labels_title">Icônes + libellés</string>
     <string name="floating_navigation_labels_description">Désactivé, seules les icônes sont affichées. Le choix reste actif lors des changements de destination.</string>
     <string name="floating_navigation_five_items_title">5 éléments avec Plus</string>

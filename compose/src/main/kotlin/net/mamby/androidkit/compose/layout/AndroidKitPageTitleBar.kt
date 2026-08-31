@@ -23,7 +23,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -43,47 +41,29 @@ import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingTitleBarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
 
-@Immutable
-public class AndroidKitFloatingTitleBarAction(
-    public val icon: ImageVector,
-    public val label: String,
-    public val onClick: () -> Unit,
-    public val enabled: Boolean = true,
-)
-
 @Composable
-public fun AndroidKitFloatingTitleBar(
-    title: String? = null,
-    modifier: Modifier = Modifier,
-    onBack: (() -> Unit)? = null,
-    actions: List<AndroidKitFloatingTitleBarAction> = emptyList(),
-    visible: Boolean = true,
-    onOverflowExpandedChange: (Boolean) -> Unit = {},
-    windowInsets: WindowInsets = WindowInsets.safeDrawing.only(
-        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
-    ),
-    style: AndroidKitFloatingTitleBarStyle = AndroidKitThemeTokens.floatingTitleBarStyle,
-    maximumDirectActions: Int = 2,
-    titleContent: (@Composable () -> Unit)? = null,
-    navigationIcon: (@Composable () -> Unit)? = null,
+internal fun AndroidKitPageTitleBar(
+    title: String?,
+    onBack: (() -> Unit)?,
+    actions: List<AndroidKitPageAction>,
+    visible: Boolean,
+    style: AndroidKitPageTitleBarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
-    require(maximumDirectActions >= 0) { "Maximum direct actions must not be negative." }
-    if (title == null && titleContent == null && onBack == null && actions.isEmpty()) return
+    if (title == null && onBack == null && actions.isEmpty()) return
 
     val hasButtons = onBack != null || actions.isNotEmpty()
-    val hasTitle = title != null || titleContent != null
+    val hasTitle = title != null
     var overflowExpanded by remember { mutableStateOf(false) }
 
     fun setOverflowExpanded(expanded: Boolean) {
         overflowExpanded = expanded
-        onOverflowExpandedChange(expanded)
     }
 
     LaunchedEffect(visible) {
@@ -91,13 +71,17 @@ public fun AndroidKitFloatingTitleBar(
     }
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .windowInsetsPadding(windowInsets)
-            .heightIn(min = dimensions.floatingTitleBarHeight)
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
+                ),
+            )
+            .heightIn(min = dimensions.pageTitleBarHeight)
             .padding(
                 horizontal = dimensions.spaceSmall,
-                vertical = dimensions.floatingTitleBarVerticalPadding,
+                vertical = dimensions.pageTitleBarVerticalPadding,
             ),
     ) {
         AnimatedVisibility(
@@ -115,13 +99,12 @@ public fun AndroidKitFloatingTitleBar(
                         min = if (hasButtons) dimensions.minimumTouchTarget else 0.dp,
                     ),
             ) {
-                val directActionCount = directTitleBarActionCount(
+                val directActionCount = directPageTitleBarActionCount(
                     actionCount = actions.size,
                     availableWidth = maxWidth,
                     hasTitle = hasTitle,
                     hasNavigation = onBack != null,
                     dimensions = dimensions,
-                    maximumDirectActions = maximumDirectActions,
                 )
                 val directActions = actions.take(directActionCount)
                 val overflowActions = actions.drop(directActionCount)
@@ -146,15 +129,14 @@ public fun AndroidKitFloatingTitleBar(
                 }
 
                 if (onBack != null) {
-                    FloatingTitleBarBackButton(
+                    PageTitleBarBackButton(
                         onClick = onBack,
                         modifier = Modifier.align(Alignment.CenterStart),
                         style = style,
-                        content = navigationIcon,
                     )
                 }
 
-                if (hasTitle) {
+                title?.let { pageTitle ->
                     FloatingSurface(
                         shape = style.titleShape,
                         modifier = Modifier
@@ -172,21 +154,17 @@ public fun AndroidKitFloatingTitleBar(
                                 vertical = dimensions.spaceSmall,
                             ),
                         ) {
-                            if (titleContent != null) {
-                                titleContent()
-                            } else if (title != null) {
-                                Text(
-                                    text = title,
-                                    modifier = Modifier.clearAndSetSemantics {
-                                        heading()
-                                        contentDescription = title
-                                    },
-                                    textAlign = TextAlign.Start,
-                                    style = style.titleTextStyle,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            }
+                            Text(
+                                text = pageTitle,
+                                modifier = Modifier.clearAndSetSemantics {
+                                    heading()
+                                    contentDescription = pageTitle
+                                },
+                                textAlign = TextAlign.Start,
+                                style = style.titleTextStyle,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
                         }
                     }
                 }
@@ -198,12 +176,12 @@ public fun AndroidKitFloatingTitleBar(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         directActions.forEach { action ->
-                            FloatingTitleBarActionButton(action = action, style = style)
+                            PageTitleBarActionButton(action = action, style = style)
                         }
                         if (overflowActions.isNotEmpty()) {
                             Box {
-                                FloatingTitleBarActionButton(
-                                    action = AndroidKitFloatingTitleBarAction(
+                                PageTitleBarActionButton(
+                                    action = AndroidKitPageAction(
                                         icon = AndroidKitIcons.More,
                                         label = strings.more,
                                         onClick = {
@@ -264,42 +242,37 @@ public fun AndroidKitFloatingTitleBar(
 }
 
 @Composable
-private fun FloatingTitleBarBackButton(
+private fun PageTitleBarBackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    style: AndroidKitFloatingTitleBarStyle,
-    content: (@Composable () -> Unit)?,
+    style: AndroidKitPageTitleBarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     FloatingSurfaceButton(
         onClick = onClick,
         shape = style.buttonShape,
-        visualSize = dimensions.floatingTitleBarButtonSize,
+        visualSize = dimensions.pageTitleBarButtonSize,
         modifier = modifier,
         style = style.buttonSurfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
-        if (content != null) {
-            content()
-        } else {
-            Icon(
-                imageVector = AndroidKitIcons.ArrowBack,
-                contentDescription = AndroidKitThemeTokens.strings.back,
-                modifier = Modifier.size(dimensions.floatingActionIconSize),
-            )
-        }
+        Icon(
+            imageVector = AndroidKitIcons.ArrowBack,
+            contentDescription = AndroidKitThemeTokens.strings.back,
+            modifier = Modifier.size(dimensions.floatingActionIconSize),
+        )
     }
 }
 
 @Composable
-private fun FloatingTitleBarActionButton(
-    action: AndroidKitFloatingTitleBarAction,
-    style: AndroidKitFloatingTitleBarStyle,
+private fun PageTitleBarActionButton(
+    action: AndroidKitPageAction,
+    style: AndroidKitPageTitleBarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     FloatingSurfaceButton(
         onClick = action.onClick,
         shape = style.buttonShape,
-        visualSize = dimensions.floatingTitleBarButtonSize,
+        visualSize = dimensions.pageTitleBarButtonSize,
         enabled = action.enabled,
         style = style.buttonSurfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
@@ -311,32 +284,32 @@ private fun FloatingTitleBarActionButton(
     }
 }
 
-private fun directTitleBarActionCount(
+private fun directPageTitleBarActionCount(
     actionCount: Int,
     availableWidth: Dp,
     hasTitle: Boolean,
     hasNavigation: Boolean,
     dimensions: AndroidKitDimensions,
-    maximumDirectActions: Int,
 ): Int {
     val navigationWidth = controlRowWidth(
         controlCount = if (hasNavigation) 1 else 0,
         dimensions = dimensions,
     )
-    val minimumTitleWidth = if (hasTitle) dimensions.floatingTitleMinimumWidth else 0.dp
+    val minimumTitleWidth = if (hasTitle) dimensions.pageTitleBarMinimumTitleWidth else 0.dp
     val titleStartSpacing = if (hasTitle && hasNavigation) dimensions.spaceExtraSmall else 0.dp
 
-    return (minOf(maximumDirectActions, actionCount) downTo 0).firstOrNull { directCount ->
-        val endControlCount = directCount + if (actionCount > directCount) 1 else 0
-        val endWidth = controlRowWidth(endControlCount, dimensions)
-        val titleEndSpacing = if (hasTitle && endControlCount > 0) {
-            dimensions.spaceExtraSmall
-        } else {
-            0.dp
-        }
-        navigationWidth + titleStartSpacing + minimumTitleWidth + titleEndSpacing + endWidth <=
-            availableWidth
-    } ?: 0
+    return (minOf(MaximumDirectPageTitleBarActions, actionCount) downTo 0)
+        .firstOrNull { directCount ->
+            val endControlCount = directCount + if (actionCount > directCount) 1 else 0
+            val endWidth = controlRowWidth(endControlCount, dimensions)
+            val titleEndSpacing = if (hasTitle && endControlCount > 0) {
+                dimensions.spaceExtraSmall
+            } else {
+                0.dp
+            }
+            navigationWidth + titleStartSpacing + minimumTitleWidth + titleEndSpacing + endWidth <=
+                availableWidth
+        } ?: 0
 }
 
 private fun controlRowWidth(
@@ -347,3 +320,5 @@ private fun controlRowWidth(
 } else {
     dimensions.minimumTouchTarget * controlCount
 }
+
+private const val MaximumDirectPageTitleBarActions = 2

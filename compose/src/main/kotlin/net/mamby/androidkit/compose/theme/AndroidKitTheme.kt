@@ -39,8 +39,8 @@ public data class AndroidKitThemeDefinition(
     public val pageStyle: AndroidKitPageStyle = AndroidKitPageStyle(
         containerColor = colorScheme.background,
     ),
-    public val floatingTitleBarStyle: AndroidKitFloatingTitleBarStyle =
-        AndroidKitFloatingTitleBarStyle(
+    public val pageTitleBarStyle: AndroidKitPageTitleBarStyle =
+        AndroidKitPageTitleBarStyle(
             titleShape = CircleShape,
             buttonShape = CircleShape,
             titleTextStyle = typography.titleMedium.copy(
@@ -155,8 +155,8 @@ public data class AndroidKitDimensions(
     public val floatingNavigationItemVerticalPadding: Dp = 0.dp,
     public val floatingNavigationLabelSpacing: Dp = 0.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
-    public val floatingTitleBarButtonSize: Dp = 44.dp,
-    public val floatingTitleBarVerticalPadding: Dp = spaceSmall,
+    public val pageTitleBarButtonSize: Dp = 44.dp,
+    public val pageTitleBarVerticalPadding: Dp = spaceSmall,
     public val floatingActionButtonSize: Dp = 56.dp,
     public val floatingActionIconSize: Dp = 20.dp,
     public val floatingSurfaceBorderWidth: Dp = 1.dp,
@@ -165,8 +165,8 @@ public data class AndroidKitDimensions(
     public val floatingSurfaceButtonShadowRadius: Dp = 3.dp,
     public val floatingSurfaceButtonShadowOffsetY: Dp = 2.5.dp,
     public val floatingDropdownShadowElevation: Dp = 1.dp,
-    public val floatingTitleBarHeight: Dp = 0.dp,
-    public val floatingTitleMinimumWidth: Dp = 48.dp,
+    public val pageTitleBarHeight: Dp = 0.dp,
+    public val pageTitleBarMinimumTitleWidth: Dp = 48.dp,
     public val bottomSheetCornerRadius: Dp = 24.dp,
     public val bottomSheetHorizontalPadding: Dp = 12.dp,
     public val bottomSheetTopPadding: Dp = spaceSmall,
@@ -180,8 +180,6 @@ public data class AndroidKitDimensions(
     public val bottomSheetChromeContentSpacing: Dp = spaceExtraSmall,
     public val bottomSheetIconButtonSize: Dp = 32.dp,
     public val bottomSheetIconSize: Dp = 20.dp,
-    @Deprecated("Floating titles now use a surface capsule instead of a text shadow.")
-    public val floatingTitleTextShadowRadius: Dp = 2.dp,
     @Deprecated("Content protection now uses a background gradient instead of blur.")
     public val contentProtectionBlurRadius: Dp = 0.dp,
     public val contentProtectionFadeLength: Dp = 4.dp,
@@ -391,10 +389,10 @@ public object AndroidKitThemeTokens {
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.pageStyle
 
-    public val floatingTitleBarStyle: AndroidKitFloatingTitleBarStyle
+    public val pageTitleBarStyle: AndroidKitPageTitleBarStyle
         @Composable
         @ReadOnlyComposable
-        get() = LocalAndroidKitThemeDefinition.current.floatingTitleBarStyle
+        get() = LocalAndroidKitThemeDefinition.current.pageTitleBarStyle
 
     public val floatingActionButtonStyle: AndroidKitFloatingActionButtonStyle
         @Composable

@@ -88,7 +88,7 @@
     <string name="demo_section_body">يوفر المستدعي محتوى القسم.</string>
     <string name="demo_setting_title">إعداد توضيحي</string>
     <string name="demo_setting_supporting_text">يمكن لنص داعم اختياري توضيح إعداد فردي.</string>
-    <string name="floating_title_bar_demo_instruction">استخدم عناصر التحكم الظاهرة. في الوضع الغامر، المس أي مكان في الصفحة باستثناء الإجراءات لإخفاء شريط العنوان أو إظهاره.</string>
+    <string name="page_title_bar_demo_instruction">استخدم عناصر التحكم الظاهرة. في الوضع الغامر، المس أي مكان في الصفحة باستثناء الإجراءات لإخفاء شريط العنوان أو إظهاره.</string>
     <string name="floating_navigation_labels_title">أيقونات + تسميات</string>
     <string name="floating_navigation_labels_description">عند التعطيل تظهر الأيقونات فقط. يبقى الاختيار نشطاً عند تغيير الوجهات.</string>
     <string name="floating_navigation_five_items_title">٥ عناصر مع المزيد</string>

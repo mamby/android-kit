@@ -34,8 +34,8 @@ import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
-import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.AndroidKitPage
+import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
@@ -334,7 +334,7 @@ class ComposeBehaviorTest {
                 AndroidKitPage(
                     title = "Immersive title",
                     actions = listOf(
-                        AndroidKitFloatingTitleBarAction(
+                        AndroidKitPageAction(
                             icon = materialSymbol(R.drawable.ic_symbol_edit),
                             label = "Edit",
                             onClick = { actionCount += 1 },

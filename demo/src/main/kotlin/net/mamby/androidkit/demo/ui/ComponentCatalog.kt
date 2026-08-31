@@ -9,7 +9,6 @@ enum class ComponentId(
     val apiName: String,
 ) {
     AndroidKitPage("AndroidKitPage"),
-    AndroidKitFloatingTitleBar("AndroidKitFloatingTitleBar"),
     AndroidKitFloatingActionButton("AndroidKitFloatingActionButton"),
     AndroidKitCard("AndroidKitCard"),
     AndroidKitSettingSection("AndroidKitSettingSection"),
@@ -30,26 +29,17 @@ enum class ComponentDemo(
 ) {
     AndroidKitPageBasic(ComponentId.AndroidKitPage, R.string.variation_basic),
     AndroidKitPageTitle(ComponentId.AndroidKitPage, R.string.variation_with_title),
+    AndroidKitPageTitleActions(
+        ComponentId.AndroidKitPage,
+        R.string.variation_back_title_actions,
+    ),
+    AndroidKitPageImmersiveMode(
+        ComponentId.AndroidKitPage,
+        R.string.variation_immersive_mode,
+    ),
     AndroidKitPageFloatingActionButton(
         ComponentId.AndroidKitPage,
         R.string.variation_with_floating_action_button,
-    ),
-
-    AndroidKitFloatingTitleBarBackOnly(
-        ComponentId.AndroidKitFloatingTitleBar,
-        R.string.variation_back_only,
-    ),
-    AndroidKitFloatingTitleBarBackTitle(
-        ComponentId.AndroidKitFloatingTitleBar,
-        R.string.variation_back_title,
-    ),
-    AndroidKitFloatingTitleBarBackTitleActions(
-        ComponentId.AndroidKitFloatingTitleBar,
-        R.string.variation_back_title_actions,
-    ),
-    AndroidKitFloatingTitleBarImmersiveMode(
-        ComponentId.AndroidKitFloatingTitleBar,
-        R.string.variation_immersive_mode,
     ),
 
     AndroidKitFloatingActionButtonTopStart(

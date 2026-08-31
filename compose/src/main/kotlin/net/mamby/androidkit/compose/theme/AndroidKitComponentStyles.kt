@@ -13,7 +13,7 @@ public data class AndroidKitPageStyle(
 )
 
 @Immutable
-public data class AndroidKitFloatingTitleBarStyle(
+public data class AndroidKitPageTitleBarStyle(
     public val titleSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
     public val buttonSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
     public val dropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle? = null,

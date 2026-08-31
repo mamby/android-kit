@@ -33,8 +33,8 @@ import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
-import net.mamby.androidkit.compose.layout.AndroidKitFloatingTitleBarAction
 import net.mamby.androidkit.compose.layout.AndroidKitPage
+import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -96,15 +96,38 @@ private fun AndroidKitPageDemo(
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
+    val hasTitleActions = demo == ComponentDemo.AndroidKitPageTitleActions ||
+        demo == ComponentDemo.AndroidKitPageImmersiveMode
     val title = when (demo) {
         ComponentDemo.AndroidKitPageBasic -> null
-        ComponentDemo.AndroidKitPageTitle -> stringResource(R.string.demo_page_title)
-        ComponentDemo.AndroidKitPageFloatingActionButton -> stringResource(R.string.demo_page_title)
+        ComponentDemo.AndroidKitPageTitle,
+        ComponentDemo.AndroidKitPageTitleActions,
+        ComponentDemo.AndroidKitPageImmersiveMode,
+        ComponentDemo.AndroidKitPageFloatingActionButton,
+        -> stringResource(R.string.demo_page_title)
         else -> error("Unexpected AndroidKitPage demo: $demo")
+    }
+    val actions = if (hasTitleActions) {
+        listOf(
+            AndroidKitPageAction(
+                icon = materialSymbol(R.drawable.ic_symbol_save),
+                label = stringResource(R.string.action_save),
+                onClick = { actionCount += 1 },
+            ),
+            AndroidKitPageAction(
+                icon = materialSymbol(R.drawable.ic_symbol_share),
+                label = stringResource(R.string.action_share),
+                onClick = { actionCount += 1 },
+            ),
+        )
+    } else {
+        emptyList()
     }
     AndroidKitPage(
         title = title,
         onBack = listDetailBackAction(onBack),
+        actions = actions,
+        titleBarImmersiveMode = demo == ComponentDemo.AndroidKitPageImmersiveMode,
         floatingActionButton = {
             if (demo == ComponentDemo.AndroidKitPageFloatingActionButton) {
                 AndroidKitFloatingActionButton(onClick = { actionCount += 1 }) {
@@ -127,6 +150,9 @@ private fun AndroidKitPageDemo(
                         )
                     },
                 ) {
+                    if (hasTitleActions) {
+                        Text(stringResource(R.string.page_title_bar_demo_instruction))
+                    }
                     Text(stringResource(R.string.action_count, actionCount))
                 }
             }
@@ -200,36 +226,9 @@ private fun StandardComponentDemo(
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
     val actionBar = demo.takeIf { it.component == ComponentId.AndroidKitFloatingActionBar }
-    val titleBarDemo = demo.takeIf { it.component == ComponentId.AndroidKitFloatingTitleBar }
-    val titleBarActions = if (
-        titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarBackTitleActions ||
-        titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarImmersiveMode
-    ) {
-        listOf(
-            AndroidKitFloatingTitleBarAction(
-                icon = materialSymbol(R.drawable.ic_symbol_save),
-                label = stringResource(R.string.action_save),
-                onClick = { actionCount += 1 },
-            ),
-            AndroidKitFloatingTitleBarAction(
-                icon = materialSymbol(R.drawable.ic_symbol_share),
-                label = stringResource(R.string.action_share),
-                onClick = { actionCount += 1 },
-            ),
-        )
-    } else {
-        emptyList()
-    }
     AndroidKitPage(
-        title = if (titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarBackOnly) {
-            null
-        } else {
-            componentDemoTitle(demo)
-        },
+        title = componentDemoTitle(demo),
         onBack = listDetailBackAction(onBack),
-        actions = titleBarActions,
-        titleBarImmersiveMode =
-            titleBarDemo == ComponentDemo.AndroidKitFloatingTitleBarImmersiveMode,
         floatingActionButton = {
             actionBar?.let {
                 AndroidKitFloatingActionBarDemo(
@@ -242,11 +241,6 @@ private fun StandardComponentDemo(
         DemoList(contentPadding) {
             item {
                 when (demo.component) {
-                    ComponentId.AndroidKitFloatingTitleBar ->
-                        AndroidKitFloatingTitleBarDemoContent(
-                        demo = demo,
-                        actionCount = actionCount,
-                    )
                     ComponentId.AndroidKitCard -> AndroidKitCardDemo(
                         demo = demo,
                         actionCount = actionCount,
@@ -287,24 +281,6 @@ private fun StandardComponentDemo(
                 }
             }
             item { DemoScrollContent() }
-        }
-    }
-}
-
-@Composable
-private fun AndroidKitFloatingTitleBarDemoContent(
-    demo: ComponentDemo,
-    actionCount: Int,
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(AndroidKitThemeTokens.dimensions.spaceSmall),
-    ) {
-        Text(stringResource(R.string.floating_title_bar_demo_instruction))
-        if (
-            demo == ComponentDemo.AndroidKitFloatingTitleBarBackTitleActions ||
-            demo == ComponentDemo.AndroidKitFloatingTitleBarImmersiveMode
-        ) {
-            Text(stringResource(R.string.action_count, actionCount))
         }
     }
 }
