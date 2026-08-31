@@ -293,7 +293,9 @@ private fun <Key : Any> FloatingNavigationBar(
                         items = items,
                         selectedKey = selectedKey,
                         onSelected = onSelected,
-                        onOverflowFlyoutVisibleChange = { overflowFlyoutVisible = it },
+                        onOverflowClick = {
+                            overflowFlyoutVisible = !overflowFlyoutVisible
+                        },
                         showLabels = showLabels,
                         visibleDestinationCount = visibleDestinationCount,
                         layoutState = layoutState,
@@ -309,17 +311,18 @@ private fun <Key : Any> FloatingNavigationBar(
                     LaunchedEffect(overflowItems.isEmpty()) {
                         if (overflowItems.isEmpty()) overflowFlyoutVisible = false
                     }
-                    NavigationOverflowFlyout(
-                        expanded = overflowFlyoutVisible && overflowItems.isNotEmpty(),
-                        items = overflowItems,
-                        selectedKey = selectedKey,
-                        onDismissRequest = { overflowFlyoutVisible = false },
-                        onSelected = { key ->
-                            overflowFlyoutVisible = false
-                            onSelected(key)
-                        },
-                        style = style,
-                    )
+                    if (overflowFlyoutVisible && overflowItems.isNotEmpty()) {
+                        NavigationOverflowFlyout(
+                            items = overflowItems,
+                            selectedKey = selectedKey,
+                            onDismissRequest = { overflowFlyoutVisible = false },
+                            onSelected = { key ->
+                                overflowFlyoutVisible = false
+                                onSelected(key)
+                            },
+                            style = style,
+                        )
+                    }
                 }
             }
         }
@@ -331,7 +334,7 @@ private fun <Key : Any> CompactNavigationItemsLayout(
     items: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onSelected: (Key) -> Unit,
-    onOverflowFlyoutVisibleChange: (Boolean) -> Unit,
+    onOverflowClick: () -> Unit,
     showLabels: Boolean,
     visibleDestinationCount: Int,
     layoutState: CompactNavigationLayoutState,
@@ -406,7 +409,7 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                 Box {
                     CompactNavigationBarItem(
                         selected = overflowSelected,
-                        onClick = { onOverflowFlyoutVisibleChange(true) },
+                        onClick = onOverflowClick,
                         icon = AndroidKitIcons.More,
                         label = AndroidKitThemeTokens.strings.more,
                         contentDescription = AndroidKitThemeTokens.strings.more,
@@ -627,7 +630,6 @@ private fun NavigationIcon(
 
 @Composable
 private fun <Key : Any> NavigationOverflowFlyout(
-    expanded: Boolean,
     items: List<AndroidKitFloatingNavigationItem<Key>>,
     selectedKey: Key,
     onDismissRequest: () -> Unit,
@@ -661,7 +663,7 @@ private fun <Key : Any> NavigationOverflowFlyout(
         unselectedTextColor = style.unselectedContentColor,
     )
     AndroidKitFloatingDropdownMenu(
-        expanded = expanded,
+        expanded = true,
         onDismissRequest = onDismissRequest,
         placement = AndroidKitFloatingDropdownMenuPlacement.Above,
         horizontalAlignment = AndroidKitFloatingDropdownMenuHorizontalAlignment.End,
@@ -682,7 +684,7 @@ private fun <Key : Any> NavigationOverflowFlyout(
                 opacity = flyoutVisuals.opacity,
             )
             Column(
-                modifier = Modifier.padding(vertical = dimensions.spaceSmall),
+                modifier = Modifier.padding(dimensions.floatingNavigationContentPadding),
             ) {
                 items.forEach { item ->
                     val selected = item.key == selectedKey
