@@ -118,6 +118,21 @@ private fun AndroidKitPageDemo(
                 label = stringResource(R.string.action_share),
                 onClick = { actionCount += 1 },
             ),
+            AndroidKitPageAction(
+                icon = materialSymbol(R.drawable.ic_symbol_edit),
+                label = stringResource(R.string.action_edit),
+                onClick = { actionCount += 1 },
+            ),
+            AndroidKitPageAction(
+                icon = materialSymbol(R.drawable.ic_symbol_refresh),
+                label = stringResource(R.string.action_retry),
+                onClick = { actionCount += 1 },
+            ),
+            AndroidKitPageAction(
+                icon = materialSymbol(R.drawable.ic_symbol_delete),
+                label = stringResource(R.string.action_delete),
+                onClick = { actionCount += 1 },
+            ),
         )
     } else {
         emptyList()
