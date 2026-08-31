@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.exclude
@@ -50,7 +51,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
@@ -62,6 +62,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -83,6 +85,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitFloatingNavigationStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
+import kotlin.math.roundToInt
 
 public class AndroidKitFloatingNavigationItem<Key : Any>(
     public val key: Key,
@@ -278,41 +281,14 @@ private fun <Key : Any> FloatingNavigationBar(
                 style = surfaceStyle,
             ) {
                 Box {
-                    val backgroundModifier = Modifier.matchParentSize().let { modifier ->
-                        if (visuals.opacity == 1f) {
-                            modifier
-                        } else {
-                            modifier.graphicsLayer { alpha = visuals.opacity }
-                        }
-                    }
-                    val selectionShape = style.itemShape
-                    Canvas(modifier = backgroundModifier) {
-                        drawRect(style.compactContainerColor)
-                        layoutState.selectionBounds?.let { bounds ->
-                            val selectionSize = Size(
-                                width = bounds.width.toFloat(),
-                                height = bounds.height.toFloat(),
-                            )
-                            val outline = selectionShape.createOutline(
-                                size = selectionSize,
-                                layoutDirection = layoutDirection,
-                                density = this,
-                            )
-                            withTransform(
-                                transformBlock = {
-                                    translate(
-                                        left = bounds.left.toFloat(),
-                                        top = bounds.top.toFloat(),
-                                    )
-                                },
-                            ) {
-                                drawNavigationSelectionOutline(
-                                    outline = outline,
-                                    color = style.selectedContainerColor,
-                                )
-                            }
-                        }
-                    }
+                    NavigationSelectionBackground(
+                        modifier = Modifier.matchParentSize(),
+                        containerColor = style.compactContainerColor,
+                        selectedContainerColor = style.selectedContainerColor,
+                        selectionBounds = layoutState.selectionBounds,
+                        selectionShape = style.itemShape,
+                        opacity = visuals.opacity,
+                    )
                     CompactNavigationItemsLayout(
                         items = items,
                         selectedKey = selectedKey,
@@ -663,7 +639,19 @@ private fun <Key : Any> NavigationOverflowFlyout(
         ?: AndroidKitThemeTokens.floatingDropdownMenuStyle
     val flyoutSurfaceStyle = flyoutStyle.surfaceStyle
         ?: AndroidKitThemeTokens.floatingSurfaceStyle
-    val flyoutOpacity = floatingSurfaceVisuals(flyoutSurfaceStyle).opacity
+    val flyoutVisuals = floatingSurfaceVisuals(flyoutSurfaceStyle)
+    val flyoutContainerColor = flyoutSurfaceStyle.containerColor
+        .takeIf { it != Color.Unspecified }
+        ?: AndroidKitThemeTokens.colorScheme.surface
+    val transparentFlyoutStyle = flyoutStyle.copy(
+        surfaceStyle = flyoutSurfaceStyle.copy(
+            containerColor = Color.Transparent,
+            opacity = 1f,
+        ),
+    )
+    var flyoutBounds by remember { mutableStateOf<IntRect?>(null) }
+    var selectedItemBounds by remember(selectedKey, items) { mutableStateOf<IntRect?>(null) }
+    val relativeSelectionBounds = selectedItemBounds.relativeTo(flyoutBounds)
     val itemColors = NavigationDrawerItemDefaults.colors(
         selectedContainerColor = Color.Transparent,
         unselectedContainerColor = Color.Transparent,
@@ -677,66 +665,130 @@ private fun <Key : Any> NavigationOverflowFlyout(
         onDismissRequest = onDismissRequest,
         placement = AndroidKitFloatingDropdownMenuPlacement.Above,
         horizontalAlignment = AndroidKitFloatingDropdownMenuHorizontalAlignment.End,
-        style = flyoutStyle,
+        style = transparentFlyoutStyle,
+        contentPadding = PaddingValues.Zero,
     ) {
-        items.forEach { item ->
-            val selected = item.key == selectedKey
-            NavigationDrawerItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .drawNavigationSelectionHighlight(
-                        selected = selected,
-                        shape = style.itemShape,
-                        color = style.selectedContainerColor,
-                        surfaceOpacity = flyoutOpacity,
-                    ),
-                label = {
-                    Text(
-                        text = item.label,
-                        style = style.overflowItemTextStyle,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-                selected = selected,
-                onClick = { onSelected(item.key) },
-                shape = style.itemShape,
-                icon = {
-                    Icon(
-                        imageVector = if (selected) item.selectedIcon else item.icon,
-                        contentDescription = null,
-                        modifier = Modifier.size(dimensions.floatingNavigationIconSize),
-                    )
-                },
-                badge = item.badge,
-                colors = itemColors,
+        Box(
+            modifier = Modifier.onGloballyPositioned { coordinates ->
+                flyoutBounds = coordinates.intBoundsInRoot()
+            },
+        ) {
+            NavigationSelectionBackground(
+                modifier = Modifier.matchParentSize(),
+                containerColor = flyoutContainerColor,
+                selectedContainerColor = style.selectedContainerColor,
+                selectionBounds = relativeSelectionBounds,
+                selectionShape = style.itemShape,
+                opacity = flyoutVisuals.opacity,
             )
+            Column(
+                modifier = Modifier.padding(vertical = dimensions.spaceSmall),
+            ) {
+                items.forEach { item ->
+                    val selected = item.key == selectedKey
+                    NavigationDrawerItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (selected) {
+                                    Modifier.onGloballyPositioned { coordinates ->
+                                        selectedItemBounds = coordinates.intBoundsInRoot()
+                                    }
+                                } else {
+                                    Modifier
+                                },
+                            ),
+                        label = {
+                            Text(
+                                text = item.label,
+                                style = style.overflowItemTextStyle,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        },
+                        selected = selected,
+                        onClick = { onSelected(item.key) },
+                        shape = style.itemShape,
+                        icon = {
+                            Icon(
+                                imageVector = if (selected) item.selectedIcon else item.icon,
+                                contentDescription = null,
+                                modifier = Modifier.size(dimensions.floatingNavigationIconSize),
+                            )
+                        },
+                        badge = item.badge,
+                        colors = itemColors,
+                    )
+                }
+            }
         }
     }
 }
 
-private fun Modifier.drawNavigationSelectionHighlight(
-    selected: Boolean,
-    shape: Shape,
-    color: Color,
-    surfaceOpacity: Float,
-): Modifier = if (selected) {
-    drawWithCache {
-        val selectionOutline = shape.createOutline(
-            size = size,
-            layoutDirection = layoutDirection,
-            density = this,
-        )
-        val selectionColor = color.copy(alpha = color.alpha * surfaceOpacity)
-        onDrawBehind {
-            drawNavigationSelectionOutline(
-                outline = selectionOutline,
-                color = selectionColor,
-            )
+@Composable
+private fun NavigationSelectionBackground(
+    containerColor: Color,
+    selectedContainerColor: Color,
+    selectionBounds: IntRect?,
+    selectionShape: Shape,
+    opacity: Float,
+    modifier: Modifier = Modifier,
+): Unit {
+    val backgroundModifier = modifier.let { baseModifier ->
+        if (opacity == 1f) {
+            baseModifier
+        } else {
+            baseModifier.graphicsLayer { alpha = opacity }
         }
     }
-} else {
-    this
+    Canvas(modifier = backgroundModifier) {
+        drawRect(containerColor)
+        selectionBounds?.let { bounds ->
+            val selectionSize = Size(
+                width = bounds.width.toFloat(),
+                height = bounds.height.toFloat(),
+            )
+            val outline = selectionShape.createOutline(
+                size = selectionSize,
+                layoutDirection = layoutDirection,
+                density = this,
+            )
+            withTransform(
+                transformBlock = {
+                    translate(
+                        left = bounds.left.toFloat(),
+                        top = bounds.top.toFloat(),
+                    )
+                },
+            ) {
+                drawNavigationSelectionOutline(
+                    outline = outline,
+                    color = selectedContainerColor,
+                )
+            }
+        }
+    }
+}
+
+private fun androidx.compose.ui.layout.LayoutCoordinates.intBoundsInRoot(): IntRect =
+    boundsInRoot().let { bounds ->
+        IntRect(
+            left = bounds.left.roundToInt(),
+            top = bounds.top.roundToInt(),
+            right = bounds.right.roundToInt(),
+            bottom = bounds.bottom.roundToInt(),
+        )
+    }
+
+private fun IntRect?.relativeTo(parentBounds: IntRect?): IntRect? {
+    val bounds = this ?: return null
+    val parent = parentBounds ?: return null
+    return IntRect(
+        left = bounds.left - parent.left,
+        top = bounds.top - parent.top,
+        right = bounds.right - parent.left,
+        bottom = bounds.bottom - parent.top,
+    )
 }
 
 private fun DrawScope.drawNavigationSelectionOutline(
