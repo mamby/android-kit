@@ -5,11 +5,9 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,15 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -36,11 +28,11 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
+import net.mamby.androidkit.compose.action.AndroidKitFloatingToolbar
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
@@ -55,20 +47,10 @@ internal fun AndroidKitPageTitleBar(
     style: AndroidKitPageTitleBarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val strings = AndroidKitThemeTokens.strings
     if (title == null && onBack == null && actions.isEmpty()) return
 
     val hasButtons = onBack != null || actions.isNotEmpty()
     val hasTitle = title != null
-    var overflowExpanded by remember { mutableStateOf(false) }
-
-    fun setOverflowExpanded(expanded: Boolean) {
-        overflowExpanded = expanded
-    }
-
-    LaunchedEffect(visible) {
-        if (!visible && overflowExpanded) setOverflowExpanded(false)
-    }
 
     Box(
         modifier = Modifier
@@ -108,9 +90,6 @@ internal fun AndroidKitPageTitleBar(
                 )
                 val directActions = actions.take(directActionCount)
                 val overflowActions = actions.drop(directActionCount)
-                LaunchedEffect(overflowActions.isNotEmpty()) {
-                    if (overflowActions.isEmpty()) setOverflowExpanded(false)
-                }
                 val endControlCount = directActions.size + if (overflowActions.isNotEmpty()) 1 else 0
                 val leadingWidth = controlRowWidth(
                     controlCount = onBack?.let { 1 } ?: 0,
@@ -170,67 +149,29 @@ internal fun AndroidKitPageTitleBar(
                 }
 
                 if (endControlCount > 0) {
-                    Row(
+                    AndroidKitFloatingToolbar(
                         modifier = Modifier.align(Alignment.CenterEnd),
-                        horizontalArrangement = Arrangement.spacedBy(0.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                        style = pageActionToolbarStyle(style, dimensions),
+                        contentPadding = PaddingValues.Zero,
+                        itemSpacing = 0.dp,
                     ) {
                         directActions.forEach { action ->
-                            PageTitleBarActionButton(action = action, style = style)
+                            icon(
+                                onClick = action.onClick,
+                                icon = action.icon,
+                                contentDescription = action.label,
+                                enabled = action.enabled,
+                            )
                         }
                         if (overflowActions.isNotEmpty()) {
-                            Box {
-                                PageTitleBarActionButton(
-                                    action = AndroidKitPageAction(
-                                        icon = AndroidKitIcons.More,
-                                        label = strings.more,
-                                        onClick = {
-                                            setOverflowExpanded(true)
-                                        },
-                                    ),
-                                    style = style,
-                                )
-                                AndroidKitFloatingDropdownMenu(
-                                    expanded = overflowExpanded,
-                                    onDismissRequest = {
-                                        setOverflowExpanded(false)
-                                    },
-                                    offset = DpOffset(
-                                        x = 0.dp,
-                                        y = -dimensions.spaceExtraSmall,
-                                    ),
-                                    style = style.dropdownMenuStyle
-                                        ?: AndroidKitThemeTokens.floatingDropdownMenuStyle,
-                                ) {
-                                    overflowActions.forEach { action ->
-                                        DropdownMenuItem(
-                                            text = {
-                                                Text(
-                                                    text = action.label,
-                                                    maxLines = 1,
-                                                    overflow = TextOverflow.Ellipsis,
-                                                )
-                                            },
-                                            onClick = {
-                                                setOverflowExpanded(false)
-                                                action.onClick()
-                                            },
-                                            enabled = action.enabled,
-                                            contentPadding = PaddingValues(
-                                                start = dimensions.spaceMedium,
-                                                end = dimensions.spaceLarge,
-                                            ),
-                                            leadingIcon = {
-                                                Icon(
-                                                    imageVector = action.icon,
-                                                    contentDescription = null,
-                                                    modifier = Modifier.size(
-                                                        dimensions.floatingActionIconSize,
-                                                    ),
-                                                )
-                                            },
-                                        )
-                                    }
+                            flyout(enabled = visible) {
+                                overflowActions.forEach { action ->
+                                    item(
+                                        icon = action.icon,
+                                        label = action.label,
+                                        onClick = action.onClick,
+                                        enabled = action.enabled,
+                                    )
                                 }
                             }
                         }
@@ -264,25 +205,18 @@ private fun PageTitleBarBackButton(
 }
 
 @Composable
-private fun PageTitleBarActionButton(
-    action: AndroidKitPageAction,
-    style: AndroidKitPageTitleBarStyle,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    FloatingSurfaceButton(
-        onClick = action.onClick,
-        shape = style.buttonShape,
-        visualSize = dimensions.pageTitleBarButtonSize,
-        enabled = action.enabled,
-        style = style.buttonSurfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
-    ) {
-        Icon(
-            imageVector = action.icon,
-            contentDescription = action.label,
-            modifier = Modifier.size(dimensions.floatingActionIconSize),
-        )
-    }
-}
+private fun pageActionToolbarStyle(
+    pageTitleBarStyle: AndroidKitPageTitleBarStyle,
+    dimensions: AndroidKitDimensions,
+): AndroidKitFloatingToolbarStyle = AndroidKitFloatingToolbarStyle(
+    surfaceStyle = pageTitleBarStyle.buttonSurfaceStyle,
+    dropdownMenuStyle = pageTitleBarStyle.dropdownMenuStyle,
+    separatorColor = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
+    shape = pageTitleBarStyle.buttonShape,
+    itemShape = pageTitleBarStyle.buttonShape,
+    labelTextStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle,
+    iconSize = dimensions.floatingActionIconSize,
+)
 
 private fun directPageTitleBarActionCount(
     actionCount: Int,

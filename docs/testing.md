@@ -32,8 +32,10 @@ Generate or intentionally update approved reference images:
 .\gradlew.bat :test:updateDebugScreenshotTest
 ```
 
-Review every generated image, then commit the accepted files under
-`test/src/screenshotTestDebug/reference`. Validate later changes with:
+Review every generated image locally. Reference images under
+`test/src/screenshotTestDebug/reference` are local artifacts and must not be
+committed because screenshots and device captures can contain personal
+information. While a local reference set is available, validate later changes with:
 
 ```powershell
 .\gradlew.bat :test:validateDebugScreenshotTest

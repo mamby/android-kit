@@ -64,6 +64,17 @@ public data class AndroidKitFloatingActionBarStyle(
 )
 
 @Immutable
+public data class AndroidKitFloatingToolbarStyle(
+    public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    public val dropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle? = null,
+    public val separatorColor: Color,
+    public val shape: Shape,
+    public val itemShape: Shape,
+    public val labelTextStyle: TextStyle,
+    public val iconSize: Dp,
+)
+
+@Immutable
 public data class AndroidKitFloatingDropdownMenuStyle(
     public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
     public val shape: Shape,

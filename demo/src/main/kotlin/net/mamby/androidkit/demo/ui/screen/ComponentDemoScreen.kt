@@ -27,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
-import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarFlyoutStyle
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
@@ -470,13 +469,17 @@ private fun AndroidKitFloatingActionBarDemo(
     val editIcon = materialSymbol(R.drawable.ic_symbol_edit)
     val saveIcon = materialSymbol(R.drawable.ic_symbol_save)
     val shareIcon = materialSymbol(R.drawable.ic_symbol_share)
-    val flyoutItems = listOf(
-        materialSymbol(R.drawable.ic_symbol_add) to add,
-        materialSymbol(R.drawable.ic_symbol_close) to close,
-        materialSymbol(R.drawable.ic_symbol_refresh) to retry,
-        materialSymbol(R.drawable.ic_symbol_close) to cancel,
-        materialSymbol(R.drawable.ic_symbol_check) to confirm,
-        materialSymbol(R.drawable.ic_symbol_delete) to delete,
+    val flyoutItemGroups = listOf(
+        listOf(
+            materialSymbol(R.drawable.ic_symbol_add) to add,
+            materialSymbol(R.drawable.ic_symbol_close) to close,
+        ),
+        listOf(
+            materialSymbol(R.drawable.ic_symbol_refresh) to retry,
+            materialSymbol(R.drawable.ic_symbol_close) to cancel,
+            materialSymbol(R.drawable.ic_symbol_check) to confirm,
+        ),
+        listOf(materialSymbol(R.drawable.ic_symbol_delete) to delete),
     )
     AndroidKitFloatingActionBar {
         when (demo) {
@@ -496,9 +499,13 @@ private fun AndroidKitFloatingActionBarDemo(
                     icon = shareIcon,
                     contentDescription = share,
                 )
-                flyout(style = AndroidKitFloatingActionBarFlyoutStyle.Icon) {
-                    flyoutItems.forEach { (icon, label) ->
-                        item(icon = icon, label = label, onClick = onAction)
+                separator()
+                flyout {
+                    flyoutItemGroups.forEachIndexed { index, group ->
+                        if (index > 0) separator()
+                        group.forEach { (icon, label) ->
+                            item(icon = icon, label = label, onClick = onAction)
+                        }
                     }
                 }
             }
@@ -519,9 +526,13 @@ private fun AndroidKitFloatingActionBarDemo(
                     icon = shareIcon,
                     label = share,
                 )
-                flyout(style = AndroidKitFloatingActionBarFlyoutStyle.IconAndLabel) {
-                    flyoutItems.forEach { (icon, label) ->
-                        item(icon = icon, label = label, onClick = onAction)
+                separator()
+                flyout {
+                    flyoutItemGroups.forEachIndexed { index, group ->
+                        if (index > 0) separator()
+                        group.forEach { (icon, label) ->
+                            item(icon = icon, label = label, onClick = onAction)
+                        }
                     }
                 }
             }
@@ -530,9 +541,13 @@ private fun AndroidKitFloatingActionBarDemo(
                 text(onClick = onAction, label = edit)
                 text(onClick = onAction, label = save)
                 text(onClick = onAction, label = share)
-                flyout(style = AndroidKitFloatingActionBarFlyoutStyle.Text) {
-                    flyoutItems.forEach { (icon, label) ->
-                        item(icon = icon, label = label, onClick = onAction)
+                separator()
+                flyout {
+                    flyoutItemGroups.forEachIndexed { index, group ->
+                        if (index > 0) separator()
+                        group.forEach { (icon, label) ->
+                            item(icon = icon, label = label, onClick = onAction)
+                        }
                     }
                 }
             }

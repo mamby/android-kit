@@ -84,6 +84,14 @@ public data class AndroidKitThemeDefinition(
             itemShape = shapes.extraLarge,
             labelTextStyle = typography.labelSmall,
         ),
+    public val floatingToolbarStyle: AndroidKitFloatingToolbarStyle =
+        AndroidKitFloatingToolbarStyle(
+            separatorColor = colorScheme.outlineVariant,
+            shape = shapes.extraLarge,
+            itemShape = shapes.extraLarge,
+            labelTextStyle = typography.labelSmall,
+            iconSize = dimensions.floatingActionBarIconSize,
+        ),
     public val floatingDropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle =
         AndroidKitFloatingDropdownMenuStyle(shape = shapes.extraLarge),
     public val floatingNavigationStyle: AndroidKitFloatingNavigationStyle =
@@ -413,6 +421,11 @@ public object AndroidKitThemeTokens {
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.floatingActionBarStyle
+
+    public val floatingToolbarStyle: AndroidKitFloatingToolbarStyle
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.floatingToolbarStyle
 
     public val floatingDropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle
         @Composable

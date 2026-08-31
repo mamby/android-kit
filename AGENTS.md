@@ -6,7 +6,9 @@ branding and the Prism theme inside `demo`.
 
 All automated test source belongs to the top-level `test` module. Before changing
 or executing the test suites, read [docs/testing.md](docs/testing.md). Do not put
-tests inside published modules.
+tests inside published modules. Do not commit generated screenshots, screenshot
+reference images, or device captures; keep them local because they can contain
+personal information.
 
 Never copy code directly from the inspiration applications. Generalize useful
 patterns behind small, typed APIs and prove them in the demo catalog first.
