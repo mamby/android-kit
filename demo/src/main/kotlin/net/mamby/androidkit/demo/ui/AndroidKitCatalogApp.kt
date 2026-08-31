@@ -43,7 +43,8 @@ fun AndroidKitCatalogApp(
     val settingsViewModel: DemoSettingsViewModel = viewModel {
         DemoSettingsViewModel(DemoSettingsRepository(applicationContext))
     }
-    val settings by settingsViewModel.settings.collectAsStateWithLifecycle()
+    val settingsState by settingsViewModel.settings.collectAsStateWithLifecycle()
+    val settings = settingsState ?: return
     val themeDefinition = settings.themeChoice.definition()
     LaunchedEffect(themeDefinition.isDark) {
         onThemeDarknessChanged(themeDefinition.isDark)

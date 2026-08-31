@@ -107,11 +107,13 @@ internal class DemoSettingsRepository(context: Context) {
 internal class DemoSettingsViewModel(
     private val repository: DemoSettingsRepository,
 ) : ViewModel() {
-    val settings = repository.settings.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = DemoSettings(),
-    )
+    val settings = repository.settings
+        .map<DemoSettings, DemoSettings?> { it }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = null,
+        )
 
     fun setThemeChoice(choice: DemoThemeChoice) {
         viewModelScope.launch {

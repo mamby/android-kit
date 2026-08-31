@@ -4,4 +4,10 @@
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <style name="Theme.AndroidKitDemo.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/androidkit_demo_icon_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.AndroidKitDemo</item>
+    </style>
 </resources>

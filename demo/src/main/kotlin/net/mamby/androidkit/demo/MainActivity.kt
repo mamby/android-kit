@@ -6,14 +6,22 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import net.mamby.androidkit.demo.ui.AndroidKitCatalogApp
 
 class MainActivity : AppCompatActivity() {
+    private var isContentReady = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { !isContentReady }
         super.onCreate(savedInstanceState)
-        applyEdgeToEdge(isDarkTheme = false)
+        enableEdgeToEdge()
         setContent {
-            AndroidKitCatalogApp(onThemeDarknessChanged = ::applyEdgeToEdge)
+            AndroidKitCatalogApp { isDarkTheme ->
+                applyEdgeToEdge(isDarkTheme)
+                isContentReady = true
+            }
         }
     }
 

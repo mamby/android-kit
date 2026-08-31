@@ -1,9 +1,0 @@
-<resources>
-    <style name="Theme.AndroidKitDemo" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:fontFamily">sans</item>
-        <item name="android:windowActionModeOverlay">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowSplashScreenBackground">@color/androidkit_demo_icon_background</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-    </style>
-</resources>
