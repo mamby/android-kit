@@ -82,6 +82,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuHorizontalAlignment
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuPlacement
+import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuWithContainerColor
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.LocalAndroidKitFloatingNavigationInsets
 import net.mamby.androidkit.compose.theme.AndroidKitAdaptiveNavigationItemStyle
@@ -649,12 +650,6 @@ private fun <Key : Any> NavigationOverflowFlyout(
     val flyoutContainerColor = flyoutSurfaceStyle.containerColor
         .takeIf { it != Color.Unspecified }
         ?: AndroidKitThemeTokens.colorScheme.surface
-    val transparentFlyoutStyle = flyoutStyle.copy(
-        surfaceStyle = flyoutSurfaceStyle.copy(
-            containerColor = Color.Transparent,
-            opacity = 1f,
-        ),
-    )
     var flyoutBounds by remember { mutableStateOf<IntRect?>(null) }
     var selectedItemBounds by remember(selectedKey, items) { mutableStateOf<IntRect?>(null) }
     val relativeSelectionBounds = selectedItemBounds.relativeTo(flyoutBounds)
@@ -668,12 +663,13 @@ private fun <Key : Any> NavigationOverflowFlyout(
         leadingIconColor = style.unselectedContentColor,
         trailingIconColor = style.unselectedContentColor,
     )
-    AndroidKitFloatingDropdownMenu(
+    AndroidKitFloatingDropdownMenuWithContainerColor(
         expanded = true,
         onDismissRequest = onDismissRequest,
+        containerColor = Color.Transparent,
         placement = AndroidKitFloatingDropdownMenuPlacement.Above,
         horizontalAlignment = AndroidKitFloatingDropdownMenuHorizontalAlignment.End,
-        style = transparentFlyoutStyle,
+        style = flyoutStyle,
         contentPadding = PaddingValues.Zero,
     ) {
         Box(
@@ -729,7 +725,9 @@ private fun <Key : Any> NavigationOverflowFlyout(
                         },
                         trailingIcon = item.badge,
                         colors = if (selected) selectedItemColors else unselectedItemColors,
-                        contentPadding = MenuDefaults.DropdownMenuItemContentPadding,
+                        contentPadding = PaddingValues(
+                            horizontal = dimensions.floatingNavigationOverflowItemHorizontalPadding,
+                        ),
                     )
                 }
             }
@@ -754,7 +752,7 @@ private fun NavigationSelectionBackground(
         }
     }
     Canvas(modifier = backgroundModifier) {
-        drawRect(containerColor)
+        drawRect(containerColor.copy(alpha = 1f))
         selectionBounds?.let { bounds ->
             val selectionSize = Size(
                 width = bounds.width.toFloat(),
@@ -775,7 +773,7 @@ private fun NavigationSelectionBackground(
             ) {
                 drawNavigationSelectionOutline(
                     outline = outline,
-                    color = selectedContainerColor,
+                    color = selectedContainerColor.copy(alpha = 1f),
                 )
             }
         }

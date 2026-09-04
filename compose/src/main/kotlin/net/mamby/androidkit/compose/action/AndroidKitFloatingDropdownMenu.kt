@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -67,6 +68,31 @@ public fun AndroidKitFloatingDropdownMenu(
     contentPadding = contentPadding,
     properties = properties,
     scrollState = scrollState,
+    content = content,
+)
+
+@Composable
+internal fun AndroidKitFloatingDropdownMenuWithContainerColor(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    containerColor: Color,
+    placement: AndroidKitFloatingDropdownMenuPlacement,
+    horizontalAlignment: AndroidKitFloatingDropdownMenuHorizontalAlignment,
+    style: AndroidKitFloatingDropdownMenuStyle,
+    contentPadding: PaddingValues,
+    content: @Composable ColumnScope.() -> Unit,
+): Unit = FloatingDropdownMenuContent(
+    expanded = expanded,
+    onDismissRequest = onDismissRequest,
+    modifier = Modifier,
+    placement = placement,
+    horizontalAlignment = horizontalAlignment,
+    offset = DpOffset.Zero,
+    style = style,
+    contentPadding = contentPadding,
+    properties = PopupProperties(focusable = true),
+    scrollState = rememberScrollState(),
+    containerColor = containerColor,
     content = content,
 )
 
@@ -123,6 +149,7 @@ private fun FloatingDropdownMenuContent(
     contentPadding: PaddingValues,
     properties: PopupProperties,
     scrollState: ScrollState,
+    containerColor: Color? = null,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     val density = LocalDensity.current
@@ -154,6 +181,7 @@ private fun FloatingDropdownMenuContent(
                 FloatingSurface(
                     shape = style.shape,
                     modifier = modifier,
+                    containerColor = containerColor,
                     style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
                 ) {
                     Column(

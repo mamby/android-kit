@@ -14,6 +14,9 @@ public typealias AndroidKitFloatingActionBarScope = AndroidKitFloatingToolbarSco
 
 public typealias AndroidKitFloatingActionBarFlyoutScope = AndroidKitFloatingToolbarFlyoutScope
 
+public typealias AndroidKitFloatingActionBarIconAndLabelLayout =
+    AndroidKitFloatingToolbarIconAndLabelLayout
+
 @Composable
 public fun AndroidKitFloatingActionBar(
     modifier: Modifier = Modifier,

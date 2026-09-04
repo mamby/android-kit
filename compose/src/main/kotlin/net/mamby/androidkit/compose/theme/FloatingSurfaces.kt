@@ -25,6 +25,9 @@ internal data class FloatingSurfaceVisuals(
     val containerColor: Color,
     val contentColor: Color,
     val border: BorderStroke,
+    val disabledContainerColor: Color,
+    val disabledContentColor: Color,
+    val disabledBorder: BorderStroke,
     val shadow: Shadow,
     val buttonShadow: Shadow,
 )
@@ -35,16 +38,15 @@ internal fun floatingSurfaceVisuals(
 ): FloatingSurfaceVisuals {
     val dimensions = AndroidKitThemeTokens.dimensions
     val scheme = AndroidKitThemeTokens.colorScheme
-    return remember(style, dimensions, scheme) {
+    val opacity = floatingSurfaceAlphaForLevel(
+        AndroidKitThemeTokens.floatingSurfaceOpacityLevel,
+    )
+    return remember(style, dimensions, scheme, opacity) {
         val baseContainerColor = style.containerColor.takeIf { it != Color.Unspecified }
             ?: scheme.surface
         FloatingSurfaceVisuals(
-            opacity = style.opacity,
-            containerColor = if (style.opacity == 1f) {
-                baseContainerColor
-            } else {
-                baseContainerColor.copy(alpha = style.opacity)
-            },
+            opacity = opacity,
+            containerColor = baseContainerColor.copy(alpha = opacity),
             contentColor = style.contentColor.takeIf { it != Color.Unspecified }
                 ?: scheme.onSurface,
             border = BorderStroke(
@@ -52,6 +54,18 @@ internal fun floatingSurfaceVisuals(
                     ?: dimensions.floatingSurfaceBorderWidth,
                 color = style.borderColor.takeIf { it != Color.Unspecified }
                     ?: scheme.outlineVariant.copy(alpha = FloatingSurfaceBorderAlpha),
+            ),
+            disabledContainerColor = style.disabledContainerColor.takeIf {
+                it != Color.Unspecified
+            } ?: scheme.onSurface.copy(alpha = DisabledContainerAlpha),
+            disabledContentColor = style.disabledContentColor.takeIf {
+                it != Color.Unspecified
+            } ?: scheme.onSurface.copy(alpha = DisabledContentAlpha),
+            disabledBorder = BorderStroke(
+                width = style.borderWidth.takeIf { it != Dp.Unspecified }
+                    ?: dimensions.floatingSurfaceBorderWidth,
+                color = style.disabledBorderColor.takeIf { it != Color.Unspecified }
+                    ?: scheme.onSurface.copy(alpha = DisabledBorderAlpha),
             ),
             shadow = Shadow(
                 radius = style.shadowRadius.takeIf { it != Dp.Unspecified }
@@ -109,17 +123,22 @@ internal fun FloatingSurfaceButton(
     content: @Composable () -> Unit,
 ): Unit {
     val visuals = floatingSurfaceVisuals(style)
+    val shadowModifier = if (enabled) {
+        Modifier.dropShadow(shape, visuals.buttonShadow)
+    } else {
+        Modifier
+    }
     Surface(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier
             .minimumInteractiveComponentSize()
             .size(visualSize)
-            .dropShadow(shape, visuals.buttonShadow),
+            .then(shadowModifier),
         shape = shape,
-        color = visuals.containerColor,
-        contentColor = visuals.contentColor,
-        border = visuals.border,
+        color = if (enabled) visuals.containerColor else visuals.disabledContainerColor,
+        contentColor = if (enabled) visuals.contentColor else visuals.disabledContentColor,
+        border = if (enabled) visuals.border else visuals.disabledBorder,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -132,3 +151,6 @@ internal fun FloatingSurfaceButton(
 
 private const val FloatingSurfaceBorderAlpha = 0.45f
 private const val FloatingSurfaceShadowAlpha = 0.03f
+private const val DisabledContainerAlpha = 0.12f
+private const val DisabledContentAlpha = 0.38f
+private const val DisabledBorderAlpha = 0.12f

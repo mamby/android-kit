@@ -110,6 +110,10 @@ enum class ComponentDemo(
         ComponentId.AndroidKitFloatingActionBar,
         R.string.variation_icons_labels,
     ),
+    AndroidKitFloatingActionBarHorizontalIconsAndLabels(
+        ComponentId.AndroidKitFloatingActionBar,
+        R.string.variation_horizontal_icons_labels,
+    ),
     AndroidKitFloatingActionBarText(
         ComponentId.AndroidKitFloatingActionBar,
         R.string.variation_text_only,

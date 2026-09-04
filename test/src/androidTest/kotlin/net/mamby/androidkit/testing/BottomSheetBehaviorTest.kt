@@ -1,6 +1,5 @@
 package net.mamby.androidkit.testing
 
-import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -31,8 +30,9 @@ import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
+import net.mamby.androidkit.compose.form.AndroidKitBottomSheetDefaults
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
@@ -231,6 +231,48 @@ class BottomSheetBehaviorTest {
     }
 
     @Test
+    fun contentManagedModeKeepsContentBelowChromeWithoutCallerPadding() {
+        composeRule.setContent {
+            AndroidKitTheme {
+                AndroidKitBottomSheet(
+                    visible = true,
+                    title = SheetTitle,
+                    onDismiss = {},
+                    scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
+                    header = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(64.dp)
+                                .testTag(SheetHeaderTag),
+                        )
+                    },
+                ) {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        item {
+                            Text(
+                                text = SheetBody,
+                                modifier = Modifier.testTag(FirstSheetItemTag),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        val headerBottom = composeRule.onNodeWithTag(SheetHeaderTag)
+            .fetchSemanticsNode()
+            .boundsInRoot
+            .bottom
+        val firstItemTop = composeRule.onNodeWithTag(FirstSheetItemTag)
+            .fetchSemanticsNode()
+            .boundsInRoot
+            .top
+
+        assertTrue(firstItemTop >= headerBottom)
+    }
+
+    @Test
     fun contentPullMustEndBeforeAFreshPullCanDismissTheSheet() {
         var visible by mutableStateOf(true)
         var dismissCount by mutableIntStateOf(0)
@@ -276,6 +318,48 @@ class BottomSheetBehaviorTest {
     }
 
     @Test
+    fun upwardPullOnExpandedSheetSettlesAtItsExistingAnchor() {
+        composeRule.setContent {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
+            ) {
+                AndroidKitTheme {
+                    AndroidKitBottomSheet(
+                        visible = true,
+                        title = SheetTitle,
+                        onDismiss = {},
+                        maxHeightFraction = AndroidKitBottomSheetDefaults.MaximumHeightFraction,
+                        scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .testTag(SheetContentTag),
+                        )
+                    }
+                }
+            }
+        }
+
+        val initialTop = composeRule.onNodeWithText(SheetTitle)
+            .fetchSemanticsNode()
+            .boundsInRoot
+            .top
+
+        composeRule.onNodeWithTag(SheetContentTag).performTouchInput {
+            swipeUp(durationMillis = 1_000)
+        }
+
+        composeRule.waitForIdle()
+        val settledTop = composeRule.onNodeWithText(SheetTitle)
+            .fetchSemanticsNode()
+            .boundsInRoot
+            .top
+
+        assertEquals(initialTop, settledTop, 1f)
+    }
+
+    @Test
     fun requestedHeightIsClampedToNinetyPercentOfTheWindow() {
         composeRule.setContent {
             DeviceConfigurationOverride(
@@ -314,7 +398,9 @@ private const val SheetTitle = "Bottom sheet"
 private const val SheetBody = "Sheet body"
 private const val ManagedScrollTag = "managedSheetScroll"
 private const val SheetContentTag = "sheetContent"
+private const val SheetHeaderTag = "sheetHeader"
+private const val FirstSheetItemTag = "firstSheetItem"
 
 private fun pressSystemBack() {
-    InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(KeyEvent.KEYCODE_BACK)
+    pressBack()
 }

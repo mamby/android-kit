@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,6 +34,7 @@ import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
+import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 
 @DslMarker
 public annotation class AndroidKitFloatingToolbarDsl
@@ -50,6 +53,15 @@ public interface AndroidKitFloatingToolbarScope {
         onClick: () -> Unit,
         icon: ImageVector,
         label: String,
+        modifier: Modifier = Modifier,
+        enabled: Boolean = true,
+    ): Unit
+
+    public fun iconAndLabel(
+        onClick: () -> Unit,
+        icon: ImageVector,
+        label: String,
+        layout: AndroidKitFloatingToolbarIconAndLabelLayout,
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
     ): Unit
@@ -83,7 +95,7 @@ public interface AndroidKitFloatingToolbarFlyoutScope {
     public fun separator(modifier: Modifier = Modifier): Unit
 
     public fun item(
-        icon: ImageVector,
+        icon: ImageVector? = null,
         label: String,
         onClick: () -> Unit,
         enabled: Boolean = true,
@@ -93,6 +105,11 @@ public interface AndroidKitFloatingToolbarFlyoutScope {
 public enum class AndroidKitFloatingToolbarFlyoutAnchor {
     Item,
     Toolbar,
+}
+
+public enum class AndroidKitFloatingToolbarIconAndLabelLayout {
+    Vertical,
+    Horizontal,
 }
 
 @Composable
@@ -197,11 +214,28 @@ private class FloatingToolbarScopeImpl : AndroidKitFloatingToolbarScope {
         label: String,
         modifier: Modifier,
         enabled: Boolean,
+    ): Unit = iconAndLabel(
+        onClick = onClick,
+        icon = icon,
+        label = label,
+        layout = AndroidKitFloatingToolbarIconAndLabelLayout.Vertical,
+        modifier = modifier,
+        enabled = enabled,
+    )
+
+    override fun iconAndLabel(
+        onClick: () -> Unit,
+        icon: ImageVector,
+        label: String,
+        layout: AndroidKitFloatingToolbarIconAndLabelLayout,
+        modifier: Modifier,
+        enabled: Boolean,
     ) {
         items += FloatingToolbarItemDefinition.IconAndLabel(
             onClick = onClick,
             icon = icon,
             label = label,
+            layout = layout,
             modifier = modifier,
             enabled = enabled,
         )
@@ -264,7 +298,7 @@ private class FloatingToolbarFlyoutScopeImpl : AndroidKitFloatingToolbarFlyoutSc
     }
 
     override fun item(
-        icon: ImageVector,
+        icon: ImageVector?,
         label: String,
         onClick: () -> Unit,
         enabled: Boolean,
@@ -293,6 +327,7 @@ private sealed interface FloatingToolbarItemDefinition {
         val onClick: () -> Unit,
         val icon: ImageVector,
         val label: String,
+        val layout: AndroidKitFloatingToolbarIconAndLabelLayout,
         override val modifier: Modifier,
         val enabled: Boolean,
     ) : FloatingToolbarItemDefinition
@@ -326,7 +361,7 @@ private sealed interface FloatingToolbarFlyoutItem {
     val modifier: Modifier
 
     class Action(
-        val icon: ImageVector,
+        val icon: ImageVector?,
         val label: String,
         val onClick: () -> Unit,
         val enabled: Boolean,
@@ -364,6 +399,7 @@ private fun FloatingToolbarItem(
             modifier = item.modifier,
             icon = item.icon,
             showLabel = true,
+            iconAndLabelLayout = item.layout,
             enabled = item.enabled,
             style = style,
         )
@@ -511,12 +547,14 @@ private fun FloatingToolbarFlyoutPopup(
                         start = dimensions.spaceMedium,
                         end = dimensions.spaceLarge,
                     ),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = item.icon,
-                            contentDescription = null,
-                            modifier = Modifier.size(toolbarStyle.iconSize),
-                        )
+                    leadingIcon = item.icon?.let { icon ->
+                        {
+                            Icon(
+                                imageVector = icon,
+                                contentDescription = null,
+                                modifier = Modifier.size(toolbarStyle.iconSize),
+                            )
+                        }
                     },
                 )
 
@@ -555,33 +593,57 @@ private fun FloatingToolbarItemContent(
     modifier: Modifier,
     icon: ImageVector?,
     showLabel: Boolean,
+    iconAndLabelLayout: AndroidKitFloatingToolbarIconAndLabelLayout =
+        AndroidKitFloatingToolbarIconAndLabelLayout.Vertical,
     enabled: Boolean,
     style: AndroidKitFloatingToolbarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    Column(
-        modifier = modifier
-            .clip(style.itemShape)
-            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
-            .minimumInteractiveComponentSize()
-            .padding(horizontal = dimensions.spaceSmall),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
-    ) {
+    val surfaceStyle = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle
+    val disabledContentColor = if (enabled) {
+        null
+    } else {
+        floatingSurfaceVisuals(surfaceStyle).disabledContentColor
+    }
+    val itemModifier = modifier
+        .clip(style.itemShape)
+        .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
+        .minimumInteractiveComponentSize()
+        .padding(horizontal = dimensions.spaceSmall)
+    val content: @Composable () -> Unit = {
         icon?.let {
             Icon(
                 imageVector = it,
                 contentDescription = label.takeUnless { showLabel },
                 modifier = Modifier.size(style.iconSize),
+                tint = disabledContentColor ?: LocalContentColor.current,
             )
         }
         if (showLabel) {
             Text(
                 text = label,
                 style = style.labelTextStyle,
+                color = disabledContentColor ?: Color.Unspecified,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+        }
+    }
+    when (iconAndLabelLayout) {
+        AndroidKitFloatingToolbarIconAndLabelLayout.Vertical -> Column(
+            modifier = itemModifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+        ) {
+            content()
+        }
+
+        AndroidKitFloatingToolbarIconAndLabelLayout.Horizontal -> Row(
+            modifier = itemModifier,
+            horizontalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            content()
         }
     }
 }

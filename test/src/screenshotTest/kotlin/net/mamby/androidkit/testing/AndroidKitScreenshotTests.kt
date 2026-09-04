@@ -23,11 +23,11 @@ import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
 
 @PreviewTest
 @AdaptiveDeviceMatrix
@@ -124,12 +124,12 @@ fun androidKitRtl() {
 }
 
 @PreviewTest
-@Preview(name = "Floating transparent", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(name = "Floating minimum opacity", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
-fun androidKitFloatingTransparent() {
+fun androidKitFloatingMinimumOpacity() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Light,
-        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(opacity = 0f),
+        floatingSurfaceOpacityLevel = AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel,
     )
 }
 
@@ -139,28 +139,17 @@ fun androidKitFloatingTransparent() {
 fun androidKitFloatingOpaque() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Light,
-        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(opacity = 1f),
+        floatingSurfaceOpacityLevel = AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
     )
 }
 
 @PreviewTest
-@Preview(name = "Dark surface transparent", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(name = "Dark surface minimum opacity", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
-fun androidKitDarkSurfaceTransparent() {
+fun androidKitDarkSurfaceMinimumOpacity() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Dark,
-        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
-            opacity = 0f,
-        ),
-    )
-}
-
-@PreviewTest
-@Preview(name = "Dark surface default", widthDp = 360, heightDp = 800, showBackground = true)
-@Composable
-fun androidKitDarkSurfaceDefault() {
-    ScreenshotGallery(
-        theme = AndroidKitThemes.Dark,
+        floatingSurfaceOpacityLevel = AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel,
     )
 }
 
@@ -170,24 +159,21 @@ fun androidKitDarkSurfaceDefault() {
 fun androidKitDarkSurfaceOpaque() {
     ScreenshotGallery(
         theme = AndroidKitThemes.Dark,
-        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
-            opacity = 1f,
-        ),
+        floatingSurfaceOpacityLevel = AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
     )
 }
 
 @Composable
 private fun ScreenshotGallery(
     theme: AndroidKitThemeDefinition,
-    floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(),
+    floatingSurfaceOpacityLevel: Float = theme.floatingSurfaceOpacityLevel,
     showCompactLabels: Boolean = false,
 ) {
     val addIcon = materialSymbol(R.drawable.ic_symbol_add)
     val settingsIcon = materialSymbol(R.drawable.ic_symbol_settings)
     val editIcon = materialSymbol(R.drawable.ic_symbol_edit)
     AndroidKitTheme(
-        definition = theme,
-        floatingSurfaceStyle = floatingSurfaceStyle,
+        definition = theme.copy(floatingSurfaceOpacityLevel = floatingSurfaceOpacityLevel),
     ) {
         AndroidKitFloatingNavigation(
             items = screenshotNavigationItems(),

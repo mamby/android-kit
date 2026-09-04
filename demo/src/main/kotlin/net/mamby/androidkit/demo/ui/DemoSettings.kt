@@ -18,10 +18,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 
 internal data class DemoSettings(
     val themeChoice: DemoThemeChoice = DemoThemeChoice.Light,
-    val floatingSurfacesTransparent: Boolean = false,
+    val floatingSurfaceOpacityLevel: Float = DefaultFloatingSurfaceOpacityLevel,
     val floatingNavigationLayout: DemoFloatingNavigationLayout =
         DemoFloatingNavigationLayout.FiveItemsWithMore,
     val showCompactNavigationLabels: Boolean = false,
@@ -64,11 +66,10 @@ internal class DemoSettingsRepository(context: Context) {
                 themeChoice = DemoThemeChoice.fromStoredValue(
                     preferences[ThemeChoiceKey],
                 ),
-                floatingSurfacesTransparent = preferences[FloatingSurfacesTransparentKey]
-                    ?: preferences[FloatingSurfaceOpacityKey]?.let { opacity ->
-                        opacity < OpaqueFloatingSurfaceOpacity
-                    }
-                    ?: false,
+                floatingSurfaceOpacityLevel = normalizeFloatingSurfaceOpacityLevel(
+                    preferences[FloatingSurfaceOpacityLevelKey]
+                        ?: DefaultFloatingSurfaceOpacityLevel,
+                ),
                 floatingNavigationLayout = DemoFloatingNavigationLayout.fromStoredValue(
                     preferences[FloatingNavigationLayoutKey],
                 ),
@@ -83,10 +84,12 @@ internal class DemoSettingsRepository(context: Context) {
         }
     }
 
-    suspend fun setFloatingSurfacesTransparent(isTransparent: Boolean) {
+    suspend fun setFloatingSurfaceOpacityLevel(level: Float) {
         dataStore.edit { preferences ->
-            preferences[FloatingSurfacesTransparentKey] = isTransparent
+            preferences[FloatingSurfaceOpacityLevelKey] =
+                normalizeFloatingSurfaceOpacityLevel(level)
             preferences.remove(FloatingSurfaceOpacityKey)
+            preferences.remove(FloatingSurfacesTransparentKey)
         }
     }
 
@@ -121,9 +124,9 @@ internal class DemoSettingsViewModel(
         }
     }
 
-    fun setFloatingSurfacesTransparent(isTransparent: Boolean) {
+    fun setFloatingSurfaceOpacityLevel(level: Float) {
         viewModelScope.launch {
-            repository.setFloatingSurfacesTransparent(isTransparent)
+            repository.setFloatingSurfaceOpacityLevel(level)
         }
     }
 
@@ -146,6 +149,9 @@ private val Context.demoSettingsDataStore: DataStore<Preferences> by preferences
 )
 
 private val ThemeChoiceKey = stringPreferencesKey("theme_choice")
+private val FloatingSurfaceOpacityLevelKey = floatPreferencesKey(
+    "floating_surface_opacity_level",
+)
 private val FloatingSurfaceOpacityKey = floatPreferencesKey("floating_surface_opacity")
 private val FloatingSurfacesTransparentKey = booleanPreferencesKey(
     "floating_surfaces_transparent",
@@ -156,5 +162,23 @@ private val FloatingNavigationLayoutKey = stringPreferencesKey(
 private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
     "show_compact_navigation_labels",
 )
-internal const val TransparentFloatingSurfaceOpacity = 0.92f
-internal const val OpaqueFloatingSurfaceOpacity = 1f
+
+internal const val MinimumFloatingSurfaceOpacityLevel: Float =
+    AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel
+internal const val MaximumFloatingSurfaceOpacityLevel: Float =
+    AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel
+internal const val DefaultFloatingSurfaceOpacityLevel: Float =
+    AndroidKitFloatingSurfaceDefaults.DefaultOpacityLevel
+internal const val FloatingSurfaceOpacityLevelStep: Float = 5f
+
+internal fun normalizeFloatingSurfaceOpacityLevel(level: Float): Float {
+    if (!level.isFinite()) return DefaultFloatingSurfaceOpacityLevel
+
+    val clampedLevel = level.coerceIn(
+        MinimumFloatingSurfaceOpacityLevel,
+        MaximumFloatingSurfaceOpacityLevel,
+    )
+    return (
+        clampedLevel / FloatingSurfaceOpacityLevelStep
+    ).roundToInt() * FloatingSurfaceOpacityLevelStep
+}

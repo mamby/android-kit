@@ -24,6 +24,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+public object AndroidKitFloatingSurfaceDefaults {
+    public const val MinimumOpacityLevel: Float = 0f
+    public const val MaximumOpacityLevel: Float = 100f
+    public const val DefaultOpacityLevel: Float = MinimumOpacityLevel
+}
+
 @Immutable
 public data class AndroidKitThemeDefinition(
     public val colorScheme: ColorScheme,
@@ -31,6 +37,8 @@ public data class AndroidKitThemeDefinition(
     public val typography: Typography = AndroidKitDefaults.typography,
     public val shapes: Shapes = AndroidKitDefaults.shapes,
     public val dimensions: AndroidKitDimensions = AndroidKitDimensions(),
+    public val floatingSurfaceOpacityLevel: Float =
+        AndroidKitFloatingSurfaceDefaults.DefaultOpacityLevel,
     public val bottomSheetStyle: AndroidKitBottomSheetStyle = AndroidKitBottomSheetStyle(
         containerColor = colorScheme.surface,
         contentColor = colorScheme.onSurface,
@@ -109,7 +117,19 @@ public data class AndroidKitThemeDefinition(
             labelTextStyle = typography.labelSmall,
             overflowItemTextStyle = typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
         ),
-)
+) {
+    init {
+        require(
+            floatingSurfaceOpacityLevel in
+                AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel..
+                AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
+        ) {
+            "Floating surface opacity level must be between " +
+                "${AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel} and " +
+                "${AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel}."
+        }
+    }
+}
 
 @Immutable
 public data class AndroidKitBottomSheetStyle(
@@ -125,7 +145,6 @@ public data class AndroidKitBottomSheetStyle(
 
 @Immutable
 public data class AndroidKitFloatingSurfaceStyle(
-    public val opacity: Float = 0.8f,
     public val containerColor: Color = Color.Unspecified,
     public val contentColor: Color = Color.Unspecified,
     public val borderColor: Color = Color.Unspecified,
@@ -135,11 +154,10 @@ public data class AndroidKitFloatingSurfaceStyle(
     public val shadowOffsetY: Dp = Dp.Unspecified,
     public val buttonShadowRadius: Dp = Dp.Unspecified,
     public val buttonShadowOffsetY: Dp = Dp.Unspecified,
-) {
-    init {
-        require(opacity in 0f..1f) { "Floating surface opacity must be between 0 and 1." }
-    }
-}
+    public val disabledContainerColor: Color = Color.Unspecified,
+    public val disabledContentColor: Color = Color.Unspecified,
+    public val disabledBorderColor: Color = Color.Unspecified,
+)
 
 @Immutable
 public data class AndroidKitDimensions(
@@ -148,9 +166,10 @@ public data class AndroidKitDimensions(
     public val spaceMedium: Dp = 16.dp,
     public val spaceLarge: Dp = 24.dp,
     public val spaceExtraLarge: Dp = 32.dp,
-    public val screenPadding: Dp = 20.dp,
+    public val screenPadding: Dp = 12.dp,
     public val contentMaxWidth: Dp = 1_200.dp,
     public val minimumTouchTarget: Dp = 48.dp,
+    public val settingSectionSpacing: Dp = 5.dp,
     public val settingSectionEntryVerticalPadding: Dp = 12.dp,
     public val floatingNavigationMargin: Dp = 8.dp,
     public val floatingNavigationMaxWidth: Dp = 560.dp,
@@ -160,6 +179,7 @@ public data class AndroidKitDimensions(
     public val floatingNavigationIndicatorSize: Dp = 40.dp,
     public val floatingNavigationItemHorizontalPadding: Dp = 12.dp,
     public val floatingNavigationIconItemHorizontalPadding: Dp = 12.dp,
+    public val floatingNavigationOverflowItemHorizontalPadding: Dp = 18.dp,
     public val floatingNavigationItemVerticalPadding: Dp = 0.dp,
     public val floatingNavigationLabelSpacing: Dp = 0.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
@@ -387,6 +407,11 @@ public object AndroidKitThemeTokens {
         @ReadOnlyComposable
         get() = LocalFloatingSurfaceStyle.current
 
+    public val floatingSurfaceOpacityLevel: Float
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.floatingSurfaceOpacityLevel
+
     public val bottomSheetStyle: AndroidKitBottomSheetStyle
         @Composable
         @ReadOnlyComposable
@@ -442,7 +467,7 @@ public object AndroidKitThemeTokens {
  * Required theme boundary for Android Kit Compose components.
  *
  * Supply a custom [AndroidKitThemeDefinition] to customize component colors, typography, shapes,
- * dimensions, and component-specific styles consistently.
+ * dimensions, shared floating-surface opacity level, and component-specific styles consistently.
  */
 @Composable
 public fun AndroidKitTheme(
@@ -468,3 +493,15 @@ public fun AndroidKitTheme(
         )
     }
 }
+
+internal fun floatingSurfaceAlphaForLevel(level: Float): Float {
+    val fraction = level.coerceIn(
+        AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel,
+        AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
+    ) / AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel
+    return MinimumFloatingSurfaceAlpha +
+        (MaximumFloatingSurfaceAlpha - MinimumFloatingSurfaceAlpha) * fraction
+}
+
+private const val MinimumFloatingSurfaceAlpha: Float = 0.8f
+private const val MaximumFloatingSurfaceAlpha: Float = 1f

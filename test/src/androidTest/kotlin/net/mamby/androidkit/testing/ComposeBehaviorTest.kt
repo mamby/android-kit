@@ -38,7 +38,7 @@ import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
 import org.junit.Assert.assertEquals
@@ -122,14 +122,17 @@ class ComposeBehaviorTest {
     fun compactNavigationCompositesBackgroundOpacityOnceAndOpaqueSurfaceIsExact() {
         val underlayColor = Color.Red
         val selectedColor = AndroidKitThemes.Light.colorScheme.secondaryContainer
-        var opacity by mutableStateOf(ProductionTransparentSurfaceOpacity)
+        var opacityLevel by mutableStateOf(
+            AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel,
+        )
         composeRule.setContent {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
                 AndroidKitTheme(
-                    definition = AndroidKitThemes.Light,
-                    floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(opacity),
+                    definition = AndroidKitThemes.Light.copy(
+                        floatingSurfaceOpacityLevel = opacityLevel,
+                    ),
                 ) {
                     AndroidKitFloatingNavigation(
                         items = listOf(
@@ -171,18 +174,20 @@ class ComposeBehaviorTest {
         val unselectedSampleX = transparentPixels.width * 5 / 12
         assertColorClose(
             expected = selectedColor
-                .copy(alpha = ProductionTransparentSurfaceOpacity)
+                .copy(alpha = MinimumRenderedFloatingSurfaceAlpha)
                 .compositeOver(underlayColor),
             actual = transparentPixels[selectedSampleX, sampleY],
         )
         assertColorClose(
             expected = Color.White
-                .copy(alpha = ProductionTransparentSurfaceOpacity)
+                .copy(alpha = MinimumRenderedFloatingSurfaceAlpha)
                 .compositeOver(underlayColor),
             actual = transparentPixels[unselectedSampleX, sampleY],
         )
 
-        composeRule.runOnIdle { opacity = 1f }
+        composeRule.runOnIdle {
+            opacityLevel = AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel
+        }
         composeRule.waitForIdle()
         val opaquePixels = composeRule
             .onNodeWithTag(FloatingNavigationBarTestTag)
@@ -639,5 +644,5 @@ private fun assertColorClose(
 private const val ImmersiveContentTestTag = "immersiveContent"
 private const val NavigationContentTestTag = "navigationContent"
 private const val FloatingNavigationBarTestTag = "androidKitFloatingNavigationBar"
-private const val ProductionTransparentSurfaceOpacity = 0.92f
+private const val MinimumRenderedFloatingSurfaceAlpha = 0.8f
 private const val ColorChannelTolerance = 0.015f

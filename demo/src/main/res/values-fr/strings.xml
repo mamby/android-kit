@@ -21,6 +21,7 @@
     <string name="component_placeholder_body">Sélectionnez une variante de composant pour ouvrir sa démonstration interactive.</string>
     <string name="primary_action">Action principale</string>
     <string name="active_variation">Variante active</string>
+    <string name="component_enabled">Activé</string>
     <string name="action_count">Actions déclenchées : %1$d</string>
     <string name="localization_title">Localisation</string>
     <string name="language_section">Langue de l’application</string>
@@ -43,8 +44,9 @@
     <string name="theme_dark">Sombre</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">Un thème coloré défini par l’application qui valide le point d’extension public.</string>
-    <string name="floating_surface_transparency">Surfaces flottantes transparentes</string>
-    <string name="floating_surface_transparency_description">Utilise une opacité de 92 %. Désactivez cette option pour utiliser la couleur de surface opaque du thème actif.</string>
+    <string name="floating_surface_opacity">Opacité des surfaces flottantes</string>
+    <string name="floating_surface_opacity_description">Ajuste les surfaces flottantes de la translucidité par défaut jusqu’à une opacité totale.</string>
+    <string name="floating_surface_opacity_value">%1$d %%</string>
     <string name="open_sheet">Ouvrir la feuille d’exemple</string>
     <string name="sheet_title">Feuille réutilisable</string>
     <string name="sheet_detail_title">Détail de la feuille</string>
@@ -77,6 +79,7 @@
     <string name="variation_content_managed">Défilement géré par le contenu</string>
     <string name="variation_icons_only">Icônes uniquement</string>
     <string name="variation_icons_labels">Icônes et libellés</string>
+    <string name="variation_horizontal_icons_labels">Icônes et libellés horizontaux</string>
     <string name="variation_text_only">Texte uniquement</string>
     <string name="variation_text_items">Éléments textuels</string>
     <string name="variation_icon_items">Éléments avec icône</string>

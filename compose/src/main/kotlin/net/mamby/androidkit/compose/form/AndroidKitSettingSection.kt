@@ -86,7 +86,7 @@ public fun AndroidKitSettingSection(
     label: String? = null,
     description: String? = null,
     style: AndroidKitSettingSectionStyle = AndroidKitThemeTokens.settingSectionStyle,
-    sectionSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    sectionSpacing: Dp = AndroidKitThemeTokens.dimensions.settingSectionSpacing,
     sectionTextPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
     ),

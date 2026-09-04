@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -64,6 +66,7 @@ import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetStyle
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.floatingSurfaceAlphaForLevel
 
 public enum class AndroidKitBottomSheetScrollMode {
     VerticalScroll,
@@ -75,6 +78,14 @@ public object AndroidKitBottomSheetDefaults {
     public const val MaximumHeightFraction: Float = 0.90f
 }
 
+/**
+ * Displays modal sheet content below persistent sheet chrome.
+ *
+ * Sheet chrome and a [floatingAction] are overlaid so scrollable content can draw behind them.
+ * When a floating action is present, the managed content padding includes its measured clearance.
+ * [AndroidKitBottomSheetScrollMode.ContentManaged] callers should apply that padding to their
+ * scrollable content so its final item clears the floating action.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun AndroidKitBottomSheet(
@@ -106,13 +117,20 @@ public fun AndroidKitBottomSheet(
         Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
     },
     header: (@Composable (onDismiss: () -> Unit) -> Unit)? = null,
-    contentWindowInsets: WindowInsets = WindowInsets(0.dp),
+    contentWindowInsets: WindowInsets = WindowInsets.safeDrawing.only(
+        WindowInsetsSides.Top + WindowInsetsSides.Bottom,
+    ),
     skipPartiallyExpanded: Boolean = true,
     dismissOnBackPress: Boolean = onBack == null,
+    floatingAction: @Composable () -> Unit = {},
+    floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
     content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val floatingSurfaceStyle = AndroidKitThemeTokens.floatingSurfaceStyle
+    val floatingSurfaceOpacity = floatingSurfaceAlphaForLevel(
+        AndroidKitThemeTokens.floatingSurfaceOpacityLevel,
+    )
     val strings = AndroidKitThemeTokens.strings
     var renderSheet by remember { mutableStateOf(visible) }
 
@@ -135,10 +153,16 @@ public fun AndroidKitBottomSheet(
     val safeDrawingTopPadding = WindowInsets.safeDrawing
         .asPaddingValues()
         .calculateTopPadding()
+    val requestedTopPadding = contentWindowInsets
+        .asPaddingValues()
+        .calculateTopPadding()
+    val stableContentWindowInsets = contentWindowInsets.only(
+        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+    )
     val sheetDismissGesturesEnabled = gesturesEnabled && dismissGesturesEnabled
-    val chromeContainerColor = style.chromeContainerColor.takeIf {
+    val chromeContainerColor = (style.chromeContainerColor.takeIf {
         it != Color.Unspecified
-    } ?: style.containerColor.copy(alpha = floatingSurfaceStyle.opacity)
+    } ?: style.containerColor).copy(alpha = floatingSurfaceOpacity)
 
     fun dismissWithAnimation() {
         if (!gesturesEnabled) return
@@ -173,7 +197,9 @@ public fun AndroidKitBottomSheet(
         tonalElevation = style.tonalElevation,
         scrimColor = style.scrimColor,
         dragHandle = null,
-        contentWindowInsets = { contentWindowInsets },
+        // Material consumes top insets from the live sheet offset. Keeping top clearance out of
+        // that animated path prevents sheet measurement and its expanded anchor feeding back.
+        contentWindowInsets = { stableContentWindowInsets },
         properties = ModalBottomSheetProperties(
             shouldDismissOnBackPress = dismissOnBackPress,
         ),
@@ -183,7 +209,8 @@ public fun AndroidKitBottomSheet(
         }
 
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val safeSheetHeight = (maxHeight - safeDrawingTopPadding).coerceAtLeast(0.dp)
+            val topClearance = maxOf(safeDrawingTopPadding, requestedTopPadding)
+            val safeSheetHeight = (maxHeight - topClearance).coerceAtLeast(0.dp)
             val maxSheetHeight = minOf(maxHeight * cappedHeightFraction, safeSheetHeight)
 
             Column(
@@ -215,6 +242,9 @@ public fun AndroidKitBottomSheet(
                     showChrome = showChrome,
                     chromeContentSpacing = chromeContentSpacing,
                     contentBottomPadding = contentBottomPadding,
+                    floatingAction = floatingAction,
+                    floatingActionAlignment = floatingActionAlignment,
+                    floatingActionMargin = floatingActionMargin,
                     chrome = {
                         if (header != null) {
                             Box(
@@ -237,7 +267,7 @@ public fun AndroidKitBottomSheet(
                             )
                         }
                     },
-                ) { chromeContentPadding ->
+                ) { appliedContentPadding, managedContentPadding ->
                     when (scrollMode) {
                         AndroidKitBottomSheetScrollMode.VerticalScroll -> Column(
                             modifier = (if (fitContent) {
@@ -248,25 +278,26 @@ public fun AndroidKitBottomSheet(
                         ) {
                             Spacer(
                                 modifier = Modifier.height(
-                                    chromeContentPadding.calculateTopPadding(),
+                                    appliedContentPadding.calculateTopPadding(),
                                 ),
                             )
-                            content(chromeContentPadding)
+                            content(managedContentPadding)
                             Spacer(
                                 modifier = Modifier.height(
-                                    chromeContentPadding.calculateBottomPadding(),
+                                    appliedContentPadding.calculateBottomPadding() +
+                                        managedContentPadding.calculateBottomPadding(),
                                 ),
                             )
                         }
 
                         AndroidKitBottomSheetScrollMode.ContentManaged -> Column(
-                            modifier = if (fitContent) {
+                            modifier = (if (fitContent) {
                                 Modifier.fillMaxWidth()
                             } else {
                                 Modifier.fillMaxSize()
-                            },
+                            }).padding(appliedContentPadding),
                         ) {
-                            content(chromeContentPadding)
+                            content(managedContentPadding)
                         }
                     }
                 }
@@ -280,11 +311,18 @@ private fun BottomSheetContentLayout(
     showChrome: Boolean,
     chromeContentSpacing: Dp,
     contentBottomPadding: Dp,
+    floatingAction: @Composable () -> Unit,
+    floatingActionAlignment: Alignment.Horizontal,
+    floatingActionMargin: Dp,
     chrome: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable (PaddingValues) -> Unit,
+    content: @Composable (
+        appliedContentPadding: PaddingValues,
+        managedContentPadding: PaddingValues,
+    ) -> Unit,
 ) {
     SubcomposeLayout(modifier = modifier) { constraints ->
+        val floatingActionMarginPx = floatingActionMargin.roundToPx()
         val chromePlaceables = if (showChrome) {
             subcompose(BottomSheetContentSlot.Chrome, chrome).map { measurable ->
                 measurable.measure(constraints.copy(minHeight = 0))
@@ -293,26 +331,70 @@ private fun BottomSheetContentLayout(
             emptyList()
         }
         val chromeHeight = chromePlaceables.maxOfOrNull { it.height } ?: 0
-        val contentPadding = PaddingValues(
+        val floatingActionConstraints = constraints.copy(
+            minWidth = 0,
+            minHeight = 0,
+            maxWidth = (constraints.maxWidth - floatingActionMarginPx * 2).coerceAtLeast(0),
+            maxHeight = (constraints.maxHeight - floatingActionMarginPx * 2).coerceAtLeast(0),
+        )
+        val floatingActionPlaceables = subcompose(BottomSheetContentSlot.FloatingAction) {
+            Box(contentAlignment = Alignment.Center) {
+                floatingAction()
+            }
+        }.map { measurable -> measurable.measure(floatingActionConstraints) }
+        val floatingActionHeight = floatingActionPlaceables.maxOfOrNull { it.height } ?: 0
+        val floatingActionClearance = if (floatingActionHeight == 0) {
+            0.dp
+        } else {
+            floatingActionHeight.toDp() + floatingActionMargin
+        }
+        val hasFloatingAction = floatingActionHeight > 0
+        val appliedContentPadding = PaddingValues(
             top = if (showChrome) chromeHeight.toDp() + chromeContentSpacing else 0.dp,
-            bottom = contentBottomPadding,
+            bottom = if (hasFloatingAction) 0.dp else contentBottomPadding,
+        )
+        val managedContentPadding = PaddingValues(
+            bottom = if (hasFloatingAction) {
+                contentBottomPadding + floatingActionClearance
+            } else {
+                0.dp
+            },
         )
         val contentPlaceables = subcompose(BottomSheetContentSlot.Content) {
-            content(contentPadding)
+            content(appliedContentPadding, managedContentPadding)
         }.map { measurable -> measurable.measure(constraints) }
         val width = maxOf(
             chromePlaceables.maxOfOrNull { it.width } ?: 0,
             contentPlaceables.maxOfOrNull { it.width } ?: 0,
+            floatingActionPlaceables.maxOfOrNull { it.width } ?: 0,
         ).coerceIn(constraints.minWidth, constraints.maxWidth)
+        val floatingActionMinimumHeight = if (floatingActionHeight == 0) {
+            0
+        } else {
+            floatingActionHeight + floatingActionMarginPx
+        }
         val height = maxOf(
             chromeHeight,
             contentPlaceables.maxOfOrNull { it.height } ?: 0,
+            floatingActionMinimumHeight,
         ).coerceIn(constraints.minHeight, constraints.maxHeight)
+        val availableFloatingActionWidth =
+            (width - floatingActionMarginPx * 2).coerceAtLeast(0)
 
         layout(width, height) {
             contentPlaceables.forEach { it.placeRelative(0, 0) }
             chromePlaceables.forEach { placeable ->
                 placeable.placeRelative(x = (width - placeable.width) / 2, y = 0)
+            }
+            floatingActionPlaceables.forEach { placeable ->
+                placeable.place(
+                    x = floatingActionMarginPx + floatingActionAlignment.align(
+                        size = placeable.width,
+                        space = availableFloatingActionWidth,
+                        layoutDirection = layoutDirection,
+                    ),
+                    y = (height - floatingActionMarginPx - placeable.height).coerceAtLeast(0),
+                )
             }
         }
     }
@@ -321,6 +403,7 @@ private fun BottomSheetContentLayout(
 private enum class BottomSheetContentSlot {
     Chrome,
     Content,
+    FloatingAction,
 }
 
 private class BottomSheetContentScrollHandoff : NestedScrollConnection {

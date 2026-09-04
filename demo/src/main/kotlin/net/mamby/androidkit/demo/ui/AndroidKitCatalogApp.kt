@@ -9,7 +9,9 @@ import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneSt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -23,7 +25,6 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceStyle
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.screen.ComponentDemoScreen
@@ -45,7 +46,15 @@ fun AndroidKitCatalogApp(
     }
     val settingsState by settingsViewModel.settings.collectAsStateWithLifecycle()
     val settings = settingsState ?: return
-    val themeDefinition = settings.themeChoice.definition()
+    var previewedFloatingSurfaceOpacityLevel by remember {
+        mutableFloatStateOf(settings.floatingSurfaceOpacityLevel)
+    }
+    LaunchedEffect(settings.floatingSurfaceOpacityLevel) {
+        previewedFloatingSurfaceOpacityLevel = settings.floatingSurfaceOpacityLevel
+    }
+    val themeDefinition = settings.themeChoice.definition().copy(
+        floatingSurfaceOpacityLevel = previewedFloatingSurfaceOpacityLevel,
+    )
     LaunchedEffect(themeDefinition.isDark) {
         onThemeDarknessChanged(themeDefinition.isDark)
     }
@@ -62,13 +71,6 @@ fun AndroidKitCatalogApp(
     AndroidKitTheme(
         definition = themeDefinition,
         strings = androidKitStrings(),
-        floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(
-            opacity = if (settings.floatingSurfacesTransparent) {
-                TransparentFloatingSurfaceOpacity
-            } else {
-                OpaqueFloatingSurfaceOpacity
-            },
-        ),
     ) {
         val dummyNavigationIcons = listOf(
             materialSymbol(R.drawable.ic_symbol_home),
@@ -157,10 +159,16 @@ fun AndroidKitCatalogApp(
                             SettingsScreen(
                                 themeChoice = settings.themeChoice,
                                 onThemeChoice = settingsViewModel::setThemeChoice,
-                                floatingSurfacesTransparent =
-                                    settings.floatingSurfacesTransparent,
-                                onFloatingSurfacesTransparentChange =
-                                    settingsViewModel::setFloatingSurfacesTransparent,
+                                floatingSurfaceOpacityLevel =
+                                    previewedFloatingSurfaceOpacityLevel,
+                                onFloatingSurfaceOpacityLevelChange = { level ->
+                                    previewedFloatingSurfaceOpacityLevel = level
+                                },
+                                onFloatingSurfaceOpacityLevelChangeFinished = {
+                                    settingsViewModel.setFloatingSurfaceOpacityLevel(
+                                        previewedFloatingSurfaceOpacityLevel,
+                                    )
+                                },
                             )
                         }
                         entry<DemoRootRoute> { route ->

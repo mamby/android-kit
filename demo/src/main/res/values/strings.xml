@@ -22,6 +22,7 @@
     <string name="component_placeholder_body">Select a component variation to open its interactive demo.</string>
     <string name="primary_action">Primary action</string>
     <string name="active_variation">Active variation</string>
+    <string name="component_enabled">Enabled</string>
     <string name="action_count">Actions invoked: %1$d</string>
     <string name="localization_title">Localization</string>
     <string name="language_section">Application language</string>
@@ -44,8 +45,9 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">A colorful app-defined theme that proves the public extension point.</string>
-    <string name="floating_surface_transparency">Transparent floating surfaces</string>
-    <string name="floating_surface_transparency_description">Uses 92% opacity. Turn off for the active theme’s opaque surface color.</string>
+    <string name="floating_surface_opacity">Floating surface opacity</string>
+    <string name="floating_surface_opacity_description">Adjusts floating surfaces from the default translucency to fully opaque.</string>
+    <string name="floating_surface_opacity_value">%1$d%%</string>
     <string name="open_sheet">Open example sheet</string>
     <string name="sheet_title">Reusable sheet</string>
     <string name="sheet_detail_title">Sheet detail</string>
@@ -78,6 +80,7 @@
     <string name="variation_content_managed">Content-managed scrolling</string>
     <string name="variation_icons_only">Icons only</string>
     <string name="variation_icons_labels">Icons and labels</string>
+    <string name="variation_horizontal_icons_labels">Horizontal icons and labels</string>
     <string name="variation_text_only">Text only</string>
     <string name="variation_text_items">Text items</string>
     <string name="variation_icon_items">Icon items</string>

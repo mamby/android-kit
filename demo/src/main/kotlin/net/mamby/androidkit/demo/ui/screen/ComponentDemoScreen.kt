@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
+import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarIconAndLabelLayout
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
@@ -184,6 +185,7 @@ private fun AndroidKitFloatingActionButtonDemo(
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
+    var enabled by rememberSaveable { mutableStateOf(true) }
     val alignment = when (demo) {
         ComponentDemo.AndroidKitFloatingActionButtonTopStart -> Alignment.TopStart
         ComponentDemo.AndroidKitFloatingActionButtonTopCenter -> Alignment.TopCenter
@@ -209,6 +211,16 @@ private fun AndroidKitFloatingActionButtonDemo(
                 item {
                     Text(text = stringResource(R.string.action_count, actionCount))
                 }
+                item {
+                    val enabledLabel = stringResource(R.string.component_enabled)
+                    AndroidKitSettingSection {
+                        toggle(
+                            label = enabledLabel,
+                            checked = enabled,
+                            onCheckedChange = { enabled = it },
+                        )
+                    }
+                }
                 item { DemoScrollContent() }
             }
             Box(
@@ -221,6 +233,7 @@ private fun AndroidKitFloatingActionButtonDemo(
                     modifier = Modifier
                         .align(alignment)
                         .padding(dimensions.screenPadding),
+                    enabled = enabled,
                 ) {
                     Icon(
                         imageVector = materialSymbol(R.drawable.ic_symbol_edit),
@@ -431,6 +444,8 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     val isBackNavigation = demo == ComponentDemo.AndroidKitBottomSheetBackNavigation
     val isChromeless = demo == ComponentDemo.AndroidKitBottomSheetChromelessFitContent
     val isContentManaged = demo == ComponentDemo.AndroidKitBottomSheetContentManaged
+    val cancel = stringResource(R.string.action_cancel)
+    val confirm = stringResource(R.string.action_confirm)
     AndroidKitBottomSheet(
         visible = visible,
         title = if (isBackNavigation && showingDetail) {
@@ -451,6 +466,12 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
             AndroidKitBottomSheetScrollMode.ContentManaged
         } else {
             AndroidKitBottomSheetScrollMode.VerticalScroll
+        },
+        floatingAction = {
+            AndroidKitFloatingActionBar {
+                text(onClick = { visible = false }, label = cancel)
+                text(onClick = { visible = false }, label = confirm)
+            }
         },
     ) { managedContentPadding ->
         if (isContentManaged) {
@@ -498,8 +519,8 @@ private fun AndroidKitFloatingActionBarDemo(
         ),
         listOf(
             materialSymbol(R.drawable.ic_symbol_refresh) to retry,
-            materialSymbol(R.drawable.ic_symbol_close) to cancel,
-            materialSymbol(R.drawable.ic_symbol_check) to confirm,
+            null to cancel,
+            null to confirm,
         ),
         listOf(materialSymbol(R.drawable.ic_symbol_delete) to delete),
     )
@@ -515,6 +536,7 @@ private fun AndroidKitFloatingActionBarDemo(
                     onClick = onAction,
                     icon = saveIcon,
                     contentDescription = save,
+                    enabled = false,
                 )
                 icon(
                     onClick = onAction,
@@ -532,21 +554,34 @@ private fun AndroidKitFloatingActionBarDemo(
                 }
             }
 
-            ComponentDemo.AndroidKitFloatingActionBarIconsAndLabels -> {
+            ComponentDemo.AndroidKitFloatingActionBarIconsAndLabels,
+            ComponentDemo.AndroidKitFloatingActionBarHorizontalIconsAndLabels,
+            -> {
+                val layout = if (
+                    demo == ComponentDemo.AndroidKitFloatingActionBarHorizontalIconsAndLabels
+                ) {
+                    AndroidKitFloatingActionBarIconAndLabelLayout.Horizontal
+                } else {
+                    AndroidKitFloatingActionBarIconAndLabelLayout.Vertical
+                }
                 iconAndLabel(
                     onClick = onAction,
                     icon = editIcon,
                     label = edit,
+                    layout = layout,
                 )
                 iconAndLabel(
                     onClick = onAction,
                     icon = saveIcon,
                     label = save,
+                    layout = layout,
+                    enabled = false,
                 )
                 iconAndLabel(
                     onClick = onAction,
                     icon = shareIcon,
                     label = share,
+                    layout = layout,
                 )
                 separator()
                 flyout {
@@ -561,7 +596,7 @@ private fun AndroidKitFloatingActionBarDemo(
 
             ComponentDemo.AndroidKitFloatingActionBarText -> {
                 text(onClick = onAction, label = edit)
-                text(onClick = onAction, label = save)
+                text(onClick = onAction, label = save, enabled = false)
                 text(onClick = onAction, label = share)
                 separator()
                 flyout {
