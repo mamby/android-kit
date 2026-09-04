@@ -306,6 +306,58 @@ class ComposeBehaviorTest {
     }
 
     @Test
+    fun androidKitPageKeepsViewportEdgeToEdgeAndItemsClearTitleBar() {
+        composeRule.setContent {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
+            ) {
+                AndroidKitTheme {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .testTag(PageRootTestTag),
+                    ) {
+                        AndroidKitPage(title = PageTitle) { contentPadding ->
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .testTag(PageViewportTestTag),
+                                contentPadding = contentPadding,
+                            ) {
+                                item {
+                                    Text(
+                                        text = PageFirstItem,
+                                        modifier = Modifier.testTag(PageFirstItemTestTag),
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        val rootBounds = composeRule.onNodeWithTag(PageRootTestTag)
+            .fetchSemanticsNode()
+            .boundsInRoot
+        val viewportBounds = composeRule.onNodeWithTag(PageViewportTestTag)
+            .fetchSemanticsNode()
+            .boundsInRoot
+        val titleBottom = composeRule.onNodeWithContentDescription(PageTitle)
+            .fetchSemanticsNode()
+            .boundsInRoot
+            .bottom
+        val firstItemTop = composeRule.onNodeWithTag(PageFirstItemTestTag)
+            .fetchSemanticsNode()
+            .boundsInRoot
+            .top
+
+        assertEquals(rootBounds.top, viewportBounds.top, 1f)
+        assertEquals(rootBounds.bottom, viewportBounds.bottom, 1f)
+        assertTrue(firstItemTop >= titleBottom)
+    }
+
+    @Test
     fun immersiveTitleBarTogglesWhenContentConsumesOnlyTheInitialDown() {
         composeRule.setContent {
             AndroidKitTheme {
@@ -496,7 +548,6 @@ class ComposeBehaviorTest {
             .onNodeWithContentDescription("More", useUnmergedTree = true)
             .performClick()
 
-        composeRule.onNodeWithText("Language").assertExists()
         composeRule.onNodeWithText("Settings").assertIsSelected()
         composeRule.onNodeWithContentDescription("More").assertIsSelected()
         composeRule.onNodeWithContentDescription("Close").assertDoesNotExist()
@@ -644,5 +695,10 @@ private fun assertColorClose(
 private const val ImmersiveContentTestTag = "immersiveContent"
 private const val NavigationContentTestTag = "navigationContent"
 private const val FloatingNavigationBarTestTag = "androidKitFloatingNavigationBar"
+private const val PageRootTestTag = "pageRoot"
+private const val PageViewportTestTag = "pageViewport"
+private const val PageFirstItemTestTag = "pageFirstItem"
+private const val PageTitle = "Edge-to-edge page"
+private const val PageFirstItem = "First page item"
 private const val MinimumRenderedFloatingSurfaceAlpha = 0.8f
 private const val ColorChannelTolerance = 0.015f

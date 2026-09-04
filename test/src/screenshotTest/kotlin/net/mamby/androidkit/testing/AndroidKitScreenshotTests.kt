@@ -15,11 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
+import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
+import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
 import net.mamby.androidkit.compose.layout.AndroidKitPage
-import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
@@ -81,17 +82,17 @@ fun androidKitFloatingTitleActions() {
             title = "A centered page title that must ellipsize",
             onBack = {},
             actions = listOf(
-                AndroidKitPageAction(
+                AndroidKitAction(
                     materialSymbol(R.drawable.ic_symbol_edit),
                     "Edit",
                     {},
                 ),
-                AndroidKitPageAction(
+                AndroidKitAction(
                     materialSymbol(R.drawable.ic_symbol_share),
                     "Share",
                     {},
                 ),
-                AndroidKitPageAction(
+                AndroidKitAction(
                     materialSymbol(R.drawable.ic_symbol_delete),
                     "Delete",
                     {},
@@ -106,6 +107,46 @@ fun androidKitFloatingTitleActions() {
             ) {
                 Text("Title bar content protection")
             }
+        }
+    }
+}
+
+@PreviewTest
+@Preview(name = "Bottom sheet actions", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(
+    name = "Bottom sheet actions RTL",
+    widthDp = 360,
+    heightDp = 800,
+    locale = "ar",
+    showBackground = true,
+)
+@Composable
+fun androidKitBottomSheetHeaderActions() {
+    AndroidKitTheme(definition = AndroidKitThemes.Light) {
+        AndroidKitBottomSheet(
+            visible = true,
+            title = "Sheet actions",
+            onDismiss = {},
+            actions = listOf(
+                AndroidKitAction(
+                    materialSymbol(R.drawable.ic_symbol_edit),
+                    "Edit",
+                    {},
+                ),
+                AndroidKitAction(
+                    materialSymbol(R.drawable.ic_symbol_share),
+                    "Share",
+                    {},
+                ),
+                AndroidKitAction(
+                    materialSymbol(R.drawable.ic_symbol_delete),
+                    "Delete",
+                    {},
+                ),
+            ),
+            fitContent = true,
+        ) {
+            Text("Actions remain flat beside the close button.")
         }
     }
 }

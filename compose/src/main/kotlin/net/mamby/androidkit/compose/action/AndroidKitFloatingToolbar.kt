@@ -504,6 +504,35 @@ private fun FloatingToolbarFlyoutTrigger(
 )
 
 @Composable
+internal fun AndroidKitActionFlyout(
+    items: List<AndroidKitActionItem>,
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    enabled: Boolean,
+    horizontalAlignment: AndroidKitFloatingDropdownMenuHorizontalAlignment,
+    style: AndroidKitFloatingToolbarStyle,
+): Unit = FloatingToolbarFlyoutPopup(
+    items = items.map { item ->
+        when (item) {
+            is AndroidKitAction -> FloatingToolbarFlyoutItem.Action(
+                icon = item.icon,
+                label = item.label,
+                onClick = item.onClick,
+                enabled = item.enabled,
+            )
+
+            AndroidKitActionSeparator -> FloatingToolbarFlyoutItem.Separator(Modifier)
+        }
+    },
+    expanded = expanded,
+    onDismissRequest = onDismissRequest,
+    enabled = enabled,
+    placement = AndroidKitFloatingDropdownMenuPlacement.Below,
+    horizontalAlignment = horizontalAlignment,
+    toolbarStyle = style,
+)
+
+@Composable
 private fun FloatingToolbarFlyoutPopup(
     items: List<FloatingToolbarFlyoutItem>,
     expanded: Boolean,
@@ -533,7 +562,7 @@ private fun FloatingToolbarFlyoutPopup(
                     text = {
                         Text(
                             text = item.label,
-                            style = toolbarStyle.labelTextStyle,
+                            style = AndroidKitThemeTokens.typography.labelLarge,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -552,7 +581,9 @@ private fun FloatingToolbarFlyoutPopup(
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
-                                modifier = Modifier.size(toolbarStyle.iconSize),
+                                modifier = Modifier.size(
+                                    dimensions.floatingDropdownMenuIconSize,
+                                ),
                             )
                         }
                     },

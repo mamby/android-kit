@@ -75,6 +75,7 @@
     <string name="variation_titleless">بلا عنوان</string>
     <string name="variation_standard">قياسي</string>
     <string name="variation_back_navigation">التنقل بالرجوع</string>
+    <string name="variation_header_actions">إجراءات الرأس</string>
     <string name="variation_chromeless_fit_content">محتوى ملائم بلا إطار</string>
     <string name="variation_content_managed">تمرير يديره المحتوى</string>
     <string name="variation_icons_only">أيقونات فقط</string>

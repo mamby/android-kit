@@ -76,6 +76,7 @@
     <string name="variation_titleless">Titleless</string>
     <string name="variation_standard">Standard</string>
     <string name="variation_back_navigation">Back navigation</string>
+    <string name="variation_header_actions">Header actions</string>
     <string name="variation_chromeless_fit_content">Chromeless fit content</string>
     <string name="variation_content_managed">Content-managed scrolling</string>
     <string name="variation_icons_only">Icons only</string>

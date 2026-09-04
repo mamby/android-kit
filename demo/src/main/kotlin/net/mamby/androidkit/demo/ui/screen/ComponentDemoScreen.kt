@@ -26,6 +26,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import net.mamby.androidkit.compose.action.AndroidKitAction
+import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarIconAndLabelLayout
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
@@ -34,8 +36,6 @@ import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import net.mamby.androidkit.compose.form.AndroidKitSettingSection
 import net.mamby.androidkit.compose.layout.AndroidKitPage
-import net.mamby.androidkit.compose.layout.AndroidKitPageAction
-import net.mamby.androidkit.compose.layout.AndroidKitPageActionSeparator
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -110,29 +110,29 @@ private fun AndroidKitPageDemo(
     }
     val actions = if (hasTitleActions) {
         listOf(
-            AndroidKitPageAction(
+            AndroidKitAction(
                 icon = materialSymbol(R.drawable.ic_symbol_save),
                 label = stringResource(R.string.action_save),
                 onClick = { actionCount += 1 },
             ),
-            AndroidKitPageActionSeparator,
-            AndroidKitPageAction(
+            AndroidKitActionSeparator,
+            AndroidKitAction(
                 icon = materialSymbol(R.drawable.ic_symbol_share),
                 label = stringResource(R.string.action_share),
                 onClick = { actionCount += 1 },
             ),
-            AndroidKitPageAction(
+            AndroidKitAction(
                 icon = materialSymbol(R.drawable.ic_symbol_edit),
                 label = stringResource(R.string.action_edit),
                 onClick = { actionCount += 1 },
             ),
-            AndroidKitPageAction(
+            AndroidKitAction(
                 icon = materialSymbol(R.drawable.ic_symbol_refresh),
                 label = stringResource(R.string.action_retry),
                 onClick = { actionCount += 1 },
             ),
-            AndroidKitPageActionSeparator,
-            AndroidKitPageAction(
+            AndroidKitActionSeparator,
+            AndroidKitAction(
                 icon = materialSymbol(R.drawable.ic_symbol_delete),
                 label = stringResource(R.string.action_delete),
                 onClick = { actionCount += 1 },
@@ -431,6 +431,7 @@ private fun AndroidKitSettingSectionDemo(
 private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     var visible by rememberSaveable { mutableStateOf(false) }
     var showingDetail by rememberSaveable { mutableStateOf(true) }
+    var headerActionCount by rememberSaveable { mutableIntStateOf(0) }
     Button(
         modifier = Modifier.testTag("open_bottom_sheet"),
         onClick = {
@@ -442,10 +443,33 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     }
 
     val isBackNavigation = demo == ComponentDemo.AndroidKitBottomSheetBackNavigation
+    val hasHeaderActions = demo == ComponentDemo.AndroidKitBottomSheetHeaderActions
     val isChromeless = demo == ComponentDemo.AndroidKitBottomSheetChromelessFitContent
     val isContentManaged = demo == ComponentDemo.AndroidKitBottomSheetContentManaged
     val cancel = stringResource(R.string.action_cancel)
     val confirm = stringResource(R.string.action_confirm)
+    val headerActions = if (hasHeaderActions) {
+        listOf(
+            AndroidKitAction(
+                icon = materialSymbol(R.drawable.ic_symbol_save),
+                label = stringResource(R.string.action_save),
+                onClick = { headerActionCount += 1 },
+            ),
+            AndroidKitAction(
+                icon = materialSymbol(R.drawable.ic_symbol_share),
+                label = stringResource(R.string.action_share),
+                onClick = { headerActionCount += 1 },
+            ),
+            AndroidKitActionSeparator,
+            AndroidKitAction(
+                icon = materialSymbol(R.drawable.ic_symbol_delete),
+                label = stringResource(R.string.action_delete),
+                onClick = { headerActionCount += 1 },
+            ),
+        )
+    } else {
+        emptyList()
+    }
     AndroidKitBottomSheet(
         visible = visible,
         title = if (isBackNavigation && showingDetail) {
@@ -460,6 +484,7 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
         onBack = ({ showingDetail = false }).takeIf {
             isBackNavigation && showingDetail
         },
+        actions = headerActions,
         fitContent = isChromeless,
         showChrome = !isChromeless,
         scrollMode = if (isContentManaged) {
@@ -490,6 +515,9 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
             }
         } else {
             Text(stringResource(R.string.sheet_body))
+            if (hasHeaderActions) {
+                Text(stringResource(R.string.action_count, headerActionCount))
+            }
             if (!isChromeless) DemoScrollContent()
         }
     }

@@ -93,6 +93,10 @@ enum class ComponentDemo(
         ComponentId.AndroidKitBottomSheet,
         R.string.variation_back_navigation,
     ),
+    AndroidKitBottomSheetHeaderActions(
+        ComponentId.AndroidKitBottomSheet,
+        R.string.variation_header_actions,
+    ),
     AndroidKitBottomSheetChromelessFitContent(
         ComponentId.AndroidKitBottomSheet,
         R.string.variation_chromeless_fit_content,

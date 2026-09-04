@@ -75,6 +75,7 @@
     <string name="variation_titleless">Sans titre</string>
     <string name="variation_standard">Standard</string>
     <string name="variation_back_navigation">Navigation retour</string>
+    <string name="variation_header_actions">Actions d’en-tête</string>
     <string name="variation_chromeless_fit_content">Contenu ajusté sans chrome</string>
     <string name="variation_content_managed">Défilement géré par le contenu</string>
     <string name="variation_icons_only">Icônes uniquement</string>

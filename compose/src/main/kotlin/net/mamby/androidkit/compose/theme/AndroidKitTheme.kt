@@ -141,6 +141,7 @@ public data class AndroidKitBottomSheetStyle(
     public val tonalElevation: Dp = 0.dp,
     public val chromeContainerColor: Color = Color.Unspecified,
     public val titleTextStyle: TextStyle? = null,
+    public val dropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle? = null,
 )
 
 @Immutable
@@ -183,6 +184,7 @@ public data class AndroidKitDimensions(
     public val floatingNavigationItemVerticalPadding: Dp = 0.dp,
     public val floatingNavigationLabelSpacing: Dp = 0.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
+    public val floatingDropdownMenuIconSize: Dp = 24.dp,
     public val pageTitleBarButtonSize: Dp = 44.dp,
     public val pageTitleBarVerticalPadding: Dp = spaceSmall,
     public val floatingActionButtonSize: Dp = 56.dp,

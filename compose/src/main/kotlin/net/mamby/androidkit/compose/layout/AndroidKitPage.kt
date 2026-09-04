@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,35 +21,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import net.mamby.androidkit.compose.action.AndroidKitAction
+import net.mamby.androidkit.compose.action.AndroidKitActionItem
+import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
 import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
 import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
-@Immutable
-public sealed interface AndroidKitPageActionItem
+public typealias AndroidKitPageActionItem = AndroidKitActionItem
 
-@Immutable
-public class AndroidKitPageAction(
-    public val icon: ImageVector,
-    public val label: String,
-    public val onClick: () -> Unit,
-    public val enabled: Boolean = true,
-) : AndroidKitPageActionItem
+public typealias AndroidKitPageAction = AndroidKitAction
 
-@Immutable
-public data object AndroidKitPageActionSeparator : AndroidKitPageActionItem
+public typealias AndroidKitPageActionSeparator = AndroidKitActionSeparator
 
+/**
+ * Displays a page whose content viewport is always edge-to-edge behind its title bar and system
+ * bars. Apply the provided [PaddingValues] to a scrollable component's `contentPadding`, not its
+ * [Modifier], so items remain unobscured without shrinking the viewport.
+ */
 @Composable
 public fun AndroidKitPage(
     title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
-    actions: List<AndroidKitPageActionItem> = emptyList(),
+    actions: List<AndroidKitActionItem> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
     floatingActionButton: @Composable () -> Unit = {},
     style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
@@ -71,7 +69,7 @@ public fun AndroidKitPage(
     val hasTitleBar = topBar != null ||
         title != null ||
         onBack != null ||
-        actions.any { it is AndroidKitPageAction }
+        actions.any { it is AndroidKitAction }
     AndroidKitPageLayout(
         modifier = modifier
             .toggleTitleBarOnUnconsumedTap(
