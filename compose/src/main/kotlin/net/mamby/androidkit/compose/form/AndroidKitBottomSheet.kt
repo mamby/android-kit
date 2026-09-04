@@ -15,10 +15,13 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -97,8 +100,9 @@ public object AndroidKitBottomSheetDefaults {
  * Sheet content is always laid out edge-to-edge behind the persistent sheet chrome.
  * [AndroidKitBottomSheetScrollMode.ContentManaged] callers must apply the provided padding to the
  * scrollable component's `contentPadding`, not its [Modifier], so items clear the chrome, system
- * bars, and [floatingAction] while the viewport remains edge-to-edge. [actions] use the default
- * header; a custom [header] owns all of its chrome. An explicitly supplied
+ * bars, and [floatingAction] while the viewport remains edge-to-edge. The floating action stays
+ * above the IME when it is visible. [actions] use the default header; a custom [header] owns all
+ * of its chrome. An explicitly supplied
  * [AndroidKitBottomSheetStyle.chromeContainerColor] selects the chrome's base color; its rendered
  * alpha still comes from the theme's shared floating-surface opacity.
  */
@@ -134,7 +138,7 @@ public fun AndroidKitBottomSheet(
         Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
     },
     header: (@Composable (onDismiss: () -> Unit) -> Unit)? = null,
-    contentWindowInsets: WindowInsets = WindowInsets.safeDrawing.only(
+    contentWindowInsets: WindowInsets = WindowInsets.safeDrawing.exclude(WindowInsets.ime).only(
         WindowInsetsSides.Top + WindowInsetsSides.Bottom,
     ),
     skipPartiallyExpanded: Boolean = true,
@@ -170,10 +174,13 @@ public fun AndroidKitBottomSheet(
     val safeDrawingTopPadding = WindowInsets.safeDrawing
         .asPaddingValues()
         .calculateTopPadding()
-    val requestedContentPadding = contentWindowInsets.asPaddingValues()
+    // The IME resizes the sheet layout; persistent content insets must not lift the floating
+    // action again inside that already-resized layout.
+    val persistentContentWindowInsets = contentWindowInsets.exclude(WindowInsets.ime)
+    val requestedContentPadding = persistentContentWindowInsets.asPaddingValues()
     val requestedTopPadding = requestedContentPadding.calculateTopPadding()
     val requestedBottomPadding = requestedContentPadding.calculateBottomPadding()
-    val horizontalContentWindowInsets = contentWindowInsets.only(WindowInsetsSides.Horizontal)
+    val horizontalContentWindowInsets = persistentContentWindowInsets.only(WindowInsetsSides.Horizontal)
     val sheetDismissGesturesEnabled = gesturesEnabled && dismissGesturesEnabled
     val chromeContainerColor = (style.chromeContainerColor.takeIf {
         it != Color.Unspecified
@@ -199,7 +206,7 @@ public fun AndroidKitBottomSheet(
 
     ModalBottomSheet(
         onDismissRequest = ::dismissWithAnimation,
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         sheetState = sheetState,
         sheetMaxWidth = sheetMaxWidth,
         sheetGesturesEnabled = sheetDismissGesturesEnabled,
@@ -262,7 +269,7 @@ public fun AndroidKitBottomSheet(
                     floatingActionAlignment = floatingActionAlignment,
                     floatingActionMargin = floatingActionMargin,
                     contentBottomInset = requestedBottomPadding,
-                    contentWindowInsets = contentWindowInsets,
+                    contentWindowInsets = persistentContentWindowInsets,
                     chrome = {
                         if (header != null) {
                             Box(
