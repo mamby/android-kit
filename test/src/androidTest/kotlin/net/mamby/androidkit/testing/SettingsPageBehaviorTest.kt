@@ -28,6 +28,7 @@ import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
+import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -106,6 +107,27 @@ class SettingsPageBehaviorTest {
         rule.onNodeWithText("Theme").performClick()
         rule.onNodeWithText("Prism").performClick()
         rule.runOnIdle { assertEquals("prism", selected) }
+    }
+
+    @Test
+    fun systemOptionShowsCurrentHostValueInSettingsRowAndPicker() {
+        rule.setContent {
+            AndroidKitTheme {
+                AndroidKitSettingsPage {
+                    generalSection(theme = AndroidKitSettingsSelection(
+                        label = "Theme", selectedId = "system", onSelected = {},
+                        options = listOf(AndroidKitSettingsOption("light", "Light")),
+                        closeContentDescription = "Close",
+                        systemOption = AndroidKitSettingsSystemOption(
+                            id = "system", label = "System", currentValueLabel = "Light",
+                        ),
+                    ))
+                }
+            }
+        }
+
+        rule.onNodeWithText("System (Light)").assertIsDisplayed().performClick()
+        rule.onNodeWithText("System (Light)").assertIsDisplayed()
     }
 
     @Test

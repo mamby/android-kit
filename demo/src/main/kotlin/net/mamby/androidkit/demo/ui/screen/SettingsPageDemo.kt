@@ -1,6 +1,7 @@
 package net.mamby.androidkit.demo.ui.screen
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,12 +12,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalLocale
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
+import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.ComponentDemo
 
@@ -28,6 +31,11 @@ internal fun SettingsPageDemo(demo: ComponentDemo, onBack: () -> Unit) {
     var opacity by rememberSaveable { mutableFloatStateOf(0f) }
     var locked by rememberSaveable { mutableStateOf(false) }
     var showLanguage by rememberSaveable { mutableStateOf(true) }
+    val systemLanguageId = when (LocalLocale.current.platformLocale.language) {
+        "fr" -> "fr"
+        "ar" -> "ar"
+        else -> "en"
+    }
     val stateHolder = rememberSaveableStateHolder()
     val grouped = demo == ComponentDemo.AndroidKitSettingsPageSubpages
     val optional = demo == ComponentDemo.AndroidKitSettingsPageOptional
@@ -67,6 +75,15 @@ internal fun SettingsPageDemo(demo: ComponentDemo, onBack: () -> Unit) {
                                 ),
                                 selectedId = language, onSelected = { language = it },
                                 closeContentDescription = stringResource(R.string.action_close),
+                                systemOption = AndroidKitSettingsSystemOption(
+                                    id = "system",
+                                    label = stringResource(R.string.language_system),
+                                    currentValueLabel = when (systemLanguageId) {
+                                        "fr" -> "Français"
+                                        "ar" -> "العربية"
+                                        else -> "English"
+                                    },
+                                ),
                             ),
                             searchLabel = stringResource(R.string.settings_search_languages),
                             emptyResultsLabel = stringResource(R.string.settings_no_languages),
@@ -74,12 +91,18 @@ internal fun SettingsPageDemo(demo: ComponentDemo, onBack: () -> Unit) {
                         theme = AndroidKitSettingsSelection(
                             label = stringResource(R.string.settings_theme),
                             options = listOf(
-                                AndroidKitSettingsOption("system", stringResource(R.string.language_system)),
                                 AndroidKitSettingsOption("light", stringResource(R.string.theme_light)),
                                 AndroidKitSettingsOption("dark", stringResource(R.string.theme_dark)),
                             ),
                             selectedId = theme, onSelected = { theme = it },
                             closeContentDescription = stringResource(R.string.action_close),
+                            systemOption = AndroidKitSettingsSystemOption(
+                                id = "system",
+                                label = stringResource(R.string.language_system),
+                                currentValueLabel = stringResource(
+                                    if (isSystemInDarkTheme()) R.string.theme_dark else R.string.theme_light
+                                ),
+                            ),
                         ),
                         floatingOpacity = if (optional) null else AndroidKitFloatingOpacitySetting(
                             label = stringResource(R.string.floating_surface_opacity), value = opacity,

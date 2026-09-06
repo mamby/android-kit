@@ -27,7 +27,7 @@
     <string name="localization_title">Localization</string>
     <string name="language_section">Application language</string>
     <string name="language_section_description">Changing language uses the official per-app locale API.</string>
-    <string name="language_system">System default</string>
+    <string name="language_system">System</string>
     <string name="format_section">Formatted examples</string>
     <string name="format_section_description">Formatters receive a locale explicitly and never depend on process-global state.</string>
     <string name="format_date">Date</string>

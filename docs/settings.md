@@ -37,8 +37,13 @@ where entries are declared. Custom `item` content inside a section receives a
 `AndroidKitSettingsSelection` contains a label, stable keyed options, selected
 ID, selection callback, and localized Close description. IDs must be unique and
 the selected ID must be present. The host supplies every option: Android Kit
-does not define supported languages, language names, system-default choices,
-or application themes. A host can include custom themes such as Prism.
+does not define supported languages, language names, or application themes. A
+host can include custom themes such as Prism.
+
+Use `systemOption` when a host offers a system choice. The host supplies its
+localized label and the localized label of the currently resolved value; Android
+Kit renders the shared `System (current value)` form in both the settings row
+and picker. The host still owns which languages or themes are available.
 
 `AndroidKitLanguageSetting` adds localized search and empty-result labels.
 Language search ignores case and accents. The search field is part of the

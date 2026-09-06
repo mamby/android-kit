@@ -26,7 +26,7 @@
     <string name="localization_title">Localisation</string>
     <string name="language_section">Langue de l’application</string>
     <string name="language_section_description">Le changement utilise l’API officielle des langues par application.</string>
-    <string name="language_system">Langue du système</string>
+    <string name="language_system">Système</string>
     <string name="format_section">Exemples formatés</string>
     <string name="format_section_description">Les formateurs reçoivent explicitement une locale et ne dépendent jamais de l’état global du processus.</string>
     <string name="format_date">Date</string>

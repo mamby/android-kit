@@ -47,6 +47,19 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 /** Stable identity is independent of the translated label and filtered list position. */
 public data class AndroidKitSettingsOption(public val id: String, public val label: String)
 
+/** The host-localized system choice and the host-localized value it currently resolves to. */
+public data class AndroidKitSettingsSystemOption(
+    public val id: String,
+    public val label: String,
+    public val currentValueLabel: String,
+) {
+    init {
+        require(id.isNotBlank()) { "System option ID must not be blank." }
+        require(label.isNotBlank()) { "System option label must not be blank." }
+        require(currentValueLabel.isNotBlank()) { "System option current value must not be blank." }
+    }
+}
+
 public data class AndroidKitSettingsSelection(
     public val label: String,
     public val options: List<AndroidKitSettingsOption>,
@@ -55,11 +68,13 @@ public data class AndroidKitSettingsSelection(
     public val closeContentDescription: String,
     public val enabled: Boolean = true,
     public val icon: ImageVector? = null,
+    public val systemOption: AndroidKitSettingsSystemOption? = null,
 ) {
     init {
-        require(options.isNotEmpty()) { "Selection options must not be empty." }
-        require(options.map { it.id }.distinct().size == options.size) { "Option IDs must be unique." }
-        require(options.any { it.id == selectedId }) { "The selected ID must identify an option." }
+        val allIds = options.map { it.id } + listOfNotNull(systemOption?.id)
+        require(allIds.isNotEmpty()) { "Selection options must not be empty." }
+        require(allIds.distinct().size == allIds.size) { "Option IDs must be unique." }
+        require(selectedId in allIds) { "The selected ID must identify an option." }
     }
 }
 
@@ -265,9 +280,10 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         val pickerKey = "$kind:$sectionKey"
         pickers[pickerKey] = picker
         val selection = picker.selection
+        val options = selection.displayOptions()
         button(
             label = selection.label,
-            supportingText = selection.options.first { it.id == selection.selectedId }.label,
+            supportingText = options.first { it.id == selection.selectedId }.label,
             icon = selection.icon, enabled = selection.enabled,
             onClick = { openPicker(pickerKey) },
         )
@@ -295,9 +311,10 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
 private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
     val selection = picker.selection
-    val options = remember(selection.options, query) {
+    val displayOptions = selection.displayOptions()
+    val options = remember(displayOptions, query) {
         val search = query.searchKey()
-        selection.options.filter { search.isEmpty() || it.label.searchKey().contains(search) }
+        displayOptions.filter { search.isEmpty() || it.label.searchKey().contains(search) }
     }
     val listState = rememberLazyListState()
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -362,3 +379,11 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
 private val SearchMarks = Regex("\\p{M}+")
 private fun String.searchKey(): String = Normalizer.normalize(trim(), Normalizer.Form.NFD)
     .replace(SearchMarks, "").lowercase(Locale.ROOT)
+
+private fun AndroidKitSettingsSelection.displayOptions(): List<AndroidKitSettingsOption> =
+    listOfNotNull(systemOption?.let { option ->
+        AndroidKitSettingsOption(
+            id = option.id,
+            label = "${option.label} (${option.currentValueLabel})",
+        )
+    }) + options

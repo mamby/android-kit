@@ -80,7 +80,10 @@ public data class AndroidKitThemeDefinition(
         dividerColor = colorScheme.outlineVariant,
         secondaryContentColor = colorScheme.onSurfaceVariant,
         shape = shapes.extraLarge,
-        sectionLabelTextStyle = AndroidKitDefaults.typography.labelLarge,
+        sectionLabelTextStyle = AndroidKitDefaults.typography.labelLarge.copy(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+        ),
         descriptionTextStyle = AndroidKitDefaults.typography.bodyMedium,
         entryLabelTextStyle = AndroidKitDefaults.typography.bodyLarge,
         supportingTextStyle = AndroidKitDefaults.typography.bodyMedium,
