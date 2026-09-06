@@ -101,4 +101,17 @@
     <string name="floating_navigation_seven_items_description">يعرض سبع وجهات، وتُنقل العناصر التي لا تتسع لها المساحة إلى «المزيد».</string>
     <string name="floating_navigation_scenario_instruction">يتم حفظ هذه الخيارات عند تغيير الوجهات.</string>
     <string name="demo_scroll_text">توفر هذه الكتلة الهادئة محتوى كافياً للتحقق من تمرير الصفحة مع بقاء عناصر التحكم العائمة ثابتة.\n\nتُظهر الفقرة الثانية التفاف الأسطر وتكبير النص والمسافات عبر النوافذ المضغوطة والموسعة.\n\nتُطيل الفقرة الثالثة الصفحة إلى ما بعد مساحة العرض الأولى دون إضافة سطح مرئي جديد.\n\nتساعد الفقرة الرابعة على التحقق من سلاسة التمرير أسفل العنوان والإجراءات العائمة.\n\nتحافظ الفقرة الخامسة على حياد المثال كي يبقى التركيز على المكوّن المعروض.\n\nتوفر الفقرة السادسة مسافة إضافية لاختبار ظهور شريط العنوان في الوضع الغامر.\n\nتؤكد الفقرة السابعة بقاء المحتوى الطويل مقروءاً مع أحجام نصوص إمكانية الوصول الأكبر.\n\nتسهّل الفقرة الثامنة فحص المساحة المحجوزة للتنقل قرب نهاية الصفحة.\n\nتتحقق الفقرة التاسعة من ثبات المسافات بعد كتلة طويلة ومتواصلة من المحتوى.\n\nتؤكد الفقرة العاشرة والأخيرة إمكانية الوصول إلى كل المحتوى فوق شريط التنقل وهوامش النظام.</string>
+    <string name="settings_general">عام</string>
+    <string name="settings_security">الأمان</string>
+    <string name="settings_theme">المظهر</string>
+    <string name="settings_min">الأدنى</string>
+    <string name="settings_max">الأقصى</string>
+    <string name="settings_all">جميع الإعدادات</string>
+    <string name="settings_optional">إعدادات اختيارية</string>
+    <string name="settings_subpages">صفحات فرعية</string>
+    <string name="settings_show_language">إظهار اللغة</string>
+    <string name="settings_search_languages">البحث عن لغة</string>
+    <string name="settings_no_languages">لا توجد لغات مطابقة</string>
+    <string name="settings_app_lock">قفل التطبيق</string>
+    <string name="settings_demo_state">حالة تجريبية فقط؛ لا تغيّر لغة التطبيق أو مظهره أو عتامته أو المصادقة.</string>
 </resources>

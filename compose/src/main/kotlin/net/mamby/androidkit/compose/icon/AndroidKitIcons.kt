@@ -14,6 +14,17 @@ import androidx.compose.ui.unit.dp
  * Host-provided product icons remain outside this set.
  */
 internal object AndroidKitIcons {
+    val Check: ImageVector = lucideIcon(name = "Check") {
+        path(
+            fill = null, stroke = LucideStroke, strokeLineWidth = LucideStrokeWidth,
+            strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round,
+        ) {
+            moveTo(20f, 6f)
+            lineTo(9f, 17f)
+            lineTo(4f, 12f)
+        }
+    }
+
     val ArrowBack: ImageVector = lucideIcon(
         name = "ArrowLeft",
         autoMirror = true,

@@ -101,4 +101,17 @@
     <string name="floating_navigation_seven_items_description">Affiche sept destinations ; celles qui ne tiennent pas sont déplacées dans Plus.</string>
     <string name="floating_navigation_scenario_instruction">Ces choix sont conservés lors des changements de destination.</string>
     <string name="demo_scroll_text">Ce bloc discret fournit assez de contenu pour vérifier que la page défile tandis que les commandes flottantes restent ancrées.\n\nLe deuxième paragraphe rend visibles le retour à la ligne, la mise à l’échelle du texte et les espacements sur les fenêtres compactes et étendues.\n\nUn troisième paragraphe prolonge la page au-delà de la fenêtre initiale sans ajouter une autre surface visuelle.\n\nLe quatrième paragraphe aide à vérifier que le défilement reste fluide sous le titre et les actions flottantes.\n\nLe cinquième paragraphe garde l’exemple neutre afin que l’attention reste portée sur le composant présenté.\n\nLe sixième paragraphe fournit davantage de distance pour tester la visibilité immersive de la barre de titre.\n\nLe septième paragraphe confirme que le contenu long reste lisible avec une taille de texte d’accessibilité plus grande.\n\nLe huitième paragraphe facilite l’inspection de l’espace réservé à la navigation près du bas de la page.\n\nLe neuvième paragraphe vérifie que les espacements restent cohérents après un long bloc de contenu continu.\n\nLe dixième et dernier paragraphe confirme que tout le contenu reste accessible au-dessus de la navigation et des marges système.</string>
+    <string name="settings_general">Général</string>
+    <string name="settings_security">Sécurité</string>
+    <string name="settings_theme">Thème</string>
+    <string name="settings_min">Min</string>
+    <string name="settings_max">Max</string>
+    <string name="settings_all">Tous les paramètres</string>
+    <string name="settings_optional">Paramètres facultatifs</string>
+    <string name="settings_subpages">Sous-pages</string>
+    <string name="settings_show_language">Afficher la langue</string>
+    <string name="settings_search_languages">Rechercher une langue</string>
+    <string name="settings_no_languages">Aucune langue correspondante</string>
+    <string name="settings_app_lock">Verrouillage de l’application</string>
+    <string name="settings_demo_state">État de démonstration uniquement ; ne modifie pas la langue, le thème, l’opacité ou l’authentification de l’application.</string>
 </resources>

@@ -16,7 +16,7 @@ public data class AndroidKitPageStyle(
 public data class AndroidKitPageTitleBarStyle(
     public val titleSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
     public val buttonSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val dropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle? = null,
+    public val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
     public val titleShape: Shape,
     public val buttonShape: Shape,
     public val titleTextStyle: TextStyle,
@@ -57,7 +57,7 @@ public data class AndroidKitSettingSectionStyle(
 @Immutable
 public data class AndroidKitFloatingActionBarStyle(
     public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val dropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle? = null,
+    public val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
     public val shape: Shape,
     public val itemShape: Shape,
     public val labelTextStyle: TextStyle,
@@ -66,7 +66,7 @@ public data class AndroidKitFloatingActionBarStyle(
 @Immutable
 public data class AndroidKitFloatingToolbarStyle(
     public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val dropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle? = null,
+    public val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
     public val separatorColor: Color,
     public val shape: Shape,
     public val itemShape: Shape,
@@ -75,7 +75,7 @@ public data class AndroidKitFloatingToolbarStyle(
 )
 
 @Immutable
-public data class AndroidKitFloatingDropdownMenuStyle(
+public data class AndroidKitActionFlyoutStyle(
     public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
     public val shape: Shape,
 )
@@ -110,6 +110,6 @@ public data class AndroidKitFloatingNavigationStyle(
     public val itemShape: Shape,
     public val labelTextStyle: TextStyle,
     public val overflowItemTextStyle: TextStyle,
-    public val overflowFlyoutStyle: AndroidKitFloatingDropdownMenuStyle? = null,
+    public val overflowFlyoutStyle: AndroidKitActionFlyoutStyle? = null,
     public val adaptiveItemStyle: AndroidKitAdaptiveNavigationItemStyle? = null,
 )

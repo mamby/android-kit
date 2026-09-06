@@ -1,28 +1,14 @@
 package net.mamby.androidkit.demo.ui.screen
 
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import kotlin.math.roundToInt
-import net.mamby.androidkit.compose.form.AndroidKitSettingSection
-import net.mamby.androidkit.compose.layout.AndroidKitPage
-import net.mamby.androidkit.compose.presentation.AndroidKitCard
-import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
+import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
+import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
+import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
-import net.mamby.androidkit.demo.ui.MaximumFloatingSurfaceOpacityLevel
-import net.mamby.androidkit.demo.ui.MinimumFloatingSurfaceOpacityLevel
-import net.mamby.androidkit.demo.ui.normalizeFloatingSurfaceOpacityLevel
 
 @Composable
 fun SettingsScreen(
@@ -32,107 +18,33 @@ fun SettingsScreen(
     onFloatingSurfaceOpacityLevelChange: (Float) -> Unit,
     onFloatingSurfaceOpacityLevelChangeFinished: () -> Unit,
 ) {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    AndroidKitPage(title = stringResource(R.string.settings_title)) { contentPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = dimensions.screenPadding),
-            contentPadding = contentPadding,
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-        ) {
-            item {
-                AndroidKitCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    header = {
-                        DemoCardHeader(
-                            title = stringResource(R.string.appearance_section),
-                            supportingText = stringResource(
-                                R.string.appearance_section_description,
-                            ),
-                        )
-                    },
-                ) {
-                    Row(
-                        modifier = Modifier.horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
-                    ) {
-                        ThemeChip(
-                            choice = DemoThemeChoice.Light,
-                            label = stringResource(R.string.theme_light),
-                            selected = themeChoice,
-                            onSelected = onThemeChoice,
-                        )
-                        ThemeChip(
-                            choice = DemoThemeChoice.Dark,
-                            label = stringResource(R.string.theme_dark),
-                            selected = themeChoice,
-                            onSelected = onThemeChoice,
-                        )
-                        ThemeChip(
-                            choice = DemoThemeChoice.Prism,
-                            label = stringResource(R.string.theme_prism),
-                            selected = themeChoice,
-                            onSelected = onThemeChoice,
-                        )
-                    }
-                    Text(stringResource(R.string.theme_prism_description))
-                }
-            }
-            item {
-                val opacityLabel = stringResource(R.string.floating_surface_opacity)
-                val opacityValueLabel = stringResource(
-                    R.string.floating_surface_opacity_value,
-                    normalizeFloatingSurfaceOpacityLevel(
-                        floatingSurfaceOpacityLevel,
-                    ).roundToInt(),
-                )
-                AndroidKitSettingSection(
-                    description = stringResource(
-                        R.string.floating_surface_opacity_description,
-                    ),
-                ) {
-                    slider(
-                        label = opacityLabel,
-                        value = floatingSurfaceOpacityLevel,
-                        onValueChange = onFloatingSurfaceOpacityLevelChange,
-                        valueRange = MinimumFloatingSurfaceOpacityLevel..
-                            MaximumFloatingSurfaceOpacityLevel,
-                        steps = FloatingSurfaceOpacitySliderSteps,
-                        onValueChangeFinished =
-                            onFloatingSurfaceOpacityLevelChangeFinished,
-                        valueLabel = opacityValueLabel,
-                    )
-                }
-            }
-            item {
-                AndroidKitCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    header = {
-                        DemoCardHeader(
-                            title = stringResource(R.string.about_section),
-                            supportingText = stringResource(R.string.about_body),
-                        )
-                    },
-                ) {}
-            }
-            item { DemoScrollContent() }
+    AndroidKitSettingsPage(title = stringResource(R.string.settings_title)) {
+        generalSection(
+            label = stringResource(R.string.settings_general),
+            theme = AndroidKitSettingsSelection(
+                label = stringResource(R.string.settings_theme),
+                options = listOf(
+                    AndroidKitSettingsOption(DemoThemeChoice.Light.name, stringResource(R.string.theme_light)),
+                    AndroidKitSettingsOption(DemoThemeChoice.Dark.name, stringResource(R.string.theme_dark)),
+                    AndroidKitSettingsOption(DemoThemeChoice.Prism.name, stringResource(R.string.theme_prism)),
+                ),
+                selectedId = themeChoice.name,
+                onSelected = { onThemeChoice(DemoThemeChoice.valueOf(it)) },
+                closeContentDescription = stringResource(R.string.action_close),
+            ),
+            floatingOpacity = AndroidKitFloatingOpacitySetting(
+                label = stringResource(R.string.floating_surface_opacity),
+                value = floatingSurfaceOpacityLevel,
+                minimumLabel = stringResource(R.string.settings_min),
+                maximumLabel = stringResource(R.string.settings_max),
+                onValueChange = onFloatingSurfaceOpacityLevelChange,
+                onValueChangeFinished = onFloatingSurfaceOpacityLevelChangeFinished,
+                supportingText = stringResource(R.string.floating_surface_opacity_description),
+            ),
+        )
+        section(key = "about", label = stringResource(R.string.about_section)) {
+            item { Text(stringResource(R.string.about_body)) }
         }
+        item(key = "scroll-content") { DemoScrollContent() }
     }
-}
-
-private const val FloatingSurfaceOpacitySliderSteps: Int = 19
-
-@Composable
-private fun ThemeChip(
-    choice: DemoThemeChoice,
-    label: String,
-    selected: DemoThemeChoice,
-    onSelected: (DemoThemeChoice) -> Unit,
-) {
-    FilterChip(
-        selected = selected == choice,
-        onClick = { onSelected(choice) },
-        label = { Text(label) },
-    )
 }

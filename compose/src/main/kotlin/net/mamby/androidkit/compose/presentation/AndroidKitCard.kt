@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -24,10 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
+import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitCardStyle
@@ -217,32 +214,16 @@ private fun AndroidKitCardOverflowMenu(
                 contentDescription = AndroidKitThemeTokens.strings.more,
             )
         }
-        AndroidKitFloatingDropdownMenu(
+        AndroidKitActionFlyout(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
             items.forEach { item ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = item.label,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                    onClick = {
-                        expanded = false
-                        item.onClick()
-                    },
+                item(
+                    label = item.label,
+                    onClick = item.onClick,
                     enabled = item.enabled,
-                    leadingIcon = item.icon?.let { icon ->
-                        {
-                            Icon(
-                                imageVector = icon,
-                                contentDescription = null,
-                            )
-                        }
-                    },
+                    icon = item.icon,
                 )
             }
         }

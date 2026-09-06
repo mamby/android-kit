@@ -51,7 +51,7 @@ public data class AndroidKitThemeDefinition(
         AndroidKitPageTitleBarStyle(
             titleShape = CircleShape,
             buttonShape = CircleShape,
-            titleTextStyle = typography.titleMedium.copy(
+            titleTextStyle = AndroidKitDefaults.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold,
                 platformStyle = PlatformTextStyle(includeFontPadding = false),
                 lineHeightStyle = LineHeightStyle(
@@ -80,28 +80,28 @@ public data class AndroidKitThemeDefinition(
         dividerColor = colorScheme.outlineVariant,
         secondaryContentColor = colorScheme.onSurfaceVariant,
         shape = shapes.extraLarge,
-        sectionLabelTextStyle = typography.labelLarge,
-        descriptionTextStyle = typography.bodyMedium,
-        entryLabelTextStyle = typography.bodyLarge,
-        supportingTextStyle = typography.bodyMedium,
-        valueLabelTextStyle = typography.labelLarge,
+        sectionLabelTextStyle = AndroidKitDefaults.typography.labelLarge,
+        descriptionTextStyle = AndroidKitDefaults.typography.bodyMedium,
+        entryLabelTextStyle = AndroidKitDefaults.typography.bodyLarge,
+        supportingTextStyle = AndroidKitDefaults.typography.bodyMedium,
+        valueLabelTextStyle = AndroidKitDefaults.typography.labelLarge,
     ),
     public val floatingActionBarStyle: AndroidKitFloatingActionBarStyle =
         AndroidKitFloatingActionBarStyle(
             shape = shapes.extraLarge,
             itemShape = shapes.extraLarge,
-            labelTextStyle = typography.labelSmall,
+            labelTextStyle = AndroidKitDefaults.typography.labelSmall,
         ),
     public val floatingToolbarStyle: AndroidKitFloatingToolbarStyle =
         AndroidKitFloatingToolbarStyle(
             separatorColor = colorScheme.outlineVariant,
             shape = shapes.extraLarge,
             itemShape = shapes.extraLarge,
-            labelTextStyle = typography.labelSmall,
+            labelTextStyle = AndroidKitDefaults.typography.labelSmall,
             iconSize = dimensions.floatingActionBarIconSize,
         ),
-    public val floatingDropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle =
-        AndroidKitFloatingDropdownMenuStyle(shape = shapes.extraLarge),
+    public val actionFlyoutStyle: AndroidKitActionFlyoutStyle =
+        AndroidKitActionFlyoutStyle(shape = shapes.extraLarge),
     public val floatingNavigationStyle: AndroidKitFloatingNavigationStyle =
         AndroidKitFloatingNavigationStyle(
             containerColor = colorScheme.background,
@@ -114,8 +114,8 @@ public data class AndroidKitThemeDefinition(
             unselectedContentColor = colorScheme.onSurface,
             barShape = shapes.extraLarge,
             itemShape = shapes.extraLarge,
-            labelTextStyle = typography.labelSmall,
-            overflowItemTextStyle = typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
+            labelTextStyle = AndroidKitDefaults.typography.labelSmall,
+            overflowItemTextStyle = AndroidKitDefaults.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
         ),
 ) {
     init {
@@ -141,7 +141,7 @@ public data class AndroidKitBottomSheetStyle(
     public val tonalElevation: Dp = 0.dp,
     public val chromeContainerColor: Color = Color.Unspecified,
     public val titleTextStyle: TextStyle? = null,
-    public val dropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle? = null,
+    public val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
 )
 
 @Immutable
@@ -170,6 +170,7 @@ public data class AndroidKitDimensions(
     public val screenPadding: Dp = 12.dp,
     public val contentMaxWidth: Dp = 1_200.dp,
     public val minimumTouchTarget: Dp = 48.dp,
+    public val settingsPageSectionSpacing: Dp = 20.dp,
     public val settingSectionSpacing: Dp = 5.dp,
     public val settingSectionEntryVerticalPadding: Dp = 12.dp,
     public val floatingNavigationMargin: Dp = 8.dp,
@@ -184,7 +185,7 @@ public data class AndroidKitDimensions(
     public val floatingNavigationItemVerticalPadding: Dp = 0.dp,
     public val floatingNavigationLabelSpacing: Dp = 0.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
-    public val floatingDropdownMenuIconSize: Dp = 24.dp,
+    public val actionFlyoutIconSize: Dp = 24.dp,
     public val pageTitleBarButtonSize: Dp = 44.dp,
     public val pageTitleBarVerticalPadding: Dp = spaceSmall,
     public val floatingActionButtonSize: Dp = 56.dp,
@@ -194,7 +195,7 @@ public data class AndroidKitDimensions(
     public val floatingSurfaceShadowOffsetY: Dp = 5.dp,
     public val floatingSurfaceButtonShadowRadius: Dp = 3.dp,
     public val floatingSurfaceButtonShadowOffsetY: Dp = 2.5.dp,
-    public val floatingDropdownShadowElevation: Dp = 1.dp,
+    public val actionFlyoutShadowElevation: Dp = 1.dp,
     public val pageTitleBarHeight: Dp = 0.dp,
     public val pageTitleBarMinimumTitleWidth: Dp = 48.dp,
     public val bottomSheetCornerRadius: Dp = 24.dp,
@@ -454,10 +455,10 @@ public object AndroidKitThemeTokens {
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.floatingToolbarStyle
 
-    public val floatingDropdownMenuStyle: AndroidKitFloatingDropdownMenuStyle
+    public val actionFlyoutStyle: AndroidKitActionFlyoutStyle
         @Composable
         @ReadOnlyComposable
-        get() = LocalAndroidKitThemeDefinition.current.floatingDropdownMenuStyle
+        get() = LocalAndroidKitThemeDefinition.current.actionFlyoutStyle
 
     public val floatingNavigationStyle: AndroidKitFloatingNavigationStyle
         @Composable

@@ -33,6 +33,13 @@ system. Public components also accept per-instance styles and focused layout or
 content overrides; those overrides default to the nearest Android Kit theme and
 do not change existing component appearance unless supplied explicitly.
 
+Use [`AndroidKitActionFlyout`](docs/action-flyout.md) for anchored action menus
+and custom dropdown content, including menus opened from standalone buttons.
+
+Use [`AndroidKitSettingsPage`](docs/settings.md) for shared settings presentation,
+optional host-configured controls, custom sections, and host-owned subpages.
+Language lists and all setting values belong to the host application.
+
 ## Build the catalog
 
 ```powershell

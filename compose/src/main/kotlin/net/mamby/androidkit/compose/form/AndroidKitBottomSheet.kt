@@ -74,7 +74,7 @@ import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
 import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuHorizontalAlignment
+import net.mamby.androidkit.compose.action.AndroidKitActionFlyoutHorizontalAlignment
 import net.mamby.androidkit.compose.action.MaximumDirectHeaderActions
 import net.mamby.androidkit.compose.action.partitionAndroidKitActions
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
@@ -492,7 +492,7 @@ private fun ColumnScope.BottomSheetDragHandle(
 }
 
 @Composable
-private fun BottomSheetChrome(
+internal fun BottomSheetChrome(
     title: String,
     style: AndroidKitBottomSheetStyle,
     dimensions: AndroidKitDimensions,
@@ -627,7 +627,7 @@ private fun BottomSheetActionButtons(
                     onDismissRequest = { overflowExpanded = false },
                     enabled = enabled,
                     horizontalAlignment =
-                        AndroidKitFloatingDropdownMenuHorizontalAlignment.Start,
+                        AndroidKitActionFlyoutHorizontalAlignment.Start,
                     style = bottomSheetActionFlyoutStyle(style, dimensions),
                 )
             }
@@ -640,7 +640,7 @@ private fun bottomSheetActionFlyoutStyle(
     bottomSheetStyle: AndroidKitBottomSheetStyle,
     dimensions: AndroidKitDimensions,
 ): AndroidKitFloatingToolbarStyle = AndroidKitFloatingToolbarStyle(
-    dropdownMenuStyle = bottomSheetStyle.dropdownMenuStyle,
+    flyoutStyle = bottomSheetStyle.flyoutStyle,
     separatorColor = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
     shape = CircleShape,
     itemShape = CircleShape,

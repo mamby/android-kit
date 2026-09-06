@@ -234,7 +234,7 @@ private fun pageActionToolbarStyle(
     dimensions: AndroidKitDimensions,
 ): AndroidKitFloatingToolbarStyle = AndroidKitFloatingToolbarStyle(
     surfaceStyle = pageTitleBarStyle.buttonSurfaceStyle,
-    dropdownMenuStyle = pageTitleBarStyle.dropdownMenuStyle,
+    flyoutStyle = pageTitleBarStyle.flyoutStyle,
     separatorColor = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
     shape = pageTitleBarStyle.buttonShape,
     itemShape = pageTitleBarStyle.buttonShape,

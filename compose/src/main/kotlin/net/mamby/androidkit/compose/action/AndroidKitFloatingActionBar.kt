@@ -43,7 +43,7 @@ private fun AndroidKitFloatingActionBarStyle.asFloatingToolbarStyle():
     AndroidKitFloatingToolbarStyle =
     AndroidKitFloatingToolbarStyle(
         surfaceStyle = surfaceStyle,
-        dropdownMenuStyle = dropdownMenuStyle,
+        flyoutStyle = flyoutStyle,
         separatorColor = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
         shape = shape,
         itemShape = itemShape,

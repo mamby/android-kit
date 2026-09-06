@@ -11,10 +11,10 @@ enum class ComponentId(
     AndroidKitPage("AndroidKitPage"),
     AndroidKitFloatingActionButton("AndroidKitFloatingActionButton"),
     AndroidKitCard("AndroidKitCard"),
-    AndroidKitSettingSection("AndroidKitSettingSection"),
+    AndroidKitSettingsPage("AndroidKitSettingsPage"),
     AndroidKitBottomSheet("AndroidKitBottomSheet"),
     AndroidKitFloatingActionBar("AndroidKitFloatingActionBar"),
-    AndroidKitFloatingDropdownMenu("AndroidKitFloatingDropdownMenu"),
+    AndroidKitActionFlyout("AndroidKitActionFlyout"),
     AndroidKitFloatingNavigation("AndroidKitFloatingNavigation"),
     ;
 
@@ -72,17 +72,17 @@ enum class ComponentDemo(
     AndroidKitCardRichContent(ComponentId.AndroidKitCard, R.string.variation_rich_content),
     AndroidKitCardOverflow(ComponentId.AndroidKitCard, R.string.variation_overflow),
 
-    AndroidKitSettingSectionButton(
-        ComponentId.AndroidKitSettingSection,
-        R.string.variation_button_entry,
+    AndroidKitSettingsPageAll(
+        ComponentId.AndroidKitSettingsPage,
+        R.string.settings_all,
     ),
-    AndroidKitSettingSectionToggle(
-        ComponentId.AndroidKitSettingSection,
-        R.string.variation_toggle_entry,
+    AndroidKitSettingsPageOptional(
+        ComponentId.AndroidKitSettingsPage,
+        R.string.settings_optional,
     ),
-    AndroidKitSettingSectionGrouped(
-        ComponentId.AndroidKitSettingSection,
-        R.string.variation_grouped_entries,
+    AndroidKitSettingsPageSubpages(
+        ComponentId.AndroidKitSettingsPage,
+        R.string.settings_subpages,
     ),
 
     AndroidKitBottomSheetStandard(
@@ -123,12 +123,12 @@ enum class ComponentDemo(
         R.string.variation_text_only,
     ),
 
-    AndroidKitFloatingDropdownMenuText(
-        ComponentId.AndroidKitFloatingDropdownMenu,
+    AndroidKitActionFlyoutText(
+        ComponentId.AndroidKitActionFlyout,
         R.string.variation_text_items,
     ),
-    AndroidKitFloatingDropdownMenuIcons(
-        ComponentId.AndroidKitFloatingDropdownMenu,
+    AndroidKitActionFlyoutIcons(
+        ComponentId.AndroidKitActionFlyout,
         R.string.variation_icon_items,
     ),
 

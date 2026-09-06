@@ -19,7 +19,9 @@ import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
-import net.mamby.androidkit.compose.form.AndroidKitSettingSection
+import androidx.compose.material3.Switch
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.TextButton
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
@@ -243,17 +245,13 @@ private fun ScreenshotGallery(
                         verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
                     ) {
                         item {
-                            AndroidKitSettingSection(
-                                label = "Actions",
-                                description = "Opinionated Material 3 defaults",
-                            ) {
-                                button(label = "Primary action", onClick = {})
-                                toggle(
-                                    label = "Encrypted backups",
-                                    checked = true,
-                                    onCheckedChange = {},
-                                    supportingText = "Stored on this device",
-                                    icon = settingsIcon,
+                            AndroidKitCard(header = { Text("Actions") }) {
+                                TextButton(onClick = {}) { Text("Primary action") }
+                                ListItem(
+                                    headlineContent = { Text("Encrypted backups") },
+                                    supportingContent = { Text("Stored on this device") },
+                                    leadingContent = { Icon(settingsIcon, contentDescription = null) },
+                                    trailingContent = { Switch(checked = true, onCheckedChange = {}) },
                                 )
                             }
                         }

@@ -48,6 +48,16 @@ public interface AndroidKitSettingSectionScope {
         enabled: Boolean = true,
     ): Unit
 
+    /** Opens a host-owned destination using the shared navigation-row presentation. */
+    public fun navigation(
+        label: String,
+        onClick: () -> Unit,
+        modifier: Modifier = Modifier,
+        supportingText: String? = null,
+        icon: ImageVector? = null,
+        enabled: Boolean = true,
+    ): Unit = button(label, onClick, modifier, supportingText, icon, enabled)
+
     public fun toggle(
         label: String,
         checked: Boolean,
@@ -81,7 +91,8 @@ public interface AndroidKitSettingSectionScope {
 }
 
 @Composable
-public fun AndroidKitSettingSection(
+internal fun SettingsSection(
+    entries: List<SettingsEntryDefinition>,
     modifier: Modifier = Modifier,
     label: String? = null,
     description: String? = null,
@@ -97,10 +108,8 @@ public fun AndroidKitSettingSection(
     dividerPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
     ),
-    content: AndroidKitSettingSectionScope.() -> Unit,
 ): Unit {
-    val scope = SettingSectionScopeImpl().apply(content)
-    require(scope.entries.isNotEmpty()) { "At least one settings entry is required." }
+    if (entries.isEmpty()) return
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -124,7 +133,7 @@ public fun AndroidKitSettingSection(
             border = BorderStroke(style.borderWidth, style.borderColor),
         ) {
             Column {
-                scope.entries.forEachIndexed { index, entry ->
+                entries.forEachIndexed { index, entry ->
                     if (index > 0) {
                         HorizontalDivider(
                             modifier = Modifier.padding(dividerPadding),
@@ -150,7 +159,7 @@ public fun AndroidKitSettingSection(
     }
 }
 
-private class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
+internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
     val entries: MutableList<SettingsEntryDefinition> = mutableListOf()
 
     override fun button(
@@ -231,7 +240,7 @@ private class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
     }
 }
 
-private sealed interface SettingsEntryDefinition {
+internal sealed interface SettingsEntryDefinition {
     val label: String
     val modifier: Modifier
     val supportingText: String?
@@ -270,6 +279,8 @@ private sealed interface SettingsEntryDefinition {
         val valueLabel: String?,
         val enabled: Boolean,
         val colors: SliderColors?,
+        val minimumLabel: String? = null,
+        val maximumLabel: String? = null,
     ) : SettingsEntryDefinition
 
     class Custom(
@@ -419,6 +430,12 @@ private fun SettingsSliderEntry(
             enabled = entry.enabled,
             colors = entry.colors ?: SliderDefaults.colors(),
         )
+        if (entry.minimumLabel != null && entry.maximumLabel != null) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(entry.minimumLabel, style = style.supportingTextStyle, color = style.secondaryContentColor)
+                Text(entry.maximumLabel, style = style.supportingTextStyle, color = style.secondaryContentColor)
+            }
+        }
     }
 }
 

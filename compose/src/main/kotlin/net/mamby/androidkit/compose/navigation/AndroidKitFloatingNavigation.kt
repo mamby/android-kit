@@ -79,10 +79,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuHorizontalAlignment
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuPlacement
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenuWithContainerColor
+import net.mamby.androidkit.compose.action.AndroidKitActionFlyoutHorizontalAlignment
+import net.mamby.androidkit.compose.action.AndroidKitActionFlyoutPlacement
+import net.mamby.androidkit.compose.action.AndroidKitActionFlyoutWithContainerColor
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.LocalAndroidKitFloatingNavigationInsets
 import net.mamby.androidkit.compose.theme.AndroidKitAdaptiveNavigationItemStyle
@@ -643,7 +642,7 @@ private fun <Key : Any> NavigationOverflowFlyout(
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val flyoutStyle = style.overflowFlyoutStyle
-        ?: AndroidKitThemeTokens.floatingDropdownMenuStyle
+        ?: AndroidKitThemeTokens.actionFlyoutStyle
     val flyoutSurfaceStyle = flyoutStyle.surfaceStyle
         ?: AndroidKitThemeTokens.floatingSurfaceStyle
     val flyoutVisuals = floatingSurfaceVisuals(flyoutSurfaceStyle)
@@ -663,12 +662,12 @@ private fun <Key : Any> NavigationOverflowFlyout(
         leadingIconColor = style.unselectedContentColor,
         trailingIconColor = style.unselectedContentColor,
     )
-    AndroidKitFloatingDropdownMenuWithContainerColor(
+    AndroidKitActionFlyoutWithContainerColor(
         expanded = true,
         onDismissRequest = onDismissRequest,
         containerColor = Color.Transparent,
-        placement = AndroidKitFloatingDropdownMenuPlacement.Above,
-        horizontalAlignment = AndroidKitFloatingDropdownMenuHorizontalAlignment.End,
+        placement = AndroidKitActionFlyoutPlacement.Above,
+        horizontalAlignment = AndroidKitActionFlyoutHorizontalAlignment.End,
         style = flyoutStyle,
         contentPadding = PaddingValues.Zero,
     ) {

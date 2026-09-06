@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,10 +30,11 @@ import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarIconAndLabelLayout
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
-import net.mamby.androidkit.compose.action.AndroidKitFloatingDropdownMenu
+import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
-import net.mamby.androidkit.compose.form.AndroidKitSettingSection
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Switch
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
@@ -75,6 +75,7 @@ internal fun ComponentDemoScreen(
     onBack: () -> Unit,
 ) {
     when (demo.component) {
+        ComponentId.AndroidKitSettingsPage -> SettingsPageDemo(demo, onBack)
         ComponentId.AndroidKitPage -> AndroidKitPageDemo(demo = demo, onBack = onBack)
         ComponentId.AndroidKitFloatingActionButton -> AndroidKitFloatingActionButtonDemo(
             demo = demo,
@@ -213,13 +214,10 @@ private fun AndroidKitFloatingActionButtonDemo(
                 }
                 item {
                     val enabledLabel = stringResource(R.string.component_enabled)
-                    AndroidKitSettingSection {
-                        toggle(
-                            label = enabledLabel,
-                            checked = enabled,
-                            onCheckedChange = { enabled = it },
-                        )
-                    }
+                    ListItem(
+                        headlineContent = { Text(enabledLabel) },
+                        trailingContent = { Switch(checked = enabled, onCheckedChange = { enabled = it }) },
+                    )
                 }
                 item { DemoScrollContent() }
             }
@@ -276,11 +274,6 @@ private fun StandardComponentDemo(
                         actionCount = actionCount,
                         onAction = { actionCount += 1 },
                     )
-                    ComponentId.AndroidKitSettingSection -> AndroidKitSettingSectionDemo(
-                        demo = demo,
-                        onAction = { actionCount += 1 },
-                    )
-
                     ComponentId.AndroidKitBottomSheet -> AndroidKitBottomSheetDemo(demo)
                     ComponentId.AndroidKitFloatingActionBar -> AndroidKitCard(
                         modifier = Modifier.fillMaxWidth(),
@@ -294,8 +287,8 @@ private fun StandardComponentDemo(
                         Text(stringResource(R.string.action_count, actionCount))
                     }
 
-                    ComponentId.AndroidKitFloatingDropdownMenu ->
-                        AndroidKitFloatingDropdownMenuDemo(demo)
+                    ComponentId.AndroidKitActionFlyout ->
+                        AndroidKitActionFlyoutDemo(demo)
                     ComponentId.AndroidKitFloatingNavigation ->
                         AndroidKitFloatingNavigationDemo(
                             demo = demo,
@@ -305,6 +298,7 @@ private fun StandardComponentDemo(
                             onShowLabelsChange = onShowCompactNavigationLabelsChange,
                         )
 
+                    ComponentId.AndroidKitSettingsPage,
                     ComponentId.AndroidKitPage,
                     ComponentId.AndroidKitFloatingActionButton,
                     -> error("Handled by a dedicated demo screen")
@@ -364,65 +358,6 @@ private fun AndroidKitCardDemo(
         }
         if (hasOverflow) {
             Text(stringResource(R.string.action_count, actionCount))
-        }
-    }
-}
-
-@Composable
-private fun AndroidKitSettingSectionDemo(
-    demo: ComponentDemo,
-    onAction: () -> Unit,
-) {
-    var checked by rememberSaveable(demo) { mutableStateOf(false) }
-    val activeVariation = stringResource(R.string.active_variation)
-    val settingLabel = stringResource(R.string.demo_setting_title)
-    val actionLabel = stringResource(R.string.primary_action)
-    val description = stringResource(R.string.demo_supporting_text)
-    val entrySupportingText = stringResource(R.string.demo_setting_supporting_text)
-    val settingsIcon = materialSymbol(R.drawable.ic_symbol_settings)
-    val checkIcon = materialSymbol(R.drawable.ic_symbol_check)
-    AndroidKitSettingSection(
-        label = activeVariation.takeUnless {
-            demo == ComponentDemo.AndroidKitSettingSectionButton
-        },
-        description = description.takeIf {
-            demo == ComponentDemo.AndroidKitSettingSectionGrouped
-        },
-    ) {
-        when (demo) {
-            ComponentDemo.AndroidKitSettingSectionButton -> button(
-                label = settingLabel,
-                onClick = onAction,
-            )
-
-            ComponentDemo.AndroidKitSettingSectionToggle -> toggle(
-                label = settingLabel,
-                checked = checked,
-                onCheckedChange = {
-                    checked = it
-                    onAction()
-                },
-            )
-
-            ComponentDemo.AndroidKitSettingSectionGrouped -> {
-                toggle(
-                    label = settingLabel,
-                    checked = checked,
-                    onCheckedChange = {
-                        checked = it
-                        onAction()
-                    },
-                    supportingText = entrySupportingText,
-                    icon = settingsIcon,
-                )
-                button(
-                    label = actionLabel,
-                    onClick = onAction,
-                    icon = checkIcon,
-                )
-            }
-
-            else -> error("Unexpected AndroidKitSettingSection demo: $demo")
         }
     }
 }
@@ -643,7 +578,7 @@ private fun AndroidKitFloatingActionBarDemo(
 }
 
 @Composable
-private fun AndroidKitFloatingDropdownMenuDemo(demo: ComponentDemo) {
+private fun AndroidKitActionFlyoutDemo(demo: ComponentDemo) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     Box {
         Button(onClick = { expanded = true }) {
@@ -653,7 +588,7 @@ private fun AndroidKitFloatingDropdownMenuDemo(demo: ComponentDemo) {
             )
             Text(stringResource(R.string.action_more))
         }
-        AndroidKitFloatingDropdownMenu(
+        AndroidKitActionFlyout(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
@@ -662,18 +597,28 @@ private fun AndroidKitFloatingDropdownMenuDemo(demo: ComponentDemo) {
                 materialSymbol(R.drawable.ic_symbol_share) to R.string.action_share,
                 materialSymbol(R.drawable.ic_symbol_delete) to R.string.action_delete,
             ).forEach { (icon, labelResource) ->
-                DropdownMenuItem(
-                    text = { Text(stringResource(labelResource)) },
-                    onClick = { expanded = false },
-                    leadingIcon = if (
-                        demo == ComponentDemo.AndroidKitFloatingDropdownMenuIcons
+                item(
+                    label = stringResource(labelResource),
+                    onClick = {},
+                    icon = if (
+                        demo == ComponentDemo.AndroidKitActionFlyoutIcons
                     ) {
-                        { Icon(imageVector = icon, contentDescription = null) }
+                        icon
                     } else {
                         null
                     },
                 )
             }
+            separator()
+            Text(
+                text = stringResource(R.string.action_more),
+                modifier = Modifier.padding(horizontal = AndroidKitThemeTokens.dimensions.spaceMedium),
+                style = AndroidKitThemeTokens.typography.labelSmall,
+            )
+            item(
+                label = stringResource(R.string.action_cancel),
+                onClick = {},
+            )
         }
     }
 }
@@ -696,17 +641,16 @@ private fun AndroidKitFloatingNavigationDemo(
     val sevenItemsDescription = stringResource(
         R.string.floating_navigation_seven_items_description,
     )
-    AndroidKitSettingSection(
-        label = stringResource(demo.titleResource),
-        description = stringResource(R.string.floating_navigation_scenario_instruction),
-    ) {
-        toggle(
+    Column {
+        Text(stringResource(demo.titleResource))
+        Text(stringResource(R.string.floating_navigation_scenario_instruction))
+        NavigationDemoToggle(
             label = labelsTitle,
             supportingText = labelsDescription,
             checked = showLabels,
             onCheckedChange = onShowLabelsChange,
         )
-        toggle(
+        NavigationDemoToggle(
             label = fiveItemsTitle,
             supportingText = fiveItemsDescription,
             checked = layout == DemoFloatingNavigationLayout.FiveItemsWithMore,
@@ -720,7 +664,7 @@ private fun AndroidKitFloatingNavigationDemo(
                 )
             },
         )
-        toggle(
+        NavigationDemoToggle(
             label = sevenItemsTitle,
             supportingText = sevenItemsDescription,
             checked = layout == DemoFloatingNavigationLayout.SevenItemsWithMore,
@@ -753,5 +697,19 @@ private fun DemoList(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(AndroidKitThemeTokens.dimensions.spaceMedium),
         content = content,
+    )
+}
+
+@Composable
+private fun NavigationDemoToggle(
+    label: String,
+    supportingText: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(label) },
+        supportingContent = { Text(supportingText) },
+        trailingContent = { Switch(checked = checked, onCheckedChange = onCheckedChange) },
     )
 }
