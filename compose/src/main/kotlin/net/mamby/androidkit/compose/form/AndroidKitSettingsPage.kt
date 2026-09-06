@@ -68,10 +68,10 @@ public data class AndroidKitSettingsSelection(
     public val closeContentDescription: String,
     public val enabled: Boolean = true,
     public val icon: ImageVector? = null,
-    public val systemOption: AndroidKitSettingsSystemOption? = null,
+    public val systemOption: AndroidKitSettingsSystemOption,
 ) {
     init {
-        val allIds = options.map { it.id } + listOfNotNull(systemOption?.id)
+        val allIds = options.map { it.id } + systemOption.id
         require(allIds.isNotEmpty()) { "Selection options must not be empty." }
         require(allIds.distinct().size == allIds.size) { "Option IDs must be unique." }
         require(selectedId in allIds) { "The selected ID must identify an option." }
@@ -381,9 +381,9 @@ private fun String.searchKey(): String = Normalizer.normalize(trim(), Normalizer
     .replace(SearchMarks, "").lowercase(Locale.ROOT)
 
 private fun AndroidKitSettingsSelection.displayOptions(): List<AndroidKitSettingsOption> =
-    listOfNotNull(systemOption?.let { option ->
+    listOf(
         AndroidKitSettingsOption(
-            id = option.id,
-            label = "${option.label} (${option.currentValueLabel})",
+            id = systemOption.id,
+            label = "${systemOption.label} (${systemOption.currentValueLabel})",
         )
-    }) + options
+    ) + options

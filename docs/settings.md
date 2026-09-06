@@ -40,10 +40,12 @@ the selected ID must be present. The host supplies every option: Android Kit
 does not define supported languages, language names, or application themes. A
 host can include custom themes such as Prism.
 
-Use `systemOption` when a host offers a system choice. The host supplies its
+`systemOption` is required for settings selections. The host supplies its
 localized label and the localized label of the currently resolved value; Android
 Kit renders the shared `System (current value)` form in both the settings row
-and picker. The host still owns which languages or themes are available.
+and picker. The host still owns which languages or themes are available. This
+keeps the shared presentation enforced until the host explicitly selects a
+different value.
 
 `AndroidKitLanguageSetting` adds localized search and empty-result labels.
 Language search ignores case and accents. The search field is part of the

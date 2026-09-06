@@ -74,6 +74,7 @@ class SettingsPageBehaviorTest {
                             label = "Language", selectedId = selected, onSelected = { selected = it },
                             options = listOf(AndroidKitSettingsOption("en", "English"), AndroidKitSettingsOption("fr", "Français")),
                             closeContentDescription = "Close picker",
+                            systemOption = AndroidKitSettingsSystemOption("system", "System", "English"),
                         ), searchLabel = "Search languages", emptyResultsLabel = "No results",
                     ))
                 }
@@ -100,6 +101,7 @@ class SettingsPageBehaviorTest {
                         label = "Theme", selectedId = selected, onSelected = { selected = it },
                         options = listOf(AndroidKitSettingsOption("light", "Light"), AndroidKitSettingsOption("prism", "Prism")),
                         closeContentDescription = "Close picker",
+                        systemOption = AndroidKitSettingsSystemOption("system", "System", "Light"),
                     ))
                 }
             }
@@ -199,6 +201,7 @@ class SettingsPageBehaviorTest {
                                 label = "Language", selectedId = "en", onSelected = {},
                                 options = listOf(AndroidKitSettingsOption("en", "English")),
                                 closeContentDescription = "Close",
+                                systemOption = AndroidKitSettingsSystemOption("system", "System", "English"),
                             ),
                             searchLabel = "Search", emptyResultsLabel = "No results",
                         ) else null,
@@ -206,6 +209,7 @@ class SettingsPageBehaviorTest {
                             label = "Theme", selectedId = "light", onSelected = {},
                             options = listOf(AndroidKitSettingsOption("light", "Light")),
                             closeContentDescription = "Close",
+                            systemOption = AndroidKitSettingsSystemOption("system", "System", "Light"),
                         ),
                     )
                 }

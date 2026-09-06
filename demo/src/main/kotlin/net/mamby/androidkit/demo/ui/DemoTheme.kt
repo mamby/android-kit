@@ -1,6 +1,7 @@
 package net.mamby.androidkit.demo.ui
 
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -11,6 +12,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemes
 import net.mamby.androidkit.demo.R
 
 enum class DemoThemeChoice(internal val storedValue: String) {
+    System("system"),
     Light("light"),
     Dark("dark"),
     Prism("prism"),
@@ -18,7 +20,7 @@ enum class DemoThemeChoice(internal val storedValue: String) {
 
     internal companion object {
         fun fromStoredValue(value: String?): DemoThemeChoice =
-            entries.firstOrNull { it.storedValue == value } ?: Light
+            entries.firstOrNull { it.storedValue == value } ?: System
     }
 }
 
@@ -52,7 +54,9 @@ val PrismThemeDefinition = AndroidKitThemeDefinition(
     shapes = AndroidKitDefaults.shapes,
 )
 
+@Composable
 fun DemoThemeChoice.definition(): AndroidKitThemeDefinition = when (this) {
+    DemoThemeChoice.System -> if (isSystemInDarkTheme()) AndroidKitThemes.Dark else AndroidKitThemes.Light
     DemoThemeChoice.Light -> AndroidKitThemes.Light
     DemoThemeChoice.Dark -> AndroidKitThemes.Dark
     DemoThemeChoice.Prism -> PrismThemeDefinition

@@ -3,10 +3,12 @@ package net.mamby.androidkit.demo.ui.screen
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.isSystemInDarkTheme
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
+import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
 
@@ -31,6 +33,13 @@ fun SettingsScreen(
                 selectedId = themeChoice.name,
                 onSelected = { onThemeChoice(DemoThemeChoice.valueOf(it)) },
                 closeContentDescription = stringResource(R.string.action_close),
+                systemOption = AndroidKitSettingsSystemOption(
+                    id = DemoThemeChoice.System.name,
+                    label = stringResource(R.string.language_system),
+                    currentValueLabel = stringResource(
+                        if (isSystemInDarkTheme()) R.string.theme_dark else R.string.theme_light,
+                    ),
+                ),
             ),
             floatingOpacity = AndroidKitFloatingOpacitySetting(
                 label = stringResource(R.string.floating_surface_opacity),

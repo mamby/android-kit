@@ -26,7 +26,7 @@ import net.mamby.androidkit.demo.ui.ComponentDemo
 @Composable
 internal fun SettingsPageDemo(demo: ComponentDemo, onBack: () -> Unit) {
     var destination by rememberSaveable(demo) { mutableStateOf("root") }
-    var language by rememberSaveable { mutableStateOf("en") }
+    var language by rememberSaveable { mutableStateOf("system") }
     var theme by rememberSaveable { mutableStateOf("system") }
     var opacity by rememberSaveable { mutableFloatStateOf(0f) }
     var locked by rememberSaveable { mutableStateOf(false) }

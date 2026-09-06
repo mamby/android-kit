@@ -22,7 +22,7 @@ import kotlin.math.roundToInt
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 
 internal data class DemoSettings(
-    val themeChoice: DemoThemeChoice = DemoThemeChoice.Light,
+    val themeChoice: DemoThemeChoice = DemoThemeChoice.System,
     val floatingSurfaceOpacityLevel: Float = DefaultFloatingSurfaceOpacityLevel,
     val floatingNavigationLayout: DemoFloatingNavigationLayout =
         DemoFloatingNavigationLayout.FiveItemsWithMore,
