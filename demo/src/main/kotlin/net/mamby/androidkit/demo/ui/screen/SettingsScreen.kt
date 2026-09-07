@@ -1,12 +1,13 @@
 package net.mamby.androidkit.demo.ui.screen
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.foundation.isSystemInDarkTheme
+import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
@@ -19,6 +20,10 @@ import net.mamby.androidkit.localization.AppLocaleManager
 
 @Composable
 fun SettingsScreen(
+    appLockEnabled: Boolean,
+    onAppLockChange: (Boolean) -> Unit,
+    appLockBusy: Boolean,
+    appLockError: String?,
     themeChoice: DemoThemeChoice,
     onThemeChoice: (DemoThemeChoice) -> Unit,
     floatingSurfaceOpacityLevel: Float,
@@ -77,6 +82,16 @@ fun SettingsScreen(
                 onValueChange = onFloatingSurfaceOpacityLevelChange,
                 onValueChangeFinished = onFloatingSurfaceOpacityLevelChangeFinished,
                 supportingText = stringResource(R.string.floating_surface_opacity_description),
+            ),
+        )
+        securitySection(
+            label = stringResource(R.string.settings_security),
+            appLock = AndroidKitAppLockSetting(
+                label = stringResource(R.string.settings_app_lock),
+                checked = appLockEnabled,
+                onCheckedChange = onAppLockChange,
+                enabled = !appLockBusy,
+                supportingText = appLockError ?: stringResource(R.string.settings_app_lock_description),
             ),
         )
         section(key = "about", label = stringResource(R.string.about_section)) {

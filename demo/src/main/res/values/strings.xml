@@ -107,18 +107,12 @@
     <string name="settings_theme">Theme</string>
     <string name="settings_min">Min</string>
     <string name="settings_max">Max</string>
-    <string name="settings_all">All settings</string>
-    <string name="settings_optional">Optional settings</string>
-    <string name="settings_subpages">Subpages</string>
-    <string name="settings_show_language">Show language</string>
     <string name="settings_search_languages">Search languages</string>
     <string name="settings_no_languages">No matching languages</string>
     <string name="settings_app_lock">App lock</string>
-    <string name="settings_demo_state">Demo state only; does not change app language, theme, opacity, or authentication.</string>
-    <string name="lock_page_ready">Ready to unlock</string>
-    <string name="lock_page_authenticating">Authenticating</string>
-    <string name="lock_page_error">Retry after an error</string>
     <string name="lock_page_message">Unlock to continue</string>
     <string name="lock_page_unlock">Unlock</string>
-    <string name="lock_page_error_message">Authentication failed. Please try again.</string>
+    <string name="settings_app_lock_description">Require authentication when opening or returning to the app.</string>
+    <string name="app_lock_unavailable">Set up a screen lock or biometrics in device settings, then try again.</string>
+    <string name="app_lock_authenticate">Confirm your identity to continue</string>
 </resources>

@@ -36,7 +36,6 @@ import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Switch
 import net.mamby.androidkit.compose.layout.AndroidKitPage
-import net.mamby.androidkit.compose.layout.AndroidKitLockPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -76,18 +75,6 @@ internal fun ComponentDemoScreen(
     onBack: () -> Unit,
 ) {
     when (demo.component) {
-        ComponentId.AndroidKitLockPage -> AndroidKitLockPage(
-            message = stringResource(R.string.lock_page_message),
-            unlockLabel = stringResource(R.string.lock_page_unlock),
-            onUnlock = onBack,
-            isUnlocking = demo == ComponentDemo.AndroidKitLockPageAuthenticating,
-            errorMessage = if (demo == ComponentDemo.AndroidKitLockPageError) {
-                stringResource(R.string.lock_page_error_message)
-            } else {
-                null
-            },
-        )
-        ComponentId.AndroidKitSettingsPage -> SettingsPageDemo(demo, onBack)
         ComponentId.AndroidKitPage -> AndroidKitPageDemo(demo = demo, onBack = onBack)
         ComponentId.AndroidKitFloatingActionButton -> AndroidKitFloatingActionButtonDemo(
             demo = demo,
@@ -310,8 +297,6 @@ private fun StandardComponentDemo(
                             onShowLabelsChange = onShowCompactNavigationLabelsChange,
                         )
 
-                    ComponentId.AndroidKitSettingsPage,
-                    ComponentId.AndroidKitLockPage,
                     ComponentId.AndroidKitPage,
                     ComponentId.AndroidKitFloatingActionButton,
                     -> error("Handled by a dedicated demo screen")

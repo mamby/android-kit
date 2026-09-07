@@ -9,10 +9,8 @@ enum class ComponentId(
     val apiName: String,
 ) {
     AndroidKitPage("AndroidKitPage"),
-    AndroidKitLockPage("AndroidKitLockPage"),
     AndroidKitFloatingActionButton("AndroidKitFloatingActionButton"),
     AndroidKitCard("AndroidKitCard"),
-    AndroidKitSettingsPage("AndroidKitSettingsPage"),
     AndroidKitBottomSheet("AndroidKitBottomSheet"),
     AndroidKitFloatingActionBar("AndroidKitFloatingActionBar"),
     AndroidKitActionFlyout("AndroidKitActionFlyout"),
@@ -29,9 +27,6 @@ enum class ComponentDemo(
     @StringRes val titleResource: Int,
 ) {
     AndroidKitPageBasic(ComponentId.AndroidKitPage, R.string.variation_basic),
-    AndroidKitLockPageReady(ComponentId.AndroidKitLockPage, R.string.lock_page_ready),
-    AndroidKitLockPageAuthenticating(ComponentId.AndroidKitLockPage, R.string.lock_page_authenticating),
-    AndroidKitLockPageError(ComponentId.AndroidKitLockPage, R.string.lock_page_error),
     AndroidKitPageTitle(ComponentId.AndroidKitPage, R.string.variation_with_title),
     AndroidKitPageTitleActions(
         ComponentId.AndroidKitPage,
@@ -75,20 +70,6 @@ enum class ComponentDemo(
     AndroidKitCardSupportingText(ComponentId.AndroidKitCard, R.string.variation_supporting_text),
     AndroidKitCardRichContent(ComponentId.AndroidKitCard, R.string.variation_rich_content),
     AndroidKitCardOverflow(ComponentId.AndroidKitCard, R.string.variation_overflow),
-
-    AndroidKitSettingsPageAll(
-        ComponentId.AndroidKitSettingsPage,
-        R.string.settings_all,
-    ),
-    AndroidKitSettingsPageOptional(
-        ComponentId.AndroidKitSettingsPage,
-        R.string.settings_optional,
-    ),
-    AndroidKitSettingsPageSubpages(
-        ComponentId.AndroidKitSettingsPage,
-        R.string.settings_subpages,
-    ),
-
     AndroidKitBottomSheetStandard(
         ComponentId.AndroidKitBottomSheet,
         R.string.variation_standard,

@@ -13,16 +13,15 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import net.mamby.androidkit.compose.layout.AndroidKitLockPage
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
@@ -37,13 +36,11 @@ import net.mamby.androidkit.navigation3.rememberMultiBackStackNavigationState
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun AndroidKitCatalogApp(
+internal fun AndroidKitCatalogApp(
+    settingsViewModel: DemoSettingsViewModel,
+    onAuthenticate: (Boolean?) -> Unit,
     onThemeDarknessChanged: (Boolean) -> Unit,
 ) {
-    val applicationContext = LocalContext.current.applicationContext
-    val settingsViewModel: DemoSettingsViewModel = viewModel {
-        DemoSettingsViewModel(DemoSettingsRepository(applicationContext))
-    }
     val settingsState by settingsViewModel.settings.collectAsStateWithLifecycle()
     val settings = settingsState ?: return
     var previewedFloatingSurfaceOpacityLevel by remember {
@@ -72,6 +69,16 @@ fun AndroidKitCatalogApp(
         definition = themeDefinition,
         strings = androidKitStrings(),
     ) {
+        if (settings.appLockEnabled && !settingsViewModel.unlocked) {
+            AndroidKitLockPage(
+                message = stringResource(R.string.lock_page_message),
+                unlockLabel = stringResource(R.string.lock_page_unlock),
+                onUnlock = { onAuthenticate(null) },
+                isUnlocking = settingsViewModel.authenticating,
+                errorMessage = settingsViewModel.authenticationError,
+            )
+            return@AndroidKitTheme
+        }
         val dummyNavigationIcons = listOf(
             materialSymbol(R.drawable.ic_symbol_home),
             materialSymbol(R.drawable.ic_symbol_favorite),
@@ -157,6 +164,10 @@ fun AndroidKitCatalogApp(
                         entry<LocalizationRoute> { LocalizationScreen() }
                         entry<SettingsRoute> {
                             SettingsScreen(
+                                appLockEnabled = settings.appLockEnabled,
+                                onAppLockChange = { onAuthenticate(it) },
+                                appLockBusy = settingsViewModel.authenticating,
+                                appLockError = settingsViewModel.authenticationError,
                                 themeChoice = settings.themeChoice,
                                 onThemeChoice = settingsViewModel::setThemeChoice,
                                 floatingSurfaceOpacityLevel =

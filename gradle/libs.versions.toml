@@ -1,4 +1,5 @@
 [versions]
+biometric = "1.1.0"
 agp = "9.4.0-alpha04"
 kotlin = "2.4.10"
 compose-bom = "2026.08.00"
@@ -23,6 +24,7 @@ profile-installer = "1.4.1"
 uiautomator = "2.4.0"
 
 [libraries]
+biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }

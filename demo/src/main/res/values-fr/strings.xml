@@ -106,18 +106,12 @@
     <string name="settings_theme">Thème</string>
     <string name="settings_min">Min</string>
     <string name="settings_max">Max</string>
-    <string name="settings_all">Tous les paramètres</string>
-    <string name="settings_optional">Paramètres facultatifs</string>
-    <string name="settings_subpages">Sous-pages</string>
-    <string name="settings_show_language">Afficher la langue</string>
     <string name="settings_search_languages">Rechercher une langue</string>
     <string name="settings_no_languages">Aucune langue correspondante</string>
     <string name="settings_app_lock">Verrouillage de l’application</string>
-    <string name="settings_demo_state">État de démonstration uniquement ; ne modifie pas la langue, le thème, l’opacité ou l’authentification de l’application.</string>
-    <string name="lock_page_ready">Prêt à déverrouiller</string>
-    <string name="lock_page_authenticating">Authentification en cours</string>
-    <string name="lock_page_error">Réessayer après une erreur</string>
     <string name="lock_page_message">Déverrouillez pour continuer</string>
     <string name="lock_page_unlock">Déverrouiller</string>
-    <string name="lock_page_error_message">Échec de l’authentification. Veuillez réessayer.</string>
+    <string name="settings_app_lock_description">Authentification requise à l’ouverture ou au retour dans l’application.</string>
+    <string name="app_lock_unavailable">Configurez un verrouillage d’écran ou la biométrie dans les paramètres de l’appareil, puis réessayez.</string>
+    <string name="app_lock_authenticate">Confirmez votre identité pour continuer</string>
 </resources>

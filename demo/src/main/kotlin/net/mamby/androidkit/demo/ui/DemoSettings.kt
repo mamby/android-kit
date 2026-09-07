@@ -1,27 +1,31 @@
 package net.mamby.androidkit.demo.ui
 
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import java.io.IOException
+import kotlin.math.roundToInt
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 
 internal data class DemoSettings(
+    val appLockEnabled: Boolean = false,
     val themeChoice: DemoThemeChoice = DemoThemeChoice.System,
     val floatingSurfaceOpacityLevel: Float = DefaultFloatingSurfaceOpacityLevel,
     val floatingNavigationLayout: DemoFloatingNavigationLayout =
@@ -56,13 +60,15 @@ internal class DemoSettingsRepository(context: Context) {
     val settings: Flow<DemoSettings> = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
-                emit(emptyPreferences())
+                // A read failure must never silently disable a persisted app lock.
+                emit(preferencesOf(AppLockEnabledKey to true))
             } else {
                 throw exception
             }
         }
         .map { preferences ->
             DemoSettings(
+                appLockEnabled = preferences[AppLockEnabledKey] ?: false,
                 themeChoice = DemoThemeChoice.fromStoredValue(
                     preferences[ThemeChoiceKey],
                 ),
@@ -77,6 +83,10 @@ internal class DemoSettingsRepository(context: Context) {
                     ?: false,
             )
         }
+
+    suspend fun setAppLockEnabled(enabled: Boolean) {
+        dataStore.edit { it[AppLockEnabledKey] = enabled }
+    }
 
     suspend fun setThemeChoice(choice: DemoThemeChoice) {
         dataStore.edit { preferences ->
@@ -110,6 +120,52 @@ internal class DemoSettingsRepository(context: Context) {
 internal class DemoSettingsViewModel(
     private val repository: DemoSettingsRepository,
 ) : ViewModel() {
+    var unlocked by mutableStateOf(false)
+        private set
+    var authenticating by mutableStateOf(false)
+        private set
+    var authenticationError by mutableStateOf<String?>(null)
+        private set
+    private var requestedLockEnabled: Boolean? = null
+
+    private var lockGeneration = 0
+
+    fun lock() {
+        lockGeneration++
+        unlocked = false
+    }
+
+    fun beginAuthentication(enabled: Boolean?): Boolean {
+        if (authenticating) return false
+        requestedLockEnabled = enabled
+        authenticationError = null
+        authenticating = true
+        return true
+    }
+
+    fun authenticationSucceeded() {
+        if (!authenticating) return
+        val generation = lockGeneration
+        val enabled = requestedLockEnabled
+        requestedLockEnabled = null
+        viewModelScope.launch {
+            try {
+                if (enabled != null) repository.setAppLockEnabled(enabled)
+                unlocked = generation == lockGeneration
+            } catch (exception: IOException) {
+                authenticationError = exception.localizedMessage
+            } finally {
+                authenticating = false
+            }
+        }
+    }
+
+    fun authenticationFailed(message: String) {
+        requestedLockEnabled = null
+        authenticating = false
+        authenticationError = message
+    }
+
     val settings = repository.settings
         .map<DemoSettings, DemoSettings?> { it }
         .stateIn(
@@ -148,6 +204,7 @@ private val Context.demoSettingsDataStore: DataStore<Preferences> by preferences
     name = "demo_settings",
 )
 
+private val AppLockEnabledKey = booleanPreferencesKey("app_lock_enabled")
 private val ThemeChoiceKey = stringPreferencesKey("theme_choice")
 private val FloatingSurfaceOpacityLevelKey = floatPreferencesKey(
     "floating_surface_opacity_level",

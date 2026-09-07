@@ -106,18 +106,12 @@
     <string name="settings_theme">المظهر</string>
     <string name="settings_min">الأدنى</string>
     <string name="settings_max">الأقصى</string>
-    <string name="settings_all">جميع الإعدادات</string>
-    <string name="settings_optional">إعدادات اختيارية</string>
-    <string name="settings_subpages">صفحات فرعية</string>
-    <string name="settings_show_language">إظهار اللغة</string>
     <string name="settings_search_languages">البحث عن لغة</string>
     <string name="settings_no_languages">لا توجد لغات مطابقة</string>
     <string name="settings_app_lock">قفل التطبيق</string>
-    <string name="settings_demo_state">حالة تجريبية فقط؛ لا تغيّر لغة التطبيق أو مظهره أو عتامته أو المصادقة.</string>
-    <string name="lock_page_ready">جاهز لفتح القفل</string>
-    <string name="lock_page_authenticating">جارٍ التحقق من الهوية</string>
-    <string name="lock_page_error">إعادة المحاولة بعد خطأ</string>
     <string name="lock_page_message">افتح القفل للمتابعة</string>
     <string name="lock_page_unlock">فتح القفل</string>
-    <string name="lock_page_error_message">فشل التحقق من الهوية. يرجى المحاولة مرة أخرى.</string>
+    <string name="settings_app_lock_description">طلب التحقق من الهوية عند فتح التطبيق أو العودة إليه.</string>
+    <string name="app_lock_unavailable">أعدّ قفل الشاشة أو المقاييس الحيوية في إعدادات الجهاز، ثم حاول مرة أخرى.</string>
+    <string name="app_lock_authenticate">أكّد هويتك للمتابعة</string>
 </resources>
