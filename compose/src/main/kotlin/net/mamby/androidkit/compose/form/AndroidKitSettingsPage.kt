@@ -272,6 +272,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
                     supportingText = it.supportingText, icon = null, valueLabel = null,
                     enabled = it.enabled, colors = null,
                     minimumLabel = it.minimumLabel, maximumLabel = it.maximumLabel,
+                    isOpacitySlider = true,
                 )
             }
         }

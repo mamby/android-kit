@@ -242,8 +242,6 @@ public fun AndroidKitBottomSheet(
                     .heightIn(max = maxSheetHeight)
                     .padding(sheetContentPadding),
             ) {
-                dragHandle?.invoke(this)
-
                 BottomSheetContentLayout(
                     modifier = (if (fitContent) {
                         Modifier.fillMaxWidth()
@@ -262,8 +260,8 @@ public fun AndroidKitBottomSheet(
                                 contentScrollHandoff.onGestureStarted()
                             }
                         },
-                    showChrome = showChrome,
-                    chromeContentSpacing = chromeContentSpacing,
+                    showChrome = showChrome || dragHandle != null,
+                    chromeContentSpacing = if (showChrome) chromeContentSpacing else 0.dp,
                     contentBottomPadding = contentBottomPadding,
                     floatingAction = floatingAction,
                     floatingActionAlignment = floatingActionAlignment,
@@ -271,27 +269,28 @@ public fun AndroidKitBottomSheet(
                     contentBottomInset = requestedBottomPadding,
                     contentWindowInsets = persistentContentWindowInsets,
                     chrome = {
-                        if (header != null) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(chromeContainerColor),
-                            ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(chromeContainerColor),
+                        ) {
+                            dragHandle?.invoke(this)
+                            if (showChrome && header != null) {
                                 header(::dismissWithAnimation)
+                            } else if (showChrome) {
+                                BottomSheetChrome(
+                                    title = title,
+                                    style = style,
+                                    dimensions = dimensions,
+                                    backContentDescription = backContentDescription ?: strings.back,
+                                    onBack = onBack,
+                                    closeContentDescription = closeContentDescription ?: strings.close,
+                                    onClose = ::dismissWithAnimation,
+                                    actions = actions,
+                                    actionsEnabled = visible,
+                                    containerColor = Color.Transparent,
+                                )
                             }
-                        } else {
-                            BottomSheetChrome(
-                                title = title,
-                                style = style,
-                                dimensions = dimensions,
-                                backContentDescription = backContentDescription ?: strings.back,
-                                onBack = onBack,
-                                closeContentDescription = closeContentDescription ?: strings.close,
-                                onClose = ::dismissWithAnimation,
-                                actions = actions,
-                                actionsEnabled = visible,
-                                containerColor = chromeContainerColor,
-                            )
                         }
                     },
                 ) { managedContentPadding ->

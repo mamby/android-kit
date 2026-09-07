@@ -1,8 +1,12 @@
 package net.mamby.androidkit.compose.form
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,9 +14,12 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
@@ -22,14 +29,22 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitSettingSectionStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -281,6 +296,7 @@ internal sealed interface SettingsEntryDefinition {
         val colors: SliderColors?,
         val minimumLabel: String? = null,
         val maximumLabel: String? = null,
+        val isOpacitySlider: Boolean = false,
     ) : SettingsEntryDefinition
 
     class Custom(
@@ -371,6 +387,7 @@ private fun SettingsToggleEntry(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsSliderEntry(
     entry: SettingsEntryDefinition.Slider,
@@ -418,6 +435,12 @@ private fun SettingsSliderEntry(
                 )
             }
         }
+        val colors = entry.colors ?: if (entry.isOpacitySlider) {
+            SliderDefaults.colors(thumbColor = AndroidKitThemeTokens.colorScheme.onPrimary)
+        } else {
+            SliderDefaults.colors()
+        }
+        val interactionSource = remember { MutableInteractionSource() }
         Slider(
             value = entry.value,
             onValueChange = entry.onValueChange,
@@ -428,7 +451,59 @@ private fun SettingsSliderEntry(
             steps = entry.steps,
             onValueChangeFinished = entry.onValueChangeFinished,
             enabled = entry.enabled,
-            colors = entry.colors ?: SliderDefaults.colors(),
+            colors = colors,
+            interactionSource = interactionSource,
+            thumb = {
+                if (entry.isOpacitySlider) {
+                    Box(
+                        Modifier
+                            .size(dimensions.spaceLarge)
+                            .dropShadow(
+                                shape = CircleShape,
+                                shadow = Shadow(
+                                    radius = dimensions.spaceExtraSmall,
+                                    spread = 0.dp,
+                                    offset = DpOffset.Zero,
+                                    color = if (entry.enabled) {
+                                        AndroidKitThemeTokens.colorScheme.outlineVariant
+                                    } else {
+                                        Color.Transparent
+                                    },
+                                ),
+                            )
+                            .clip(CircleShape)
+                            .background(
+                                color = if (entry.enabled) colors.thumbColor else colors.disabledThumbColor,
+                                shape = CircleShape,
+                            )
+                            .indication(interactionSource, ripple()),
+                    )
+                } else {
+                    SliderDefaults.Thumb(
+                        interactionSource = interactionSource,
+                        colors = colors,
+                        enabled = entry.enabled,
+                    )
+                }
+            },
+            track = { sliderState ->
+                if (entry.isOpacitySlider) {
+                    SliderDefaults.Track(
+                        sliderState = sliderState,
+                        colors = colors,
+                        enabled = entry.enabled,
+                        drawStopIndicator = null,
+                        drawTick = { _, _ -> },
+                        thumbTrackGapSize = 0.dp,
+                    )
+                } else {
+                    SliderDefaults.Track(
+                        sliderState = sliderState,
+                        colors = colors,
+                        enabled = entry.enabled,
+                    )
+                }
+            },
         )
         if (entry.minimumLabel != null && entry.maximumLabel != null) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
