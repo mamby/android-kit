@@ -139,11 +139,11 @@ private fun LanguageChip(
     )
 }
 
-private fun nativeLanguageName(languageTag: String): String =
+internal fun nativeLanguageName(languageTag: String): String =
     Locale.forLanguageTag(languageTag).let { locale ->
         locale.getDisplayLanguage(locale).replaceFirstChar { character ->
             if (character.isLowerCase()) character.titlecase() else character.toString()
         }
     }
 
-private val SupportedLanguageTags: List<String> = listOf("en", "fr", "ar")
+internal val SupportedLanguageTags: List<String> = listOf("en", "fr", "ar")

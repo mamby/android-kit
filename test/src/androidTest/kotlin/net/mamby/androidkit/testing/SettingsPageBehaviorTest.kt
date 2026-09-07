@@ -8,8 +8,14 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasScrollAction
@@ -22,6 +28,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
+import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
@@ -37,6 +44,59 @@ import org.junit.Test
 
 class SettingsPageBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Test
+    fun predefinedIconsAllowHostOverridesAndRestoreDefaults() {
+        var icon by mutableStateOf<ImageVector?>(null)
+        val overrideIcon = ImageVector.Builder(
+            name = "Host override", defaultWidth = 48.dp, defaultHeight = 24.dp,
+            viewportWidth = 48f, viewportHeight = 24f,
+        ).apply {
+            path(fill = SolidColor(Color.Black)) {
+                moveTo(0f, 0f)
+                lineTo(48f, 12f)
+                lineTo(0f, 24f)
+                close()
+            }
+        }.build()
+        rule.setContent {
+            AndroidKitTheme {
+                AndroidKitSettingsPage {
+                    generalSection(
+                        language = AndroidKitLanguageSetting(
+                            selection = AndroidKitSettingsSelection(
+                                label = "Language", options = listOf(AndroidKitSettingsOption("en", "English")),
+                                selectedId = "en", onSelected = {}, closeContentDescription = "Close",
+                                systemOption = AndroidKitSettingsSystemOption("system", "System", "English"),
+                                icon = icon,
+                            ),
+                            searchLabel = "Search", emptyResultsLabel = "No results",
+                        ),
+                        theme = AndroidKitSettingsSelection(
+                            label = "Theme", options = listOf(AndroidKitSettingsOption("light", "Light")),
+                            selectedId = "light", onSelected = {}, closeContentDescription = "Close",
+                            systemOption = AndroidKitSettingsSystemOption("system", "System", "Light"),
+                            icon = icon,
+                        ),
+                    )
+                    securitySection(appLock = AndroidKitAppLockSetting(
+                        label = "App lock", checked = false, onCheckedChange = {}, icon = icon,
+                    ))
+                }
+            }
+        }
+        val labels = listOf("Language", "Theme", "App lock")
+        fun labelStarts() = labels.map {
+            rule.onNodeWithText(it, useUnmergedTree = true).fetchSemanticsNode().boundsInRoot.left
+        }
+        val defaultStarts = labelStarts()
+        rule.runOnIdle { icon = overrideIcon }
+        labelStarts().zip(defaultStarts).forEach { (custom, default) ->
+            assertTrue("The host icon's intrinsic width must be used", custom > default)
+        }
+        rule.runOnIdle { icon = null }
+        assertEquals(defaultStarts, labelStarts())
+    }
 
     @Test
     fun hiddenSectionsLeaveNoGapAndCustomSectionsKeepTheirOrder() {
@@ -129,7 +189,9 @@ class SettingsPageBehaviorTest {
         }
 
         rule.onNodeWithText("System (Light)").assertIsDisplayed().performClick()
-        rule.onNodeWithText("System (Light)").assertIsDisplayed()
+        rule.onNode(
+            hasText("System (Light)") and SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.RadioButton),
+        ).assertIsDisplayed()
     }
 
     @Test

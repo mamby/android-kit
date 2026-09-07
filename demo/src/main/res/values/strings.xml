@@ -45,7 +45,7 @@
     <string name="theme_dark">Dark</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">A colorful app-defined theme that proves the public extension point.</string>
-    <string name="floating_surface_opacity">Floating surface opacity</string>
+    <string name="floating_surface_opacity">Transparency</string>
     <string name="floating_surface_opacity_description">Adjusts floating surfaces from the default translucency to fully opaque.</string>
     <string name="floating_surface_opacity_value">%1$d%%</string>
     <string name="open_sheet">Open example sheet</string>

@@ -34,6 +34,14 @@ where entries are declared. Custom `item` content inside a section receives a
 
 ## Host-owned choices and state
 
+Predefined Language, Theme, and App lock entries own their default icons. Language
+and Theme use the translate and sun artwork originally used in Fralov; App lock
+uses Lucide LockKeyhole. Omit `icon` (or pass null) to use the shared default, or
+supply an `ImageVector` through `AndroidKitSettingsSelection.icon` or
+`AndroidKitAppLockSetting.icon` to override it. These icons are decorative; the
+row label supplies accessibility text. Custom section entries keep their existing
+optional host-owned icons, and floating opacity remains iconless.
+
 `AndroidKitSettingsSelection` contains a label, stable keyed options, selected
 ID, selection callback, and localized Close description. IDs must be unique and
 the selected ID must be present. The host supplies every option: Android Kit

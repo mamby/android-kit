@@ -44,7 +44,7 @@
     <string name="theme_dark">داكن</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">سمة ملوّنة يعرّفها التطبيق لإثبات نقطة التوسعة العامة.</string>
-    <string name="floating_surface_opacity">عتامة الأسطح العائمة</string>
+    <string name="floating_surface_opacity">الشفافية</string>
     <string name="floating_surface_opacity_description">يضبط الأسطح العائمة من الشفافية الافتراضية إلى العتامة الكاملة.</string>
     <string name="floating_surface_opacity_value">%1$d٪</string>
     <string name="open_sheet">فتح لوحة المثال</string>

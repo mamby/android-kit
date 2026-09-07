@@ -2,15 +2,20 @@ package net.mamby.androidkit.demo.ui.screen
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.isSystemInDarkTheme
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
+import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
+import net.mamby.androidkit.localization.AppLocaleManager
 
 @Composable
 fun SettingsScreen(
@@ -20,9 +25,32 @@ fun SettingsScreen(
     onFloatingSurfaceOpacityLevelChange: (Float) -> Unit,
     onFloatingSurfaceOpacityLevelChangeFinished: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val displayLocale = LocalLocale.current.platformLocale
+    val localeManager = remember(context) {
+        AppLocaleManager(context, SupportedLanguageTags.toSet())
+    }
     AndroidKitSettingsPage(title = stringResource(R.string.settings_title)) {
         generalSection(
             label = stringResource(R.string.settings_general),
+            language = AndroidKitLanguageSetting(
+                selection = AndroidKitSettingsSelection(
+                    label = stringResource(R.string.language_section),
+                    options = SupportedLanguageTags.map { tag ->
+                        AndroidKitSettingsOption(tag, nativeLanguageName(tag))
+                    },
+                    selectedId = localeManager.selectedLanguageTag() ?: "system",
+                    onSelected = { id -> localeManager.setApplicationLanguage(id.takeUnless { it == "system" }) },
+                    closeContentDescription = stringResource(R.string.action_close),
+                    systemOption = AndroidKitSettingsSystemOption(
+                        id = "system",
+                        label = stringResource(R.string.language_system),
+                        currentValueLabel = localeManager.systemLocale().getDisplayLanguage(displayLocale),
+                    ),
+                ),
+                searchLabel = stringResource(R.string.settings_search_languages),
+                emptyResultsLabel = stringResource(R.string.settings_no_languages),
+            ),
             theme = AndroidKitSettingsSelection(
                 label = stringResource(R.string.settings_theme),
                 options = listOf(

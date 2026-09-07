@@ -44,7 +44,7 @@
     <string name="theme_dark">Sombre</string>
     <string name="theme_prism">Prism</string>
     <string name="theme_prism_description">Un thème coloré défini par l’application qui valide le point d’extension public.</string>
-    <string name="floating_surface_opacity">Opacité des surfaces flottantes</string>
+    <string name="floating_surface_opacity">Transparence</string>
     <string name="floating_surface_opacity_description">Ajuste les surfaces flottantes de la translucidité par défaut jusqu’à une opacité totale.</string>
     <string name="floating_surface_opacity_value">%1$d %%</string>
     <string name="open_sheet">Ouvrir la feuille d’exemple</string>

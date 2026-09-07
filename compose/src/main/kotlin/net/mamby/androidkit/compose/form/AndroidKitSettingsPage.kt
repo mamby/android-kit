@@ -67,6 +67,7 @@ public data class AndroidKitSettingsSelection(
     public val onSelected: (String) -> Unit,
     public val closeContentDescription: String,
     public val enabled: Boolean = true,
+    /** Optional row icon override; null uses the predefined language or theme icon. */
     public val icon: ImageVector? = null,
     public val systemOption: AndroidKitSettingsSystemOption,
 ) {
@@ -106,6 +107,7 @@ public data class AndroidKitAppLockSetting(
     public val onCheckedChange: (Boolean) -> Unit,
     public val supportingText: String? = null,
     public val enabled: Boolean = true,
+    /** Optional row icon override; null uses the predefined app-lock icon. */
     public val icon: ImageVector? = null,
 )
 
@@ -254,9 +256,12 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
     ) {
         section(key, label) {
             language?.let {
-                addPicker(key, "language", SettingsPickerDefinition(it.selection, it.searchLabel, it.emptyResultsLabel))
+                addPicker(
+                    key, "language", SettingsPickerDefinition(it.selection, it.searchLabel, it.emptyResultsLabel),
+                    AndroidKitIcons.Language,
+                )
             }
-            theme?.let { addPicker(key, "theme", SettingsPickerDefinition(it)) }
+            theme?.let { addPicker(key, "theme", SettingsPickerDefinition(it), AndroidKitIcons.Theme) }
             floatingOpacity?.let {
                 (this as SettingSectionScopeImpl).entries += SettingsEntryDefinition.Slider(
                     label = it.label, value = it.value, onValueChange = it.onValueChange,
@@ -276,6 +281,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         sectionKey: String,
         kind: String,
         picker: SettingsPickerDefinition,
+        defaultIcon: ImageVector,
     ) {
         val pickerKey = "$kind:$sectionKey"
         pickers[pickerKey] = picker
@@ -284,7 +290,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         button(
             label = selection.label,
             supportingText = options.first { it.id == selection.selectedId }.label,
-            icon = selection.icon, enabled = selection.enabled,
+            icon = selection.icon ?: defaultIcon, enabled = selection.enabled,
             onClick = { openPicker(pickerKey) },
         )
     }
@@ -300,7 +306,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         section(key, label) {
             appLock?.let {
                 toggle(it.label, it.checked, it.onCheckedChange, supportingText = it.supportingText,
-                    icon = it.icon, enabled = it.enabled)
+                    icon = it.icon ?: AndroidKitIcons.AppLock, enabled = it.enabled)
             }
             content()
         }
