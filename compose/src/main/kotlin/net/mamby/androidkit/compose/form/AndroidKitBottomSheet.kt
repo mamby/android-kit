@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,6 +64,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -100,7 +103,9 @@ public object AndroidKitBottomSheetDefaults {
  * Sheet content is always laid out edge-to-edge behind the persistent sheet chrome.
  * [AndroidKitBottomSheetScrollMode.ContentManaged] callers must apply the provided padding to the
  * scrollable component's `contentPadding`, not its [Modifier], so items clear the chrome, system
- * bars, and [floatingAction] while the viewport remains edge-to-edge. The floating action stays
+ * bars, and [floatingAction] while the viewport remains edge-to-edge. [sheetContentPadding] is
+ * applied inside the chrome and included in content clearance rather than insetting the viewport.
+ * The floating action stays
  * above the IME when it is visible. [actions] use the default header; a custom [header] owns all
  * of its chrome. An explicitly supplied
  * [AndroidKitBottomSheetStyle.chromeContainerColor] selects the chrome's base color; its rendered
@@ -149,6 +154,11 @@ public fun AndroidKitBottomSheet(
     content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
+    val layoutDirection = LocalLayoutDirection.current
+    val horizontalSheetPadding = PaddingValues(
+        start = sheetContentPadding.calculateStartPadding(layoutDirection),
+        end = sheetContentPadding.calculateEndPadding(layoutDirection),
+    )
     val floatingSurfaceOpacity = floatingSurfaceAlphaForLevel(
         AndroidKitThemeTokens.floatingSurfaceOpacityLevel,
     )
@@ -239,8 +249,7 @@ public fun AndroidKitBottomSheet(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = maxSheetHeight)
-                    .padding(sheetContentPadding),
+                    .heightIn(max = maxSheetHeight),
             ) {
                 BottomSheetContentLayout(
                     modifier = (if (fitContent) {
@@ -262,17 +271,25 @@ public fun AndroidKitBottomSheet(
                         },
                     showChrome = showChrome || dragHandle != null,
                     chromeContentSpacing = if (showChrome) chromeContentSpacing else 0.dp,
+                    sheetContentPadding = sheetContentPadding,
                     contentBottomPadding = contentBottomPadding,
-                    floatingAction = floatingAction,
+                    floatingAction = {
+                        Box(modifier = Modifier.padding(horizontalSheetPadding)) {
+                            floatingAction()
+                        }
+                    },
                     floatingActionAlignment = floatingActionAlignment,
                     floatingActionMargin = floatingActionMargin,
-                    contentBottomInset = requestedBottomPadding,
+                    contentBottomInset = requestedBottomPadding +
+                        sheetContentPadding.calculateBottomPadding(),
                     contentWindowInsets = persistentContentWindowInsets,
                     chrome = {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(chromeContainerColor),
+                                .background(chromeContainerColor)
+                                .padding(horizontalSheetPadding)
+                                .padding(top = sheetContentPadding.calculateTopPadding()),
                         ) {
                             dragHandle?.invoke(this)
                             if (showChrome && header != null) {
@@ -300,7 +317,9 @@ public fun AndroidKitBottomSheet(
                                 Modifier.fillMaxWidth()
                             } else {
                                 Modifier.fillMaxSize()
-                            }).verticalScroll(verticalScrollState),
+                            })
+                                .verticalScroll(verticalScrollState)
+                                .padding(horizontalSheetPadding),
                         ) {
                             Spacer(
                                 modifier = Modifier.height(
@@ -335,6 +354,7 @@ public fun AndroidKitBottomSheet(
 private fun BottomSheetContentLayout(
     showChrome: Boolean,
     chromeContentSpacing: Dp,
+    sheetContentPadding: PaddingValues,
     contentBottomPadding: Dp,
     floatingAction: @Composable () -> Unit,
     floatingActionAlignment: Alignment.Horizontal,
@@ -386,10 +406,12 @@ private fun BottomSheetContentLayout(
         val chromeClearance = if (showChrome) {
             chromeHeight.toDp() + chromeContentSpacing
         } else {
-            0.dp
+            sheetContentPadding.calculateTopPadding()
         }
         val managedContentPadding = PaddingValues(
+            start = sheetContentPadding.calculateStartPadding(layoutDirection),
             top = chromeClearance,
+            end = sheetContentPadding.calculateEndPadding(layoutDirection),
             bottom = contentBottomPadding + contentBottomInset +
                 if (hasFloatingAction) floatingActionClearance else 0.dp,
         )

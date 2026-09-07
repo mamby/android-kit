@@ -81,7 +81,7 @@ public data class AndroidKitThemeDefinition(
         secondaryContentColor = colorScheme.onSurfaceVariant,
         shape = shapes.extraLarge,
         sectionLabelTextStyle = AndroidKitDefaults.typography.labelLarge.copy(
-            fontSize = 16.sp,
+            fontSize = 15.sp,
             fontWeight = FontWeight.Normal,
         ),
         descriptionTextStyle = AndroidKitDefaults.typography.bodyMedium,
