@@ -9,6 +9,7 @@ enum class ComponentId(
     val apiName: String,
 ) {
     AndroidKitPage("AndroidKitPage"),
+    AndroidKitLockPage("AndroidKitLockPage"),
     AndroidKitFloatingActionButton("AndroidKitFloatingActionButton"),
     AndroidKitCard("AndroidKitCard"),
     AndroidKitSettingsPage("AndroidKitSettingsPage"),
@@ -28,6 +29,9 @@ enum class ComponentDemo(
     @StringRes val titleResource: Int,
 ) {
     AndroidKitPageBasic(ComponentId.AndroidKitPage, R.string.variation_basic),
+    AndroidKitLockPageReady(ComponentId.AndroidKitLockPage, R.string.lock_page_ready),
+    AndroidKitLockPageAuthenticating(ComponentId.AndroidKitLockPage, R.string.lock_page_authenticating),
+    AndroidKitLockPageError(ComponentId.AndroidKitLockPage, R.string.lock_page_error),
     AndroidKitPageTitle(ComponentId.AndroidKitPage, R.string.variation_with_title),
     AndroidKitPageTitleActions(
         ComponentId.AndroidKitPage,

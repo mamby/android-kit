@@ -40,6 +40,10 @@ Use [`AndroidKitSettingsPage`](docs/settings.md) for shared settings presentatio
 optional host-configured controls, custom sections, and host-owned subpages.
 Language lists and all setting values belong to the host application.
 
+Use [`AndroidKitLockPage`](docs/lock-page.md) for a title-free lock screen with
+progress and retry feedback. Authentication, lock timing and navigation belong
+to the host application.
+
 ## Build the catalog
 
 ```powershell

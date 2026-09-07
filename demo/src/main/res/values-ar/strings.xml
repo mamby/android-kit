@@ -114,4 +114,10 @@
     <string name="settings_no_languages">لا توجد لغات مطابقة</string>
     <string name="settings_app_lock">قفل التطبيق</string>
     <string name="settings_demo_state">حالة تجريبية فقط؛ لا تغيّر لغة التطبيق أو مظهره أو عتامته أو المصادقة.</string>
+    <string name="lock_page_ready">جاهز لفتح القفل</string>
+    <string name="lock_page_authenticating">جارٍ التحقق من الهوية</string>
+    <string name="lock_page_error">إعادة المحاولة بعد خطأ</string>
+    <string name="lock_page_message">افتح القفل للمتابعة</string>
+    <string name="lock_page_unlock">فتح القفل</string>
+    <string name="lock_page_error_message">فشل التحقق من الهوية. يرجى المحاولة مرة أخرى.</string>
 </resources>

@@ -115,4 +115,10 @@
     <string name="settings_no_languages">No matching languages</string>
     <string name="settings_app_lock">App lock</string>
     <string name="settings_demo_state">Demo state only; does not change app language, theme, opacity, or authentication.</string>
+    <string name="lock_page_ready">Ready to unlock</string>
+    <string name="lock_page_authenticating">Authenticating</string>
+    <string name="lock_page_error">Retry after an error</string>
+    <string name="lock_page_message">Unlock to continue</string>
+    <string name="lock_page_unlock">Unlock</string>
+    <string name="lock_page_error_message">Authentication failed. Please try again.</string>
 </resources>

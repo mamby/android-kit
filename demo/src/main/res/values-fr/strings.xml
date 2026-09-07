@@ -114,4 +114,10 @@
     <string name="settings_no_languages">Aucune langue correspondante</string>
     <string name="settings_app_lock">Verrouillage de l’application</string>
     <string name="settings_demo_state">État de démonstration uniquement ; ne modifie pas la langue, le thème, l’opacité ou l’authentification de l’application.</string>
+    <string name="lock_page_ready">Prêt à déverrouiller</string>
+    <string name="lock_page_authenticating">Authentification en cours</string>
+    <string name="lock_page_error">Réessayer après une erreur</string>
+    <string name="lock_page_message">Déverrouillez pour continuer</string>
+    <string name="lock_page_unlock">Déverrouiller</string>
+    <string name="lock_page_error_message">Échec de l’authentification. Veuillez réessayer.</string>
 </resources>
