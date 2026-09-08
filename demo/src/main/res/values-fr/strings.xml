@@ -115,4 +115,6 @@
     <string name="app_lock_unavailable">Configurez un verrouillage d’écran ou la biométrie dans les paramètres de l’appareil, puis réessayez.</string>
     <string name="app_lock_authenticate">Confirmez votre identité pour continuer</string>
     <string name="settings_lock_now">Verrouiller maintenant</string>
+    <string name="demo_selected_action">Action sélectionnée : %1$s</string>
+    <string name="demo_no_action">Aucune</string>
 </resources>

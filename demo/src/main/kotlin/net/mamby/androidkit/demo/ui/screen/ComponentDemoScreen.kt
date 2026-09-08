@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -40,6 +38,9 @@ import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
+import net.mamby.androidkit.demo.ui.DemoToggle
+import net.mamby.androidkit.demo.ui.DemoPageAction
+import net.mamby.androidkit.demo.ui.fabPositions
 import net.mamby.androidkit.demo.ui.ComponentDemo
 import net.mamby.androidkit.demo.ui.ComponentId
 import net.mamby.androidkit.demo.ui.DemoFloatingNavigationLayout
@@ -68,6 +69,10 @@ fun ComponentPlaceholder() {
 @Composable
 internal fun ComponentDemoScreen(
     demo: ComponentDemo,
+    demoToggles: Set<DemoToggle>,
+    onDemoToggleChange: (DemoToggle, Boolean) -> Unit,
+    selectedPageAction: DemoPageAction?,
+    onPageActionSelected: (DemoPageAction) -> Unit,
     floatingNavigationLayout: DemoFloatingNavigationLayout,
     onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
@@ -75,9 +80,16 @@ internal fun ComponentDemoScreen(
     onBack: () -> Unit,
 ) {
     when (demo.component) {
-        ComponentId.AndroidKitPage -> AndroidKitPageDemo(demo = demo, onBack = onBack)
+        ComponentId.AndroidKitPage -> AndroidKitPageDemo(
+            toggles = demoToggles,
+            onToggleChange = onDemoToggleChange,
+            selectedAction = selectedPageAction,
+            onActionSelected = onPageActionSelected,
+            onBack = onBack,
+        )
         ComponentId.AndroidKitFloatingActionButton -> AndroidKitFloatingActionButtonDemo(
-            demo = demo,
+            toggles = demoToggles,
+            onToggleChange = onDemoToggleChange,
             onBack = onBack,
         )
         else -> StandardComponentDemo(
@@ -93,62 +105,36 @@ internal fun ComponentDemoScreen(
 
 @Composable
 private fun AndroidKitPageDemo(
-    demo: ComponentDemo,
+    toggles: Set<DemoToggle>,
+    onToggleChange: (DemoToggle, Boolean) -> Unit,
+    selectedAction: DemoPageAction?,
+    onActionSelected: (DemoPageAction) -> Unit,
     onBack: () -> Unit,
 ) {
-    var actionCount by rememberSaveable { mutableIntStateOf(0) }
-    val hasTitleActions = demo == ComponentDemo.AndroidKitPageTitleActions ||
-        demo == ComponentDemo.AndroidKitPageImmersiveMode
-    val title = when (demo) {
-        ComponentDemo.AndroidKitPageBasic -> null
-        ComponentDemo.AndroidKitPageTitle,
-        ComponentDemo.AndroidKitPageTitleActions,
-        ComponentDemo.AndroidKitPageImmersiveMode,
-        ComponentDemo.AndroidKitPageFloatingActionButton,
-        -> stringResource(R.string.demo_page_title)
-        else -> error("Unexpected AndroidKitPage demo: $demo")
-    }
-    val actions = if (hasTitleActions) {
-        listOf(
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_save),
-                label = stringResource(R.string.action_save),
-                onClick = { actionCount += 1 },
-            ),
-            AndroidKitActionSeparator,
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_share),
-                label = stringResource(R.string.action_share),
-                onClick = { actionCount += 1 },
-            ),
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_edit),
-                label = stringResource(R.string.action_edit),
-                onClick = { actionCount += 1 },
-            ),
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_refresh),
-                label = stringResource(R.string.action_retry),
-                onClick = { actionCount += 1 },
-            ),
-            AndroidKitActionSeparator,
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_delete),
-                label = stringResource(R.string.action_delete),
-                onClick = { actionCount += 1 },
-            ),
-        )
-    } else {
-        emptyList()
-    }
+    val actions = if (DemoToggle.PageActions in toggles) {
+        buildList {
+            DemoPageAction.entries.filter { it != DemoPageAction.Confirm }.forEach { action ->
+                if (action == DemoPageAction.Share || action == DemoPageAction.Delete) {
+                    add(AndroidKitActionSeparator)
+                }
+                add(
+                    AndroidKitAction(
+                        icon = materialSymbol(action.icon),
+                        label = stringResource(action.label),
+                        onClick = { onActionSelected(action) },
+                    ),
+                )
+            }
+        }
+    } else emptyList()
     AndroidKitPage(
-        title = title,
+        title = if (DemoToggle.PageTitle in toggles) stringResource(R.string.demo_page_title) else null,
         onBack = listDetailBackAction(onBack),
         actions = actions,
-        titleBarImmersiveMode = demo == ComponentDemo.AndroidKitPageImmersiveMode,
+        titleBarImmersiveMode = DemoToggle.PageImmersive in toggles,
         floatingActionButton = {
-            if (demo == ComponentDemo.AndroidKitPageFloatingActionButton) {
-                AndroidKitFloatingActionButton(onClick = { actionCount += 1 }) {
+            if (DemoToggle.PageFab in toggles) {
+                AndroidKitFloatingActionButton(onClick = { onActionSelected(DemoPageAction.Confirm) }) {
                     Icon(
                         imageVector = materialSymbol(R.drawable.ic_symbol_check),
                         contentDescription = stringResource(R.string.action_confirm),
@@ -159,20 +145,19 @@ private fun AndroidKitPageDemo(
     ) { contentPadding ->
         DemoList(contentPadding) {
             item {
-                AndroidKitCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    header = {
-                        DemoCardHeader(
-                            title = demo.component.apiName,
-                            supportingText = stringResource(demo.titleResource),
-                        )
-                    },
-                ) {
-                    if (hasTitleActions) {
-                        Text(stringResource(R.string.page_title_bar_demo_instruction))
-                    }
-                    Text(stringResource(R.string.action_count, actionCount))
-                }
+                Text(stringResource(
+                    R.string.demo_selected_action,
+                    selectedAction?.let { stringResource(it.label) }
+                        ?: stringResource(R.string.demo_no_action),
+                ))
+            }
+            listOf(
+                DemoToggle.PageTitle,
+                DemoToggle.PageActions,
+                DemoToggle.PageImmersive,
+                DemoToggle.PageFab,
+            ).forEach { toggle ->
+                item(key = toggle.name) { DemoToggleRow(toggle, toggles, onToggleChange) }
             }
             item { DemoScrollContent() }
         }
@@ -181,23 +166,14 @@ private fun AndroidKitPageDemo(
 
 @Composable
 private fun AndroidKitFloatingActionButtonDemo(
-    demo: ComponentDemo,
+    toggles: Set<DemoToggle>,
+    onToggleChange: (DemoToggle, Boolean) -> Unit,
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
-    var enabled by rememberSaveable { mutableStateOf(true) }
-    val alignment = when (demo) {
-        ComponentDemo.AndroidKitFloatingActionButtonTopStart -> Alignment.TopStart
-        ComponentDemo.AndroidKitFloatingActionButtonTopCenter -> Alignment.TopCenter
-        ComponentDemo.AndroidKitFloatingActionButtonTopEnd -> Alignment.TopEnd
-        ComponentDemo.AndroidKitFloatingActionButtonBottomStart -> Alignment.BottomStart
-        ComponentDemo.AndroidKitFloatingActionButtonBottomCenter -> Alignment.BottomCenter
-        ComponentDemo.AndroidKitFloatingActionButtonBottomEnd -> Alignment.BottomEnd
-        else -> error("Unexpected AndroidKitFloatingActionButton demo: $demo")
-    }
     val dimensions = AndroidKitThemeTokens.dimensions
     AndroidKitPage(
-        title = componentDemoTitle(demo),
+        title = ComponentId.AndroidKitFloatingActionButton.apiName,
         onBack = listDetailBackAction(onBack),
     ) { contentPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -211,12 +187,8 @@ private fun AndroidKitFloatingActionButtonDemo(
                 item {
                     Text(text = stringResource(R.string.action_count, actionCount))
                 }
-                item {
-                    val enabledLabel = stringResource(R.string.component_enabled)
-                    ListItem(
-                        headlineContent = { Text(enabledLabel) },
-                        trailingContent = { Switch(checked = enabled, onCheckedChange = { enabled = it }) },
-                    )
+                (listOf(DemoToggle.FabEnabled) + fabPositions.keys).forEach { toggle ->
+                    item(key = toggle.name) { DemoToggleRow(toggle, toggles, onToggleChange) }
                 }
                 item { DemoScrollContent() }
             }
@@ -225,17 +197,19 @@ private fun AndroidKitFloatingActionButtonDemo(
                     .fillMaxSize()
                     .padding(contentPadding),
             ) {
-                AndroidKitFloatingActionButton(
-                    onClick = { actionCount += 1 },
-                    modifier = Modifier
-                        .align(alignment)
-                        .padding(dimensions.screenPadding),
-                    enabled = enabled,
-                ) {
-                    Icon(
-                        imageVector = materialSymbol(R.drawable.ic_symbol_edit),
-                        contentDescription = stringResource(R.string.action_edit),
-                    )
+                fabPositions.filterKeys { it in toggles }.forEach { (_, alignment) ->
+                    AndroidKitFloatingActionButton(
+                        onClick = { actionCount += 1 },
+                        modifier = Modifier
+                            .align(alignment)
+                            .padding(dimensions.screenPadding),
+                        enabled = DemoToggle.FabEnabled in toggles,
+                    ) {
+                        Icon(
+                            imageVector = materialSymbol(R.drawable.ic_symbol_edit),
+                            contentDescription = stringResource(R.string.action_edit),
+                        )
+                    }
                 }
             }
         }
@@ -252,54 +226,39 @@ private fun StandardComponentDemo(
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
-    val actionBar = demo.takeIf { it.component == ComponentId.AndroidKitFloatingActionBar }
     AndroidKitPage(
-        title = componentDemoTitle(demo),
+        title = demo.component.apiName,
         onBack = listDetailBackAction(onBack),
-        floatingActionButton = {
-            actionBar?.let {
-                AndroidKitFloatingActionBarDemo(
-                    demo = it,
-                    onAction = { actionCount += 1 },
-                )
-            }
-        },
     ) { contentPadding ->
         DemoList(contentPadding) {
-            item {
-                when (demo.component) {
-                    ComponentId.AndroidKitCard -> AndroidKitCardDemo(
-                        demo = demo,
-                        actionCount = actionCount,
-                        onAction = { actionCount += 1 },
-                    )
-                    ComponentId.AndroidKitBottomSheet -> AndroidKitBottomSheetDemo(demo)
-                    ComponentId.AndroidKitFloatingActionBar -> AndroidKitCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        header = {
-                            DemoCardHeader(
-                                title = stringResource(R.string.active_variation),
-                                supportingText = stringResource(demo.titleResource),
+            ComponentDemo.entries.filter { it.component == demo.component }.forEach { variation ->
+                item(key = variation.name) {
+                    Column(verticalArrangement = Arrangement.spacedBy(
+                        AndroidKitThemeTokens.dimensions.spaceSmall,
+                    )) {
+                        Text(stringResource(variation.titleResource), style = MaterialTheme.typography.titleMedium)
+                        when (demo.component) {
+                            ComponentId.AndroidKitCard -> AndroidKitCardDemo(
+                                demo = variation,
+                                actionCount = actionCount,
+                                onAction = { actionCount += 1 },
                             )
-                        },
-                    ) {
-                        Text(stringResource(R.string.action_count, actionCount))
+                            ComponentId.AndroidKitBottomSheet -> AndroidKitBottomSheetDemo(variation)
+                            ComponentId.AndroidKitFloatingActionBar -> {
+                                AndroidKitFloatingActionBarDemo(variation, onAction = { actionCount += 1 })
+                                Text(stringResource(R.string.action_count, actionCount))
+                            }
+                            ComponentId.AndroidKitActionFlyout -> AndroidKitActionFlyoutDemo(variation)
+                            ComponentId.AndroidKitFloatingNavigation -> AndroidKitFloatingNavigationDemo(
+                                demo = variation,
+                                layout = floatingNavigationLayout,
+                                onLayoutChange = onFloatingNavigationLayoutChange,
+                                showLabels = showCompactNavigationLabels,
+                                onShowLabelsChange = onShowCompactNavigationLabelsChange,
+                            )
+                            else -> error("Handled by a dedicated demo screen")
+                        }
                     }
-
-                    ComponentId.AndroidKitActionFlyout ->
-                        AndroidKitActionFlyoutDemo(demo)
-                    ComponentId.AndroidKitFloatingNavigation ->
-                        AndroidKitFloatingNavigationDemo(
-                            demo = demo,
-                            layout = floatingNavigationLayout,
-                            onLayoutChange = onFloatingNavigationLayoutChange,
-                            showLabels = showCompactNavigationLabels,
-                            onShowLabelsChange = onShowCompactNavigationLabelsChange,
-                        )
-
-                    ComponentId.AndroidKitPage,
-                    ComponentId.AndroidKitFloatingActionButton,
-                    -> error("Handled by a dedicated demo screen")
                 }
             }
             item { DemoScrollContent() }
@@ -352,7 +311,7 @@ private fun AndroidKitCardDemo(
     ) {
         Text(stringResource(R.string.demo_section_body))
         if (demo == ComponentDemo.AndroidKitCardRichContent) {
-            Button(onClick = {}) { Text(stringResource(R.string.primary_action)) }
+            Button(onClick = onAction) { Text(stringResource(R.string.primary_action)) }
         }
         if (hasOverflow) {
             Text(stringResource(R.string.action_count, actionCount))
@@ -366,13 +325,17 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     var showingDetail by rememberSaveable { mutableStateOf(true) }
     var headerActionCount by rememberSaveable { mutableIntStateOf(0) }
     Button(
-        modifier = Modifier.testTag("open_bottom_sheet"),
+        modifier = Modifier.testTag(if (demo == ComponentDemo.AndroidKitBottomSheetStandard) {
+            "open_bottom_sheet"
+        } else {
+            "open_bottom_sheet_${demo.name}"
+        }),
         onClick = {
             showingDetail = true
             visible = true
         },
     ) {
-        Text(stringResource(R.string.open_sheet))
+        Text(stringResource(demo.titleResource))
     }
 
     val isBackNavigation = demo == ComponentDemo.AndroidKitBottomSheetBackNavigation
@@ -584,7 +547,7 @@ private fun AndroidKitActionFlyoutDemo(demo: ComponentDemo) {
                 imageVector = materialSymbol(R.drawable.ic_symbol_more_vert),
                 contentDescription = null,
             )
-            Text(stringResource(R.string.action_more))
+            Text(stringResource(demo.titleResource))
         }
         AndroidKitActionFlyout(
             expanded = expanded,
@@ -680,8 +643,18 @@ private fun AndroidKitFloatingNavigationDemo(
 }
 
 @Composable
-private fun componentDemoTitle(demo: ComponentDemo): String =
-    "${demo.component.apiName} · ${stringResource(demo.titleResource)}"
+private fun DemoToggleRow(
+    toggle: DemoToggle,
+    toggles: Set<DemoToggle>,
+    onToggleChange: (DemoToggle, Boolean) -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(toggle.label)) },
+        trailingContent = {
+            Switch(checked = toggle in toggles, onCheckedChange = { onToggleChange(toggle, it) })
+        },
+    )
+}
 
 @Composable
 private fun DemoList(

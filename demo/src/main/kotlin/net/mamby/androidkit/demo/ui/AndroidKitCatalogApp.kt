@@ -151,6 +151,10 @@ internal fun AndroidKitCatalogApp(
                         ) { route ->
                             ComponentDemoScreen(
                                 demo = route.demo,
+                                demoToggles = settings.demoToggles,
+                                onDemoToggleChange = settingsViewModel::setDemoToggle,
+                                selectedPageAction = settings.selectedPageAction,
+                                onPageActionSelected = settingsViewModel::setSelectedPageAction,
                                 floatingNavigationLayout = settings.floatingNavigationLayout,
                                 onFloatingNavigationLayoutChange =
                                     settingsViewModel::setFloatingNavigationLayout,

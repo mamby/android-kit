@@ -25,6 +25,8 @@ import kotlinx.coroutines.launch
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 
 internal data class DemoSettings(
+    val demoToggles: Set<DemoToggle> = DemoToggle.entries.filter { it.defaultValue }.toSet(),
+    val selectedPageAction: DemoPageAction? = null,
     val appLockEnabled: Boolean = false,
     val themeChoice: DemoThemeChoice = DemoThemeChoice.System,
     val floatingSurfaceOpacityLevel: Float = DefaultFloatingSurfaceOpacityLevel,
@@ -68,6 +70,13 @@ internal class DemoSettingsRepository(context: Context) {
         }
         .map { preferences ->
             DemoSettings(
+                demoToggles = DemoToggle.entries.filter { toggle ->
+                    preferences[booleanPreferencesKey("demo_toggle_${toggle.name}")]
+                        ?: toggle.defaultValue
+                }.toSet(),
+                selectedPageAction = DemoPageAction.entries.firstOrNull {
+                    it.name == preferences[SelectedPageActionKey]
+                },
                 appLockEnabled = preferences[AppLockEnabledKey] ?: false,
                 themeChoice = DemoThemeChoice.fromStoredValue(
                     preferences[ThemeChoiceKey],
@@ -83,6 +92,14 @@ internal class DemoSettingsRepository(context: Context) {
                     ?: false,
             )
         }
+
+    suspend fun setDemoToggle(toggle: DemoToggle, enabled: Boolean) {
+        dataStore.edit { it[booleanPreferencesKey("demo_toggle_${toggle.name}")] = enabled }
+    }
+
+    suspend fun setSelectedPageAction(action: DemoPageAction) {
+        dataStore.edit { it[SelectedPageActionKey] = action.name }
+    }
 
     suspend fun setAppLockEnabled(enabled: Boolean) {
         dataStore.edit { it[AppLockEnabledKey] = enabled }
@@ -174,6 +191,14 @@ internal class DemoSettingsViewModel(
             initialValue = null,
         )
 
+    fun setDemoToggle(toggle: DemoToggle, enabled: Boolean) {
+        viewModelScope.launch { repository.setDemoToggle(toggle, enabled) }
+    }
+
+    fun setSelectedPageAction(action: DemoPageAction) {
+        viewModelScope.launch { repository.setSelectedPageAction(action) }
+    }
+
     fun setThemeChoice(choice: DemoThemeChoice) {
         viewModelScope.launch {
             repository.setThemeChoice(choice)
@@ -204,6 +229,7 @@ private val Context.demoSettingsDataStore: DataStore<Preferences> by preferences
     name = "demo_settings",
 )
 
+private val SelectedPageActionKey = stringPreferencesKey("selected_page_action")
 private val AppLockEnabledKey = booleanPreferencesKey("app_lock_enabled")
 private val ThemeChoiceKey = stringPreferencesKey("theme_choice")
 private val FloatingSurfaceOpacityLevelKey = floatPreferencesKey(

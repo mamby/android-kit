@@ -116,4 +116,6 @@
     <string name="app_lock_unavailable">Set up a screen lock or biometrics in device settings, then try again.</string>
     <string name="app_lock_authenticate">Confirm your identity to continue</string>
     <string name="settings_lock_now">Lock now</string>
+    <string name="demo_selected_action">Selected action: %1$s</string>
+    <string name="demo_no_action">None</string>
 </resources>

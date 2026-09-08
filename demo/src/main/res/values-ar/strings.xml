@@ -115,4 +115,6 @@
     <string name="app_lock_unavailable">أعدّ قفل الشاشة أو المقاييس الحيوية في إعدادات الجهاز، ثم حاول مرة أخرى.</string>
     <string name="app_lock_authenticate">أكّد هويتك للمتابعة</string>
     <string name="settings_lock_now">قفل الآن</string>
+    <string name="demo_selected_action">الإجراء المحدد: %1$s</string>
+    <string name="demo_no_action">لا شيء</string>
 </resources>

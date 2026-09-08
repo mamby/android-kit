@@ -14,9 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.testTag
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
@@ -39,17 +36,8 @@ fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
         ) {
             ComponentId.entries.forEach { component ->
-                item(key = component.name) {
-                    Text(
-                        text = component.catalogName,
-                        modifier = Modifier
-                            .padding(top = dimensions.spaceMedium)
-                            .semantics { heading() },
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
                 items(
-                    items = ComponentDemo.entries.filter { it.component == component },
+                    items = listOf(ComponentDemo.entries.first { it.component == component }),
                     key = ComponentDemo::name,
                 ) { demo ->
                     Card(
@@ -68,7 +56,7 @@ fun ComponentsScreen(onSelected: (ComponentDemo) -> Unit) {
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = stringResource(demo.titleResource),
+                                text = component.catalogName,
                                 modifier = Modifier.weight(1f),
                                 style = MaterialTheme.typography.titleMedium,
                             )
