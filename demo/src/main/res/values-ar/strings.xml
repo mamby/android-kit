@@ -111,7 +111,12 @@
     <string name="settings_app_lock">قفل التطبيق</string>
     <string name="lock_page_message">افتح القفل للمتابعة</string>
     <string name="lock_page_unlock">فتح القفل</string>
-    <string name="settings_app_lock_description">طلب التحقق من الهوية عند فتح التطبيق أو العودة إليه.</string>
+    <string name="settings_app_lock_description">طلب التحقق من الهوية عند فتح التطبيق أو بعد انقضاء مدة الغياب المحددة.</string>
+    <string name="settings_app_lock_timeout">القفل بعد مغادرة التطبيق</string>
+    <string name="settings_lock_immediately">فورًا</string>
+    <string name="settings_lock_after_one_minute">بعد دقيقة واحدة</string>
+    <string name="settings_lock_after_five_minutes">بعد 5 دقائق</string>
+    <string name="settings_lock_after_fifteen_minutes">بعد 15 دقيقة</string>
     <string name="app_lock_unavailable">أعدّ قفل الشاشة أو المقاييس الحيوية في إعدادات الجهاز، ثم حاول مرة أخرى.</string>
     <string name="app_lock_authenticate">أكّد هويتك للمتابعة</string>
     <string name="settings_lock_now">قفل الآن</string>

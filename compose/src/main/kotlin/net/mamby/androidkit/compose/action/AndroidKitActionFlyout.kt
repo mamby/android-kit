@@ -1,11 +1,7 @@
 package net.mamby.androidkit.compose.action
 
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -16,22 +12,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuPopup
+import androidx.compose.material3.DropdownMenuPopupPositionProvider
+import androidx.compose.material3.MenuAnchorPosition
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
@@ -41,9 +39,8 @@ import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
+import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitActionFlyoutStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
@@ -63,6 +60,17 @@ public interface AndroidKitActionFlyoutScope : ColumnScope {
         enabled: Boolean = true,
     ): Unit
 
+    /** Opens a nested menu. Back/outside dismisses that level; actions dismiss the entire flyout. */
+    @Suppress("ComposableNaming")
+    @Composable
+    public fun submenu(
+        label: String,
+        modifier: Modifier = Modifier,
+        icon: ImageVector? = null,
+        enabled: Boolean = true,
+        content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+    ): Unit
+
     @Suppress("ComposableNaming") // Match the toolbar and action-bar flyout DSL.
     @Composable
     public fun separator(
@@ -75,6 +83,11 @@ private class ActionFlyoutScopeImpl(
     columnScope: ColumnScope,
     private val onDismissRequest: () -> Unit,
     private val enabled: Boolean,
+    private val expanded: Boolean,
+    private val style: AndroidKitActionFlyoutStyle,
+    private val contentPadding: PaddingValues,
+    private val properties: PopupProperties,
+    private val containerColor: Color?,
 ) : AndroidKitActionFlyoutScope, ColumnScope by columnScope {
     @Composable
     override fun item(
@@ -118,6 +131,20 @@ private class ActionFlyoutScopeImpl(
     }
 
     @Composable
+    override fun submenu(
+        label: String,
+        modifier: Modifier,
+        icon: ImageVector?,
+        enabled: Boolean,
+        content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+    ) {
+        ActionFlyoutSubmenu(
+            label, modifier, icon, this.enabled && enabled, expanded,
+            style, contentPadding, properties, containerColor, onDismissRequest, content,
+        )
+    }
+
+    @Composable
     override fun separator(modifier: Modifier, color: Color) {
         val dimensions = AndroidKitThemeTokens.dimensions
         HorizontalDivider(
@@ -127,6 +154,77 @@ private class ActionFlyoutScopeImpl(
             ),
             color = color.takeUnless { it == Color.Unspecified }
                 ?: AndroidKitThemeTokens.colorScheme.outlineVariant,
+        )
+    }
+}
+
+@Composable
+private fun ActionFlyoutSubmenu(
+    label: String,
+    modifier: Modifier,
+    icon: ImageVector?,
+    enabled: Boolean,
+    parentExpanded: Boolean,
+    style: AndroidKitActionFlyoutStyle,
+    contentPadding: PaddingValues,
+    properties: PopupProperties,
+    containerColor: Color?,
+    onActionDismissRequest: () -> Unit,
+    content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    LaunchedEffect(enabled, parentExpanded) {
+        if (!enabled || !parentExpanded) expanded = false
+    }
+    val dimensions = AndroidKitThemeTokens.dimensions
+    Box {
+        DropdownMenuItem(
+            text = {
+                Text(
+                    label,
+                    style = AndroidKitThemeTokens.typography.labelLarge,
+                    fontWeight = FontWeight.Normal,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+            onClick = { expanded = true },
+            modifier = modifier,
+            enabled = enabled,
+            contentPadding = PaddingValues(
+                start = dimensions.spaceMedium, end = dimensions.spaceLarge,
+            ),
+            leadingIcon = icon?.let {
+                {
+                    Icon(
+                        it, contentDescription = null,
+                        modifier = Modifier.size(dimensions.actionFlyoutIconSize),
+                    )
+                }
+            },
+            trailingIcon = {
+                Icon(
+                    AndroidKitIcons.ChevronRight, contentDescription = null,
+                    modifier = Modifier.size(dimensions.actionFlyoutIconSize),
+                )
+            },
+        )
+        ActionFlyoutPopup(
+            expanded = expanded && enabled && parentExpanded,
+            onDismissRequest = { expanded = false },
+            onActionDismissRequest = {
+                expanded = false
+                onActionDismissRequest()
+            },
+            positionProvider = MenuDefaults.rememberDropdownMenuPopupPositionProvider(
+                MenuAnchorPosition.End,
+            ),
+            style = style,
+            contentPadding = contentPadding,
+            properties = properties,
+            containerColor = containerColor,
+            enabled = enabled,
+            content = content,
         )
     }
 }
@@ -224,106 +322,70 @@ private fun ActionFlyoutContent(
     content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
 ): Unit {
     val density = LocalDensity.current
-    val transformOriginState = remember { mutableStateOf(TransformOrigin.Center) }
     val positionProvider = remember(placement, horizontalAlignment, offset, density) {
-        ActionFlyoutPositionProvider(
-            placement = placement,
-            horizontalAlignment = horizontalAlignment,
-            offset = offset,
-            density = density,
-            onPositionCalculated = { anchorBounds, menuBounds ->
-                transformOriginState.value = calculateTransformOrigin(anchorBounds, menuBounds)
-            },
-        )
+        ActionFlyoutPositionProvider(placement, horizontalAlignment, offset, density)
     }
-    val expandedState = remember { MutableTransitionState(false) }
-    expandedState.targetState = expanded && enabled
 
     LaunchedEffect(enabled, expanded) {
         if (!enabled && expanded) onDismissRequest()
     }
 
-    if (expandedState.currentState || expandedState.targetState) {
-        Popup(
-            onDismissRequest = onDismissRequest,
-            popupPositionProvider = positionProvider,
-            properties = properties,
-        ) {
-            ActionFlyoutAnimation(
-                expandedState = expandedState,
-                transformOriginState = transformOriginState,
-            ) {
-                FloatingSurface(
-                    shape = style.shape,
-                    modifier = modifier,
-                    containerColor = containerColor,
-                    style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(contentPadding)
-                            .width(IntrinsicSize.Max)
-                            .verticalScroll(scrollState),
-                    ) {
-                        ActionFlyoutScopeImpl(this, onDismissRequest, enabled).content()
-                    }
-                }
-            }
-        }
-    }
+    ActionFlyoutPopup(
+        expanded = expanded && enabled,
+        onDismissRequest = onDismissRequest,
+        onActionDismissRequest = onDismissRequest,
+        positionProvider = positionProvider,
+        modifier = modifier,
+        style = style,
+        contentPadding = contentPadding,
+        properties = properties,
+        scrollState = scrollState,
+        containerColor = containerColor,
+        enabled = enabled,
+        content = content,
+    )
 }
 
 @Composable
-private fun ActionFlyoutAnimation(
-    expandedState: MutableTransitionState<Boolean>,
-    transformOriginState: MutableState<TransformOrigin>,
-    content: @Composable ColumnScope.() -> Unit,
-): Unit {
-    @Suppress("DEPRECATION")
-    val transition = updateTransition(expandedState, label = "ActionFlyout")
-    val scale by transition.animateFloat(
-        transitionSpec = {
-            spring(
-                dampingRatio = FastSpatialDampingRatio,
-                stiffness = FastSpatialStiffness,
-            )
-        },
-        label = "ActionFlyoutScale",
-    ) { isExpanded ->
-        if (isExpanded) ExpandedScale else CollapsedScale
+private fun ActionFlyoutPopup(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    onActionDismissRequest: () -> Unit,
+    positionProvider: DropdownMenuPopupPositionProvider,
+    modifier: Modifier = Modifier,
+    style: AndroidKitActionFlyoutStyle,
+    contentPadding: PaddingValues,
+    properties: PopupProperties,
+    scrollState: ScrollState = rememberScrollState(),
+    containerColor: Color? = null,
+    enabled: Boolean = true,
+    content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+) {
+    DropdownMenuPopup(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        popupPositionProvider = positionProvider,
+        properties = properties,
+    ) {
+        FloatingSurface(
+            shape = style.shape,
+            modifier = modifier,
+            containerColor = containerColor,
+            style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(contentPadding)
+                    .width(IntrinsicSize.Max)
+                    .verticalScroll(scrollState),
+            ) {
+                ActionFlyoutScopeImpl(
+                    this, onActionDismissRequest, enabled, expanded,
+                    style, contentPadding, properties, containerColor,
+                ).content()
+            }
+        }
     }
-    val alpha by transition.animateFloat(
-        transitionSpec = {
-            spring(
-                dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = FastEffectsStiffness,
-            )
-        },
-        label = "ActionFlyoutAlpha",
-    ) { isExpanded ->
-        if (isExpanded) ExpandedAlpha else CollapsedAlpha
-    }
-    val isInspecting = LocalInspectionMode.current
-
-    Column(
-        modifier = Modifier
-            .width(IntrinsicSize.Max)
-            .graphicsLayer {
-                scaleX = if (isInspecting) {
-                    if (expandedState.targetState) ExpandedScale else CollapsedScale
-                } else {
-                    scale
-                }
-                scaleY = scaleX
-                this.alpha = if (isInspecting) {
-                    if (expandedState.targetState) ExpandedAlpha else CollapsedAlpha
-                } else {
-                    alpha
-                }
-                transformOrigin = transformOriginState.value
-            },
-        content = content,
-    )
 }
 
 private data class ActionFlyoutPositionProvider(
@@ -331,8 +393,10 @@ private data class ActionFlyoutPositionProvider(
     val horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment,
     val offset: DpOffset,
     val density: Density,
-    val onPositionCalculated: (anchorBounds: IntRect, menuBounds: IntRect) -> Unit,
-) : PopupPositionProvider {
+) : DropdownMenuPopupPositionProvider {
+    override var transformOrigin: TransformOrigin by mutableStateOf(TransformOrigin.Center)
+        private set
+
     override fun calculatePosition(
         anchorBounds: IntRect,
         windowSize: IntSize,
@@ -408,7 +472,7 @@ private data class ActionFlyoutPositionProvider(
             }
         }
         val menuOffset = IntOffset(x, y)
-        onPositionCalculated(
+        transformOrigin = calculateTransformOrigin(
             anchorBounds,
             IntRect(offset = menuOffset, size = popupContentSize),
         )
@@ -458,10 +522,3 @@ private fun calculateTransformOrigin(
 
 private val MenuHorizontalMargin = 8.dp
 private val MenuVerticalMargin = 48.dp
-private const val ExpandedScale = 1f
-private const val CollapsedScale = 0.8f
-private const val ExpandedAlpha = 1f
-private const val CollapsedAlpha = 0f
-private const val FastSpatialDampingRatio = 0.9f
-private const val FastSpatialStiffness = 1_400f
-private const val FastEffectsStiffness = 3_800f

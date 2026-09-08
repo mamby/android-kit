@@ -112,10 +112,22 @@
     <string name="settings_app_lock">App lock</string>
     <string name="lock_page_message">Unlock to continue</string>
     <string name="lock_page_unlock">Unlock</string>
-    <string name="settings_app_lock_description">Require authentication when opening or returning to the app.</string>
+    <string name="settings_app_lock_description">Require authentication when opening the app or after the selected time away.</string>
+    <string name="settings_app_lock_timeout">Lock after leaving the app</string>
+    <string name="settings_lock_immediately">Immediately</string>
+    <string name="settings_lock_after_one_minute">After 1 minute</string>
+    <string name="settings_lock_after_five_minutes">After 5 minutes</string>
+    <string name="settings_lock_after_fifteen_minutes">After 15 minutes</string>
     <string name="app_lock_unavailable">Set up a screen lock or biometrics in device settings, then try again.</string>
     <string name="app_lock_authenticate">Confirm your identity to continue</string>
     <string name="settings_lock_now">Lock now</string>
     <string name="demo_selected_action">Selected action: %1$s</string>
     <string name="demo_no_action">None</string>
+    <string name="variation_submenus">Nested submenus</string>
+    <string name="flyout_demo_export">Export</string>
+    <string name="flyout_demo_copy_link">Copy link</string>
+    <string name="flyout_demo_document">Document</string>
+    <string name="flyout_demo_pdf">PDF</string>
+    <string name="flyout_demo_plain_text">Plain text</string>
+    <string name="flyout_demo_image">Image (unavailable)</string>
 </resources>

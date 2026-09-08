@@ -111,7 +111,12 @@
     <string name="settings_app_lock">Verrouillage de l’application</string>
     <string name="lock_page_message">Déverrouillez pour continuer</string>
     <string name="lock_page_unlock">Déverrouiller</string>
-    <string name="settings_app_lock_description">Authentification requise à l’ouverture ou au retour dans l’application.</string>
+    <string name="settings_app_lock_description">Authentification requise à l’ouverture de l’application ou après la durée d’absence choisie.</string>
+    <string name="settings_app_lock_timeout">Verrouiller après avoir quitté l’application</string>
+    <string name="settings_lock_immediately">Immédiatement</string>
+    <string name="settings_lock_after_one_minute">Après 1 minute</string>
+    <string name="settings_lock_after_five_minutes">Après 5 minutes</string>
+    <string name="settings_lock_after_fifteen_minutes">Après 15 minutes</string>
     <string name="app_lock_unavailable">Configurez un verrouillage d’écran ou la biométrie dans les paramètres de l’appareil, puis réessayez.</string>
     <string name="app_lock_authenticate">Confirmez votre identité pour continuer</string>
     <string name="settings_lock_now">Verrouiller maintenant</string>

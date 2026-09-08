@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
+import net.mamby.androidkit.compose.form.AndroidKitAppLockTimeoutSetting
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
@@ -16,11 +17,14 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
+import net.mamby.androidkit.demo.ui.DemoAppLockTimeout
 import net.mamby.androidkit.localization.AppLocaleManager
 
 @Composable
 fun SettingsScreen(
     appLockEnabled: Boolean,
+    appLockTimeout: DemoAppLockTimeout,
+    onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
     onAppLockChange: (Boolean) -> Unit,
     appLockBusy: Boolean,
     appLockError: String?,
@@ -95,6 +99,24 @@ fun SettingsScreen(
                 supportingText = appLockError ?: stringResource(R.string.settings_app_lock_description),
                 lockNowLabel = stringResource(R.string.settings_lock_now),
                 onLockNow = onLockNow,
+                timeout = AndroidKitAppLockTimeoutSetting(
+                    label = stringResource(R.string.settings_app_lock_timeout),
+                    options = DemoAppLockTimeout.entries.map { timeout ->
+                        AndroidKitSettingsOption(
+                            id = timeout.name,
+                            label = stringResource(
+                                when (timeout) {
+                                    DemoAppLockTimeout.Immediately -> R.string.settings_lock_immediately
+                                    DemoAppLockTimeout.OneMinute -> R.string.settings_lock_after_one_minute
+                                    DemoAppLockTimeout.FiveMinutes -> R.string.settings_lock_after_five_minutes
+                                    DemoAppLockTimeout.FifteenMinutes -> R.string.settings_lock_after_fifteen_minutes
+                                },
+                            ),
+                        )
+                    },
+                    selectedId = appLockTimeout.name,
+                    onSelected = { onAppLockTimeoutChange(DemoAppLockTimeout.valueOf(it)) },
+                ),
             ),
         )
         section(key = "about", label = stringResource(R.string.about_section)) {

@@ -570,6 +570,22 @@ private fun AndroidKitActionFlyoutDemo(demo: ComponentDemo) {
                     },
                 )
             }
+            if (demo == ComponentDemo.AndroidKitActionFlyoutSubmenus) {
+                submenu(label = stringResource(R.string.action_share)) {
+                    item(label = stringResource(R.string.flyout_demo_copy_link), onClick = {})
+                    submenu(label = stringResource(R.string.flyout_demo_export)) {
+                        submenu(label = stringResource(R.string.flyout_demo_document)) {
+                            item(label = stringResource(R.string.flyout_demo_pdf), onClick = {})
+                            item(label = stringResource(R.string.flyout_demo_plain_text), onClick = {})
+                        }
+                        item(
+                            label = stringResource(R.string.flyout_demo_image),
+                            enabled = false,
+                            onClick = {},
+                        )
+                    }
+                }
+            }
             separator()
             Text(
                 text = stringResource(R.string.action_more),

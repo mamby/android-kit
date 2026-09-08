@@ -39,6 +39,33 @@ to choose the preferred anchor edge. The flyout respects RTL and falls back to
 another position when the preferred edge cannot fit within the window. It also
 accepts `offset`, `contentPadding`, `scrollState`, `properties`, and `style`.
 
+## Material menu trial and submenus
+
+The flyout uses Material 3's `DropdownMenuPopup` and its default motion, while
+retaining Kit's floating surface, row styling, scrolling, and root placement.
+This trial pins Material 3 to `1.5.0-alpha27`; other Material components also
+resolve to this release and should be reviewed before publishing.
+
+The standalone content DSL supports nested menus:
+
+```kotlin
+submenu(label = "Share") {
+    item(label = "Copy link", onClick = onCopyLink)
+    submenu(label = "Export") {
+        item(label = "Text", onClick = onExportText)
+    }
+}
+```
+
+Submenus inherit the parent surface style, padding, and popup properties. They
+use Material's end-relative positioning, including RTL and window-edge fallback.
+Back or an outside click dismisses the current submenu; selecting an action
+requests dismissal of every parent before invoking the action. Disabling or
+closing a parent closes its nested menus. Custom content owns its dismissal.
+The existing toolbar item DSL remains unchanged; `submenu` is available in the
+`AndroidKitActionFlyoutScope` content DSL. Custom implementations of that scope
+must implement the new `submenu` member.
+
 ## Migration from floating dropdown
 
 The separate dropdown API has been removed. Consumers must update these names:

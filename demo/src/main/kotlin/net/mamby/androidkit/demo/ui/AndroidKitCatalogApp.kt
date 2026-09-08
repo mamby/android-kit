@@ -169,6 +169,8 @@ internal fun AndroidKitCatalogApp(
                         entry<SettingsRoute> {
                             SettingsScreen(
                                 appLockEnabled = settings.appLockEnabled,
+                                appLockTimeout = settings.appLockTimeout,
+                                onAppLockTimeoutChange = settingsViewModel::setAppLockTimeout,
                                 onAppLockChange = { onAuthenticate(it) },
                                 appLockBusy = settingsViewModel.authenticating,
                                 appLockError = settingsViewModel.authenticationError,

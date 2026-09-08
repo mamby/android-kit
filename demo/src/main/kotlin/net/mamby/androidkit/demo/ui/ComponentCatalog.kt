@@ -116,6 +116,10 @@ enum class ComponentDemo(
         ComponentId.AndroidKitActionFlyout,
         R.string.variation_icon_items,
     ),
+    AndroidKitActionFlyoutSubmenus(
+        ComponentId.AndroidKitActionFlyout,
+        R.string.variation_submenus,
+    ),
 
     AndroidKitFloatingNavigationInteractive(
         ComponentId.AndroidKitFloatingNavigation,

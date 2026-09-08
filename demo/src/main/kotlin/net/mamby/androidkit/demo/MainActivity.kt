@@ -57,8 +57,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        settingsViewModel.onForeground()
+        super.onStart()
+    }
+
     override fun onStop() {
-        if (!isChangingConfigurations) settingsViewModel.lock()
+        if (!isChangingConfigurations) settingsViewModel.onBackground()
         super.onStop()
     }
 

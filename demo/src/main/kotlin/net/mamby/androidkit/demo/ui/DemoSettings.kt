@@ -1,6 +1,7 @@
 package net.mamby.androidkit.demo.ui
 
 import android.content.Context
+import android.os.SystemClock
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,6 +17,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import java.io.IOException
 import kotlin.math.roundToInt
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
@@ -28,12 +31,20 @@ internal data class DemoSettings(
     val demoToggles: Set<DemoToggle> = DemoToggle.entries.filter { it.defaultValue }.toSet(),
     val selectedPageAction: DemoPageAction? = null,
     val appLockEnabled: Boolean = false,
+    val appLockTimeout: DemoAppLockTimeout = DemoAppLockTimeout.Immediately,
     val themeChoice: DemoThemeChoice = DemoThemeChoice.System,
     val floatingSurfaceOpacityLevel: Float = DefaultFloatingSurfaceOpacityLevel,
     val floatingNavigationLayout: DemoFloatingNavigationLayout =
         DemoFloatingNavigationLayout.FiveItemsWithMore,
     val showCompactNavigationLabels: Boolean = false,
 )
+
+enum class DemoAppLockTimeout(val duration: Duration) {
+    Immediately(Duration.ZERO),
+    OneMinute(1.minutes),
+    FiveMinutes(5.minutes),
+    FifteenMinutes(15.minutes),
+}
 
 internal enum class DemoFloatingNavigationLayout(
     val storedValue: String,
@@ -78,6 +89,9 @@ internal class DemoSettingsRepository(context: Context) {
                     it.name == preferences[SelectedPageActionKey]
                 },
                 appLockEnabled = preferences[AppLockEnabledKey] ?: false,
+                appLockTimeout = DemoAppLockTimeout.entries.firstOrNull {
+                    it.name == preferences[AppLockTimeoutKey]
+                } ?: DemoAppLockTimeout.Immediately,
                 themeChoice = DemoThemeChoice.fromStoredValue(
                     preferences[ThemeChoiceKey],
                 ),
@@ -103,6 +117,10 @@ internal class DemoSettingsRepository(context: Context) {
 
     suspend fun setAppLockEnabled(enabled: Boolean) {
         dataStore.edit { it[AppLockEnabledKey] = enabled }
+    }
+
+    suspend fun setAppLockTimeout(timeout: DemoAppLockTimeout) {
+        dataStore.edit { it[AppLockTimeoutKey] = timeout.name }
     }
 
     suspend fun setThemeChoice(choice: DemoThemeChoice) {
@@ -146,6 +164,27 @@ internal class DemoSettingsViewModel(
     private var requestedLockEnabled: Boolean? = null
 
     private var lockGeneration = 0
+    private var backgroundedAt: Long? = null
+
+    fun onBackground() {
+        // Invalidate authentication work that was started before leaving the app.
+        lockGeneration++
+        backgroundedAt = SystemClock.elapsedRealtime()
+        if ((settings.value?.appLockTimeout ?: DemoAppLockTimeout.Immediately) ==
+            DemoAppLockTimeout.Immediately
+        ) {
+            lock()
+        }
+    }
+
+    fun onForeground() {
+        val leftAt = backgroundedAt ?: return
+        backgroundedAt = null
+        val timeout = settings.value?.appLockTimeout ?: DemoAppLockTimeout.Immediately
+        if (SystemClock.elapsedRealtime() - leftAt >= timeout.duration.inWholeMilliseconds) {
+            lock()
+        }
+    }
 
     fun lock() {
         lockGeneration++
@@ -205,6 +244,16 @@ internal class DemoSettingsViewModel(
         }
     }
 
+    fun setAppLockTimeout(timeout: DemoAppLockTimeout) {
+        viewModelScope.launch {
+            try {
+                repository.setAppLockTimeout(timeout)
+            } catch (exception: IOException) {
+                authenticationError = exception.localizedMessage
+            }
+        }
+    }
+
     fun setFloatingSurfaceOpacityLevel(level: Float) {
         viewModelScope.launch {
             repository.setFloatingSurfaceOpacityLevel(level)
@@ -231,6 +280,7 @@ private val Context.demoSettingsDataStore: DataStore<Preferences> by preferences
 
 private val SelectedPageActionKey = stringPreferencesKey("selected_page_action")
 private val AppLockEnabledKey = booleanPreferencesKey("app_lock_enabled")
+private val AppLockTimeoutKey = stringPreferencesKey("app_lock_timeout")
 private val ThemeChoiceKey = stringPreferencesKey("theme_choice")
 private val FloatingSurfaceOpacityLevelKey = floatPreferencesKey(
     "floating_surface_opacity_level",

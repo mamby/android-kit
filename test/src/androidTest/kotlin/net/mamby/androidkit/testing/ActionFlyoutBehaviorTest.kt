@@ -158,6 +158,80 @@ class ActionFlyoutBehaviorTest {
     }
 
     @Test
+    fun nestedActionDismissesAllMenusBeforeInvokingAndReopensCollapsed() {
+        var expanded by mutableStateOf(false)
+        val events = mutableListOf<String>()
+        composeRule.setContent {
+            AndroidKitTheme {
+                Box {
+                    Button(onClick = { expanded = true }) { Text("Open") }
+                    AndroidKitActionFlyout(
+                        expanded = expanded,
+                        onDismissRequest = {
+                            expanded = false
+                            events += "dismiss"
+                        },
+                    ) {
+                        submenu(label = "Export") {
+                            submenu(label = "Format") {
+                                item(label = "Text file", onClick = { events += "export" })
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        composeRule.onNodeWithText("Open").performClick()
+        composeRule.onNodeWithText("Export").performClick()
+        composeRule.onNodeWithText("Format").performClick()
+        composeRule.onNodeWithText("Text file").performClick()
+        composeRule.runOnIdle { assertEquals(listOf("dismiss", "export"), events) }
+        composeRule.onNodeWithText("Export").assertDoesNotExist()
+        composeRule.onNodeWithText("Text file").assertDoesNotExist()
+        composeRule.onNodeWithText("Open").performClick()
+        composeRule.onNodeWithText("Export").assertExists()
+        composeRule.onNodeWithText("Format").assertDoesNotExist()
+    }
+
+    @Test
+    fun backClosesOnlySubmenuAndDisablingParentClosesDescendants() {
+        var expanded by mutableStateOf(true)
+        var enabled by mutableStateOf(true)
+        var dismissCount = 0
+        composeRule.setContent {
+            AndroidKitTheme {
+                Box {
+                    Text("Anchor")
+                    AndroidKitActionFlyout(
+                        expanded = expanded,
+                        enabled = enabled,
+                        onDismissRequest = { expanded = false; dismissCount++ },
+                    ) {
+                        submenu(label = "Export") {
+                            item(label = "Text file", onClick = {})
+                        }
+                        submenu(label = "Unavailable", enabled = false) {
+                            item(label = "Hidden action", onClick = {})
+                        }
+                    }
+                }
+            }
+        }
+        composeRule.onNodeWithText("Unavailable").assertIsNotEnabled()
+        composeRule.onNodeWithText("Export").performClick()
+        composeRule.onNodeWithText("Text file").assertExists()
+        pressBack()
+        composeRule.onNodeWithText("Text file").assertDoesNotExist()
+        composeRule.onNodeWithText("Export").assertExists()
+        composeRule.runOnIdle { assertEquals(0, dismissCount) }
+        composeRule.onNodeWithText("Export").performClick()
+        composeRule.runOnIdle { enabled = false }
+        composeRule.onNodeWithText("Text file").assertDoesNotExist()
+        composeRule.onNodeWithText("Export").assertDoesNotExist()
+        composeRule.runOnIdle { assertEquals(1, dismissCount) }
+    }
+
+    @Test
     fun toolbarFlyoutUsesTheSameActionDismissalBehavior() {
         var actionCount = 0
         composeRule.setContent {
