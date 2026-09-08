@@ -72,6 +72,13 @@
     <string name="variation_button_entry">Entrée bouton</string>
     <string name="variation_toggle_entry">Entrée interrupteur</string>
     <string name="variation_grouped_entries">Entrées groupées</string>
+    <string name="variation_submenus">Sous-menus imbriqués</string>
+    <string name="flyout_demo_export">Exporter</string>
+    <string name="flyout_demo_copy_link">Copier le lien</string>
+    <string name="flyout_demo_document">Document</string>
+    <string name="flyout_demo_pdf">PDF</string>
+    <string name="flyout_demo_plain_text">Texte brut</string>
+    <string name="flyout_demo_image">Image (indisponible)</string>
     <string name="variation_titleless">Sans titre</string>
     <string name="variation_standard">Standard</string>
     <string name="variation_back_navigation">Navigation retour</string>

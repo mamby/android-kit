@@ -72,6 +72,13 @@
     <string name="variation_button_entry">عنصر زر</string>
     <string name="variation_toggle_entry">عنصر تبديل</string>
     <string name="variation_grouped_entries">عناصر مجمّعة</string>
+    <string name="variation_submenus">قوائم فرعية متداخلة</string>
+    <string name="flyout_demo_export">تصدير</string>
+    <string name="flyout_demo_copy_link">نسخ الرابط</string>
+    <string name="flyout_demo_document">مستند</string>
+    <string name="flyout_demo_pdf">PDF</string>
+    <string name="flyout_demo_plain_text">نص عادي</string>
+    <string name="flyout_demo_image">صورة (غير متاحة)</string>
     <string name="variation_titleless">بلا عنوان</string>
     <string name="variation_standard">قياسي</string>
     <string name="variation_back_navigation">التنقل بالرجوع</string>
