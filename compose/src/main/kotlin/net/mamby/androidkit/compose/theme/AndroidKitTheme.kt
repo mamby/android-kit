@@ -184,7 +184,7 @@ public data class AndroidKitDimensions(
     public val floatingNavigationIndicatorSize: Dp = 40.dp,
     public val floatingNavigationItemHorizontalPadding: Dp = 12.dp,
     public val floatingNavigationIconItemHorizontalPadding: Dp = 12.dp,
-    public val floatingNavigationOverflowItemHorizontalPadding: Dp = 18.dp,
+    public val floatingNavigationOverflowItemHorizontalPadding: Dp = 16.dp,
     public val floatingNavigationItemVerticalPadding: Dp = 0.dp,
     public val floatingNavigationLabelSpacing: Dp = 0.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,

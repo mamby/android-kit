@@ -632,6 +632,9 @@ private fun NavigationIcon(
     }
 }
 
+// Reference inset: Material Symbols Home has 160 units of clearance on a 960-unit canvas.
+private const val NavigationIconOpticalInsetRatio = 160f / 960f
+
 @Composable
 private fun <Key : Any> NavigationOverflowFlyout(
     items: List<AndroidKitFloatingNavigationItem<Key>>,
@@ -725,7 +728,9 @@ private fun <Key : Any> NavigationOverflowFlyout(
                         trailingIcon = item.badge,
                         colors = if (selected) selectedItemColors else unselectedItemColors,
                         contentPadding = PaddingValues(
-                            horizontal = dimensions.floatingNavigationOverflowItemHorizontalPadding,
+                            start = dimensions.floatingNavigationOverflowItemHorizontalPadding,
+                            end = dimensions.floatingNavigationOverflowItemHorizontalPadding +
+                                dimensions.floatingNavigationIconSize * NavigationIconOpticalInsetRatio,
                         ),
                     )
                 }
