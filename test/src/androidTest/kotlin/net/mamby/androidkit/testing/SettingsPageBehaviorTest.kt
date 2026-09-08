@@ -18,6 +18,9 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -30,6 +33,8 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
+import net.mamby.androidkit.compose.form.AndroidKitAppLockTimeoutSetting
+import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
@@ -44,6 +49,116 @@ import org.junit.Test
 
 class SettingsPageBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Test
+    fun appLockExtrasWaitForHostAndTimeoutSelectionClosesDialog() {
+        var checked by mutableStateOf(false)
+        var selected by mutableStateOf("0")
+        var requested: String? = null
+        var locks = 0
+        rule.setContent {
+            AndroidKitTheme {
+                AndroidKitSettingsPage {
+                    securitySection(appLock = AndroidKitAppLockSetting(
+                        label = "App lock", checked = checked, onCheckedChange = {},
+                        timeout = AndroidKitAppLockTimeoutSetting(
+                            label = "Lock after leaving", options = timeoutOptions,
+                            selectedId = selected, onSelected = { requested = it },
+                        ),
+                        lockNowLabel = "Lock now", onLockNow = { locks++ },
+                    ))
+                }
+            }
+        }
+        rule.onNodeWithText("App lock").performClick()
+        rule.onNodeWithText("Lock after leaving").assertDoesNotExist()
+        rule.onNodeWithText("Lock now").assertDoesNotExist()
+        rule.runOnIdle { checked = true }
+        rule.onNodeWithText("Lock after leaving").performClick()
+        rule.onNode(isDialog()).assertExists()
+        rule.onNode(hasText("Immediately") and radioRole).assertIsSelected()
+        rule.onNode(hasText("After 5 minutes") and radioRole).performClick()
+        rule.onNode(isDialog()).assertDoesNotExist()
+        rule.runOnIdle { assertEquals("5", requested) }
+        rule.onNodeWithText("Immediately").assertIsDisplayed()
+        rule.runOnIdle { selected = requireNotNull(requested) }
+        rule.onNodeWithText("After 5 minutes").assertIsDisplayed()
+        rule.onNodeWithText("Lock now").performClick()
+        rule.runOnIdle { assertEquals(1, locks) }
+    }
+
+    @Test
+    fun timeoutDialogBackDismissesWithoutChangingSelection() {
+        var requests = 0
+        rule.setContent {
+            AndroidKitTheme {
+                AndroidKitSettingsPage {
+                    securitySection(appLock = AndroidKitAppLockSetting(
+                        label = "App lock", checked = true, onCheckedChange = {},
+                        timeout = AndroidKitAppLockTimeoutSetting(
+                            label = "Timeout", options = timeoutOptions,
+                            selectedId = "5", onSelected = { requests++ },
+                        ),
+                    ))
+                }
+            }
+        }
+        rule.onNodeWithText("Lock now").assertDoesNotExist()
+        rule.onNodeWithText("Timeout").performClick()
+        pressBack()
+        rule.onNode(isDialog()).assertDoesNotExist()
+        rule.runOnIdle { assertEquals(0, requests) }
+        rule.onNodeWithText("Timeout").performClick()
+        rule.onNode(hasText("After 5 minutes") and radioRole).assertIsSelected()
+    }
+
+    @Test
+    fun timeoutDialogCannotOutliveItsEnabledConfiguration() {
+        var checked by mutableStateOf(true)
+        var enabled by mutableStateOf(true)
+        var timeoutEnabled by mutableStateOf(true)
+        var hasTimeout by mutableStateOf(true)
+        var hasSection by mutableStateOf(true)
+        rule.setContent {
+            AndroidKitTheme {
+                AndroidKitSettingsPage {
+                    if (hasSection) {
+                        securitySection(appLock = AndroidKitAppLockSetting(
+                            label = "App lock", checked = checked, onCheckedChange = {}, enabled = enabled,
+                            timeout = if (hasTimeout) AndroidKitAppLockTimeoutSetting(
+                                label = "Timeout", options = timeoutOptions, enabled = timeoutEnabled,
+                                selectedId = "0", onSelected = {},
+                            ) else null,
+                            lockNowLabel = "Lock now", onLockNow = {},
+                        ))
+                    }
+                }
+            }
+        }
+        val removals: List<() -> Unit> = listOf(
+            { checked = false }, { enabled = false }, { timeoutEnabled = false },
+            { hasTimeout = false }, { hasSection = false },
+        )
+        removals.forEach { remove ->
+            rule.onNodeWithText("Timeout").performClick()
+            rule.onNode(isDialog()).assertExists()
+            rule.runOnIdle { remove() }
+            try {
+                rule.onNode(isDialog()).assertDoesNotExist()
+            } catch (failure: AssertionError) {
+                throw AssertionError(
+                    "Dialog remained: checked=$checked enabled=$enabled timeoutEnabled=$timeoutEnabled " +
+                        "hasTimeout=$hasTimeout hasSection=$hasSection", failure,
+                )
+            }
+            if (!enabled) rule.onNodeWithText("Lock now").assertIsNotEnabled()
+            rule.runOnIdle {
+                checked = true; enabled = true; timeoutEnabled = true; hasTimeout = true; hasSection = true
+            }
+            rule.onNode(isDialog()).assertDoesNotExist()
+            rule.onAllNodesWithText("Timeout").assertCountEquals(1)
+        }
+    }
 
     @Test
     fun predefinedIconsAllowHostOverridesAndRestoreDefaults() {
@@ -343,3 +458,11 @@ class SettingsPageBehaviorTest {
         assertEquals(before, rule.onNodeWithText("Open child").fetchSemanticsNode().boundsInRoot.top)
     }
 }
+
+private val timeoutOptions = listOf(
+    AndroidKitSettingsOption("0", "Immediately"),
+    AndroidKitSettingsOption("1", "After 1 minute"),
+    AndroidKitSettingsOption("5", "After 5 minutes"),
+    AndroidKitSettingsOption("15", "After 15 minutes"),
+)
+private val radioRole = SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.RadioButton)

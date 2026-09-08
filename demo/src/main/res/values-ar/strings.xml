@@ -114,4 +114,5 @@
     <string name="settings_app_lock_description">طلب التحقق من الهوية عند فتح التطبيق أو العودة إليه.</string>
     <string name="app_lock_unavailable">أعدّ قفل الشاشة أو المقاييس الحيوية في إعدادات الجهاز، ثم حاول مرة أخرى.</string>
     <string name="app_lock_authenticate">أكّد هويتك للمتابعة</string>
+    <string name="settings_lock_now">قفل الآن</string>
 </resources>

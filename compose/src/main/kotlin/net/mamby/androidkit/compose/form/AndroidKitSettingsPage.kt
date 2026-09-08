@@ -16,9 +16,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -26,6 +28,7 @@ import androidx.compose.runtime.NonSkippableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -101,6 +104,21 @@ public data class AndroidKitFloatingOpacitySetting(
     }
 }
 
+/** Host-defined timeout choices. IDs have no duration semantics inside Android Kit. */
+public data class AndroidKitAppLockTimeoutSetting(
+    public val label: String,
+    public val options: List<AndroidKitSettingsOption>,
+    public val selectedId: String,
+    public val onSelected: (String) -> Unit,
+    public val enabled: Boolean = true,
+) {
+    init {
+        require(options.isNotEmpty()) { "Timeout options must not be empty." }
+        require(options.map { it.id }.distinct().size == options.size) { "Timeout option IDs must be unique." }
+        require(options.any { it.id == selectedId }) { "The selected ID must identify a timeout option." }
+    }
+}
+
 public data class AndroidKitAppLockSetting(
     public val label: String,
     public val checked: Boolean,
@@ -109,7 +127,16 @@ public data class AndroidKitAppLockSetting(
     public val enabled: Boolean = true,
     /** Optional row icon override; null uses the predefined app-lock icon. */
     public val icon: ImageVector? = null,
-)
+    /** Shown only while checked. The host persists and enforces the selected timeout. */
+    public val timeout: AndroidKitAppLockTimeoutSetting? = null,
+    public val lockNowLabel: String? = null,
+    /** Optional host lock action, shown only while checked. Requires a localized [lockNowLabel]. */
+    public val onLockNow: (() -> Unit)? = null,
+) {
+    init {
+        require(onLockNow == null || !lockNowLabel.isNullOrBlank()) { "Lock now requires a localized label." }
+    }
+}
 
 @DslMarker
 public annotation class AndroidKitSettingsPageDsl
@@ -181,8 +208,11 @@ public fun AndroidKitSettingsPage(
         }
     }
     val picker = scope.pickers[activePicker]?.takeIf { it.selection.enabled }
+    val timeoutPicker = scope.timeoutPickers[activePicker]
     if (picker != null) {
         key(activePicker) { SettingsPicker(picker) { activePicker = null } }
+    } else if (timeoutPicker != null) {
+        key(activePicker) { AppLockTimeoutDialog(timeoutPicker) { activePicker = null } }
     } else if (activePicker != null) {
         androidx.compose.runtime.LaunchedEffect(activePicker) { activePicker = null }
     }
@@ -198,6 +228,7 @@ private data class SettingsPickerDefinition(
 private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : AndroidKitSettingsPageScope {
     val items = mutableStateListOf<SettingsPageItem>()
     val pickers = mutableMapOf<String, SettingsPickerDefinition>()
+    val timeoutPickers = mutableStateMapOf<String, AndroidKitAppLockTimeoutSetting>()
     private val keys = mutableSetOf<String>()
 
     private fun registerItem(item: SettingsPageItem) {
@@ -217,6 +248,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         if (index >= 0) items.removeAt(index)
         keys.remove(key)
         pickers.keys.removeAll { it.endsWith(":$key") }
+        timeoutPickers.keys.removeAll { it.endsWith(":$key") }
     }
 
     @Composable
@@ -233,7 +265,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
             registerItem(SettingsPageItem(key) {
                 SettingsSection(entries = entries.entries, label = label, description = description)
             })
-            DisposableEffect(key) {
+            DisposableEffect(this@SettingsPageScopeImpl, key) {
                 onDispose { removeItem(key) }
             }
         } else {
@@ -304,14 +336,63 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         appLock: AndroidKitAppLockSetting?,
         content: @Composable AndroidKitSettingSectionScope.() -> Unit,
     ) {
+        val timeoutKey = "app-lock-timeout:$key"
+        val timeout = appLock?.timeout?.takeIf { appLock.checked }
+        if (timeout != null && appLock.enabled && timeout.enabled) {
+            timeoutPickers[timeoutKey] = timeout
+        } else {
+            timeoutPickers.remove(timeoutKey)
+        }
         section(key, label) {
             appLock?.let {
                 toggle(it.label, it.checked, it.onCheckedChange, supportingText = it.supportingText,
                     icon = it.icon ?: AndroidKitIcons.AppLock, enabled = it.enabled)
+                timeout?.let { selection ->
+                    button(
+                        label = selection.label,
+                        supportingText = selection.options.first { option -> option.id == selection.selectedId }.label,
+                        enabled = it.enabled && selection.enabled,
+                        onClick = { openPicker(timeoutKey) },
+                    )
+                }
+                if (it.checked && it.onLockNow != null) {
+                    button(label = requireNotNull(it.lockNowLabel), onClick = it.onLockNow, enabled = it.enabled)
+                }
             }
             content()
         }
     }
+}
+
+@Composable
+private fun AppLockTimeoutDialog(selection: AndroidKitAppLockTimeoutSetting, onDismiss: () -> Unit) {
+    val dimensions = AndroidKitThemeTokens.dimensions
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(selection.label) },
+        confirmButton = {},
+        text = {
+            LazyColumn(modifier = Modifier.fillMaxWidth().selectableGroup()) {
+                items(selection.options, key = { it.id }) { option ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                            .selectable(
+                                selected = option.id == selection.selectedId,
+                                role = Role.RadioButton,
+                                onClick = { onDismiss(); selection.onSelected(option.id) },
+                            )
+                            .heightIn(min = dimensions.minimumTouchTarget)
+                            .padding(vertical = dimensions.settingSectionEntryVerticalPadding),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+                    ) {
+                        RadioButton(selected = option.id == selection.selectedId, onClick = null)
+                        Text(option.label, style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        },
+    )
 }
 
 @Composable

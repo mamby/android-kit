@@ -168,6 +168,7 @@ internal fun AndroidKitCatalogApp(
                                 onAppLockChange = { onAuthenticate(it) },
                                 appLockBusy = settingsViewModel.authenticating,
                                 appLockError = settingsViewModel.authenticationError,
+                                onLockNow = settingsViewModel::lock,
                                 themeChoice = settings.themeChoice,
                                 onThemeChoice = settingsViewModel::setThemeChoice,
                                 floatingSurfaceOpacityLevel =

@@ -115,4 +115,5 @@
     <string name="settings_app_lock_description">Require authentication when opening or returning to the app.</string>
     <string name="app_lock_unavailable">Set up a screen lock or biometrics in device settings, then try again.</string>
     <string name="app_lock_authenticate">Confirm your identity to continue</string>
+    <string name="settings_lock_now">Lock now</string>
 </resources>

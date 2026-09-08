@@ -24,6 +24,7 @@ fun SettingsScreen(
     onAppLockChange: (Boolean) -> Unit,
     appLockBusy: Boolean,
     appLockError: String?,
+    onLockNow: () -> Unit,
     themeChoice: DemoThemeChoice,
     onThemeChoice: (DemoThemeChoice) -> Unit,
     floatingSurfaceOpacityLevel: Float,
@@ -92,6 +93,8 @@ fun SettingsScreen(
                 onCheckedChange = onAppLockChange,
                 enabled = !appLockBusy,
                 supportingText = appLockError ?: stringResource(R.string.settings_app_lock_description),
+                lockNowLabel = stringResource(R.string.settings_lock_now),
+                onLockNow = onLockNow,
             ),
         )
         section(key = "about", label = stringResource(R.string.about_section)) {

@@ -17,9 +17,7 @@ AndroidKitSettingsPage(title = settingsTitle, onBack = onBack) {
         toggle(label = autoplayLabel, checked = autoplay, onCheckedChange = onAutoplay)
         navigation(label = downloadsLabel, onClick = onOpenDownloads)
     }
-    securitySection(label = securityLabel, appLock = appLockSetting) {
-        if (appLockEnabled) button(label = lockNowLabel, onClick = onLockNow)
-    }
+    securitySection(label = securityLabel, appLock = appLockSetting)
     item(key = "notice") { Text(notice) }
 }
 ```
@@ -69,7 +67,36 @@ their theme from `onValueChange` for live preview and save the current value fro
 
 `AndroidKitAppLockSetting` is controlled by host-confirmed state. Hosts perform
 authentication and persistence; a requested change does not optimistically
-change the switch. Additional security controls use the section entry DSL.
+change the switch. Optional `timeout` and `onLockNow` configuration add the shared
+timeout row and Lock now action only while `checked` is true. `enabled = false`
+disables all three controls. Supply a localized `lockNowLabel` with `onLockNow`.
+
+```kotlin
+AndroidKitAppLockSetting(
+    label = appLockLabel,
+    checked = appLockEnabled,
+    onCheckedChange = onAppLockChange,
+    timeout = AndroidKitAppLockTimeoutSetting(
+        label = timeoutLabel,
+        options = timeoutOptions,
+        selectedId = selectedTimeoutId,
+        onSelected = onTimeoutSelected,
+    ),
+    lockNowLabel = lockNowLabel,
+    onLockNow = onLockNow,
+)
+```
+
+Timeout options use `AndroidKitSettingsOption` with unique IDs and a selected ID
+present in the list; no system option is needed. The row shows the selected label
+and opens a Material radio-choice dialog. Selection closes it immediately and
+invokes the host callback, without a Done button or optimistic state change.
+Back or outside dismissal leaves the selection unchanged. Removing the timeout
+or its section, unchecking app lock, or disabling either the app-lock setting or
+the timeout dismisses an open dialog. Hosts retain authentication, persistence,
+duration semantics, and lock enforcement. Other security controls can still use
+the section entry DSL. Omitting the new optional fields preserves toggle-only
+source usage; consumers must recompile against the updated artifact.
 
 ## Subpages and spacing
 
