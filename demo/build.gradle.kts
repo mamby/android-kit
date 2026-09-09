@@ -8,6 +8,7 @@ plugins {
 android {
     namespace = "net.mamby.androidkit.demo"
     compileSdk = 37
+    ndkVersion = "30.0.16248370"
 
     defaultConfig {
         applicationId = "net.mamby.androidkit.demo"

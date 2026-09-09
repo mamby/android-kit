@@ -646,11 +646,12 @@ private fun DemoToggleRow(
     onToggleChange: (DemoToggle, Boolean) -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(toggle.label)) },
         trailingContent = {
             Switch(checked = toggle in toggles, onCheckedChange = { onToggleChange(toggle, it) })
         },
-    )
+    ) {
+        Text(stringResource(toggle.label))
+    }
 }
 
 @Composable
@@ -676,8 +677,9 @@ private fun NavigationDemoToggle(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(label) },
         supportingContent = { Text(supportingText) },
         trailingContent = { Switch(checked = checked, onCheckedChange = onCheckedChange) },
-    )
+    ) {
+        Text(label)
+    }
 }

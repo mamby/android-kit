@@ -217,6 +217,7 @@ public data class AndroidKitDimensions(
     @Deprecated("Content protection now uses a background gradient instead of blur.")
     public val contentProtectionBlurRadius: Dp = 0.dp,
     public val contentProtectionFadeLength: Dp = 4.dp,
+    public val pageTitlelessTopPadding: Dp = 12.dp,
 )
 
 @Immutable
