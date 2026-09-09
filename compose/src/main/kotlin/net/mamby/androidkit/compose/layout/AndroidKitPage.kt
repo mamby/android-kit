@@ -120,7 +120,7 @@ public fun AndroidKitPage(
                             additionalTop = if (hasTitleBar) {
                                 dimensions.spaceMedium
                             } else {
-                                statusBarClearance
+                                statusBarClearance + dimensions.pageTitleBarVerticalPadding
                             },
                             additionalBottom = navigationBottomClearance +
                                 floatingActionClearance,
