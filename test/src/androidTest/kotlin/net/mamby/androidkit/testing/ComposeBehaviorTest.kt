@@ -1,5 +1,8 @@
 package net.mamby.androidkit.testing
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -8,9 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -33,7 +34,6 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
@@ -284,9 +284,7 @@ class ComposeBehaviorTest {
                     ) {
                         AndroidKitPage(
                             title = "Clearance",
-                            floatingActionButton = {
-                                AndroidKitFloatingActionButton(onClick = {}) {}
-                            },
+                            floatingActionButton = AndroidKitFloatingAction.Button(onClick = {}, icon = materialSymbol(R.drawable.ic_symbol_edit), label = "Action"),
                         ) { contentPadding ->
                             bottomPadding = contentPadding.calculateBottomPadding()
                             Box(Modifier.fillMaxSize())

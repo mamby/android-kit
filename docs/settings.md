@@ -18,17 +18,19 @@ AndroidKitSettingsPage(title = settingsTitle, onBack = onBack) {
         navigation(label = downloadsLabel, onClick = onOpenDownloads)
     }
     securitySection(label = securityLabel, appLock = appLockSetting)
-    item(key = "notice") { Text(notice) }
+    section(key = "notice") { info(label = notice) }
 }
 ```
 
-Sections appear in declaration order. Custom section and page-item keys must be
+Sections appear in declaration order. Section keys must be
 unique strings. General defaults to key `general`; Security defaults to
 `security`. Null predefined configurations hide the corresponding entries.
 Empty sections, including custom sections, produce no heading, divider, or gap.
-The section DSL is composable, so labels can be resolved with `stringResource`
-where entries are declared. Custom `item` content inside a section receives a
-`RowScope` and the same entry padding as built-in controls.
+Page and section builders are non-composable. Resolve `stringResource`, painters,
+and other composable inputs before entering them. Use `info(label, value,
+supportingText, icon)` for read-only rows; `button`, `navigation`, `toggle`, and
+`slider` declare Kit-rendered controls. Arbitrary page and row `item` slots are
+removed. App-owned subpages continue to use normal page body content.
 
 ## Host-owned choices and state
 

@@ -1,7 +1,6 @@
 package net.mamby.androidkit.demo.ui.screen
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -40,88 +39,110 @@ fun SettingsScreen(
     val localeManager = remember(context) {
         AppLocaleManager(context, SupportedLanguageTags.toSet())
     }
-    AndroidKitSettingsPage(title = stringResource(R.string.settings_title)) {
-        generalSection(
-            label = stringResource(R.string.settings_general),
-            language = AndroidKitLanguageSetting(
-                selection = AndroidKitSettingsSelection(
-                    label = stringResource(R.string.language_section),
-                    options = SupportedLanguageTags.map { tag ->
-                        AndroidKitSettingsOption(tag, nativeLanguageName(tag))
-                    },
-                    selectedId = localeManager.selectedLanguageTag() ?: "system",
-                    onSelected = { id -> localeManager.setApplicationLanguage(id.takeUnless { it == "system" }) },
-                    closeContentDescription = stringResource(R.string.action_close),
-                    systemOption = AndroidKitSettingsSystemOption(
-                        id = "system",
-                        label = stringResource(R.string.language_system),
-                        currentValueLabel = localeManager.systemLocale().getDisplayLanguage(displayLocale),
-                    ),
-                ),
-                searchLabel = stringResource(R.string.settings_search_languages),
-                emptyResultsLabel = stringResource(R.string.settings_no_languages),
-            ),
-            theme = AndroidKitSettingsSelection(
-                label = stringResource(R.string.settings_theme),
-                options = listOf(
-                    AndroidKitSettingsOption(DemoThemeChoice.Light.name, stringResource(R.string.theme_light)),
-                    AndroidKitSettingsOption(DemoThemeChoice.Dark.name, stringResource(R.string.theme_dark)),
-                    AndroidKitSettingsOption(DemoThemeChoice.Prism.name, stringResource(R.string.theme_prism)),
-                ),
-                selectedId = themeChoice.name,
-                onSelected = { onThemeChoice(DemoThemeChoice.valueOf(it)) },
-                closeContentDescription = stringResource(R.string.action_close),
-                systemOption = AndroidKitSettingsSystemOption(
-                    id = DemoThemeChoice.System.name,
-                    label = stringResource(R.string.language_system),
-                    currentValueLabel = stringResource(
+    val settingsGeneralText = stringResource(R.string.settings_general)
+    val languageSectionText = stringResource(R.string.language_section)
+    val actionCloseText = stringResource(R.string.action_close)
+    val languageSystemText = stringResource(R.string.language_system)
+    val settingsSearchLanguagesText = stringResource(R.string.settings_search_languages)
+    val settingsNoLanguagesText = stringResource(R.string.settings_no_languages)
+    val settingsThemeText = stringResource(R.string.settings_theme)
+    val themeLightText = stringResource(R.string.theme_light)
+    val themeDarkText = stringResource(R.string.theme_dark)
+    val themePrismText = stringResource(R.string.theme_prism)
+    val systemThemeText = stringResource(
                         if (isSystemInDarkTheme()) R.string.theme_dark else R.string.theme_light,
-                    ),
-                ),
-            ),
-            floatingOpacity = AndroidKitFloatingOpacitySetting(
-                label = stringResource(R.string.floating_surface_opacity),
-                value = floatingSurfaceOpacityLevel,
-                minimumLabel = stringResource(R.string.settings_min),
-                maximumLabel = stringResource(R.string.settings_max),
-                onValueChange = onFloatingSurfaceOpacityLevelChange,
-                onValueChangeFinished = onFloatingSurfaceOpacityLevelChangeFinished,
-                supportingText = stringResource(R.string.floating_surface_opacity_description),
-            ),
-        )
-        securitySection(
-            label = stringResource(R.string.settings_security),
-            appLock = AndroidKitAppLockSetting(
-                label = stringResource(R.string.settings_app_lock),
-                checked = appLockEnabled,
-                onCheckedChange = onAppLockChange,
-                enabled = !appLockBusy,
-                supportingText = appLockError ?: stringResource(R.string.settings_app_lock_description),
-                lockNowLabel = stringResource(R.string.settings_lock_now),
-                onLockNow = onLockNow,
-                timeout = AndroidKitAppLockTimeoutSetting(
-                    label = stringResource(R.string.settings_app_lock_timeout),
-                    options = DemoAppLockTimeout.entries.map { timeout ->
-                        AndroidKitSettingsOption(
-                            id = timeout.name,
-                            label = stringResource(
+                    )
+    val floatingSurfaceOpacityText = stringResource(R.string.floating_surface_opacity)
+    val settingsMinText = stringResource(R.string.settings_min)
+    val settingsMaxText = stringResource(R.string.settings_max)
+    val floatingSurfaceOpacityDescriptionText = stringResource(R.string.floating_surface_opacity_description)
+    val settingsSecurityText = stringResource(R.string.settings_security)
+    val settingsAppLockText = stringResource(R.string.settings_app_lock)
+    val settingsAppLockDescriptionText = stringResource(R.string.settings_app_lock_description)
+    val settingsLockNowText = stringResource(R.string.settings_lock_now)
+    val settingsAppLockTimeoutText = stringResource(R.string.settings_app_lock_timeout)
+    val timeoutOptions = DemoAppLockTimeout.entries.map { timeout ->
+        AndroidKitSettingsOption(id = timeout.name,
+            label = stringResource(
                                 when (timeout) {
                                     DemoAppLockTimeout.Immediately -> R.string.settings_lock_immediately
                                     DemoAppLockTimeout.OneMinute -> R.string.settings_lock_after_one_minute
                                     DemoAppLockTimeout.FiveMinutes -> R.string.settings_lock_after_five_minutes
                                     DemoAppLockTimeout.FifteenMinutes -> R.string.settings_lock_after_fifteen_minutes
                                 },
-                            ),
-                        )
+                            )
+        )
+    }
+    val aboutSectionText = stringResource(R.string.about_section)
+    val aboutBodyText = stringResource(R.string.about_body)
+    AndroidKitSettingsPage(title = stringResource(R.string.settings_title)) {
+        generalSection(
+            label = settingsGeneralText,
+            language = AndroidKitLanguageSetting(
+                selection = AndroidKitSettingsSelection(
+                    label = languageSectionText,
+                    options = SupportedLanguageTags.map { tag ->
+                        AndroidKitSettingsOption(tag, nativeLanguageName(tag))
                     },
+                    selectedId = localeManager.selectedLanguageTag() ?: "system",
+                    onSelected = { id -> localeManager.setApplicationLanguage(id.takeUnless { it == "system" }) },
+                    closeContentDescription = actionCloseText,
+                    systemOption = AndroidKitSettingsSystemOption(
+                        id = "system",
+                        label = languageSystemText,
+                        currentValueLabel = localeManager.systemLocale().getDisplayLanguage(displayLocale),
+                    ),
+                ),
+                searchLabel = settingsSearchLanguagesText,
+                emptyResultsLabel = settingsNoLanguagesText,
+            ),
+            theme = AndroidKitSettingsSelection(
+                label = settingsThemeText,
+                options = listOf(
+                    AndroidKitSettingsOption(DemoThemeChoice.Light.name, themeLightText),
+                    AndroidKitSettingsOption(DemoThemeChoice.Dark.name, themeDarkText),
+                    AndroidKitSettingsOption(DemoThemeChoice.Prism.name, themePrismText),
+                ),
+                selectedId = themeChoice.name,
+                onSelected = { onThemeChoice(DemoThemeChoice.valueOf(it)) },
+                closeContentDescription = actionCloseText,
+                systemOption = AndroidKitSettingsSystemOption(
+                    id = DemoThemeChoice.System.name,
+                    label = languageSystemText,
+                    currentValueLabel = systemThemeText,
+                ),
+            ),
+            floatingOpacity = AndroidKitFloatingOpacitySetting(
+                label = floatingSurfaceOpacityText,
+                value = floatingSurfaceOpacityLevel,
+                minimumLabel = settingsMinText,
+                maximumLabel = settingsMaxText,
+                onValueChange = onFloatingSurfaceOpacityLevelChange,
+                onValueChangeFinished = onFloatingSurfaceOpacityLevelChangeFinished,
+                supportingText = floatingSurfaceOpacityDescriptionText,
+            ),
+        )
+        securitySection(
+            label = settingsSecurityText,
+            appLock = AndroidKitAppLockSetting(
+                label = settingsAppLockText,
+                checked = appLockEnabled,
+                onCheckedChange = onAppLockChange,
+                enabled = !appLockBusy,
+                supportingText = appLockError ?: settingsAppLockDescriptionText,
+                lockNowLabel = settingsLockNowText,
+                onLockNow = onLockNow,
+                timeout = AndroidKitAppLockTimeoutSetting(
+                    label = settingsAppLockTimeoutText,
+                    options = timeoutOptions,
                     selectedId = appLockTimeout.name,
                     onSelected = { onAppLockTimeoutChange(DemoAppLockTimeout.valueOf(it)) },
                 ),
             ),
         )
-        section(key = "about", label = stringResource(R.string.about_section)) {
-            item { Text(stringResource(R.string.about_body)) }
+        section(key = "about", label = aboutSectionText) {
+            info(label = aboutBodyText)
         }
-        item(key = "scroll-content") { DemoScrollContent() }
+
     }
 }

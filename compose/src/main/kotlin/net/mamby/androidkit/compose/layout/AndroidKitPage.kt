@@ -1,5 +1,7 @@
 package net.mamby.androidkit.compose.layout
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,10 +16,8 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +26,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitAction
+import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
+import net.mamby.androidkit.compose.action.RenderFloatingAction
 import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
 import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
@@ -50,14 +52,13 @@ public fun AndroidKitPage(
     onBack: (() -> Unit)? = null,
     actions: List<AndroidKitActionItem> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
-    floatingActionButton: @Composable () -> Unit = {},
+    floatingActionButton: AndroidKitFloatingAction? = null,
     style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
     titleBarStyle: AndroidKitPageTitleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
     applyImePadding: Boolean = true,
-    topBar: (@Composable (visible: Boolean) -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit,
 ): Unit {
     var titleBarVisible by rememberSaveable(titleBarImmersiveMode) { mutableStateOf(true) }
@@ -66,8 +67,7 @@ public fun AndroidKitPage(
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
     val statusBarClearance = measuredContentPadding.calculateTopPadding()
     val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
-    val hasTitleBar = topBar != null ||
-        title != null ||
+    val hasTitleBar = title != null ||
         onBack != null ||
         actions.any { it is AndroidKitAction }
     AndroidKitPageLayout(
@@ -81,7 +81,7 @@ public fun AndroidKitPage(
         contentWindowInsets = measuredContentInsets,
         floatingActionMargin = floatingActionMargin,
         floatingActionAlignment = floatingActionAlignment,
-        floatingActionButton = floatingActionButton,
+        floatingActionButton = { RenderFloatingAction(floatingActionButton) },
     ) { floatingActionHeight ->
         val floatingActionClearance = if (floatingActionHeight == 0.dp) {
             0.dp
@@ -94,9 +94,6 @@ public fun AndroidKitPage(
             contentWindowInsets = measuredContentInsets.only(WindowInsetsSides.Horizontal),
             topBar = {
                 if (hasTitleBar) {
-                    if (topBar != null) {
-                        topBar(titleBarVisible)
-                    } else {
                         AndroidKitPageTitleBar(
                             title = title,
                             onBack = onBack,
@@ -104,7 +101,6 @@ public fun AndroidKitPage(
                             visible = titleBarVisible,
                             style = titleBarStyle,
                         )
-                    }
                 }
             },
             content = { contentPadding ->

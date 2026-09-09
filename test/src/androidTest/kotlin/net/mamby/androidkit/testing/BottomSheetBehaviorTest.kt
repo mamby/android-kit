@@ -1,5 +1,7 @@
 package net.mamby.androidkit.testing
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,10 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -298,14 +298,6 @@ class BottomSheetBehaviorTest {
                     title = SheetTitle,
                     onDismiss = {},
                     scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
-                    header = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(64.dp)
-                                .testTag(SheetHeaderTag),
-                        )
-                    },
                 ) { managedContentPadding ->
                     LazyColumn(
                         modifier = Modifier
@@ -324,7 +316,7 @@ class BottomSheetBehaviorTest {
             }
         }
 
-        val headerBounds = composeRule.onNodeWithTag(SheetHeaderTag)
+        val headerBounds = composeRule.onNodeWithTag("AndroidKitSheetChrome", useUnmergedTree = true)
             .fetchSemanticsNode()
             .boundsInRoot
         val viewportBounds = composeRule.onNodeWithTag(ManagedScrollTag)
@@ -360,14 +352,6 @@ class BottomSheetBehaviorTest {
                         chromeContainerColor = chromeBaseColor,
                     ),
                     scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
-                    header = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(64.dp)
-                                .testTag(OpacitySheetHeaderTag),
-                        )
-                    },
                 ) { managedContentPadding ->
                     LazyColumn(
                         modifier = Modifier
@@ -381,11 +365,11 @@ class BottomSheetBehaviorTest {
             }
         }
 
-        val translucentPixels = composeRule.onNodeWithTag(OpacitySheetHeaderTag)
+        val translucentPixels = composeRule.onNodeWithTag("AndroidKitSheetChrome", useUnmergedTree = true)
             .captureToImage()
             .toPixelMap()
         val sampleX = translucentPixels.width / 2
-        val sampleY = translucentPixels.height / 2
+        val sampleY = 1
         assertColorClose(
             expected = chromeBaseColor
                 .copy(alpha = MinimumRenderedFloatingSurfaceAlpha)
@@ -397,7 +381,7 @@ class BottomSheetBehaviorTest {
             opacityLevel = AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel
         }
         composeRule.waitForIdle()
-        val opaquePixels = composeRule.onNodeWithTag(OpacitySheetHeaderTag)
+        val opaquePixels = composeRule.onNodeWithTag("AndroidKitSheetChrome", useUnmergedTree = true)
             .captureToImage()
             .toPixelMap()
 
@@ -420,7 +404,7 @@ class BottomSheetBehaviorTest {
                         showChrome = false,
                         sheetContentPadding = PaddingValues.Zero,
                         contentBottomPadding = 0.dp,
-                        dragHandle = null,
+                        showDragHandle = false,
                         contentWindowInsets = WindowInsets(0, 0, 0, TestBottomInsetPx),
                     ) { managedContentPadding ->
                         LazyColumn(

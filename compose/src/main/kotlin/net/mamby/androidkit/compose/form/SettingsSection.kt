@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -53,7 +52,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 public annotation class AndroidKitSettingSectionDsl
 
 @AndroidKitSettingSectionDsl
-public interface AndroidKitSettingSectionScope {
+public sealed interface AndroidKitSettingSectionScope {
     public fun button(
         label: String,
         onClick: () -> Unit,
@@ -99,10 +98,9 @@ public interface AndroidKitSettingSectionScope {
         colors: SliderColors? = null,
     ): Unit
 
-    public fun item(
-        modifier: Modifier = Modifier,
-        content: @Composable RowScope.() -> Unit,
-    ): Unit
+    public fun info(label: String, value: String? = null, supportingText: String? = null,
+        icon: ImageVector? = null, modifier: Modifier = Modifier): Unit
+
 }
 
 @Composable
@@ -247,12 +245,11 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
         )
     }
 
-    override fun item(
-        modifier: Modifier,
-        content: @Composable RowScope.() -> Unit,
-    ) {
-        entries += SettingsEntryDefinition.Custom(modifier, content)
+    override fun info(label: String, value: String?, supportingText: String?,
+        icon: ImageVector?, modifier: Modifier) {
+        entries += SettingsEntryDefinition.Info(label, value, supportingText, icon, modifier)
     }
+
 }
 
 internal sealed interface SettingsEntryDefinition {
@@ -299,14 +296,14 @@ internal sealed interface SettingsEntryDefinition {
         val isOpacitySlider: Boolean = false,
     ) : SettingsEntryDefinition
 
-    class Custom(
+    class Info(
+        override val label: String,
+        val value: String?,
+        override val supportingText: String?,
+        override val icon: ImageVector?,
         override val modifier: Modifier,
-        val content: @Composable RowScope.() -> Unit,
-    ) : SettingsEntryDefinition {
-        override val label: String = ""
-        override val supportingText: String? = null
-        override val icon: ImageVector? = null
-    }
+    ) : SettingsEntryDefinition
+
 }
 
 @Composable
@@ -318,15 +315,15 @@ private fun SettingsEntry(
     is SettingsEntryDefinition.Button -> SettingsButtonEntry(entry, style, contentPadding)
     is SettingsEntryDefinition.Slider -> SettingsSliderEntry(entry, style, contentPadding)
     is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry, style, contentPadding)
-    is SettingsEntryDefinition.Custom -> Row(
-        modifier = entry.modifier
-            .fillMaxWidth()
-            .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
-            .padding(contentPadding),
-        horizontalArrangement = Arrangement.spacedBy(AndroidKitThemeTokens.dimensions.spaceMedium),
-        verticalAlignment = Alignment.CenterVertically,
-        content = entry.content,
-    )
+    is SettingsEntryDefinition.Info -> SettingsEntryContent(
+        label = entry.label, supportingText = entry.supportingText, icon = entry.icon,
+        modifier = entry.modifier.fillMaxWidth()
+            .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget),
+        style = style, contentPadding = contentPadding,
+    ) {
+        entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }
+    }
+
 }
 
 @Composable

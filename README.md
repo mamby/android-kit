@@ -29,12 +29,13 @@ The sharing boundaries and stabilization order are recorded in
 All Android Kit Compose components must be descendants of `AndroidKitTheme`.
 They fail fast when the theme is missing, and consumer styling is supplied as a
 custom `AndroidKitThemeDefinition` so every component uses one coherent design
-system. Public components also accept per-instance styles and focused layout or
-content overrides; those overrides default to the nearest Android Kit theme and
+system. Public components accept per-instance styles and typed data, state, and callbacks.
+Kit owns control rendering and chrome; app body content remains composable inside
+pages, cards, sheets, and navigation. Styles default to the nearest Kit theme and
 do not change existing component appearance unless supplied explicitly.
 
 Use [`AndroidKitActionFlyout`](docs/action-flyout.md) for anchored action menus
-and custom dropdown content, including menus opened from standalone buttons.
+with typed entries, including menus opened from standalone buttons.
 
 Use [`AndroidKitSettingsPage`](docs/settings.md) for shared settings presentation,
 optional host-configured controls, custom sections, and host-owned subpages.
@@ -43,6 +44,8 @@ Language lists and all setting values belong to the host application.
 Use [`AndroidKitLockPage`](docs/lock-page.md) for a title-free lock screen with
 progress and retry feedback. Authentication, lock timing and navigation belong
 to the host application.
+
+See [the component API contract](docs/component-contract.md) for ownership and migration.
 
 ## Build the catalog
 

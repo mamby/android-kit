@@ -1,5 +1,11 @@
 package net.mamby.androidkit.compose.form
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
+import net.mamby.androidkit.compose.action.RenderFloatingAction
+import androidx.compose.material3.OutlinedTextField
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -47,11 +53,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,6 +69,7 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -97,6 +102,14 @@ public object AndroidKitBottomSheetDefaults {
     public const val MaximumHeightFraction: Float = 0.90f
 }
 
+/** State and events for an optional pinned search field in sheet chrome. */
+public class AndroidKitSheetSearch(
+    public val query: String,
+    public val onQueryChange: (String) -> Unit,
+    public val label: String,
+    public val enabled: Boolean = true,
+)
+
 /**
  * Displays modal sheet content with persistent sheet chrome.
  *
@@ -106,8 +119,7 @@ public object AndroidKitBottomSheetDefaults {
  * bars, and [floatingAction] while the viewport remains edge-to-edge. [sheetContentPadding] is
  * applied inside the chrome and included in content clearance rather than insetting the viewport.
  * The floating action stays
- * above the IME when it is visible. [actions] use the default header; a custom [header] owns all
- * of its chrome. An explicitly supplied
+ * above the IME when it is visible. [actions] and [search] are rendered in Kit-owned chrome. An explicitly supplied
  * [AndroidKitBottomSheetStyle.chromeContainerColor] selects the chrome's base color; its rendered
  * alpha still comes from the theme's shared floating-surface opacity.
  */
@@ -137,18 +149,14 @@ public fun AndroidKitBottomSheet(
     ),
     contentBottomPadding: Dp = AndroidKitThemeTokens.dimensions.bottomSheetBottomPadding,
     chromeContentSpacing: Dp = AndroidKitThemeTokens.dimensions.bottomSheetChromeContentSpacing,
-    dragHandle: (@Composable ColumnScope.() -> Unit)? = {
-        val dimensions = AndroidKitThemeTokens.dimensions
-        BottomSheetDragHandle(dimensions = dimensions, color = style.dragHandleColor)
-        Spacer(modifier = Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
-    },
-    header: (@Composable (onDismiss: () -> Unit) -> Unit)? = null,
+    showDragHandle: Boolean = true,
+    search: AndroidKitSheetSearch? = null,
     contentWindowInsets: WindowInsets = WindowInsets.safeDrawing.exclude(WindowInsets.ime).only(
         WindowInsetsSides.Top + WindowInsetsSides.Bottom,
     ),
     skipPartiallyExpanded: Boolean = true,
     dismissOnBackPress: Boolean = onBack == null,
-    floatingAction: @Composable () -> Unit = {},
+    floatingAction: AndroidKitFloatingAction? = null,
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
     content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
@@ -269,13 +277,13 @@ public fun AndroidKitBottomSheet(
                                 contentScrollHandoff.onGestureStarted()
                             }
                         },
-                    showChrome = showChrome || dragHandle != null,
+                    showChrome = showChrome || showDragHandle,
                     chromeContentSpacing = if (showChrome) chromeContentSpacing else 0.dp,
                     sheetContentPadding = sheetContentPadding,
                     contentBottomPadding = contentBottomPadding,
                     floatingAction = {
                         Box(modifier = Modifier.padding(horizontalSheetPadding)) {
-                            floatingAction()
+                            RenderFloatingAction(floatingAction)
                         }
                     },
                     floatingActionAlignment = floatingActionAlignment,
@@ -288,13 +296,15 @@ public fun AndroidKitBottomSheet(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(chromeContainerColor)
+                                .testTag("AndroidKitSheetChrome")
                                 .padding(horizontalSheetPadding)
                                 .padding(top = sheetContentPadding.calculateTopPadding()),
                         ) {
-                            dragHandle?.invoke(this)
-                            if (showChrome && header != null) {
-                                header(::dismissWithAnimation)
-                            } else if (showChrome) {
+                            if (showDragHandle) {
+                                BottomSheetDragHandle(dimensions = dimensions, color = style.dragHandleColor)
+                                Spacer(Modifier.height(dimensions.bottomSheetDragHandleBottomSpacing))
+                            }
+                            if (showChrome) {
                                 BottomSheetChrome(
                                     title = title,
                                     style = style,
@@ -307,6 +317,14 @@ public fun AndroidKitBottomSheet(
                                     actionsEnabled = visible,
                                     containerColor = Color.Transparent,
                                 )
+                                search?.let { field ->
+                                    OutlinedTextField(
+                                        value = field.query, onValueChange = field.onQueryChange,
+                                        label = { Text(field.label) }, singleLine = true,
+                                        enabled = field.enabled,
+                                        modifier = Modifier.fillMaxWidth().padding(bottom = dimensions.spaceSmall),
+                                    )
+                                }
                             }
                         }
                     },

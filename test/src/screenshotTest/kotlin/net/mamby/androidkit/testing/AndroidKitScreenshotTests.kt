@@ -1,5 +1,6 @@
 package net.mamby.androidkit.testing
 
+import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
 import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
-import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.ListItem
@@ -227,14 +226,8 @@ private fun ScreenshotGallery(
             Box(modifier = Modifier.fillMaxSize()) {
                 AndroidKitPage(
                     title = "Android Kit",
-                    floatingActionButton = {
-                        AndroidKitFloatingActionButton(onClick = {}) {
-                            Icon(
-                                addIcon,
-                                contentDescription = "Add",
-                            )
-                        }
-                    },
+                    floatingActionButton = AndroidKitFloatingAction.Button(onClick = {}, icon = addIcon,
+                                label = "Add"),
                 ) { pagePadding ->
                     val dimensions = AndroidKitThemeTokens.dimensions
                     LazyColumn(
@@ -245,7 +238,7 @@ private fun ScreenshotGallery(
                         verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
                     ) {
                         item {
-                            AndroidKitCard(header = { Text("Actions") }) {
+                            AndroidKitCard(title = "Actions") {
                                 TextButton(onClick = {}) { Text("Primary action") }
                                 ListItem(
                                     headlineContent = { Text("Encrypted backups") },
@@ -258,12 +251,7 @@ private fun ScreenshotGallery(
                         item {
                             AndroidKitCard(
                                 modifier = Modifier.fillMaxWidth(),
-                                header = {
-                                    Text(
-                                        text = "Floating action bar",
-                                        style = MaterialTheme.typography.titleMedium,
-                                    )
-                                },
+                                title = "Floating action bar",
                             ) {
                                 AndroidKitFloatingActionBar {
                                     icon(
@@ -278,12 +266,7 @@ private fun ScreenshotGallery(
                         item {
                             AndroidKitCard(
                                 modifier = Modifier.fillMaxWidth(),
-                                header = {
-                                    Text(
-                                        text = "Scrollable content",
-                                        style = MaterialTheme.typography.titleMedium,
-                                    )
-                                },
+                                title = "Scrollable content",
                             ) {
                                 Text(
                                     "A muted block verifies scrolling across the adaptive device matrix.\n\n" +

@@ -62,12 +62,8 @@ internal fun LocalizationContent() {
     ) {
         AndroidKitCard(
             modifier = Modifier.fillMaxWidth(),
-            header = {
-                DemoCardHeader(
-                    title = stringResource(R.string.language_section),
+            title = stringResource(R.string.language_section),
                     supportingText = stringResource(R.string.language_section_description),
-                )
-            },
         ) {
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -91,12 +87,8 @@ internal fun LocalizationContent() {
         }
         AndroidKitCard(
             modifier = Modifier.fillMaxWidth(),
-            header = {
-                DemoCardHeader(
-                    title = stringResource(R.string.format_section),
+            title = stringResource(R.string.format_section),
                     supportingText = stringResource(R.string.format_section_description),
-                )
-            },
         ) {
             listOf(
                 stringResource(R.string.format_date) to

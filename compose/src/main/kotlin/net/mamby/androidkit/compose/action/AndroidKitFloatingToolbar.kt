@@ -1,5 +1,7 @@
 package net.mamby.androidkit.compose.action
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,10 +18,8 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,7 +38,7 @@ import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 public annotation class AndroidKitFloatingToolbarDsl
 
 @AndroidKitFloatingToolbarDsl
-public interface AndroidKitFloatingToolbarScope {
+public sealed interface AndroidKitFloatingToolbarScope {
     public fun icon(
         onClick: () -> Unit,
         icon: ImageVector,
@@ -82,14 +82,11 @@ public interface AndroidKitFloatingToolbarScope {
         content: AndroidKitFloatingToolbarFlyoutScope.() -> Unit,
     ): Unit
 
-    public fun item(
-        modifier: Modifier = Modifier,
-        content: @Composable () -> Unit,
-    ): Unit
+
 }
 
 @AndroidKitFloatingToolbarDsl
-public interface AndroidKitFloatingToolbarFlyoutScope {
+public sealed interface AndroidKitFloatingToolbarFlyoutScope {
     public fun separator(modifier: Modifier = Modifier): Unit
 
     public fun item(
@@ -277,15 +274,7 @@ private class FloatingToolbarScopeImpl : AndroidKitFloatingToolbarScope {
         )
     }
 
-    override fun item(
-        modifier: Modifier,
-        content: @Composable () -> Unit,
-    ) {
-        items += FloatingToolbarItemDefinition.Custom(
-            modifier = modifier,
-            content = content,
-        )
-    }
+
 }
 
 private class FloatingToolbarFlyoutScopeImpl : AndroidKitFloatingToolbarFlyoutScope {
@@ -349,10 +338,7 @@ private sealed interface FloatingToolbarItemDefinition {
         val placement: AndroidKitActionFlyoutPlacement,
     ) : FloatingToolbarItemDefinition
 
-    class Custom(
-        override val modifier: Modifier,
-        val content: @Composable () -> Unit,
-    ) : FloatingToolbarItemDefinition
+
 }
 
 private sealed interface FloatingToolbarFlyoutItem {
@@ -440,12 +426,7 @@ private fun FloatingToolbarItem(
             )
         }
 
-        is FloatingToolbarItemDefinition.Custom -> Box(
-            modifier = item.modifier.minimumInteractiveComponentSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            item.content()
-        }
+
     }
 }
 

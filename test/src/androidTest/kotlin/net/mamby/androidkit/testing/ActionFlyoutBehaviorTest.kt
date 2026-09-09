@@ -1,12 +1,12 @@
 package net.mamby.androidkit.testing
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -36,6 +36,7 @@ class ActionFlyoutBehaviorTest {
         val events = mutableListOf<String>()
         composeRule.setContent {
             AndroidKitTheme {
+                val deleteIcon = materialSymbol(R.drawable.ic_symbol_delete)
                 Box {
                     Button(onClick = { expanded = true }) { Text("Open") }
                     AndroidKitActionFlyout(
@@ -45,12 +46,11 @@ class ActionFlyoutBehaviorTest {
                             events += "dismiss"
                         },
                     ) {
-                        Text("Custom heading")
                         item(label = "Share", onClick = { events += "share" })
                         separator()
                         item(
                             label = "Delete",
-                            icon = materialSymbol(R.drawable.ic_symbol_delete),
+                            icon = deleteIcon,
                             onClick = { events += "delete" },
                             enabled = false,
                         )
@@ -61,20 +61,20 @@ class ActionFlyoutBehaviorTest {
 
         composeRule.onNodeWithText("Share").assertDoesNotExist()
         composeRule.onNodeWithText("Open").performClick()
-        composeRule.onNodeWithText("Custom heading").assertExists()
+        composeRule.onNodeWithText("Share").assertExists()
         composeRule.onNodeWithText("Delete")
             .assertIsNotEnabled()
             .performTouchInput { click() }
         composeRule.runOnIdle { assertEquals(emptyList<String>(), events) }
         composeRule.onNodeWithText("Share").performClick()
         composeRule.runOnIdle { assertEquals(listOf("dismiss", "share"), events) }
-        composeRule.onNodeWithText("Custom heading").assertDoesNotExist()
+        composeRule.onNodeWithText("Share").assertDoesNotExist()
     }
 
     @Test
-    fun customContentRemainsOpenUntilBackRequestsDismissal() {
+    fun backRequestsDismissalWithoutInvokingAnAction() {
         var expanded by mutableStateOf(true)
-        var customClicked = false
+        var actionClicked = false
         composeRule.setContent {
             AndroidKitTheme {
                 Box {
@@ -83,17 +83,16 @@ class ActionFlyoutBehaviorTest {
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
                     ) {
-                        Button(onClick = { customClicked = true }) { Text("Custom control") }
+                        item(label = "Action", onClick = { actionClicked = true })
                     }
                 }
             }
         }
 
-        composeRule.onNodeWithText("Custom control").performClick()
-        composeRule.runOnIdle { assertEquals(true, customClicked) }
-        composeRule.onNodeWithText("Custom control").assertExists()
+        composeRule.onNodeWithText("Action").assertExists()
         pressBack()
-        composeRule.onNodeWithText("Custom control").assertDoesNotExist()
+        composeRule.onNodeWithText("Action").assertDoesNotExist()
+        composeRule.runOnIdle { assertEquals(false, actionClicked) }
     }
 
     @Test

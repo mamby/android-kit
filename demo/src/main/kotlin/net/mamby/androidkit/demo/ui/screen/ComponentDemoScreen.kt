@@ -1,5 +1,8 @@
 package net.mamby.androidkit.demo.ui.screen
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +16,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -132,16 +133,10 @@ private fun AndroidKitPageDemo(
         onBack = listDetailBackAction(onBack),
         actions = actions,
         titleBarImmersiveMode = DemoToggle.PageImmersive in toggles,
-        floatingActionButton = {
-            if (DemoToggle.PageFab in toggles) {
-                AndroidKitFloatingActionButton(onClick = { onActionSelected(DemoPageAction.Confirm) }) {
-                    Icon(
-                        imageVector = materialSymbol(R.drawable.ic_symbol_check),
-                        contentDescription = stringResource(R.string.action_confirm),
-                    )
-                }
-            }
-        },
+        floatingActionButton = if (DemoToggle.PageFab in toggles) {
+                AndroidKitFloatingAction.Button(onClick = { onActionSelected(DemoPageAction.Confirm) }, icon = materialSymbol(R.drawable.ic_symbol_check),
+                        label = stringResource(R.string.action_confirm))
+            } else null,
     ) { contentPadding ->
         DemoList(contentPadding) {
             item {
@@ -198,18 +193,12 @@ private fun AndroidKitFloatingActionButtonDemo(
                     .padding(contentPadding),
             ) {
                 fabPositions.filterKeys { it in toggles }.forEach { (_, alignment) ->
-                    AndroidKitFloatingActionButton(
-                        onClick = { actionCount += 1 },
+                    AndroidKitFloatingActionButton(AndroidKitFloatingAction.Button(onClick = { actionCount += 1 },
                         modifier = Modifier
                             .align(alignment)
                             .padding(dimensions.screenPadding),
-                        enabled = DemoToggle.FabEnabled in toggles,
-                    ) {
-                        Icon(
-                            imageVector = materialSymbol(R.drawable.ic_symbol_edit),
-                            contentDescription = stringResource(R.string.action_edit),
-                        )
-                    }
+                        enabled = DemoToggle.FabEnabled in toggles, icon = materialSymbol(R.drawable.ic_symbol_edit),
+                            label = stringResource(R.string.action_edit)))
                 }
             }
         }
@@ -296,18 +285,8 @@ private fun AndroidKitCardDemo(
         } else {
             emptyList()
         },
-        header = {
-            DemoCardHeaderTitle(stringResource(R.string.demo_section_title))
-        },
-        headerSupportingContent = if (demo != ComponentDemo.AndroidKitCardBasic) {
-            {
-                DemoCardHeaderSupportingContent(
-                    stringResource(R.string.demo_supporting_text),
-                )
-            }
-        } else {
-            null
-        },
+        title = stringResource(R.string.demo_section_title),
+        supportingText = if (demo != ComponentDemo.AndroidKitCardBasic) stringResource(R.string.demo_supporting_text) else null,
     ) {
         Text(stringResource(R.string.demo_section_body))
         if (demo == ComponentDemo.AndroidKitCardRichContent) {
@@ -388,12 +367,10 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
         } else {
             AndroidKitBottomSheetScrollMode.VerticalScroll
         },
-        floatingAction = {
-            AndroidKitFloatingActionBar {
+        floatingAction = AndroidKitFloatingAction.Bar {
                 text(onClick = { visible = false }, label = cancel)
                 text(onClick = { visible = false }, label = confirm)
-            }
-        },
+            },
     ) { managedContentPadding ->
         if (isContentManaged) {
             LazyColumn(
@@ -541,6 +518,19 @@ private fun AndroidKitFloatingActionBarDemo(
 @Composable
 private fun AndroidKitActionFlyoutDemo(demo: ComponentDemo) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    val actions = listOf(
+        materialSymbol(R.drawable.ic_symbol_edit) to stringResource(R.string.action_edit),
+        materialSymbol(R.drawable.ic_symbol_share) to stringResource(R.string.action_share),
+        materialSymbol(R.drawable.ic_symbol_delete) to stringResource(R.string.action_delete),
+    )
+    val shareLabel = stringResource(R.string.action_share)
+    val copyLinkLabel = stringResource(R.string.flyout_demo_copy_link)
+    val exportLabel = stringResource(R.string.flyout_demo_export)
+    val documentLabel = stringResource(R.string.flyout_demo_document)
+    val pdfLabel = stringResource(R.string.flyout_demo_pdf)
+    val plainTextLabel = stringResource(R.string.flyout_demo_plain_text)
+    val imageLabel = stringResource(R.string.flyout_demo_image)
+    val cancelLabel = stringResource(R.string.action_cancel)
     Box {
         Button(onClick = { expanded = true }) {
             Icon(
@@ -553,13 +543,9 @@ private fun AndroidKitActionFlyoutDemo(demo: ComponentDemo) {
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            listOf(
-                materialSymbol(R.drawable.ic_symbol_edit) to R.string.action_edit,
-                materialSymbol(R.drawable.ic_symbol_share) to R.string.action_share,
-                materialSymbol(R.drawable.ic_symbol_delete) to R.string.action_delete,
-            ).forEach { (icon, labelResource) ->
+            actions.forEach { (icon, label) ->
                 item(
-                    label = stringResource(labelResource),
+                    label = label,
                     onClick = {},
                     icon = if (
                         demo == ComponentDemo.AndroidKitActionFlyoutIcons
@@ -571,15 +557,15 @@ private fun AndroidKitActionFlyoutDemo(demo: ComponentDemo) {
                 )
             }
             if (demo == ComponentDemo.AndroidKitActionFlyoutSubmenus) {
-                submenu(label = stringResource(R.string.action_share)) {
-                    item(label = stringResource(R.string.flyout_demo_copy_link), onClick = {})
-                    submenu(label = stringResource(R.string.flyout_demo_export)) {
-                        submenu(label = stringResource(R.string.flyout_demo_document)) {
-                            item(label = stringResource(R.string.flyout_demo_pdf), onClick = {})
-                            item(label = stringResource(R.string.flyout_demo_plain_text), onClick = {})
+                submenu(label = shareLabel) {
+                    item(label = copyLinkLabel, onClick = {})
+                    submenu(label = exportLabel) {
+                        submenu(label = documentLabel) {
+                            item(label = pdfLabel, onClick = {})
+                            item(label = plainTextLabel, onClick = {})
                         }
                         item(
-                            label = stringResource(R.string.flyout_demo_image),
+                            label = imageLabel,
                             enabled = false,
                             onClick = {},
                         )
@@ -587,13 +573,8 @@ private fun AndroidKitActionFlyoutDemo(demo: ComponentDemo) {
                 }
             }
             separator()
-            Text(
-                text = stringResource(R.string.action_more),
-                modifier = Modifier.padding(horizontal = AndroidKitThemeTokens.dimensions.spaceMedium),
-                style = AndroidKitThemeTokens.typography.labelSmall,
-            )
             item(
-                label = stringResource(R.string.action_cancel),
+                label = cancelLabel,
                 onClick = {},
             )
         }

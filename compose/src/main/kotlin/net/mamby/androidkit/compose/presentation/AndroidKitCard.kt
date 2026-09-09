@@ -1,5 +1,7 @@
 package net.mamby.androidkit.compose.presentation
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,13 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -42,11 +43,11 @@ public class AndroidKitCardMenuItem(
 public fun AndroidKitCard(
     modifier: Modifier = Modifier,
     menuItems: List<AndroidKitCardMenuItem> = emptyList(),
-    header: (@Composable ColumnScope.() -> Unit)? = null,
+    title: String? = null,
     style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
     contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.dimensions.spaceMedium),
     contentSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
-    headerSupportingContent: (@Composable ColumnScope.() -> Unit)? = null,
+    supportingText: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     Card(
@@ -57,8 +58,8 @@ public fun AndroidKitCard(
     ) {
         AndroidKitCardContent(
             menuItems = menuItems,
-            header = header,
-            headerSupportingContent = headerSupportingContent,
+            header = title?.let { text -> { Text(text, style = style.titleTextStyle ?: AndroidKitThemeTokens.typography.titleMedium) } },
+            headerSupportingContent = supportingText?.let { text -> { Text(text, style = style.supportingTextStyle ?: AndroidKitThemeTokens.typography.bodyMedium, color = if (style.supportingTextColor == androidx.compose.ui.graphics.Color.Unspecified) AndroidKitThemeTokens.colorScheme.onSurfaceVariant else style.supportingTextColor) } },
             contentPadding = contentPadding,
             contentSpacing = contentSpacing,
             content = content,
@@ -72,11 +73,11 @@ public fun AndroidKitCard(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     menuItems: List<AndroidKitCardMenuItem> = emptyList(),
-    header: (@Composable ColumnScope.() -> Unit)? = null,
+    title: String? = null,
     style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
     contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.dimensions.spaceMedium),
     contentSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
-    headerSupportingContent: (@Composable ColumnScope.() -> Unit)? = null,
+    supportingText: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
     Card(
@@ -89,8 +90,8 @@ public fun AndroidKitCard(
     ) {
         AndroidKitCardContent(
             menuItems = menuItems,
-            header = header,
-            headerSupportingContent = headerSupportingContent,
+            header = title?.let { text -> { Text(text, style = style.titleTextStyle ?: AndroidKitThemeTokens.typography.titleMedium) } },
+            headerSupportingContent = supportingText?.let { text -> { Text(text, style = style.supportingTextStyle ?: AndroidKitThemeTokens.typography.bodyMedium, color = if (style.supportingTextColor == androidx.compose.ui.graphics.Color.Unspecified) AndroidKitThemeTokens.colorScheme.onSurfaceVariant else style.supportingTextColor) } },
             contentPadding = contentPadding,
             contentSpacing = contentSpacing,
             content = content,

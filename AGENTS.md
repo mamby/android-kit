@@ -4,6 +4,12 @@ Use Kotlin, Jetpack Compose, AndroidX, Material 3, Navigation 3, coroutines and
 official Android APIs. Keep the published modules app-agnostic and keep demo-only
 branding and the Prism theme inside `demo`.
 
+Keep Kit-owned chrome and child-control rendering internal. Public component APIs
+accept typed data, state, callbacks, and explicit styles; do not add arbitrary
+rendering slots for headers, controls, menus, settings rows, or badges. Preserve
+app body slots in pages, cards, sheets, and navigation. See
+[docs/component-contract.md](docs/component-contract.md).
+
 All automated test source belongs to the top-level `test` module. Before changing
 or executing the test suites, read [docs/testing.md](docs/testing.md). Do not put
 tests inside published modules. Do not commit generated screenshots, screenshot

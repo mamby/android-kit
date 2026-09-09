@@ -1,5 +1,7 @@
 package net.mamby.androidkit.compose.navigation
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -24,6 +26,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -44,11 +47,9 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -66,6 +67,7 @@ import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.role
@@ -91,13 +93,27 @@ import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 import kotlin.math.roundToInt
 
+public class AndroidKitNavigationBadge(
+    public val label: String? = null,
+    public val contentDescription: String? = null,
+)
+
+@Composable
+private fun NavigationBadge(badge: AndroidKitNavigationBadge) {
+    Badge(modifier = Modifier.semantics {
+        badge.contentDescription?.let { contentDescription = it }
+    }) {
+        badge.label?.let { Text(it) }
+    }
+}
+
 public class AndroidKitFloatingNavigationItem<Key : Any>(
     public val key: Key,
     public val label: String,
     public val icon: ImageVector,
     public val selectedIcon: ImageVector = icon,
     public val contentDescription: String = label,
-    public val badge: (@Composable () -> Unit)? = null,
+    public val badge: AndroidKitNavigationBadge? = null,
 )
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -161,7 +177,7 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
                                 )
                             },
                             label = { Text(item.label) },
-                            badge = item.badge,
+                            badge = item.badge?.let { badge -> { NavigationBadge(badge) } },
                             colors = navigationSuiteItemColors,
                         )
                     }
@@ -360,7 +376,7 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                     icon = item.icon,
                     label = item.label,
                     showLabel = showLabels,
-                    badge = item.badge,
+                    badge = item.badge?.let { badge -> { NavigationBadge(badge) } },
                     style = style,
                 )
             }.single().measure(naturalConstraints)
@@ -400,7 +416,7 @@ private fun <Key : Any> CompactNavigationItemsLayout(
                     label = item.label,
                     contentDescription = item.contentDescription,
                     showLabel = showLabels,
-                    badge = item.badge,
+                    badge = item.badge?.let { badge -> { NavigationBadge(badge) } },
                     style = style,
                     modifier = Modifier.widthIn(min = dimensions.minimumTouchTarget),
                 )
@@ -725,7 +741,7 @@ private fun <Key : Any> NavigationOverflowFlyout(
                                 modifier = Modifier.size(dimensions.floatingNavigationIconSize),
                             )
                         },
-                        trailingIcon = item.badge,
+                        trailingIcon = item.badge?.let { badge -> { NavigationBadge(badge) } },
                         colors = if (selected) selectedItemColors else unselectedItemColors,
                         contentPadding = PaddingValues(
                             start = dimensions.floatingNavigationOverflowItemHorizontalPadding,

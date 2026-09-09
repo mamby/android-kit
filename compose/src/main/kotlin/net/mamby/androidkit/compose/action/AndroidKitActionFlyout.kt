@@ -1,5 +1,7 @@
 package net.mamby.androidkit.compose.action
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,13 +23,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -47,8 +48,96 @@ import net.mamby.androidkit.compose.theme.FloatingSurface
 import kotlin.math.max
 import kotlin.math.min
 
-/** Content of an action flyout, including standard actions and custom Compose content. */
-public interface AndroidKitActionFlyoutScope : ColumnScope {
+/** Declares menu entries. AndroidKit owns their layout, styling, and dismissal. */
+public class AndroidKitActionFlyoutScope internal constructor() {
+    private val entries = mutableListOf<Entry>()
+
+    /** Adds an action with an optional vector icon. */
+    public fun item(
+        label: String,
+        onClick: () -> Unit,
+        modifier: Modifier = Modifier,
+        icon: ImageVector? = null,
+        enabled: Boolean = true,
+    ) {
+        entries += Entry.Action(label, onClick, modifier, icon, null, enabled)
+    }
+
+    /** Adds an action with painter data; Kit owns the icon's size and tint. */
+    public fun item(
+        label: String,
+        onClick: () -> Unit,
+        icon: Painter,
+        modifier: Modifier = Modifier,
+        enabled: Boolean = true,
+    ) {
+        entries += Entry.Action(label, onClick, modifier, null, icon, enabled)
+    }
+
+    public fun submenu(
+        label: String,
+        modifier: Modifier = Modifier,
+        icon: ImageVector? = null,
+        enabled: Boolean = true,
+        content: AndroidKitActionFlyoutScope.() -> Unit,
+    ) {
+        entries += Entry.Submenu(label, modifier, icon, enabled, AndroidKitActionFlyoutScope().apply(content))
+    }
+
+    public fun separator(
+        modifier: Modifier = Modifier,
+        color: Color = Color.Unspecified,
+    ) {
+        entries += Entry.Separator(modifier, color)
+    }
+
+    @Composable
+    internal fun render(scope: ActionFlyoutRenderScope) {
+        entries.forEach { entry ->
+            when (entry) {
+                is Entry.Action -> scope.item(
+                    label = entry.label,
+                    onClick = entry.onClick,
+                    modifier = entry.modifier,
+                    icon = entry.icon,
+                    enabled = entry.enabled,
+                    iconPainter = entry.painter,
+                )
+                is Entry.Submenu -> scope.submenu(
+                    label = entry.label,
+                    modifier = entry.modifier,
+                    icon = entry.icon,
+                    enabled = entry.enabled,
+                ) { entry.children.render(this) }
+                is Entry.Separator -> scope.separator(entry.modifier, entry.color)
+            }
+        }
+    }
+
+    private sealed interface Entry {
+        data class Action(
+            val label: String,
+            val onClick: () -> Unit,
+            val modifier: Modifier,
+            val icon: ImageVector?,
+            val painter: Painter?,
+            val enabled: Boolean,
+        ) : Entry
+
+        data class Submenu(
+            val label: String,
+            val modifier: Modifier,
+            val icon: ImageVector?,
+            val enabled: Boolean,
+            val children: AndroidKitActionFlyoutScope,
+        ) : Entry
+
+        data class Separator(val modifier: Modifier, val color: Color) : Entry
+    }
+}
+
+/** Internal rendering scope; consumers declare entries through [AndroidKitActionFlyoutScope]. */
+internal interface ActionFlyoutRenderScope : ColumnScope {
     /** Dismisses the flyout before invoking [onClick]. Icons are optional. */
     @Suppress("ComposableNaming") // Match the toolbar and action-bar flyout DSL.
     @Composable
@@ -58,6 +147,7 @@ public interface AndroidKitActionFlyoutScope : ColumnScope {
         modifier: Modifier = Modifier,
         icon: ImageVector? = null,
         enabled: Boolean = true,
+        iconPainter: Painter? = null,
     ): Unit
 
     /** Opens a nested menu. Back/outside dismisses that level; actions dismiss the entire flyout. */
@@ -68,7 +158,7 @@ public interface AndroidKitActionFlyoutScope : ColumnScope {
         modifier: Modifier = Modifier,
         icon: ImageVector? = null,
         enabled: Boolean = true,
-        content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+        content: @Composable ActionFlyoutRenderScope.() -> Unit,
     ): Unit
 
     @Suppress("ComposableNaming") // Match the toolbar and action-bar flyout DSL.
@@ -88,7 +178,7 @@ private class ActionFlyoutScopeImpl(
     private val contentPadding: PaddingValues,
     private val properties: PopupProperties,
     private val containerColor: Color?,
-) : AndroidKitActionFlyoutScope, ColumnScope by columnScope {
+) : ActionFlyoutRenderScope, ColumnScope by columnScope {
     @Composable
     override fun item(
         label: String,
@@ -96,6 +186,7 @@ private class ActionFlyoutScopeImpl(
         modifier: Modifier,
         icon: ImageVector?,
         enabled: Boolean,
+        iconPainter: Painter?,
     ) {
         val dimensions = AndroidKitThemeTokens.dimensions
         DropdownMenuItem(
@@ -118,7 +209,15 @@ private class ActionFlyoutScopeImpl(
                 start = dimensions.spaceMedium,
                 end = dimensions.spaceLarge,
             ),
-            leadingIcon = icon?.let {
+            leadingIcon = if (iconPainter != null) {
+                {
+                    Icon(
+                        painter = iconPainter,
+                        contentDescription = null,
+                        modifier = Modifier.size(dimensions.actionFlyoutIconSize),
+                    )
+                }
+            } else icon?.let {
                 {
                     Icon(
                         imageVector = it,
@@ -136,7 +235,7 @@ private class ActionFlyoutScopeImpl(
         modifier: Modifier,
         icon: ImageVector?,
         enabled: Boolean,
-        content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+        content: @Composable ActionFlyoutRenderScope.() -> Unit,
     ) {
         ActionFlyoutSubmenu(
             label, modifier, icon, this.enabled && enabled, expanded,
@@ -170,7 +269,7 @@ private fun ActionFlyoutSubmenu(
     properties: PopupProperties,
     containerColor: Color?,
     onActionDismissRequest: () -> Unit,
-    content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+    content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     LaunchedEffect(enabled, parentExpanded) {
@@ -230,10 +329,10 @@ private fun ActionFlyoutSubmenu(
 }
 
 /**
- * An anchored menu for actions or custom content. Place it alongside its trigger in a Box.
+ * An anchored menu of Kit-rendered actions, separators, and submenus. Place it alongside its trigger in a Box.
  * The caller owns [expanded] and closes the flyout in [onDismissRequest].
  * Standard [item][AndroidKitActionFlyoutScope.item] entries request dismissal before invoking their
- * action; custom content controls its own dismissal.
+ * action. Resolve composable resources before entering the non-composable content builder.
  * Content scrolls vertically. [placement] and [horizontalAlignment] prefer an anchor edge and
  * fall back when the menu would extend beyond the window, respecting layout direction.
  */
@@ -254,7 +353,7 @@ public fun AndroidKitActionFlyout(
     scrollState: ScrollState = rememberScrollState(),
     offset: DpOffset = DpOffset.Zero,
     enabled: Boolean = true,
-    content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+    content: AndroidKitActionFlyoutScope.() -> Unit,
 ): Unit = ActionFlyoutContent(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
@@ -267,7 +366,7 @@ public fun AndroidKitActionFlyout(
     properties = properties,
     scrollState = scrollState,
     enabled = enabled,
-    content = content,
+    content = { AndroidKitActionFlyoutScope().apply(content).render(this) },
 )
 
 @Composable
@@ -279,7 +378,7 @@ internal fun AndroidKitActionFlyoutWithContainerColor(
     horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment,
     style: AndroidKitActionFlyoutStyle,
     contentPadding: PaddingValues,
-    content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+    content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ): Unit = ActionFlyoutContent(
     expanded = expanded,
     onDismissRequest = onDismissRequest,
@@ -319,7 +418,7 @@ private fun ActionFlyoutContent(
     scrollState: ScrollState,
     containerColor: Color? = null,
     enabled: Boolean = true,
-    content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+    content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ): Unit {
     val density = LocalDensity.current
     val positionProvider = remember(placement, horizontalAlignment, offset, density) {
@@ -359,7 +458,7 @@ private fun ActionFlyoutPopup(
     scrollState: ScrollState = rememberScrollState(),
     containerColor: Color? = null,
     enabled: Boolean = true,
-    content: @Composable AndroidKitActionFlyoutScope.() -> Unit,
+    content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ) {
     DropdownMenuPopup(
         expanded = expanded,

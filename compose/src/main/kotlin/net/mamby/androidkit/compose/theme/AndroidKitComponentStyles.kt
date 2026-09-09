@@ -36,6 +36,9 @@ public data class AndroidKitCardStyle(
     public val borderColor: Color,
     public val borderWidth: Dp,
     public val shape: Shape,
+    public val titleTextStyle: TextStyle? = null,
+    public val supportingTextStyle: TextStyle? = null,
+    public val supportingTextColor: Color = Color.Unspecified,
 )
 
 @Immutable

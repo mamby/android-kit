@@ -28,12 +28,8 @@ fun DummyNavigationScreen(index: Int) {
             item {
                 AndroidKitCard(
                     modifier = Modifier.fillMaxWidth(),
-                    header = {
-                        DemoCardHeader(
-                            title = stringResource(R.string.nav_demo, index),
+                    title = stringResource(R.string.nav_demo, index),
                             supportingText = stringResource(R.string.dummy_navigation_body),
-                        )
-                    },
                 ) {
                     Text(stringResource(R.string.dummy_navigation_instruction))
                 }

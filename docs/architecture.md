@@ -1,9 +1,8 @@
 # Architecture and sharing boundaries
 
 Android Kit takes reusable presentation patterns from Personal Health Vault and
-Fralov as inspiration, then expresses them as app-agnostic APIs. Neither app is a
-consumer yet. Migration begins only after the catalog, behavior tests and visual
-matrix are stable.
+Fralov as inspiration, then expresses them as app-agnostic APIs. Both apps consume the shared components, with the demo catalog exercising the
+app-agnostic contracts.
 
 ## Published surface
 
@@ -27,7 +26,9 @@ clear integration error.
 
 The theme is the default styling source, not a restriction on local composition.
 Public components expose immutable per-instance styles, focused layout parameters
-and slots where content legitimately varies. Every override defaults to the
+and body slots in pages, cards, sheets, and navigation. Kit-owned chrome and
+controls accept typed data rather than rendering slots; see
+[the component contract](component-contract.md). Every override defaults to the
 theme-backed value, while touch targets, safe-area behavior, accessibility
 semantics and adaptive layout policy remain owned by the kit.
 

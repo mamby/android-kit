@@ -1,7 +1,8 @@
 package net.mamby.androidkit.compose.form
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -19,23 +20,19 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.NonSkippableComposable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
@@ -141,8 +138,37 @@ public data class AndroidKitAppLockSetting(
 @DslMarker
 public annotation class AndroidKitSettingsPageDsl
 
+/** Typed settings declarations; resolve composable resources before entering this builder. */
 @AndroidKitSettingsPageDsl
-public interface AndroidKitSettingsPageScope {
+public class AndroidKitSettingsPageScope internal constructor() {
+    private val sections = mutableListOf<@Composable (SettingsPageRenderScope) -> Unit>()
+    private val keys = mutableSetOf<String>()
+
+    private fun add(key: String, render: @Composable (SettingsPageRenderScope) -> Unit) {
+        require(keys.add(key)) { "Settings page keys must be unique: $key" }
+        sections += render
+    }
+
+    public fun generalSection(key: String = "general", label: String? = null,
+        language: AndroidKitLanguageSetting? = null, theme: AndroidKitSettingsSelection? = null,
+        floatingOpacity: AndroidKitFloatingOpacitySetting? = null,
+    ) { add(key) { it.generalSection(key, label, language, theme, floatingOpacity) } }
+
+    public fun securitySection(key: String = "security", label: String? = null,
+        appLock: AndroidKitAppLockSetting? = null,
+        content: AndroidKitSettingSectionScope.() -> Unit = {},
+    ) { add(key) { it.securitySection(key, label, appLock) { content() } } }
+
+    public fun section(key: String, label: String? = null, description: String? = null,
+        content: AndroidKitSettingSectionScope.() -> Unit,
+    ) { add(key) { it.section(key, label, description) { content() } } }
+
+    @Composable
+    internal fun render(scope: SettingsPageRenderScope) { sections.forEach { it(scope) } }
+}
+
+@AndroidKitSettingsPageDsl
+internal interface SettingsPageRenderScope {
     @Composable
     @NonSkippableComposable
     public fun generalSection(
@@ -171,7 +197,6 @@ public interface AndroidKitSettingsPageScope {
         content: @Composable AndroidKitSettingSectionScope.() -> Unit,
     ): Unit
 
-    public fun item(key: String, content: @Composable () -> Unit): Unit
 }
 
 /**
@@ -185,11 +210,11 @@ public fun AndroidKitSettingsPage(
     onBack: (() -> Unit)? = null,
     actions: List<AndroidKitActionItem> = emptyList(),
     listState: LazyListState = rememberLazyListState(),
-    content: @Composable AndroidKitSettingsPageScope.() -> Unit,
+    content: AndroidKitSettingsPageScope.() -> Unit,
 ): Unit {
     var activePicker by rememberSaveable { mutableStateOf<String?>(null) }
     val scope = SettingsPageScopeImpl { activePicker = it }
-    scope.content()
+    AndroidKitSettingsPageScope().apply(content).render(scope)
     val dimensions = AndroidKitThemeTokens.dimensions
     val direction = LocalLayoutDirection.current
     AndroidKitPage(title = title, modifier = modifier, onBack = onBack, actions = actions) { padding ->
@@ -225,7 +250,7 @@ private data class SettingsPickerDefinition(
     val emptyResultsLabel: String? = null,
 )
 
-private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : AndroidKitSettingsPageScope {
+private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : SettingsPageRenderScope {
     val items = mutableStateListOf<SettingsPageItem>()
     val pickers = mutableMapOf<String, SettingsPickerDefinition>()
     val timeoutPickers = mutableStateMapOf<String, AndroidKitAppLockTimeoutSetting>()
@@ -273,9 +298,6 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         }
     }
 
-    override fun item(key: String, content: @Composable () -> Unit) {
-        registerItem(SettingsPageItem(key, content))
-    }
 
     @Composable
     @NonSkippableComposable
@@ -407,29 +429,11 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
     val listState = rememberLazyListState()
     val dimensions = AndroidKitThemeTokens.dimensions
     val style = AndroidKitThemeTokens.bottomSheetStyle
-    // The existing measured chrome slot pins search below the title without covering list rows.
-    val header: (@Composable (() -> Unit) -> Unit)? = if (picker.searchLabel != null) {
-        { close ->
-            Column {
-                BottomSheetChrome(
-                    title = selection.label, style = style, dimensions = dimensions,
-                    backContentDescription = "", onBack = null,
-                    closeContentDescription = selection.closeContentDescription, onClose = close,
-                    actions = emptyList(), actionsEnabled = true, containerColor = Color.Transparent,
-                )
-                OutlinedTextField(
-                    value = query, onValueChange = { query = it }, singleLine = true,
-                    label = { Text(picker.searchLabel) },
-                    modifier = Modifier.fillMaxWidth().padding(bottom = dimensions.spaceSmall),
-                )
-            }
-        }
-    } else null
     AndroidKitBottomSheet(
         visible = true, title = selection.label, onDismiss = onDismiss,
         closeContentDescription = selection.closeContentDescription,
         fitContent = picker.searchLabel == null,
-        header = header,
+        search = picker.searchLabel?.let { AndroidKitSheetSearch(query, { query = it }, it) },
         scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
         dismissGesturesEnabled = !listState.canScrollBackward,
     ) { padding ->

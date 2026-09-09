@@ -1,13 +1,12 @@
 package net.mamby.androidkit.testing
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -49,6 +49,30 @@ import org.junit.Test
 
 class SettingsPageBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Test
+    fun informationalRowsUpdateAndDisappearWithTheirSection() {
+        var value by mutableStateOf("Before")
+        var visible by mutableStateOf(true)
+        rule.setContent {
+            AndroidKitTheme {
+                AndroidKitSettingsPage {
+                    if (visible) {
+                        section(key = "status") { info(label = "Status", value = value) }
+                    }
+                    section(key = "remaining") { info(label = "Remaining") }
+                }
+            }
+        }
+        rule.onNodeWithText("Before").assertIsDisplayed()
+        rule.onNodeWithText("Status").assert(SemanticsMatcher.keyNotDefined(SemanticsActions.OnClick))
+        rule.runOnIdle { value = "After" }
+        rule.onNodeWithText("After").assertIsDisplayed()
+        rule.onNodeWithText("Before").assertDoesNotExist()
+        rule.runOnIdle { visible = false }
+        rule.onNodeWithText("After").assertDoesNotExist()
+        rule.onNodeWithText("Remaining").assertIsDisplayed()
+    }
 
     @Test
     fun appLockExtrasWaitForHostAndTimeoutSelectionClosesDialog() {
@@ -346,7 +370,7 @@ class SettingsPageBehaviorTest {
                         label = "Opacity", value = level, minimumLabel = "Min", maximumLabel = "Max",
                         onValueChange = { level = it }, onValueChangeFinished = {},
                     ))
-                    item(key = "scroll") { Text("Scroll content") }
+                    section(key = "scroll") { info(label = "Scroll content") }
                 }
             }
         }
@@ -440,10 +464,10 @@ class SettingsPageBehaviorTest {
                         onBack = if (destination == "child") ({ destination = "root" }) else null,
                     ) {
                         if (destination == "root") {
-                            repeat(30) { index -> item("item-$index") { Text("Entry $index") } }
+                            repeat(30) { index -> section(key = "item-$index") { info(label = "Entry $index") } }
                             section("navigation") { navigation("Open child", { destination = "child" }) }
                         } else {
-                            item("child-content") { Text("Child content") }
+                            section(key = "child-content") { info(label = "Child content") }
                         }
                     }
                 }
