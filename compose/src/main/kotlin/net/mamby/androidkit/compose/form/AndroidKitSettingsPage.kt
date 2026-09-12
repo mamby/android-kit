@@ -47,25 +47,24 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 /** Stable identity is independent of the translated label and filtered list position. */
 public data class AndroidKitSettingsOption(public val id: String, public val label: String)
 
-/** The host-localized system choice and the host-localized value it currently resolves to. */
+/** A system choice and the host-localized value it currently resolves to. */
 public data class AndroidKitSettingsSystemOption(
     public val id: String,
-    public val label: String,
+    public val label: String? = null,
     public val currentValueLabel: String,
 ) {
     init {
         require(id.isNotBlank()) { "System option ID must not be blank." }
-        require(label.isNotBlank()) { "System option label must not be blank." }
         require(currentValueLabel.isNotBlank()) { "System option current value must not be blank." }
     }
 }
 
 public data class AndroidKitSettingsSelection(
-    public val label: String,
+    public val label: String? = null,
     public val options: List<AndroidKitSettingsOption>,
     public val selectedId: String,
     public val onSelected: (String) -> Unit,
-    public val closeContentDescription: String,
+    public val closeContentDescription: String? = null,
     public val enabled: Boolean = true,
     /** Optional row icon override; null uses the predefined language or theme icon. */
     public val icon: ImageVector? = null,
@@ -81,15 +80,15 @@ public data class AndroidKitSettingsSelection(
 
 public data class AndroidKitLanguageSetting(
     public val selection: AndroidKitSettingsSelection,
-    public val searchLabel: String,
-    public val emptyResultsLabel: String,
+    public val searchLabel: String? = null,
+    public val emptyResultsLabel: String? = null,
 )
 
 public data class AndroidKitFloatingOpacitySetting(
-    public val label: String,
+    public val label: String? = null,
     public val value: Float,
-    public val minimumLabel: String,
-    public val maximumLabel: String,
+    public val minimumLabel: String? = null,
+    public val maximumLabel: String? = null,
     public val onValueChange: (Float) -> Unit,
     public val onValueChangeFinished: () -> Unit,
     public val supportingText: String? = null,
@@ -101,9 +100,9 @@ public data class AndroidKitFloatingOpacitySetting(
     }
 }
 
-/** Host-defined timeout choices. IDs have no duration semantics inside Android Kit. */
+/** Timeout choices. Hosts own the policy and options; Kit supplies shared fallback labels. */
 public data class AndroidKitAppLockTimeoutSetting(
-    public val label: String,
+    public val label: String? = null,
     public val options: List<AndroidKitSettingsOption>,
     public val selectedId: String,
     public val onSelected: (String) -> Unit,
@@ -117,7 +116,7 @@ public data class AndroidKitAppLockTimeoutSetting(
 }
 
 public data class AndroidKitAppLockSetting(
-    public val label: String,
+    public val label: String? = null,
     public val checked: Boolean,
     public val onCheckedChange: (Boolean) -> Unit,
     public val supportingText: String? = null,
@@ -127,12 +126,10 @@ public data class AndroidKitAppLockSetting(
     /** Shown only while checked. The host persists and enforces the selected timeout. */
     public val timeout: AndroidKitAppLockTimeoutSetting? = null,
     public val lockNowLabel: String? = null,
-    /** Optional host lock action, shown only while checked. Requires a localized [lockNowLabel]. */
+    /** Optional lock action, shown only while checked; Kit supplies the shared fallback label. */
     public val onLockNow: (() -> Unit)? = null,
 ) {
-    init {
-        require(onLockNow == null || !lockNowLabel.isNullOrBlank()) { "Lock now requires a localized label." }
-    }
+    init { require(lockNowLabel == null || lockNowLabel.isNotBlank()) { "Lock now label must not be blank." } }
 }
 
 @DslMarker
@@ -323,30 +320,36 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         theme: AndroidKitSettingsSelection?,
         floatingOpacity: AndroidKitFloatingOpacitySetting?,
     ) {
-        section(key, label) {
+        val strings = AndroidKitThemeTokens.strings
+        section(key, label ?: strings.general) {
             language?.let {
                 addPicker(
-                    key, "language", SettingsPickerDefinition(it.selection, it.searchLabel, it.emptyResultsLabel),
+                    key, "language", SettingsPickerDefinition(
+                        it.selection,
+                        it.searchLabel ?: strings.searchLanguages,
+                        it.emptyResultsLabel ?: strings.noMatchingLanguages,
+                    ),
                     AndroidKitIcons.Language,
                 )
             }
             theme?.let { addPicker(key, "theme", SettingsPickerDefinition(it), AndroidKitIcons.Theme) }
             floatingOpacity?.let {
                 (this as SettingSectionScopeImpl).entries += SettingsEntryDefinition.Slider(
-                    label = it.label, value = it.value, onValueChange = it.onValueChange,
+                    label = it.label ?: strings.transparency, value = it.value, onValueChange = it.onValueChange,
                     modifier = Modifier,
                     valueRange = AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel..
                         AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
                     steps = 19, onValueChangeFinished = it.onValueChangeFinished,
                     supportingText = it.supportingText, icon = null, valueLabel = null,
                     enabled = it.enabled, colors = null,
-                    minimumLabel = it.minimumLabel, maximumLabel = it.maximumLabel,
+                    minimumLabel = it.minimumLabel ?: strings.min, maximumLabel = it.maximumLabel ?: strings.max,
                     isOpacitySlider = true,
                 )
             }
         }
     }
 
+    @Composable
     private fun AndroidKitSettingSectionScope.addPicker(
         sectionKey: String,
         kind: String,
@@ -356,9 +359,11 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         val pickerKey = "$kind:$sectionKey"
         pickers[pickerKey] = picker
         val selection = picker.selection
-        val options = selection.displayOptions()
+        val strings = AndroidKitThemeTokens.strings
+        val selectionLabel = selection.label ?: if (kind == "theme") strings.theme else strings.language
+        val options = selection.displayOptions(strings.system)
         button(
-            label = selection.label,
+            label = selectionLabel,
             supportingText = options.first { it.id == selection.selectedId }.label,
             icon = selection.icon ?: defaultIcon, enabled = selection.enabled,
             onClick = { openPicker(pickerKey) },
@@ -373,6 +378,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         appLock: AndroidKitAppLockSetting?,
         content: @Composable AndroidKitSettingSectionScope.() -> Unit,
     ) {
+        val strings = AndroidKitThemeTokens.strings
         val timeoutKey = "app-lock-timeout:$key"
         val timeout = appLock?.timeout?.takeIf { appLock.checked }
         if (timeout != null && appLock.enabled && timeout.enabled) {
@@ -380,20 +386,20 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         } else {
             timeoutPickers.remove(timeoutKey)
         }
-        section(key, label) {
+        section(key, label ?: strings.security) {
             appLock?.let {
-                toggle(it.label, it.checked, it.onCheckedChange, supportingText = it.supportingText,
+                toggle(it.label ?: strings.appLock, it.checked, it.onCheckedChange, supportingText = it.supportingText,
                     icon = it.icon ?: AndroidKitIcons.AppLock, enabled = it.enabled)
                 timeout?.let { selection ->
                     button(
-                        label = selection.label,
+                        label = selection.label ?: strings.lockAfterLeavingApp,
                         supportingText = selection.options.first { option -> option.id == selection.selectedId }.label,
                         enabled = it.enabled && selection.enabled,
                         onClick = { openPicker(timeoutKey) },
                     )
                 }
                 if (it.checked && it.onLockNow != null) {
-                    button(label = requireNotNull(it.lockNowLabel), onClick = it.onLockNow, enabled = it.enabled)
+                    button(label = it.lockNowLabel ?: strings.lockNow, onClick = it.onLockNow, enabled = it.enabled)
                 }
             }
             content()
@@ -404,9 +410,10 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
 @Composable
 private fun AppLockTimeoutDialog(selection: AndroidKitAppLockTimeoutSetting, onDismiss: () -> Unit) {
     val dimensions = AndroidKitThemeTokens.dimensions
+    val strings = AndroidKitThemeTokens.strings
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(selection.label) },
+        title = { Text(selection.label ?: strings.lockAfterLeavingApp) },
         confirmButton = {},
         text = {
             LazyColumn(modifier = Modifier.fillMaxWidth().selectableGroup()) {
@@ -436,7 +443,8 @@ private fun AppLockTimeoutDialog(selection: AndroidKitAppLockTimeoutSetting, onD
 private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
     val selection = picker.selection
-    val displayOptions = selection.displayOptions()
+    val strings = AndroidKitThemeTokens.strings
+    val displayOptions = selection.displayOptions(strings.system)
     val options = remember(displayOptions, query) {
         val search = query.searchKey()
         displayOptions.filter { search.isEmpty() || it.label.searchKey().contains(search) }
@@ -445,7 +453,7 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
     val dimensions = AndroidKitThemeTokens.dimensions
     val style = AndroidKitThemeTokens.bottomSheetStyle
     AndroidKitBottomSheet(
-        visible = true, title = selection.label, onDismiss = onDismiss,
+        visible = true, title = selection.label ?: strings.language, onDismiss = onDismiss,
         closeContentDescription = selection.closeContentDescription,
         fitContent = picker.searchLabel == null,
         search = picker.searchLabel?.let { AndroidKitSheetSearch(query, { query = it }, it) },
@@ -487,10 +495,10 @@ private val SearchMarks = Regex("\\p{M}+")
 private fun String.searchKey(): String = Normalizer.normalize(trim(), Normalizer.Form.NFD)
     .replace(SearchMarks, "").lowercase(Locale.ROOT)
 
-private fun AndroidKitSettingsSelection.displayOptions(): List<AndroidKitSettingsOption> =
+private fun AndroidKitSettingsSelection.displayOptions(systemLabel: String): List<AndroidKitSettingsOption> =
     listOf(
         AndroidKitSettingsOption(
             id = systemOption.id,
-            label = "${systemOption.label} (${systemOption.currentValueLabel})",
+            label = "${systemOption.label ?: systemLabel} (${systemOption.currentValueLabel})",
         )
     ) + options

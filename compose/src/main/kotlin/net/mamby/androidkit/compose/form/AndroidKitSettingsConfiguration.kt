@@ -30,24 +30,21 @@ public data class AndroidKitSettingsAction(
 }
 
 public data class AndroidKitSettingsSupport(
-    public val title: String,
-    public val description: String,
+    public val title: String? = null,
+    public val description: String? = null,
     public val action: AndroidKitSettingsAction,
 ) {
-    init {
-        require(title.isNotBlank() && description.isNotBlank()) { "Support requires a title and description." }
-    }
+    init { require(title == null || title.isNotBlank()) { "Support title must not be blank." } }
 }
 
 /** Available actions are always rendered in report, suggest, translate order. */
 public data class AndroidKitSettingsGetInvolved(
-    public val title: String,
+    public val title: String? = null,
     public val reportIssue: AndroidKitSettingsAction? = null,
     public val suggestImprovement: AndroidKitSettingsAction? = null,
     public val helpTranslate: AndroidKitSettingsAction? = null,
 ) {
     init {
-        require(title.isNotBlank()) { "Get involved requires a title." }
         require(reportIssue != null || suggestImprovement != null || helpTranslate != null) {
             "Get involved requires at least one action."
         }
@@ -56,12 +53,12 @@ public data class AndroidKitSettingsGetInvolved(
 
 /** About is settings content, using the same section and row renderers as other settings. */
 public data class AndroidKitSettingsAbout(
-    public val title: String,
+    public val title: String? = null,
     public val appName: String,
-    public val versionLabel: String,
+    public val versionLabel: String? = null,
     public val version: String,
-    public val openSourceTitle: String,
-    public val informationTitle: String,
+    public val openSourceTitle: String? = null,
+    public val informationTitle: String? = null,
     public val description: String? = null,
     public val maintainer: String? = null,
     public val appIcon: ImageVector? = null,
@@ -74,8 +71,8 @@ public data class AndroidKitSettingsAbout(
     public val contact: AndroidKitSettingsAction? = null,
 ) {
     init {
-        require(listOf(title, appName, versionLabel, version, openSourceTitle, informationTitle).all { it.isNotBlank() }) {
-            "About requires localized titles, app name, and version."
+        require(appName.isNotBlank() && version.isNotBlank()) {
+            "About requires a localized app name and version."
         }
     }
 }
@@ -97,16 +94,17 @@ public sealed interface AndroidKitSettingsPageConfiguration {
 }
 
 internal fun AndroidKitSettingsPageScope.aboutContent(about: AndroidKitSettingsAbout) {
+    val strings = AndroidKitThemeTokens.strings
     section("identity") {
         info(label = about.appName, supportingText = about.description, icon = about.appIcon)
         about.maintainer?.let { info(label = it) }
-        info(label = about.versionLabel, value = about.version)
+        info(label = about.versionLabel ?: strings.version, value = about.version)
         about.whatsNew?.let { action(it) }
     }
-    section("open-source", label = about.openSourceTitle) {
+    section("open-source", label = about.openSourceTitle ?: strings.openSource) {
         listOfNotNull(about.sourceCode, about.contributors, about.license, about.libraries).forEach { action(it) }
     }
-    section("information", label = about.informationTitle) {
+    section("information", label = about.informationTitle ?: strings.information) {
         listOfNotNull(about.privacyPolicy, about.contact).forEach { action(it) }
     }
 }
@@ -120,6 +118,7 @@ internal fun AndroidKitSettingSectionScope.action(action: AndroidKitSettingsActi
 internal fun SettingsSupportCard(support: AndroidKitSettingsSupport) {
     val dimensions = AndroidKitThemeTokens.dimensions
     val style = AndroidKitThemeTokens.settingSectionStyle
+    val strings = AndroidKitThemeTokens.strings
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = style.shape,
@@ -135,8 +134,8 @@ internal fun SettingsSupportCard(support: AndroidKitSettingsSupport) {
             Row(horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium)) {
                 Icon(AndroidKitIcons.Support, contentDescription = null)
                 Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
-                    Text(support.title, style = style.entryLabelTextStyle)
-                    Text(support.description, style = style.descriptionTextStyle)
+                    Text(support.title ?: strings.supportTitle, style = style.entryLabelTextStyle)
+                    Text(support.description ?: strings.supportDescription, style = style.descriptionTextStyle)
                 }
             }
             Button(onClick = support.action.onClick, enabled = support.action.enabled, modifier = Modifier.fillMaxWidth()) {
@@ -157,12 +156,12 @@ internal fun SettingsSupportCard(support: AndroidKitSettingsSupport) {
 internal fun SettingsGetInvolvedSection(data: AndroidKitSettingsGetInvolved) {
     val scope = SettingSectionScopeImpl()
     listOfNotNull(data.reportIssue, data.suggestImprovement, data.helpTranslate).forEach { scope.action(it) }
-    SettingsSection(entries = scope.entries, label = data.title)
+    SettingsSection(entries = scope.entries, label = data.title ?: AndroidKitThemeTokens.strings.getInvolved)
 }
 
 @Composable
 internal fun SettingsAboutEntry(data: AndroidKitSettingsAbout, onClick: () -> Unit) {
     val scope = SettingSectionScopeImpl()
-    scope.navigation(label = data.title, supportingText = data.appName, onClick = onClick)
+    scope.navigation(label = data.title ?: AndroidKitThemeTokens.strings.about, supportingText = data.appName, onClick = onClick)
     SettingsSection(entries = scope.entries)
 }

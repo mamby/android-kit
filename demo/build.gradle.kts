@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+apply(from = rootProject.file("gradle/validate-androidkit-localization.gradle.kts"))
+
 android {
     namespace = "net.mamby.androidkit.demo"
     compileSdk = 37
