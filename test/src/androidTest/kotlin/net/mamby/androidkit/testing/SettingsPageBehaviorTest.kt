@@ -85,21 +85,21 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     securitySection(appLock = AndroidKitAppLockSetting(
-                        label = "App lock", checked = checked, onCheckedChange = {},
+                        checked = checked, onCheckedChange = {},
                         timeout = AndroidKitAppLockTimeoutSetting(
-                            label = "Lock after leaving", options = timeoutOptions,
+                            options = timeoutOptions,
                             selectedId = selected, onSelected = { requested = it },
                         ),
-                        lockNowLabel = "Lock now", onLockNow = { locks++ },
+                        onLockNow = { locks++ },
                     ))
                 }
             }
         }
         rule.onNodeWithText("App lock").performClick()
-        rule.onNodeWithText("Lock after leaving").assertDoesNotExist()
+        rule.onNodeWithText("Lock after leaving the app").assertDoesNotExist()
         rule.onNodeWithText("Lock now").assertDoesNotExist()
         rule.runOnIdle { checked = true }
-        rule.onNodeWithText("Lock after leaving").performClick()
+        rule.onNodeWithText("Lock after leaving the app").performClick()
         rule.onNode(isDialog()).assertExists()
         rule.onNode(hasText("Immediately") and radioRole).assertIsSelected()
         rule.onNode(hasText("After 5 minutes") and radioRole).performClick()
@@ -119,9 +119,9 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     securitySection(appLock = AndroidKitAppLockSetting(
-                        label = "App lock", checked = true, onCheckedChange = {},
+                        checked = true, onCheckedChange = {},
                         timeout = AndroidKitAppLockTimeoutSetting(
-                            label = "Timeout", options = timeoutOptions,
+                            options = timeoutOptions,
                             selectedId = "5", onSelected = { requests++ },
                         ),
                     ))
@@ -129,11 +129,11 @@ class SettingsPageBehaviorTest {
             }
         }
         rule.onNodeWithText("Lock now").assertDoesNotExist()
-        rule.onNodeWithText("Timeout").performClick()
+        rule.onNodeWithText("Lock after leaving the app").performClick()
         pressBack()
         rule.onNode(isDialog()).assertDoesNotExist()
         rule.runOnIdle { assertEquals(0, requests) }
-        rule.onNodeWithText("Timeout").performClick()
+        rule.onNodeWithText("Lock after leaving the app").performClick()
         rule.onNode(hasText("After 5 minutes") and radioRole).assertIsSelected()
     }
 
@@ -149,12 +149,12 @@ class SettingsPageBehaviorTest {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     if (hasSection) {
                         securitySection(appLock = AndroidKitAppLockSetting(
-                            label = "App lock", checked = checked, onCheckedChange = {}, enabled = enabled,
+                            checked = checked, onCheckedChange = {}, enabled = enabled,
                             timeout = if (hasTimeout) AndroidKitAppLockTimeoutSetting(
-                                label = "Timeout", options = timeoutOptions, enabled = timeoutEnabled,
+                                options = timeoutOptions, enabled = timeoutEnabled,
                                 selectedId = "0", onSelected = {},
                             ) else null,
-                            lockNowLabel = "Lock now", onLockNow = {},
+                            onLockNow = {},
                         ))
                     }
                 }
@@ -165,7 +165,7 @@ class SettingsPageBehaviorTest {
             { hasTimeout = false }, { hasSection = false },
         )
         removals.forEach { remove ->
-            rule.onNodeWithText("Timeout").performClick()
+            rule.onNodeWithText("Lock after leaving the app").performClick()
             rule.onNode(isDialog()).assertExists()
             rule.runOnIdle { remove() }
             try {
@@ -181,7 +181,7 @@ class SettingsPageBehaviorTest {
                 checked = true; enabled = true; timeoutEnabled = true; hasTimeout = true; hasSection = true
             }
             rule.onNode(isDialog()).assertDoesNotExist()
-            rule.onAllNodesWithText("Timeout").assertCountEquals(1)
+            rule.onAllNodesWithText("Lock after leaving the app").assertCountEquals(1)
         }
     }
 
@@ -205,22 +205,21 @@ class SettingsPageBehaviorTest {
                     generalSection(
                         language = AndroidKitLanguageSetting(
                             selection = AndroidKitSettingsSelection(
-                                label = "Language", options = listOf(AndroidKitSettingsOption("en", "English")),
-                                selectedId = "en", onSelected = {}, closeContentDescription = "Close",
-                                systemOption = AndroidKitSettingsSystemOption("system", "System", "English"),
+                                options = listOf(AndroidKitSettingsOption("en", "English")),
+                                selectedId = "en", onSelected = {},
+                                systemOption = AndroidKitSettingsSystemOption("system", "English"),
                                 icon = icon,
                             ),
-                            searchLabel = "Search", emptyResultsLabel = "No results",
                         ),
                         theme = AndroidKitSettingsSelection(
-                            label = "Theme", options = listOf(AndroidKitSettingsOption("light", "Light")),
-                            selectedId = "light", onSelected = {}, closeContentDescription = "Close",
-                            systemOption = AndroidKitSettingsSystemOption("system", "System", "Light"),
+                            options = listOf(AndroidKitSettingsOption("light", "Light")),
+                            selectedId = "light", onSelected = {},
+                            systemOption = AndroidKitSettingsSystemOption("system", "Light"),
                             icon = icon,
                         ),
                     )
                     securitySection(appLock = AndroidKitAppLockSetting(
-                        label = "App lock", checked = false, onCheckedChange = {}, icon = icon,
+                        checked = false, onCheckedChange = {}, icon = icon,
                     ))
                 }
             }
@@ -246,8 +245,8 @@ class SettingsPageBehaviorTest {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     section("first") { button("First", {}) }
                     if (showEmpty) {
-                        generalSection(label = "Hidden general")
-                        securitySection(label = "Hidden security")
+                        generalSection()
+                        securitySection()
                         section("empty", label = "Hidden custom") {}
                     }
                     section("last") { button("Last", {}) }
@@ -271,24 +270,23 @@ class SettingsPageBehaviorTest {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     generalSection(language = AndroidKitLanguageSetting(
                         selection = AndroidKitSettingsSelection(
-                            label = "Language", selectedId = selected, onSelected = { selected = it },
+                            selectedId = selected, onSelected = { selected = it },
                             options = listOf(AndroidKitSettingsOption("en", "English"), AndroidKitSettingsOption("fr", "Français")),
-                            closeContentDescription = "Close picker",
-                            systemOption = AndroidKitSettingsSystemOption("system", "System", "English"),
-                        ), searchLabel = "Search languages", emptyResultsLabel = "No results",
+                            systemOption = AndroidKitSettingsSystemOption("system", "English"),
+                        ),
                     ))
                 }
             }
         }
         rule.onNodeWithText("Language").performClick()
         rule.onNodeWithText("Search languages").performTextReplacement("missing")
-        rule.onNodeWithText("No results").assertIsDisplayed()
+        rule.onNodeWithText("No matching languages").assertIsDisplayed()
         rule.onNodeWithText("Search languages").performTextReplacement("FRANCAIS")
         rule.onNodeWithText("Français").performClick()
         rule.runOnIdle { assertEquals("fr", selected) }
         rule.onNodeWithText("Language").performClick()
         rule.onNodeWithText("English").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Close picker").performClick()
+        rule.onNodeWithContentDescription("Close").performClick()
     }
 
     @Test
@@ -298,10 +296,9 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     generalSection(theme = AndroidKitSettingsSelection(
-                        label = "Theme", selectedId = selected, onSelected = { selected = it },
+                        selectedId = selected, onSelected = { selected = it },
                         options = listOf(AndroidKitSettingsOption("light", "Light"), AndroidKitSettingsOption("prism", "Prism")),
-                        closeContentDescription = "Close picker",
-                        systemOption = AndroidKitSettingsSystemOption("system", "System", "Light"),
+                        systemOption = AndroidKitSettingsSystemOption("system", "Light"),
                     ))
                 }
             }
@@ -317,11 +314,10 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     generalSection(theme = AndroidKitSettingsSelection(
-                        label = "Theme", selectedId = "system", onSelected = {},
+                        selectedId = "system", onSelected = {},
                         options = listOf(AndroidKitSettingsOption("light", "Light")),
-                        closeContentDescription = "Close",
                         systemOption = AndroidKitSettingsSystemOption(
-                            id = "system", label = "System", currentValueLabel = "Light",
+                            id = "system", currentValueLabel = "Light",
                         ),
                     ))
                 }
@@ -343,18 +339,18 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     generalSection(floatingOpacity = AndroidKitFloatingOpacitySetting(
-                        label = "Opacity", value = level, minimumLabel = "Min", maximumLabel = "Max",
+                        value = level,
                         onValueChange = { level = it }, onValueChangeFinished = { commits++ },
                     ))
                     securitySection(appLock = AndroidKitAppLockSetting(
-                        label = "App lock", checked = false, onCheckedChange = { lockRequests++ },
+                        checked = false, onCheckedChange = { lockRequests++ },
                     ))
                 }
             }
         }
         rule.onNodeWithText("Min").assertIsDisplayed()
         rule.onNodeWithText("Max").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Opacity").performSemanticsAction(SemanticsActions.SetProgress) { it(100f) }
+        rule.onNodeWithContentDescription("Transparency").performSemanticsAction(SemanticsActions.SetProgress) { it(100f) }
         rule.runOnIdle { assertEquals(100f, level); assertEquals(1, commits) }
         rule.onNodeWithText("App lock").performClick()
         rule.onNodeWithText("App lock").performClick()
@@ -368,7 +364,7 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     generalSection(floatingOpacity = AndroidKitFloatingOpacitySetting(
-                        label = "Opacity", value = level, minimumLabel = "Min", maximumLabel = "Max",
+                        value = level,
                         onValueChange = { level = it }, onValueChangeFinished = {},
                     ))
                     section(key = "scroll") { info(label = "Scroll content") }
@@ -376,12 +372,12 @@ class SettingsPageBehaviorTest {
             }
         }
 
-        rule.onNodeWithContentDescription("Opacity")
+        rule.onNodeWithContentDescription("Transparency")
             .performSemanticsAction(SemanticsActions.SetProgress) { it(100f) }
         rule.runOnIdle {
             assertEquals(100f, level)
         }
-        val progress = rule.onNodeWithContentDescription("Opacity")
+        val progress = rule.onNodeWithContentDescription("Transparency")
             .fetchSemanticsNode().config[SemanticsProperties.ProgressBarRangeInfo]
         assertEquals(100f, progress.current)
         rule.onAllNodesWithText("Scroll content").assertCountEquals(1)
@@ -397,21 +393,17 @@ class SettingsPageBehaviorTest {
                         toggle("Show language", showLanguage, { showLanguage = it })
                     }
                     generalSection(
-                        label = "General",
                         language = if (showLanguage) AndroidKitLanguageSetting(
                             selection = AndroidKitSettingsSelection(
-                                label = "Language", selectedId = "en", onSelected = {},
+                                selectedId = "en", onSelected = {},
                                 options = listOf(AndroidKitSettingsOption("en", "English")),
-                                closeContentDescription = "Close",
-                                systemOption = AndroidKitSettingsSystemOption("system", "System", "English"),
+                                systemOption = AndroidKitSettingsSystemOption("system", "English"),
                             ),
-                            searchLabel = "Search", emptyResultsLabel = "No results",
                         ) else null,
                         theme = AndroidKitSettingsSelection(
-                            label = "Theme", selectedId = "light", onSelected = {},
+                            selectedId = "light", onSelected = {},
                             options = listOf(AndroidKitSettingsOption("light", "Light")),
-                            closeContentDescription = "Close",
-                            systemOption = AndroidKitSettingsSystemOption("system", "System", "Light"),
+                            systemOption = AndroidKitSettingsSystemOption("system", "Light"),
                         ),
                     )
                 }
