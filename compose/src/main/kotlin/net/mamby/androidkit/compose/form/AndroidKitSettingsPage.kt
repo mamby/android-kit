@@ -217,9 +217,15 @@ public fun AndroidKitSettingsPage(
         ) {
             items(scope.items.toList(), key = { "section:${it.key}" }) { it.content() }
             if (configuration is AndroidKitSettingsPageConfiguration.Main) {
-                item(key = "kit:support") { SettingsSupportCard(configuration.support) }
-                item(key = "kit:get-involved") { SettingsGetInvolvedSection(configuration.getInvolved) }
-                item(key = "kit:about") { SettingsAboutContent(configuration.about) }
+                configuration.support?.let { support ->
+                    item(key = "kit:support") { SettingsSupportCard(support) }
+                }
+                configuration.getInvolved?.let { getInvolved ->
+                    item(key = "kit:get-involved") { SettingsGetInvolvedSection(getInvolved) }
+                }
+                configuration.about?.let { about ->
+                    item(key = "kit:about") { SettingsAboutContent(about) }
+                }
             }
         }
     }

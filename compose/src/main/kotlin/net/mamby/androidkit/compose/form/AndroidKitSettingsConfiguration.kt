@@ -68,12 +68,12 @@ public data class AndroidKitSettingsAbout(
     }
 }
 
-/** Required page role: main pages cannot accidentally omit the shared footer. */
+/** Main-page content is optional and rendered in the declared footer order. */
 public sealed interface AndroidKitSettingsPageConfiguration {
     public data class Main(
-        public val support: AndroidKitSettingsSupport,
-        public val getInvolved: AndroidKitSettingsGetInvolved,
-        public val about: AndroidKitSettingsAbout,
+        public val support: AndroidKitSettingsSupport? = null,
+        public val getInvolved: AndroidKitSettingsGetInvolved? = null,
+        public val about: AndroidKitSettingsAbout? = null,
     ) : AndroidKitSettingsPageConfiguration
 
     /** Ordinary host-defined subpage; no main-settings footer. */
