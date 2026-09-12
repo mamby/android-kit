@@ -32,6 +32,7 @@ import net.mamby.androidkit.demo.ui.screen.ComponentsScreen
 import net.mamby.androidkit.demo.ui.screen.DummyNavigationScreen
 import net.mamby.androidkit.demo.ui.screen.LocalizationScreen
 import net.mamby.androidkit.demo.ui.screen.SettingsScreen
+import net.mamby.androidkit.demo.ui.screen.AboutScreen
 import net.mamby.androidkit.navigation3.rememberMultiBackStackNavigationState
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -168,6 +169,7 @@ internal fun AndroidKitCatalogApp(
                         entry<LocalizationRoute> { LocalizationScreen() }
                         entry<SettingsRoute> {
                             SettingsScreen(
+                                onAbout = { navigation.navigate(AboutRoute) },
                                 appLockEnabled = settings.appLockEnabled,
                                 appLockTimeout = settings.appLockTimeout,
                                 onAppLockTimeoutChange = settingsViewModel::setAppLockTimeout,
@@ -192,6 +194,7 @@ internal fun AndroidKitCatalogApp(
                         entry<DemoRootRoute> { route ->
                             DummyNavigationScreen(index = route.index)
                         }
+                        entry<AboutRoute> { AboutScreen(onBack = navigation::goBack) }
                     },
                 )
             }

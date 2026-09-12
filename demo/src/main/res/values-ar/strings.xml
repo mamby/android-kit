@@ -129,4 +129,18 @@
     <string name="settings_lock_now">قفل الآن</string>
     <string name="demo_selected_action">الإجراء المحدد: %1$s</string>
     <string name="demo_no_action">لا شيء</string>
+    <string name="settings_support_title">دعم تطوير البرمجيات مفتوحة المصدر</string>
+    <string name="settings_support_description">ساهم في صيانة Android Kit واختباره وتحسينه.</string>
+    <string name="settings_support_action">معاينة إجراء الدعم</string>
+    <string name="settings_support_preview">هذه معاينة في الكتالوج. يحدد كل تطبيق وجهة الدعم الخاصة به؛ لا يتم تحصيل أي دفعات هنا.</string>
+    <string name="settings_get_involved">المشاركة</string>
+    <string name="settings_report_issue">الإبلاغ عن مشكلة</string>
+    <string name="settings_suggest_improvement">اقتراح تحسين</string>
+    <string name="about_maintainer">من تطوير Mamby</string>
+    <string name="about_version">الإصدار</string>
+    <string name="about_open_source">المصدر المفتوح</string>
+    <string name="about_information">معلومات</string>
+    <string name="about_source">الشيفرة المصدرية</string>
+    <string name="about_contributors">المساهمون</string>
+    <string name="about_license">ترخيص MIT</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitAppLockTimeoutSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
+import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 
@@ -19,7 +20,7 @@ private fun AppLockSettingsPreview() {
     var checked by rememberSaveable { mutableStateOf(true) }
     var selected by rememberSaveable { mutableStateOf("5") }
     AndroidKitTheme {
-        AndroidKitSettingsPage(title = "App lock UI preview") {
+        AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage, title = "App lock UI preview") {
             securitySection(
                 label = "Security",
                 appLock = AndroidKitAppLockSetting(

@@ -130,4 +130,18 @@
     <string name="flyout_demo_pdf">PDF</string>
     <string name="flyout_demo_plain_text">Plain text</string>
     <string name="flyout_demo_image">Image (unavailable)</string>
+    <string name="settings_support_title">Support open-source development</string>
+    <string name="settings_support_description">Help maintain, test, and improve Android Kit.</string>
+    <string name="settings_support_action">Preview support action</string>
+    <string name="settings_support_preview">This is a catalog preview. Apps provide their own support destination; no payment is collected here.</string>
+    <string name="settings_get_involved">Get involved</string>
+    <string name="settings_report_issue">Report an issue</string>
+    <string name="settings_suggest_improvement">Suggest an improvement</string>
+    <string name="about_maintainer">Made by Mamby</string>
+    <string name="about_version">Version</string>
+    <string name="about_open_source">Open source</string>
+    <string name="about_information">Information</string>
+    <string name="about_source">Source code</string>
+    <string name="about_contributors">Contributors</string>
+    <string name="about_license">MIT license</string>
 </resources>

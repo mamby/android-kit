@@ -144,6 +144,8 @@ public class AndroidKitSettingsPageScope internal constructor() {
     private val sections = mutableListOf<@Composable (SettingsPageRenderScope) -> Unit>()
     private val keys = mutableSetOf<String>()
 
+    internal val isEmpty: Boolean get() = sections.isEmpty()
+
     private fun add(key: String, render: @Composable (SettingsPageRenderScope) -> Unit) {
         require(keys.add(key)) { "Settings page keys must be unique: $key" }
         sections += render
@@ -200,24 +202,32 @@ internal interface SettingsPageRenderScope {
 }
 
 /**
- * A scrollable settings page. Hosts declare sections in display order and own values and routes.
- * Reuse this component for subpages, passing their Back action and a retained list state.
+ * A scrollable settings page. Main pages require Support, Get involved, and About data;
+ * Kit appends those sections after host settings. Subpages do not repeat this footer.
+ * Hosts own values, external links, navigation, and retained list state.
  */
 @Composable
 public fun AndroidKitSettingsPage(
+    configuration: AndroidKitSettingsPageConfiguration,
     title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     actions: List<AndroidKitActionItem> = emptyList(),
     listState: LazyListState = rememberLazyListState(),
-    content: AndroidKitSettingsPageScope.() -> Unit,
+    content: AndroidKitSettingsPageScope.() -> Unit = {},
 ): Unit {
     var activePicker by rememberSaveable { mutableStateOf<String?>(null) }
     val scope = SettingsPageScopeImpl { activePicker = it }
-    AndroidKitSettingsPageScope().apply(content).render(scope)
+    val declarations = AndroidKitSettingsPageScope().apply(content)
+    if (configuration is AndroidKitSettingsPageConfiguration.About) {
+        require(declarations.isEmpty) { "About content is supplied through AndroidKitSettingsAbout, not custom sections." }
+        declarations.aboutContent(configuration.data)
+    }
+    declarations.render(scope)
     val dimensions = AndroidKitThemeTokens.dimensions
     val direction = LocalLayoutDirection.current
-    AndroidKitPage(title = title, modifier = modifier, onBack = onBack, actions = actions) { padding ->
+    val pageTitle = title ?: (configuration as? AndroidKitSettingsPageConfiguration.About)?.data?.title
+    AndroidKitPage(title = pageTitle, modifier = modifier, onBack = onBack, actions = actions) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
@@ -229,7 +239,12 @@ public fun AndroidKitSettingsPage(
             ),
             verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
         ) {
-            items(scope.items.toList(), key = { it.key }) { it.content() }
+            items(scope.items.toList(), key = { "section:${it.key}" }) { it.content() }
+            if (configuration is AndroidKitSettingsPageConfiguration.Main) {
+                item(key = "kit:support") { SettingsSupportCard(configuration.support) }
+                item(key = "kit:get-involved") { SettingsGetInvolvedSection(configuration.getInvolved) }
+                item(key = "kit:about") { SettingsAboutEntry(configuration.about, configuration.onAbout) }
+            }
         }
     }
     val picker = scope.pickers[activePicker]?.takeIf { it.selection.enabled }

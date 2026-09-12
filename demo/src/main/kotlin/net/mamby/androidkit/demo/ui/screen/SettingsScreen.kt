@@ -3,6 +3,14 @@ package net.mamby.androidkit.demo.ui.screen
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
@@ -14,6 +22,10 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
+import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
+import net.mamby.androidkit.compose.form.AndroidKitSettingsSupport
+import net.mamby.androidkit.compose.form.AndroidKitSettingsGetInvolved
+import net.mamby.androidkit.compose.form.AndroidKitSettingsAction
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
 import net.mamby.androidkit.demo.ui.DemoAppLockTimeout
@@ -21,6 +33,7 @@ import net.mamby.androidkit.localization.AppLocaleManager
 
 @Composable
 fun SettingsScreen(
+    onAbout: () -> Unit,
     appLockEnabled: Boolean,
     appLockTimeout: DemoAppLockTimeout,
     onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
@@ -73,9 +86,27 @@ fun SettingsScreen(
                             )
         )
     }
-    val aboutSectionText = stringResource(R.string.about_section)
-    val aboutBodyText = stringResource(R.string.about_body)
-    AndroidKitSettingsPage(title = stringResource(R.string.settings_title)) {
+    val uriHandler = LocalUriHandler.current
+    var showSupportPreview by rememberSaveable { mutableStateOf(false) }
+    val configuration = AndroidKitSettingsPageConfiguration.Main(
+        support = AndroidKitSettingsSupport(
+            title = stringResource(R.string.settings_support_title),
+            description = stringResource(R.string.settings_support_description),
+            action = AndroidKitSettingsAction(stringResource(R.string.settings_support_action), { showSupportPreview = true }),
+        ),
+        getInvolved = AndroidKitSettingsGetInvolved(
+            title = stringResource(R.string.settings_get_involved),
+            reportIssue = AndroidKitSettingsAction(stringResource(R.string.settings_report_issue), {
+                uriHandler.openUri("$CatalogRepository/issues/new")
+            }),
+            suggestImprovement = AndroidKitSettingsAction(stringResource(R.string.settings_suggest_improvement), {
+                uriHandler.openUri("$CatalogRepository/issues/new")
+            }),
+        ),
+        about = catalogAbout(),
+        onAbout = onAbout,
+    )
+    AndroidKitSettingsPage(configuration = configuration, title = stringResource(R.string.settings_title)) {
         generalSection(
             label = settingsGeneralText,
             language = AndroidKitLanguageSetting(
@@ -140,9 +171,15 @@ fun SettingsScreen(
                 ),
             ),
         )
-        section(key = "about", label = aboutSectionText) {
-            info(label = aboutBodyText)
-        }
-
+    }
+    if (showSupportPreview) {
+        AlertDialog(
+            onDismissRequest = { showSupportPreview = false },
+            title = { Text(stringResource(R.string.settings_support_action)) },
+            text = { Text(stringResource(R.string.settings_support_preview)) },
+            confirmButton = {
+                TextButton(onClick = { showSupportPreview = false }) { Text(actionCloseText) }
+            },
+        )
     }
 }

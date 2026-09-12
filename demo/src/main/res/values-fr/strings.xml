@@ -129,4 +129,18 @@
     <string name="settings_lock_now">Verrouiller maintenant</string>
     <string name="demo_selected_action">Action sélectionnée : %1$s</string>
     <string name="demo_no_action">Aucune</string>
+    <string name="settings_support_title">Soutenir le développement open source</string>
+    <string name="settings_support_description">Aidez à maintenir, tester et améliorer Android Kit.</string>
+    <string name="settings_support_action">Aperçu du soutien</string>
+    <string name="settings_support_preview">Ceci est un aperçu du catalogue. Chaque application fournit sa destination de soutien ; aucun paiement n’est collecté ici.</string>
+    <string name="settings_get_involved">Participer</string>
+    <string name="settings_report_issue">Signaler un problème</string>
+    <string name="settings_suggest_improvement">Suggérer une amélioration</string>
+    <string name="about_maintainer">Créé par Mamby</string>
+    <string name="about_version">Version</string>
+    <string name="about_open_source">Open source</string>
+    <string name="about_information">Informations</string>
+    <string name="about_source">Code source</string>
+    <string name="about_contributors">Contributeurs</string>
+    <string name="about_license">Licence MIT</string>
 </resources>

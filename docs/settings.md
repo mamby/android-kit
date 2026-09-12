@@ -6,7 +6,15 @@ clearance. The standalone settings-section component has been removed; its
 renderer is internal. Hosts use the public page and entry DSLs.
 
 ```kotlin
-AndroidKitSettingsPage(title = settingsTitle, onBack = onBack) {
+AndroidKitSettingsPage(
+    configuration = AndroidKitSettingsPageConfiguration.Main(
+        support = support,
+        getInvolved = getInvolved,
+        about = about,
+        onAbout = onOpenAbout,
+    ),
+    title = settingsTitle,
+) {
     generalSection(
         label = generalLabel,
         language = languageSetting,
@@ -30,7 +38,49 @@ Page and section builders are non-composable. Resolve `stringResource`, painters
 and other composable inputs before entering them. Use `info(label, value,
 supportingText, icon)` for read-only rows; `button`, `navigation`, `toggle`, and
 `slider` declare Kit-rendered controls. Arbitrary page and row `item` slots are
-removed. App-owned subpages continue to use normal page body content.
+removed. App-owned settings subpages use the same page and entry DSLs.
+
+## Required main-page footer and About content
+
+Every call must explicitly select `Main`, `Subpage`, or `About` through
+`AndroidKitSettingsPageConfiguration`. There is no default role or optional
+main-page footer. This is a source-breaking API change: migrate main pages to
+`Main` and ordinary subpages/previews to `Subpage`.
+
+`Main` requires `AndroidKitSettingsSupport`, `AndroidKitSettingsGetInvolved`,
+`AndroidKitSettingsAbout`, and an `onAbout` navigation callback. Kit always
+renders all host sections first, then the support card, Get involved, and About
+entry. Their placement and renderers cannot be replaced with composable slots.
+The support card uses Material primary-container colors and the shared settings
+shape, text styles, and spacing. The other footer sections use normal settings rows.
+
+Get involved has optional `reportIssue`, `suggestImprovement`, and `helpTranslate`
+actions, rendered in that order. At least one must be supplied. Every action has
+host-localized text, an enabled state, an optional icon override, and a callback;
+the host decides whether to open a URL, mail intent, or internal destination.
+No payment service, beneficiary, donation URL, or tax claim is supplied by Kit.
+
+The same About data is reused by the host's About route:
+
+```kotlin
+AndroidKitSettingsPage(
+    configuration = AndroidKitSettingsPageConfiguration.About(about),
+    onBack = onBack,
+)
+```
+
+This renders app identity, maintainer, version and optional What's new first;
+then source, contributors, license and libraries; then privacy and contact.
+It uses the existing settings sections and items, not a separate page design.
+Unavailable actions and empty sections are omitted. About accepts no custom
+section builder; its typed data defines all content. Main-page footer sections
+are not repeated. Titles and identity/version labels come from the host.
+
+For other settings subpages use `configuration =
+AndroidKitSettingsPageConfiguration.Subpage` and the ordinary section builder.
+Navigation and per-route saved scroll state remain host-owned. The demo uses
+Navigation 3 for Settings to About and demonstrates support with an explicitly
+labeled preview dialog, without a payment destination.
 
 ## Host-owned choices and state
 

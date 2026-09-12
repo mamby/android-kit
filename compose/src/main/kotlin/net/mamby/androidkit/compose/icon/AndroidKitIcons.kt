@@ -17,6 +17,18 @@ import androidx.compose.ui.unit.dp
  * Host-provided product icons remain outside this set.
  */
 internal object AndroidKitIcons {
+    // Lucide heart, under the same ISC license as the other Kit chrome icons.
+    val Support: ImageVector = lucideIcon(name = "Heart") {
+        addPath(
+            pathData = addPathNodes(
+                "M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5" +
+                    "c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5",
+            ),
+            fill = null, stroke = LucideStroke, strokeLineWidth = LucideStrokeWidth,
+            strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round,
+        )
+    }
+
     val Theme: ImageVector = ImageVector.Builder(
         name = "AndroidKit.Theme", defaultWidth = 17.dp, defaultHeight = 17.dp,
         viewportWidth = 21.6f, viewportHeight = 21.6f,

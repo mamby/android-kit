@@ -17,6 +17,9 @@ data object LocalizationRoute : CatalogRootRoute
 data object SettingsRoute : CatalogRootRoute
 
 @Serializable
+data object AboutRoute : CatalogRoute
+
+@Serializable
 data class DemoRootRoute(val index: Int) : CatalogRootRoute
 
 @Serializable
