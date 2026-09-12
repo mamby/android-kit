@@ -93,6 +93,7 @@ public sealed interface AndroidKitSettingsPageConfiguration {
     public data class About(public val data: AndroidKitSettingsAbout) : AndroidKitSettingsPageConfiguration
 }
 
+@Composable
 internal fun AndroidKitSettingsPageScope.aboutContent(about: AndroidKitSettingsAbout) {
     val strings = AndroidKitThemeTokens.strings
     section("identity") {
