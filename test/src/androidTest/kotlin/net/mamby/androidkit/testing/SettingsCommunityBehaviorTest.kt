@@ -1,18 +1,14 @@
 package net.mamby.androidkit.testing
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -32,35 +28,25 @@ class SettingsCommunityBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun mainFooterFollowsSettingsAndAboutReturnsToRetainedScrollPosition() {
-        var aboutOpen by mutableStateOf(false)
+    fun mainFooterIncludesAboutContent() {
         var supportClicks = 0
         var reportClicks = 0
         var sourceClicks = 0
-        lateinit var mainList: LazyListState
         val about = aboutData(source = AndroidKitSettingsAction("Source code", { sourceClicks++ }))
         rule.setContent {
             SettingsTestViewport {
-                val holder = rememberSaveableStateHolder()
-                holder.SaveableStateProvider(aboutOpen) {
-                    if (aboutOpen) {
-                        AndroidKitSettingsPage(
-                            configuration = AndroidKitSettingsPageConfiguration.About(about),
-                            onBack = { aboutOpen = false },
-                        )
-                    } else {
-                        mainList = rememberLazyListState()
-                        AndroidKitSettingsPage(
-                            configuration = AndroidKitSettingsPageConfiguration.Main(
-                                support = AndroidKitSettingsSupport("Support this work", "Fund maintenance", AndroidKitSettingsAction("Support", { supportClicks++ })),
-                                getInvolved = AndroidKitSettingsGetInvolved("Get involved", reportIssue = AndroidKitSettingsAction("Report issue", { reportClicks++ })),
-                                about = about, onAbout = { aboutOpen = true },
-                            ),
-                            listState = mainList,
-                        ) {
-                            repeat(20) { index -> section("setting-$index") { info("Setting $index") } }
-                        }
-                    }
+                AndroidKitSettingsPage(
+                    configuration = AndroidKitSettingsPageConfiguration.Main(
+                        support = AndroidKitSettingsSupport(
+                            action = AndroidKitSettingsAction("Support", { supportClicks++ }),
+                        ),
+                        getInvolved = AndroidKitSettingsGetInvolved(
+                            reportIssue = AndroidKitSettingsAction("Report issue", { reportClicks++ }),
+                        ),
+                        about = about,
+                    ),
+                ) {
+                    repeat(20) { index -> section("setting-$index") { info("Setting $index") } }
                 }
             }
         }
@@ -73,29 +59,20 @@ class SettingsCommunityBehaviorTest {
         rule.onNodeWithText("Support").performClick()
         scrollTo("Report issue")
         rule.onNodeWithText("Report issue").performClick()
-        scrollTo("About")
-        // All four fit in the controlled viewport at the end of the list.
-        val positions = listOf("Setting 19", "Support this work", "Report issue", "About").map {
+        scrollTo("Example app")
+        val positions = listOf("Setting 19", "Support", "Report issue", "Example app").map {
             rule.onNodeWithText(it).assertIsDisplayed()
             rule.onNodeWithText(it).fetchSemanticsNode().boundsInRoot.top
         }
         assertTrue(positions.zipWithNext().all { (first, second) -> first < second })
-        var before = 0 to 0
-        rule.runOnIdle { before = mainList.firstVisibleItemIndex to mainList.firstVisibleItemScrollOffset }
-        rule.onNodeWithText("About").performClick()
-        rule.onNodeWithText("Example app").assertIsDisplayed()
-        rule.onNodeWithText("Support").assertDoesNotExist()
-        rule.onNodeWithText("Report issue").assertDoesNotExist()
         rule.onNode(hasScrollAction()).performScrollToNode(hasText("Source code"))
         rule.onNodeWithText("Source code").performClick()
-        rule.onNodeWithContentDescription("Back").performClick()
-        rule.onNodeWithText("About").assertIsDisplayed()
         rule.runOnIdle {
-            assertEquals(before, mainList.firstVisibleItemIndex to mainList.firstVisibleItemScrollOffset)
             assertEquals(1, supportClicks)
             assertEquals(1, reportClicks)
             assertEquals(1, sourceClicks)
         }
+        rule.onNodeWithText("About").assertDoesNotExist()
     }
 
     @Test
@@ -104,9 +81,19 @@ class SettingsCommunityBehaviorTest {
         var version by mutableStateOf("1.0")
         rule.setContent {
             SettingsTestViewport {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.About(
-                    aboutData(source = if (showSource) AndroidKitSettingsAction("Source code", {}) else null).copy(version = version),
-                ))
+                AndroidKitSettingsPage(
+                    configuration = AndroidKitSettingsPageConfiguration.Main(
+                        support = AndroidKitSettingsSupport(
+                            action = AndroidKitSettingsAction("Support", {}),
+                        ),
+                        getInvolved = AndroidKitSettingsGetInvolved(
+                            reportIssue = AndroidKitSettingsAction("Report issue", {}),
+                        ),
+                        about = aboutData(
+                            source = if (showSource) AndroidKitSettingsAction("Source code", {}) else null,
+                        ).copy(version = version),
+                    ),
+                )
             }
         }
         rule.onNodeWithText("1.0").assertIsDisplayed()
@@ -126,6 +113,5 @@ private fun SettingsTestViewport(content: @Composable () -> Unit) {
 }
 
 private fun aboutData(source: AndroidKitSettingsAction?) = AndroidKitSettingsAbout(
-    title = "About", appName = "Example app", versionLabel = "Version", version = "1.0",
-    openSourceTitle = "Open source", informationTitle = "Information", sourceCode = source,
+    appName = "Example app", version = "1.0", sourceCode = source,
 )

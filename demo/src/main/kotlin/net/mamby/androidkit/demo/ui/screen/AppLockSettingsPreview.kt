@@ -22,11 +22,9 @@ private fun AppLockSettingsPreview() {
     AndroidKitTheme {
         AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage, title = "App lock UI preview") {
             securitySection(
-                label = "Security",
                 appLock = AndroidKitAppLockSetting(
-                    label = "App lock", checked = checked, onCheckedChange = { checked = it },
+                    checked = checked, onCheckedChange = { checked = it },
                     timeout = AndroidKitAppLockTimeoutSetting(
-                        label = "Lock after leaving the app",
                         options = listOf(
                             AndroidKitSettingsOption("0", "Immediately"),
                             AndroidKitSettingsOption("1", "After 1 minute"),
@@ -35,7 +33,7 @@ private fun AppLockSettingsPreview() {
                         ),
                         selectedId = selected, onSelected = { selected = it },
                     ),
-                    lockNowLabel = "Lock now", onLockNow = {},
+                    onLockNow = {},
                 ),
             )
         }

@@ -16,8 +16,8 @@ abstract class ValidateAndroidKitLocalization : DefaultTask() {
     fun validate() {
         val catalog = readObject(catalogFile.get().asFile)
         val snapshot = readObject(snapshotFile.get().asFile)
-        val catalogStrings = objectValue(catalog, "strings")
-        val snapshotStrings = objectValue(snapshot, "strings")
+        val catalogStrings = objectValue(catalog["strings"], "strings")
+        val snapshotStrings = objectValue(snapshot["strings"], "strings")
         val locales = listValue(snapshot, "locales").map { it.toString() }.toSet()
         val errors = mutableListOf<String>()
 
@@ -37,7 +37,7 @@ abstract class ValidateAndroidKitLocalization : DefaultTask() {
                 errors += "$key changed in AndroidKit (revision $catalogRevision); update its host translation."
             }
 
-            val translations = objectValue(snapshotObject, "translations")
+            val translations = objectValue(snapshotObject["translations"], "translations")
             locales.filterNot { it.equals("en", ignoreCase = true) }.forEach { locale ->
                 val translation = translations[locale]?.toString().orEmpty().trim()
                 if (translation.isEmpty()) {
@@ -79,7 +79,14 @@ if (catalogPath != null && snapshotPath != null) {
         catalogFile.set(rootProject.layout.projectDirectory.file(catalogPath))
         snapshotFile.set(rootProject.layout.projectDirectory.file(snapshotPath))
     }
-    tasks.matching { it.name == "check" }.configureEach {
+    tasks.matching {
+        it.name == "check" ||
+            it.name == "preBuild" ||
+            it.name.startsWith("pre") && it.name.endsWith("Build") ||
+            it.name.startsWith("assemble") ||
+            it.name.startsWith("bundle") ||
+            it.name.startsWith("lint")
+    }.configureEach {
         dependsOn("validateAndroidKitLocalization")
     }
 }

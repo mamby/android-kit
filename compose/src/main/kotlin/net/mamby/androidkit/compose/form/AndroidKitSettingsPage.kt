@@ -50,7 +50,6 @@ public data class AndroidKitSettingsOption(public val id: String, public val lab
 /** A system choice and the host-localized value it currently resolves to. */
 public data class AndroidKitSettingsSystemOption(
     public val id: String,
-    public val label: String? = null,
     public val currentValueLabel: String,
 ) {
     init {
@@ -60,11 +59,9 @@ public data class AndroidKitSettingsSystemOption(
 }
 
 public data class AndroidKitSettingsSelection(
-    public val label: String? = null,
     public val options: List<AndroidKitSettingsOption>,
     public val selectedId: String,
     public val onSelected: (String) -> Unit,
-    public val closeContentDescription: String? = null,
     public val enabled: Boolean = true,
     /** Optional row icon override; null uses the predefined language or theme icon. */
     public val icon: ImageVector? = null,
@@ -80,15 +77,10 @@ public data class AndroidKitSettingsSelection(
 
 public data class AndroidKitLanguageSetting(
     public val selection: AndroidKitSettingsSelection,
-    public val searchLabel: String? = null,
-    public val emptyResultsLabel: String? = null,
 )
 
 public data class AndroidKitFloatingOpacitySetting(
-    public val label: String? = null,
     public val value: Float,
-    public val minimumLabel: String? = null,
-    public val maximumLabel: String? = null,
     public val onValueChange: (Float) -> Unit,
     public val onValueChangeFinished: () -> Unit,
     public val supportingText: String? = null,
@@ -102,7 +94,6 @@ public data class AndroidKitFloatingOpacitySetting(
 
 /** Timeout choices. Hosts own the policy and options; Kit supplies shared fallback labels. */
 public data class AndroidKitAppLockTimeoutSetting(
-    public val label: String? = null,
     public val options: List<AndroidKitSettingsOption>,
     public val selectedId: String,
     public val onSelected: (String) -> Unit,
@@ -116,7 +107,6 @@ public data class AndroidKitAppLockTimeoutSetting(
 }
 
 public data class AndroidKitAppLockSetting(
-    public val label: String? = null,
     public val checked: Boolean,
     public val onCheckedChange: (Boolean) -> Unit,
     public val supportingText: String? = null,
@@ -125,11 +115,9 @@ public data class AndroidKitAppLockSetting(
     public val icon: ImageVector? = null,
     /** Shown only while checked. The host persists and enforces the selected timeout. */
     public val timeout: AndroidKitAppLockTimeoutSetting? = null,
-    public val lockNowLabel: String? = null,
     /** Optional lock action, shown only while checked; Kit supplies the shared fallback label. */
     public val onLockNow: (() -> Unit)? = null,
 ) {
-    init { require(lockNowLabel == null || lockNowLabel.isNotBlank()) { "Lock now label must not be blank." } }
 }
 
 @DslMarker
@@ -141,22 +129,20 @@ public class AndroidKitSettingsPageScope internal constructor() {
     private val sections = mutableListOf<@Composable (SettingsPageRenderScope) -> Unit>()
     private val keys = mutableSetOf<String>()
 
-    internal val isEmpty: Boolean get() = sections.isEmpty()
-
     private fun add(key: String, render: @Composable (SettingsPageRenderScope) -> Unit) {
         require(keys.add(key)) { "Settings page keys must be unique: $key" }
         sections += render
     }
 
-    public fun generalSection(key: String = "general", label: String? = null,
+    public fun generalSection(key: String = "general",
         language: AndroidKitLanguageSetting? = null, theme: AndroidKitSettingsSelection? = null,
         floatingOpacity: AndroidKitFloatingOpacitySetting? = null,
-    ) { add(key) { it.generalSection(key, label, language, theme, floatingOpacity) } }
+    ) { add(key) { it.generalSection(key, language, theme, floatingOpacity) } }
 
-    public fun securitySection(key: String = "security", label: String? = null,
+    public fun securitySection(key: String = "security",
         appLock: AndroidKitAppLockSetting? = null,
         content: AndroidKitSettingSectionScope.() -> Unit = {},
-    ) { add(key) { it.securitySection(key, label, appLock) { content() } } }
+    ) { add(key) { it.securitySection(key, appLock) { content() } } }
 
     public fun section(key: String, label: String? = null, description: String? = null,
         content: AndroidKitSettingSectionScope.() -> Unit,
@@ -172,7 +158,6 @@ internal interface SettingsPageRenderScope {
     @NonSkippableComposable
     public fun generalSection(
         key: String = "general",
-        label: String? = null,
         language: AndroidKitLanguageSetting? = null,
         theme: AndroidKitSettingsSelection? = null,
         floatingOpacity: AndroidKitFloatingOpacitySetting? = null,
@@ -182,7 +167,6 @@ internal interface SettingsPageRenderScope {
     @NonSkippableComposable
     public fun securitySection(
         key: String = "security",
-        label: String? = null,
         appLock: AndroidKitAppLockSetting? = null,
         content: @Composable AndroidKitSettingSectionScope.() -> Unit = {},
     ): Unit
@@ -200,7 +184,7 @@ internal interface SettingsPageRenderScope {
 
 /**
  * A scrollable settings page. Main pages require Support, Get involved, and About data;
- * Kit appends those sections after host settings. Subpages do not repeat this footer.
+ * Kit appends that content after host settings. Subpages do not repeat this footer.
  * Hosts own values, external links, navigation, and retained list state.
  */
 @Composable
@@ -216,15 +200,10 @@ public fun AndroidKitSettingsPage(
     var activePicker by rememberSaveable { mutableStateOf<String?>(null) }
     val scope = SettingsPageScopeImpl { activePicker = it }
     val declarations = AndroidKitSettingsPageScope().apply(content)
-    if (configuration is AndroidKitSettingsPageConfiguration.About) {
-        require(declarations.isEmpty) { "About content is supplied through AndroidKitSettingsAbout, not custom sections." }
-        declarations.aboutContent(configuration.data)
-    }
     declarations.render(scope)
     val dimensions = AndroidKitThemeTokens.dimensions
     val direction = LocalLayoutDirection.current
-    val pageTitle = title ?: (configuration as? AndroidKitSettingsPageConfiguration.About)?.data?.title
-    AndroidKitPage(title = pageTitle, modifier = modifier, onBack = onBack, actions = actions) { padding ->
+    AndroidKitPage(title = title, modifier = modifier, onBack = onBack, actions = actions) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
@@ -240,7 +219,7 @@ public fun AndroidKitSettingsPage(
             if (configuration is AndroidKitSettingsPageConfiguration.Main) {
                 item(key = "kit:support") { SettingsSupportCard(configuration.support) }
                 item(key = "kit:get-involved") { SettingsGetInvolvedSection(configuration.getInvolved) }
-                item(key = "kit:about") { SettingsAboutEntry(configuration.about, configuration.onAbout) }
+                item(key = "kit:about") { SettingsAboutContent(configuration.about) }
             }
         }
     }
@@ -315,19 +294,18 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
     @NonSkippableComposable
     override fun generalSection(
         key: String,
-        label: String?,
         language: AndroidKitLanguageSetting?,
         theme: AndroidKitSettingsSelection?,
         floatingOpacity: AndroidKitFloatingOpacitySetting?,
     ) {
         val strings = AndroidKitThemeTokens.strings
-        section(key, label ?: strings.general) {
+        section(key, strings.general) {
             language?.let {
                 addPicker(
                     key, "language", SettingsPickerDefinition(
                         it.selection,
-                        it.searchLabel ?: strings.searchLanguages,
-                        it.emptyResultsLabel ?: strings.noMatchingLanguages,
+                        strings.searchLanguages,
+                        strings.noMatchingLanguages,
                     ),
                     AndroidKitIcons.Language,
                 )
@@ -335,14 +313,14 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
             theme?.let { addPicker(key, "theme", SettingsPickerDefinition(it), AndroidKitIcons.Theme) }
             floatingOpacity?.let {
                 (this as SettingSectionScopeImpl).entries += SettingsEntryDefinition.Slider(
-                    label = it.label ?: strings.transparency, value = it.value, onValueChange = it.onValueChange,
+                    label = strings.transparency, value = it.value, onValueChange = it.onValueChange,
                     modifier = Modifier,
                     valueRange = AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel..
                         AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
                     steps = 19, onValueChangeFinished = it.onValueChangeFinished,
                     supportingText = it.supportingText, icon = null, valueLabel = null,
                     enabled = it.enabled, colors = null,
-                    minimumLabel = it.minimumLabel ?: strings.min, maximumLabel = it.maximumLabel ?: strings.max,
+                    minimumLabel = strings.min, maximumLabel = strings.max,
                     isOpacitySlider = true,
                 )
             }
@@ -360,7 +338,7 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         pickers[pickerKey] = picker
         val selection = picker.selection
         val strings = AndroidKitThemeTokens.strings
-        val selectionLabel = selection.label ?: if (kind == "theme") strings.theme else strings.language
+        val selectionLabel = if (kind == "theme") strings.theme else strings.language
         val options = selection.displayOptions(strings.system)
         button(
             label = selectionLabel,
@@ -374,7 +352,6 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
     @NonSkippableComposable
     override fun securitySection(
         key: String,
-        label: String?,
         appLock: AndroidKitAppLockSetting?,
         content: @Composable AndroidKitSettingSectionScope.() -> Unit,
     ) {
@@ -386,20 +363,20 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         } else {
             timeoutPickers.remove(timeoutKey)
         }
-        section(key, label ?: strings.security) {
+        section(key, strings.security) {
             appLock?.let {
-                toggle(it.label ?: strings.appLock, it.checked, it.onCheckedChange, supportingText = it.supportingText,
+                toggle(strings.appLock, it.checked, it.onCheckedChange, supportingText = it.supportingText,
                     icon = it.icon ?: AndroidKitIcons.AppLock, enabled = it.enabled)
                 timeout?.let { selection ->
                     button(
-                        label = selection.label ?: strings.lockAfterLeavingApp,
+                        label = strings.lockAfterLeavingApp,
                         supportingText = selection.options.first { option -> option.id == selection.selectedId }.label,
                         enabled = it.enabled && selection.enabled,
                         onClick = { openPicker(timeoutKey) },
                     )
                 }
                 if (it.checked && it.onLockNow != null) {
-                    button(label = it.lockNowLabel ?: strings.lockNow, onClick = it.onLockNow, enabled = it.enabled)
+                    button(label = strings.lockNow, onClick = it.onLockNow, enabled = it.enabled)
                 }
             }
             content()
@@ -413,7 +390,7 @@ private fun AppLockTimeoutDialog(selection: AndroidKitAppLockTimeoutSetting, onD
     val strings = AndroidKitThemeTokens.strings
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(selection.label ?: strings.lockAfterLeavingApp) },
+        title = { Text(strings.lockAfterLeavingApp) },
         confirmButton = {},
         text = {
             LazyColumn(modifier = Modifier.fillMaxWidth().selectableGroup()) {
@@ -453,8 +430,7 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
     val dimensions = AndroidKitThemeTokens.dimensions
     val style = AndroidKitThemeTokens.bottomSheetStyle
     AndroidKitBottomSheet(
-        visible = true, title = selection.label ?: strings.language, onDismiss = onDismiss,
-        closeContentDescription = selection.closeContentDescription,
+        visible = true, title = strings.language, onDismiss = onDismiss,
         fitContent = picker.searchLabel == null,
         search = picker.searchLabel?.let { AndroidKitSheetSearch(query, { query = it }, it) },
         scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
@@ -499,6 +475,6 @@ private fun AndroidKitSettingsSelection.displayOptions(systemLabel: String): Lis
     listOf(
         AndroidKitSettingsOption(
             id = systemOption.id,
-            label = "${systemOption.label ?: systemLabel} (${systemOption.currentValueLabel})",
+            label = "$systemLabel (${systemOption.currentValueLabel})",
         )
     ) + options

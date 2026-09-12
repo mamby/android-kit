@@ -26,6 +26,8 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSupport
 import net.mamby.androidkit.compose.form.AndroidKitSettingsGetInvolved
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAction
+import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
+import net.mamby.androidkit.demo.BuildConfig
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
 import net.mamby.androidkit.demo.ui.DemoAppLockTimeout
@@ -33,7 +35,6 @@ import net.mamby.androidkit.localization.AppLocaleManager
 
 @Composable
 fun SettingsScreen(
-    onAbout: () -> Unit,
     appLockEnabled: Boolean,
     appLockTimeout: DemoAppLockTimeout,
     onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
@@ -52,28 +53,15 @@ fun SettingsScreen(
     val localeManager = remember(context) {
         AppLocaleManager(context, SupportedLanguageTags.toSet())
     }
-    val settingsGeneralText = stringResource(R.string.settings_general)
-    val languageSectionText = stringResource(R.string.language_section)
     val actionCloseText = stringResource(R.string.action_close)
-    val languageSystemText = stringResource(R.string.language_system)
-    val settingsSearchLanguagesText = stringResource(R.string.settings_search_languages)
-    val settingsNoLanguagesText = stringResource(R.string.settings_no_languages)
-    val settingsThemeText = stringResource(R.string.settings_theme)
     val themeLightText = stringResource(R.string.theme_light)
     val themeDarkText = stringResource(R.string.theme_dark)
     val themePrismText = stringResource(R.string.theme_prism)
     val systemThemeText = stringResource(
                         if (isSystemInDarkTheme()) R.string.theme_dark else R.string.theme_light,
                     )
-    val floatingSurfaceOpacityText = stringResource(R.string.floating_surface_opacity)
-    val settingsMinText = stringResource(R.string.settings_min)
-    val settingsMaxText = stringResource(R.string.settings_max)
     val floatingSurfaceOpacityDescriptionText = stringResource(R.string.floating_surface_opacity_description)
-    val settingsSecurityText = stringResource(R.string.settings_security)
-    val settingsAppLockText = stringResource(R.string.settings_app_lock)
     val settingsAppLockDescriptionText = stringResource(R.string.settings_app_lock_description)
-    val settingsLockNowText = stringResource(R.string.settings_lock_now)
-    val settingsAppLockTimeoutText = stringResource(R.string.settings_app_lock_timeout)
     val timeoutOptions = DemoAppLockTimeout.entries.map { timeout ->
         AndroidKitSettingsOption(id = timeout.name,
             label = stringResource(
@@ -90,12 +78,9 @@ fun SettingsScreen(
     var showSupportPreview by rememberSaveable { mutableStateOf(false) }
     val configuration = AndroidKitSettingsPageConfiguration.Main(
         support = AndroidKitSettingsSupport(
-            title = stringResource(R.string.settings_support_title),
-            description = stringResource(R.string.settings_support_description),
             action = AndroidKitSettingsAction(stringResource(R.string.settings_support_action), { showSupportPreview = true }),
         ),
         getInvolved = AndroidKitSettingsGetInvolved(
-            title = stringResource(R.string.settings_get_involved),
             reportIssue = AndroidKitSettingsAction(stringResource(R.string.settings_report_issue), {
                 uriHandler.openUri("$CatalogRepository/issues/new")
             }),
@@ -104,31 +89,23 @@ fun SettingsScreen(
             }),
         ),
         about = catalogAbout(),
-        onAbout = onAbout,
     )
     AndroidKitSettingsPage(configuration = configuration, title = stringResource(R.string.settings_title)) {
         generalSection(
-            label = settingsGeneralText,
             language = AndroidKitLanguageSetting(
                 selection = AndroidKitSettingsSelection(
-                    label = languageSectionText,
                     options = SupportedLanguageTags.map { tag ->
                         AndroidKitSettingsOption(tag, nativeLanguageName(tag))
                     },
                     selectedId = localeManager.selectedLanguageTag() ?: "system",
                     onSelected = { id -> localeManager.setApplicationLanguage(id.takeUnless { it == "system" }) },
-                    closeContentDescription = actionCloseText,
                     systemOption = AndroidKitSettingsSystemOption(
                         id = "system",
-                        label = languageSystemText,
                         currentValueLabel = localeManager.systemLocale().getDisplayLanguage(displayLocale),
                     ),
                 ),
-                searchLabel = settingsSearchLanguagesText,
-                emptyResultsLabel = settingsNoLanguagesText,
             ),
             theme = AndroidKitSettingsSelection(
-                label = settingsThemeText,
                 options = listOf(
                     AndroidKitSettingsOption(DemoThemeChoice.Light.name, themeLightText),
                     AndroidKitSettingsOption(DemoThemeChoice.Dark.name, themeDarkText),
@@ -136,35 +113,26 @@ fun SettingsScreen(
                 ),
                 selectedId = themeChoice.name,
                 onSelected = { onThemeChoice(DemoThemeChoice.valueOf(it)) },
-                closeContentDescription = actionCloseText,
                 systemOption = AndroidKitSettingsSystemOption(
                     id = DemoThemeChoice.System.name,
-                    label = languageSystemText,
                     currentValueLabel = systemThemeText,
                 ),
             ),
             floatingOpacity = AndroidKitFloatingOpacitySetting(
-                label = floatingSurfaceOpacityText,
                 value = floatingSurfaceOpacityLevel,
-                minimumLabel = settingsMinText,
-                maximumLabel = settingsMaxText,
                 onValueChange = onFloatingSurfaceOpacityLevelChange,
                 onValueChangeFinished = onFloatingSurfaceOpacityLevelChangeFinished,
                 supportingText = floatingSurfaceOpacityDescriptionText,
             ),
         )
         securitySection(
-            label = settingsSecurityText,
             appLock = AndroidKitAppLockSetting(
-                label = settingsAppLockText,
                 checked = appLockEnabled,
                 onCheckedChange = onAppLockChange,
                 enabled = !appLockBusy,
                 supportingText = appLockError ?: settingsAppLockDescriptionText,
-                lockNowLabel = settingsLockNowText,
                 onLockNow = onLockNow,
                 timeout = AndroidKitAppLockTimeoutSetting(
-                    label = settingsAppLockTimeoutText,
                     options = timeoutOptions,
                     selectedId = appLockTimeout.name,
                     onSelected = { onAppLockTimeoutChange(DemoAppLockTimeout.valueOf(it)) },
@@ -182,4 +150,24 @@ fun SettingsScreen(
             },
         )
     }
+}
+
+private const val CatalogRepository = "https://github.com/mamby/android-kit"
+
+@Composable
+private fun catalogAbout(): AndroidKitSettingsAbout {
+    val uriHandler = LocalUriHandler.current
+    return AndroidKitSettingsAbout(
+        appName = stringResource(R.string.app_name),
+        description = stringResource(R.string.about_body),
+        maintainer = stringResource(R.string.about_maintainer),
+        version = BuildConfig.VERSION_NAME,
+        sourceCode = AndroidKitSettingsAction(stringResource(R.string.about_source), { uriHandler.openUri(CatalogRepository) }),
+        contributors = AndroidKitSettingsAction(stringResource(R.string.about_contributors), {
+            uriHandler.openUri("$CatalogRepository/graphs/contributors")
+        }),
+        license = AndroidKitSettingsAction(stringResource(R.string.about_license), {
+            uriHandler.openUri("$CatalogRepository/blob/main/LICENSE")
+        }),
+    )
 }

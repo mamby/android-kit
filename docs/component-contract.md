@@ -22,8 +22,8 @@ escape hatch. Migrate consumers and the demo with the library.
 - Settings: resolve composable resources before the page builder. Use `section`
   and typed rows, including `info` for labels, values, and supporting text.
   Select an explicit page configuration: `Main` requires Support, Get involved,
-  About data and navigation; `Subpage` has no footer; `About` renders typed About
-  content with the same settings rows. See [settings.md](settings.md).
+  and About data and renders that content inline; `Subpage` has no footer. See
+  [settings.md](settings.md).
 - Cards: replace `header` and `headerSupportingContent` with `title` and
   `supportingText`. Explicit typography and supporting color belong in card style.
 - Floating controls: supply `AndroidKitFloatingAction.Button(icon, label, onClick)`

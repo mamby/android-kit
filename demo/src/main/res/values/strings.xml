@@ -53,7 +53,6 @@
     <string name="sheet_detail_title">Sheet detail</string>
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
     <string name="sheet_list_item">Content-managed item %1$d</string>
-    <string name="about_section">About this catalog</string>
     <string name="about_body">The catalog consumes the same public artifacts intended for external open-source apps.</string>
     <string name="variation_basic">Basic</string>
     <string name="variation_with_title">With title</string>
@@ -103,6 +102,7 @@
     <string name="floating_navigation_scenario_instruction">These choices persist across destination changes.</string>
     <string name="demo_scroll_text">This muted block provides enough content to verify that the page scrolls while floating controls remain anchored.\n\nThe second paragraph makes line wrapping, text scaling, and spacing visible across compact and expanded windows.\n\nA third paragraph extends the page beyond the initial viewport without introducing another visual surface.\n\nThe fourth paragraph helps verify that scrolling remains smooth beneath floating title and action controls.\n\nThe fifth paragraph keeps the example neutral so attention remains on the component currently being demonstrated.\n\nThe sixth paragraph provides more distance for checking immersive title-bar visibility.\n\nThe seventh paragraph confirms that long content remains readable with larger accessibility text sizes.\n\nThe eighth paragraph makes bottom navigation clearance easier to inspect near the end of the page.\n\nThe ninth paragraph checks that spacing stays consistent after a longer continuous block of content.\n\nThe tenth and final paragraph confirms that all content remains reachable above navigation and system insets.</string>
     <string name="settings_general">General</string>
+    <string name="settings_language">Language</string>
     <string name="settings_security">Security</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_min">Min</string>
@@ -138,9 +138,6 @@
     <string name="settings_report_issue">Report an issue</string>
     <string name="settings_suggest_improvement">Suggest an improvement</string>
     <string name="about_maintainer">Made by Mamby</string>
-    <string name="about_version">Version</string>
-    <string name="about_open_source">Open source</string>
-    <string name="about_information">Information</string>
     <string name="about_source">Source code</string>
     <string name="about_contributors">Contributors</string>
     <string name="about_license">MIT license</string>

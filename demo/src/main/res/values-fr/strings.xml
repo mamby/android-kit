@@ -52,7 +52,6 @@
     <string name="sheet_detail_title">Détail de la feuille</string>
     <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>
     <string name="sheet_list_item">Élément à défilement géré %1$d</string>
-    <string name="about_section">À propos du catalogue</string>
     <string name="about_body">Le catalogue consomme les mêmes artefacts publics destinés aux applications open source externes.</string>
     <string name="variation_basic">Simple</string>
     <string name="variation_with_title">Avec titre</string>
@@ -109,6 +108,7 @@
     <string name="floating_navigation_scenario_instruction">Ces choix sont conservés lors des changements de destination.</string>
     <string name="demo_scroll_text">Ce bloc discret fournit assez de contenu pour vérifier que la page défile tandis que les commandes flottantes restent ancrées.\n\nLe deuxième paragraphe rend visibles le retour à la ligne, la mise à l’échelle du texte et les espacements sur les fenêtres compactes et étendues.\n\nUn troisième paragraphe prolonge la page au-delà de la fenêtre initiale sans ajouter une autre surface visuelle.\n\nLe quatrième paragraphe aide à vérifier que le défilement reste fluide sous le titre et les actions flottantes.\n\nLe cinquième paragraphe garde l’exemple neutre afin que l’attention reste portée sur le composant présenté.\n\nLe sixième paragraphe fournit davantage de distance pour tester la visibilité immersive de la barre de titre.\n\nLe septième paragraphe confirme que le contenu long reste lisible avec une taille de texte d’accessibilité plus grande.\n\nLe huitième paragraphe facilite l’inspection de l’espace réservé à la navigation près du bas de la page.\n\nLe neuvième paragraphe vérifie que les espacements restent cohérents après un long bloc de contenu continu.\n\nLe dixième et dernier paragraphe confirme que tout le contenu reste accessible au-dessus de la navigation et des marges système.</string>
     <string name="settings_general">Général</string>
+    <string name="settings_language">Langue</string>
     <string name="settings_security">Sécurité</string>
     <string name="settings_theme">Thème</string>
     <string name="settings_min">Min</string>
@@ -137,9 +137,6 @@
     <string name="settings_report_issue">Signaler un problème</string>
     <string name="settings_suggest_improvement">Suggérer une amélioration</string>
     <string name="about_maintainer">Créé par Mamby</string>
-    <string name="about_version">Version</string>
-    <string name="about_open_source">Open source</string>
-    <string name="about_information">Informations</string>
     <string name="about_source">Code source</string>
     <string name="about_contributors">Contributeurs</string>
     <string name="about_license">Licence MIT</string>
