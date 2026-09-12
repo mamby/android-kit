@@ -21,8 +21,8 @@ escape hatch. Migrate consumers and the demo with the library.
   also accept only their typed declarations; custom toolbar `item` is removed.
 - Settings: resolve composable resources before the page builder. Use `section`
   and typed rows, including `info` for labels, values, and supporting text.
-  Select an explicit page configuration: `Main` requires Support, Get involved,
-  and About data and renders that content inline; `Subpage` has no footer. See
+  Select an explicit page configuration: `Main` renders any supplied Support,
+  Get involved, and About data inline; `Subpage` has no footer. See
   [settings.md](settings.md).
 - Cards: replace `header` and `headerSupportingContent` with `title` and
   `supportingText`. Explicit typography and supporting color belong in card style.
