@@ -52,7 +52,6 @@
     <string name="sheet_detail_title">Détail de la feuille</string>
     <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>
     <string name="sheet_list_item">Élément à défilement géré %1$d</string>
-    <string name="about_body">Le catalogue consomme les mêmes artefacts publics destinés aux applications open source externes.</string>
     <string name="variation_basic">Simple</string>
     <string name="variation_with_title">Avec titre</string>
     <string name="variation_with_floating_action_button">Avec bouton flottant</string>
@@ -133,11 +132,16 @@
     <string name="settings_support_description">Aidez à maintenir, tester et améliorer Android Kit.</string>
     <string name="settings_support_action">Aperçu du soutien</string>
     <string name="settings_support_preview">Ceci est un aperçu du catalogue. Chaque application fournit sa destination de soutien ; aucun paiement n’est collecté ici.</string>
-    <string name="settings_get_involved">Participer</string>
-    <string name="settings_report_issue">Signaler un problème</string>
-    <string name="settings_suggest_improvement">Suggérer une amélioration</string>
-    <string name="about_maintainer">Créé par Mamby</string>
-    <string name="about_source">Code source</string>
-    <string name="about_contributors">Contributeurs</string>
-    <string name="about_license">Licence MIT</string>
+    <string name="settings_about">À propos</string>
+    <string name="settings_contact">Contact</string>
+    <string name="settings_app_info">Infos sur l’application</string>
+    <string name="settings_app">Application</string>
+    <string name="settings_privacy_policy">Politique de confidentialité</string>
+    <string name="settings_terms_of_use">Conditions d’utilisation</string>
+    <string name="settings_third_party_licenses">Licences tierces</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_open_source">Code ouvert</string>
+    <string name="settings_license">Licence</string>
+    <string name="settings_source_code">Code source</string>
+    <string name="settings_contributors">Contributeurs</string>
 </resources>

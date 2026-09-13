@@ -183,8 +183,8 @@ internal interface SettingsPageRenderScope {
 }
 
 /**
- * A scrollable settings page. Main pages require Support, Get involved, and About data;
- * Kit appends that content after host settings. Subpages do not repeat this footer.
+ * A scrollable settings page. Main pages require Contact and App info actions;
+ * Kit appends About and an optional donation banner. AppInfo renders predefined sections.
  * Hosts own values, external links, navigation, and retained list state.
  */
 @Composable
@@ -203,7 +203,10 @@ public fun AndroidKitSettingsPage(
     declarations.render(scope)
     val dimensions = AndroidKitThemeTokens.dimensions
     val direction = LocalLayoutDirection.current
-    AndroidKitPage(title = title, modifier = modifier, onBack = onBack, actions = actions) { padding ->
+    val pageTitle = title ?: if (configuration is AndroidKitSettingsPageConfiguration.AppInfo) {
+        AndroidKitThemeTokens.strings.appInfo
+    } else null
+    AndroidKitPage(title = pageTitle, modifier = modifier, onBack = onBack, actions = actions) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,
@@ -216,16 +219,18 @@ public fun AndroidKitSettingsPage(
             verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
         ) {
             items(scope.items.toList(), key = { "section:${it.key}" }) { it.content() }
-            if (configuration is AndroidKitSettingsPageConfiguration.Main) {
-                configuration.support?.let { support ->
-                    item(key = "kit:support") { SettingsSupportCard(support) }
+            when (configuration) {
+                is AndroidKitSettingsPageConfiguration.Main -> {
+                    item(key = "kit:about") { SettingsAboutSection(configuration) }
+                    configuration.support?.let { support ->
+                        item(key = "kit:support") { SettingsSupportCard(support) }
+                    }
                 }
-                configuration.getInvolved?.let { getInvolved ->
-                    item(key = "kit:get-involved") { SettingsGetInvolvedSection(getInvolved) }
+                is AndroidKitSettingsPageConfiguration.AppInfo -> {
+                    item(key = "kit:app") { SettingsAppSection(configuration.about) }
+                    item(key = "kit:open-source") { SettingsOpenSourceSection(configuration.about) }
                 }
-                configuration.about?.let { about ->
-                    item(key = "kit:about") { SettingsAboutContent(about) }
-                }
+                AndroidKitSettingsPageConfiguration.Subpage -> Unit
             }
         }
     }

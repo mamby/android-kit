@@ -52,7 +52,6 @@
     <string name="sheet_detail_title">تفاصيل اللوحة</string>
     <string name="sheet_body">يمتلك المستدعي الرؤية والمحتوى. ويوفر Android Kit الشريط المتكيّف والمسافات وتسميات إمكانية الوصول.</string>
     <string name="sheet_list_item">عنصر يدير المحتوى تمريره %1$d</string>
-    <string name="about_body">يستهلك الدليل نفس الحزم العامة المخصصة لتطبيقات المصادر المفتوحة الخارجية.</string>
     <string name="variation_basic">أساسي</string>
     <string name="variation_with_title">مع عنوان</string>
     <string name="variation_with_floating_action_button">مع زر عائم</string>
@@ -133,11 +132,16 @@
     <string name="settings_support_description">ساهم في صيانة Android Kit واختباره وتحسينه.</string>
     <string name="settings_support_action">معاينة إجراء الدعم</string>
     <string name="settings_support_preview">هذه معاينة في الكتالوج. يحدد كل تطبيق وجهة الدعم الخاصة به؛ لا يتم تحصيل أي دفعات هنا.</string>
-    <string name="settings_get_involved">المشاركة</string>
-    <string name="settings_report_issue">الإبلاغ عن مشكلة</string>
-    <string name="settings_suggest_improvement">اقتراح تحسين</string>
-    <string name="about_maintainer">من تطوير Mamby</string>
-    <string name="about_source">الشيفرة المصدرية</string>
-    <string name="about_contributors">المساهمون</string>
-    <string name="about_license">ترخيص MIT</string>
+    <string name="settings_about">حول</string>
+    <string name="settings_contact">التواصل</string>
+    <string name="settings_app_info">معلومات التطبيق</string>
+    <string name="settings_app">التطبيق</string>
+    <string name="settings_privacy_policy">سياسة الخصوصية</string>
+    <string name="settings_terms_of_use">شروط الاستخدام</string>
+    <string name="settings_third_party_licenses">تراخيص الجهات الخارجية</string>
+    <string name="settings_version">الإصدار</string>
+    <string name="settings_open_source">مفتوح المصدر</string>
+    <string name="settings_license">الترخيص</string>
+    <string name="settings_source_code">الشيفرة المصدرية</string>
+    <string name="settings_contributors">المساهمون</string>
 </resources>

@@ -33,82 +33,77 @@ public data class AndroidKitSettingsSupport(
     public val action: AndroidKitSettingsAction,
 )
 
-/** Available actions are always rendered in report, suggest, translate order. */
-public data class AndroidKitSettingsGetInvolved(
-    public val reportIssue: AndroidKitSettingsAction? = null,
-    public val suggestImprovement: AndroidKitSettingsAction? = null,
-    public val helpTranslate: AndroidKitSettingsAction? = null,
-) {
-    init {
-        require(reportIssue != null || suggestImprovement != null || helpTranslate != null) {
-            "Get involved requires at least one action."
-        }
-    }
-}
+/** Predefined settings link. Its label comes from the current Kit strings. */
+public data class AndroidKitSettingsLink(
+    public val onClick: () -> Unit,
+    public val supportingText: String? = null,
+    public val icon: ImageVector? = null,
+    public val enabled: Boolean = true,
+)
 
-/** About is settings content, using the same section and row renderers as other settings. */
+/** Typed content for the predefined App info subpage. Hosts own all destinations. */
 public data class AndroidKitSettingsAbout(
-    public val appName: String,
     public val version: String,
-    public val description: String? = null,
-    public val maintainer: String? = null,
-    public val appIcon: ImageVector? = null,
-    public val whatsNew: AndroidKitSettingsAction? = null,
-    public val sourceCode: AndroidKitSettingsAction? = null,
-    public val contributors: AndroidKitSettingsAction? = null,
-    public val license: AndroidKitSettingsAction? = null,
-    public val libraries: AndroidKitSettingsAction? = null,
-    public val privacyPolicy: AndroidKitSettingsAction? = null,
-    public val contact: AndroidKitSettingsAction? = null,
+    public val privacyPolicy: AndroidKitSettingsLink,
+    public val termsOfUse: AndroidKitSettingsLink,
+    public val libraries: AndroidKitSettingsLink,
+    public val sourceCode: AndroidKitSettingsLink,
+    public val license: AndroidKitSettingsLink,
+    public val contributors: AndroidKitSettingsLink,
 ) {
-    init {
-        require(appName.isNotBlank() && version.isNotBlank()) {
-            "About requires a localized app name and version."
-        }
-    }
+    init { require(version.isNotBlank()) { "App info requires a version." } }
 }
 
-/** Main-page content is optional and rendered in the declared footer order. */
 public sealed interface AndroidKitSettingsPageConfiguration {
+    /** About is always present; the donation banner is optional and appears last. */
     public data class Main(
+        public val contact: AndroidKitSettingsLink,
+        public val appInfo: AndroidKitSettingsLink,
         public val support: AndroidKitSettingsSupport? = null,
-        public val getInvolved: AndroidKitSettingsGetInvolved? = null,
-        public val about: AndroidKitSettingsAbout? = null,
     ) : AndroidKitSettingsPageConfiguration
+
+    public data class AppInfo(public val about: AndroidKitSettingsAbout) : AndroidKitSettingsPageConfiguration
 
     /** Ordinary host-defined subpage; no main-settings footer. */
     public data object Subpage : AndroidKitSettingsPageConfiguration
 }
 
 @Composable
-internal fun SettingsAboutContent(about: AndroidKitSettingsAbout) {
+internal fun SettingsAboutSection(main: AndroidKitSettingsPageConfiguration.Main) {
     val strings = AndroidKitThemeTokens.strings
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val identity = SettingSectionScopeImpl().apply {
-        info(label = about.appName, supportingText = about.description, icon = about.appIcon)
-        about.maintainer?.let { info(label = it) }
-        info(label = strings.version, value = about.version)
-        about.whatsNew?.let { action(it) }
+    val scope = SettingSectionScopeImpl().apply {
+        link(main.contact, strings.contact, AndroidKitIcons.Contact)
+        link(main.appInfo, strings.appInfo, AndroidKitIcons.Info)
     }
-    val openSource = SettingSectionScopeImpl().apply {
-        listOfNotNull(about.sourceCode, about.contributors, about.license, about.libraries).forEach { action(it) }
-    }
-    val information = SettingSectionScopeImpl().apply {
-        listOfNotNull(about.privacyPolicy, about.contact).forEach { action(it) }
-    }
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
-    ) {
-        SettingsSection(entries = identity.entries)
-        SettingsSection(entries = openSource.entries, label = strings.openSource)
-        SettingsSection(entries = information.entries, label = strings.information)
-    }
+    SettingsSection(entries = scope.entries, label = strings.about)
 }
 
-internal fun AndroidKitSettingSectionScope.action(action: AndroidKitSettingsAction) {
-    navigation(action.label, action.onClick, supportingText = action.supportingText,
-        icon = action.icon, enabled = action.enabled)
+@Composable
+internal fun SettingsAppSection(about: AndroidKitSettingsAbout) {
+    val strings = AndroidKitThemeTokens.strings
+    val scope = SettingSectionScopeImpl().apply {
+        link(about.privacyPolicy, strings.privacyPolicy, AndroidKitIcons.AppLock)
+        link(about.termsOfUse, strings.termsOfUse, AndroidKitIcons.Document)
+        link(about.libraries, strings.thirdPartyLicenses, AndroidKitIcons.Document)
+        info(label = strings.version, value = about.version, icon = AndroidKitIcons.Info)
+    }
+    SettingsSection(entries = scope.entries, label = strings.app)
+}
+
+@Composable
+internal fun SettingsOpenSourceSection(about: AndroidKitSettingsAbout) {
+    val strings = AndroidKitThemeTokens.strings
+    val scope = SettingSectionScopeImpl().apply {
+        link(about.sourceCode, strings.sourceCode, AndroidKitIcons.Code)
+        link(about.license, strings.license, AndroidKitIcons.Document)
+        link(about.contributors, strings.contributors, AndroidKitIcons.Contributors)
+    }
+    SettingsSection(entries = scope.entries, label = strings.openSource)
+}
+
+private fun AndroidKitSettingSectionScope.link(link: AndroidKitSettingsLink, label: String, icon: ImageVector) {
+    navigation(label = label, onClick = link.onClick,
+        supportingText = link.supportingText, icon = link.icon ?: icon, enabled = link.enabled)
 }
 
 @Composable
@@ -147,11 +142,4 @@ internal fun SettingsSupportCard(support: AndroidKitSettingsSupport) {
             support.action.supportingText?.let { Text(it, style = style.descriptionTextStyle) }
         }
     }
-}
-
-@Composable
-internal fun SettingsGetInvolvedSection(data: AndroidKitSettingsGetInvolved) {
-    val scope = SettingSectionScopeImpl()
-    listOfNotNull(data.reportIssue, data.suggestImprovement, data.helpTranslate).forEach { scope.action(it) }
-    SettingsSection(entries = scope.entries, label = AndroidKitThemeTokens.strings.getInvolved)
 }

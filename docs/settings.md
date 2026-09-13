@@ -9,8 +9,8 @@ renderer is internal. Hosts use the public page and entry DSLs.
 AndroidKitSettingsPage(
     configuration = AndroidKitSettingsPageConfiguration.Main(
         support = support,
-        getInvolved = getInvolved,
-        about = about,
+        contact = AndroidKitSettingsLink(onClick = onContact),
+        appInfo = AndroidKitSettingsLink(onClick = onAppInfo),
     ),
     title = settingsTitle,
 ) {
@@ -120,3 +120,34 @@ saveable-state support and pass it through `listState`.
 margins use `screenPadding`; bottom content spacing uses `spaceMedium`. Page
 clearance and margins are combined in the list's `contentPadding`, keeping the
 viewport edge-to-edge. Do not add a second page-padding modifier in consumers.
+
+## About and App info
+
+Main always appends About with Contact and App info, followed by the optional
+support/donation banner. Both links are required. Get involved has been removed.
+Hosts own navigation and external destinations; the demo Contact opens the
+maintainer's GitHub profile.
+
+Render the predefined subpage with
+`AndroidKitSettingsPageConfiguration.AppInfo(AndroidKitSettingsAbout(`
+`version = version, privacyPolicy = privacyPolicy, termsOfUse = termsOfUse,`
+`libraries = thirdPartyLicenses, sourceCode = sourceCode, license = license,`
+`contributors = contributors))`.
+It defaults to the App info title and accepts the usual host Back callback.
+App always contains Privacy policy, Terms of use, Third-party licenses
+(`libraries`), and the required read-only Version, in that order. Open source
+always contains Source code, License, and Contributors. All six links and the
+version are required. Provide the license name, such as MIT, through its link's
+`supportingText`. No legal destinations are inferred.
+
+`AndroidKitSettingsLink` requires `onClick`; its label is always taken from the
+current `AndroidKitStrings`. The host may provide an icon, supporting text, and
+enabled state. Localize the predefined labels through `AndroidKitStrings`.
+Rendering remains Kit-owned.
+
+This changes the Main and About constructor contracts: replace inline `about`
+and `getInvolved` with required `contact` and `appInfo` links, and pass About
+data to the new AppInfo destination. About no longer accepts app identity,
+What's new, or Contact fields. All requested App info actions are required;
+only the donation banner is optional.
+Ordinary Subpage configurations still have no footer.

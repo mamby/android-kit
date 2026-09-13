@@ -24,7 +24,7 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSupport
-import net.mamby.androidkit.compose.form.AndroidKitSettingsGetInvolved
+import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAction
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.demo.BuildConfig
@@ -35,6 +35,7 @@ import net.mamby.androidkit.localization.AppLocaleManager
 
 @Composable
 fun SettingsScreen(
+    onAppInfo: () -> Unit,
     appLockEnabled: Boolean,
     appLockTimeout: DemoAppLockTimeout,
     onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
@@ -80,15 +81,8 @@ fun SettingsScreen(
         support = AndroidKitSettingsSupport(
             action = AndroidKitSettingsAction(stringResource(R.string.settings_support_action), { showSupportPreview = true }),
         ),
-        getInvolved = AndroidKitSettingsGetInvolved(
-            reportIssue = AndroidKitSettingsAction(stringResource(R.string.settings_report_issue), {
-                uriHandler.openUri("$CatalogRepository/issues/new")
-            }),
-            suggestImprovement = AndroidKitSettingsAction(stringResource(R.string.settings_suggest_improvement), {
-                uriHandler.openUri("$CatalogRepository/issues/new")
-            }),
-        ),
-        about = catalogAbout(),
+        contact = AndroidKitSettingsLink(onClick = { uriHandler.openUri("https://github.com/mamby") }),
+        appInfo = AndroidKitSettingsLink(onClick = onAppInfo),
     )
     AndroidKitSettingsPage(configuration = configuration, title = stringResource(R.string.settings_title)) {
         generalSection(
@@ -155,19 +149,25 @@ fun SettingsScreen(
 private const val CatalogRepository = "https://github.com/mamby/android-kit"
 
 @Composable
-private fun catalogAbout(): AndroidKitSettingsAbout {
+internal fun AppInfoScreen(onBack: () -> Unit) {
     val uriHandler = LocalUriHandler.current
-    return AndroidKitSettingsAbout(
-        appName = stringResource(R.string.app_name),
-        description = stringResource(R.string.about_body),
-        maintainer = stringResource(R.string.about_maintainer),
-        version = BuildConfig.VERSION_NAME,
-        sourceCode = AndroidKitSettingsAction(stringResource(R.string.about_source), { uriHandler.openUri(CatalogRepository) }),
-        contributors = AndroidKitSettingsAction(stringResource(R.string.about_contributors), {
-            uriHandler.openUri("$CatalogRepository/graphs/contributors")
-        }),
-        license = AndroidKitSettingsAction(stringResource(R.string.about_license), {
-            uriHandler.openUri("$CatalogRepository/blob/main/LICENSE")
-        }),
+    AndroidKitSettingsPage(
+        configuration = AndroidKitSettingsPageConfiguration.AppInfo(
+            AndroidKitSettingsAbout(
+                version = BuildConfig.VERSION_NAME,
+                privacyPolicy = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
+                termsOfUse = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
+                libraries = AndroidKitSettingsLink(onClick = { uriHandler.openUri("$CatalogRepository/THIRD_PARTY_NOTICES.md") }),
+                sourceCode = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
+                license = AndroidKitSettingsLink(
+                    onClick = { uriHandler.openUri("$CatalogRepository/blob/main/LICENSE") },
+                    supportingText = "MIT",
+                ),
+                contributors = AndroidKitSettingsLink(onClick = {
+                    uriHandler.openUri("$CatalogRepository/graphs/contributors")
+                }),
+            ),
+        ),
+        onBack = onBack,
     )
 }

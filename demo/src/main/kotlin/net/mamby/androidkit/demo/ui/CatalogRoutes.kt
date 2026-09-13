@@ -21,3 +21,6 @@ data class DemoRootRoute(val index: Int) : CatalogRootRoute
 
 @Serializable
 data class ComponentDemoRoute(val demo: ComponentDemo) : CatalogRoute
+
+@Serializable
+data object AppInfoRoute : CatalogRoute

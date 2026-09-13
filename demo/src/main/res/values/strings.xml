@@ -53,7 +53,6 @@
     <string name="sheet_detail_title">Sheet detail</string>
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
     <string name="sheet_list_item">Content-managed item %1$d</string>
-    <string name="about_body">The catalog consumes the same public artifacts intended for external open-source apps.</string>
     <string name="variation_basic">Basic</string>
     <string name="variation_with_title">With title</string>
     <string name="variation_with_floating_action_button">With floating action button</string>
@@ -134,11 +133,16 @@
     <string name="settings_support_description">Help maintain, test, and improve Android Kit.</string>
     <string name="settings_support_action">Preview support action</string>
     <string name="settings_support_preview">This is a catalog preview. Apps provide their own support destination; no payment is collected here.</string>
-    <string name="settings_get_involved">Get involved</string>
-    <string name="settings_report_issue">Report an issue</string>
-    <string name="settings_suggest_improvement">Suggest an improvement</string>
-    <string name="about_maintainer">Made by Mamby</string>
-    <string name="about_source">Source code</string>
-    <string name="about_contributors">Contributors</string>
-    <string name="about_license">MIT license</string>
+    <string name="settings_about">About</string>
+    <string name="settings_contact">Contact</string>
+    <string name="settings_app_info">App info</string>
+    <string name="settings_app">App</string>
+    <string name="settings_privacy_policy">Privacy policy</string>
+    <string name="settings_terms_of_use">Terms of use</string>
+    <string name="settings_third_party_licenses">Third-party licenses</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_open_source">Open source</string>
+    <string name="settings_license">License</string>
+    <string name="settings_source_code">Source code</string>
+    <string name="settings_contributors">Contributors</string>
 </resources>

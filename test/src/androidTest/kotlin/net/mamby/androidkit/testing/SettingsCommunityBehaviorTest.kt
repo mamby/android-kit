@@ -2,7 +2,6 @@ package net.mamby.androidkit.testing
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
@@ -14,7 +13,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAction
-import net.mamby.androidkit.compose.form.AndroidKitSettingsGetInvolved
+import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSupport
@@ -28,90 +27,121 @@ class SettingsCommunityBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun mainFooterIncludesAboutContent() {
+    fun mainAlwaysShowsAboutAndOptionalSupportLast() {
+        var contactClicks = 0
+        var appInfoClicks = 0
         var supportClicks = 0
-        var reportClicks = 0
-        var sourceClicks = 0
-        val about = aboutData(source = AndroidKitSettingsAction("Source code", { sourceClicks++ }))
+        var showSupport by mutableStateOf(true)
         rule.setContent {
-            SettingsTestViewport {
+            AndroidKitTheme {
                 AndroidKitSettingsPage(
                     configuration = AndroidKitSettingsPageConfiguration.Main(
-                        support = AndroidKitSettingsSupport(
-                            action = AndroidKitSettingsAction("Support", { supportClicks++ }),
-                        ),
-                        getInvolved = AndroidKitSettingsGetInvolved(
-                            reportIssue = AndroidKitSettingsAction("Report issue", { reportClicks++ }),
-                        ),
-                        about = about,
+                        contact = AndroidKitSettingsLink(onClick = { contactClicks++ }),
+                        appInfo = AndroidKitSettingsLink(onClick = { appInfoClicks++ }),
+                        support = if (showSupport) AndroidKitSettingsSupport(
+                            AndroidKitSettingsAction("Donate", { supportClicks++ }),
+                        ) else null,
                     ),
                 ) {
-                    repeat(20) { index -> section("setting-$index") { info("Setting $index") } }
+                    section("host") { info("Host setting") }
                 }
             }
         }
-        fun scrollTo(label: String) {
-            rule.onNode(hasScrollAction()).performScrollToNode(hasText(label))
-            rule.onNodeWithText(label).assertIsDisplayed()
+        assertOrder("Host setting", "About", "Contact", "App info", "Donate")
+        for (label in listOf("Contact", "App info", "Donate")) {
+            scrollTo(label)
+            rule.onNodeWithText(label).performClick()
         }
-        scrollTo("Setting 19")
-        scrollTo("Support")
-        rule.onNodeWithText("Support").performClick()
-        scrollTo("Report issue")
-        rule.onNodeWithText("Report issue").performClick()
-        scrollTo("Example app")
-        val positions = listOf("Setting 19", "Support", "Report issue", "Example app").map {
-            rule.onNodeWithText(it).assertIsDisplayed()
-            rule.onNodeWithText(it).fetchSemanticsNode().boundsInRoot.top
-        }
-        assertTrue(positions.zipWithNext().all { (first, second) -> first < second })
-        rule.onNode(hasScrollAction()).performScrollToNode(hasText("Source code"))
-        rule.onNodeWithText("Source code").performClick()
         rule.runOnIdle {
+            assertEquals(1, contactClicks)
+            assertEquals(1, appInfoClicks)
             assertEquals(1, supportClicks)
-            assertEquals(1, reportClicks)
-            assertEquals(1, sourceClicks)
+            showSupport = false
         }
+        rule.onNodeWithText("Donate").assertDoesNotExist()
+        scrollTo("About")
+        scrollTo("Contact")
+        scrollTo("App info")
+        rule.onNodeWithText("Version").assertDoesNotExist()
+    }
+
+    @Test
+    fun appInfoHasPredefinedOrderAndInvokesLinks() {
+        var clicks = 0
+        val link = AndroidKitSettingsLink(onClick = { clicks++ })
+        rule.setContent {
+            AndroidKitTheme {
+                AndroidKitSettingsPage(
+                    configuration = AndroidKitSettingsPageConfiguration.AppInfo(
+                        AndroidKitSettingsAbout(
+                            version = "1.0", privacyPolicy = link, termsOfUse = link,
+                            libraries = link, sourceCode = link,
+                            license = link.copy(supportingText = "MIT"), contributors = link,
+                        ),
+                    ),
+                )
+            }
+        }
+        assertOrder("App", "Privacy policy", "Terms of use", "Third-party licenses",
+            "Version", "Open source", "Source code", "License", "Contributors")
+        for (label in listOf("Privacy policy", "Terms of use", "Third-party licenses",
+            "Source code", "License", "Contributors")) {
+            scrollTo(label)
+            rule.onNodeWithText(label).performClick()
+        }
+        scrollTo("License")
+        rule.onNodeWithText("MIT").assertIsDisplayed()
+        rule.runOnIdle { assertEquals(6, clicks) }
+        rule.onNodeWithText("Contact").assertDoesNotExist()
         rule.onNodeWithText("About").assertDoesNotExist()
     }
 
     @Test
-    fun aboutUpdatesVersionAndRemovesUnavailableLinksAndEmptySections() {
-        var showSource by mutableStateOf(true)
+    fun appInfoKeepsAllRequiredEntriesVisible() {
+        var clicks = 0
         var version by mutableStateOf("1.0")
+        val link = AndroidKitSettingsLink(onClick = { clicks++ })
         rule.setContent {
-            SettingsTestViewport {
+            AndroidKitTheme {
                 AndroidKitSettingsPage(
-                    configuration = AndroidKitSettingsPageConfiguration.Main(
-                        support = AndroidKitSettingsSupport(
-                            action = AndroidKitSettingsAction("Support", {}),
+                    configuration = AndroidKitSettingsPageConfiguration.AppInfo(
+                        AndroidKitSettingsAbout(version = version,
+                            privacyPolicy = link,
+                            termsOfUse = link,
+                            libraries = link,
+                            sourceCode = link,
+                            license = link.copy(supportingText = "MIT"),
+                            contributors = link,
                         ),
-                        getInvolved = AndroidKitSettingsGetInvolved(
-                            reportIssue = AndroidKitSettingsAction("Report issue", {}),
-                        ),
-                        about = aboutData(
-                            source = if (showSource) AndroidKitSettingsAction("Source code", {}) else null,
-                        ).copy(version = version),
                     ),
                 )
             }
         }
         rule.onNodeWithText("1.0").assertIsDisplayed()
+        rule.onNodeWithText("Privacy policy").assertIsDisplayed()
+        rule.onNodeWithText("Terms of use").assertIsDisplayed()
+        rule.onNodeWithText("Third-party licenses").assertIsDisplayed()
         rule.onNodeWithText("Source code").assertIsDisplayed()
-        rule.onNodeWithText("Information").assertDoesNotExist()
-        rule.runOnIdle { version = "2.0"; showSource = false }
+        rule.onNodeWithText("License").assertIsDisplayed()
+        rule.onNodeWithText("Contributors").assertIsDisplayed()
+        rule.runOnIdle { version = "2.0" }
         rule.onNodeWithText("2.0").assertIsDisplayed()
         rule.onNodeWithText("1.0").assertDoesNotExist()
-        rule.onNodeWithText("Source code").assertDoesNotExist()
-        rule.onNodeWithText("Open source").assertDoesNotExist()
+        rule.onNodeWithText("Open source").assertIsDisplayed()
+        rule.runOnIdle { assertEquals(0, clicks) }
+    }
+
+    private fun scrollTo(label: String) {
+        rule.onNode(hasScrollAction()).performScrollToNode(hasText(label))
+        rule.onNodeWithText(label).assertIsDisplayed()
+    }
+
+    private fun assertOrder(vararg labels: String) {
+        labels.toList().zipWithNext().forEach { (first, second) ->
+            scrollTo(second)
+            val firstTop = rule.onNodeWithText(first).fetchSemanticsNode().boundsInRoot.top
+            val secondTop = rule.onNodeWithText(second).fetchSemanticsNode().boundsInRoot.top
+            assertTrue("$first must precede $second", firstTop < secondTop)
+        }
     }
 }
-
-@Composable
-private fun SettingsTestViewport(content: @Composable () -> Unit) {
-    AndroidKitTheme(content = content)
-}
-
-private fun aboutData(source: AndroidKitSettingsAction?) = AndroidKitSettingsAbout(
-    appName = "Example app", version = "1.0", sourceCode = source,
-)
