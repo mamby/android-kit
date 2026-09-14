@@ -1,72 +1,90 @@
-# Shared localization
+# Kit-owned translations
 
-AndroidKit owns the canonical English vocabulary for concepts shared by its
-components. Host applications own translations for the locales they support.
+AndroidKit owns and translates its shared component vocabulary. Components resolve
+private Android resources internally from the current application configuration.
+Hosts cannot supply a string set or override predefined labels through Kit APIs.
+Application content, custom actions, option values, and domain messages remain
+host-owned. The App info title and built-in More/Close controls are Kit-owned.
 
-The published `localization` artifact contains
-`androidkit-english-catalog.json` in its assets. The catalog includes every
-user-visible English default owned by AndroidKit components, including shared
-actions, title-bar actions, settings section/entry labels, picker labels,
-slider labels, and app-lock labels. Hosts must import that catalog
-when updating AndroidKit and keep a checked-in translation snapshot containing
-the catalog revision for every translated key.
+This is a breaking API change: remove `AndroidKitTheme(strings = ...)`,
+`AndroidKitStrings`, `AndroidKitThemeTokens.strings`, and toolbar flyout
+`contentDescription` overrides. Use host resources for host content.
+Do not pass a custom title to the predefined AppInfo settings configuration.
 
-The host localization check must fail when:
+## Required build enforcement
 
-- a catalog key is missing from the host snapshot;
-- the English value or revision changed without a corresponding translation
-  update; or
-- a supported host locale has no translation, unless that locale explicitly
-  opts into English fallback.
+Every consuming application must apply the supplied Gradle script after its
+Android application plugin (AGP 8.4 or newer):
 
-Do not rename a shared key to reflect an app's preferred wording. If the
-concept is different, use a separate host-owned key. For example,
-`androidkit_settings_transparency` is the shared name for the floating-surface
-setting, regardless of whether an app's internal implementation uses alpha or
-opacity terminology.
+```kotlin
+apply(from = rootProject.file("gradle/validate-androidkit-resources.gradle"))
+```
 
-The catalog does not include host data passed through component APIs: app names,
-domain-specific setting labels, supported language/theme option names, app-lock
-error messages, descriptions, URLs, or action destinations. Those remain
-localized by the host because their meaning belongs to the application.
-
-Hosts translate the catalog through `AndroidKitStrings` and pass the translated
-value set to `AndroidKitTheme`. Shared settings components use those values when
-their corresponding label is omitted; an explicit value remains available for
-an intentional product-specific override.
-
-## CI enforcement
-
-Apply `gradle/validate-androidkit-localization.gradle.kts` in the host and set
-these Gradle properties to checked-in files:
+Declare every application-supported language in the host's Gradle properties:
 
 ```properties
-androidKitLocalizationCatalog=path/to/androidkit-english-catalog.json
-androidKitLocalizationSnapshot=path/to/androidkit-translations.json
+androidKitSupportedLocales=en,fr,ar
 ```
 
-The snapshot records the catalog revision and translations for each supported
-locale:
+Keep this declaration aligned with the app's language picker and Android locale
+configuration. The script validates each variant's static and generated resource
+directories and its resolved dependency AARs. The contract is read from the actual
+Compose AAR, so a separate copied catalog cannot drift from the consumed version.
 
-```json
-{
-  "locales": ["en", "fr", "ar"],
-  "strings": {
-    "androidkit_settings_transparency": {
-      "revision": 1,
-      "translations": {
-        "fr": "Transparence",
-        "ar": "الشفافية"
-      }
-    }
-  }
-}
-```
+For local Android project dependencies, expose their complete AAR through a
+consumable variant with usage `androidkit-localization`. The four Kit library
+build files show the public `SingleArtifact.AAR` wiring. Every local project in
+the application dependency graph must expose this verification variant; missing
+variants fail resolution. Published Maven AAR dependencies need no producer setup.
 
-The validator is attached to `check` and fails when AndroidKit adds a key,
-changes a revision, removes a key, or lacks a translation for a supported host
-locale.
+Validation fails for:
 
-The catalog is a localization contract, not a request for AndroidKit to ship
-every host language. A changed English value is intentionally a required host
-localization review.
+- any host or other dependency resource definition using the reserved `androidkit_`
+  prefix, including value aliases and configuration-specific overrides;
+- a declared host language, host resource locale, or locale-config entry unsupported
+  by Kit;
+- a missing or incompatible Kit contract, or incomplete bundled translations.
+
+The validation task is a required generated-assets dependency of APK/AAB packaging
+and is also attached to `check` and variant lint tasks. It generates an empty
+assets directory; it adds no runtime assets to the application.
+A standalone Kotlin compile is not a full packaging/contract check.
+
+Android itself still merges app and library resources with app precedence.
+Private resources and this build gate enforce the project contract, not protection
+against an app author deliberately removing validation or modifying the library.
+Applying the script is mandatory for supported integration; merely adding an AAR
+cannot install build logic into the consuming project.
+
+## Language coverage and maintenance
+
+Kit ships English, French, Arabic, German, Spanish, Hindi, Indonesian, Italian,
+Japanese, Korean, Dutch, Polish, Portuguese, Russian, Thai, Turkish, Vietnamese,
+and Simplified Chinese resources. New translations are machine-assisted and have
+not received native-speaker review. A neutral
+translation such as French also covers French regional locales. To support a new
+language, add complete Kit translations, update
+`compose/src/main/assets/androidkit-localization-contract.json`, and release Kit
+before enabling that language in a host. Unsupported declared languages fail the
+build instead of silently accepting English fallback.
+
+Android's English fallback remains available for unexpected device configurations.
+Hosts still choose and persist their application language with official locale
+APIs. Host language selection must not advertise languages absent from its declared
+supported set.
+
+Canonical text lives in `compose/src/main/res/values`, with matching resources in
+`values-fr` and `values-ar`. Every internal `AndroidKitStrings` field is required
+and resolved in `AndroidKitLocalizedStrings.kt`; there are no Kotlin English
+defaults. Keep all translations generic and free of demo branding. Kit resources
+are private through `values/public.xml`.
+
+The previous English catalog and host snapshot validator are legacy artifacts.
+They do not satisfy the new contract; replace their application with the new
+validator. Existing files are retained for older consumers.
+
+Run `./test/gradle/verify-localization.ps1` for the packaging-gate regression suite.
+Fixtures stay under `test`; generated fixture outputs stay under `demo/build`.
+
+See [Android library resource precedence](https://developer.android.com/studio/projects/android-library)
+and [Compose resources](https://developer.android.com/develop/ui/compose/resources).

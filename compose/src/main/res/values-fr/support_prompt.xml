@@ -1,0 +1,7 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">L’application vous plaît ?</string>
+    <string name="androidkit_compose_support_prompt_description">Si vous souhaitez soutenir son développement, les dons sont appréciés, mais jamais obligatoires.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">En savoir plus</string>
+    <string name="androidkit_compose_support_prompt_not_now">Pas maintenant</string>
+    <string name="androidkit_compose_support_prompt_donate">Faire un don</string>
+</resources>

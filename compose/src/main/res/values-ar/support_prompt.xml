@@ -1,0 +1,7 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">هل يعجبك التطبيق؟</string>
+    <string name="androidkit_compose_support_prompt_description">إذا رغبت في دعم تطويره، فإن التبرعات محل تقدير، لكنها ليست مطلوبة أبداً.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">معرفة المزيد</string>
+    <string name="androidkit_compose_support_prompt_not_now">ليس الآن</string>
+    <string name="androidkit_compose_support_prompt_donate">تبرّع</string>
+</resources>

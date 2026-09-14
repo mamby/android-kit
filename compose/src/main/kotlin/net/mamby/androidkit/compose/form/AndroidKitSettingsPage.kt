@@ -197,6 +197,9 @@ public fun AndroidKitSettingsPage(
     listState: LazyListState = rememberLazyListState(),
     content: AndroidKitSettingsPageScope.() -> Unit = {},
 ): Unit {
+    require(configuration !is AndroidKitSettingsPageConfiguration.AppInfo || title == null) {
+        "The App info title is owned and localized by AndroidKit."
+    }
     var activePicker by rememberSaveable { mutableStateOf<String?>(null) }
     val scope = SettingsPageScopeImpl { activePicker = it }
     val declarations = AndroidKitSettingsPageScope().apply(content)

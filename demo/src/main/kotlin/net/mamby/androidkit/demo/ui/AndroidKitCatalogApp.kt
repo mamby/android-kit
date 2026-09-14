@@ -68,7 +68,6 @@ internal fun AndroidKitCatalogApp(
 
     AndroidKitTheme(
         definition = themeDefinition,
-        strings = androidKitStrings(),
     ) {
         if (settings.appLockEnabled && !settingsViewModel.unlocked) {
             AndroidKitLockPage(

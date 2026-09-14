@@ -1,6 +1,11 @@
 {
   "schema": 1,
   "strings": {
+    "androidkit_support_prompt_title": { "value": "Enjoying the app?", "revision": 1 },
+    "androidkit_support_prompt_description": { "value": "If you’d like to support its development, donations are appreciated—but never required.", "revision": 1 },
+    "androidkit_support_prompt_learn_more": { "value": "Learn more", "revision": 1 },
+    "androidkit_support_prompt_not_now": { "value": "Not now", "revision": 1 },
+    "androidkit_support_prompt_donate": { "value": "Donate", "revision": 1 },
     "androidkit_action_back": { "value": "Back", "revision": 1 },
     "androidkit_action_add": { "value": "Add", "revision": 1 },
     "androidkit_action_close": { "value": "Close", "revision": 1 },

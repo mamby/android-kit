@@ -16,6 +16,7 @@ internal enum class DemoToggle(@StringRes val label: Int, val defaultValue: Bool
     PageActions(R.string.variation_back_title_actions),
     PageImmersive(R.string.variation_immersive_mode),
     PageFab(R.string.variation_with_floating_action_button),
+    PageSupport(R.string.demo_support_prompt),
 }
 
 internal val fabPositions = mapOf(

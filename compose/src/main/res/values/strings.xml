@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Back</string>
+    <string name="androidkit_compose_add">Add</string>
+    <string name="androidkit_compose_close">Close</string>
+    <string name="androidkit_compose_more">More</string>
+    <string name="androidkit_compose_retry">Retry</string>
+    <string name="androidkit_compose_cancel">Cancel</string>
+    <string name="androidkit_compose_confirm">Confirm</string>
+    <string name="androidkit_compose_save">Save</string>
+    <string name="androidkit_compose_hide_title_bar">Hide title bar</string>
+    <string name="androidkit_compose_show_title_bar">Show title bar</string>
+    <string name="androidkit_compose_general">General</string>
+    <string name="androidkit_compose_language">Language</string>
+    <string name="androidkit_compose_theme">Theme</string>
+    <string name="androidkit_compose_transparency">Transparency</string>
+    <string name="androidkit_compose_min">Min</string>
+    <string name="androidkit_compose_max">Max</string>
+    <string name="androidkit_compose_search_languages">Search languages</string>
+    <string name="androidkit_compose_no_matching_languages">No matching languages</string>
+    <string name="androidkit_compose_system">System</string>
+    <string name="androidkit_compose_security">Security</string>
+    <string name="androidkit_compose_app_lock">App lock</string>
+    <string name="androidkit_compose_lock_after_leaving_app">Lock after leaving the app</string>
+    <string name="androidkit_compose_immediately">Immediately</string>
+    <string name="androidkit_compose_after_one_minute">After 1 minute</string>
+    <string name="androidkit_compose_after_five_minutes">After 5 minutes</string>
+    <string name="androidkit_compose_after_fifteen_minutes">After 15 minutes</string>
+    <string name="androidkit_compose_lock_now">Lock now</string>
+    <string name="androidkit_compose_support_title">Support this app</string>
+    <string name="androidkit_compose_support_description">Help support continued development.</string>
+    <string name="androidkit_compose_about">About</string>
+    <string name="androidkit_compose_version">Version</string>
+    <string name="androidkit_compose_open_source">Open source</string>
+    <string name="androidkit_compose_contact">Contact</string>
+    <string name="androidkit_compose_app_info">App info</string>
+    <string name="androidkit_compose_app">App</string>
+    <string name="androidkit_compose_privacy_policy">Privacy policy</string>
+    <string name="androidkit_compose_terms_of_use">Terms of use</string>
+    <string name="androidkit_compose_third_party_licenses">Third-party licenses</string>
+    <string name="androidkit_compose_source_code">Source code</string>
+    <string name="androidkit_compose_license">License</string>
+    <string name="androidkit_compose_contributors">Contributors</string>
+</resources>
+

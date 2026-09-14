@@ -4,13 +4,9 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.theme.AndroidKitDefaults
-import net.mamby.androidkit.compose.theme.AndroidKitStrings
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
-import net.mamby.androidkit.demo.R
-
 enum class DemoThemeChoice(internal val storedValue: String) {
     System("system"),
     Light("light"),
@@ -61,48 +57,3 @@ fun DemoThemeChoice.definition(): AndroidKitThemeDefinition = when (this) {
     DemoThemeChoice.Dark -> AndroidKitThemes.Dark
     DemoThemeChoice.Prism -> PrismThemeDefinition
 }
-
-@Composable
-fun androidKitStrings(): AndroidKitStrings = AndroidKitStrings(
-    back = stringResource(R.string.action_back),
-    add = stringResource(R.string.action_add),
-    close = stringResource(R.string.action_close),
-    more = stringResource(R.string.action_more),
-    retry = stringResource(R.string.action_retry),
-    cancel = stringResource(R.string.action_cancel),
-    confirm = stringResource(R.string.action_confirm),
-    save = stringResource(R.string.action_save),
-    hideTitleBar = stringResource(R.string.action_hide_title_bar),
-    showTitleBar = stringResource(R.string.action_show_title_bar),
-    general = stringResource(R.string.settings_general),
-    language = stringResource(R.string.settings_language),
-    theme = stringResource(R.string.settings_theme),
-    transparency = stringResource(R.string.floating_surface_opacity),
-    min = stringResource(R.string.settings_min),
-    max = stringResource(R.string.settings_max),
-    searchLanguages = stringResource(R.string.settings_search_languages),
-    noMatchingLanguages = stringResource(R.string.settings_no_languages),
-    system = stringResource(R.string.language_system),
-    security = stringResource(R.string.settings_security),
-    appLock = stringResource(R.string.settings_app_lock),
-    lockAfterLeavingApp = stringResource(R.string.settings_app_lock_timeout),
-    immediately = stringResource(R.string.settings_lock_immediately),
-    afterOneMinute = stringResource(R.string.settings_lock_after_one_minute),
-    afterFiveMinutes = stringResource(R.string.settings_lock_after_five_minutes),
-    afterFifteenMinutes = stringResource(R.string.settings_lock_after_fifteen_minutes),
-    lockNow = stringResource(R.string.settings_lock_now),
-    about = stringResource(R.string.settings_about),
-    contact = stringResource(R.string.settings_contact),
-    appInfo = stringResource(R.string.settings_app_info),
-    app = stringResource(R.string.settings_app),
-    privacyPolicy = stringResource(R.string.settings_privacy_policy),
-    termsOfUse = stringResource(R.string.settings_terms_of_use),
-    thirdPartyLicenses = stringResource(R.string.settings_third_party_licenses),
-    version = stringResource(R.string.settings_version),
-    openSource = stringResource(R.string.settings_open_source),
-    license = stringResource(R.string.settings_license),
-    sourceCode = stringResource(R.string.settings_source_code),
-    contributors = stringResource(R.string.settings_contributors),
-    supportTitle = stringResource(R.string.settings_support_title),
-    supportDescription = stringResource(R.string.settings_support_description),
-)

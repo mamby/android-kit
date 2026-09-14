@@ -1,0 +1,44 @@
+import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.FileSystemOperations
+import org.gradle.api.tasks.*
+import javax.inject.Inject
+
+abstract class LocalizationFixtureResources extends DefaultTask {
+    @InputDirectory abstract DirectoryProperty getSourceDirectory()
+    @OutputDirectory abstract DirectoryProperty getOutputDirectory()
+    @Inject abstract FileSystemOperations getFileSystemOperations()
+    @TaskAction void generate() {
+        fileSystemOperations.sync { from(sourceDirectory); into(outputDirectory) }
+    }
+}
+
+gradle.beforeProject { app ->
+    if (app.path != ':demo') return
+    app.plugins.withId('com.android.application') {
+        def components = app.extensions.getByName('androidComponents')
+        components.onVariants(components.selector().all()) { variant ->
+            if (variant.name != 'debug') return
+            def scenario = app.providers.gradleProperty('androidKitLocalizationFixture').get()
+            def root = app.rootProject.file('test/gradle/localization-fixtures')
+            if (scenario == 'generated') {
+                def generate = app.tasks.register('generateLocalizationFixture', LocalizationFixtureResources) {
+                    sourceDirectory.set(new File(root, 'override'))
+                    outputDirectory.set(app.layout.buildDirectory.dir('localization-fixtures/generated/res'))
+                }
+                variant.sources.res.addGeneratedSourceDirectory(generate) { it.outputDirectory }
+            } else if (scenario == 'dependency') {
+                def aar = app.tasks.register('dependencyLocalizationFixture', Zip) {
+                    from(new File(root, 'override')) { into('res') }
+                    archiveFileName.set('localization-fixture.aar')
+                    destinationDirectory.set(app.layout.buildDirectory.dir('localization-fixtures/dependency'))
+                }
+                app.tasks.matching { it.name == 'validateDebugAndroidKitLocalization' }.configureEach {
+                    dependencyAars.from(aar.flatMap { it.archiveFile })
+                }
+            } else {
+                variant.sources.res.addStaticSourceDirectory(new File(root, scenario).absolutePath)
+            }
+        }
+    }
+}

@@ -33,14 +33,18 @@ escape hatch. Migrate consumers and the demo with the library.
   Standalone buttons use `AndroidKitFloatingActionButton(action)`. Button icons
   accept vectors or painters; Kit owns icon rendering. Optional tooltip text is data.
 - Pages: use title, back callback, and action data; the custom `topBar` is removed.
+  The list-content overload owns scrolling and can prepend an optional typed
+  support prompt. See [support prompts](support-prompt.md).
 - Sheets: use title/actions and optional `AndroidKitSheetSearch` state for pinned
   search. Replace `dragHandle = null` with `showDragHandle = false`.
 - Navigation: supply `AndroidKitNavigationBadge(label, contentDescription)`;
   a null badge hides it, while a badge with null label renders a dot.
 
 Outer modifiers and explicit style/layout parameters remain supported. Authentication,
-persistence, localization, navigation decisions, and application state belong to
-consumers. Existing edge-to-edge, scroll-padding, IME, and dismissal contracts remain.
+persistence, application-content localization, navigation decisions, and application
+state belong to consumers. Kit-owned vocabulary is translated only in Kit and is
+not overridable. Consumers must apply the [localization build gate](localization.md).
+Existing edge-to-edge, scroll-padding, IME, and dismissal contracts remain.
 
 ```kotlin
 val addAction = AndroidKitFloatingAction.Button(

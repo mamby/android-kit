@@ -75,7 +75,6 @@ public sealed interface AndroidKitFloatingToolbarScope {
 
     public fun flyout(
         modifier: Modifier = Modifier,
-        contentDescription: String? = null,
         enabled: Boolean = true,
         placement: AndroidKitActionFlyoutPlacement =
             AndroidKitActionFlyoutPlacement.Below,
@@ -256,7 +255,6 @@ private class FloatingToolbarScopeImpl : AndroidKitFloatingToolbarScope {
 
     override fun flyout(
         modifier: Modifier,
-        contentDescription: String?,
         enabled: Boolean,
         placement: AndroidKitActionFlyoutPlacement,
         content: AndroidKitFloatingToolbarFlyoutScope.() -> Unit,
@@ -268,7 +266,6 @@ private class FloatingToolbarScopeImpl : AndroidKitFloatingToolbarScope {
         items += FloatingToolbarItemDefinition.Flyout(
             items = flyoutScope.items,
             modifier = modifier,
-            contentDescription = contentDescription,
             enabled = enabled,
             placement = placement,
         )
@@ -333,7 +330,6 @@ private sealed interface FloatingToolbarItemDefinition {
     class Flyout(
         val items: List<FloatingToolbarFlyoutItem>,
         override val modifier: Modifier,
-        val contentDescription: String?,
         val enabled: Boolean,
         val placement: AndroidKitActionFlyoutPlacement,
     ) : FloatingToolbarItemDefinition
@@ -407,8 +403,7 @@ private fun FloatingToolbarItem(
             AndroidKitFloatingToolbarFlyoutAnchor.Item -> FloatingToolbarItemAnchoredFlyout(
                 items = item.items,
                 modifier = item.modifier,
-                contentDescription = item.contentDescription
-                    ?: AndroidKitThemeTokens.strings.more,
+                contentDescription = AndroidKitThemeTokens.strings.more,
                 enabled = item.enabled,
                 placement = item.placement,
                 toolbarStyle = style,
@@ -418,8 +413,7 @@ private fun FloatingToolbarItem(
                 onClick = {
                     onToolbarFlyoutExpandedChange(!toolbarFlyoutExpanded)
                 },
-                contentDescription = item.contentDescription
-                    ?: AndroidKitThemeTokens.strings.more,
+                contentDescription = AndroidKitThemeTokens.strings.more,
                 modifier = item.modifier,
                 enabled = item.enabled,
                 toolbarStyle = style,

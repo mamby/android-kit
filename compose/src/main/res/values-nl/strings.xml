@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Terug</string>
+    <string name="androidkit_compose_add">Toevoegen</string>
+    <string name="androidkit_compose_close">Sluiten</string>
+    <string name="androidkit_compose_more">Meer</string>
+    <string name="androidkit_compose_retry">Opnieuw proberen</string>
+    <string name="androidkit_compose_cancel">Annuleren</string>
+    <string name="androidkit_compose_confirm">Bevestigen</string>
+    <string name="androidkit_compose_save">Opslaan</string>
+    <string name="androidkit_compose_hide_title_bar">Titelbalk verbergen</string>
+    <string name="androidkit_compose_show_title_bar">Titelbalk tonen</string>
+    <string name="androidkit_compose_general">Algemeen</string>
+    <string name="androidkit_compose_language">Taal</string>
+    <string name="androidkit_compose_theme">Thema</string>
+    <string name="androidkit_compose_transparency">Transparantie</string>
+    <string name="androidkit_compose_min">Min.</string>
+    <string name="androidkit_compose_max">Max.</string>
+    <string name="androidkit_compose_search_languages">Talen zoeken</string>
+    <string name="androidkit_compose_no_matching_languages">Geen overeenkomende talen</string>
+    <string name="androidkit_compose_system">Systeem</string>
+    <string name="androidkit_compose_security">Beveiliging</string>
+    <string name="androidkit_compose_app_lock">Appvergrendeling</string>
+    <string name="androidkit_compose_lock_after_leaving_app">Vergrendelen na verlaten van de app</string>
+    <string name="androidkit_compose_immediately">Onmiddellijk</string>
+    <string name="androidkit_compose_after_one_minute">Na 1 minuut</string>
+    <string name="androidkit_compose_after_five_minutes">Na 5 minuten</string>
+    <string name="androidkit_compose_after_fifteen_minutes">Na 15 minuten</string>
+    <string name="androidkit_compose_lock_now">Nu vergrendelen</string>
+    <string name="androidkit_compose_support_title">Steun deze app</string>
+    <string name="androidkit_compose_support_description">Help de verdere ontwikkeling te ondersteunen.</string>
+    <string name="androidkit_compose_about">Over</string>
+    <string name="androidkit_compose_version">Versie</string>
+    <string name="androidkit_compose_open_source">Open source</string>
+    <string name="androidkit_compose_contact">Contact</string>
+    <string name="androidkit_compose_app_info">App-info</string>
+    <string name="androidkit_compose_app">App</string>
+    <string name="androidkit_compose_privacy_policy">Privacybeleid</string>
+    <string name="androidkit_compose_terms_of_use">Gebruiksvoorwaarden</string>
+    <string name="androidkit_compose_third_party_licenses">Licenties van derden</string>
+    <string name="androidkit_compose_source_code">Broncode</string>
+    <string name="androidkit_compose_license">Licentie</string>
+    <string name="androidkit_compose_contributors">Bijdragers</string>
+    <string name="androidkit_compose_support_prompt_title">Bevalt de app?</string>
+    <string name="androidkit_compose_support_prompt_description">Als je de ontwikkeling wilt steunen, worden donaties gewaardeerd, maar ze zijn nooit verplicht.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Meer informatie</string>
+    <string name="androidkit_compose_support_prompt_not_now">Niet nu</string>
+    <string name="androidkit_compose_support_prompt_donate">Doneren</string>
+</resources>
+

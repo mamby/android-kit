@@ -5,7 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-apply(from = rootProject.file("gradle/validate-androidkit-localization.gradle.kts"))
+
+apply(from = rootProject.file("gradle/validate-androidkit-resources.gradle"))
 
 android {
     namespace = "net.mamby.androidkit.demo"
@@ -27,6 +28,7 @@ android {
     }
 
     androidResources {
+        localeFilters += listOf("en", "fr", "ar")
         generateLocaleConfig = true
     }
 

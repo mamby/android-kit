@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "resourcePrefix": "androidkit_",
+  "defaultLocale": "en",
+  "supportedLocales": ["en","fr","ar","de","es","hi","id","it","ja","ko","nl","pl","pt","ru","th","tr","vi","zh-Hans"]
+}

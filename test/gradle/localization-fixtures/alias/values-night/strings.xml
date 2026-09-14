@@ -1,0 +1,4 @@
+<resources>
+    <item type="string" name="androidkit_compose_close">@android:string/cancel</item>
+</resources>
+

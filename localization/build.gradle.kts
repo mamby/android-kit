@@ -4,6 +4,22 @@ plugins {
     signing
 }
 
+// Full local AAR for the consumer localization contract (AGP's public Artifact API).
+androidComponents.onVariants { variant ->
+    configurations.consumable("${variant.name}AndroidKitLocalizationElements") {
+        attributes {
+            fun <T : Any> copyAttribute(key: Attribute<T>) {
+                attribute(key, variant.runtimeConfiguration.attributes.getAttribute(key)!!)
+            }
+            variant.runtimeConfiguration.attributes.keySet().forEach { copyAttribute(it) }
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named<Usage>("androidkit-localization"))
+        }
+        outgoing.artifact(variant.artifacts.get(com.android.build.api.artifact.SingleArtifact.AAR)) {
+            type = "aar"
+        }
+    }
+}
+
 android {
     namespace = "net.mamby.androidkit.localization"
     compileSdk = 37

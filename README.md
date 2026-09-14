@@ -40,6 +40,9 @@ with typed entries, including menus opened from standalone buttons.
 Use [`AndroidKitSettingsPage`](docs/settings.md) for shared settings presentation,
 optional host-configured controls, custom sections, and host-owned subpages.
 Language lists and all setting values belong to the host application.
+Shared component labels are translated inside Kit and cannot be overridden through
+its API. Hosts must apply the [localization build gate](docs/localization.md), which
+rejects Kit resource overrides and languages without Kit translations.
 
 Use [`AndroidKitLockPage`](docs/lock-page.md) for a title-free lock screen with
 progress and retry feedback. Authentication, lock timing and navigation belong

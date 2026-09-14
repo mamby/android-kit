@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">رجوع</string>
+    <string name="androidkit_compose_add">إضافة</string>
+    <string name="androidkit_compose_close">إغلاق</string>
+    <string name="androidkit_compose_more">المزيد</string>
+    <string name="androidkit_compose_retry">إعادة المحاولة</string>
+    <string name="androidkit_compose_cancel">إلغاء</string>
+    <string name="androidkit_compose_confirm">تأكيد</string>
+    <string name="androidkit_compose_save">حفظ</string>
+    <string name="androidkit_compose_hide_title_bar">إخفاء شريط العنوان</string>
+    <string name="androidkit_compose_show_title_bar">إظهار شريط العنوان</string>
+    <string name="androidkit_compose_general">عام</string>
+    <string name="androidkit_compose_language">اللغة</string>
+    <string name="androidkit_compose_theme">المظهر</string>
+    <string name="androidkit_compose_transparency">الشفافية</string>
+    <string name="androidkit_compose_min">الأدنى</string>
+    <string name="androidkit_compose_max">الأقصى</string>
+    <string name="androidkit_compose_search_languages">البحث عن لغة</string>
+    <string name="androidkit_compose_no_matching_languages">لا توجد لغات مطابقة</string>
+    <string name="androidkit_compose_system">النظام</string>
+    <string name="androidkit_compose_security">الأمان</string>
+    <string name="androidkit_compose_app_lock">قفل التطبيق</string>
+    <string name="androidkit_compose_lock_after_leaving_app">القفل بعد مغادرة التطبيق</string>
+    <string name="androidkit_compose_immediately">فورًا</string>
+    <string name="androidkit_compose_after_one_minute">بعد دقيقة واحدة</string>
+    <string name="androidkit_compose_after_five_minutes">بعد 5 دقائق</string>
+    <string name="androidkit_compose_after_fifteen_minutes">بعد 15 دقيقة</string>
+    <string name="androidkit_compose_lock_now">قفل الآن</string>
+    <string name="androidkit_compose_support_title">ادعم هذا التطبيق</string>
+    <string name="androidkit_compose_support_description">ساهم في دعم استمرار التطوير.</string>
+    <string name="androidkit_compose_about">حول</string>
+    <string name="androidkit_compose_version">الإصدار</string>
+    <string name="androidkit_compose_open_source">مفتوح المصدر</string>
+    <string name="androidkit_compose_contact">التواصل</string>
+    <string name="androidkit_compose_app_info">معلومات التطبيق</string>
+    <string name="androidkit_compose_app">التطبيق</string>
+    <string name="androidkit_compose_privacy_policy">سياسة الخصوصية</string>
+    <string name="androidkit_compose_terms_of_use">شروط الاستخدام</string>
+    <string name="androidkit_compose_third_party_licenses">تراخيص الجهات الخارجية</string>
+    <string name="androidkit_compose_source_code">الشيفرة المصدرية</string>
+    <string name="androidkit_compose_license">الترخيص</string>
+    <string name="androidkit_compose_contributors">المساهمون</string>
+</resources>
+

@@ -36,6 +36,9 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Switch
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
+import net.mamby.androidkit.compose.presentation.AndroidKitSupportPrompt
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import net.mamby.androidkit.compose.presentation.AndroidKitCardMenuItem
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
@@ -112,6 +115,19 @@ private fun AndroidKitPageDemo(
     onActionSelected: (DemoPageAction) -> Unit,
     onBack: () -> Unit,
 ) {
+    var showSupportPreview by rememberSaveable { mutableStateOf(false) }
+    var promptGeneration by rememberSaveable { mutableIntStateOf(0) }
+    if (showSupportPreview) {
+        AlertDialog(
+            onDismissRequest = { showSupportPreview = false },
+            text = { Text(stringResource(R.string.settings_support_preview)) },
+            confirmButton = {
+                TextButton(onClick = { showSupportPreview = false }) {
+                    Text(stringResource(R.string.action_close))
+                }
+            },
+        )
+    }
     val actions = if (DemoToggle.PageActions in toggles) {
         buildList {
             DemoPageAction.entries.filter { it != DemoPageAction.Confirm }.forEach { action ->
@@ -137,8 +153,15 @@ private fun AndroidKitPageDemo(
                 AndroidKitFloatingAction.Button(onClick = { onActionSelected(DemoPageAction.Confirm) }, icon = materialSymbol(R.drawable.ic_symbol_check),
                         label = stringResource(R.string.action_confirm))
             } else null,
-    ) { contentPadding ->
-        DemoList(contentPadding) {
+        supportPrompt = if (DemoToggle.PageSupport in toggles) AndroidKitSupportPrompt(
+            id = "demo:$promptGeneration",
+            onDonate = {
+                onToggleChange(DemoToggle.PageSupport, false)
+                showSupportPreview = true
+            },
+            onDismiss = { onToggleChange(DemoToggle.PageSupport, false) },
+        ) else null,
+        listContent = {
             item {
                 Text(stringResource(
                     R.string.demo_selected_action,
@@ -151,12 +174,18 @@ private fun AndroidKitPageDemo(
                 DemoToggle.PageActions,
                 DemoToggle.PageImmersive,
                 DemoToggle.PageFab,
+                DemoToggle.PageSupport,
             ).forEach { toggle ->
-                item(key = toggle.name) { DemoToggleRow(toggle, toggles, onToggleChange) }
+                item(key = toggle.name) {
+                    DemoToggleRow(toggle, toggles) { changed, checked ->
+                        if (changed == DemoToggle.PageSupport && checked) promptGeneration++
+                        onToggleChange(changed, checked)
+                    }
+                }
             }
             item { DemoScrollContent() }
-        }
-    }
+        },
+    )
 }
 
 @Composable

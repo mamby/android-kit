@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">뒤로</string>
+    <string name="androidkit_compose_add">추가</string>
+    <string name="androidkit_compose_close">닫기</string>
+    <string name="androidkit_compose_more">더보기</string>
+    <string name="androidkit_compose_retry">다시 시도</string>
+    <string name="androidkit_compose_cancel">취소</string>
+    <string name="androidkit_compose_confirm">확인</string>
+    <string name="androidkit_compose_save">저장</string>
+    <string name="androidkit_compose_hide_title_bar">제목 표시줄 숨기기</string>
+    <string name="androidkit_compose_show_title_bar">제목 표시줄 표시</string>
+    <string name="androidkit_compose_general">일반</string>
+    <string name="androidkit_compose_language">언어</string>
+    <string name="androidkit_compose_theme">테마</string>
+    <string name="androidkit_compose_transparency">투명도</string>
+    <string name="androidkit_compose_min">최소</string>
+    <string name="androidkit_compose_max">최대</string>
+    <string name="androidkit_compose_search_languages">언어 검색</string>
+    <string name="androidkit_compose_no_matching_languages">일치하는 언어 없음</string>
+    <string name="androidkit_compose_system">시스템</string>
+    <string name="androidkit_compose_security">보안</string>
+    <string name="androidkit_compose_app_lock">앱 잠금</string>
+    <string name="androidkit_compose_lock_after_leaving_app">앱을 나간 후 잠그기</string>
+    <string name="androidkit_compose_immediately">즉시</string>
+    <string name="androidkit_compose_after_one_minute">1분 후</string>
+    <string name="androidkit_compose_after_five_minutes">5분 후</string>
+    <string name="androidkit_compose_after_fifteen_minutes">15분 후</string>
+    <string name="androidkit_compose_lock_now">지금 잠그기</string>
+    <string name="androidkit_compose_support_title">이 앱 후원하기</string>
+    <string name="androidkit_compose_support_description">지속적인 개발을 지원해 주세요.</string>
+    <string name="androidkit_compose_about">소개</string>
+    <string name="androidkit_compose_version">버전</string>
+    <string name="androidkit_compose_open_source">오픈 소스</string>
+    <string name="androidkit_compose_contact">문의</string>
+    <string name="androidkit_compose_app_info">앱 정보</string>
+    <string name="androidkit_compose_app">앱</string>
+    <string name="androidkit_compose_privacy_policy">개인정보 처리방침</string>
+    <string name="androidkit_compose_terms_of_use">이용 약관</string>
+    <string name="androidkit_compose_third_party_licenses">타사 라이선스</string>
+    <string name="androidkit_compose_source_code">소스 코드</string>
+    <string name="androidkit_compose_license">라이선스</string>
+    <string name="androidkit_compose_contributors">기여자</string>
+    <string name="androidkit_compose_support_prompt_title">앱이 마음에 드시나요?</string>
+    <string name="androidkit_compose_support_prompt_description">개발을 지원하고 싶으시다면 기부해 주셔도 좋습니다. 기부는 언제나 선택 사항입니다.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">자세히 알아보기</string>
+    <string name="androidkit_compose_support_prompt_not_now">나중에</string>
+    <string name="androidkit_compose_support_prompt_donate">기부하기</string>
+</resources>
+

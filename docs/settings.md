@@ -15,7 +15,6 @@ AndroidKitSettingsPage(
     title = settingsTitle,
 ) {
     generalSection(
-        label = generalLabel,
         language = languageSetting,
         theme = themeSetting,
         floatingOpacity = opacitySetting,
@@ -24,7 +23,7 @@ AndroidKitSettingsPage(
         toggle(label = autoplayLabel, checked = autoplay, onCheckedChange = onAutoplay)
         navigation(label = downloadsLabel, onClick = onOpenDownloads)
     }
-    securitySection(label = securityLabel, appLock = appLockSetting)
+    securitySection(appLock = appLockSetting)
     section(key = "notice") { info(label = notice) }
 }
 ```
@@ -49,27 +48,28 @@ supply an `ImageVector` through `AndroidKitSettingsSelection.icon` or
 row label supplies accessibility text. Custom section entries keep their existing
 optional host-owned icons, and floating opacity remains iconless.
 
-`AndroidKitSettingsSelection` contains a label, stable keyed options, selected
-ID, selection callback, and localized Close description. IDs must be unique and
+`AndroidKitSettingsSelection` contains stable keyed options, selected
+ID, and a selection callback. Kit owns the row and Close labels. IDs must be unique and
 the selected ID must be present. The host supplies every option: Android Kit
-does not define supported languages, language names, or application themes. A
+does not define the host language list, language names, or application themes. All
+host languages must be supported by Kit translations. A
 host can include custom themes such as Prism.
 
 `systemOption` is required for settings selections. The host supplies its
-localized label and the localized label of the currently resolved value; Android
+stable ID and the localized label of the currently resolved value; Android
 Kit renders the shared `System (current value)` form in both the settings row
 and picker. The host still owns which languages or themes are available. This
 keeps the shared presentation enforced until the host explicitly selects a
 different value.
 
-`AndroidKitLanguageSetting` adds localized search and empty-result labels.
+`AndroidKitLanguageSetting` uses Kit-owned search and empty-result labels.
 Language search ignores case and accents. The search field is part of the
 sheet's measured chrome so it stays below the title while the choices scroll.
 Selection and dismissal clear the query. Theme selection uses the same choice
 presentation in a sheet that fits its content.
 
-`AndroidKitFloatingOpacitySetting` accepts a finite level in `0f..100f` and
-localized Min/Max labels. It uses steps of five, with no visible numeric value.
+`AndroidKitFloatingOpacitySetting` accepts a finite level in `0f..100f` and uses
+Kit-owned Min/Max labels. It uses steps of five, with no visible numeric value.
 The existing theme mapping remains 0.8 alpha at Min and 1.0 at Max. Hosts update
 their theme from `onValueChange` for live preview and save the current value from
 `onValueChangeFinished`. This setting does not change theme tokens itself.
@@ -78,20 +78,17 @@ their theme from `onValueChange` for live preview and save the current value fro
 authentication and persistence; a requested change does not optimistically
 change the switch. Optional `timeout` and `onLockNow` configuration add the shared
 timeout row and Lock now action only while `checked` is true. `enabled = false`
-disables all three controls. Supply a localized `lockNowLabel` with `onLockNow`.
+disables all three controls. Kit owns the Lock now and timeout row labels.
 
 ```kotlin
 AndroidKitAppLockSetting(
-    label = appLockLabel,
     checked = appLockEnabled,
     onCheckedChange = onAppLockChange,
     timeout = AndroidKitAppLockTimeoutSetting(
-        label = timeoutLabel,
         options = timeoutOptions,
         selectedId = selectedTimeoutId,
         onSelected = onTimeoutSelected,
     ),
-    lockNowLabel = lockNowLabel,
     onLockNow = onLockNow,
 )
 ```
@@ -133,7 +130,8 @@ Render the predefined subpage with
 `version = version, privacyPolicy = privacyPolicy, termsOfUse = termsOfUse,`
 `libraries = thirdPartyLicenses, sourceCode = sourceCode, license = license,`
 `contributors = contributors))`.
-It defaults to the App info title and accepts the usual host Back callback.
+It uses the Kit-owned App info title and accepts the usual host Back callback.
+Passing a custom title to this predefined configuration is rejected.
 App always contains Privacy policy, Terms of use, Third-party licenses
 (`libraries`), and the required read-only Version, in that order. Open source
 always contains Source code, License, and Contributors. All six links and the
@@ -142,7 +140,7 @@ version are required. Provide the license name, such as MIT, through its link's
 
 `AndroidKitSettingsLink` requires `onClick`; its label is always taken from the
 current `AndroidKitStrings`. The host may provide an icon, supporting text, and
-enabled state. Localize the predefined labels through `AndroidKitStrings`.
+enabled state. Kit translates these labels internally; hosts cannot override them.
 Rendering remains Kit-owned.
 
 This changes the Main and About constructor contracts: replace inline `about`

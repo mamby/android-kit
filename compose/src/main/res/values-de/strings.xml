@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Zurück</string>
+    <string name="androidkit_compose_add">Hinzufügen</string>
+    <string name="androidkit_compose_close">Schließen</string>
+    <string name="androidkit_compose_more">Mehr</string>
+    <string name="androidkit_compose_retry">Erneut versuchen</string>
+    <string name="androidkit_compose_cancel">Abbrechen</string>
+    <string name="androidkit_compose_confirm">Bestätigen</string>
+    <string name="androidkit_compose_save">Speichern</string>
+    <string name="androidkit_compose_hide_title_bar">Titelleiste ausblenden</string>
+    <string name="androidkit_compose_show_title_bar">Titelleiste einblenden</string>
+    <string name="androidkit_compose_general">Allgemein</string>
+    <string name="androidkit_compose_language">Sprache</string>
+    <string name="androidkit_compose_theme">Design</string>
+    <string name="androidkit_compose_transparency">Transparenz</string>
+    <string name="androidkit_compose_min">Min.</string>
+    <string name="androidkit_compose_max">Max.</string>
+    <string name="androidkit_compose_search_languages">Sprachen suchen</string>
+    <string name="androidkit_compose_no_matching_languages">Keine passenden Sprachen</string>
+    <string name="androidkit_compose_system">System</string>
+    <string name="androidkit_compose_security">Sicherheit</string>
+    <string name="androidkit_compose_app_lock">App-Sperre</string>
+    <string name="androidkit_compose_lock_after_leaving_app">Nach Verlassen der App sperren</string>
+    <string name="androidkit_compose_immediately">Sofort</string>
+    <string name="androidkit_compose_after_one_minute">Nach 1 Minute</string>
+    <string name="androidkit_compose_after_five_minutes">Nach 5 Minuten</string>
+    <string name="androidkit_compose_after_fifteen_minutes">Nach 15 Minuten</string>
+    <string name="androidkit_compose_lock_now">Jetzt sperren</string>
+    <string name="androidkit_compose_support_title">Diese App unterstützen</string>
+    <string name="androidkit_compose_support_description">Hilf dabei, die Weiterentwicklung zu unterstützen.</string>
+    <string name="androidkit_compose_about">Über</string>
+    <string name="androidkit_compose_version">Version</string>
+    <string name="androidkit_compose_open_source">Open Source</string>
+    <string name="androidkit_compose_contact">Kontakt</string>
+    <string name="androidkit_compose_app_info">App-Info</string>
+    <string name="androidkit_compose_app">App</string>
+    <string name="androidkit_compose_privacy_policy">Datenschutzerklärung</string>
+    <string name="androidkit_compose_terms_of_use">Nutzungsbedingungen</string>
+    <string name="androidkit_compose_third_party_licenses">Drittanbieterlizenzen</string>
+    <string name="androidkit_compose_source_code">Quellcode</string>
+    <string name="androidkit_compose_license">Lizenz</string>
+    <string name="androidkit_compose_contributors">Mitwirkende</string>
+    <string name="androidkit_compose_support_prompt_title">Gefällt dir die App?</string>
+    <string name="androidkit_compose_support_prompt_description">Wenn du die Entwicklung unterstützen möchtest, freuen wir uns über Spenden. Sie sind aber niemals erforderlich.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Mehr erfahren</string>
+    <string name="androidkit_compose_support_prompt_not_now">Nicht jetzt</string>
+    <string name="androidkit_compose_support_prompt_donate">Spenden</string>
+</resources>
+
