@@ -3,6 +3,7 @@ package net.mamby.androidkit.testing
 import androidx.activity.ComponentActivity
 import android.content.res.Configuration
 import android.os.LocaleList
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import java.util.Locale
@@ -22,8 +23,9 @@ import org.junit.Test
 @Composable
 private fun EnglishKitTheme(content: @Composable () -> Unit) {
     val context = LocalContext.current
-    val resources = remember(context) {
-        val configuration = Configuration(context.resources.configuration).apply {
+    val currentConfiguration = LocalConfiguration.current
+    val resources = remember(context, currentConfiguration) {
+        val configuration = Configuration(currentConfiguration).apply {
             setLocales(LocaleList(Locale.ENGLISH))
         }
         context.createConfigurationContext(configuration).resources

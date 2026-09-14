@@ -21,14 +21,14 @@
     <string name="androidkit_compose_system">Systeem</string>
     <string name="androidkit_compose_security">Beveiliging</string>
     <string name="androidkit_compose_app_lock">Appvergrendeling</string>
-    <string name="androidkit_compose_lock_after_leaving_app">Vergrendelen na verlaten van de app</string>
+    <string name="androidkit_compose_lock_after_leaving_app">Vergrendelen na het verlaten van de app</string>
     <string name="androidkit_compose_immediately">Onmiddellijk</string>
     <string name="androidkit_compose_after_one_minute">Na 1 minuut</string>
     <string name="androidkit_compose_after_five_minutes">Na 5 minuten</string>
     <string name="androidkit_compose_after_fifteen_minutes">Na 15 minuten</string>
     <string name="androidkit_compose_lock_now">Nu vergrendelen</string>
     <string name="androidkit_compose_support_title">Steun deze app</string>
-    <string name="androidkit_compose_support_description">Help de verdere ontwikkeling te ondersteunen.</string>
+    <string name="androidkit_compose_support_description">Steun de verdere ontwikkeling van de app.</string>
     <string name="androidkit_compose_about">Over</string>
     <string name="androidkit_compose_version">Versie</string>
     <string name="androidkit_compose_open_source">Open source</string>
@@ -47,4 +47,3 @@
     <string name="androidkit_compose_support_prompt_not_now">Niet nu</string>
     <string name="androidkit_compose_support_prompt_donate">Doneren</string>
 </resources>
-

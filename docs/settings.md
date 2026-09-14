@@ -131,17 +131,24 @@ Render the predefined subpage with
 `libraries = thirdPartyLicenses, sourceCode = sourceCode, license = license,`
 `contributors = contributors))`.
 It uses the Kit-owned App info title and accepts the usual host Back callback.
-Passing a custom title to this predefined configuration is rejected.
+Its dedicated overload has no title, toolbar actions, or content builder parameters,
+so hosts cannot add sections or rows or replace its chrome. The overload accepting
+host sections takes `AndroidKitSettingsPageConfiguration.Customizable` (Main or
+Subpage); AppInfo cannot be passed to it.
 App always contains Privacy policy, Terms of use, Third-party licenses
 (`libraries`), and the required read-only Version, in that order. Open source
 always contains Source code, License, and Contributors. All six links and the
-version are required. Provide the license name, such as MIT, through its link's
-`supportingText`. No legal destinations are inferred.
+version are required. No legal destinations are inferred.
 
 `AndroidKitSettingsLink` requires `onClick`; its label is always taken from the
-current `AndroidKitStrings`. The host may provide an icon, supporting text, and
-enabled state. Kit translates these labels internally; hosts cannot override them.
-Rendering remains Kit-owned.
+current `AndroidKitStrings`. Hosts supply only the click callback and enabled
+state. Kit owns the icons and presentation of every predefined About and App info
+link; host descriptions, labels, icons, and custom content are not accepted.
+Kit translates these labels internally; hosts cannot override them. The app's
+version remains required host-owned data for the read-only Version row.
+
+Remove `supportingText` and `icon` arguments from existing
+`AndroidKitSettingsLink` calls; these customization fields are no longer public API.
 
 This changes the Main and About constructor contracts: replace inline `about`
 and `getInvolved` with required `contact` and `appInfo` links, and pass About

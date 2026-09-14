@@ -76,7 +76,7 @@ class SettingsCommunityBehaviorTest {
                         AndroidKitSettingsAbout(
                             version = "1.0", privacyPolicy = link, termsOfUse = link,
                             libraries = link, sourceCode = link,
-                            license = link.copy(supportingText = "MIT"), contributors = link,
+                            license = link, contributors = link,
                         ),
                     ),
                 )
@@ -90,7 +90,7 @@ class SettingsCommunityBehaviorTest {
             rule.onNodeWithText(label).performClick()
         }
         scrollTo("License")
-        rule.onNodeWithText("MIT").assertIsDisplayed()
+        rule.onNodeWithText("MIT").assertDoesNotExist()
         rule.runOnIdle { assertEquals(6, clicks) }
         rule.onNodeWithText("Contact").assertDoesNotExist()
         rule.onNodeWithText("About").assertDoesNotExist()
@@ -110,7 +110,7 @@ class SettingsCommunityBehaviorTest {
                             termsOfUse = link,
                             libraries = link,
                             sourceCode = link,
-                            license = link.copy(supportingText = "MIT"),
+                            license = link,
                             contributors = link,
                         ),
                     ),

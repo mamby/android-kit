@@ -31,15 +31,14 @@
     <string name="androidkit_compose_support_description">Aidez à poursuivre le développement.</string>
     <string name="androidkit_compose_about">À propos</string>
     <string name="androidkit_compose_version">Version</string>
-    <string name="androidkit_compose_open_source">Code ouvert</string>
+    <string name="androidkit_compose_open_source">Open source</string>
     <string name="androidkit_compose_contact">Contact</string>
     <string name="androidkit_compose_app_info">Infos sur l’application</string>
     <string name="androidkit_compose_app">Application</string>
     <string name="androidkit_compose_privacy_policy">Politique de confidentialité</string>
     <string name="androidkit_compose_terms_of_use">Conditions d’utilisation</string>
-    <string name="androidkit_compose_third_party_licenses">Licences tierces</string>
+    <string name="androidkit_compose_third_party_licenses">Licences de tiers</string>
     <string name="androidkit_compose_source_code">Code source</string>
     <string name="androidkit_compose_license">Licence</string>
     <string name="androidkit_compose_contributors">Contributeurs</string>
 </resources>
-

@@ -28,7 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">15 分钟后</string>
     <string name="androidkit_compose_lock_now">立即锁定</string>
     <string name="androidkit_compose_support_title">支持此应用</string>
-    <string name="androidkit_compose_support_description">帮助支持持续开发。</string>
+    <string name="androidkit_compose_support_description">支持应用的持续开发。</string>
     <string name="androidkit_compose_about">关于</string>
     <string name="androidkit_compose_version">版本</string>
     <string name="androidkit_compose_open_source">开源</string>
@@ -42,9 +42,8 @@
     <string name="androidkit_compose_license">许可证</string>
     <string name="androidkit_compose_contributors">贡献者</string>
     <string name="androidkit_compose_support_prompt_title">喜欢这个应用吗？</string>
-    <string name="androidkit_compose_support_prompt_description">如果您想支持应用的开发，欢迎捐赠，但绝不强制。</string>
+    <string name="androidkit_compose_support_prompt_description">如果您愿意支持应用的开发，欢迎捐赠。捐赠始终出于自愿。</string>
     <string name="androidkit_compose_support_prompt_learn_more">了解更多</string>
     <string name="androidkit_compose_support_prompt_not_now">暂不</string>
     <string name="androidkit_compose_support_prompt_donate">捐赠</string>
 </resources>
-

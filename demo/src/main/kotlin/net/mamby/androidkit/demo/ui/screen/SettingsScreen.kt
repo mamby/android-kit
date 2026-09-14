@@ -161,7 +161,6 @@ internal fun AppInfoScreen(onBack: () -> Unit) {
                 sourceCode = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
                 license = AndroidKitSettingsLink(
                     onClick = { uriHandler.openUri("$CatalogRepository/blob/main/LICENSE") },
-                    supportingText = "MIT",
                 ),
                 contributors = AndroidKitSettingsLink(onClick = {
                     uriHandler.openUri("$CatalogRepository/graphs/contributors")

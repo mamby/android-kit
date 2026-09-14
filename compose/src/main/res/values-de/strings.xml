@@ -28,7 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Nach 15 Minuten</string>
     <string name="androidkit_compose_lock_now">Jetzt sperren</string>
     <string name="androidkit_compose_support_title">Diese App unterstützen</string>
-    <string name="androidkit_compose_support_description">Hilf dabei, die Weiterentwicklung zu unterstützen.</string>
+    <string name="androidkit_compose_support_description">Unterstütze die Weiterentwicklung der App.</string>
     <string name="androidkit_compose_about">Über</string>
     <string name="androidkit_compose_version">Version</string>
     <string name="androidkit_compose_open_source">Open Source</string>
@@ -47,4 +47,3 @@
     <string name="androidkit_compose_support_prompt_not_now">Nicht jetzt</string>
     <string name="androidkit_compose_support_prompt_donate">Spenden</string>
 </resources>
-

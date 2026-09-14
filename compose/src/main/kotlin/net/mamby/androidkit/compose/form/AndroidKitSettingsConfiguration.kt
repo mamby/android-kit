@@ -33,11 +33,9 @@ public data class AndroidKitSettingsSupport(
     public val action: AndroidKitSettingsAction,
 )
 
-/** Predefined settings link. Its label comes from the current Kit strings. */
+/** Predefined settings link. Kit owns its label, icon, and presentation; hosts own behavior. */
 public data class AndroidKitSettingsLink(
     public val onClick: () -> Unit,
-    public val supportingText: String? = null,
-    public val icon: ImageVector? = null,
     public val enabled: Boolean = true,
 )
 
@@ -55,17 +53,20 @@ public data class AndroidKitSettingsAbout(
 }
 
 public sealed interface AndroidKitSettingsPageConfiguration {
+    /** Settings pages that accept host-defined sections and page chrome. */
+    public sealed interface Customizable : AndroidKitSettingsPageConfiguration
+
     /** About is always present; the donation banner is optional and appears last. */
     public data class Main(
         public val contact: AndroidKitSettingsLink,
         public val appInfo: AndroidKitSettingsLink,
         public val support: AndroidKitSettingsSupport? = null,
-    ) : AndroidKitSettingsPageConfiguration
+    ) : Customizable
 
     public data class AppInfo(public val about: AndroidKitSettingsAbout) : AndroidKitSettingsPageConfiguration
 
     /** Ordinary host-defined subpage; no main-settings footer. */
-    public data object Subpage : AndroidKitSettingsPageConfiguration
+    public data object Subpage : Customizable
 }
 
 @Composable
@@ -103,7 +104,7 @@ internal fun SettingsOpenSourceSection(about: AndroidKitSettingsAbout) {
 
 private fun AndroidKitSettingSectionScope.link(link: AndroidKitSettingsLink, label: String, icon: ImageVector) {
     navigation(label = label, onClick = link.onClick,
-        supportingText = link.supportingText, icon = link.icon ?: icon, enabled = link.enabled)
+        icon = icon, enabled = link.enabled)
 }
 
 @Composable

@@ -23,7 +23,9 @@ escape hatch. Migrate consumers and the demo with the library.
   and typed rows, including `info` for labels, values, and supporting text.
   Select an explicit page configuration: `Main` always renders Contact and App info in About, followed by an optional
   donation banner. `AppInfo` renders predefined App and Open source sections;
-  all requested App info entries are required and always rendered; `Subpage` has
+  predefined links accept only click callbacks and enabled state, with Kit-owned
+  labels and icons and no host descriptions or custom content. The app version
+  remains host-owned data. All requested App info entries are required and always rendered; `Subpage` has
   no footer. See
   [settings.md](settings.md).
 - Cards: replace `header` and `headerSupportingContent` with `title` and

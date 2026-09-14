@@ -44,7 +44,6 @@
     <string name="androidkit_compose_support_prompt_title">앱이 마음에 드시나요?</string>
     <string name="androidkit_compose_support_prompt_description">개발을 지원하고 싶으시다면 기부해 주셔도 좋습니다. 기부는 언제나 선택 사항입니다.</string>
     <string name="androidkit_compose_support_prompt_learn_more">자세히 알아보기</string>
-    <string name="androidkit_compose_support_prompt_not_now">나중에</string>
+    <string name="androidkit_compose_support_prompt_not_now">지금은 안 함</string>
     <string name="androidkit_compose_support_prompt_donate">기부하기</string>
 </resources>
-

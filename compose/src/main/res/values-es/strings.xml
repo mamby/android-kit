@@ -21,7 +21,7 @@
     <string name="androidkit_compose_system">Sistema</string>
     <string name="androidkit_compose_security">Seguridad</string>
     <string name="androidkit_compose_app_lock">Bloqueo de la aplicación</string>
-    <string name="androidkit_compose_lock_after_leaving_app">Bloquear al salir de la aplicación</string>
+    <string name="androidkit_compose_lock_after_leaving_app">Bloquear después de salir de la aplicación</string>
     <string name="androidkit_compose_immediately">Inmediatamente</string>
     <string name="androidkit_compose_after_one_minute">Después de 1 minuto</string>
     <string name="androidkit_compose_after_five_minutes">Después de 5 minutos</string>
@@ -47,4 +47,3 @@
     <string name="androidkit_compose_support_prompt_not_now">Ahora no</string>
     <string name="androidkit_compose_support_prompt_donate">Donar</string>
 </resources>
-

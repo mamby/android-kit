@@ -28,7 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Po 15 minutach</string>
     <string name="androidkit_compose_lock_now">Zablokuj teraz</string>
     <string name="androidkit_compose_support_title">Wesprzyj tę aplikację</string>
-    <string name="androidkit_compose_support_description">Pomóż wspierać dalszy rozwój.</string>
+    <string name="androidkit_compose_support_description">Wesprzyj dalszy rozwój aplikacji.</string>
     <string name="androidkit_compose_about">Informacje</string>
     <string name="androidkit_compose_version">Wersja</string>
     <string name="androidkit_compose_open_source">Otwarte oprogramowanie</string>
@@ -37,7 +37,7 @@
     <string name="androidkit_compose_app">Aplikacja</string>
     <string name="androidkit_compose_privacy_policy">Polityka prywatności</string>
     <string name="androidkit_compose_terms_of_use">Warunki użytkowania</string>
-    <string name="androidkit_compose_third_party_licenses">Licencje innych firm</string>
+    <string name="androidkit_compose_third_party_licenses">Licencje podmiotów trzecich</string>
     <string name="androidkit_compose_source_code">Kod źródłowy</string>
     <string name="androidkit_compose_license">Licencja</string>
     <string name="androidkit_compose_contributors">Współtwórcy</string>
@@ -47,4 +47,3 @@
     <string name="androidkit_compose_support_prompt_not_now">Nie teraz</string>
     <string name="androidkit_compose_support_prompt_donate">Przekaż darowiznę</string>
 </resources>
-

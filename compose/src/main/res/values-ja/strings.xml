@@ -44,7 +44,6 @@
     <string name="androidkit_compose_support_prompt_title">アプリを気に入っていただけましたか？</string>
     <string name="androidkit_compose_support_prompt_description">開発を支援していただける場合は、寄付を歓迎します。寄付は任意です。</string>
     <string name="androidkit_compose_support_prompt_learn_more">詳しく見る</string>
-    <string name="androidkit_compose_support_prompt_not_now">後で</string>
+    <string name="androidkit_compose_support_prompt_not_now">今はしない</string>
     <string name="androidkit_compose_support_prompt_donate">寄付する</string>
 </resources>
-

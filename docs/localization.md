@@ -74,10 +74,15 @@ APIs. Host language selection must not advertise languages absent from its decla
 supported set.
 
 Canonical text lives in `compose/src/main/res/values`, with matching resources in
-`values-fr` and `values-ar`. Every internal `AndroidKitStrings` field is required
+each supported locale directory. Every internal `AndroidKitStrings` field is required
 and resolved in `AndroidKitLocalizedStrings.kt`; there are no Kotlin English
 defaults. Keep all translations generic and free of demo branding. Kit resources
 are private through `values/public.xml`.
+
+See [the translation review](translation-review.md) for terminology decisions,
+per-language review coverage, and the distinction between resource validation and
+native-speaker approval. Preserve the translator context comments in the English
+resources when updating translations.
 
 The previous English catalog and host snapshot validator are legacy artifacts.
 They do not satisfy the new contract; replace their application with the new

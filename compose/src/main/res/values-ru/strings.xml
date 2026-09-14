@@ -28,7 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Через 15 минут</string>
     <string name="androidkit_compose_lock_now">Заблокировать сейчас</string>
     <string name="androidkit_compose_support_title">Поддержать приложение</string>
-    <string name="androidkit_compose_support_description">Помогите поддержать дальнейшую разработку.</string>
+    <string name="androidkit_compose_support_description">Поддержите дальнейшую разработку приложения.</string>
     <string name="androidkit_compose_about">О приложении</string>
     <string name="androidkit_compose_version">Версия</string>
     <string name="androidkit_compose_open_source">Открытый исходный код</string>
@@ -42,9 +42,8 @@
     <string name="androidkit_compose_license">Лицензия</string>
     <string name="androidkit_compose_contributors">Участники</string>
     <string name="androidkit_compose_support_prompt_title">Нравится приложение?</string>
-    <string name="androidkit_compose_support_prompt_description">Если вы хотите поддержать разработку, будем благодарны за пожертвования. Они никогда не обязательны.</string>
+    <string name="androidkit_compose_support_prompt_description">Если вы хотите поддержать разработку, будем благодарны за пожертвования. Пожертвования всегда добровольны.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Подробнее</string>
     <string name="androidkit_compose_support_prompt_not_now">Не сейчас</string>
     <string name="androidkit_compose_support_prompt_donate">Пожертвовать</string>
 </resources>
-

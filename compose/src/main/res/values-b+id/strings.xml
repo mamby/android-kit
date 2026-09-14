@@ -28,7 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Setelah 15 menit</string>
     <string name="androidkit_compose_lock_now">Kunci sekarang</string>
     <string name="androidkit_compose_support_title">Dukung aplikasi ini</string>
-    <string name="androidkit_compose_support_description">Bantu mendukung pengembangan berkelanjutan.</string>
+    <string name="androidkit_compose_support_description">Bantu melanjutkan pengembangan aplikasi ini.</string>
     <string name="androidkit_compose_about">Tentang</string>
     <string name="androidkit_compose_version">Versi</string>
     <string name="androidkit_compose_open_source">Sumber terbuka</string>
@@ -44,7 +44,6 @@
     <string name="androidkit_compose_support_prompt_title">Suka aplikasi ini?</string>
     <string name="androidkit_compose_support_prompt_description">Jika ingin mendukung pengembangannya, donasi sangat dihargai, tetapi tidak pernah diwajibkan.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Pelajari lebih lanjut</string>
-    <string name="androidkit_compose_support_prompt_not_now">Nanti saja</string>
+    <string name="androidkit_compose_support_prompt_not_now">Tidak sekarang</string>
     <string name="androidkit_compose_support_prompt_donate">Donasi</string>
 </resources>
-

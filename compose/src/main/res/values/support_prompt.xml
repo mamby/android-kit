@@ -1,7 +1,9 @@
 <resources>
     <string name="androidkit_compose_support_prompt_title">Enjoying the app?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
     <string name="androidkit_compose_support_prompt_description">If you’d like to support its development, donations are appreciated—but never required.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Learn more</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
     <string name="androidkit_compose_support_prompt_not_now">Not now</string>
     <string name="androidkit_compose_support_prompt_donate">Donate</string>
 </resources>

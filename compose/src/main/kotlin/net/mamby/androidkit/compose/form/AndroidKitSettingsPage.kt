@@ -189,7 +189,7 @@ internal interface SettingsPageRenderScope {
  */
 @Composable
 public fun AndroidKitSettingsPage(
-    configuration: AndroidKitSettingsPageConfiguration,
+    configuration: AndroidKitSettingsPageConfiguration.Customizable,
     title: String? = null,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
@@ -197,19 +197,38 @@ public fun AndroidKitSettingsPage(
     listState: LazyListState = rememberLazyListState(),
     content: AndroidKitSettingsPageScope.() -> Unit = {},
 ): Unit {
-    require(configuration !is AndroidKitSettingsPageConfiguration.AppInfo || title == null) {
-        "The App info title is owned and localized by AndroidKit."
-    }
+    SettingsPage(configuration, title, modifier, onBack, actions, listState, content)
+}
+
+/** Fixed App info surface. Kit owns every entry, title, icon, and section. */
+@Composable
+public fun AndroidKitSettingsPage(
+    configuration: AndroidKitSettingsPageConfiguration.AppInfo,
+    modifier: Modifier = Modifier,
+    onBack: (() -> Unit)? = null,
+    listState: LazyListState = rememberLazyListState(),
+): Unit {
+    SettingsPage(configuration, AndroidKitThemeTokens.strings.appInfo, modifier, onBack,
+        emptyList(), listState, {})
+}
+
+@Composable
+private fun SettingsPage(
+    configuration: AndroidKitSettingsPageConfiguration,
+    title: String?,
+    modifier: Modifier,
+    onBack: (() -> Unit)?,
+    actions: List<AndroidKitActionItem>,
+    listState: LazyListState,
+    content: AndroidKitSettingsPageScope.() -> Unit,
+) {
     var activePicker by rememberSaveable { mutableStateOf<String?>(null) }
     val scope = SettingsPageScopeImpl { activePicker = it }
     val declarations = AndroidKitSettingsPageScope().apply(content)
     declarations.render(scope)
     val dimensions = AndroidKitThemeTokens.dimensions
     val direction = LocalLayoutDirection.current
-    val pageTitle = title ?: if (configuration is AndroidKitSettingsPageConfiguration.AppInfo) {
-        AndroidKitThemeTokens.strings.appInfo
-    } else null
-    AndroidKitPage(title = pageTitle, modifier = modifier, onBack = onBack, actions = actions) { padding ->
+    AndroidKitPage(title = title, modifier = modifier, onBack = onBack, actions = actions) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState,

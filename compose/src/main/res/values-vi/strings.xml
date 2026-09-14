@@ -28,7 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Sau 15 phút</string>
     <string name="androidkit_compose_lock_now">Khóa ngay</string>
     <string name="androidkit_compose_support_title">Ủng hộ ứng dụng này</string>
-    <string name="androidkit_compose_support_description">Giúp hỗ trợ việc phát triển ứng dụng lâu dài.</string>
+    <string name="androidkit_compose_support_description">Hỗ trợ việc tiếp tục phát triển ứng dụng.</string>
     <string name="androidkit_compose_about">Giới thiệu</string>
     <string name="androidkit_compose_version">Phiên bản</string>
     <string name="androidkit_compose_open_source">Mã nguồn mở</string>
@@ -44,7 +44,6 @@
     <string name="androidkit_compose_support_prompt_title">Bạn thích ứng dụng này chứ?</string>
     <string name="androidkit_compose_support_prompt_description">Nếu muốn hỗ trợ việc phát triển, bạn có thể quyên góp. Chúng tôi rất trân trọng, nhưng việc này không bao giờ là bắt buộc.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Tìm hiểu thêm</string>
-    <string name="androidkit_compose_support_prompt_not_now">Để sau</string>
+    <string name="androidkit_compose_support_prompt_not_now">Không phải bây giờ</string>
     <string name="androidkit_compose_support_prompt_donate">Quyên góp</string>
 </resources>
-
