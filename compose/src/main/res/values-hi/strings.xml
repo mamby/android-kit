@@ -38,13 +38,14 @@
     <string name="androidkit_compose_privacy_policy">गोपनीयता नीति</string>
     <string name="androidkit_compose_terms_of_use">उपयोग की शर्तें</string>
     <string name="androidkit_compose_third_party_licenses">तृतीय-पक्ष लाइसेंस</string>
-    <string name="androidkit_compose_source_code">स्रोत कोड</string>
+    <string name="androidkit_compose_project_repository">परियोजना रिपॉज़िटरी</string>
     <string name="androidkit_compose_license">लाइसेंस</string>
-    <string name="androidkit_compose_contributors">योगदानकर्ता</string>
+    <string name="androidkit_compose_contribute">योगदान दें</string>
     <string name="androidkit_compose_support_prompt_title">क्या आपको ऐप पसंद है?</string>
     <string name="androidkit_compose_support_prompt_description">अगर आप इसके विकास का समर्थन करना चाहें, तो दान का स्वागत है, लेकिन यह कभी अनिवार्य नहीं है।</string>
     <string name="androidkit_compose_support_prompt_learn_more">और जानें</string>
     <string name="androidkit_compose_support_prompt_not_now">अभी नहीं</string>
     <string name="androidkit_compose_support_prompt_donate">दान करें</string>
+    <string name="androidkit_compose_contact_description">फ़ीड या सवाल</string>
 </resources>
 

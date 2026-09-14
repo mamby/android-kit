@@ -38,8 +38,9 @@
     <string name="androidkit_compose_privacy_policy">سياسة الخصوصية</string>
     <string name="androidkit_compose_terms_of_use">شروط الاستخدام</string>
     <string name="androidkit_compose_third_party_licenses">تراخيص الجهات الخارجية</string>
-    <string name="androidkit_compose_source_code">الشيفرة المصدرية</string>
+    <string name="androidkit_compose_project_repository">مستودع المشروع</string>
     <string name="androidkit_compose_license">الترخيص</string>
-    <string name="androidkit_compose_contributors">المساهمون</string>
+    <string name="androidkit_compose_contribute">ساهم</string>
+    <string name="androidkit_compose_contact_description">الخلاصة أو الأسئلة</string>
 </resources>
 

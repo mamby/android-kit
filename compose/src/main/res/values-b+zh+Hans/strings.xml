@@ -38,12 +38,13 @@
     <string name="androidkit_compose_privacy_policy">隐私政策</string>
     <string name="androidkit_compose_terms_of_use">使用条款</string>
     <string name="androidkit_compose_third_party_licenses">第三方许可证</string>
-    <string name="androidkit_compose_source_code">源代码</string>
+    <string name="androidkit_compose_project_repository">项目仓库</string>
     <string name="androidkit_compose_license">许可证</string>
-    <string name="androidkit_compose_contributors">贡献者</string>
+    <string name="androidkit_compose_contribute">参与贡献</string>
     <string name="androidkit_compose_support_prompt_title">喜欢这个应用吗？</string>
     <string name="androidkit_compose_support_prompt_description">如果您愿意支持应用的开发，欢迎捐赠。捐赠始终出于自愿。</string>
     <string name="androidkit_compose_support_prompt_learn_more">了解更多</string>
     <string name="androidkit_compose_support_prompt_not_now">暂不</string>
     <string name="androidkit_compose_support_prompt_donate">捐赠</string>
+    <string name="androidkit_compose_contact_description">动态或问题</string>
 </resources>

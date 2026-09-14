@@ -38,12 +38,13 @@
     <string name="androidkit_compose_privacy_policy">개인정보 처리방침</string>
     <string name="androidkit_compose_terms_of_use">이용 약관</string>
     <string name="androidkit_compose_third_party_licenses">타사 라이선스</string>
-    <string name="androidkit_compose_source_code">소스 코드</string>
+    <string name="androidkit_compose_project_repository">프로젝트 저장소</string>
     <string name="androidkit_compose_license">라이선스</string>
-    <string name="androidkit_compose_contributors">기여자</string>
+    <string name="androidkit_compose_contribute">기여하기</string>
     <string name="androidkit_compose_support_prompt_title">앱이 마음에 드시나요?</string>
     <string name="androidkit_compose_support_prompt_description">개발을 지원하고 싶으시다면 기부해 주셔도 좋습니다. 기부는 언제나 선택 사항입니다.</string>
     <string name="androidkit_compose_support_prompt_learn_more">자세히 알아보기</string>
     <string name="androidkit_compose_support_prompt_not_now">지금은 안 함</string>
     <string name="androidkit_compose_support_prompt_donate">기부하기</string>
+    <string name="androidkit_compose_contact_description">피드 또는 질문</string>
 </resources>

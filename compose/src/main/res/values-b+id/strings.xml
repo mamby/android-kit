@@ -38,12 +38,13 @@
     <string name="androidkit_compose_privacy_policy">Kebijakan privasi</string>
     <string name="androidkit_compose_terms_of_use">Ketentuan penggunaan</string>
     <string name="androidkit_compose_third_party_licenses">Lisensi pihak ketiga</string>
-    <string name="androidkit_compose_source_code">Kode sumber</string>
+    <string name="androidkit_compose_project_repository">Repositori proyek</string>
     <string name="androidkit_compose_license">Lisensi</string>
-    <string name="androidkit_compose_contributors">Kontributor</string>
+    <string name="androidkit_compose_contribute">Berkontribusi</string>
     <string name="androidkit_compose_support_prompt_title">Suka aplikasi ini?</string>
     <string name="androidkit_compose_support_prompt_description">Jika ingin mendukung pengembangannya, donasi sangat dihargai, tetapi tidak pernah diwajibkan.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Pelajari lebih lanjut</string>
     <string name="androidkit_compose_support_prompt_not_now">Tidak sekarang</string>
     <string name="androidkit_compose_support_prompt_donate">Donasi</string>
+    <string name="androidkit_compose_contact_description">Feed atau pertanyaan</string>
 </resources>

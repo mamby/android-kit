@@ -121,23 +121,23 @@ viewport edge-to-edge. Do not add a second page-padding modifier in consumers.
 ## About and App info
 
 Main always appends About with Contact and App info, followed by the optional
-support/donation banner. Both links are required. Get involved has been removed.
+support/donation banner. Contact includes the Kit-owned localized subtext “Feed or questions”; hosts cannot customize it. Both links are required. Get involved has been removed.
 Hosts own navigation and external destinations; the demo Contact opens the
 maintainer's GitHub profile.
 
 Render the predefined subpage with
 `AndroidKitSettingsPageConfiguration.AppInfo(AndroidKitSettingsAbout(`
 `version = version, privacyPolicy = privacyPolicy, termsOfUse = termsOfUse,`
-`libraries = thirdPartyLicenses, sourceCode = sourceCode, license = license,`
-`contributors = contributors))`.
+`libraries = thirdPartyLicenses, projectRepository = projectRepository,`
+`contribute = contribute))`.
 It uses the Kit-owned App info title and accepts the usual host Back callback.
 Its dedicated overload has no title, toolbar actions, or content builder parameters,
 so hosts cannot add sections or rows or replace its chrome. The overload accepting
 host sections takes `AndroidKitSettingsPageConfiguration.Customizable` (Main or
 Subpage); AppInfo cannot be passed to it.
-App always contains Privacy policy, Terms of use, Third-party licenses
+App always contains Terms of use, Privacy policy, Third-party licenses
 (`libraries`), and the required read-only Version, in that order. Open source
-always contains Source code, License, and Contributors. All six links and the
+always contains Project repository and Contribute. All five links and the
 version are required. No legal destinations are inferred.
 
 `AndroidKitSettingsLink` requires `onClick`; its label is always taken from the
@@ -156,3 +156,8 @@ data to the new AppInfo destination. About no longer accepts app identity,
 What's new, or Contact fields. All requested App info actions are required;
 only the donation banner is optional.
 Ordinary Subpage configurations still have no footer.
+
+Open source destinations are host-owned: `projectRepository` opens the project repository,
+and `contribute` opens contribution guidelines or the project contribution page.
+Migrate previous `sourceCode` and `contributors` callbacks to these fields and remove
+the separate `license` callback; the App section is unchanged.

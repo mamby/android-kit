@@ -158,12 +158,9 @@ internal fun AppInfoScreen(onBack: () -> Unit) {
                 privacyPolicy = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
                 termsOfUse = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
                 libraries = AndroidKitSettingsLink(onClick = { uriHandler.openUri("$CatalogRepository/THIRD_PARTY_NOTICES.md") }),
-                sourceCode = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
-                license = AndroidKitSettingsLink(
-                    onClick = { uriHandler.openUri("$CatalogRepository/blob/main/LICENSE") },
-                ),
-                contributors = AndroidKitSettingsLink(onClick = {
-                    uriHandler.openUri("$CatalogRepository/graphs/contributors")
+                projectRepository = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
+                contribute = AndroidKitSettingsLink(onClick = {
+                    uriHandler.openUri("$CatalogRepository/contribute")
                 }),
             ),
         ),

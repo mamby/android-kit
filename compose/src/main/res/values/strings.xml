@@ -44,8 +44,9 @@
     <string name="androidkit_compose_terms_of_use">Terms of use</string>
     <!-- Licenses for external software, including work by individuals, not only companies. -->
     <string name="androidkit_compose_third_party_licenses">Third-party licenses</string>
-    <string name="androidkit_compose_source_code">Source code</string>
+    <string name="androidkit_compose_project_repository">Project repository</string>
     <string name="androidkit_compose_license">License</string>
     <!-- Everyone who contributed, including translators/designers, not only developers. -->
-    <string name="androidkit_compose_contributors">Contributors</string>
+    <string name="androidkit_compose_contribute">Contribute</string>
+    <string name="androidkit_compose_contact_description">Feed or questions</string>
 </resources>

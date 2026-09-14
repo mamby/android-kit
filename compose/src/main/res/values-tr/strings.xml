@@ -38,13 +38,14 @@
     <string name="androidkit_compose_privacy_policy">Gizlilik politikası</string>
     <string name="androidkit_compose_terms_of_use">Kullanım koşulları</string>
     <string name="androidkit_compose_third_party_licenses">Üçüncü taraf lisansları</string>
-    <string name="androidkit_compose_source_code">Kaynak kodu</string>
+    <string name="androidkit_compose_project_repository">Proje deposu</string>
     <string name="androidkit_compose_license">Lisans</string>
-    <string name="androidkit_compose_contributors">Katkıda bulunanlar</string>
+    <string name="androidkit_compose_contribute">Katkıda bulun</string>
     <string name="androidkit_compose_support_prompt_title">Uygulamayı beğendiniz mi?</string>
     <string name="androidkit_compose_support_prompt_description">Geliştirilmesini desteklemek isterseniz bağışlarınız memnuniyetle karşılanır, ancak hiçbir zaman zorunlu değildir.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Daha fazla bilgi</string>
     <string name="androidkit_compose_support_prompt_not_now">Şimdi değil</string>
     <string name="androidkit_compose_support_prompt_donate">Bağış yap</string>
+    <string name="androidkit_compose_contact_description">Akış veya sorular</string>
 </resources>
 

@@ -38,12 +38,13 @@
     <string name="androidkit_compose_privacy_policy">Datenschutzerklärung</string>
     <string name="androidkit_compose_terms_of_use">Nutzungsbedingungen</string>
     <string name="androidkit_compose_third_party_licenses">Drittanbieterlizenzen</string>
-    <string name="androidkit_compose_source_code">Quellcode</string>
+    <string name="androidkit_compose_project_repository">Projekt-Repository</string>
     <string name="androidkit_compose_license">Lizenz</string>
-    <string name="androidkit_compose_contributors">Mitwirkende</string>
+    <string name="androidkit_compose_contribute">Mitwirken</string>
     <string name="androidkit_compose_support_prompt_title">Gefällt dir die App?</string>
     <string name="androidkit_compose_support_prompt_description">Wenn du die Entwicklung unterstützen möchtest, freuen wir uns über Spenden. Sie sind aber niemals erforderlich.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Mehr erfahren</string>
     <string name="androidkit_compose_support_prompt_not_now">Nicht jetzt</string>
     <string name="androidkit_compose_support_prompt_donate">Spenden</string>
+    <string name="androidkit_compose_contact_description">Feed oder Fragen</string>
 </resources>

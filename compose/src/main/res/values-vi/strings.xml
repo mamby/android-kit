@@ -38,12 +38,13 @@
     <string name="androidkit_compose_privacy_policy">Chính sách quyền riêng tư</string>
     <string name="androidkit_compose_terms_of_use">Điều khoản sử dụng</string>
     <string name="androidkit_compose_third_party_licenses">Giấy phép bên thứ ba</string>
-    <string name="androidkit_compose_source_code">Mã nguồn</string>
+    <string name="androidkit_compose_project_repository">Kho lưu trữ dự án</string>
     <string name="androidkit_compose_license">Giấy phép</string>
-    <string name="androidkit_compose_contributors">Người đóng góp</string>
+    <string name="androidkit_compose_contribute">Đóng góp</string>
     <string name="androidkit_compose_support_prompt_title">Bạn thích ứng dụng này chứ?</string>
     <string name="androidkit_compose_support_prompt_description">Nếu muốn hỗ trợ việc phát triển, bạn có thể quyên góp. Chúng tôi rất trân trọng, nhưng việc này không bao giờ là bắt buộc.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Tìm hiểu thêm</string>
     <string name="androidkit_compose_support_prompt_not_now">Không phải bây giờ</string>
     <string name="androidkit_compose_support_prompt_donate">Quyên góp</string>
+    <string name="androidkit_compose_contact_description">Bảng tin hoặc câu hỏi</string>
 </resources>

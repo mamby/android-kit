@@ -45,9 +45,8 @@ public data class AndroidKitSettingsAbout(
     public val privacyPolicy: AndroidKitSettingsLink,
     public val termsOfUse: AndroidKitSettingsLink,
     public val libraries: AndroidKitSettingsLink,
-    public val sourceCode: AndroidKitSettingsLink,
-    public val license: AndroidKitSettingsLink,
-    public val contributors: AndroidKitSettingsLink,
+    public val projectRepository: AndroidKitSettingsLink,
+    public val contribute: AndroidKitSettingsLink,
 ) {
     init { require(version.isNotBlank()) { "App info requires a version." } }
 }
@@ -73,7 +72,7 @@ public sealed interface AndroidKitSettingsPageConfiguration {
 internal fun SettingsAboutSection(main: AndroidKitSettingsPageConfiguration.Main) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
-        link(main.contact, strings.contact, AndroidKitIcons.Contact)
+        link(main.contact, strings.contact, AndroidKitIcons.Contact, strings.contactDescription)
         link(main.appInfo, strings.appInfo, AndroidKitIcons.Info)
     }
     SettingsSection(entries = scope.entries, label = strings.about)
@@ -83,8 +82,8 @@ internal fun SettingsAboutSection(main: AndroidKitSettingsPageConfiguration.Main
 internal fun SettingsAppSection(about: AndroidKitSettingsAbout) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
-        link(about.privacyPolicy, strings.privacyPolicy, AndroidKitIcons.AppLock)
         link(about.termsOfUse, strings.termsOfUse, AndroidKitIcons.Document)
+        link(about.privacyPolicy, strings.privacyPolicy, AndroidKitIcons.AppLock)
         link(about.libraries, strings.thirdPartyLicenses, AndroidKitIcons.Document)
         info(label = strings.version, value = about.version, icon = AndroidKitIcons.Info)
     }
@@ -95,16 +94,20 @@ internal fun SettingsAppSection(about: AndroidKitSettingsAbout) {
 internal fun SettingsOpenSourceSection(about: AndroidKitSettingsAbout) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
-        link(about.sourceCode, strings.sourceCode, AndroidKitIcons.Code)
-        link(about.license, strings.license, AndroidKitIcons.Document)
-        link(about.contributors, strings.contributors, AndroidKitIcons.Contributors)
+        link(about.projectRepository, strings.projectRepository, AndroidKitIcons.Code)
+        link(about.contribute, strings.contribute, AndroidKitIcons.Contributors)
     }
     SettingsSection(entries = scope.entries, label = strings.openSource)
 }
 
-private fun AndroidKitSettingSectionScope.link(link: AndroidKitSettingsLink, label: String, icon: ImageVector) {
+private fun AndroidKitSettingSectionScope.link(
+    link: AndroidKitSettingsLink,
+    label: String,
+    icon: ImageVector,
+    supportingText: String? = null,
+) {
     navigation(label = label, onClick = link.onClick,
-        icon = icon, enabled = link.enabled)
+        icon = icon, enabled = link.enabled, supportingText = supportingText)
 }
 
 @Composable

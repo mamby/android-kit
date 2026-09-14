@@ -38,12 +38,13 @@
     <string name="androidkit_compose_privacy_policy">Политика конфиденциальности</string>
     <string name="androidkit_compose_terms_of_use">Условия использования</string>
     <string name="androidkit_compose_third_party_licenses">Лицензии третьих сторон</string>
-    <string name="androidkit_compose_source_code">Исходный код</string>
+    <string name="androidkit_compose_project_repository">Репозиторий проекта</string>
     <string name="androidkit_compose_license">Лицензия</string>
-    <string name="androidkit_compose_contributors">Участники</string>
+    <string name="androidkit_compose_contribute">Внести вклад</string>
     <string name="androidkit_compose_support_prompt_title">Нравится приложение?</string>
     <string name="androidkit_compose_support_prompt_description">Если вы хотите поддержать разработку, будем благодарны за пожертвования. Пожертвования всегда добровольны.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Подробнее</string>
     <string name="androidkit_compose_support_prompt_not_now">Не сейчас</string>
     <string name="androidkit_compose_support_prompt_donate">Пожертвовать</string>
+    <string name="androidkit_compose_contact_description">Лента или вопросы</string>
 </resources>

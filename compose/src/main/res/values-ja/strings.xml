@@ -38,12 +38,13 @@
     <string name="androidkit_compose_privacy_policy">プライバシーポリシー</string>
     <string name="androidkit_compose_terms_of_use">利用規約</string>
     <string name="androidkit_compose_third_party_licenses">サードパーティのライセンス</string>
-    <string name="androidkit_compose_source_code">ソースコード</string>
+    <string name="androidkit_compose_project_repository">プロジェクトリポジトリ</string>
     <string name="androidkit_compose_license">ライセンス</string>
-    <string name="androidkit_compose_contributors">貢献者</string>
+    <string name="androidkit_compose_contribute">貢献する</string>
     <string name="androidkit_compose_support_prompt_title">アプリを気に入っていただけましたか？</string>
     <string name="androidkit_compose_support_prompt_description">開発を支援していただける場合は、寄付を歓迎します。寄付は任意です。</string>
     <string name="androidkit_compose_support_prompt_learn_more">詳しく見る</string>
     <string name="androidkit_compose_support_prompt_not_now">今はしない</string>
     <string name="androidkit_compose_support_prompt_donate">寄付する</string>
+    <string name="androidkit_compose_contact_description">フィードまたは質問</string>
 </resources>

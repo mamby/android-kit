@@ -75,23 +75,23 @@ class SettingsCommunityBehaviorTest {
                     configuration = AndroidKitSettingsPageConfiguration.AppInfo(
                         AndroidKitSettingsAbout(
                             version = "1.0", privacyPolicy = link, termsOfUse = link,
-                            libraries = link, sourceCode = link,
-                            license = link, contributors = link,
+                            libraries = link, projectRepository = link,
+                            contribute = link,
                         ),
                     ),
                 )
             }
         }
-        assertOrder("App", "Privacy policy", "Terms of use", "Third-party licenses",
-            "Version", "Open source", "Source code", "License", "Contributors")
+        assertOrder("App", "Terms of use", "Privacy policy", "Third-party licenses",
+            "Version", "Open source", "Project repository", "Contribute")
         for (label in listOf("Privacy policy", "Terms of use", "Third-party licenses",
-            "Source code", "License", "Contributors")) {
+            "Project repository", "Contribute")) {
             scrollTo(label)
             rule.onNodeWithText(label).performClick()
         }
-        scrollTo("License")
+        scrollTo("Contribute")
         rule.onNodeWithText("MIT").assertDoesNotExist()
-        rule.runOnIdle { assertEquals(6, clicks) }
+        rule.runOnIdle { assertEquals(5, clicks) }
         rule.onNodeWithText("Contact").assertDoesNotExist()
         rule.onNodeWithText("About").assertDoesNotExist()
     }
@@ -109,9 +109,8 @@ class SettingsCommunityBehaviorTest {
                             privacyPolicy = link,
                             termsOfUse = link,
                             libraries = link,
-                            sourceCode = link,
-                            license = link,
-                            contributors = link,
+                            projectRepository = link,
+                            contribute = link,
                         ),
                     ),
                 )
@@ -121,9 +120,9 @@ class SettingsCommunityBehaviorTest {
         rule.onNodeWithText("Privacy policy").assertIsDisplayed()
         rule.onNodeWithText("Terms of use").assertIsDisplayed()
         rule.onNodeWithText("Third-party licenses").assertIsDisplayed()
-        rule.onNodeWithText("Source code").assertIsDisplayed()
-        rule.onNodeWithText("License").assertIsDisplayed()
-        rule.onNodeWithText("Contributors").assertIsDisplayed()
+        rule.onNodeWithText("Project repository").assertIsDisplayed()
+        rule.onNodeWithText("License").assertDoesNotExist()
+        rule.onNodeWithText("Contribute").assertIsDisplayed()
         rule.runOnIdle { version = "2.0" }
         rule.onNodeWithText("2.0").assertIsDisplayed()
         rule.onNodeWithText("1.0").assertDoesNotExist()

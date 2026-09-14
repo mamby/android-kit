@@ -38,7 +38,8 @@
     <string name="androidkit_compose_privacy_policy">Politique de confidentialité</string>
     <string name="androidkit_compose_terms_of_use">Conditions d’utilisation</string>
     <string name="androidkit_compose_third_party_licenses">Licences de tiers</string>
-    <string name="androidkit_compose_source_code">Code source</string>
+    <string name="androidkit_compose_project_repository">Dépôt du projet</string>
     <string name="androidkit_compose_license">Licence</string>
-    <string name="androidkit_compose_contributors">Contributeurs</string>
+    <string name="androidkit_compose_contribute">Contribuer</string>
+    <string name="androidkit_compose_contact_description">Fil ou questions</string>
 </resources>
