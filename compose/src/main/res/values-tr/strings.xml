@@ -46,6 +46,5 @@
     <string name="androidkit_compose_support_prompt_learn_more">Daha fazla bilgi</string>
     <string name="androidkit_compose_support_prompt_not_now">Şimdi değil</string>
     <string name="androidkit_compose_support_prompt_donate">Bağış yap</string>
-    <string name="androidkit_compose_contact_description">Akış veya sorular</string>
+    <string name="androidkit_compose_contact_description">Geri bildirim veya sorular</string>
 </resources>
-

@@ -46,7 +46,8 @@
     <string name="androidkit_compose_third_party_licenses">Third-party licenses</string>
     <string name="androidkit_compose_project_repository">Project repository</string>
     <string name="androidkit_compose_license">License</string>
-    <!-- Everyone who contributed, including translators/designers, not only developers. -->
+    <!-- Action opening contribution guidance: code, translation, design, etc.; not a list of contributors. -->
     <string name="androidkit_compose_contribute">Contribute</string>
-    <string name="androidkit_compose_contact_description">Feed or questions</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Feedback or questions</string>
 </resources>

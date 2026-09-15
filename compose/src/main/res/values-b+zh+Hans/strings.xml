@@ -46,5 +46,5 @@
     <string name="androidkit_compose_support_prompt_learn_more">了解更多</string>
     <string name="androidkit_compose_support_prompt_not_now">暂不</string>
     <string name="androidkit_compose_support_prompt_donate">捐赠</string>
-    <string name="androidkit_compose_contact_description">动态或问题</string>
+    <string name="androidkit_compose_contact_description">反馈或问题</string>
 </resources>

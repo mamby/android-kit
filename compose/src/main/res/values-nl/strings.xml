@@ -46,5 +46,5 @@
     <string name="androidkit_compose_support_prompt_learn_more">Meer informatie</string>
     <string name="androidkit_compose_support_prompt_not_now">Niet nu</string>
     <string name="androidkit_compose_support_prompt_donate">Doneren</string>
-    <string name="androidkit_compose_contact_description">Feed of vragen</string>
+    <string name="androidkit_compose_contact_description">Feedback of vragen</string>
 </resources>

@@ -28,7 +28,7 @@
     <string name="language_section_description">Le changement utilise l’API officielle des langues par application.</string>
     <string name="language_system">Système</string>
     <string name="format_section">Exemples formatés</string>
-    <string name="format_section_description">Les formateurs reçoivent explicitement une locale et ne dépendent jamais de l’état global du processus.</string>
+    <string name="format_section_description">Les outils de formatage reçoivent explicitement des paramètres régionaux et ne dépendent jamais de l’état global du processus.</string>
     <string name="format_date">Date</string>
     <string name="format_time">Heure</string>
     <string name="format_number">Nombre</string>
@@ -130,7 +130,7 @@
     <string name="demo_no_action">Aucune</string>
     <string name="settings_support_title">Soutenir le développement open source</string>
     <string name="settings_support_description">Aidez à maintenir, tester et améliorer Android Kit.</string>
-    <string name="settings_support_action">Aperçu du soutien</string>
+    <string name="settings_support_action">Aperçu de l’action de soutien</string>
     <string name="settings_support_preview">Ceci est un aperçu du catalogue. Chaque application fournit sa destination de soutien ; aucun paiement n’est collecté ici.</string>
     <string name="settings_about">À propos</string>
     <string name="settings_contact">Contact</string>
@@ -138,9 +138,9 @@
     <string name="settings_app">Application</string>
     <string name="settings_privacy_policy">Politique de confidentialité</string>
     <string name="settings_terms_of_use">Conditions d’utilisation</string>
-    <string name="settings_third_party_licenses">Licences tierces</string>
+    <string name="settings_third_party_licenses">Licences de tiers</string>
     <string name="settings_version">Version</string>
-    <string name="settings_open_source">Code ouvert</string>
+    <string name="settings_open_source">Open source</string>
     <string name="settings_license">Licence</string>
     <string name="settings_source_code">Code source</string>
     <string name="settings_contributors">Contributeurs</string>

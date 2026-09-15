@@ -13,7 +13,7 @@
     <string name="action_hide_title_bar">إخفاء شريط العنوان</string>
     <string name="action_show_title_bar">إظهار شريط العنوان</string>
     <string name="nav_components">المكوّنات</string>
-    <string name="nav_localization">اللغة</string>
+    <string name="nav_localization">التوطين</string>
     <string name="nav_settings">الإعدادات</string>
     <string name="nav_demo">عرض %1$d</string>
     <string name="dummy_navigation_body">وجهة تجريبية تُستخدم لاختبار قائمة التنقل المضغوطة الإضافية.</string>
@@ -23,7 +23,7 @@
     <string name="active_variation">النسخة النشطة</string>
     <string name="component_enabled">مفعّل</string>
     <string name="action_count">عدد الإجراءات المنفذة: %1$d</string>
-    <string name="localization_title">التعريب</string>
+    <string name="localization_title">التوطين</string>
     <string name="language_section">لغة التطبيق</string>
     <string name="language_section_description">يستخدم تغيير اللغة واجهة برمجة اللغات الرسمية لكل تطبيق.</string>
     <string name="language_system">لغة النظام</string>
@@ -37,7 +37,7 @@
     <string name="sample_coffee">قهوة</string>
     <string name="sample_design">تصميم</string>
     <string name="sample_code">برمجة</string>
-    <string name="settings_title">إعدادات الدليل</string>
+    <string name="settings_title">إعدادات الكتالوج</string>
     <string name="appearance_section">المظهر</string>
     <string name="appearance_section_description">السمة الفاتحة والداكنة من المكتبة. أما Prism فموجودة في هذا العرض فقط.</string>
     <string name="theme_light">فاتح</string>
@@ -50,7 +50,7 @@
     <string name="open_sheet">فتح لوحة المثال</string>
     <string name="sheet_title">لوحة قابلة لإعادة الاستخدام</string>
     <string name="sheet_detail_title">تفاصيل اللوحة</string>
-    <string name="sheet_body">يمتلك المستدعي الرؤية والمحتوى. ويوفر Android Kit الشريط المتكيّف والمسافات وتسميات إمكانية الوصول.</string>
+    <string name="sheet_body">يتحكم المستدعي في الظهور والمحتوى. ويوفر Android Kit عناصر الواجهة المحيطة بالمحتوى بتخطيط متكيّف، والمسافات وتسميات إمكانية الوصول.</string>
     <string name="sheet_list_item">عنصر يدير المحتوى تمريره %1$d</string>
     <string name="variation_basic">أساسي</string>
     <string name="variation_with_title">مع عنوان</string>

@@ -40,11 +40,11 @@
     <string name="androidkit_compose_third_party_licenses">ใบอนุญาตของบุคคลที่สาม</string>
     <string name="androidkit_compose_project_repository">ที่เก็บโครงการ</string>
     <string name="androidkit_compose_license">ใบอนุญาต</string>
-    <string name="androidkit_compose_contribute">ร่วมพัฒนา</string>
+    <string name="androidkit_compose_contribute">มีส่วนร่วม</string>
     <string name="androidkit_compose_support_prompt_title">ชอบแอปนี้ไหม</string>
     <string name="androidkit_compose_support_prompt_description">หากต้องการสนับสนุนการพัฒนา เรายินดีรับบริจาค โดยการบริจาคเป็นไปตามความสมัครใจเสมอ</string>
     <string name="androidkit_compose_support_prompt_learn_more">ดูข้อมูลเพิ่มเติม</string>
     <string name="androidkit_compose_support_prompt_not_now">ไม่ใช่ตอนนี้</string>
     <string name="androidkit_compose_support_prompt_donate">บริจาค</string>
-    <string name="androidkit_compose_contact_description">ฟีดหรือคำถาม</string>
+    <string name="androidkit_compose_contact_description">ความคิดเห็นหรือคำถาม</string>
 </resources>

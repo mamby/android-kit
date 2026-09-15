@@ -49,3 +49,23 @@ alpha, beta, RC, preview, or other prerelease version unless explicitly
 requested. This policy applies to AndroidX and non-AndroidX components,
 including AGP, Kotlin, Kotlin serialization, screenshot tooling, test
 frameworks, and the Gradle wrapper.
+
+## Translation quality
+
+English resources are the semantic reference for every locale. Before changing
+translations, read [the localization workflow](docs/localization.md#translation-quality-workflow)
+and [the terminology glossary](docs/translation-glossary.md). Inspect the actual
+component or demo usage; translate its UX meaning, never isolated words.
+
+Prefer official platform terminology and corroborated usage in established apps
+in the target language for equivalent actions. Popularity alone is not evidence
+of correctness. Preserve the project's accepted vocabulary and regional register.
+For ambiguous terms, consult primary sources and record the sources actually
+checked; never invent a reference or claim native-speaker approval for AI review.
+
+Check the English reference for mistakes before propagating it. Correct clear
+source errors when the intended meaning is established by the request and usage,
+and document the correction. Keep translated meaning, timing, optionality,
+placeholders and action versus heading roles aligned with English. Re-review all
+affected locales, including demo duplicates, and record coverage and unresolved
+linguistic uncertainty. Resource/build validation does not prove language quality.

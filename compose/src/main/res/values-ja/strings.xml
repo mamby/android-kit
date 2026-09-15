@@ -46,5 +46,5 @@
     <string name="androidkit_compose_support_prompt_learn_more">詳しく見る</string>
     <string name="androidkit_compose_support_prompt_not_now">今はしない</string>
     <string name="androidkit_compose_support_prompt_donate">寄付する</string>
-    <string name="androidkit_compose_contact_description">フィードまたは質問</string>
+    <string name="androidkit_compose_contact_description">フィードバックまたは質問</string>
 </resources>

@@ -46,5 +46,5 @@
     <string name="androidkit_compose_support_prompt_learn_more">Tìm hiểu thêm</string>
     <string name="androidkit_compose_support_prompt_not_now">Không phải bây giờ</string>
     <string name="androidkit_compose_support_prompt_donate">Quyên góp</string>
-    <string name="androidkit_compose_contact_description">Bảng tin hoặc câu hỏi</string>
+    <string name="androidkit_compose_contact_description">Phản hồi hoặc câu hỏi</string>
 </resources>

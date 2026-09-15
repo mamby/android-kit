@@ -121,7 +121,7 @@ viewport edge-to-edge. Do not add a second page-padding modifier in consumers.
 ## About and App info
 
 Main always appends About with Contact and App info, followed by the optional
-support/donation banner. Contact includes the Kit-owned localized subtext “Feed or questions”; hosts cannot customize it. Both links are required. Get involved has been removed.
+support/donation banner. Contact includes the Kit-owned localized subtext “Feedback or questions”; hosts cannot customize it. Both links are required. Get involved has been removed.
 Hosts own navigation and external destinations; the demo Contact opens the
 maintainer's GitHub profile.
 

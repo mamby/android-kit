@@ -41,6 +41,5 @@
     <string name="androidkit_compose_project_repository">مستودع المشروع</string>
     <string name="androidkit_compose_license">الترخيص</string>
     <string name="androidkit_compose_contribute">ساهم</string>
-    <string name="androidkit_compose_contact_description">الخلاصة أو الأسئلة</string>
+    <string name="androidkit_compose_contact_description">تعليقات أو أسئلة</string>
 </resources>
-

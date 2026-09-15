@@ -46,5 +46,5 @@
     <string name="androidkit_compose_support_prompt_learn_more">Подробнее</string>
     <string name="androidkit_compose_support_prompt_not_now">Не сейчас</string>
     <string name="androidkit_compose_support_prompt_donate">Пожертвовать</string>
-    <string name="androidkit_compose_contact_description">Лента или вопросы</string>
+    <string name="androidkit_compose_contact_description">Отзывы или вопросы</string>
 </resources>

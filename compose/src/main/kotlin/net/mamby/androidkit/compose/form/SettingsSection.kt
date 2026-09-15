@@ -28,8 +28,10 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSliderState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -438,14 +440,20 @@ private fun SettingsSliderEntry(
             SliderDefaults.colors()
         }
         val interactionSource = remember { MutableInteractionSource() }
-        Slider(
+        val sliderState = rememberSliderState(
             value = entry.value,
+            steps = entry.steps,
+            trackRange = entry.valueRange,
+        )
+        SideEffect {
+            sliderState.value = entry.value
+        }
+        Slider(
+            state = sliderState,
             onValueChange = entry.onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = entry.label },
-            valueRange = entry.valueRange,
-            steps = entry.steps,
             onValueChangeFinished = entry.onValueChangeFinished,
             enabled = entry.enabled,
             colors = colors,

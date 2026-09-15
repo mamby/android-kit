@@ -45,7 +45,7 @@ accepts `offset`, `contentPadding`, `scrollState`, `properties`, and `style`.
 
 The flyout uses Material 3's `DropdownMenuPopup` and its default motion, while
 retaining Kit's floating surface, row styling, scrolling, and root placement.
-This trial pins Material 3 to `1.5.0-alpha27`; other Material components also
+This trial pins Material 3 to `1.5.0-alpha28`; other Material components also
 resolve to this release and should be reviewed before publishing.
 
 The standalone content DSL supports nested menus:

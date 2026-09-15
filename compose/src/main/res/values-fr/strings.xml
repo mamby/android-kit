@@ -41,5 +41,5 @@
     <string name="androidkit_compose_project_repository">Dépôt du projet</string>
     <string name="androidkit_compose_license">Licence</string>
     <string name="androidkit_compose_contribute">Contribuer</string>
-    <string name="androidkit_compose_contact_description">Fil ou questions</string>
+    <string name="androidkit_compose_contact_description">Commentaires ou questions</string>
 </resources>

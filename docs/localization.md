@@ -56,6 +56,41 @@ against an app author deliberately removing validation or modifying the library.
 Applying the script is mandatory for supported integration; merely adding an AAR
 cannot install build logic into the consuming project.
 
+## Translation quality workflow
+
+Apply this workflow to Kit and demo resources. English in each module's `values`
+directory is the semantic reference, including its translator comments; another
+translation or a legacy catalog must not become the source language.
+
+1. Read the English text alongside the call site: heading, action, accessibility
+   label, subtitle, destination, or state. Establish what happens when activated.
+   Correct an evident source error before translating when its intended meaning
+   is established; record the reason and review every affected locale.
+2. Consult [the glossary](translation-glossary.md). For ambiguous vocabulary, use
+   official platform terminology first, then compare primary documentation or
+   localized UI resources from established apps for an equivalent UX context.
+   Seek corroboration across products; do not copy an entire sentence merely
+   because one popular app uses it. Record exact links and distinguish sourced
+   terms from editorial choices. A source can itself contain translation errors.
+3. Preserve meaning, register and regional conventions, not English word order.
+   Keep nouns for headings and appropriate verbs for actions. Preserve numeric
+   values, placeholders, optionality and the absence of promises such as reminders.
+   Keep accepted wording unless there is a concrete semantic or UX problem.
+4. Perform a separate review pass against English and the call site: look for
+   omissions, added promises, false friends, unnatural wording and inconsistent
+   terms. Check duplicates in the demo. Record locale/key coverage, corrections,
+   references and uncertainties in [the review](translation-review.md). A second
+   AI pass is not independent human or native-speaker approval; obtain competent
+   human review when claiming that level of assurance.
+5. Check XML, duplicate/missing keys and format arguments, then run focused Android
+   resource/build checks. Separately inspect the interface for truncation, RTL,
+   larger text and accessibility pronunciation when device review is available.
+   Report linguistic, build and device evidence separately. A passing build never
+   establishes that a translation is idiomatic.
+
+The glossary records project terminology decisions. Updating it and these
+instructions guides future edits; it is not an automated semantic build gate.
+
 ## Language coverage and maintenance
 
 Kit ships English, French, Arabic, German, Spanish, Hindi, Indonesian, Italian,
