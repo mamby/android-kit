@@ -8,29 +8,29 @@ renderer is internal. Hosts use the public page and entry DSLs.
 ```kotlin
 AndroidKitSettingsPage(
     configuration = AndroidKitSettingsPageConfiguration.Main(
-        support = support,
-        contact = AndroidKitSettingsLink(onClick = onContact),
-        appInfo = AndroidKitSettingsLink(onClick = onAppInfo),
+        about = AndroidKitSettingsLink(onClick = onAbout),
     ),
     title = settingsTitle,
 ) {
-    generalSection(
-        language = languageSetting,
-        theme = themeSetting,
-        floatingOpacity = opacitySetting,
-    )
+    section(key = "language", label = languageSectionTitle) {
+        language(languageSetting)
+    }
+    section(key = "appearance", label = appearanceTitle) {
+        theme(themeSetting)
+        transparency(opacitySetting)
+    }
     section(key = "media", label = mediaLabel) {
         toggle(label = autoplayLabel, checked = autoplay, onCheckedChange = onAutoplay)
         navigation(label = downloadsLabel, onClick = onOpenDownloads)
     }
-    securitySection(appLock = appLockSetting)
+    section(key = "security", label = securityTitle) { appLock(appLockSetting) }
     section(key = "notice") { info(label = notice) }
 }
 ```
 
-Sections appear in declaration order. Section keys must be
-unique strings. General defaults to key `general`; Security defaults to
-`security`. Null predefined configurations hide the corresponding entries.
+Hosts own section titles, grouping, and entry order. Language can appear alone or
+alongside other entries. Section keys must be unique; each predefined entry kind
+can occur once per section. Omit a declaration to hide it.
 Empty sections, including custom sections, produce no heading, divider, or gap.
 Page and section builders are non-composable. Resolve `stringResource`, painters,
 and other composable inputs before entering them. Use `info(label, value,
@@ -40,13 +40,11 @@ removed. App-owned settings subpages use the same page and entry DSLs.
 
 ## Host-owned choices and state
 
-Predefined Language, Theme, and App lock entries own their default icons. Language
-and Theme use the translate and sun artwork originally used in Fralov; App lock
-uses Lucide LockKeyhole. Omit `icon` (or pass null) to use the shared default, or
-supply an `ImageVector` through `AndroidKitSettingsSelection.icon` or
-`AndroidKitAppLockSetting.icon` to override it. These icons are decorative; the
-row label supplies accessibility text. Custom section entries keep their existing
-optional host-owned icons, and floating opacity remains iconless.
+Predefined Language, Theme, and App lock entries have fixed Kit-owned icons.
+Transparency remains iconless. Hosts cannot supply generic descriptions or icons
+for predefined entries. App lock accepts an optional `errorMessage` for a host
+authentication failure; it is absent during normal operation. Custom entries
+retain host-owned labels, descriptions, and optional icons.
 
 `AndroidKitSettingsSelection` contains stable keyed options, selected
 ID, and a selection callback. Kit owns the row and Close labels. IDs must be unique and
@@ -118,46 +116,40 @@ margins use `screenPadding`; bottom content spacing uses `spaceMedium`. Page
 clearance and margins are combined in the list's `contentPadding`, keeping the
 viewport edge-to-edge. Do not add a second page-padding modifier in consumers.
 
-## About and App info
+## About
 
-Main always appends About with Contact and App info. Contact includes the Kit-owned
-localized subtext “Feedback or questions”; App info has no supporting text.
-Hosts cannot customize these labels or descriptions. Both links are required.
-Hosts own navigation and external destinations; the demo Contact opens the
-maintainer's GitHub profile.
+`Main(about = link)` appends one About navigation row after all host sections.
+`Main()` omits it. The row has a Kit-owned icon, label, and directional chevron,
+with the Kit-owned subtitle “Contact, legal and more”. Hosts cannot reposition it.
 
-Render the predefined subpage with
-`AndroidKitSettingsPageConfiguration.AppInfo(AndroidKitSettingsAbout(`
-`version = version, privacyPolicy = privacyPolicy, termsOfUse = termsOfUse,`
-`libraries = thirdPartyLicenses, openSource = openSource))`.
-It uses the Kit-owned App info title and accepts the usual host Back callback.
-Its dedicated overload has no title, toolbar actions, or content builder parameters,
-so hosts cannot add sections or rows or replace its chrome. The overload accepting
-host sections takes `AndroidKitSettingsPageConfiguration.Customizable` (Main or
-Subpage); AppInfo cannot be passed to it.
-Legal always contains Terms of use, Privacy policy, and Third-party licenses
-(`libraries`), in that order. Third-party licenses includes the supporting text
-“Licenses for third-party software”. An unlabeled section contains the required read-only
-The titled Open source section appears next with “Explore, use or contribute” as
-its clickable entry. It is visible by default and can be omitted with
-`showOpenSource = false`. The titled Version section follows, with the version
-value as its entry. Tapping the version copies it to the system clipboard; the
-row exposes a localized Copy version accessibility action and a copy icon.
-Neither section repeats its title inside the entry.
-All three links and the version are required. No legal
-destinations are inferred.
+Render `AndroidKitSettingsPageConfiguration.About(AndroidKitSettingsAbout(...))`
+for the fixed About subpage. Kit owns its title, grouping, and order:
 
-`AndroidKitSettingsLink` requires `onClick`; its label is always taken from the
-current `AndroidKitStrings`. Hosts supply only the click callback and enabled
-state. Kit owns the icons and presentation of every predefined About and App info
-link; host descriptions, labels, icons, and custom content are not accepted.
-Kit translates these labels internally; hosts cannot override them. The app's
-version remains required host-owned data for the read-only Version row.
+1. App information: required `appName` and optional `description`, then optional
+   `website` and `sourceCode` rows, then required `version`. Website opens the app's
+   public website; Source code opens its repository. Neither link has a subtitle.
+   The version row copies its current value when tapped.
+2. Contact: optional `contact` in a standalone section, with the shared
+   Feedback or questions subtitle.
+3. Legal information: optional `privacyPolicy`, `termsOfUse`, and `libraries`
+   (Third-party licenses), then `additionalLegalEntries` in host-supplied order.
+   Third-party licenses can cover both open-source and proprietary dependencies.
 
-Remove `supportingText` and `icon` arguments from existing
-`AndroidKitSettingsLink` calls; these customization fields are no longer public API.
+The About page retains its title and row labels, but has no section headings.
+Separate cards and spacing distinguish app details, Contact, and legal entries.
+There are no separate Project, Links, or Open source sections.
 
-Main requires `contact` and `appInfo` links. Pass legal links, the Open source
-destination, and version data to AppInfo. About no longer accepts app identity,
-What's new, support, or donation fields. All requested App info actions are required.
-Ordinary Subpage configurations still have no footer.
+Empty groups and blank app descriptions are omitted without reserved space.
+`AndroidKitSettingsLink` accepts only a click callback and enabled state; the host
+owns navigation and Kit owns standard labels, icons, and rendering. Additional
+legal entries retain host-localized titles and optional supporting text, with
+unique nonblank IDs. No destinations are inferred.
+
+## Migration
+
+Replace `generalSection` and `securitySection` with host-titled `section` calls
+and declare `language`, `theme`, `transparency`, and `appLock` inside them.
+Remove predefined `icon` and `supportingText` arguments. Pass authentication
+failures as `errorMessage` on App lock. Supply `appName` in About. Main's About
+link and About's destinations are now optional; app name and version are required.
+Ordinary `Subpage` configurations have no automatic About row.

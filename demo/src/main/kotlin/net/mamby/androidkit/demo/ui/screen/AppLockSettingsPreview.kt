@@ -21,8 +21,8 @@ private fun AppLockSettingsPreview() {
     var selected by rememberSaveable { mutableStateOf("5") }
     AndroidKitTheme {
         AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage, title = "App lock UI preview") {
-            securitySection(
-                appLock = AndroidKitAppLockSetting(
+            section("security") {
+                appLock(AndroidKitAppLockSetting(
                     checked = checked, onCheckedChange = { checked = it },
                     timeout = AndroidKitAppLockTimeoutSetting(
                         options = listOf(
@@ -34,8 +34,8 @@ private fun AppLockSettingsPreview() {
                         selectedId = selected, onSelected = { selected = it },
                     ),
                     onLockNow = {},
-                ),
-            )
+                ))
+            }
         }
     }
 }

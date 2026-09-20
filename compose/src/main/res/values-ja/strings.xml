@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">15分後</string>
     <string name="androidkit_compose_lock_now">今すぐロック</string>
     <string name="androidkit_compose_about">このアプリについて</string>
+    <string name="androidkit_compose_about_description">お問い合わせ、法的情報など</string>
     <string name="androidkit_compose_version">バージョン</string>
     <string name="androidkit_compose_copy_version">バージョンをコピー</string>
     <string name="androidkit_compose_open_source">オープンソース</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">今はしない</string>
     <string name="androidkit_compose_support_prompt_donate">寄付する</string>
     <string name="androidkit_compose_contact_description">フィードバックまたは質問</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">アプリ情報</string>
+    <string name="androidkit_compose_project">プロジェクト</string>
+    <string name="androidkit_compose_website">ウェブサイト</string>
+    <string name="androidkit_compose_source_code">ソースコード</string>
 </resources>

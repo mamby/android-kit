@@ -4,12 +4,12 @@ AndroidKit owns and translates its shared component vocabulary. Components resol
 private Android resources internally from the current application configuration.
 Hosts cannot supply a string set or override predefined labels through Kit APIs.
 Application content, custom actions, option values, and domain messages remain
-host-owned. The App info title and built-in More/Close controls are Kit-owned.
+host-owned. The About title and built-in More/Close controls are Kit-owned.
 
 This is a breaking API change: remove `AndroidKitTheme(strings = ...)`,
 `AndroidKitStrings`, `AndroidKitThemeTokens.strings`, and toolbar flyout
 `contentDescription` overrides. Use host resources for host content.
-Do not pass a custom title to the predefined AppInfo settings configuration.
+Do not pass a custom title to the predefined About settings configuration.
 
 ## Required build enforcement
 

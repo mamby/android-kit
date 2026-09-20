@@ -7,10 +7,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -31,7 +27,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
-import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitAppLockTimeoutSetting
 import androidx.test.espresso.Espresso.pressBack
@@ -84,14 +79,16 @@ class SettingsPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    securitySection(appLock = AndroidKitAppLockSetting(
+                    section("security", label = "Security") {
+                        appLock(AndroidKitAppLockSetting(
                         checked = checked, onCheckedChange = {},
                         timeout = AndroidKitAppLockTimeoutSetting(
                             options = timeoutOptions,
                             selectedId = selected, onSelected = { requested = it },
                         ),
                         onLockNow = { locks++ },
-                    ))
+                        ))
+                    }
                 }
             }
         }
@@ -118,13 +115,15 @@ class SettingsPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    securitySection(appLock = AndroidKitAppLockSetting(
+                    section("security", label = "Security") {
+                        appLock(AndroidKitAppLockSetting(
                         checked = true, onCheckedChange = {},
                         timeout = AndroidKitAppLockTimeoutSetting(
                             options = timeoutOptions,
                             selectedId = "5", onSelected = { requests++ },
                         ),
-                    ))
+                        ))
+                    }
                 }
             }
         }
@@ -148,14 +147,16 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     if (hasSection) {
-                        securitySection(appLock = AndroidKitAppLockSetting(
+                        section("security", label = "Security") {
+                            appLock(AndroidKitAppLockSetting(
                             checked = checked, onCheckedChange = {}, enabled = enabled,
                             timeout = if (hasTimeout) AndroidKitAppLockTimeoutSetting(
                                 options = timeoutOptions, enabled = timeoutEnabled,
                                 selectedId = "0", onSelected = {},
                             ) else null,
                             onLockNow = {},
-                        ))
+                            ))
+                        }
                     }
                 }
             }
@@ -186,58 +187,6 @@ class SettingsPageBehaviorTest {
     }
 
     @Test
-    fun predefinedIconsAllowHostOverridesAndRestoreDefaults() {
-        var icon by mutableStateOf<ImageVector?>(null)
-        val overrideIcon = ImageVector.Builder(
-            name = "Host override", defaultWidth = 48.dp, defaultHeight = 24.dp,
-            viewportWidth = 48f, viewportHeight = 24f,
-        ).apply {
-            path(fill = SolidColor(Color.Black)) {
-                moveTo(0f, 0f)
-                lineTo(48f, 12f)
-                lineTo(0f, 24f)
-                close()
-            }
-        }.build()
-        rule.setContent {
-            AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    generalSection(
-                        language = AndroidKitLanguageSetting(
-                            selection = AndroidKitSettingsSelection(
-                                options = listOf(AndroidKitSettingsOption("en", "English")),
-                                selectedId = "en", onSelected = {},
-                                systemOption = AndroidKitSettingsSystemOption("system", "English"),
-                                icon = icon,
-                            ),
-                        ),
-                        theme = AndroidKitSettingsSelection(
-                            options = listOf(AndroidKitSettingsOption("light", "Light")),
-                            selectedId = "light", onSelected = {},
-                            systemOption = AndroidKitSettingsSystemOption("system", "Light"),
-                            icon = icon,
-                        ),
-                    )
-                    securitySection(appLock = AndroidKitAppLockSetting(
-                        checked = false, onCheckedChange = {}, icon = icon,
-                    ))
-                }
-            }
-        }
-        val labels = listOf("Language", "Theme", "App lock")
-        fun labelStarts() = labels.map {
-            rule.onNodeWithText(it, useUnmergedTree = true).fetchSemanticsNode().boundsInRoot.left
-        }
-        val defaultStarts = labelStarts()
-        rule.runOnIdle { icon = overrideIcon }
-        labelStarts().zip(defaultStarts).forEach { (custom, default) ->
-            assertTrue("The host icon's intrinsic width must be used", custom > default)
-        }
-        rule.runOnIdle { icon = null }
-        assertEquals(defaultStarts, labelStarts())
-    }
-
-    @Test
     fun hiddenSectionsLeaveNoGapAndCustomSectionsKeepTheirOrder() {
         var showEmpty by mutableStateOf(true)
         rule.setContent {
@@ -245,8 +194,8 @@ class SettingsPageBehaviorTest {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
                     section("first") { button("First", {}) }
                     if (showEmpty) {
-                        generalSection()
-                        securitySection()
+                        section("general", label = "General") {}
+                        section("security", label = "Security") {}
                         section("empty", label = "Hidden custom") {}
                     }
                     section("last") { button("Last", {}) }
@@ -268,13 +217,15 @@ class SettingsPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    generalSection(language = AndroidKitLanguageSetting(
+                    section("general", label = "General") {
+                        language(AndroidKitLanguageSetting(
                         selection = AndroidKitSettingsSelection(
                             selectedId = selected, onSelected = { selected = it },
                             options = listOf(AndroidKitSettingsOption("en", "English"), AndroidKitSettingsOption("fr", "Français")),
                             systemOption = AndroidKitSettingsSystemOption("system", "English"),
                         ),
-                    ))
+                        ))
+                    }
                 }
             }
         }
@@ -295,11 +246,13 @@ class SettingsPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    generalSection(theme = AndroidKitSettingsSelection(
+                    section("general", label = "General") {
+                        theme(AndroidKitSettingsSelection(
                         selectedId = selected, onSelected = { selected = it },
                         options = listOf(AndroidKitSettingsOption("light", "Light"), AndroidKitSettingsOption("prism", "Prism")),
                         systemOption = AndroidKitSettingsSystemOption("system", "Light"),
-                    ))
+                        ))
+                    }
                 }
             }
         }
@@ -313,13 +266,15 @@ class SettingsPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    generalSection(theme = AndroidKitSettingsSelection(
+                    section("general", label = "General") {
+                        theme(AndroidKitSettingsSelection(
                         selectedId = "system", onSelected = {},
                         options = listOf(AndroidKitSettingsOption("light", "Light")),
                         systemOption = AndroidKitSettingsSystemOption(
                             id = "system", currentValueLabel = "Light",
                         ),
-                    ))
+                        ))
+                    }
                 }
             }
         }
@@ -338,13 +293,17 @@ class SettingsPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    generalSection(floatingOpacity = AndroidKitFloatingOpacitySetting(
+                    section("general", label = "General") {
+                        transparency(AndroidKitFloatingOpacitySetting(
                         value = level,
                         onValueChange = { level = it }, onValueChangeFinished = { commits++ },
-                    ))
-                    securitySection(appLock = AndroidKitAppLockSetting(
+                        ))
+                    }
+                    section("security", label = "Security") {
+                        appLock(AndroidKitAppLockSetting(
                         checked = false, onCheckedChange = { lockRequests++ },
-                    ))
+                        ))
+                    }
                 }
             }
         }
@@ -363,10 +322,12 @@ class SettingsPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    generalSection(floatingOpacity = AndroidKitFloatingOpacitySetting(
+                    section("general", label = "General") {
+                        transparency(AndroidKitFloatingOpacitySetting(
                         value = level,
                         onValueChange = { level = it }, onValueChangeFinished = {},
-                    ))
+                        ))
+                    }
                     section(key = "scroll") { info(label = "Scroll content") }
                 }
             }
@@ -392,20 +353,20 @@ class SettingsPageBehaviorTest {
                     section("visibility") {
                         toggle("Show language", showLanguage, { showLanguage = it })
                     }
-                    generalSection(
-                        language = if (showLanguage) AndroidKitLanguageSetting(
+                    section("general", label = "General") {
+                        if (showLanguage) language(AndroidKitLanguageSetting(
                             selection = AndroidKitSettingsSelection(
                                 selectedId = "en", onSelected = {},
                                 options = listOf(AndroidKitSettingsOption("en", "English")),
                                 systemOption = AndroidKitSettingsSystemOption("system", "English"),
                             ),
-                        ) else null,
-                        theme = AndroidKitSettingsSelection(
+                        ))
+                        theme(AndroidKitSettingsSelection(
                             selectedId = "light", onSelected = {},
                             options = listOf(AndroidKitSettingsOption("light", "Light")),
                             systemOption = AndroidKitSettingsSystemOption("system", "Light"),
-                        ),
-                    )
+                        ))
+                    }
                 }
             }
         }
@@ -475,7 +436,7 @@ class SettingsPageBehaviorTest {
         rule.onNodeWithText("Open child").assertIsDisplayed()
         assertEquals(before, rule.onNodeWithText("Open child").fetchSemanticsNode().boundsInRoot.top)
     }
-}
+                    }
 
 private val timeoutOptions = listOf(
     AndroidKitSettingsOption("0", "Immediately"),

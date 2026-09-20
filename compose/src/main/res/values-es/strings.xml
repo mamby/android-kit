@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Después de 15 minutos</string>
     <string name="androidkit_compose_lock_now">Bloquear ahora</string>
     <string name="androidkit_compose_about">Acerca de</string>
+    <string name="androidkit_compose_about_description">Contacto, información legal y más</string>
     <string name="androidkit_compose_version">Versión</string>
     <string name="androidkit_compose_copy_version">Copiar versión</string>
     <string name="androidkit_compose_open_source">Código abierto</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">Ahora no</string>
     <string name="androidkit_compose_support_prompt_donate">Donar</string>
     <string name="androidkit_compose_contact_description">Comentarios o preguntas</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">Información de la aplicación</string>
+    <string name="androidkit_compose_project">Proyecto</string>
+    <string name="androidkit_compose_website">Sitio web</string>
+    <string name="androidkit_compose_source_code">Código fuente</string>
 </resources>

@@ -32,6 +32,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">After 15 minutes</string>
     <string name="androidkit_compose_lock_now">Lock now</string>
     <string name="androidkit_compose_about">About</string>
+    <string name="androidkit_compose_about_description">Contact, legal and more</string>
     <string name="androidkit_compose_version">Version</string>
     <string name="androidkit_compose_copy_version">Copy version</string>
     <!-- Software term; use established local terminology, e.g. Open source in French. -->
@@ -39,7 +40,7 @@
     <string name="androidkit_compose_open_source_description">Explore, use or contribute</string>
     <string name="androidkit_compose_contact">Contact</string>
     <string name="androidkit_compose_app_info">App info</string>
-    <string name="androidkit_compose_legal">Legal</string>
+    <string name="androidkit_compose_legal">Legal information</string>
     <string name="androidkit_compose_privacy_policy">Privacy policy</string>
     <string name="androidkit_compose_terms_of_use">Terms of use</string>
     <!-- Licenses for external software, including work by individuals, not only companies. -->
@@ -47,4 +48,9 @@
     <string name="androidkit_compose_third_party_licenses_description">Licenses for third-party software</string>
     <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
     <string name="androidkit_compose_contact_description">Feedback or questions</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">App information</string>
+    <string name="androidkit_compose_project">Project</string>
+    <string name="androidkit_compose_website">Website</string>
+    <string name="androidkit_compose_source_code">Source code</string>
 </resources>

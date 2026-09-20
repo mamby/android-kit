@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">بعد 15 دقيقة</string>
     <string name="androidkit_compose_lock_now">قفل الآن</string>
     <string name="androidkit_compose_about">حول</string>
+    <string name="androidkit_compose_about_description">التواصل والشؤون القانونية والمزيد</string>
     <string name="androidkit_compose_version">الإصدار</string>
     <string name="androidkit_compose_copy_version">نسخ الإصدار</string>
     <string name="androidkit_compose_open_source">مفتوح المصدر</string>
@@ -40,4 +41,9 @@
     <string name="androidkit_compose_third_party_licenses">تراخيص الجهات الخارجية</string>
     <string name="androidkit_compose_third_party_licenses_description">تراخيص البرامج التابعة لجهات خارجية</string>
     <string name="androidkit_compose_contact_description">تعليقات أو أسئلة</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">معلومات التطبيق</string>
+    <string name="androidkit_compose_project">المشروع</string>
+    <string name="androidkit_compose_website">الموقع الإلكتروني</string>
+    <string name="androidkit_compose_source_code">الشفرة المصدرية</string>
 </resources>

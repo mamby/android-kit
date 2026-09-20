@@ -254,11 +254,12 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
 
     fun copyableInfo(
         label: String,
+        supportingText: String? = null,
         onClickLabel: String,
         onClick: () -> Unit,
         icon: ImageVector? = null,
     ) {
-        entries += SettingsEntryDefinition.CopyableInfo(label, onClickLabel, onClick, icon)
+        entries += SettingsEntryDefinition.CopyableInfo(label, supportingText, onClickLabel, onClick, icon)
     }
 
 }
@@ -317,11 +318,11 @@ internal sealed interface SettingsEntryDefinition {
 
     class CopyableInfo(
         override val label: String,
+        override val supportingText: String?,
         val onClickLabel: String,
         val onClick: () -> Unit,
         override val icon: ImageVector?,
         override val modifier: Modifier = Modifier,
-        override val supportingText: String? = null,
     ) : SettingsEntryDefinition
 
 }
@@ -337,7 +338,7 @@ private fun SettingsEntry(
     is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry, style, contentPadding)
     is SettingsEntryDefinition.CopyableInfo -> SettingsEntryContent(
         label = entry.label,
-        supportingText = null,
+        supportingText = entry.supportingText,
         icon = entry.icon,
         modifier = entry.modifier
             .fillMaxWidth()

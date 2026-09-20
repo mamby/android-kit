@@ -18,6 +18,7 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
+import net.mamby.androidkit.compose.form.AndroidKitSettingsLegalEntry
 import net.mamby.androidkit.demo.BuildConfig
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoThemeChoice
@@ -26,7 +27,7 @@ import net.mamby.androidkit.localization.AppLocaleManager
 
 @Composable
 fun SettingsScreen(
-    onAppInfo: () -> Unit,
+    onAbout: () -> Unit,
     appLockEnabled: Boolean,
     appLockTimeout: DemoAppLockTimeout,
     onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
@@ -51,8 +52,6 @@ fun SettingsScreen(
     val systemThemeText = stringResource(
                         if (isSystemInDarkTheme()) R.string.theme_dark else R.string.theme_light,
                     )
-    val floatingSurfaceOpacityDescriptionText = stringResource(R.string.floating_surface_opacity_description)
-    val settingsAppLockDescriptionText = stringResource(R.string.settings_app_lock_description)
     val timeoutOptions = DemoAppLockTimeout.entries.map { timeout ->
         AndroidKitSettingsOption(id = timeout.name,
             label = stringResource(
@@ -65,14 +64,15 @@ fun SettingsScreen(
                             )
         )
     }
-    val uriHandler = LocalUriHandler.current
+    val languageTitle = stringResource(R.string.settings_language)
+    val appearanceTitle = stringResource(R.string.settings_appearance)
+    val securityTitle = stringResource(R.string.settings_security)
     val configuration = AndroidKitSettingsPageConfiguration.Main(
-        contact = AndroidKitSettingsLink(onClick = { uriHandler.openUri("https://github.com/mamby") }),
-        appInfo = AndroidKitSettingsLink(onClick = onAppInfo),
+        about = AndroidKitSettingsLink(onClick = onAbout),
     )
     AndroidKitSettingsPage(configuration = configuration, title = stringResource(R.string.settings_title)) {
-        generalSection(
-            language = AndroidKitLanguageSetting(
+        section("language", label = languageTitle) {
+            language(AndroidKitLanguageSetting(
                 selection = AndroidKitSettingsSelection(
                     options = SupportedLanguageTags.map { tag ->
                         AndroidKitSettingsOption(tag, nativeLanguageName(tag))
@@ -84,8 +84,10 @@ fun SettingsScreen(
                         currentValueLabel = localeManager.systemLocale().getDisplayLanguage(displayLocale),
                     ),
                 ),
-            ),
-            theme = AndroidKitSettingsSelection(
+            ))
+        }
+        section("appearance", label = appearanceTitle) {
+            theme(AndroidKitSettingsSelection(
                 options = listOf(
                     AndroidKitSettingsOption(DemoThemeChoice.Light.name, themeLightText),
                     AndroidKitSettingsOption(DemoThemeChoice.Dark.name, themeDarkText),
@@ -97,44 +99,53 @@ fun SettingsScreen(
                     id = DemoThemeChoice.System.name,
                     currentValueLabel = systemThemeText,
                 ),
-            ),
-            floatingOpacity = AndroidKitFloatingOpacitySetting(
+            ))
+            transparency(AndroidKitFloatingOpacitySetting(
                 value = floatingSurfaceOpacityLevel,
                 onValueChange = onFloatingSurfaceOpacityLevelChange,
                 onValueChangeFinished = onFloatingSurfaceOpacityLevelChangeFinished,
-                supportingText = floatingSurfaceOpacityDescriptionText,
-            ),
-        )
-        securitySection(
-            appLock = AndroidKitAppLockSetting(
+            ))
+        }
+        section("security", label = securityTitle) {
+            appLock(AndroidKitAppLockSetting(
                 checked = appLockEnabled,
                 onCheckedChange = onAppLockChange,
                 enabled = !appLockBusy,
-                supportingText = appLockError ?: settingsAppLockDescriptionText,
+                errorMessage = appLockError,
                 onLockNow = onLockNow,
                 timeout = AndroidKitAppLockTimeoutSetting(
                     options = timeoutOptions,
                     selectedId = appLockTimeout.name,
                     onSelected = { onAppLockTimeoutChange(DemoAppLockTimeout.valueOf(it)) },
                 ),
-            ),
-        )
+            ))
+        }
     }
 }
 
 private const val CatalogRepository = "https://github.com/mamby/android-kit"
 
 @Composable
-internal fun AppInfoScreen(onBack: () -> Unit) {
+internal fun AboutScreen(onBack: () -> Unit) {
     val uriHandler = LocalUriHandler.current
     AndroidKitSettingsPage(
-        configuration = AndroidKitSettingsPageConfiguration.AppInfo(
+        configuration = AndroidKitSettingsPageConfiguration.About(
             AndroidKitSettingsAbout(
+                appName = stringResource(R.string.app_name),
                 version = BuildConfig.VERSION_NAME,
+                sourceCode = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
+                contact = AndroidKitSettingsLink(onClick = { uriHandler.openUri("https://github.com/mamby") }),
                 privacyPolicy = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
                 termsOfUse = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
                 libraries = AndroidKitSettingsLink(onClick = { uriHandler.openUri("$CatalogRepository/THIRD_PARTY_NOTICES.md") }),
-                openSource = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
+                description = stringResource(R.string.settings_about_description),
+                additionalLegalEntries = listOf(
+                    AndroidKitSettingsLegalEntry(
+                        id = "contributors",
+                        title = stringResource(R.string.settings_contributors),
+                        onClick = { uriHandler.openUri("$CatalogRepository/graphs/contributors") },
+                    ),
+                ),
             ),
         ),
         onBack = onBack,

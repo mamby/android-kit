@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">หลังจาก 15 นาที</string>
     <string name="androidkit_compose_lock_now">ล็อกตอนนี้</string>
     <string name="androidkit_compose_about">เกี่ยวกับ</string>
+    <string name="androidkit_compose_about_description">การติดต่อ ข้อมูลทางกฎหมาย และอื่น ๆ</string>
     <string name="androidkit_compose_version">เวอร์ชัน</string>
     <string name="androidkit_compose_copy_version">คัดลอกเวอร์ชัน</string>
     <string name="androidkit_compose_open_source">โอเพนซอร์ส</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">ไม่ใช่ตอนนี้</string>
     <string name="androidkit_compose_support_prompt_donate">บริจาค</string>
     <string name="androidkit_compose_contact_description">ความคิดเห็นหรือคำถาม</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">ข้อมูลแอป</string>
+    <string name="androidkit_compose_project">โครงการ</string>
+    <string name="androidkit_compose_website">เว็บไซต์</string>
+    <string name="androidkit_compose_source_code">ซอร์สโค้ด</string>
 </resources>

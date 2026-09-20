@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Setelah 15 menit</string>
     <string name="androidkit_compose_lock_now">Kunci sekarang</string>
     <string name="androidkit_compose_about">Tentang</string>
+    <string name="androidkit_compose_about_description">Kontak, informasi hukum, dan lainnya</string>
     <string name="androidkit_compose_version">Versi</string>
     <string name="androidkit_compose_copy_version">Salin versi</string>
     <string name="androidkit_compose_open_source">Sumber terbuka</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">Tidak sekarang</string>
     <string name="androidkit_compose_support_prompt_donate">Donasi</string>
     <string name="androidkit_compose_contact_description">Masukan atau pertanyaan</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">Informasi aplikasi</string>
+    <string name="androidkit_compose_project">Proyek</string>
+    <string name="androidkit_compose_website">Situs web</string>
+    <string name="androidkit_compose_source_code">Kode sumber</string>
 </resources>

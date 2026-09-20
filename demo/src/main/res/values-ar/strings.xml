@@ -130,6 +130,7 @@
     <string name="demo_no_action">لا شيء</string>
     <string name="settings_support_preview">هذه معاينة في الكتالوج. يحدد كل تطبيق وجهة الدعم الخاصة به؛ لا يتم تحصيل أي دفعات هنا.</string>
     <string name="settings_about">حول</string>
+    <string name="settings_about_description">كتالوج لمكونات وأنماط واجهة Android القابلة لإعادة الاستخدام.</string>
     <string name="settings_contact">التواصل</string>
     <string name="settings_app_info">معلومات التطبيق</string>
     <string name="settings_app">التطبيق</string>
@@ -141,4 +142,5 @@
     <string name="settings_license">الترخيص</string>
     <string name="settings_source_code">الشيفرة المصدرية</string>
     <string name="settings_contributors">المساهمون</string>
+    <string name="settings_appearance">المظهر</string>
 </resources>

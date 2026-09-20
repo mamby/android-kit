@@ -42,6 +42,7 @@ import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
+import net.mamby.androidkit.compose.theme.AndroidKitStrings
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 /** Stable identity is independent of the translated label and filtered list position. */
@@ -63,8 +64,6 @@ public data class AndroidKitSettingsSelection(
     public val selectedId: String,
     public val onSelected: (String) -> Unit,
     public val enabled: Boolean = true,
-    /** Optional row icon override; null uses the predefined language or theme icon. */
-    public val icon: ImageVector? = null,
     public val systemOption: AndroidKitSettingsSystemOption,
 ) {
     init {
@@ -83,7 +82,6 @@ public data class AndroidKitFloatingOpacitySetting(
     public val value: Float,
     public val onValueChange: (Float) -> Unit,
     public val onValueChangeFinished: () -> Unit,
-    public val supportingText: String? = null,
     public val enabled: Boolean = true,
 ) {
     init {
@@ -109,16 +107,14 @@ public data class AndroidKitAppLockTimeoutSetting(
 public data class AndroidKitAppLockSetting(
     public val checked: Boolean,
     public val onCheckedChange: (Boolean) -> Unit,
-    public val supportingText: String? = null,
+    /** Host authentication failure; absent during normal operation. */
+    public val errorMessage: String? = null,
     public val enabled: Boolean = true,
-    /** Optional row icon override; null uses the predefined app-lock icon. */
-    public val icon: ImageVector? = null,
     /** Shown only while checked. The host persists and enforces the selected timeout. */
     public val timeout: AndroidKitAppLockTimeoutSetting? = null,
     /** Optional lock action, shown only while checked; Kit supplies the shared fallback label. */
     public val onLockNow: (() -> Unit)? = null,
-) {
-}
+)
 
 @DslMarker
 public annotation class AndroidKitSettingsPageDsl
@@ -134,57 +130,45 @@ public class AndroidKitSettingsPageScope internal constructor() {
         sections += render
     }
 
-    public fun generalSection(key: String = "general",
-        language: AndroidKitLanguageSetting? = null, theme: AndroidKitSettingsSelection? = null,
-        floatingOpacity: AndroidKitFloatingOpacitySetting? = null,
-    ) { add(key) { it.generalSection(key, language, theme, floatingOpacity) } }
-
-    public fun securitySection(key: String = "security",
-        appLock: AndroidKitAppLockSetting? = null,
-        content: AndroidKitSettingSectionScope.() -> Unit = {},
-    ) { add(key) { it.securitySection(key, appLock) { content() } } }
-
     public fun section(key: String, label: String? = null, description: String? = null,
-        content: AndroidKitSettingSectionScope.() -> Unit,
+        content: AndroidKitSettingsSectionScope.() -> Unit,
     ) { add(key) { it.section(key, label, description) { content() } } }
 
     @Composable
     internal fun render(scope: SettingsPageRenderScope) { sections.forEach { it(scope) } }
 }
 
+/** Host-ordered declarations; predefined entries retain Kit-owned presentation. */
+@AndroidKitSettingSectionDsl
+public class AndroidKitSettingsSectionScope internal constructor(
+    private val entries: AndroidKitSettingSectionScope,
+    private val onLanguage: (AndroidKitLanguageSetting) -> Unit,
+    private val onTheme: (AndroidKitSettingsSelection) -> Unit,
+    private val onTransparency: (AndroidKitFloatingOpacitySetting) -> Unit,
+    private val onAppLock: (AndroidKitAppLockSetting) -> Unit,
+) : AndroidKitSettingSectionScope by entries {
+    public fun language(setting: AndroidKitLanguageSetting): Unit = onLanguage(setting)
+    public fun theme(setting: AndroidKitSettingsSelection): Unit = onTheme(setting)
+    public fun transparency(setting: AndroidKitFloatingOpacitySetting): Unit = onTransparency(setting)
+    public fun appLock(setting: AndroidKitAppLockSetting): Unit = onAppLock(setting)
+}
+
 @AndroidKitSettingsPageDsl
 internal interface SettingsPageRenderScope {
-    @Composable
-    @NonSkippableComposable
-    public fun generalSection(
-        key: String = "general",
-        language: AndroidKitLanguageSetting? = null,
-        theme: AndroidKitSettingsSelection? = null,
-        floatingOpacity: AndroidKitFloatingOpacitySetting? = null,
-    ): Unit
-
-    @Composable
-    @NonSkippableComposable
-    public fun securitySection(
-        key: String = "security",
-        appLock: AndroidKitAppLockSetting? = null,
-        content: @Composable AndroidKitSettingSectionScope.() -> Unit = {},
-    ): Unit
-
     @Composable
     @NonSkippableComposable
     public fun section(
         key: String,
         label: String? = null,
         description: String? = null,
-        content: @Composable AndroidKitSettingSectionScope.() -> Unit,
+        content: @Composable AndroidKitSettingsSectionScope.() -> Unit,
     ): Unit
 
 }
 
 /**
- * A scrollable settings page. Main pages require Contact and App info actions;
- * Kit appends About. AppInfo renders predefined sections.
+ * A scrollable settings page. An optional About action is always last on Main pages.
+ * About renders predefined sections.
  * Hosts own values, external links, navigation, and retained list state.
  */
 @Composable
@@ -200,15 +184,15 @@ public fun AndroidKitSettingsPage(
     SettingsPage(configuration, title, modifier, onBack, actions, listState, content)
 }
 
-/** Fixed App info surface. Kit owns every entry, title, icon, and section. */
+/** Fixed About surface. Kit owns its predefined entries, title, icons, and section order. */
 @Composable
 public fun AndroidKitSettingsPage(
-    configuration: AndroidKitSettingsPageConfiguration.AppInfo,
+    configuration: AndroidKitSettingsPageConfiguration.About,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
 ): Unit {
-    SettingsPage(configuration, AndroidKitThemeTokens.strings.appInfo, modifier, onBack,
+    SettingsPage(configuration, AndroidKitThemeTokens.strings.about, modifier, onBack,
         emptyList(), listState, {})
 }
 
@@ -243,14 +227,19 @@ private fun SettingsPage(
             items(scope.items.toList(), key = { "section:${it.key}" }) { it.content() }
             when (configuration) {
                 is AndroidKitSettingsPageConfiguration.Main -> {
-                    item(key = "kit:about") { SettingsAboutSection(configuration) }
-                }
-                is AndroidKitSettingsPageConfiguration.AppInfo -> {
-                    item(key = "kit:legal") { SettingsLegalSection(configuration.about) }
-                    if (configuration.about.showOpenSource) {
-                        item(key = "kit:open-source") { SettingsOpenSourceSection(configuration.about) }
+                    configuration.about?.let { about ->
+                        item(key = "kit:about") { SettingsAboutSection(about) }
                     }
-                    item(key = "kit:version") { SettingsVersionSection(configuration.about) }
+                }
+                is AndroidKitSettingsPageConfiguration.About -> {
+                    val about = configuration.content
+                    item(key = "kit:app") { SettingsAppInformationSection(about) }
+                    if (about.contact != null) {
+                        item(key = "kit:contact") { SettingsContactSection(about) }
+                    }
+                    if (about.privacyPolicy != null || about.termsOfUse != null || about.libraries != null || about.additionalLegalEntries.isNotEmpty()) {
+                        item(key = "kit:legal") { SettingsLegalSection(about) }
+                    }
                 }
                 AndroidKitSettingsPageConfiguration.Subpage -> Unit
             }
@@ -306,10 +295,55 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         key: String,
         label: String?,
         description: String?,
-        content: @Composable AndroidKitSettingSectionScope.() -> Unit,
+        content: @Composable AndroidKitSettingsSectionScope.() -> Unit,
     ) {
+        pickers.keys.removeAll { it.endsWith(":$key") }
+        timeoutPickers.keys.removeAll { it.endsWith(":$key") }
         val entries = SettingSectionScopeImpl()
-        androidx.compose.runtime.key(key) { entries.content() }
+        val strings = AndroidKitThemeTokens.strings
+        val declaredKinds = mutableSetOf<String>()
+        val declarations = AndroidKitSettingsSectionScope(
+            entries,
+            onLanguage = { setting ->
+                require(declaredKinds.add("language")) { "Duplicate language entry in $key" }
+                entries.addPicker(key, "language", SettingsPickerDefinition(setting.selection,
+                    strings.searchLanguages, strings.noMatchingLanguages), AndroidKitIcons.Language, strings)
+            },
+            onTheme = { setting ->
+                require(declaredKinds.add("theme")) { "Duplicate theme entry in $key" }
+                entries.addPicker(key, "theme", SettingsPickerDefinition(setting), AndroidKitIcons.Theme, strings)
+            },
+            onTransparency = { setting ->
+                require(declaredKinds.add("transparency")) { "Duplicate transparency entry in $key" }
+                entries.entries += SettingsEntryDefinition.Slider(
+                    label = strings.transparency, value = setting.value, onValueChange = setting.onValueChange,
+                    modifier = Modifier,
+                    valueRange = AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel..
+                        AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
+                    steps = 19, onValueChangeFinished = setting.onValueChangeFinished,
+                    supportingText = null, icon = null, valueLabel = null,
+                    enabled = setting.enabled, colors = null,
+                    minimumLabel = strings.min, maximumLabel = strings.max, isOpacitySlider = true,
+                )
+            },
+            onAppLock = { setting ->
+                require(declaredKinds.add("appLock")) { "Duplicate app-lock entry in $key" }
+                val timeoutKey = "app-lock-timeout:$key"
+                val timeout = setting.timeout?.takeIf { setting.checked }
+                if (timeout != null && setting.enabled && timeout.enabled) timeoutPickers[timeoutKey] = timeout
+                entries.toggle(strings.appLock, setting.checked, setting.onCheckedChange,
+                    supportingText = setting.errorMessage, icon = AndroidKitIcons.AppLock, enabled = setting.enabled)
+                timeout?.let { selection ->
+                    entries.button(label = strings.lockAfterLeavingApp,
+                        supportingText = selection.options.first { it.id == selection.selectedId }.label,
+                        enabled = setting.enabled && selection.enabled, onClick = { openPicker(timeoutKey) })
+                }
+                if (setting.checked && setting.onLockNow != null) {
+                    entries.button(strings.lockNow, setting.onLockNow, enabled = setting.enabled)
+                }
+            },
+        )
+        androidx.compose.runtime.key(key) { declarations.content() }
         if (entries.entries.isNotEmpty()) {
             registerItem(SettingsPageItem(key) {
                 SettingsSection(entries = entries.entries, label = label, description = description)
@@ -322,99 +356,26 @@ private class SettingsPageScopeImpl(private val openPicker: (String) -> Unit) : 
         }
     }
 
-
-    @Composable
-    @NonSkippableComposable
-    override fun generalSection(
-        key: String,
-        language: AndroidKitLanguageSetting?,
-        theme: AndroidKitSettingsSelection?,
-        floatingOpacity: AndroidKitFloatingOpacitySetting?,
-    ) {
-        val strings = AndroidKitThemeTokens.strings
-        section(key, strings.general) {
-            language?.let {
-                addPicker(
-                    key, "language", SettingsPickerDefinition(
-                        it.selection,
-                        strings.searchLanguages,
-                        strings.noMatchingLanguages,
-                    ),
-                    AndroidKitIcons.Language,
-                )
-            }
-            theme?.let { addPicker(key, "theme", SettingsPickerDefinition(it), AndroidKitIcons.Theme) }
-            floatingOpacity?.let {
-                (this as SettingSectionScopeImpl).entries += SettingsEntryDefinition.Slider(
-                    label = strings.transparency, value = it.value, onValueChange = it.onValueChange,
-                    modifier = Modifier,
-                    valueRange = AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel..
-                        AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
-                    steps = 19, onValueChangeFinished = it.onValueChangeFinished,
-                    supportingText = it.supportingText, icon = null, valueLabel = null,
-                    enabled = it.enabled, colors = null,
-                    minimumLabel = strings.min, maximumLabel = strings.max,
-                    isOpacitySlider = true,
-                )
-            }
-        }
-    }
-
-    @Composable
     private fun AndroidKitSettingSectionScope.addPicker(
         sectionKey: String,
         kind: String,
         picker: SettingsPickerDefinition,
         defaultIcon: ImageVector,
+        strings: AndroidKitStrings,
     ) {
         val pickerKey = "$kind:$sectionKey"
         pickers[pickerKey] = picker
         val selection = picker.selection
-        val strings = AndroidKitThemeTokens.strings
         val selectionLabel = if (kind == "theme") strings.theme else strings.language
         val options = selection.displayOptions(strings.system)
         button(
             label = selectionLabel,
             supportingText = options.first { it.id == selection.selectedId }.label,
-            icon = selection.icon ?: defaultIcon, enabled = selection.enabled,
+            icon = defaultIcon, enabled = selection.enabled,
             onClick = { openPicker(pickerKey) },
         )
     }
 
-    @Composable
-    @NonSkippableComposable
-    override fun securitySection(
-        key: String,
-        appLock: AndroidKitAppLockSetting?,
-        content: @Composable AndroidKitSettingSectionScope.() -> Unit,
-    ) {
-        val strings = AndroidKitThemeTokens.strings
-        val timeoutKey = "app-lock-timeout:$key"
-        val timeout = appLock?.timeout?.takeIf { appLock.checked }
-        if (timeout != null && appLock.enabled && timeout.enabled) {
-            timeoutPickers[timeoutKey] = timeout
-        } else {
-            timeoutPickers.remove(timeoutKey)
-        }
-        section(key, strings.security) {
-            appLock?.let {
-                toggle(strings.appLock, it.checked, it.onCheckedChange, supportingText = it.supportingText,
-                    icon = it.icon ?: AndroidKitIcons.AppLock, enabled = it.enabled)
-                timeout?.let { selection ->
-                    button(
-                        label = strings.lockAfterLeavingApp,
-                        supportingText = selection.options.first { option -> option.id == selection.selectedId }.label,
-                        enabled = it.enabled && selection.enabled,
-                        onClick = { openPicker(timeoutKey) },
-                    )
-                }
-                if (it.checked && it.onLockNow != null) {
-                    button(label = strings.lockNow, onClick = it.onLockNow, enabled = it.enabled)
-                }
-            }
-            content()
-        }
-    }
 }
 
 @Composable
@@ -463,7 +424,7 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
     val dimensions = AndroidKitThemeTokens.dimensions
     val style = AndroidKitThemeTokens.bottomSheetStyle
     AndroidKitBottomSheet(
-        visible = true, title = strings.language, onDismiss = onDismiss,
+        visible = true, title = if (picker.searchLabel != null) strings.language else strings.theme, onDismiss = onDismiss,
         fitContent = picker.searchLabel == null,
         search = picker.searchLabel?.let { AndroidKitSheetSearch(query, { query = it }, it) },
         scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,

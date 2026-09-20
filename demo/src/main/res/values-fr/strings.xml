@@ -130,6 +130,7 @@
     <string name="demo_no_action">Aucune</string>
     <string name="settings_support_preview">Ceci est un aperçu du catalogue. Chaque application fournit sa destination de soutien ; aucun paiement n’est collecté ici.</string>
     <string name="settings_about">À propos</string>
+    <string name="settings_about_description">Un catalogue de composants et de modèles d’interface Android réutilisables.</string>
     <string name="settings_contact">Contact</string>
     <string name="settings_app_info">Infos sur l’application</string>
     <string name="settings_app">Application</string>
@@ -141,4 +142,5 @@
     <string name="settings_license">Licence</string>
     <string name="settings_source_code">Code source</string>
     <string name="settings_contributors">Contributeurs</string>
+    <string name="settings_appearance">Apparence</string>
 </resources>

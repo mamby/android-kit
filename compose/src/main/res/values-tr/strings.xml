@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">15 dakika sonra</string>
     <string name="androidkit_compose_lock_now">Şimdi kilitle</string>
     <string name="androidkit_compose_about">Hakkında</string>
+    <string name="androidkit_compose_about_description">İletişim, yasal bilgiler ve daha fazlası</string>
     <string name="androidkit_compose_version">Sürüm</string>
     <string name="androidkit_compose_copy_version">Sürümü kopyala</string>
     <string name="androidkit_compose_open_source">Açık kaynak</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">Şimdi değil</string>
     <string name="androidkit_compose_support_prompt_donate">Bağış yap</string>
     <string name="androidkit_compose_contact_description">Geri bildirim veya sorular</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">Uygulama bilgileri</string>
+    <string name="androidkit_compose_project">Proje</string>
+    <string name="androidkit_compose_website">Web sitesi</string>
+    <string name="androidkit_compose_source_code">Kaynak kodu</string>
 </resources>

@@ -21,13 +21,16 @@ escape hatch. Migrate consumers and the demo with the library.
   also accept only their typed declarations; custom toolbar `item` is removed.
 - Settings: resolve composable resources before the page builder. Use `section`
   and typed rows, including `info` for labels, values, and supporting text.
-  Select an explicit page configuration: `Main` always renders Contact and App info in About, followed by an optional
-  donation banner. `AppInfo` renders predefined App and Open source sections;
-  predefined links accept only click callbacks and enabled state, with Kit-owned
-  labels and icons and no host descriptions or custom content. The app version
-  remains host-owned data. All requested App info entries are required and always rendered; `Subpage` has
-  no footer. See
-  [settings.md](settings.md).
+  Hosts own section titles, grouping, and entry order; predefined `language`,
+  `theme`, `transparency`, and `appLock` declarations keep their labels, icons,
+  and normal descriptions sealed. App-lock failures use explicit `errorMessage`.
+  `Main` optionally appends About as its final row. `About` renders App information,
+  Contact, and Legal information in fixed order, omitting
+  empty groups and section headings. The main About row uses the Kit-owned hint
+  “Contact, legal and more”. Website and Source code follow the app description and precede
+  Version; Third-party licenses belongs in Legal. Hosts supply app data and
+  optional destinations; Kit owns link
+  labels and icons. `Subpage` has no footer. See [settings.md](settings.md).
 - Cards: replace `header` and `headerSupportingContent` with `title` and
   `supportingText`. Explicit typography and supporting color belong in card style.
 - Floating controls: supply `AndroidKitFloatingAction.Button(icon, label, onClick)`

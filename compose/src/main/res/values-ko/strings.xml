@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">15분 후</string>
     <string name="androidkit_compose_lock_now">지금 잠그기</string>
     <string name="androidkit_compose_about">소개</string>
+    <string name="androidkit_compose_about_description">문의, 법적 정보 등</string>
     <string name="androidkit_compose_version">버전</string>
     <string name="androidkit_compose_copy_version">버전 복사</string>
     <string name="androidkit_compose_open_source">오픈 소스</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">지금은 안 함</string>
     <string name="androidkit_compose_support_prompt_donate">기부하기</string>
     <string name="androidkit_compose_contact_description">의견 또는 질문</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">앱 정보</string>
+    <string name="androidkit_compose_project">프로젝트</string>
+    <string name="androidkit_compose_website">웹사이트</string>
+    <string name="androidkit_compose_source_code">소스 코드</string>
 </resources>

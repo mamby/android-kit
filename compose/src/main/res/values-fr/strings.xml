@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Après 15 minutes</string>
     <string name="androidkit_compose_lock_now">Verrouiller maintenant</string>
     <string name="androidkit_compose_about">À propos</string>
+    <string name="androidkit_compose_about_description">Contact, mentions légales et plus</string>
     <string name="androidkit_compose_version">Version</string>
     <string name="androidkit_compose_copy_version">Copier la version</string>
     <string name="androidkit_compose_open_source">Open source</string>
@@ -40,4 +41,9 @@
     <string name="androidkit_compose_third_party_licenses">Licences de tiers</string>
     <string name="androidkit_compose_third_party_licenses_description">Licences des logiciels tiers</string>
     <string name="androidkit_compose_contact_description">Commentaires ou questions</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">Informations sur l’application</string>
+    <string name="androidkit_compose_project">Projet</string>
+    <string name="androidkit_compose_website">Site web</string>
+    <string name="androidkit_compose_source_code">Code source</string>
 </resources>

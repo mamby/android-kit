@@ -1,5 +1,15 @@
 # Shared vocabulary translation review
 
+## About navigation summary (2026-09-20)
+
+The new Kit-owned About-row subtitle combines the existing Contact, Version, and
+Legal information concepts. English, French, Arabic, German, Spanish, Hindi,
+Indonesian, Italian, Japanese, Korean, Dutch, Polish, European Portuguese,
+Russian, Thai, Turkish, Vietnamese, and Simplified Chinese were updated. The
+demo's optional About description was added in its English, French, and Arabic
+language sets. These are editorial translations checked against their About-row
+and subpage usage; they have not received native-speaker review.
+
 ## Settings reorganization (2026-09-15)
 
 The settings-only sponsor title and description were removed in all 18 Compose
@@ -213,3 +223,31 @@ changes. Build checks do not replace linguistic or device review.
 
 Future wording changes should repeat contextual review for every affected locale
 and retain the distinction between editorial review and native-speaker approval.
+
+## 2026-09-20 Settings organization
+
+Added About headings App information and Project, and destination labels Website
+and Source code across all 18 supported locales (en, fr, ar, de, es, hi, id, it,
+ja, ko, nl, pl, pt, ru, th, tr, vi, zh-Hans). Reused existing Open source strings.
+Added demo-owned Appearance section titles in English, French, and Arabic.
+Reviewed these as noun labels against their actual About/grouping call sites and
+the existing glossary; French Code source follows the accepted glossary term.
+No external references or native-speaker approval are claimed for this pass.
+No English source correction was required. New wording is machine-assisted;
+idiomatic quality, truncation, RTL and pronunciation remain unverified on device.
+Resource/compilation validation is separate from linguistic assurance.
+
+### About hint and heading refinement
+
+The main About hint is now “Contact, legal and more”. Updated
+androidkit_compose_about_description in all 18 supported locales. Reviewed as a
+navigation subtitle listing destinations, not as a contact action or legal advice.
+Retained each locale's contact/legal terminology where natural and replaced the
+version reference with a general “and more” phrase. No placeholders or timing
+claims are present. No demo duplicate of this hint exists; its similarly named
+app-description resource is separate content and remains unchanged.
+About section headings are hidden; cards, spacing, page title and row labels remain.
+XML parsing and duplicate-key checks passed. Wording received an AI review against
+English and the actual call site, not native-speaker approval. No new external
+terminology references were used. Idiomatic quality and device layout remain
+unverified; compilation is not linguistic assurance.

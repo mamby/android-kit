@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Через 15 минут</string>
     <string name="androidkit_compose_lock_now">Заблокировать сейчас</string>
     <string name="androidkit_compose_about">О приложении</string>
+    <string name="androidkit_compose_about_description">Контакты, правовая информация и другое</string>
     <string name="androidkit_compose_version">Версия</string>
     <string name="androidkit_compose_copy_version">Копировать версию</string>
     <string name="androidkit_compose_open_source">Открытый исходный код</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">Не сейчас</string>
     <string name="androidkit_compose_support_prompt_donate">Пожертвовать</string>
     <string name="androidkit_compose_contact_description">Отзывы или вопросы</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">О приложении</string>
+    <string name="androidkit_compose_project">Проект</string>
+    <string name="androidkit_compose_website">Веб-сайт</string>
+    <string name="androidkit_compose_source_code">Исходный код</string>
 </resources>

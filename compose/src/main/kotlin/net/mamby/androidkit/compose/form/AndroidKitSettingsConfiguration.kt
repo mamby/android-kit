@@ -16,86 +16,116 @@ public data class AndroidKitSettingsLink(
     public val enabled: Boolean = true,
 )
 
-/** Typed content for the predefined App info subpage. Hosts own all destinations. */
+/** Typed content for the predefined About subpage. Hosts own all destinations and custom copy. */
 public data class AndroidKitSettingsAbout(
+    public val appName: String,
     public val version: String,
-    public val privacyPolicy: AndroidKitSettingsLink,
-    public val termsOfUse: AndroidKitSettingsLink,
-    public val libraries: AndroidKitSettingsLink,
-    public val openSource: AndroidKitSettingsLink,
-    public val showOpenSource: Boolean = true,
+    public val contact: AndroidKitSettingsLink? = null,
+    public val privacyPolicy: AndroidKitSettingsLink? = null,
+    public val termsOfUse: AndroidKitSettingsLink? = null,
+    public val libraries: AndroidKitSettingsLink? = null,
+    /** Public app website, separate from its source repository. */
+    public val website: AndroidKitSettingsLink? = null,
+    /** Source repository destination. */
+    public val sourceCode: AndroidKitSettingsLink? = null,
+    public val description: String? = null,
+    public val additionalLegalEntries: List<AndroidKitSettingsLegalEntry> = emptyList(),
 ) {
-    init { require(version.isNotBlank()) { "App info requires a version." } }
+    init {
+        require(appName.isNotBlank()) { "About requires an app name." }
+        require(version.isNotBlank()) { "About requires a version." }
+        val ids = additionalLegalEntries.map(AndroidKitSettingsLegalEntry::id)
+        require(ids.size == ids.toSet().size) { "Additional legal entry IDs must be unique." }
+    }
+}
+
+/** Host-owned legal destination rendered after the predefined legal entries. */
+public data class AndroidKitSettingsLegalEntry(
+    public val id: String,
+    public val title: String,
+    public val onClick: () -> Unit,
+    public val supportingText: String? = null,
+    public val enabled: Boolean = true,
+) {
+    init {
+        require(id.isNotBlank()) { "A legal entry ID cannot be blank." }
+        require(title.isNotBlank()) { "A legal entry title cannot be blank." }
+    }
 }
 
 public sealed interface AndroidKitSettingsPageConfiguration {
     /** Settings pages that accept host-defined sections and page chrome. */
     public sealed interface Customizable : AndroidKitSettingsPageConfiguration
 
-    /** About is always present with Contact and App info. */
+    /** Main settings page with an optional About destination, always placed last. */
     public data class Main(
-        public val contact: AndroidKitSettingsLink,
-        public val appInfo: AndroidKitSettingsLink,
+        public val about: AndroidKitSettingsLink? = null,
     ) : Customizable
 
-    public data class AppInfo(public val about: AndroidKitSettingsAbout) : AndroidKitSettingsPageConfiguration
+    public data class About(public val content: AndroidKitSettingsAbout) : AndroidKitSettingsPageConfiguration
 
     /** Ordinary host-defined subpage; no main-settings footer. */
     public data object Subpage : Customizable
 }
 
 @Composable
-internal fun SettingsAboutSection(main: AndroidKitSettingsPageConfiguration.Main) {
+internal fun SettingsAboutSection(about: AndroidKitSettingsLink) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
-        link(main.contact, strings.contact, AndroidKitIcons.Contact, strings.contactDescription)
-        link(main.appInfo, strings.appInfo, AndroidKitIcons.Info)
+        link(about, strings.about, AndroidKitIcons.Info, strings.aboutDescription)
     }
-    SettingsSection(entries = scope.entries, label = strings.about)
+    SettingsSection(entries = scope.entries)
+}
+
+@Composable
+internal fun SettingsContactSection(about: AndroidKitSettingsAbout) {
+    val strings = AndroidKitThemeTokens.strings
+    val scope = SettingSectionScopeImpl().apply {
+        about.contact?.let { link(it, strings.contact, AndroidKitIcons.Contact, strings.contactDescription) }
+    }
+    SettingsSection(entries = scope.entries)
 }
 
 @Composable
 internal fun SettingsLegalSection(about: AndroidKitSettingsAbout) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
-        link(about.termsOfUse, strings.termsOfUse, AndroidKitIcons.Document)
-        link(about.privacyPolicy, strings.privacyPolicy, AndroidKitIcons.AppLock)
-        link(
-            about.libraries,
-            strings.thirdPartyLicenses,
-            AndroidKitIcons.Document,
-            strings.thirdPartyLicensesDescription,
-        )
+        about.privacyPolicy?.let { link(it, strings.privacyPolicy, AndroidKitIcons.AppLock) }
+        about.termsOfUse?.let { link(it, strings.termsOfUse, AndroidKitIcons.Document) }
+        about.libraries?.let { link(it, strings.thirdPartyLicenses, AndroidKitIcons.Document) }
+        about.additionalLegalEntries.forEach { entry ->
+            navigation(
+                label = entry.title,
+                onClick = entry.onClick,
+                supportingText = entry.supportingText,
+                icon = AndroidKitIcons.Document,
+                enabled = entry.enabled,
+            )
+        }
     }
-    SettingsSection(entries = scope.entries, label = strings.legal)
+    SettingsSection(entries = scope.entries)
 }
 
 @Composable
-internal fun SettingsVersionSection(about: AndroidKitSettingsAbout) {
+internal fun SettingsAppInformationSection(about: AndroidKitSettingsAbout) {
     val strings = AndroidKitThemeTokens.strings
     val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
     val scope = SettingSectionScopeImpl().apply {
+        info(label = about.appName, supportingText = about.description?.takeIf(String::isNotBlank))
+        about.website?.let { link(it, strings.website, AndroidKitIcons.Website) }
+        about.sourceCode?.let { link(it, strings.sourceCode, AndroidKitIcons.Code) }
         copyableInfo(
-            label = about.version,
+            label = strings.version,
+            supportingText = about.version,
             onClickLabel = strings.copyVersion,
             onClick = {
                 val clipEntry = ClipEntry(ClipData.newPlainText(strings.version, about.version))
                 coroutineScope.launch { clipboard.setClipEntry(clipEntry) }
             },
-            icon = AndroidKitIcons.Info,
         )
     }
-    SettingsSection(entries = scope.entries, label = strings.version)
-}
-
-@Composable
-internal fun SettingsOpenSourceSection(about: AndroidKitSettingsAbout) {
-    val strings = AndroidKitThemeTokens.strings
-    val scope = SettingSectionScopeImpl().apply {
-        link(about.openSource, strings.openSourceDescription, AndroidKitIcons.Code)
-    }
-    SettingsSection(entries = scope.entries, label = strings.openSource)
+    SettingsSection(entries = scope.entries)
 }
 
 private fun AndroidKitSettingSectionScope.link(

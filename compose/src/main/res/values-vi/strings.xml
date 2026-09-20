@@ -28,6 +28,7 @@
     <string name="androidkit_compose_after_fifteen_minutes">Sau 15 phút</string>
     <string name="androidkit_compose_lock_now">Khóa ngay</string>
     <string name="androidkit_compose_about">Giới thiệu</string>
+    <string name="androidkit_compose_about_description">Liên hệ, thông tin pháp lý và hơn thế nữa</string>
     <string name="androidkit_compose_version">Phiên bản</string>
     <string name="androidkit_compose_copy_version">Sao chép phiên bản</string>
     <string name="androidkit_compose_open_source">Mã nguồn mở</string>
@@ -45,4 +46,9 @@
     <string name="androidkit_compose_support_prompt_not_now">Không phải bây giờ</string>
     <string name="androidkit_compose_support_prompt_donate">Quyên góp</string>
     <string name="androidkit_compose_contact_description">Phản hồi hoặc câu hỏi</string>
+    <!-- About section headings and project destination labels. -->
+    <string name="androidkit_compose_app_information">Thông tin ứng dụng</string>
+    <string name="androidkit_compose_project">Dự án</string>
+    <string name="androidkit_compose_website">Trang web</string>
+    <string name="androidkit_compose_source_code">Mã nguồn</string>
 </resources>

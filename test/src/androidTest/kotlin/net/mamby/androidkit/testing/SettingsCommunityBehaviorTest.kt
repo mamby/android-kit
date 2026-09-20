@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -13,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
+import net.mamby.androidkit.compose.form.AndroidKitSettingsLegalEntry
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
@@ -25,92 +27,101 @@ class SettingsCommunityBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun mainAlwaysShowsAboutLinksInOrder() {
-        var contactClicks = 0
-        var appInfoClicks = 0
+    fun mainShowsOneAboutDestination() {
+        var aboutClicks = 0
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(
                     configuration = AndroidKitSettingsPageConfiguration.Main(
-                        contact = AndroidKitSettingsLink(onClick = { contactClicks++ }),
-                        appInfo = AndroidKitSettingsLink(onClick = { appInfoClicks++ }),
+                        about = AndroidKitSettingsLink(onClick = { aboutClicks++ }),
                     ),
                 ) {
                     section("host") { info("Host setting") }
                 }
             }
         }
-        assertOrder("Host setting", "About", "Contact", "App info")
-        for (label in listOf("Contact", "App info")) {
-            scrollTo(label)
-            rule.onNodeWithText(label).performClick()
-        }
-        rule.runOnIdle {
-            assertEquals(1, contactClicks)
-            assertEquals(1, appInfoClicks)
-        }
+        assertOrder("Host setting", "About")
+        rule.onNodeWithText("Contact, legal and more").assertIsDisplayed()
         scrollTo("About")
-        scrollTo("Contact")
-        scrollTo("App info")
+        rule.onNodeWithText("About").performClick()
+        rule.runOnIdle { assertEquals(1, aboutClicks) }
+        scrollTo("About")
+        rule.onNodeWithText("Contact").assertDoesNotExist()
+        rule.onNodeWithText("App info").assertDoesNotExist()
         rule.onNodeWithText("Version").assertDoesNotExist()
     }
 
     @Test
-    fun appInfoHasPredefinedOrderAndInvokesLinks() {
-        var clicks = 0
-        val link = AndroidKitSettingsLink(onClick = { clicks++ })
+    fun aboutHasPredefinedOrderAndInvokesLinks() {
+        var builtInClicks = 0
+        var additionalClicks = 0
+        var disabledClicks = 0
+        val link = AndroidKitSettingsLink(onClick = { builtInClicks++ })
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(
-                    configuration = AndroidKitSettingsPageConfiguration.AppInfo(
-                        AndroidKitSettingsAbout(
+                    configuration = AndroidKitSettingsPageConfiguration.About(
+                        AndroidKitSettingsAbout(appName = "Android Kit",
+                            description = "Reusable Android components.",
                             version = "1.0", privacyPolicy = link, termsOfUse = link,
-                            libraries = link, openSource = link,
+                            libraries = link, contact = link, website = link, sourceCode = link,
+                            additionalLegalEntries = listOf(
+                                AndroidKitSettingsLegalEntry("contributors", "Contributors", { additionalClicks++ }),
+                                AndroidKitSettingsLegalEntry("notices", "Notices", { disabledClicks++ }, enabled = false),
+                            ),
                         ),
                     ),
                 )
             }
         }
-        assertOrder("Legal", "Terms of use", "Privacy policy", "Third-party licenses",
-            "Open source", "Version", "1.0")
-        for (label in listOf("Privacy policy", "Terms of use", "Third-party licenses", "Explore, use or contribute")) {
+        assertOrder("Android Kit", "Website", "Source code", "Version",
+            "Contact", "Privacy policy", "Terms of use",
+            "Third-party licenses", "Contributors", "Notices")
+        for (label in listOf("Website", "Source code", "Contact", "Privacy policy", "Terms of use", "Third-party licenses")) {
             scrollTo(label)
             rule.onNodeWithText(label).performClick()
         }
-        scrollTo("Version")
-        rule.onNodeWithText("MIT").assertDoesNotExist()
-        rule.runOnIdle { assertEquals(4, clicks) }
-        rule.onNodeWithText("Contact").assertDoesNotExist()
-        rule.onNodeWithText("About").assertDoesNotExist()
+        scrollTo("Contributors")
+        rule.onNodeWithText("Contributors").performClick()
+        scrollTo("Notices")
+        rule.onNodeWithText("Notices").assertIsNotEnabled()
+        rule.runOnIdle {
+            assertEquals(6, builtInClicks)
+            assertEquals(1, additionalClicks)
+            assertEquals(0, disabledClicks)
+        }
+        rule.onNodeWithText("App info").assertDoesNotExist()
     }
 
     @Test
-    fun appInfoKeepsAllRequiredEntriesVisible() {
+    fun aboutKeepsRequiredEntriesVisibleAndOmitsBlankDescription() {
         var clicks = 0
         var version by mutableStateOf("1.0")
         val link = AndroidKitSettingsLink(onClick = { clicks++ })
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(
-                    configuration = AndroidKitSettingsPageConfiguration.AppInfo(
-                        AndroidKitSettingsAbout(version = version,
+                    configuration = AndroidKitSettingsPageConfiguration.About(
+                        AndroidKitSettingsAbout(appName = "Android Kit", version = version,
+                            contact = link,
                             privacyPolicy = link,
                             termsOfUse = link,
                             libraries = link,
-                            openSource = link,
+                            description = "   ",
                         ),
                     ),
                 )
             }
         }
         rule.onNodeWithText("1.0").assertIsDisplayed()
-        rule.onNodeWithText("Privacy policy").assertIsDisplayed()
-        rule.onNodeWithText("Terms of use").assertIsDisplayed()
-        rule.onNodeWithText("Third-party licenses").assertIsDisplayed()
+        scrollTo("Privacy policy")
+        scrollTo("Terms of use")
+        scrollTo("Third-party licenses")
         rule.runOnIdle { version = "2.0" }
-        rule.onNodeWithText("2.0").assertIsDisplayed()
+        scrollTo("2.0")
         rule.onNodeWithText("1.0").assertDoesNotExist()
-        rule.onNodeWithText("Legal").assertIsDisplayed()
+        rule.onNodeWithText("Legal information").assertDoesNotExist()
+        rule.onNodeWithText("App information").assertDoesNotExist()
         rule.runOnIdle { assertEquals(0, clicks) }
     }
 
