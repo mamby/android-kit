@@ -184,7 +184,7 @@ internal interface SettingsPageRenderScope {
 
 /**
  * A scrollable settings page. Main pages require Contact and App info actions;
- * Kit appends About and an optional donation banner. AppInfo renders predefined sections.
+ * Kit appends About. AppInfo renders predefined sections.
  * Hosts own values, external links, navigation, and retained list state.
  */
 @Composable
@@ -244,13 +244,13 @@ private fun SettingsPage(
             when (configuration) {
                 is AndroidKitSettingsPageConfiguration.Main -> {
                     item(key = "kit:about") { SettingsAboutSection(configuration) }
-                    configuration.support?.let { support ->
-                        item(key = "kit:support") { SettingsSupportCard(support) }
-                    }
                 }
                 is AndroidKitSettingsPageConfiguration.AppInfo -> {
-                    item(key = "kit:app") { SettingsAppSection(configuration.about) }
-                    item(key = "kit:open-source") { SettingsOpenSourceSection(configuration.about) }
+                    item(key = "kit:legal") { SettingsLegalSection(configuration.about) }
+                    if (configuration.about.showOpenSource) {
+                        item(key = "kit:open-source") { SettingsOpenSourceSection(configuration.about) }
+                    }
+                    item(key = "kit:version") { SettingsVersionSection(configuration.about) }
                 }
                 AndroidKitSettingsPageConfiguration.Subpage -> Unit
             }

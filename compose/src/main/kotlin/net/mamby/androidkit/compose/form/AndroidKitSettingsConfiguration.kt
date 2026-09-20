@@ -1,37 +1,14 @@
 package net.mamby.androidkit.compose.form
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import android.content.ClipData
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
+import kotlinx.coroutines.launch
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
-
-/** Host-localized action. The host opens its URL, mail intent, or navigation destination. */
-public data class AndroidKitSettingsAction(
-    public val label: String,
-    public val onClick: () -> Unit,
-    public val supportingText: String? = null,
-    public val icon: ImageVector? = null,
-    public val enabled: Boolean = true,
-) {
-    init { require(label.isNotBlank()) { "Settings action label must not be blank." } }
-}
-
-public data class AndroidKitSettingsSupport(
-    public val action: AndroidKitSettingsAction,
-)
 
 /** Predefined settings link. Kit owns its label, icon, and presentation; hosts own behavior. */
 public data class AndroidKitSettingsLink(
@@ -45,8 +22,8 @@ public data class AndroidKitSettingsAbout(
     public val privacyPolicy: AndroidKitSettingsLink,
     public val termsOfUse: AndroidKitSettingsLink,
     public val libraries: AndroidKitSettingsLink,
-    public val projectRepository: AndroidKitSettingsLink,
-    public val contribute: AndroidKitSettingsLink,
+    public val openSource: AndroidKitSettingsLink,
+    public val showOpenSource: Boolean = true,
 ) {
     init { require(version.isNotBlank()) { "App info requires a version." } }
 }
@@ -55,11 +32,10 @@ public sealed interface AndroidKitSettingsPageConfiguration {
     /** Settings pages that accept host-defined sections and page chrome. */
     public sealed interface Customizable : AndroidKitSettingsPageConfiguration
 
-    /** About is always present; the donation banner is optional and appears last. */
+    /** About is always present with Contact and App info. */
     public data class Main(
         public val contact: AndroidKitSettingsLink,
         public val appInfo: AndroidKitSettingsLink,
-        public val support: AndroidKitSettingsSupport? = null,
     ) : Customizable
 
     public data class AppInfo(public val about: AndroidKitSettingsAbout) : AndroidKitSettingsPageConfiguration
@@ -79,23 +55,45 @@ internal fun SettingsAboutSection(main: AndroidKitSettingsPageConfiguration.Main
 }
 
 @Composable
-internal fun SettingsAppSection(about: AndroidKitSettingsAbout) {
+internal fun SettingsLegalSection(about: AndroidKitSettingsAbout) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
         link(about.termsOfUse, strings.termsOfUse, AndroidKitIcons.Document)
         link(about.privacyPolicy, strings.privacyPolicy, AndroidKitIcons.AppLock)
-        link(about.libraries, strings.thirdPartyLicenses, AndroidKitIcons.Document)
-        info(label = strings.version, value = about.version, icon = AndroidKitIcons.Info)
+        link(
+            about.libraries,
+            strings.thirdPartyLicenses,
+            AndroidKitIcons.Document,
+            strings.thirdPartyLicensesDescription,
+        )
     }
-    SettingsSection(entries = scope.entries, label = strings.app)
+    SettingsSection(entries = scope.entries, label = strings.legal)
+}
+
+@Composable
+internal fun SettingsVersionSection(about: AndroidKitSettingsAbout) {
+    val strings = AndroidKitThemeTokens.strings
+    val clipboard = LocalClipboard.current
+    val coroutineScope = rememberCoroutineScope()
+    val scope = SettingSectionScopeImpl().apply {
+        copyableInfo(
+            label = about.version,
+            onClickLabel = strings.copyVersion,
+            onClick = {
+                val clipEntry = ClipEntry(ClipData.newPlainText(strings.version, about.version))
+                coroutineScope.launch { clipboard.setClipEntry(clipEntry) }
+            },
+            icon = AndroidKitIcons.Info,
+        )
+    }
+    SettingsSection(entries = scope.entries, label = strings.version)
 }
 
 @Composable
 internal fun SettingsOpenSourceSection(about: AndroidKitSettingsAbout) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
-        link(about.projectRepository, strings.projectRepository, AndroidKitIcons.Code)
-        link(about.contribute, strings.contribute, AndroidKitIcons.Contributors)
+        link(about.openSource, strings.openSourceDescription, AndroidKitIcons.Code)
     }
     SettingsSection(entries = scope.entries, label = strings.openSource)
 }
@@ -108,42 +106,4 @@ private fun AndroidKitSettingSectionScope.link(
 ) {
     navigation(label = label, onClick = link.onClick,
         icon = icon, enabled = link.enabled, supportingText = supportingText)
-}
-
-@Composable
-internal fun SettingsSupportCard(support: AndroidKitSettingsSupport) {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val style = AndroidKitThemeTokens.settingSectionStyle
-    val strings = AndroidKitThemeTokens.strings
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = style.shape,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        ),
-    ) {
-        Column(
-            modifier = Modifier.padding(dimensions.spaceMedium),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium)) {
-                Icon(AndroidKitIcons.Support, contentDescription = null)
-                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
-                    Text(strings.supportTitle, style = style.entryLabelTextStyle)
-                    Text(strings.supportDescription, style = style.descriptionTextStyle)
-                }
-            }
-            Button(onClick = support.action.onClick, enabled = support.action.enabled, modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    support.action.icon?.let { Icon(it, contentDescription = null) }
-                    Text(support.action.label)
-                }
-            }
-            support.action.supportingText?.let { Text(it, style = style.descriptionTextStyle) }
-        }
-    }
 }

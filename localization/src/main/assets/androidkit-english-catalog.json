@@ -33,8 +33,6 @@
     "androidkit_settings_lock_after_five_minutes": { "value": "After 5 minutes", "revision": 1 },
     "androidkit_settings_lock_after_fifteen_minutes": { "value": "After 15 minutes", "revision": 1 },
     "androidkit_settings_lock_now": { "value": "Lock now", "revision": 1 },
-    "androidkit_support_title": { "value": "Support open-source development", "revision": 1 },
-    "androidkit_support_description": { "value": "Help maintain, test, and improve Android Kit.", "revision": 1 },
     "androidkit_get_involved": { "value": "Get involved", "revision": 1 },
     "androidkit_about": { "value": "About", "revision": 1 },
     "androidkit_version": { "value": "Version", "revision": 1 },

@@ -28,8 +28,6 @@
     "androidkit_settings_lock_after_five_minutes": { "revision": 1, "translations": { "fr": "Après 5 minutes", "ar": "بعد 5 دقائق" } },
     "androidkit_settings_lock_after_fifteen_minutes": { "revision": 1, "translations": { "fr": "Après 15 minutes", "ar": "بعد 15 دقيقة" } },
     "androidkit_settings_lock_now": { "revision": 1, "translations": { "fr": "Verrouiller maintenant", "ar": "قفل الآن" } },
-    "androidkit_support_title": { "revision": 1, "translations": { "fr": "Soutenir le développement open source", "ar": "دعم تطوير البرمجيات مفتوحة المصدر" } },
-    "androidkit_support_description": { "revision": 1, "translations": { "fr": "Aidez à maintenir, tester et améliorer Android Kit.", "ar": "ساهم في صيانة Android Kit واختباره وتحسينه." } },
     "androidkit_get_involved": { "revision": 1, "translations": { "fr": "Participer", "ar": "شارك" } },
     "androidkit_about": { "revision": 1, "translations": { "fr": "À propos", "ar": "حول" } },
     "androidkit_version": { "revision": 1, "translations": { "fr": "Version", "ar": "الإصدار" } },

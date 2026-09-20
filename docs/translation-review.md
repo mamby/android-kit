@@ -1,6 +1,28 @@
 # Shared vocabulary translation review
 
-## Current review: English and UX references (2026-09-14)
+## Settings reorganization (2026-09-15)
+
+The settings-only sponsor title and description were removed in all 18 Compose
+language sets; the separate reusable support-prompt copy remains. App info now
+uses translated Legal and Version sections. The Open source entry gained concise
+translated supporting text. The former Project repository, License, and
+Contribute settings strings were removed because no shared component uses them.
+All 18 language sets were reviewed against the English row and section roles.
+These translations are AI-assisted and have not received native-speaker review.
+
+The Open source description was subsequently refined to “Explore, use or
+contribute” in all 18 language sets. It presents optional ways to engage without
+claiming price or coupling the shared component to a repository host.
+It is the clickable entry label beneath the Open source section title, rather
+than supporting text beneath a duplicate Open source row label.
+The temporary App info supporting description was removed from all language sets.
+The Third-party licenses row also gained “Licenses for third-party software” as
+supporting text in all 18 language sets, clarifying that the destination covers
+software license notices rather than presenting a library browser.
+The copyable Version entry adds a localized “Copy version” accessibility action
+in all 18 language sets. The visible row remains the host-provided version value.
+
+## Previous review: English and UX references (2026-09-14)
 
 This review supersedes the scope and counts of the historical review below.
 It follows [the localization workflow](localization.md#translation-quality-workflow)

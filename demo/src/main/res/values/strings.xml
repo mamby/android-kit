@@ -129,9 +129,6 @@
     <string name="flyout_demo_pdf">PDF</string>
     <string name="flyout_demo_plain_text">Plain text</string>
     <string name="flyout_demo_image">Image (unavailable)</string>
-    <string name="settings_support_title">Support open-source development</string>
-    <string name="settings_support_description">Help maintain, test, and improve Android Kit.</string>
-    <string name="settings_support_action">Preview support action</string>
     <string name="settings_support_preview">This is a catalog preview. Apps provide their own support destination; no payment is collected here.</string>
     <string name="settings_about">About</string>
     <string name="settings_contact">Contact</string>

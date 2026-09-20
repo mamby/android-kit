@@ -128,9 +128,6 @@
     <string name="settings_lock_now">قفل الآن</string>
     <string name="demo_selected_action">الإجراء المحدد: %1$s</string>
     <string name="demo_no_action">لا شيء</string>
-    <string name="settings_support_title">دعم تطوير البرمجيات مفتوحة المصدر</string>
-    <string name="settings_support_description">ساهم في صيانة Android Kit واختباره وتحسينه.</string>
-    <string name="settings_support_action">معاينة إجراء الدعم</string>
     <string name="settings_support_preview">هذه معاينة في الكتالوج. يحدد كل تطبيق وجهة الدعم الخاصة به؛ لا يتم تحصيل أي دفعات هنا.</string>
     <string name="settings_about">حول</string>
     <string name="settings_contact">التواصل</string>

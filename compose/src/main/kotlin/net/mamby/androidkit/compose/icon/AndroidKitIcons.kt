@@ -21,6 +21,11 @@ internal object AndroidKitIcons {
     val Info: ImageVector = settingsIcon("Info", "M22 12A10 10 0 1 1 2 12A10 10 0 1 1 22 12 M12 16V12 M12 8H12.01")
     val Document: ImageVector = settingsIcon("FileText", "M14 2H6A2 2 0 0 0 4 4V20A2 2 0 0 0 6 22H18A2 2 0 0 0 20 20V8Z M14 2V8H20 M8 13H16 M8 17H16")
     val Code: ImageVector = settingsIcon("Code", "M16 18L22 12L16 6 M8 6L2 12L8 18")
+    val Copy: ImageVector = settingsIcon(
+        "Copy",
+        "M8 8H20A2 2 0 0 1 22 10V20A2 2 0 0 1 20 22H10A2 2 0 0 1 8 20Z " +
+            "M16 8V4A2 2 0 0 0 14 2H4A2 2 0 0 0 2 4V14A2 2 0 0 0 4 16H8",
+    )
     val Contributors: ImageVector = settingsIcon("Users", "M16 21V19A4 4 0 0 0 12 15H6A4 4 0 0 0 2 19V21 M13 7A4 4 0 1 1 5 7A4 4 0 1 1 13 7 M22 21V19A4 4 0 0 0 19 15.13 M16 3.13A4 4 0 0 1 16 10.87")
 
     private fun settingsIcon(name: String, data: String): ImageVector = lucideIcon(name = name) {

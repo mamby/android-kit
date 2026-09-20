@@ -3,13 +3,6 @@ package net.mamby.androidkit.demo.ui.screen
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
@@ -23,9 +16,7 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
-import net.mamby.androidkit.compose.form.AndroidKitSettingsSupport
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
-import net.mamby.androidkit.compose.form.AndroidKitSettingsAction
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.demo.BuildConfig
 import net.mamby.androidkit.demo.R
@@ -54,7 +45,6 @@ fun SettingsScreen(
     val localeManager = remember(context) {
         AppLocaleManager(context, SupportedLanguageTags.toSet())
     }
-    val actionCloseText = stringResource(R.string.action_close)
     val themeLightText = stringResource(R.string.theme_light)
     val themeDarkText = stringResource(R.string.theme_dark)
     val themePrismText = stringResource(R.string.theme_prism)
@@ -76,11 +66,7 @@ fun SettingsScreen(
         )
     }
     val uriHandler = LocalUriHandler.current
-    var showSupportPreview by rememberSaveable { mutableStateOf(false) }
     val configuration = AndroidKitSettingsPageConfiguration.Main(
-        support = AndroidKitSettingsSupport(
-            action = AndroidKitSettingsAction(stringResource(R.string.settings_support_action), { showSupportPreview = true }),
-        ),
         contact = AndroidKitSettingsLink(onClick = { uriHandler.openUri("https://github.com/mamby") }),
         appInfo = AndroidKitSettingsLink(onClick = onAppInfo),
     )
@@ -134,16 +120,6 @@ fun SettingsScreen(
             ),
         )
     }
-    if (showSupportPreview) {
-        AlertDialog(
-            onDismissRequest = { showSupportPreview = false },
-            title = { Text(stringResource(R.string.settings_support_action)) },
-            text = { Text(stringResource(R.string.settings_support_preview)) },
-            confirmButton = {
-                TextButton(onClick = { showSupportPreview = false }) { Text(actionCloseText) }
-            },
-        )
-    }
 }
 
 private const val CatalogRepository = "https://github.com/mamby/android-kit"
@@ -158,10 +134,7 @@ internal fun AppInfoScreen(onBack: () -> Unit) {
                 privacyPolicy = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
                 termsOfUse = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
                 libraries = AndroidKitSettingsLink(onClick = { uriHandler.openUri("$CatalogRepository/THIRD_PARTY_NOTICES.md") }),
-                projectRepository = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
-                contribute = AndroidKitSettingsLink(onClick = {
-                    uriHandler.openUri("$CatalogRepository/contribute")
-                }),
+                openSource = AndroidKitSettingsLink(onClick = { uriHandler.openUri(CatalogRepository) }),
             ),
         ),
         onBack = onBack,

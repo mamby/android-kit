@@ -120,25 +120,32 @@ viewport edge-to-edge. Do not add a second page-padding modifier in consumers.
 
 ## About and App info
 
-Main always appends About with Contact and App info, followed by the optional
-support/donation banner. Contact includes the Kit-owned localized subtext “Feedback or questions”; hosts cannot customize it. Both links are required. Get involved has been removed.
+Main always appends About with Contact and App info. Contact includes the Kit-owned
+localized subtext “Feedback or questions”; App info has no supporting text.
+Hosts cannot customize these labels or descriptions. Both links are required.
 Hosts own navigation and external destinations; the demo Contact opens the
 maintainer's GitHub profile.
 
 Render the predefined subpage with
 `AndroidKitSettingsPageConfiguration.AppInfo(AndroidKitSettingsAbout(`
 `version = version, privacyPolicy = privacyPolicy, termsOfUse = termsOfUse,`
-`libraries = thirdPartyLicenses, projectRepository = projectRepository,`
-`contribute = contribute))`.
+`libraries = thirdPartyLicenses, openSource = openSource))`.
 It uses the Kit-owned App info title and accepts the usual host Back callback.
 Its dedicated overload has no title, toolbar actions, or content builder parameters,
 so hosts cannot add sections or rows or replace its chrome. The overload accepting
 host sections takes `AndroidKitSettingsPageConfiguration.Customizable` (Main or
 Subpage); AppInfo cannot be passed to it.
-App always contains Terms of use, Privacy policy, Third-party licenses
-(`libraries`), and the required read-only Version, in that order. Open source
-always contains Project repository and Contribute. All five links and the
-version are required. No legal destinations are inferred.
+Legal always contains Terms of use, Privacy policy, and Third-party licenses
+(`libraries`), in that order. Third-party licenses includes the supporting text
+“Licenses for third-party software”. An unlabeled section contains the required read-only
+The titled Open source section appears next with “Explore, use or contribute” as
+its clickable entry. It is visible by default and can be omitted with
+`showOpenSource = false`. The titled Version section follows, with the version
+value as its entry. Tapping the version copies it to the system clipboard; the
+row exposes a localized Copy version accessibility action and a copy icon.
+Neither section repeats its title inside the entry.
+All three links and the version are required. No legal
+destinations are inferred.
 
 `AndroidKitSettingsLink` requires `onClick`; its label is always taken from the
 current `AndroidKitStrings`. Hosts supply only the click callback and enabled
@@ -150,14 +157,7 @@ version remains required host-owned data for the read-only Version row.
 Remove `supportingText` and `icon` arguments from existing
 `AndroidKitSettingsLink` calls; these customization fields are no longer public API.
 
-This changes the Main and About constructor contracts: replace inline `about`
-and `getInvolved` with required `contact` and `appInfo` links, and pass About
-data to the new AppInfo destination. About no longer accepts app identity,
-What's new, or Contact fields. All requested App info actions are required;
-only the donation banner is optional.
+Main requires `contact` and `appInfo` links. Pass legal links, the Open source
+destination, and version data to AppInfo. About no longer accepts app identity,
+What's new, support, or donation fields. All requested App info actions are required.
 Ordinary Subpage configurations still have no footer.
-
-Open source destinations are host-owned: `projectRepository` opens the project repository,
-and `contribute` opens contribution guidelines or the project contribution page.
-Migrate previous `sourceCode` and `contributors` callbacks to these fields and remove
-the separate `license` callback; the App section is unchanged.

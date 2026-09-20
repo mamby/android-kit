@@ -12,11 +12,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
-import net.mamby.androidkit.compose.form.AndroidKitSettingsAction
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
-import net.mamby.androidkit.compose.form.AndroidKitSettingsSupport
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -27,38 +25,30 @@ class SettingsCommunityBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun mainAlwaysShowsAboutAndOptionalSupportLast() {
+    fun mainAlwaysShowsAboutLinksInOrder() {
         var contactClicks = 0
         var appInfoClicks = 0
-        var supportClicks = 0
-        var showSupport by mutableStateOf(true)
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSettingsPage(
                     configuration = AndroidKitSettingsPageConfiguration.Main(
                         contact = AndroidKitSettingsLink(onClick = { contactClicks++ }),
                         appInfo = AndroidKitSettingsLink(onClick = { appInfoClicks++ }),
-                        support = if (showSupport) AndroidKitSettingsSupport(
-                            AndroidKitSettingsAction("Donate", { supportClicks++ }),
-                        ) else null,
                     ),
                 ) {
                     section("host") { info("Host setting") }
                 }
             }
         }
-        assertOrder("Host setting", "About", "Contact", "App info", "Donate")
-        for (label in listOf("Contact", "App info", "Donate")) {
+        assertOrder("Host setting", "About", "Contact", "App info")
+        for (label in listOf("Contact", "App info")) {
             scrollTo(label)
             rule.onNodeWithText(label).performClick()
         }
         rule.runOnIdle {
             assertEquals(1, contactClicks)
             assertEquals(1, appInfoClicks)
-            assertEquals(1, supportClicks)
-            showSupport = false
         }
-        rule.onNodeWithText("Donate").assertDoesNotExist()
         scrollTo("About")
         scrollTo("Contact")
         scrollTo("App info")
@@ -75,23 +65,21 @@ class SettingsCommunityBehaviorTest {
                     configuration = AndroidKitSettingsPageConfiguration.AppInfo(
                         AndroidKitSettingsAbout(
                             version = "1.0", privacyPolicy = link, termsOfUse = link,
-                            libraries = link, projectRepository = link,
-                            contribute = link,
+                            libraries = link, openSource = link,
                         ),
                     ),
                 )
             }
         }
-        assertOrder("App", "Terms of use", "Privacy policy", "Third-party licenses",
-            "Version", "Open source", "Project repository", "Contribute")
-        for (label in listOf("Privacy policy", "Terms of use", "Third-party licenses",
-            "Project repository", "Contribute")) {
+        assertOrder("Legal", "Terms of use", "Privacy policy", "Third-party licenses",
+            "Open source", "Version", "1.0")
+        for (label in listOf("Privacy policy", "Terms of use", "Third-party licenses", "Explore, use or contribute")) {
             scrollTo(label)
             rule.onNodeWithText(label).performClick()
         }
-        scrollTo("Contribute")
+        scrollTo("Version")
         rule.onNodeWithText("MIT").assertDoesNotExist()
-        rule.runOnIdle { assertEquals(5, clicks) }
+        rule.runOnIdle { assertEquals(4, clicks) }
         rule.onNodeWithText("Contact").assertDoesNotExist()
         rule.onNodeWithText("About").assertDoesNotExist()
     }
@@ -109,8 +97,7 @@ class SettingsCommunityBehaviorTest {
                             privacyPolicy = link,
                             termsOfUse = link,
                             libraries = link,
-                            projectRepository = link,
-                            contribute = link,
+                            openSource = link,
                         ),
                     ),
                 )
@@ -120,13 +107,10 @@ class SettingsCommunityBehaviorTest {
         rule.onNodeWithText("Privacy policy").assertIsDisplayed()
         rule.onNodeWithText("Terms of use").assertIsDisplayed()
         rule.onNodeWithText("Third-party licenses").assertIsDisplayed()
-        rule.onNodeWithText("Project repository").assertIsDisplayed()
-        rule.onNodeWithText("License").assertDoesNotExist()
-        rule.onNodeWithText("Contribute").assertIsDisplayed()
         rule.runOnIdle { version = "2.0" }
         rule.onNodeWithText("2.0").assertIsDisplayed()
         rule.onNodeWithText("1.0").assertDoesNotExist()
-        rule.onNodeWithText("Open source").assertIsDisplayed()
+        rule.onNodeWithText("Legal").assertIsDisplayed()
         rule.runOnIdle { assertEquals(0, clicks) }
     }
 

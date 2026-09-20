@@ -252,6 +252,15 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
         entries += SettingsEntryDefinition.Info(label, value, supportingText, icon, modifier)
     }
 
+    fun copyableInfo(
+        label: String,
+        onClickLabel: String,
+        onClick: () -> Unit,
+        icon: ImageVector? = null,
+    ) {
+        entries += SettingsEntryDefinition.CopyableInfo(label, onClickLabel, onClick, icon)
+    }
+
 }
 
 internal sealed interface SettingsEntryDefinition {
@@ -306,6 +315,15 @@ internal sealed interface SettingsEntryDefinition {
         override val modifier: Modifier,
     ) : SettingsEntryDefinition
 
+    class CopyableInfo(
+        override val label: String,
+        val onClickLabel: String,
+        val onClick: () -> Unit,
+        override val icon: ImageVector?,
+        override val modifier: Modifier = Modifier,
+        override val supportingText: String? = null,
+    ) : SettingsEntryDefinition
+
 }
 
 @Composable
@@ -317,6 +335,27 @@ private fun SettingsEntry(
     is SettingsEntryDefinition.Button -> SettingsButtonEntry(entry, style, contentPadding)
     is SettingsEntryDefinition.Slider -> SettingsSliderEntry(entry, style, contentPadding)
     is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry, style, contentPadding)
+    is SettingsEntryDefinition.CopyableInfo -> SettingsEntryContent(
+        label = entry.label,
+        supportingText = null,
+        icon = entry.icon,
+        modifier = entry.modifier
+            .fillMaxWidth()
+            .clickable(
+                onClickLabel = entry.onClickLabel,
+                role = Role.Button,
+                onClick = entry.onClick,
+            )
+            .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget),
+        style = style,
+        contentPadding = contentPadding,
+    ) {
+        Icon(
+            imageVector = AndroidKitIcons.Copy,
+            contentDescription = null,
+            tint = style.secondaryContentColor,
+        )
+    }
     is SettingsEntryDefinition.Info -> SettingsEntryContent(
         label = entry.label, supportingText = entry.supportingText, icon = entry.icon,
         modifier = entry.modifier.fillMaxWidth()
