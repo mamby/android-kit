@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionButtonStyle
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarStyle
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingSearchBoxStyle
 import net.mamby.androidkit.compose.form.AndroidKitFloatingSearchBox
 
 /** Data for floating chrome. AndroidKit exclusively renders its controls. */
@@ -21,7 +20,6 @@ public sealed interface AndroidKitFloatingAction {
         public val enabled: Boolean = true,
         public val voiceInputEnabled: Boolean = true,
         public val modifier: Modifier = Modifier,
-        public val style: AndroidKitFloatingSearchBoxStyle = AndroidKitFloatingSearchBoxStyle(),
     ) : AndroidKitFloatingAction
 
     public class Button private constructor(
@@ -65,7 +63,6 @@ internal fun RenderFloatingAction(action: AndroidKitFloatingAction?) {
             modifier = action.modifier,
             enabled = action.enabled,
             voiceInputEnabled = action.voiceInputEnabled,
-            style = action.style,
         )
         is AndroidKitFloatingAction.Button -> AndroidKitFloatingActionButton(action)
         is AndroidKitFloatingAction.Bar -> AndroidKitFloatingActionBar(

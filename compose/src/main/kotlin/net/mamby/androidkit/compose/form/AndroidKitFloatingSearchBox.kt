@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -35,7 +36,6 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingSearchBoxStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
@@ -44,6 +44,7 @@ import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
  * Controlled search input. Hosts own placement, system/IME insets and query persistence.
  * Use AndroidKitFloatingAction.Search for measured placement in Kit pages and sheets.
  * Voice input opens the device recognizer; returned text replaces the query without submitting.
+ * Shape, typography, icons and control rendering are Kit-owned; shared theme tokens supply colors.
  */
 @Composable
 public fun AndroidKitFloatingSearchBox(
@@ -53,11 +54,10 @@ public fun AndroidKitFloatingSearchBox(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     voiceInputEnabled: Boolean = true,
-    style: AndroidKitFloatingSearchBoxStyle = AndroidKitFloatingSearchBoxStyle(),
 ): Unit {
     val strings = AndroidKitThemeTokens.strings
     val dimensions = AndroidKitThemeTokens.dimensions
-    val surfaceStyle = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle
+    val surfaceStyle = AndroidKitThemeTokens.floatingSurfaceStyle
     val visuals = floatingSurfaceVisuals(surfaceStyle)
     val keyboard = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -73,7 +73,7 @@ public fun AndroidKitFloatingSearchBox(
 
     Column(modifier = modifier.fillMaxWidth()) {
         FloatingSurface(
-            shape = style.shape,
+            shape = CircleShape,
             style = surfaceStyle,
         ) {
             TextField(
@@ -86,8 +86,8 @@ public fun AndroidKitFloatingSearchBox(
                     .semantics { contentDescription = strings.search },
                 enabled = enabled,
                 singleLine = true,
-                textStyle = style.textStyle ?: AndroidKitThemeTokens.typography.bodyLarge,
-                shape = style.shape,
+                textStyle = AndroidKitThemeTokens.typography.bodyLarge,
+                shape = CircleShape,
                 placeholder = { Text(strings.search) },
                 leadingIcon = {
                     Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))

@@ -1,16 +1,25 @@
 # Component ownership
 
-AndroidKit owns every component's chrome, layout, typography defaults, interaction
-semantics, and control rendering. Consumers provide typed data, state, callbacks,
-and explicit theme or component styles. Render scopes and implementations stay
-internal or private; public declaration scopes cannot be implemented by consumers.
+AndroidKit is opinionated. New components seal shape, typography, icons, labels,
+control arrangement, chrome, interaction semantics and control rendering by
+default. Consumers provide typed content/data, state, callbacks, availability
+options, placement and supported theme colors. Components follow shared Kit
+theme tokens internally; they do not expose per-component shape, icon, typography
+or rendering overrides that let hosts redesign the control. A host wanting a
+different visual direction should implement its own component. Depart from this
+default only when explicitly requested.
+
+Existing component style APIs described below remain until explicitly migrated;
+they are not a precedent for adding equivalent extensibility to new components.
+Render scopes and implementations stay internal or private; public declaration
+scopes cannot be implemented by consumers.
 
 App-specific body content remains composable inside `AndroidKitPage`,
 `AndroidKitCard`, and `AndroidKitBottomSheet`. The `content` parameter of
 `AndroidKitFloatingNavigation` is the destination screen displayed alongside the
 navigation bar, rail, or drawer. It cannot replace navigation items, their
 renderers, badges, or the overflow menu. Apps supply those through typed data and
-styles. The public theme also retains its composition slot.
+supported styling. The public theme also retains its composition slot.
 
 ## Migration
 
@@ -37,6 +46,8 @@ escape hatch. Migrate consumers and the demo with the library.
   or `AndroidKitFloatingAction.Bar { ... }` to page/sheet floating-action parameters.
   `AndroidKitFloatingAction.Search` adds controlled floating search with device
   speech input. See [floating search](floating-search.md) for usage and compatibility.
+  Search has no component style override: its shape, typography, icons and control
+  arrangement are internal and follow Kit's design and shared theme tokens.
   Standalone buttons use `AndroidKitFloatingActionButton(action)`. Button icons
   accept vectors or painters; Kit owns icon rendering. Optional tooltip text is data.
 - Pages: use title, back callback, and action data; the custom `topBar` is removed.
@@ -47,7 +58,8 @@ escape hatch. Migrate consumers and the demo with the library.
 - Navigation: supply `AndroidKitNavigationBadge(label, contentDescription)`;
   a null badge hides it, while a badge with null label renders a dot.
 
-Outer modifiers and explicit style/layout parameters remain supported. Authentication,
+Outer modifiers and existing style/layout parameters remain supported; new
+components follow the sealed default above. Authentication,
 persistence, application-content localization, navigation decisions, and application
 state belong to consumers. Kit-owned vocabulary is translated only in Kit and is
 not overridable. Consumers must apply the [localization build gate](localization.md).

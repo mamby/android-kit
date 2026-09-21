@@ -75,11 +75,17 @@ If the activity is missing or launch is denied, Kit shows an accessible localize
 error beneath the pill. Typing, clearing or retrying dismisses that error. Speech
 recognition errors inside the external speech UI belong to that provider.
 
-`AndroidKitFloatingSearchBoxStyle` exposes shape, text style and an optional shared
-floating-surface style. Defaults follow Kit typography, floating opacity, border
-and shadow. Control rendering is not replaceable.
+Shape, typography, icons, labels, control arrangement and interaction behavior
+are Kit-owned. There is no component style parameter or custom rendering slot.
+The component follows shared Kit theme colors, typography and floating-surface
+tokens. Hosts supply query/state, callbacks, availability and outer placement;
+a different visual direction requires a host-owned component.
 
 ## Compatibility
+
+The former `AndroidKitFloatingSearchBoxStyle` and `style` arguments on the
+standalone component and `AndroidKitFloatingAction.Search` have been removed.
+Remove those arguments from existing call sites; there is no replacement override.
 
 The `Search` variant extends the sealed `AndroidKitFloatingAction` interface.
 Consumers with exhaustive `when` expressions over this interface must add a

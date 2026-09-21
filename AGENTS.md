@@ -4,11 +4,18 @@ Use Kotlin, Jetpack Compose, AndroidX, Material 3, Navigation 3, coroutines and
 official Android APIs. Keep the published modules app-agnostic and keep demo-only
 branding and the Prism theme inside `demo`.
 
-Keep Kit-owned chrome and child-control rendering internal. Public component APIs
-accept typed data, state, callbacks, and explicit styles; do not add arbitrary
-rendering slots for headers, controls, menus, settings rows, or badges. Preserve
-app body slots in pages, cards, sheets, and navigation. See
-[docs/component-contract.md](docs/component-contract.md).
+AndroidKit is opinionated. For new components, keep shape, typography, icons,
+labels, control arrangement, chrome, and interaction behavior Kit-owned and
+sealed by default. Public APIs accept typed content/data, state, callbacks,
+availability options, placement, and supported theme colors. Do not expose
+component style objects or parameters that let hosts redesign Kit controls, or
+arbitrary rendering slots for headers, controls, menus, settings rows, or badges.
+Follow shared Kit theme tokens internally; preserve app body slots in pages,
+cards, sheets, and navigation. Hosts wanting a different visual direction should
+implement their own component. Depart from this default only when explicitly
+requested. Existing style APIs are not authorization to copy their extensibility
+into new components, nor a request to migrate them outside the current scope.
+See [docs/component-contract.md](docs/component-contract.md).
 
 All automated test source belongs to the top-level `test` module. Before changing
 or executing the test suites, read [docs/testing.md](docs/testing.md). Do not put
