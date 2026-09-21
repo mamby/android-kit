@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">Geri</string>
-    <string name="androidkit_compose_add">Ekle</string>
     <string name="androidkit_compose_close">Kapat</string>
     <string name="androidkit_compose_more">Diğer</string>
-    <string name="androidkit_compose_retry">Yeniden dene</string>
-    <string name="androidkit_compose_cancel">İptal</string>
-    <string name="androidkit_compose_confirm">Onayla</string>
-    <string name="androidkit_compose_save">Kaydet</string>
     <string name="androidkit_compose_hide_title_bar">Başlık çubuğunu gizle</string>
     <string name="androidkit_compose_show_title_bar">Başlık çubuğunu göster</string>
-    <string name="androidkit_compose_general">Genel</string>
     <string name="androidkit_compose_language">Dil</string>
     <string name="androidkit_compose_theme">Tema</string>
     <string name="androidkit_compose_transparency">Şeffaflık</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">Dil ara</string>
     <string name="androidkit_compose_no_matching_languages">Eşleşen dil yok</string>
     <string name="androidkit_compose_system">Sistem</string>
-    <string name="androidkit_compose_security">Güvenlik</string>
     <string name="androidkit_compose_app_lock">Uygulama kilidi</string>
     <string name="androidkit_compose_lock_after_leaving_app">Uygulamadan çıktıktan sonra kilitle</string>
-    <string name="androidkit_compose_immediately">Hemen</string>
-    <string name="androidkit_compose_after_one_minute">1 dakika sonra</string>
-    <string name="androidkit_compose_after_five_minutes">5 dakika sonra</string>
-    <string name="androidkit_compose_after_fifteen_minutes">15 dakika sonra</string>
     <string name="androidkit_compose_lock_now">Şimdi kilitle</string>
     <string name="androidkit_compose_about">Hakkında</string>
-    <string name="androidkit_compose_about_description">İletişim, yasal bilgiler ve daha fazlası</string>
     <string name="androidkit_compose_version">Sürüm</string>
     <string name="androidkit_compose_copy_version">Sürümü kopyala</string>
-    <string name="androidkit_compose_open_source">Açık kaynak</string>
-    <string name="androidkit_compose_open_source_description">Keşfet, kullan veya katkıda bulun</string>
     <string name="androidkit_compose_contact">İletişim</string>
-    <string name="androidkit_compose_app_info">Uygulama bilgileri</string>
-    <string name="androidkit_compose_legal">Yasal bilgiler</string>
     <string name="androidkit_compose_privacy_policy">Gizlilik politikası</string>
     <string name="androidkit_compose_terms_of_use">Kullanım koşulları</string>
     <string name="androidkit_compose_third_party_licenses">Üçüncü taraf lisansları</string>
-    <string name="androidkit_compose_third_party_licenses_description">Üçüncü taraf yazılım lisansları</string>
     <string name="androidkit_compose_support_prompt_title">Uygulamayı beğendiniz mi?</string>
     <string name="androidkit_compose_support_prompt_description">Geliştirilmesini desteklemek isterseniz bağışlarınız memnuniyetle karşılanır, ancak hiçbir zaman zorunlu değildir.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Daha fazla bilgi</string>
     <string name="androidkit_compose_support_prompt_not_now">Şimdi değil</string>
     <string name="androidkit_compose_support_prompt_donate">Bağış yap</string>
     <string name="androidkit_compose_contact_description">Geri bildirim veya sorular</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">Uygulama bilgileri</string>
-    <string name="androidkit_compose_project">Proje</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Web sitesi</string>
     <string name="androidkit_compose_source_code">Kaynak kodu</string>
 </resources>

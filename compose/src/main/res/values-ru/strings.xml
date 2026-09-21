@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">Назад</string>
-    <string name="androidkit_compose_add">Добавить</string>
     <string name="androidkit_compose_close">Закрыть</string>
     <string name="androidkit_compose_more">Ещё</string>
-    <string name="androidkit_compose_retry">Повторить</string>
-    <string name="androidkit_compose_cancel">Отмена</string>
-    <string name="androidkit_compose_confirm">Подтвердить</string>
-    <string name="androidkit_compose_save">Сохранить</string>
     <string name="androidkit_compose_hide_title_bar">Скрыть строку заголовка</string>
     <string name="androidkit_compose_show_title_bar">Показать строку заголовка</string>
-    <string name="androidkit_compose_general">Общие</string>
     <string name="androidkit_compose_language">Язык</string>
     <string name="androidkit_compose_theme">Тема</string>
     <string name="androidkit_compose_transparency">Прозрачность</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">Поиск языков</string>
     <string name="androidkit_compose_no_matching_languages">Нет подходящих языков</string>
     <string name="androidkit_compose_system">Система</string>
-    <string name="androidkit_compose_security">Безопасность</string>
     <string name="androidkit_compose_app_lock">Блокировка приложения</string>
     <string name="androidkit_compose_lock_after_leaving_app">Блокировать после выхода из приложения</string>
-    <string name="androidkit_compose_immediately">Сразу</string>
-    <string name="androidkit_compose_after_one_minute">Через 1 минуту</string>
-    <string name="androidkit_compose_after_five_minutes">Через 5 минут</string>
-    <string name="androidkit_compose_after_fifteen_minutes">Через 15 минут</string>
     <string name="androidkit_compose_lock_now">Заблокировать сейчас</string>
     <string name="androidkit_compose_about">О приложении</string>
-    <string name="androidkit_compose_about_description">Контакты, правовая информация и другое</string>
     <string name="androidkit_compose_version">Версия</string>
     <string name="androidkit_compose_copy_version">Копировать версию</string>
-    <string name="androidkit_compose_open_source">Открытый исходный код</string>
-    <string name="androidkit_compose_open_source_description">Изучайте, используйте или участвуйте</string>
     <string name="androidkit_compose_contact">Контакты</string>
-    <string name="androidkit_compose_app_info">Информация о приложении</string>
-    <string name="androidkit_compose_legal">Правовая информация</string>
     <string name="androidkit_compose_privacy_policy">Политика конфиденциальности</string>
     <string name="androidkit_compose_terms_of_use">Условия использования</string>
     <string name="androidkit_compose_third_party_licenses">Лицензии третьих сторон</string>
-    <string name="androidkit_compose_third_party_licenses_description">Лицензии на стороннее программное обеспечение</string>
     <string name="androidkit_compose_support_prompt_title">Нравится приложение?</string>
     <string name="androidkit_compose_support_prompt_description">Если вы хотите поддержать разработку, будем благодарны за пожертвования. Пожертвования всегда добровольны.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Подробнее</string>
     <string name="androidkit_compose_support_prompt_not_now">Не сейчас</string>
     <string name="androidkit_compose_support_prompt_donate">Пожертвовать</string>
     <string name="androidkit_compose_contact_description">Отзывы или вопросы</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">О приложении</string>
-    <string name="androidkit_compose_project">Проект</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Веб-сайт</string>
     <string name="androidkit_compose_source_code">Исходный код</string>
 </resources>

@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">戻る</string>
-    <string name="androidkit_compose_add">追加</string>
     <string name="androidkit_compose_close">閉じる</string>
     <string name="androidkit_compose_more">その他</string>
-    <string name="androidkit_compose_retry">再試行</string>
-    <string name="androidkit_compose_cancel">キャンセル</string>
-    <string name="androidkit_compose_confirm">確認</string>
-    <string name="androidkit_compose_save">保存</string>
     <string name="androidkit_compose_hide_title_bar">タイトルバーを非表示</string>
     <string name="androidkit_compose_show_title_bar">タイトルバーを表示</string>
-    <string name="androidkit_compose_general">一般</string>
     <string name="androidkit_compose_language">言語</string>
     <string name="androidkit_compose_theme">テーマ</string>
     <string name="androidkit_compose_transparency">透明度</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">言語を検索</string>
     <string name="androidkit_compose_no_matching_languages">一致する言語がありません</string>
     <string name="androidkit_compose_system">システム</string>
-    <string name="androidkit_compose_security">セキュリティ</string>
     <string name="androidkit_compose_app_lock">アプリロック</string>
     <string name="androidkit_compose_lock_after_leaving_app">アプリを離れた後にロック</string>
-    <string name="androidkit_compose_immediately">すぐに</string>
-    <string name="androidkit_compose_after_one_minute">1分後</string>
-    <string name="androidkit_compose_after_five_minutes">5分後</string>
-    <string name="androidkit_compose_after_fifteen_minutes">15分後</string>
     <string name="androidkit_compose_lock_now">今すぐロック</string>
     <string name="androidkit_compose_about">このアプリについて</string>
-    <string name="androidkit_compose_about_description">お問い合わせ、法的情報など</string>
     <string name="androidkit_compose_version">バージョン</string>
     <string name="androidkit_compose_copy_version">バージョンをコピー</string>
-    <string name="androidkit_compose_open_source">オープンソース</string>
-    <string name="androidkit_compose_open_source_description">探索、利用、貢献</string>
     <string name="androidkit_compose_contact">お問い合わせ</string>
-    <string name="androidkit_compose_app_info">アプリ情報</string>
-    <string name="androidkit_compose_legal">法的情報</string>
     <string name="androidkit_compose_privacy_policy">プライバシーポリシー</string>
     <string name="androidkit_compose_terms_of_use">利用規約</string>
     <string name="androidkit_compose_third_party_licenses">サードパーティのライセンス</string>
-    <string name="androidkit_compose_third_party_licenses_description">サードパーティ製ソフトウェアのライセンス</string>
     <string name="androidkit_compose_support_prompt_title">アプリを気に入っていただけましたか？</string>
     <string name="androidkit_compose_support_prompt_description">開発を支援していただける場合は、寄付を歓迎します。寄付は任意です。</string>
     <string name="androidkit_compose_support_prompt_learn_more">詳しく見る</string>
     <string name="androidkit_compose_support_prompt_not_now">今はしない</string>
     <string name="androidkit_compose_support_prompt_donate">寄付する</string>
     <string name="androidkit_compose_contact_description">フィードバックまたは質問</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">アプリ情報</string>
-    <string name="androidkit_compose_project">プロジェクト</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">ウェブサイト</string>
     <string name="androidkit_compose_source_code">ソースコード</string>
 </resources>

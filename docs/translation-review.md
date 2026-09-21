@@ -251,3 +251,23 @@ XML parsing and duplicate-key checks passed. Wording received an AI review again
 English and the actual call site, not native-speaker approval. No new external
 terminology references were used. Idiomatic quality and device layout remain
 unverified; compilation is not linguistic assurance.
+
+### Final unused-translation audit (2026-09-21)
+
+The About hint was removed again; the earlier hint entry above is historical.
+Audited all component modules and the demo for resource references, including
+Kotlin/Java references, XML references, plurals and string arrays. Checked internal
+AndroidKitStrings consumers rather than counting resolver assignments as UI usage.
+Removed 17 unused internal fields and their resources, plus the obsolete Open
+source description and App info label. Removed unreferenced demo strings across
+English, French and Arabic. Kit removals cover all 18 supported locales.
+No active translated wording was changed. XML parsing and source-reference checks
+were used; no tests were executed and no linguistic or device review is claimed.
+
+Also removed the unused legacy English JSON catalog and demo JSON translation
+snapshot after confirming no build or host configuration consumes them. Earlier
+review entries referring to these files are historical. The retained legacy
+validator can still accept externally supplied catalogs, but current builds use
+the sealed resource contract. Final source audit found no unreferenced translation
+resources in any Kit module or demo; locale key sets align (31 Kit, 105 demo
+including the nontranslatable app name).

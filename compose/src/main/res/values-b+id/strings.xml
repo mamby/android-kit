@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">Kembali</string>
-    <string name="androidkit_compose_add">Tambah</string>
     <string name="androidkit_compose_close">Tutup</string>
     <string name="androidkit_compose_more">Lainnya</string>
-    <string name="androidkit_compose_retry">Coba lagi</string>
-    <string name="androidkit_compose_cancel">Batal</string>
-    <string name="androidkit_compose_confirm">Konfirmasi</string>
-    <string name="androidkit_compose_save">Simpan</string>
     <string name="androidkit_compose_hide_title_bar">Sembunyikan bilah judul</string>
     <string name="androidkit_compose_show_title_bar">Tampilkan bilah judul</string>
-    <string name="androidkit_compose_general">Umum</string>
     <string name="androidkit_compose_language">Bahasa</string>
     <string name="androidkit_compose_theme">Tema</string>
     <string name="androidkit_compose_transparency">Transparansi</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">Cari bahasa</string>
     <string name="androidkit_compose_no_matching_languages">Tidak ada bahasa yang cocok</string>
     <string name="androidkit_compose_system">Sistem</string>
-    <string name="androidkit_compose_security">Keamanan</string>
     <string name="androidkit_compose_app_lock">Kunci aplikasi</string>
     <string name="androidkit_compose_lock_after_leaving_app">Kunci setelah keluar dari aplikasi</string>
-    <string name="androidkit_compose_immediately">Segera</string>
-    <string name="androidkit_compose_after_one_minute">Setelah 1 menit</string>
-    <string name="androidkit_compose_after_five_minutes">Setelah 5 menit</string>
-    <string name="androidkit_compose_after_fifteen_minutes">Setelah 15 menit</string>
     <string name="androidkit_compose_lock_now">Kunci sekarang</string>
     <string name="androidkit_compose_about">Tentang</string>
-    <string name="androidkit_compose_about_description">Kontak, informasi hukum, dan lainnya</string>
     <string name="androidkit_compose_version">Versi</string>
     <string name="androidkit_compose_copy_version">Salin versi</string>
-    <string name="androidkit_compose_open_source">Sumber terbuka</string>
-    <string name="androidkit_compose_open_source_description">Jelajahi, gunakan, atau berkontribusi</string>
     <string name="androidkit_compose_contact">Kontak</string>
-    <string name="androidkit_compose_app_info">Info aplikasi</string>
-    <string name="androidkit_compose_legal">Hukum</string>
     <string name="androidkit_compose_privacy_policy">Kebijakan privasi</string>
     <string name="androidkit_compose_terms_of_use">Ketentuan penggunaan</string>
     <string name="androidkit_compose_third_party_licenses">Lisensi pihak ketiga</string>
-    <string name="androidkit_compose_third_party_licenses_description">Lisensi untuk perangkat lunak pihak ketiga</string>
     <string name="androidkit_compose_support_prompt_title">Suka aplikasi ini?</string>
     <string name="androidkit_compose_support_prompt_description">Jika ingin mendukung pengembangannya, donasi sangat dihargai, tetapi tidak pernah diwajibkan.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Pelajari lebih lanjut</string>
     <string name="androidkit_compose_support_prompt_not_now">Tidak sekarang</string>
     <string name="androidkit_compose_support_prompt_donate">Donasi</string>
     <string name="androidkit_compose_contact_description">Masukan atau pertanyaan</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">Informasi aplikasi</string>
-    <string name="androidkit_compose_project">Proyek</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Situs web</string>
     <string name="androidkit_compose_source_code">Kode sumber</string>
 </resources>

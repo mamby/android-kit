@@ -119,9 +119,10 @@ per-language review coverage, and the distinction between resource validation an
 native-speaker approval. Preserve the translator context comments in the English
 resources when updating translations.
 
-The previous English catalog and host snapshot validator are legacy artifacts.
-They do not satisfy the new contract; replace their application with the new
-validator. Existing files are retained for older consumers.
+The unused English catalog and demo translation snapshot have been removed.
+The old host snapshot validator is retained only for older consumers supplying
+their own catalogs; it does not satisfy the sealed contract. Current consumers
+must use the resource validator above.
 
 Run `./test/gradle/verify-localization.ps1` for the packaging-gate regression suite.
 Fixtures stay under `test`; generated fixture outputs stay under `demo/build`.

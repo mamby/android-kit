@@ -72,7 +72,7 @@ public sealed interface AndroidKitSettingsPageConfiguration {
 internal fun SettingsAboutSection(about: AndroidKitSettingsLink) {
     val strings = AndroidKitThemeTokens.strings
     val scope = SettingSectionScopeImpl().apply {
-        link(about, strings.about, AndroidKitIcons.Info, strings.aboutDescription)
+        link(about, strings.about, AndroidKitIcons.Info)
     }
     SettingsSection(entries = scope.entries)
 }

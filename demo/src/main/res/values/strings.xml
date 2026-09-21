@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Android Kit</string>
-    <string name="action_back">Back</string>
     <string name="action_add">Add</string>
     <string name="action_close">Close</string>
-    <string name="action_more">More</string>
     <string name="action_retry">Retry</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
@@ -11,8 +9,6 @@
     <string name="action_share">Share</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
-    <string name="action_hide_title_bar">Hide title bar</string>
-    <string name="action_show_title_bar">Show title bar</string>
     <string name="nav_components">Components</string>
     <string name="nav_localization">Localization</string>
     <string name="nav_settings">Settings</string>
@@ -21,7 +17,6 @@
     <string name="dummy_navigation_instruction">Open More when it is available to move between overflow destinations.</string>
     <string name="component_placeholder_body">Select a component variation to open its interactive demo.</string>
     <string name="primary_action">Primary action</string>
-    <string name="active_variation">Active variation</string>
     <string name="component_enabled">Enabled</string>
     <string name="action_count">Actions invoked: %1$d</string>
     <string name="localization_title">Localization</string>
@@ -39,16 +34,9 @@
     <string name="sample_design">Design</string>
     <string name="sample_code">Code</string>
     <string name="settings_title">Catalog settings</string>
-    <string name="appearance_section">Appearance</string>
-    <string name="appearance_section_description">Light and Dark belong to the library. Prism exists only in this demo.</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="theme_prism">Prism</string>
-    <string name="theme_prism_description">A colorful app-defined theme that proves the public extension point.</string>
-    <string name="floating_surface_opacity">Transparency</string>
-    <string name="floating_surface_opacity_description">Adjusts floating surfaces from the default translucency to fully opaque.</string>
-    <string name="floating_surface_opacity_value">%1$d%%</string>
-    <string name="open_sheet">Open example sheet</string>
     <string name="sheet_title">Reusable sheet</string>
     <string name="sheet_detail_title">Sheet detail</string>
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
@@ -56,8 +44,6 @@
     <string name="variation_basic">Basic</string>
     <string name="variation_with_title">With title</string>
     <string name="variation_with_floating_action_button">With floating action button</string>
-    <string name="variation_back_only">Back only</string>
-    <string name="variation_back_title">Back and title</string>
     <string name="variation_back_title_actions">Back, title and actions</string>
     <string name="variation_immersive_mode">Immersive mode</string>
     <string name="variation_top_start">Top start</string>
@@ -68,10 +54,6 @@
     <string name="variation_bottom_end">Bottom end</string>
     <string name="variation_supporting_text">Supporting text</string>
     <string name="variation_rich_content">Rich content</string>
-    <string name="variation_button_entry">Button entry</string>
-    <string name="variation_toggle_entry">Toggle entry</string>
-    <string name="variation_grouped_entries">Grouped entries</string>
-    <string name="variation_titleless">Titleless</string>
     <string name="variation_standard">Standard</string>
     <string name="variation_back_navigation">Back navigation</string>
     <string name="variation_header_actions">Header actions</string>
@@ -89,9 +71,6 @@
     <string name="demo_section_title">Example section</string>
     <string name="demo_supporting_text">Optional supporting text explains the content.</string>
     <string name="demo_section_body">The caller provides the section’s content.</string>
-    <string name="demo_setting_title">Example setting</string>
-    <string name="demo_setting_supporting_text">Optional supporting text can explain an individual setting.</string>
-    <string name="page_title_bar_demo_instruction">Use the visible controls. In immersive mode, tap anywhere on the page except an action to hide or show the title bar.</string>
     <string name="floating_navigation_labels_title">Icons + labels</string>
     <string name="floating_navigation_labels_description">Off shows icons only. The choice remains active when changing destinations.</string>
     <string name="floating_navigation_five_items_title">5 items with More</string>
@@ -100,26 +79,17 @@
     <string name="floating_navigation_seven_items_description">Shows seven destinations; items that do not fit move into More.</string>
     <string name="floating_navigation_scenario_instruction">These choices persist across destination changes.</string>
     <string name="demo_scroll_text">This muted block provides enough content to verify that the page scrolls while floating controls remain anchored.\n\nThe second paragraph makes line wrapping, text scaling, and spacing visible across compact and expanded windows.\n\nA third paragraph extends the page beyond the initial viewport without introducing another visual surface.\n\nThe fourth paragraph helps verify that scrolling remains smooth beneath floating title and action controls.\n\nThe fifth paragraph keeps the example neutral so attention remains on the component currently being demonstrated.\n\nThe sixth paragraph provides more distance for checking immersive title-bar visibility.\n\nThe seventh paragraph confirms that long content remains readable with larger accessibility text sizes.\n\nThe eighth paragraph makes bottom navigation clearance easier to inspect near the end of the page.\n\nThe ninth paragraph checks that spacing stays consistent after a longer continuous block of content.\n\nThe tenth and final paragraph confirms that all content remains reachable above navigation and system insets.</string>
-    <string name="settings_general">General</string>
     <string name="settings_language">Language</string>
     <string name="settings_security">Security</string>
-    <string name="settings_theme">Theme</string>
-    <string name="settings_min">Min</string>
-    <string name="settings_max">Max</string>
-    <string name="settings_search_languages">Search languages</string>
-    <string name="settings_no_languages">No matching languages</string>
     <string name="settings_app_lock">App lock</string>
     <string name="lock_page_message">Unlock to continue</string>
     <string name="lock_page_unlock">Unlock</string>
-    <string name="settings_app_lock_description">Require authentication when opening the app or after the selected time away.</string>
-    <string name="settings_app_lock_timeout">Lock after leaving the app</string>
     <string name="settings_lock_immediately">Immediately</string>
     <string name="settings_lock_after_one_minute">After 1 minute</string>
     <string name="settings_lock_after_five_minutes">After 5 minutes</string>
     <string name="settings_lock_after_fifteen_minutes">After 15 minutes</string>
     <string name="app_lock_unavailable">Set up a screen lock or biometrics in device settings, then try again.</string>
     <string name="app_lock_authenticate">Confirm your identity to continue</string>
-    <string name="settings_lock_now">Lock now</string>
     <string name="demo_selected_action">Selected action: %1$s</string>
     <string name="demo_no_action">None</string>
     <string name="variation_submenus">Nested submenus</string>
@@ -130,18 +100,7 @@
     <string name="flyout_demo_plain_text">Plain text</string>
     <string name="flyout_demo_image">Image (unavailable)</string>
     <string name="settings_support_preview">This is a catalog preview. Apps provide their own support destination; no payment is collected here.</string>
-    <string name="settings_about">About</string>
     <string name="settings_about_description">A catalog of reusable Android UI components and patterns.</string>
-    <string name="settings_contact">Contact</string>
-    <string name="settings_app_info">App info</string>
-    <string name="settings_app">App</string>
-    <string name="settings_privacy_policy">Privacy policy</string>
-    <string name="settings_terms_of_use">Terms of use</string>
-    <string name="settings_third_party_licenses">Third-party licenses</string>
-    <string name="settings_version">Version</string>
-    <string name="settings_open_source">Open source</string>
-    <string name="settings_license">License</string>
-    <string name="settings_source_code">Source code</string>
     <string name="settings_contributors">Contributors</string>
     <string name="settings_appearance">Appearance</string>
 </resources>

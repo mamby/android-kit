@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">Back</string>
-    <string name="androidkit_compose_add">Add</string>
     <string name="androidkit_compose_close">Close</string>
     <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
     <string name="androidkit_compose_more">More</string>
-    <string name="androidkit_compose_retry">Retry</string>
-    <string name="androidkit_compose_cancel">Cancel</string>
-    <string name="androidkit_compose_confirm">Confirm</string>
-    <string name="androidkit_compose_save">Save</string>
     <string name="androidkit_compose_hide_title_bar">Hide title bar</string>
     <string name="androidkit_compose_show_title_bar">Show title bar</string>
-    <string name="androidkit_compose_general">General</string>
     <string name="androidkit_compose_language">Language</string>
     <string name="androidkit_compose_theme">Theme</string>
     <!-- Visual surface transparency, not organizational transparency or opacity. -->
@@ -22,35 +16,21 @@
     <string name="androidkit_compose_no_matching_languages">No matching languages</string>
     <!-- Follow the device setting; the component may append the resolved value. -->
     <string name="androidkit_compose_system">System</string>
-    <string name="androidkit_compose_security">Security</string>
     <string name="androidkit_compose_app_lock">App lock</string>
     <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
     <string name="androidkit_compose_lock_after_leaving_app">Lock after leaving the app</string>
-    <string name="androidkit_compose_immediately">Immediately</string>
-    <string name="androidkit_compose_after_one_minute">After 1 minute</string>
-    <string name="androidkit_compose_after_five_minutes">After 5 minutes</string>
-    <string name="androidkit_compose_after_fifteen_minutes">After 15 minutes</string>
     <string name="androidkit_compose_lock_now">Lock now</string>
     <string name="androidkit_compose_about">About</string>
-    <string name="androidkit_compose_about_description">Contact, legal and more</string>
     <string name="androidkit_compose_version">Version</string>
     <string name="androidkit_compose_copy_version">Copy version</string>
-    <!-- Software term; use established local terminology, e.g. Open source in French. -->
-    <string name="androidkit_compose_open_source">Open source</string>
-    <string name="androidkit_compose_open_source_description">Explore, use or contribute</string>
     <string name="androidkit_compose_contact">Contact</string>
-    <string name="androidkit_compose_app_info">App info</string>
-    <string name="androidkit_compose_legal">Legal information</string>
     <string name="androidkit_compose_privacy_policy">Privacy policy</string>
     <string name="androidkit_compose_terms_of_use">Terms of use</string>
     <!-- Licenses for external software, including work by individuals, not only companies. -->
     <string name="androidkit_compose_third_party_licenses">Third-party licenses</string>
-    <string name="androidkit_compose_third_party_licenses_description">Licenses for third-party software</string>
     <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
     <string name="androidkit_compose_contact_description">Feedback or questions</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">App information</string>
-    <string name="androidkit_compose_project">Project</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Website</string>
     <string name="androidkit_compose_source_code">Source code</string>
 </resources>

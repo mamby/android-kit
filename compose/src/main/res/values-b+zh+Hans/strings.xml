@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">返回</string>
-    <string name="androidkit_compose_add">添加</string>
     <string name="androidkit_compose_close">关闭</string>
     <string name="androidkit_compose_more">更多</string>
-    <string name="androidkit_compose_retry">重试</string>
-    <string name="androidkit_compose_cancel">取消</string>
-    <string name="androidkit_compose_confirm">确认</string>
-    <string name="androidkit_compose_save">保存</string>
     <string name="androidkit_compose_hide_title_bar">隐藏标题栏</string>
     <string name="androidkit_compose_show_title_bar">显示标题栏</string>
-    <string name="androidkit_compose_general">常规</string>
     <string name="androidkit_compose_language">语言</string>
     <string name="androidkit_compose_theme">主题</string>
     <string name="androidkit_compose_transparency">透明度</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">搜索语言</string>
     <string name="androidkit_compose_no_matching_languages">没有匹配的语言</string>
     <string name="androidkit_compose_system">系统</string>
-    <string name="androidkit_compose_security">安全</string>
     <string name="androidkit_compose_app_lock">应用锁</string>
     <string name="androidkit_compose_lock_after_leaving_app">离开应用后锁定</string>
-    <string name="androidkit_compose_immediately">立即</string>
-    <string name="androidkit_compose_after_one_minute">1 分钟后</string>
-    <string name="androidkit_compose_after_five_minutes">5 分钟后</string>
-    <string name="androidkit_compose_after_fifteen_minutes">15 分钟后</string>
     <string name="androidkit_compose_lock_now">立即锁定</string>
     <string name="androidkit_compose_about">关于</string>
-    <string name="androidkit_compose_about_description">联系、法律信息及更多</string>
     <string name="androidkit_compose_version">版本</string>
     <string name="androidkit_compose_copy_version">复制版本</string>
-    <string name="androidkit_compose_open_source">开源</string>
-    <string name="androidkit_compose_open_source_description">探索、使用或参与贡献</string>
     <string name="androidkit_compose_contact">联系</string>
-    <string name="androidkit_compose_app_info">应用信息</string>
-    <string name="androidkit_compose_legal">法律信息</string>
     <string name="androidkit_compose_privacy_policy">隐私政策</string>
     <string name="androidkit_compose_terms_of_use">使用条款</string>
     <string name="androidkit_compose_third_party_licenses">第三方许可证</string>
-    <string name="androidkit_compose_third_party_licenses_description">第三方软件的许可证</string>
     <string name="androidkit_compose_support_prompt_title">喜欢这个应用吗？</string>
     <string name="androidkit_compose_support_prompt_description">如果您愿意支持应用的开发，欢迎捐赠。捐赠始终出于自愿。</string>
     <string name="androidkit_compose_support_prompt_learn_more">了解更多</string>
     <string name="androidkit_compose_support_prompt_not_now">暂不</string>
     <string name="androidkit_compose_support_prompt_donate">捐赠</string>
     <string name="androidkit_compose_contact_description">反馈或问题</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">应用信息</string>
-    <string name="androidkit_compose_project">项目</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">网站</string>
     <string name="androidkit_compose_source_code">源代码</string>
 </resources>

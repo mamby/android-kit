@@ -41,7 +41,7 @@ class SettingsCommunityBehaviorTest {
             }
         }
         assertOrder("Host setting", "About")
-        rule.onNodeWithText("Contact, legal and more").assertIsDisplayed()
+        rule.onNodeWithText("Contact, legal and more").assertDoesNotExist()
         scrollTo("About")
         rule.onNodeWithText("About").performClick()
         rule.runOnIdle { assertEquals(1, aboutClicks) }

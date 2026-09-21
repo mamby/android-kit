@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">กลับ</string>
-    <string name="androidkit_compose_add">เพิ่ม</string>
     <string name="androidkit_compose_close">ปิด</string>
     <string name="androidkit_compose_more">เพิ่มเติม</string>
-    <string name="androidkit_compose_retry">ลองอีกครั้ง</string>
-    <string name="androidkit_compose_cancel">ยกเลิก</string>
-    <string name="androidkit_compose_confirm">ยืนยัน</string>
-    <string name="androidkit_compose_save">บันทึก</string>
     <string name="androidkit_compose_hide_title_bar">ซ่อนแถบชื่อเรื่อง</string>
     <string name="androidkit_compose_show_title_bar">แสดงแถบชื่อเรื่อง</string>
-    <string name="androidkit_compose_general">ทั่วไป</string>
     <string name="androidkit_compose_language">ภาษา</string>
     <string name="androidkit_compose_theme">ธีม</string>
     <string name="androidkit_compose_transparency">ความโปร่งใส</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">ค้นหาภาษา</string>
     <string name="androidkit_compose_no_matching_languages">ไม่มีภาษาที่ตรงกัน</string>
     <string name="androidkit_compose_system">ระบบ</string>
-    <string name="androidkit_compose_security">ความปลอดภัย</string>
     <string name="androidkit_compose_app_lock">ล็อกแอป</string>
     <string name="androidkit_compose_lock_after_leaving_app">ล็อกหลังออกจากแอป</string>
-    <string name="androidkit_compose_immediately">ทันที</string>
-    <string name="androidkit_compose_after_one_minute">หลังจาก 1 นาที</string>
-    <string name="androidkit_compose_after_five_minutes">หลังจาก 5 นาที</string>
-    <string name="androidkit_compose_after_fifteen_minutes">หลังจาก 15 นาที</string>
     <string name="androidkit_compose_lock_now">ล็อกตอนนี้</string>
     <string name="androidkit_compose_about">เกี่ยวกับ</string>
-    <string name="androidkit_compose_about_description">การติดต่อ ข้อมูลทางกฎหมาย และอื่น ๆ</string>
     <string name="androidkit_compose_version">เวอร์ชัน</string>
     <string name="androidkit_compose_copy_version">คัดลอกเวอร์ชัน</string>
-    <string name="androidkit_compose_open_source">โอเพนซอร์ส</string>
-    <string name="androidkit_compose_open_source_description">สำรวจ ใช้งาน หรือมีส่วนร่วม</string>
     <string name="androidkit_compose_contact">ติดต่อ</string>
-    <string name="androidkit_compose_app_info">ข้อมูลแอป</string>
-    <string name="androidkit_compose_legal">ข้อมูลทางกฎหมาย</string>
     <string name="androidkit_compose_privacy_policy">นโยบายความเป็นส่วนตัว</string>
     <string name="androidkit_compose_terms_of_use">ข้อกำหนดการใช้งาน</string>
     <string name="androidkit_compose_third_party_licenses">ใบอนุญาตของบุคคลที่สาม</string>
-    <string name="androidkit_compose_third_party_licenses_description">ใบอนุญาตสำหรับซอฟต์แวร์ของบุคคลที่สาม</string>
     <string name="androidkit_compose_support_prompt_title">ชอบแอปนี้ไหม</string>
     <string name="androidkit_compose_support_prompt_description">หากต้องการสนับสนุนการพัฒนา เรายินดีรับบริจาค โดยการบริจาคเป็นไปตามความสมัครใจเสมอ</string>
     <string name="androidkit_compose_support_prompt_learn_more">ดูข้อมูลเพิ่มเติม</string>
     <string name="androidkit_compose_support_prompt_not_now">ไม่ใช่ตอนนี้</string>
     <string name="androidkit_compose_support_prompt_donate">บริจาค</string>
     <string name="androidkit_compose_contact_description">ความคิดเห็นหรือคำถาม</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">ข้อมูลแอป</string>
-    <string name="androidkit_compose_project">โครงการ</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">เว็บไซต์</string>
     <string name="androidkit_compose_source_code">ซอร์สโค้ด</string>
 </resources>

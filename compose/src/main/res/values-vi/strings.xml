@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">Quay lại</string>
-    <string name="androidkit_compose_add">Thêm</string>
     <string name="androidkit_compose_close">Đóng</string>
     <string name="androidkit_compose_more">Thêm tùy chọn</string>
-    <string name="androidkit_compose_retry">Thử lại</string>
-    <string name="androidkit_compose_cancel">Hủy</string>
-    <string name="androidkit_compose_confirm">Xác nhận</string>
-    <string name="androidkit_compose_save">Lưu</string>
     <string name="androidkit_compose_hide_title_bar">Ẩn thanh tiêu đề</string>
     <string name="androidkit_compose_show_title_bar">Hiện thanh tiêu đề</string>
-    <string name="androidkit_compose_general">Chung</string>
     <string name="androidkit_compose_language">Ngôn ngữ</string>
     <string name="androidkit_compose_theme">Giao diện</string>
     <string name="androidkit_compose_transparency">Độ trong suốt</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">Tìm ngôn ngữ</string>
     <string name="androidkit_compose_no_matching_languages">Không có ngôn ngữ phù hợp</string>
     <string name="androidkit_compose_system">Hệ thống</string>
-    <string name="androidkit_compose_security">Bảo mật</string>
     <string name="androidkit_compose_app_lock">Khóa ứng dụng</string>
     <string name="androidkit_compose_lock_after_leaving_app">Khóa sau khi rời ứng dụng</string>
-    <string name="androidkit_compose_immediately">Ngay lập tức</string>
-    <string name="androidkit_compose_after_one_minute">Sau 1 phút</string>
-    <string name="androidkit_compose_after_five_minutes">Sau 5 phút</string>
-    <string name="androidkit_compose_after_fifteen_minutes">Sau 15 phút</string>
     <string name="androidkit_compose_lock_now">Khóa ngay</string>
     <string name="androidkit_compose_about">Giới thiệu</string>
-    <string name="androidkit_compose_about_description">Liên hệ, thông tin pháp lý và hơn thế nữa</string>
     <string name="androidkit_compose_version">Phiên bản</string>
     <string name="androidkit_compose_copy_version">Sao chép phiên bản</string>
-    <string name="androidkit_compose_open_source">Mã nguồn mở</string>
-    <string name="androidkit_compose_open_source_description">Khám phá, sử dụng hoặc đóng góp</string>
     <string name="androidkit_compose_contact">Liên hệ</string>
-    <string name="androidkit_compose_app_info">Thông tin ứng dụng</string>
-    <string name="androidkit_compose_legal">Thông tin pháp lý</string>
     <string name="androidkit_compose_privacy_policy">Chính sách quyền riêng tư</string>
     <string name="androidkit_compose_terms_of_use">Điều khoản sử dụng</string>
     <string name="androidkit_compose_third_party_licenses">Giấy phép bên thứ ba</string>
-    <string name="androidkit_compose_third_party_licenses_description">Giấy phép cho phần mềm bên thứ ba</string>
     <string name="androidkit_compose_support_prompt_title">Bạn thích ứng dụng này chứ?</string>
     <string name="androidkit_compose_support_prompt_description">Nếu muốn hỗ trợ việc phát triển, bạn có thể quyên góp. Chúng tôi rất trân trọng, nhưng việc này không bao giờ là bắt buộc.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Tìm hiểu thêm</string>
     <string name="androidkit_compose_support_prompt_not_now">Không phải bây giờ</string>
     <string name="androidkit_compose_support_prompt_donate">Quyên góp</string>
     <string name="androidkit_compose_contact_description">Phản hồi hoặc câu hỏi</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">Thông tin ứng dụng</string>
-    <string name="androidkit_compose_project">Dự án</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Trang web</string>
     <string name="androidkit_compose_source_code">Mã nguồn</string>
 </resources>

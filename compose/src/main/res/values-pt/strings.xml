@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">Voltar</string>
-    <string name="androidkit_compose_add">Adicionar</string>
     <string name="androidkit_compose_close">Fechar</string>
     <string name="androidkit_compose_more">Mais</string>
-    <string name="androidkit_compose_retry">Tentar novamente</string>
-    <string name="androidkit_compose_cancel">Cancelar</string>
-    <string name="androidkit_compose_confirm">Confirmar</string>
-    <string name="androidkit_compose_save">Guardar</string>
     <string name="androidkit_compose_hide_title_bar">Ocultar barra de título</string>
     <string name="androidkit_compose_show_title_bar">Mostrar barra de título</string>
-    <string name="androidkit_compose_general">Geral</string>
     <string name="androidkit_compose_language">Idioma</string>
     <string name="androidkit_compose_theme">Tema</string>
     <string name="androidkit_compose_transparency">Transparência</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">Pesquisar idiomas</string>
     <string name="androidkit_compose_no_matching_languages">Nenhum idioma correspondente</string>
     <string name="androidkit_compose_system">Sistema</string>
-    <string name="androidkit_compose_security">Segurança</string>
     <string name="androidkit_compose_app_lock">Bloqueio da aplicação</string>
     <string name="androidkit_compose_lock_after_leaving_app">Bloquear após sair da aplicação</string>
-    <string name="androidkit_compose_immediately">Imediatamente</string>
-    <string name="androidkit_compose_after_one_minute">Após 1 minuto</string>
-    <string name="androidkit_compose_after_five_minutes">Após 5 minutos</string>
-    <string name="androidkit_compose_after_fifteen_minutes">Após 15 minutos</string>
     <string name="androidkit_compose_lock_now">Bloquear agora</string>
     <string name="androidkit_compose_about">Sobre</string>
-    <string name="androidkit_compose_about_description">Contacto, informações legais e mais</string>
     <string name="androidkit_compose_version">Versão</string>
     <string name="androidkit_compose_copy_version">Copiar versão</string>
-    <string name="androidkit_compose_open_source">Código aberto</string>
-    <string name="androidkit_compose_open_source_description">Explorar, usar ou contribuir</string>
     <string name="androidkit_compose_contact">Contacto</string>
-    <string name="androidkit_compose_app_info">Informações da aplicação</string>
-    <string name="androidkit_compose_legal">Informações legais</string>
     <string name="androidkit_compose_privacy_policy">Política de privacidade</string>
     <string name="androidkit_compose_terms_of_use">Termos de utilização</string>
     <string name="androidkit_compose_third_party_licenses">Licenças de terceiros</string>
-    <string name="androidkit_compose_third_party_licenses_description">Licenças de software de terceiros</string>
     <string name="androidkit_compose_support_prompt_title">Está a gostar da aplicação?</string>
     <string name="androidkit_compose_support_prompt_description">Se quiser apoiar o seu desenvolvimento, os donativos são bem-vindos, mas nunca obrigatórios.</string>
     <string name="androidkit_compose_support_prompt_learn_more">Saber mais</string>
     <string name="androidkit_compose_support_prompt_not_now">Agora não</string>
     <string name="androidkit_compose_support_prompt_donate">Fazer um donativo</string>
     <string name="androidkit_compose_contact_description">Comentários ou perguntas</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">Informações da aplicação</string>
-    <string name="androidkit_compose_project">Projeto</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Site</string>
     <string name="androidkit_compose_source_code">Código-fonte</string>
 </resources>

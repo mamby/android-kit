@@ -120,7 +120,7 @@ viewport edge-to-edge. Do not add a second page-padding modifier in consumers.
 
 `Main(about = link)` appends one About navigation row after all host sections.
 `Main()` omits it. The row has a Kit-owned icon, label, and directional chevron,
-with the Kit-owned subtitle “Contact, legal and more”. Hosts cannot reposition it.
+without a subtitle. Hosts cannot reposition it.
 
 Render `AndroidKitSettingsPageConfiguration.About(AndroidKitSettingsAbout(...))`
 for the fixed About subpage. Kit owns its title, grouping, and order:

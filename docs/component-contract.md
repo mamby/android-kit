@@ -26,8 +26,8 @@ escape hatch. Migrate consumers and the demo with the library.
   and normal descriptions sealed. App-lock failures use explicit `errorMessage`.
   `Main` optionally appends About as its final row. `About` renders App information,
   Contact, and Legal information in fixed order, omitting
-  empty groups and section headings. The main About row uses the Kit-owned hint
-  “Contact, legal and more”. Website and Source code follow the app description and precede
+  empty groups and section headings. The main About row has no subtitle.
+  Website and Source code follow the app description and precede
   Version; Third-party licenses belongs in Legal. Hosts supply app data and
   optional destinations; Kit owns link
   labels and icons. `Subpage` has no footer. See [settings.md](settings.md).

@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="androidkit_compose_back">वापस</string>
-    <string name="androidkit_compose_add">जोड़ें</string>
     <string name="androidkit_compose_close">बंद करें</string>
     <string name="androidkit_compose_more">अधिक</string>
-    <string name="androidkit_compose_retry">फिर कोशिश करें</string>
-    <string name="androidkit_compose_cancel">रद्द करें</string>
-    <string name="androidkit_compose_confirm">पुष्टि करें</string>
-    <string name="androidkit_compose_save">सहेजें</string>
     <string name="androidkit_compose_hide_title_bar">शीर्षक बार छिपाएँ</string>
     <string name="androidkit_compose_show_title_bar">शीर्षक बार दिखाएँ</string>
-    <string name="androidkit_compose_general">सामान्य</string>
     <string name="androidkit_compose_language">भाषा</string>
     <string name="androidkit_compose_theme">थीम</string>
     <string name="androidkit_compose_transparency">पारदर्शिता</string>
@@ -19,36 +13,23 @@
     <string name="androidkit_compose_search_languages">भाषाएँ खोजें</string>
     <string name="androidkit_compose_no_matching_languages">कोई मेल खाती भाषा नहीं</string>
     <string name="androidkit_compose_system">सिस्टम</string>
-    <string name="androidkit_compose_security">सुरक्षा</string>
     <string name="androidkit_compose_app_lock">ऐप लॉक</string>
     <string name="androidkit_compose_lock_after_leaving_app">ऐप से बाहर निकलने के बाद लॉक करें</string>
-    <string name="androidkit_compose_immediately">तुरंत</string>
-    <string name="androidkit_compose_after_one_minute">1 मिनट बाद</string>
-    <string name="androidkit_compose_after_five_minutes">5 मिनट बाद</string>
-    <string name="androidkit_compose_after_fifteen_minutes">15 मिनट बाद</string>
     <string name="androidkit_compose_lock_now">अभी लॉक करें</string>
     <string name="androidkit_compose_about">परिचय</string>
-    <string name="androidkit_compose_about_description">संपर्क, कानूनी जानकारी और बहुत कुछ</string>
     <string name="androidkit_compose_version">संस्करण</string>
     <string name="androidkit_compose_copy_version">संस्करण कॉपी करें</string>
-    <string name="androidkit_compose_open_source">ओपन सोर्स</string>
-    <string name="androidkit_compose_open_source_description">जानें, इस्तेमाल करें या योगदान दें</string>
     <string name="androidkit_compose_contact">संपर्क</string>
-    <string name="androidkit_compose_app_info">ऐप की जानकारी</string>
-    <string name="androidkit_compose_legal">कानूनी जानकारी</string>
     <string name="androidkit_compose_privacy_policy">गोपनीयता नीति</string>
     <string name="androidkit_compose_terms_of_use">उपयोग की शर्तें</string>
     <string name="androidkit_compose_third_party_licenses">तृतीय-पक्ष लाइसेंस</string>
-    <string name="androidkit_compose_third_party_licenses_description">तृतीय-पक्ष सॉफ़्टवेयर के लाइसेंस</string>
     <string name="androidkit_compose_support_prompt_title">क्या आपको ऐप पसंद है?</string>
     <string name="androidkit_compose_support_prompt_description">अगर आप इसके विकास का समर्थन करना चाहें, तो दान का स्वागत है, लेकिन यह कभी अनिवार्य नहीं है।</string>
     <string name="androidkit_compose_support_prompt_learn_more">और जानें</string>
     <string name="androidkit_compose_support_prompt_not_now">अभी नहीं</string>
     <string name="androidkit_compose_support_prompt_donate">दान करें</string>
     <string name="androidkit_compose_contact_description">फ़ीडबैक या सवाल</string>
-    <!-- About section headings and project destination labels. -->
-    <string name="androidkit_compose_app_information">ऐप की जानकारी</string>
-    <string name="androidkit_compose_project">प्रोजेक्ट</string>
+    <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">वेबसाइट</string>
     <string name="androidkit_compose_source_code">सोर्स कोड</string>
 </resources>
