@@ -9,9 +9,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionButtonStyle
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingSearchBoxStyle
+import net.mamby.androidkit.compose.form.AndroidKitFloatingSearchBox
 
 /** Data for floating chrome. AndroidKit exclusively renders its controls. */
 public sealed interface AndroidKitFloatingAction {
+    public class Search(
+        public val query: String,
+        public val onQueryChange: (String) -> Unit,
+        public val onSearch: (String) -> Unit,
+        public val enabled: Boolean = true,
+        public val voiceInputEnabled: Boolean = true,
+        public val modifier: Modifier = Modifier,
+        public val style: AndroidKitFloatingSearchBoxStyle = AndroidKitFloatingSearchBoxStyle(),
+    ) : AndroidKitFloatingAction
+
     public class Button private constructor(
         internal val vector: ImageVector?,
         internal val painter: Painter?,
@@ -46,6 +58,15 @@ public sealed interface AndroidKitFloatingAction {
 internal fun RenderFloatingAction(action: AndroidKitFloatingAction?) {
     when (action) {
         null -> Unit
+        is AndroidKitFloatingAction.Search -> AndroidKitFloatingSearchBox(
+            query = action.query,
+            onQueryChange = action.onQueryChange,
+            onSearch = action.onSearch,
+            modifier = action.modifier,
+            enabled = action.enabled,
+            voiceInputEnabled = action.voiceInputEnabled,
+            style = action.style,
+        )
         is AndroidKitFloatingAction.Button -> AndroidKitFloatingActionButton(action)
         is AndroidKitFloatingAction.Bar -> AndroidKitFloatingActionBar(
             modifier = action.modifier,

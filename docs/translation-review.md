@@ -1,5 +1,35 @@
 # Shared vocabulary translation review
 
+## Floating search (2026-09-21)
+
+The catalog showcase also adds six demo-owned resources in English, French and
+Arabic: page and sheet headings, usage guidance, the sheet-opening action, the
+last-submitted query with `%1$s`, and an empty-results message. These were checked
+against the two independent live-filtering examples and the keyboard submission
+callback. Placeholder parity and action/heading roles are preserved. This is
+AI-assisted editorial review, not native-speaker approval.
+
+Added `search`, `clear_search`, `voice_search`, and `voice_search_unavailable`
+(all with the `androidkit_compose_` prefix) in all 18 Compose language sets:
+English, French, Arabic, German, Spanish, Hindi, Indonesian, Italian, Japanese,
+Korean, Dutch, Polish, European Portuguese, Russian, Thai, Turkish, Vietnamese,
+and Simplified Chinese. No demo duplicates were introduced.
+
+English was checked against the component: Search is the input placeholder and
+accessible name; Clear search empties the field; Search by voice opens external
+speech UI; the error explains a failed speech launch and continued keyboard input.
+The error deliberately promises neither offline recognition nor translation.
+All translations were re-read against those roles and the English meaning,
+including the continued availability of typed input. French uses Rechercher,
+Effacer la recherche, and Rechercher à la voix. These new phrases are editorial,
+AI-assisted translations; no external linguistic reference or native-speaker
+approval is claimed. Idiomatic phrasing and screen-reader pronunciation in each
+locale remain candidates for competent human review. XML/build coverage is
+separate from language-quality assurance.
+
+The existing localization contract already lists these locales and validates
+all AAR string keys dynamically; new vocabulary requires no JSON schema change.
+
 ## About navigation summary (2026-09-20)
 
 The new Kit-owned About-row subtitle combines the existing Contact, Version, and

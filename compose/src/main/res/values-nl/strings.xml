@@ -32,4 +32,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Website</string>
     <string name="androidkit_compose_source_code">Broncode</string>
+    <string name="androidkit_compose_search">Zoeken</string>
+    <string name="androidkit_compose_clear_search">Zoekopdracht wissen</string>
+    <string name="androidkit_compose_voice_search">Zoeken met spraak</string>
+    <string name="androidkit_compose_voice_search_unavailable">Spraakinvoer is niet beschikbaar. Je kunt je zoekopdracht nog steeds typen.</string>
 </resources>

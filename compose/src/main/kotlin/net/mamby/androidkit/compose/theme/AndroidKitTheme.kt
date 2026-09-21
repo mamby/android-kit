@@ -222,6 +222,10 @@ public data class AndroidKitDimensions(
 
 @Immutable
 internal data class AndroidKitStrings(
+    val search: String,
+    val clearSearch: String,
+    val voiceSearch: String,
+    val voiceSearchUnavailable: String,
     val back: String,
     val close: String,
     val more: String,

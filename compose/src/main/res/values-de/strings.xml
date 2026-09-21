@@ -32,4 +32,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Website</string>
     <string name="androidkit_compose_source_code">Quellcode</string>
+    <string name="androidkit_compose_search">Suchen</string>
+    <string name="androidkit_compose_clear_search">Suche löschen</string>
+    <string name="androidkit_compose_voice_search">Per Sprache suchen</string>
+    <string name="androidkit_compose_voice_search_unavailable">Die Spracheingabe ist nicht verfügbar. Du kannst deine Suche weiterhin eintippen.</string>
 </resources>

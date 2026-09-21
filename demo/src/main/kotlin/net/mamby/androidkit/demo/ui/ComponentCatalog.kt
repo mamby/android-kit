@@ -13,6 +13,7 @@ enum class ComponentId(
     AndroidKitCard("AndroidKitCard"),
     AndroidKitBottomSheet("AndroidKitBottomSheet"),
     AndroidKitFloatingActionBar("AndroidKitFloatingActionBar"),
+    AndroidKitFloatingSearchBox("AndroidKitFloatingSearchBox"),
     AndroidKitActionFlyout("AndroidKitActionFlyout"),
     AndroidKitFloatingNavigation("AndroidKitFloatingNavigation"),
     ;
@@ -27,6 +28,10 @@ enum class ComponentDemo(
     @StringRes val titleResource: Int,
 ) {
     AndroidKitPageBasic(ComponentId.AndroidKitPage, R.string.variation_basic),
+    AndroidKitFloatingSearchBoxInteractive(
+        ComponentId.AndroidKitFloatingSearchBox,
+        R.string.variation_interactive,
+    ),
     AndroidKitPageTitle(ComponentId.AndroidKitPage, R.string.variation_with_title),
     AndroidKitPageTitleActions(
         ComponentId.AndroidKitPage,

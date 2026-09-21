@@ -102,4 +102,10 @@
     <string name="settings_about_description">Un catalogue de composants et de modèles d’interface Android réutilisables.</string>
     <string name="settings_contributors">Contributeurs</string>
     <string name="settings_appearance">Apparence</string>
+    <string name="floating_search_page">Recherche dans une page</string>
+    <string name="floating_search_sheet">Recherche dans un panneau inférieur</string>
+    <string name="floating_search_hint">Saisissez du texte ou utilisez le microphone pour filtrer les exemples. Lancez la recherche avec la touche de recherche du clavier. Faites défiler pour essayer le champ flottant au-dessus du clavier.</string>
+    <string name="open_floating_search_sheet">Ouvrir le panneau de recherche</string>
+    <string name="floating_search_submitted">Dernière recherche lancée : %1$s</string>
+    <string name="floating_search_empty">Aucun exemple correspondant.</string>
 </resources>

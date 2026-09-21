@@ -32,4 +32,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Web sitesi</string>
     <string name="androidkit_compose_source_code">Kaynak kodu</string>
+    <string name="androidkit_compose_search">Ara</string>
+    <string name="androidkit_compose_clear_search">Aramayı temizle</string>
+    <string name="androidkit_compose_voice_search">Sesle ara</string>
+    <string name="androidkit_compose_voice_search_unavailable">Sesli giriş kullanılamıyor. Aramanızı yazarak yapabilirsiniz.</string>
 </resources>

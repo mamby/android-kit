@@ -1,10 +1,18 @@
 package net.mamby.androidkit.compose.theme
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
+
+@Immutable
+public data class AndroidKitFloatingSearchBoxStyle(
+    public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    public val shape: Shape = CircleShape,
+    public val textStyle: TextStyle? = null,
+)
 
 @Immutable
 public data class AndroidKitPageStyle(

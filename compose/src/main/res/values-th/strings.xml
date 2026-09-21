@@ -32,4 +32,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">เว็บไซต์</string>
     <string name="androidkit_compose_source_code">ซอร์สโค้ด</string>
+    <string name="androidkit_compose_search">ค้นหา</string>
+    <string name="androidkit_compose_clear_search">ล้างการค้นหา</string>
+    <string name="androidkit_compose_voice_search">ค้นหาด้วยเสียง</string>
+    <string name="androidkit_compose_voice_search_unavailable">ไม่สามารถใช้การป้อนข้อมูลด้วยเสียงได้ คุณยังพิมพ์คำค้นหาได้</string>
 </resources>

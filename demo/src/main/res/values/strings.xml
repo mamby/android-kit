@@ -103,4 +103,10 @@
     <string name="settings_about_description">A catalog of reusable Android UI components and patterns.</string>
     <string name="settings_contributors">Contributors</string>
     <string name="settings_appearance">Appearance</string>
+    <string name="floating_search_page">Page search</string>
+    <string name="floating_search_sheet">Bottom-sheet search</string>
+    <string name="floating_search_hint">Type or use the microphone to filter the examples. Submit with the keyboard Search action. Scroll to try the floating field above the keyboard.</string>
+    <string name="open_floating_search_sheet">Open search sheet</string>
+    <string name="floating_search_submitted">Last submitted search: %1$s</string>
+    <string name="floating_search_empty">No matching examples.</string>
 </resources>

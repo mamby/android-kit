@@ -102,4 +102,10 @@
     <string name="settings_about_description">كتالوج لمكونات وأنماط واجهة Android القابلة لإعادة الاستخدام.</string>
     <string name="settings_contributors">المساهمون</string>
     <string name="settings_appearance">المظهر</string>
+    <string name="floating_search_page">البحث في الصفحة</string>
+    <string name="floating_search_sheet">البحث في اللوحة السفلية</string>
+    <string name="floating_search_hint">اكتب أو استخدم الميكروفون لتصفية الأمثلة. أرسل البحث باستخدام زر البحث في لوحة المفاتيح. مرّر لتجربة حقل البحث العائم فوق لوحة المفاتيح.</string>
+    <string name="open_floating_search_sheet">فتح لوحة البحث</string>
+    <string name="floating_search_submitted">آخر بحث تم إرساله: %1$s</string>
+    <string name="floating_search_empty">لا توجد أمثلة مطابقة.</string>
 </resources>

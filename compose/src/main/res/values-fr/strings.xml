@@ -27,4 +27,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Site web</string>
     <string name="androidkit_compose_source_code">Code source</string>
+    <string name="androidkit_compose_search">Rechercher</string>
+    <string name="androidkit_compose_clear_search">Effacer la recherche</string>
+    <string name="androidkit_compose_voice_search">Rechercher à la voix</string>
+    <string name="androidkit_compose_voice_search_unavailable">La saisie vocale est indisponible. Vous pouvez toujours saisir votre recherche.</string>
 </resources>

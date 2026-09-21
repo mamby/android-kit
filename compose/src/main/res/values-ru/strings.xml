@@ -32,4 +32,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Веб-сайт</string>
     <string name="androidkit_compose_source_code">Исходный код</string>
+    <string name="androidkit_compose_search">Поиск</string>
+    <string name="androidkit_compose_clear_search">Очистить поиск</string>
+    <string name="androidkit_compose_voice_search">Голосовой поиск</string>
+    <string name="androidkit_compose_voice_search_unavailable">Голосовой ввод недоступен. Вы можете ввести поисковый запрос вручную.</string>
 </resources>

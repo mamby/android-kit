@@ -32,4 +32,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">ウェブサイト</string>
     <string name="androidkit_compose_source_code">ソースコード</string>
+    <string name="androidkit_compose_search">検索</string>
+    <string name="androidkit_compose_clear_search">検索をクリア</string>
+    <string name="androidkit_compose_voice_search">音声で検索</string>
+    <string name="androidkit_compose_voice_search_unavailable">音声入力を利用できません。検索する内容を入力してください。</string>
 </resources>

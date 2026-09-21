@@ -35,6 +35,8 @@ escape hatch. Migrate consumers and the demo with the library.
   `supportingText`. Explicit typography and supporting color belong in card style.
 - Floating controls: supply `AndroidKitFloatingAction.Button(icon, label, onClick)`
   or `AndroidKitFloatingAction.Bar { ... }` to page/sheet floating-action parameters.
+  `AndroidKitFloatingAction.Search` adds controlled floating search with device
+  speech input. See [floating search](floating-search.md) for usage and compatibility.
   Standalone buttons use `AndroidKitFloatingActionButton(action)`. Button icons
   accept vectors or painters; Kit owns icon rendering. Optional tooltip text is data.
 - Pages: use title, back callback, and action data; the custom `topBar` is removed.

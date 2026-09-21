@@ -84,6 +84,7 @@ internal fun ComponentDemoScreen(
     onBack: () -> Unit,
 ) {
     when (demo.component) {
+        ComponentId.AndroidKitFloatingSearchBox -> FloatingSearchDemoScreen(onBack)
         ComponentId.AndroidKitPage -> AndroidKitPageDemo(
             toggles = demoToggles,
             onToggleChange = onDemoToggleChange,

@@ -33,4 +33,9 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">Website</string>
     <string name="androidkit_compose_source_code">Source code</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Search</string>
+    <string name="androidkit_compose_clear_search">Clear search</string>
+    <string name="androidkit_compose_voice_search">Search by voice</string>
+    <string name="androidkit_compose_voice_search_unavailable">Voice input is unavailable. You can still type your search.</string>
 </resources>

@@ -27,4 +27,8 @@
     <!-- About app website and source repository destination labels. -->
     <string name="androidkit_compose_website">الموقع الإلكتروني</string>
     <string name="androidkit_compose_source_code">الشفرة المصدرية</string>
+    <string name="androidkit_compose_search">بحث</string>
+    <string name="androidkit_compose_clear_search">مسح البحث</string>
+    <string name="androidkit_compose_voice_search">البحث بالصوت</string>
+    <string name="androidkit_compose_voice_search_unavailable">الإدخال الصوتي غير متاح. لا يزال بإمكانك كتابة ما تريد البحث عنه.</string>
 </resources>

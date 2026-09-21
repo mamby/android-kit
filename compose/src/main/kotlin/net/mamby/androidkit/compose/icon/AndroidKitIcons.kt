@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
  * Host-provided product icons remain outside this set.
  */
 internal object AndroidKitIcons {
+    val Search: ImageVector = settingsIcon("Search", "M21 21L16.65 16.65 M19 11A8 8 0 1 1 3 11A8 8 0 1 1 19 11")
+    val Microphone: ImageVector = settingsIcon("Mic", "M9 5A3 3 0 0 1 15 5V12A3 3 0 0 1 9 12Z M5 10V12A7 7 0 0 0 19 12V10 M12 19V22")
     val Contact: ImageVector = settingsIcon("Mail", "M4 4H20A2 2 0 0 1 22 6V18A2 2 0 0 1 20 20H4A2 2 0 0 1 2 18V6A2 2 0 0 1 4 4 M22 6L12 13L2 6")
     val Info: ImageVector = settingsIcon("Info", "M22 12A10 10 0 1 1 2 12A10 10 0 1 1 22 12 M12 16V12 M12 8H12.01")
     val Document: ImageVector = settingsIcon("FileText", "M14 2H6A2 2 0 0 0 4 4V20A2 2 0 0 0 6 22H18A2 2 0 0 0 20 20V8Z M14 2V8H20 M8 13H16 M8 17H16")
