@@ -38,4 +38,11 @@
     <string name="androidkit_compose_clear_search">Clear search</string>
     <string name="androidkit_compose_voice_search">Search by voice</string>
     <string name="androidkit_compose_voice_search_unavailable">Voice input is unavailable. You can still type your search.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">Starting microphone…</string>
+    <string name="androidkit_compose_voice_listening">Listening…</string>
+    <string name="androidkit_compose_voice_finishing">Finishing…</string>
+    <string name="androidkit_compose_voice_stop">Stop listening</string>
+    <string name="androidkit_compose_voice_permission">Microphone access is needed for voice input. You can allow it in app settings.</string>
+    <string name="androidkit_compose_voice_no_speech">No speech recognized. Try again.</string>
 </resources>

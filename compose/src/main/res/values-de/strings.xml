@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">Suche löschen</string>
     <string name="androidkit_compose_voice_search">Per Sprache suchen</string>
     <string name="androidkit_compose_voice_search_unavailable">Die Spracheingabe ist nicht verfügbar. Du kannst deine Suche weiterhin eintippen.</string>
+    <string name="androidkit_compose_voice_starting">Mikrofon wird gestartet…</string>
+    <string name="androidkit_compose_voice_listening">Spracherkennung läuft…</string>
+    <string name="androidkit_compose_voice_finishing">Wird abgeschlossen…</string>
+    <string name="androidkit_compose_voice_stop">Spracherkennung stoppen</string>
+    <string name="androidkit_compose_voice_permission">Für die Spracheingabe ist Mikrofonzugriff erforderlich. Du kannst ihn in den App-Einstellungen erlauben.</string>
+    <string name="androidkit_compose_voice_no_speech">Keine Sprache erkannt. Versuche es erneut.</string>
 </resources>

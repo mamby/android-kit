@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">Wyczyść wyszukiwanie</string>
     <string name="androidkit_compose_voice_search">Szukaj głosowo</string>
     <string name="androidkit_compose_voice_search_unavailable">Wprowadzanie głosowe jest niedostępne. Nadal możesz wpisać wyszukiwany tekst.</string>
+    <string name="androidkit_compose_voice_starting">Uruchamianie mikrofonu…</string>
+    <string name="androidkit_compose_voice_listening">Słuchanie…</string>
+    <string name="androidkit_compose_voice_finishing">Kończenie…</string>
+    <string name="androidkit_compose_voice_stop">Zatrzymaj nasłuchiwanie</string>
+    <string name="androidkit_compose_voice_permission">Wprowadzanie głosowe wymaga dostępu do mikrofonu. Możesz go przyznać w ustawieniach aplikacji.</string>
+    <string name="androidkit_compose_voice_no_speech">Nie rozpoznano mowy. Spróbuj ponownie.</string>
 </resources>

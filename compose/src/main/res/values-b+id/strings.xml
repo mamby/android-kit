@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">Hapus pencarian</string>
     <string name="androidkit_compose_voice_search">Cari dengan suara</string>
     <string name="androidkit_compose_voice_search_unavailable">Input suara tidak tersedia. Anda tetap dapat mengetik pencarian.</string>
+    <string name="androidkit_compose_voice_starting">Memulai mikrofon…</string>
+    <string name="androidkit_compose_voice_listening">Mendengarkan…</string>
+    <string name="androidkit_compose_voice_finishing">Menyelesaikan…</string>
+    <string name="androidkit_compose_voice_stop">Berhenti mendengarkan</string>
+    <string name="androidkit_compose_voice_permission">Input suara memerlukan akses mikrofon. Anda dapat mengizinkannya di setelan aplikasi.</string>
+    <string name="androidkit_compose_voice_no_speech">Tidak ada ucapan yang dikenali. Coba lagi.</string>
 </resources>

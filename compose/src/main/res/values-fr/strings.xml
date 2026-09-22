@@ -31,4 +31,10 @@
     <string name="androidkit_compose_clear_search">Effacer la recherche</string>
     <string name="androidkit_compose_voice_search">Rechercher à la voix</string>
     <string name="androidkit_compose_voice_search_unavailable">La saisie vocale est indisponible. Vous pouvez toujours saisir votre recherche.</string>
+    <string name="androidkit_compose_voice_starting">Activation du microphone…</string>
+    <string name="androidkit_compose_voice_listening">Écoute en cours…</string>
+    <string name="androidkit_compose_voice_finishing">Finalisation…</string>
+    <string name="androidkit_compose_voice_stop">Arrêter l’écoute</string>
+    <string name="androidkit_compose_voice_permission">La saisie vocale nécessite l’accès au microphone. Vous pouvez l’autoriser dans les paramètres de l’application.</string>
+    <string name="androidkit_compose_voice_no_speech">Aucune parole reconnue. Réessayez.</string>
 </resources>

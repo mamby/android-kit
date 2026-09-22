@@ -9,6 +9,12 @@ import net.mamby.androidkit.compose.R
 @Composable
 @ReadOnlyComposable
 internal fun localizedAndroidKitStrings(): AndroidKitStrings = AndroidKitStrings(
+    voiceStarting = stringResource(R.string.androidkit_compose_voice_starting),
+    voiceListening = stringResource(R.string.androidkit_compose_voice_listening),
+    voiceFinishing = stringResource(R.string.androidkit_compose_voice_finishing),
+    voiceStop = stringResource(R.string.androidkit_compose_voice_stop),
+    voicePermission = stringResource(R.string.androidkit_compose_voice_permission),
+    voiceNoSpeech = stringResource(R.string.androidkit_compose_voice_no_speech),
     search = stringResource(R.string.androidkit_compose_search),
     clearSearch = stringResource(R.string.androidkit_compose_clear_search),
     voiceSearch = stringResource(R.string.androidkit_compose_voice_search),

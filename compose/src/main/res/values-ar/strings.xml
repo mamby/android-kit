@@ -31,4 +31,10 @@
     <string name="androidkit_compose_clear_search">مسح البحث</string>
     <string name="androidkit_compose_voice_search">البحث بالصوت</string>
     <string name="androidkit_compose_voice_search_unavailable">الإدخال الصوتي غير متاح. لا يزال بإمكانك كتابة ما تريد البحث عنه.</string>
+    <string name="androidkit_compose_voice_starting">جارٍ تشغيل الميكروفون…</string>
+    <string name="androidkit_compose_voice_listening">جارٍ الاستماع…</string>
+    <string name="androidkit_compose_voice_finishing">جارٍ الإنهاء…</string>
+    <string name="androidkit_compose_voice_stop">إيقاف الاستماع</string>
+    <string name="androidkit_compose_voice_permission">يتطلب الإدخال الصوتي الوصول إلى الميكروفون. يمكنك السماح بذلك في إعدادات التطبيق.</string>
+    <string name="androidkit_compose_voice_no_speech">لم يتم التعرّف على أي كلام. حاول مرة أخرى.</string>
 </resources>

@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">ล้างการค้นหา</string>
     <string name="androidkit_compose_voice_search">ค้นหาด้วยเสียง</string>
     <string name="androidkit_compose_voice_search_unavailable">ไม่สามารถใช้การป้อนข้อมูลด้วยเสียงได้ คุณยังพิมพ์คำค้นหาได้</string>
+    <string name="androidkit_compose_voice_starting">กำลังเปิดไมโครโฟน…</string>
+    <string name="androidkit_compose_voice_listening">กำลังฟัง…</string>
+    <string name="androidkit_compose_voice_finishing">กำลังดำเนินการให้เสร็จ…</string>
+    <string name="androidkit_compose_voice_stop">หยุดฟัง</string>
+    <string name="androidkit_compose_voice_permission">การป้อนข้อมูลด้วยเสียงต้องเข้าถึงไมโครโฟน คุณอนุญาตได้ในการตั้งค่าแอป</string>
+    <string name="androidkit_compose_voice_no_speech">ไม่พบคำพูดที่รู้จำได้ โปรดลองอีกครั้ง</string>
 </resources>

@@ -2,6 +2,22 @@
 
 ## Floating search (2026-09-21)
 
+Inline dictation replaces the original external-dialog behavior. Added
+`voice_starting`, `voice_listening`, `voice_finishing`, `voice_stop`,
+`voice_permission`, and `voice_no_speech` (with the Kit prefix) in all 18 locales
+listed below. English and translations were reviewed against the starting,
+listening, finalizing, stop, permission-denial and no-match call sites. Stop ends
+capture while allowing the final result; it does not submit a search. Permission
+guidance explicitly refers to app settings, without promising permission or
+offline support. These are editorial AI-assisted translations, not native-speaker
+review. Existing demo instructions remain applicable and introduce no duplicate
+Kit labels. Technical semantics were checked against Android's official
+[SpeechRecognizer](https://developer.android.com/reference/android/speech/SpeechRecognizer),
+[recognition options](https://developer.android.com/reference/android/speech/RecognizerIntent),
+and [permission guidance](https://developer.android.com/training/permissions/requesting).
+No external linguistic reference is claimed; idiomatic phrasing and pronunciation
+remain unverified by native speakers.
+
 The catalog showcase also adds six demo-owned resources in English, French and
 Arabic: page and sheet headings, usage guidance, the sheet-opening action, the
 last-submitted query with `%1$s`, and an empty-results message. These were checked
@@ -15,7 +31,7 @@ English, French, Arabic, German, Spanish, Hindi, Indonesian, Italian, Japanese,
 Korean, Dutch, Polish, European Portuguese, Russian, Thai, Turkish, Vietnamese,
 and Simplified Chinese. No demo duplicates were introduced.
 
-English was checked against the component: Search is the input placeholder and
+For the original dialog implementation, English was checked against the component: Search is the input placeholder and
 accessible name; Clear search empties the field; Search by voice opens external
 speech UI; the error explains a failed speech launch and continued keyboard input.
 The error deliberately promises neither offline recognition nor translation.

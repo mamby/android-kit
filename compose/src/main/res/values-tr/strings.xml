@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">Aramayı temizle</string>
     <string name="androidkit_compose_voice_search">Sesle ara</string>
     <string name="androidkit_compose_voice_search_unavailable">Sesli giriş kullanılamıyor. Aramanızı yazarak yapabilirsiniz.</string>
+    <string name="androidkit_compose_voice_starting">Mikrofon başlatılıyor…</string>
+    <string name="androidkit_compose_voice_listening">Dinleniyor…</string>
+    <string name="androidkit_compose_voice_finishing">Tamamlanıyor…</string>
+    <string name="androidkit_compose_voice_stop">Dinlemeyi durdur</string>
+    <string name="androidkit_compose_voice_permission">Sesli giriş için mikrofon erişimi gereklidir. Uygulama ayarlarından izin verebilirsiniz.</string>
+    <string name="androidkit_compose_voice_no_speech">Konuşma tanınamadı. Tekrar deneyin.</string>
 </resources>

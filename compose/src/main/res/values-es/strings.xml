@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">Borrar búsqueda</string>
     <string name="androidkit_compose_voice_search">Buscar por voz</string>
     <string name="androidkit_compose_voice_search_unavailable">La entrada de voz no está disponible. Puedes escribir tu búsqueda.</string>
+    <string name="androidkit_compose_voice_starting">Activando el micrófono…</string>
+    <string name="androidkit_compose_voice_listening">Escuchando…</string>
+    <string name="androidkit_compose_voice_finishing">Finalizando…</string>
+    <string name="androidkit_compose_voice_stop">Dejar de escuchar</string>
+    <string name="androidkit_compose_voice_permission">La entrada de voz necesita acceso al micrófono. Puedes permitirlo en los ajustes de la aplicación.</string>
+    <string name="androidkit_compose_voice_no_speech">No se ha reconocido ninguna voz. Inténtalo de nuevo.</string>
 </resources>

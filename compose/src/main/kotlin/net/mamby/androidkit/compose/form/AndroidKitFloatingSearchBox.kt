@@ -1,9 +1,8 @@
 package net.mamby.androidkit.compose.form
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.speech.RecognizerIntent
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -15,26 +14,36 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.TextRange
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
@@ -43,7 +52,7 @@ import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 /**
  * Controlled search input. Hosts own placement, system/IME insets and query persistence.
  * Use AndroidKitFloatingAction.Search for measured placement in Kit pages and sheets.
- * Voice input opens the device recognizer; returned text replaces the query without submitting.
+ * Voice input appends live dictation using the device speech service without submitting.
  * Shape, typography, icons and control rendering are Kit-owned; shared theme tokens supply colors.
  */
 @Composable
@@ -61,15 +70,54 @@ public fun AndroidKitFloatingSearchBox(
     val visuals = floatingSurfaceVisuals(surfaceStyle)
     val keyboard = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-    var voicePending by rememberSaveable { mutableStateOf(false) }
-    var voiceError by rememberSaveable { mutableStateOf(false) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        voicePending = false
-        if (result.resultCode == Activity.RESULT_OK && enabled && voiceInputEnabled) {
-            result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                ?.firstOrNull()?.takeIf { it.isNotBlank() }?.let(onQueryChange)
+    var fieldValue by remember { mutableStateOf(TextFieldValue(query, TextRange(query.length))) }
+    val displayedValue = if (fieldValue.text == query) fieldValue
+        else TextFieldValue(query, TextRange(query.length))
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val factory = LocalSearchSpeechInputFactory.current
+    val currentEnabled by rememberUpdatedState(enabled && voiceInputEnabled)
+    val currentQuery by rememberUpdatedState(query)
+    val currentOnQueryChange by rememberUpdatedState(onQueryChange)
+    var permissionPending by remember { mutableStateOf(false) }
+    val dictation = remember(context, lifecycleOwner, factory) {
+        SearchDictation(
+            createInput = { factory(context) },
+            canPublish = {
+                currentEnabled && lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
+            },
+            onQueryChange = { currentOnQueryChange(it) },
+        )
+    }
+    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        val requested = permissionPending
+        permissionPending = false
+        if (requested && currentEnabled) {
+            if (granted) dictation.start(currentQuery) else dictation.permissionDenied()
         }
     }
+    DisposableEffect(dictation, lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                permissionPending = false
+                dictation.cancel()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            permissionPending = false
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            dictation.cancel()
+        }
+    }
+    SideEffect {
+        if (fieldValue.text != query) fieldValue = displayedValue
+        if (!currentEnabled) {
+            permissionPending = false
+            dictation.cancel()
+        } else dictation.hostQueryChanged(query)
+    }
+    BackHandler(enabled = dictation.active) { dictation.cancel() }
 
     Column(modifier = modifier.fillMaxWidth()) {
         FloatingSurface(
@@ -77,10 +125,15 @@ public fun AndroidKitFloatingSearchBox(
             style = surfaceStyle,
         ) {
             TextField(
-                value = query,
+                value = displayedValue,
                 onValueChange = {
-                    voiceError = false
-                    onQueryChange(it)
+                    fieldValue = it
+                    if (it.text != query) {
+                        dictation.cancel()
+                        dictation.clearError()
+                        permissionPending = false
+                        onQueryChange(it.text)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
                     .semantics { contentDescription = strings.search },
@@ -90,7 +143,11 @@ public fun AndroidKitFloatingSearchBox(
                 shape = CircleShape,
                 placeholder = { Text(strings.search) },
                 leadingIcon = {
-                    Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))
+                    if (dictation.active) {
+                        CircularProgressIndicator(modifier = Modifier.size(dimensions.floatingActionIconSize))
+                    } else {
+                        Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))
+                    }
                 },
                 trailingIcon = {
                     Row {
@@ -98,7 +155,9 @@ public fun AndroidKitFloatingSearchBox(
                             IconButton(
                                 enabled = enabled,
                                 onClick = {
-                                    voiceError = false
+                                    dictation.cancel()
+                                    dictation.clearError()
+                                    permissionPending = false
                                     onQueryChange("")
                                     focusRequester.requestFocus()
                                     keyboard?.show()
@@ -110,28 +169,26 @@ public fun AndroidKitFloatingSearchBox(
                         }
                         if (voiceInputEnabled) {
                             IconButton(
-                                enabled = enabled && !voicePending,
+                                enabled = enabled && !permissionPending && dictation.phase != DictationPhase.Finishing,
                                 onClick = {
-                                    if (!voicePending) {
-                                        voiceError = false
-                                        voicePending = true
+                                    if (dictation.active) {
+                                        dictation.stop()
+                                    } else if (!permissionPending) {
+                                        dictation.clearError()
                                         keyboard?.hide()
-                                        try {
-                                            launcher.launch(Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                                                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                                            })
-                                        } catch (_: ActivityNotFoundException) {
-                                            voicePending = false
-                                            voiceError = true
-                                        } catch (_: SecurityException) {
-                                            voicePending = false
-                                            voiceError = true
+                                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
+                                            PackageManager.PERMISSION_GRANTED) {
+                                            dictation.start(query)
+                                        } else {
+                                            permissionPending = true
+                                            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                                         }
                                     }
                                 },
                             ) {
-                                Icon(AndroidKitIcons.Microphone, strings.voiceSearch,
+                                Icon(
+                                    if (dictation.active) AndroidKitIcons.Stop else AndroidKitIcons.Microphone,
+                                    if (dictation.active) strings.voiceStop else strings.voiceSearch,
                                     Modifier.size(dimensions.floatingActionIconSize))
                             }
                         }
@@ -140,6 +197,8 @@ public fun AndroidKitFloatingSearchBox(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = {
                     if (enabled && query.isNotBlank()) {
+                        dictation.cancel()
+                        permissionPending = false
                         keyboard?.hide()
                         onSearch(query)
                     }
@@ -163,10 +222,22 @@ public fun AndroidKitFloatingSearchBox(
                 ),
             )
         }
-        if (voiceError) {
+        val status = when (dictation.phase) {
+            DictationPhase.Starting -> strings.voiceStarting
+            DictationPhase.Listening -> strings.voiceListening
+            DictationPhase.Finishing -> strings.voiceFinishing
+            DictationPhase.Idle -> when (dictation.error) {
+                DictationError.Permission -> strings.voicePermission
+                DictationError.NoSpeech -> strings.voiceNoSpeech
+                DictationError.Unavailable -> strings.voiceSearchUnavailable
+                null -> null
+            }
+        }
+        if (status != null) {
             Text(
-                text = strings.voiceSearchUnavailable,
-                color = AndroidKitThemeTokens.colorScheme.error,
+                text = status,
+                color = if (dictation.error != null) AndroidKitThemeTokens.colorScheme.error
+                    else AndroidKitThemeTokens.colorScheme.onSurfaceVariant,
                 style = AndroidKitThemeTokens.typography.bodySmall,
                 modifier = Modifier.padding(horizontal = dimensions.spaceMedium,
                     vertical = dimensions.spaceExtraSmall)

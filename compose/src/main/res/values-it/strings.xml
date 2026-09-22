@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">Cancella ricerca</string>
     <string name="androidkit_compose_voice_search">Cerca con la voce</string>
     <string name="androidkit_compose_voice_search_unavailable">La digitazione vocale non è disponibile. Puoi comunque digitare la ricerca.</string>
+    <string name="androidkit_compose_voice_starting">Attivazione del microfono…</string>
+    <string name="androidkit_compose_voice_listening">In ascolto…</string>
+    <string name="androidkit_compose_voice_finishing">Completamento…</string>
+    <string name="androidkit_compose_voice_stop">Interrompi ascolto</string>
+    <string name="androidkit_compose_voice_permission">La digitazione vocale richiede l’accesso al microfono. Puoi consentirlo nelle impostazioni dell’app.</string>
+    <string name="androidkit_compose_voice_no_speech">Nessuna voce riconosciuta. Riprova.</string>
 </resources>

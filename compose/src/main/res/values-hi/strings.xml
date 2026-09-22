@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">खोज मिटाएं</string>
     <string name="androidkit_compose_voice_search">बोलकर खोजें</string>
     <string name="androidkit_compose_voice_search_unavailable">बोलकर लिखने की सुविधा उपलब्ध नहीं है। आप अपनी खोज टाइप कर सकते हैं।</string>
+    <string name="androidkit_compose_voice_starting">माइक्रोफ़ोन चालू हो रहा है…</string>
+    <string name="androidkit_compose_voice_listening">सुन रहा है…</string>
+    <string name="androidkit_compose_voice_finishing">पूरा किया जा रहा है…</string>
+    <string name="androidkit_compose_voice_stop">सुनना बंद करें</string>
+    <string name="androidkit_compose_voice_permission">बोलकर लिखने के लिए माइक्रोफ़ोन का ऐक्सेस चाहिए। आप ऐप की सेटिंग में इसकी अनुमति दे सकते हैं।</string>
+    <string name="androidkit_compose_voice_no_speech">कोई बोली पहचानी नहीं गई। फिर से कोशिश करें।</string>
 </resources>

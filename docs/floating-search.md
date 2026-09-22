@@ -3,7 +3,7 @@
 In the demo catalog, open **Components → FloatingSearchBox**. The page has a
 floating search field and an **Open search sheet** button for the bottom-sheet
 example. Each host keeps its own query and last submitted search. Both filter
-the catalog examples as you type or return from voice input; clearing restores
+the catalog examples as you type or dictate; clearing restores
 the full list. Scroll with the keyboard open to inspect floating placement and
 content clearance.
 
@@ -57,23 +57,43 @@ field. The IME Search action submits only nonblank queries and hides the keyboar
 the submitted value is not trimmed or otherwise transformed.
 
 Voice input is enabled by default. Set `voiceInputEnabled = false` to omit the
-microphone. Tapping it launches the device speech activity using the
-[Activity Result API](https://developer.android.com/training/basics/intents/result)
-and [`RecognizerIntent.ACTION_RECOGNIZE_SPEECH`](https://developer.android.com/reference/android/speech/RecognizerIntent)
-with the free-form language model. The recognizer chooses its default language;
-Kit makes no offline, language-detection or translation promises and does not
-record audio or request microphone permission itself.
+microphone. Tapping it requests microphone permission when needed, then starts
+the official [`SpeechRecognizer`](https://developer.android.com/reference/android/speech/SpeechRecognizer)
+service inside the component. No external speech dialog is opened. The pill shows
+a progress indicator and Stop listening control, with a localized live status
+for starting, listening and finishing. Stop ends audio capture and waits for the
+provider's final result; it does not submit the search.
 
-While the speech activity is open, the microphone is disabled. A nonblank result
-at index zero replaces the query without submitting. Cancellation, missing
-results or a blank first result preserve the query; later alternatives are not
-substituted. Results arriving after input or voice input was disabled are ignored.
-The host must keep the component composed to receive the result. Query persistence
-remains the host responsibility, including across activity recreation.
+Each session preserves the existing query as a prefix. The best nonblank partial
+transcript replaces the current dictated suffix; it never appends every partial
+revision. A separating space is inserted when the prefix has no trailing whitespace.
+The final transcript replaces that suffix once more. Subsequent sessions append
+to the updated query. Missing/blank results leave the latest visible text intact.
+The host receives these updates through `onQueryChange`, without `onSearch`.
 
-If the activity is missing or launch is denied, Kit shows an accessible localized
-error beneath the pill. Typing, clearing or retrying dismisses that error. Speech
-recognition errors inside the external speech UI belong to that provider.
+Typing, clearing, submitting, pressing Back, disabling voice/the field, changing
+the query externally, disposing the component or moving the owning lifecycle to
+the background cancels the session and destroys the recognizer. Late callbacks
+are ignored. Partial text already displayed is retained unless the user/host edits
+it. Dictation never restarts automatically after returning to the screen or after
+activity recreation. Keep hidden underlying hosts disabled when showing another
+search surface; the demo does this when opening its sheet.
+
+The library manifest declares `RECORD_AUDIO`, marks microphone hardware optional,
+and includes Android's required `RecognitionService` package-visibility query.
+Runtime permission is requested only after tapping the microphone, using the
+[Activity Result permission contract](https://developer.android.com/training/permissions/requesting).
+Denial leaves typing available and shows guidance for enabling access in app settings.
+Service failures and no-speech errors are localized and accessible; editing or
+retrying clears them. Recognition does not continue in the background.
+
+Kit requests partial results and, on Android 14+, balanced automatic language
+switching (which also enables detection). Both depend on provider support and
+available language models; some services only return a final transcript. Older
+Android versions use the provider's default language. These
+[`RecognizerIntent` options](https://developer.android.com/reference/android/speech/RecognizerIntent)
+do not translate the query. The default speech service may process audio remotely;
+offline recognition and continuous dictation are not guaranteed.
 
 Shape, typography, icons, labels, control arrangement and interaction behavior
 are Kit-owned. There is no component style parameter or custom rendering slot.
@@ -91,7 +111,7 @@ The `Search` variant extends the sealed `AndroidKitFloatingAction` interface.
 Consumers with exhaustive `when` expressions over this interface must add a
 `Search` branch when recompiling. Page and sheet parameter signatures are unchanged.
 
-The four new private strings are present in every locale listed by the existing
+All search and dictation strings are present in every locale listed by the existing
 localization contract. Its schema and locale inventory are unchanged: the build
 gate discovers string keys from the AAR resources, so no JSON schema or locale
 change is needed for new vocabulary.

@@ -45,6 +45,7 @@ internal fun FloatingSearchDemoScreen(onBack: () -> Unit) {
         onBack = listDetailBackAction(onBack),
         floatingActionButton = AndroidKitFloatingAction.Search(
             query = pageQuery,
+            enabled = !sheetVisible,
             onQueryChange = { pageQuery = it },
             onSearch = { pageSubmitted = it },
             modifier = Modifier.testTag("page_floating_search"),

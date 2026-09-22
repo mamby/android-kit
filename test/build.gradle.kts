@@ -41,6 +41,13 @@ jacoco {
     toolVersion = "0.8.15"
 }
 
+// Exercise Kit-internal speech state without exposing test hooks in the public API.
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    if (name == "compileDebugAndroidTestKotlin") {
+        friendPaths.from(project(":compose").tasks.named("bundleLibCompileToJarDebug").map { it.outputs.files })
+    }
+}
+
 dependencies {
     implementation(project(":foundation"))
     implementation(project(":localization"))

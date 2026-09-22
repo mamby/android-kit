@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">Xóa nội dung tìm kiếm</string>
     <string name="androidkit_compose_voice_search">Tìm kiếm bằng giọng nói</string>
     <string name="androidkit_compose_voice_search_unavailable">Không thể nhập bằng giọng nói. Bạn vẫn có thể nhập nội dung tìm kiếm bằng bàn phím.</string>
+    <string name="androidkit_compose_voice_starting">Đang bật micrô…</string>
+    <string name="androidkit_compose_voice_listening">Đang nghe…</string>
+    <string name="androidkit_compose_voice_finishing">Đang hoàn tất…</string>
+    <string name="androidkit_compose_voice_stop">Dừng nghe</string>
+    <string name="androidkit_compose_voice_permission">Tính năng nhập bằng giọng nói cần quyền truy cập micrô. Bạn có thể cấp quyền trong phần cài đặt ứng dụng.</string>
+    <string name="androidkit_compose_voice_no_speech">Không nhận dạng được lời nói. Hãy thử lại.</string>
 </resources>

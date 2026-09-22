@@ -36,4 +36,10 @@
     <string name="androidkit_compose_clear_search">검색어 지우기</string>
     <string name="androidkit_compose_voice_search">음성으로 검색</string>
     <string name="androidkit_compose_voice_search_unavailable">음성 입력을 사용할 수 없습니다. 검색어를 직접 입력할 수 있습니다.</string>
+    <string name="androidkit_compose_voice_starting">마이크 시작 중…</string>
+    <string name="androidkit_compose_voice_listening">듣는 중…</string>
+    <string name="androidkit_compose_voice_finishing">완료 중…</string>
+    <string name="androidkit_compose_voice_stop">듣기 중지</string>
+    <string name="androidkit_compose_voice_permission">음성 입력을 사용하려면 마이크 접근 권한이 필요합니다. 앱 설정에서 허용할 수 있습니다.</string>
+    <string name="androidkit_compose_voice_no_speech">음성을 인식하지 못했습니다. 다시 시도해 주세요.</string>
 </resources>
