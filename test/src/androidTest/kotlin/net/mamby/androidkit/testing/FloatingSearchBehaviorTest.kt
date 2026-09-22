@@ -183,15 +183,17 @@ class FloatingSearchBehaviorTest {
         rule.onNodeWithContentDescription("Voice input error").assertDoesNotExist()
     }
 
-    @Test fun permissionIndicatorReopensDismissedErrorAndOffersAppSettings() {
+    @Test fun microphoneRetriesDeniedPermissionWithoutErrorIconAndOffersAppSettings() {
         permissionGranted = false
         component()
         rule.onNodeWithContentDescription("Search by voice").performClick()
         rule.runOnIdle { registry.complete(false) }
+        rule.onNodeWithContentDescription("Voice input error").assertDoesNotExist()
         rule.onNodeWithText("Close").performClick()
         rule.onNodeWithText(PermissionError).assertDoesNotExist()
         rule.onNodeWithContentDescription("Search").performTextReplacement("still editable")
-        rule.onNodeWithContentDescription("Voice input error").performClick()
+        rule.onNodeWithContentDescription("Search by voice").performClick()
+        rule.runOnIdle { registry.complete(false) }
         rule.onNodeWithText(PermissionError).assertExists()
         rule.onNodeWithText("Open app settings").performClick()
         rule.runOnIdle {
@@ -241,7 +243,7 @@ class FloatingSearchBehaviorTest {
         rule.onNodeWithContentDescription("Clear search").assertDoesNotExist()
         rule.onNodeWithContentDescription("Search by voice").assert(
             SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Listening…"))
-        rule.onNodeWithText("Listening…").assertDoesNotExist()
+        rule.onNodeWithText("Listening…").assertExists()
         rule.runOnIdle {
             assertEquals("original spoken", query)
             inputs.last().listener.onPartialResults(results("spoken query"))
@@ -250,7 +252,7 @@ class FloatingSearchBehaviorTest {
         rule.onNodeWithContentDescription("Stop listening").performClick().assertIsNotEnabled()
         rule.onNodeWithContentDescription("Search by voice").assert(
             SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Finishing…"))
-        rule.onNodeWithText("Finishing…").assertDoesNotExist()
+        rule.onNodeWithText("Finishing…").assertExists()
         rule.runOnIdle {
             assertEquals(1, inputs.last().stopCount)
             inputs.last().listener.onResults(results("final words"))

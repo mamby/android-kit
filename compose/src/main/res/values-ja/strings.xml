@@ -42,6 +42,5 @@
     <string name="androidkit_compose_voice_stop">聞き取りを停止</string>
     <string name="androidkit_compose_voice_permission">音声入力にはマイクへのアクセスが必要です。アプリの設定で許可できます。</string>
     <string name="androidkit_compose_voice_no_speech">音声を認識できませんでした。もう一度お試しください。</string>
-    <string name="androidkit_compose_voice_input_error">音声入力エラー</string>
     <string name="androidkit_compose_open_app_settings">アプリの設定を開く</string>
 </resources>

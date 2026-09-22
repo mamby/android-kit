@@ -42,6 +42,5 @@
     <string name="androidkit_compose_voice_stop">Dừng nghe</string>
     <string name="androidkit_compose_voice_permission">Tính năng nhập bằng giọng nói cần quyền truy cập micrô. Bạn có thể cấp quyền trong phần cài đặt ứng dụng.</string>
     <string name="androidkit_compose_voice_no_speech">Không nhận dạng được lời nói. Hãy thử lại.</string>
-    <string name="androidkit_compose_voice_input_error">Lỗi nhập bằng giọng nói</string>
     <string name="androidkit_compose_open_app_settings">Mở phần cài đặt ứng dụng</string>
 </resources>

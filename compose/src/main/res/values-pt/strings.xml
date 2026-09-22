@@ -42,6 +42,5 @@
     <string name="androidkit_compose_voice_stop">Parar de ouvir</string>
     <string name="androidkit_compose_voice_permission">A introdução por voz requer acesso ao microfone. Pode permiti-lo nas definições da aplicação.</string>
     <string name="androidkit_compose_voice_no_speech">Não foi reconhecida nenhuma fala. Tente novamente.</string>
-    <string name="androidkit_compose_voice_input_error">Erro na introdução por voz</string>
     <string name="androidkit_compose_open_app_settings">Abrir definições da aplicação</string>
 </resources>

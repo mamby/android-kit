@@ -42,6 +42,5 @@
     <string name="androidkit_compose_voice_stop">Berhenti mendengarkan</string>
     <string name="androidkit_compose_voice_permission">Input suara memerlukan akses mikrofon. Anda dapat mengizinkannya di setelan aplikasi.</string>
     <string name="androidkit_compose_voice_no_speech">Tidak ada ucapan yang dikenali. Coba lagi.</string>
-    <string name="androidkit_compose_voice_input_error">Error input suara</string>
     <string name="androidkit_compose_open_app_settings">Buka setelan aplikasi</string>
 </resources>

@@ -42,6 +42,5 @@
     <string name="androidkit_compose_voice_stop">停止聆听</string>
     <string name="androidkit_compose_voice_permission">语音输入需要麦克风权限。您可以在应用设置中允许访问。</string>
     <string name="androidkit_compose_voice_no_speech">未识别到语音。请重试。</string>
-    <string name="androidkit_compose_voice_input_error">语音输入错误</string>
     <string name="androidkit_compose_open_app_settings">打开应用设置</string>
 </resources>

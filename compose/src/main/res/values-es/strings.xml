@@ -42,6 +42,5 @@
     <string name="androidkit_compose_voice_stop">Dejar de escuchar</string>
     <string name="androidkit_compose_voice_permission">La entrada de voz necesita acceso al micrófono. Puedes permitirlo en los ajustes de la aplicación.</string>
     <string name="androidkit_compose_voice_no_speech">No se ha reconocido ninguna voz. Inténtalo de nuevo.</string>
-    <string name="androidkit_compose_voice_input_error">Error de entrada de voz</string>
     <string name="androidkit_compose_open_app_settings">Abrir ajustes de la aplicación</string>
 </resources>

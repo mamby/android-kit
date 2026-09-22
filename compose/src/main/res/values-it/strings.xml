@@ -42,6 +42,5 @@
     <string name="androidkit_compose_voice_stop">Interrompi ascolto</string>
     <string name="androidkit_compose_voice_permission">La digitazione vocale richiede l’accesso al microfono. Puoi consentirlo nelle impostazioni dell’app.</string>
     <string name="androidkit_compose_voice_no_speech">Nessuna voce riconosciuta. Riprova.</string>
-    <string name="androidkit_compose_voice_input_error">Errore di digitazione vocale</string>
     <string name="androidkit_compose_open_app_settings">Apri impostazioni dell’app</string>
 </resources>

@@ -9,6 +9,11 @@ import android.content.pm.PackageManager
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.FlowRow
@@ -21,8 +26,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearWavyProgressIndicator
-import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -50,7 +53,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalContext
@@ -68,6 +71,7 @@ import androidx.compose.ui.semantics.error
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.style.TextAlign
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitDefaults
@@ -119,7 +123,6 @@ public fun AndroidKitFloatingSearchBox(
     var permissionPending by remember { mutableStateOf(false) }
     val tooltipState = rememberTooltipState(isPersistent = true)
     var errorPresentation by remember { mutableIntStateOf(0) }
-    var focusError by remember { mutableStateOf(false) }
     var settingsLaunchFailed by remember { mutableStateOf(false) }
     val dictation = remember(context, lifecycleOwner, factory) {
         SearchDictation(
@@ -198,18 +201,15 @@ public fun AndroidKitFloatingSearchBox(
             }
         } else {
             tooltipState.dismiss()
-            focusError = false
             settingsLaunchFailed = false
         }
     }
-    val showErrorIndicator = visibleError == DictationError.Permission ||
-        (visibleError != null && tooltipState.isVisible)
     TooltipBox(
         modifier = modifier.fillMaxWidth(),
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
         state = tooltipState,
         enableUserInput = false,
-        focusable = focusError,
+        focusable = visibleError == DictationError.Permission,
         tooltip = {
             if (errorMessage != null) {
                 RichTooltip(
@@ -248,25 +248,18 @@ public fun AndroidKitFloatingSearchBox(
                         .padding(horizontal = dimensions.spaceSmall),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Box(Modifier.size(dimensions.minimumTouchTarget), contentAlignment = Alignment.Center) {
-                        Icon(AndroidKitIcons.Microphone, null,
-                            Modifier.size(dimensions.floatingActionIconSize),
-                            tint = AndroidKitThemeTokens.colorScheme.primary)
-                    }
-                    val defaultStroke = WavyProgressIndicatorDefaults.linearIndicatorStroke
-                    val thinStroke = remember(defaultStroke) {
-                        Stroke(width = defaultStroke.width * SpeechWaveStrokeScale, cap = defaultStroke.cap)
-                    }
-                    LinearWavyProgressIndicator(
+                    SearchMicrophoneHalo()
+                    Text(
+                        text = speechStatus.orEmpty(),
                         modifier = Modifier.weight(1f).padding(horizontal = dimensions.spaceMedium)
                             .semantics {
                                 contentDescription = strings.voiceSearch
                                 stateDescription = speechStatus.orEmpty()
                                 liveRegion = LiveRegionMode.Polite
                             },
-                        color = AndroidKitThemeTokens.colorScheme.primary,
-                        stroke = thinStroke,
-                        trackStroke = thinStroke,
+                        color = visuals.contentColor,
+                        style = AndroidKitThemeTokens.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
                     )
                     IconButton(
                         enabled = enabled && dictation.phase != DictationPhase.Finishing,
@@ -292,7 +285,7 @@ public fun AndroidKitFloatingSearchBox(
                     .onFocusChanged { fieldFocused = it.isFocused }
                     .semantics {
                         contentDescription = strings.search
-                        if (showErrorIndicator && errorMessage != null) error(errorMessage)
+                        if (tooltipState.isVisible && errorMessage != null) error(errorMessage)
                     },
                 enabled = enabled,
                 minLines = 1,
@@ -301,18 +294,7 @@ public fun AndroidKitFloatingSearchBox(
                 shape = shape,
                 placeholder = { Text(strings.search) },
                 leadingIcon = {
-                    if (showErrorIndicator) {
-                        IconButton(onClick = {
-                            focusError = true
-                            settingsLaunchFailed = false
-                            errorPresentation++
-                        }) {
-                            Icon(AndroidKitIcons.Info, strings.voiceInputError,
-                                Modifier.size(dimensions.floatingActionIconSize), tint = AndroidKitThemeTokens.colorScheme.error)
-                        }
-                    } else {
-                        Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))
-                    }
+                    Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))
                 },
                 trailingIcon = {
                     Row {
@@ -339,7 +321,6 @@ public fun AndroidKitFloatingSearchBox(
                                 onClick = {
                                     if (!permissionPending) {
                                         errorPresentation++
-                                        focusError = false
                                         settingsLaunchFailed = false
                                         dictation.clearError()
                                         keyboard?.hide()
@@ -396,5 +377,37 @@ public fun AndroidKitFloatingSearchBox(
 // Reading time for a short actionable error; extended by the accessibility timeout setting.
 private const val SearchErrorDurationMillis: Long = 6_000L
 
-// Keep the speech wave lighter than the standard loading indicator.
-private const val SpeechWaveStrokeScale: Float = 0.5f
+@Composable
+private fun SearchMicrophoneHalo() {
+    val dimensions = AndroidKitThemeTokens.dimensions
+    val color = AndroidKitThemeTokens.colorScheme.primary
+    val transition = rememberInfiniteTransition(label = "Speech microphone halo")
+    val pulse = transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(SpeechHaloHalfCycleMillis), RepeatMode.Reverse),
+        label = "Halo expansion",
+    )
+    Box(
+        modifier = Modifier.size(dimensions.minimumTouchTarget).drawBehind {
+            val fraction = pulse.value
+            drawCircle(
+                color = color,
+                radius = size.minDimension / 2 *
+                    (SpeechHaloMinRadius + (SpeechHaloMaxRadius - SpeechHaloMinRadius) * fraction),
+                alpha = SpeechHaloMinAlpha + (SpeechHaloMaxAlpha - SpeechHaloMinAlpha) * fraction,
+            )
+        },
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(AndroidKitIcons.Microphone, null,
+            Modifier.size(dimensions.floatingActionIconSize), tint = color)
+    }
+}
+
+// A quiet 1.8-second breathing cycle, contained inside the microphone's layout slot.
+private const val SpeechHaloHalfCycleMillis = 900
+private const val SpeechHaloMinRadius = 0.55f
+private const val SpeechHaloMaxRadius = 0.85f
+private const val SpeechHaloMinAlpha = 0.12f
+private const val SpeechHaloMaxAlpha = 0.25f

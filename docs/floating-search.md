@@ -53,9 +53,9 @@ do not add `imePadding()` to the search box itself. The existing top-pinned
 `AndroidKitSheetSearch` remains available and unchanged.
 
 The field starts at one line, grows to three lines, then scrolls text internally.
-Its rounded corners stay consistent as it grows. During dictation, an animated
-thin wave between the leading microphone and internal Close icons replaces the
-input in a compact single-row surface.
+Its rounded corners stay consistent as it grows. During dictation, a softly pulsing
+halo around the leading microphone, localized status, and the internal Close icon
+replace the input in a compact row.
 Error popups do not change the field's measured height. The caret is hidden when
 the software keyboard is closed. Closing the keyboard also releases editing focus
 to dismiss selection handles; tapping the input starts editing again.
@@ -67,8 +67,8 @@ the submitted value is not trimmed or otherwise transformed.
 Voice input is enabled by default. Set `voiceInputEnabled = false` to omit the
 microphone. Tapping it requests microphone permission when needed, then starts
 the official [`SpeechRecognizer`](https://developer.android.com/reference/android/speech/SpeechRecognizer)
-service inside the component. No external speech dialog is opened. The animated
-wave remains visible while starting, listening and finishing. Localized status
+service inside the component. No external speech dialog is opened. The microphone
+halo remains visible while starting, listening and finishing. Localized status
 is announced through accessibility semantics. The Close icon's accessible action
 is Stop listening: it ends audio capture and waits for the
 provider's final result; it does not submit the search.
@@ -80,7 +80,7 @@ The final transcript replaces that suffix once more. Subsequent sessions append
 to the updated query. Missing/blank results leave the latest visible text intact.
 The host receives these updates through `onQueryChange`, without `onSearch`.
 The input returns with the updated query when dictation finishes or is cancelled.
-The wave is an activity animation, not a measurement of microphone volume.
+The halo is an activity animation, not a measurement of microphone volume.
 
 Pressing Back, disabling voice/the field, changing
 the query externally, disposing the component or moving the owning lifecycle to
@@ -96,9 +96,9 @@ Runtime permission is requested only after tapping the microphone, using the
 [Activity Result permission contract](https://developer.android.com/training/permissions/requesting).
 Denial leaves typing available and shows guidance with an Open app settings action.
 Errors appear in a localized tooltip above the field, with a Close action and a
-six-second timeout extended by the system accessibility recommendation. Permission
-errors retain an indicator after dismissal or editing; tapping it reopens the
-explanation. Granting permission in settings clears the error without starting
+six-second timeout extended by the system accessibility recommendation. No error
+icon is shown. Tapping the microphone retries permission; if access is still denied,
+the tooltip appears again with the settings action. Granting permission in settings clears the error without starting
 recording. Other errors disappear after dismissal; editing or retrying clears them.
 Recognition does not continue in the background.
 

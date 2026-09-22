@@ -329,3 +329,5 @@ no demo duplicates or localization-contract schema changes are needed. The AAR
 resource gate discovers the two new keys. This was an AI contextual review, with
 no external terminology references or native-speaker approval. Idiomatic quality
 and all-locale device rendering remain unverified; build checks are separate.
+
+Removed the unused Voice input error icon label from all 18 locales after removing the icon. Permission guidance and Open app settings wording are unchanged; microphone retry now reopens the guidance. No new translated wording was introduced.
