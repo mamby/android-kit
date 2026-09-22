@@ -37,4 +37,6 @@
     <string name="androidkit_compose_voice_stop">إيقاف الاستماع</string>
     <string name="androidkit_compose_voice_permission">يتطلب الإدخال الصوتي الوصول إلى الميكروفون. يمكنك السماح بذلك في إعدادات التطبيق.</string>
     <string name="androidkit_compose_voice_no_speech">لم يتم التعرّف على أي كلام. حاول مرة أخرى.</string>
+    <string name="androidkit_compose_voice_input_error">خطأ في الإدخال الصوتي</string>
+    <string name="androidkit_compose_open_app_settings">فتح إعدادات التطبيق</string>
 </resources>

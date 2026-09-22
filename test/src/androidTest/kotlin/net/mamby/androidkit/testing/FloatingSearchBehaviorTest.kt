@@ -1,6 +1,9 @@
 package net.mamby.androidkit.testing
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.provider.Settings
 import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -15,6 +18,7 @@ import androidx.activity.result.ActivityResultRegistryOwner
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -25,6 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.AccessibilityManager
+import androidx.compose.ui.platform.LocalAccessibilityManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.FontScale
@@ -37,7 +43,6 @@ import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -82,6 +87,7 @@ class FloatingSearchBehaviorTest {
     private var shown by mutableStateOf(true)
     private var startFailure: RuntimeException? = null
     private var testLifecycleOwner: LifecycleOwner? = null
+    private var testAccessibilityManager: AccessibilityManager? = null
 
     private fun component() {
         rule.setContent {
@@ -101,10 +107,12 @@ class FloatingSearchBehaviorTest {
                 }
             }
             CompositionLocalProvider(LocalActivityResultRegistryOwner provides registry,
+                LocalAccessibilityManager provides (testAccessibilityManager ?: LocalAccessibilityManager.current),
                 LocalLifecycleOwner provides (testLifecycleOwner ?: LocalLifecycleOwner.current),
                 LocalContext provides context, LocalSearchSpeechInputFactory provides factory) {
                 AndroidKitTheme {
                     if (shown) AndroidKitFloatingSearchBox(query, { query = it }, submissions::add,
+                        modifier = Modifier.width(320.dp).testTag("search"),
                         enabled = enabled, voiceInputEnabled = voiceEnabled)
                 }
             }
@@ -138,6 +146,89 @@ class FloatingSearchBehaviorTest {
         rule.onNodeWithContentDescription("Search by voice").assertDoesNotExist()
     }
 
+    @Test fun fieldExpandsToThreeLinesThenScrollsAndShrinksWhenCleared() {
+        query = ""
+        component()
+        val oneLine = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
+        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo")
+        val twoLines = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
+        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree")
+        val threeLines = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
+        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree\nfour\nfive\nsix")
+        val sixLines = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
+        assertTrue(twoLines > oneLine)
+        assertTrue(threeLines > twoLines)
+        assertEquals(threeLines, sixLines)
+        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree\nfour\nfive\nsix\nseven\neight\nnine")
+        assertEquals(sixLines, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
+        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree\nfour\nfive\nsix")
+        rule.onNodeWithContentDescription("Search").performImeAction()
+        rule.runOnIdle { assertEquals(listOf("one\ntwo\nthree\nfour\nfive\nsix"), submissions) }
+        rule.onNodeWithContentDescription("Clear search").performClick()
+        assertEquals(oneLine, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
+    }
+
+    @Test fun speechFeedbackAndErrorPopupDoNotChangeFieldHeight() {
+        component()
+        val height = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
+        rule.onNodeWithContentDescription("Search by voice").performClick()
+        assertEquals(height, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
+        rule.runOnIdle { inputs.last().listener.onReadyForSpeech(null) }
+        assertEquals(height, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
+        rule.runOnIdle { inputs.last().listener.onError(SpeechRecognizer.ERROR_NETWORK) }
+        rule.onNodeWithText(VoiceError).assertExists()
+        assertEquals(height, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
+        rule.onNodeWithText("Close").performClick()
+        rule.onNodeWithText(VoiceError).assertDoesNotExist()
+        rule.onNodeWithContentDescription("Voice input error").assertDoesNotExist()
+    }
+
+    @Test fun permissionIndicatorReopensDismissedErrorAndOffersAppSettings() {
+        permissionGranted = false
+        component()
+        rule.onNodeWithContentDescription("Search by voice").performClick()
+        rule.runOnIdle { registry.complete(false) }
+        rule.onNodeWithText("Close").performClick()
+        rule.onNodeWithText(PermissionError).assertDoesNotExist()
+        rule.onNodeWithContentDescription("Search").performTextReplacement("still editable")
+        rule.onNodeWithContentDescription("Voice input error").performClick()
+        rule.onNodeWithText(PermissionError).assertExists()
+        rule.onNodeWithText("Open app settings").performClick()
+        rule.runOnIdle {
+            assertEquals(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, registry.settingsIntent?.action)
+            assertTrue(registry.settingsIntent?.dataString?.startsWith("package:") == true)
+            permissionGranted = true
+            registry.completeSettings()
+            assertTrue(inputs.isEmpty())
+        }
+        rule.onNodeWithContentDescription("Voice input error").assertDoesNotExist()
+    }
+
+    @Test fun errorTimeoutHonorsAccessibilityRecommendation() {
+        var requestedTimeout = 0L
+        testAccessibilityManager = object : AccessibilityManager {
+            override fun calculateRecommendedTimeoutMillis(originalTimeoutMillis: Long,
+                containsIcons: Boolean, containsText: Boolean, containsControls: Boolean): Long {
+                if (originalTimeoutMillis == 6_000L) {
+                    requestedTimeout = originalTimeoutMillis
+                    assertTrue(containsText && containsControls)
+                }
+                return 12_000L
+            }
+        }
+        startFailure = IllegalStateException()
+        component()
+        rule.onNodeWithContentDescription("Search by voice").performClick()
+        rule.onNodeWithText(VoiceError).assertExists()
+        rule.mainClock.autoAdvance = false
+        rule.mainClock.advanceTimeBy(7_000)
+        rule.onNodeWithText(VoiceError).assertExists()
+        rule.mainClock.advanceTimeBy(6_000)
+        rule.mainClock.autoAdvance = true
+        rule.onNodeWithText(VoiceError).assertDoesNotExist()
+        rule.runOnIdle { assertEquals(6_000L, requestedTimeout) }
+    }
+
     @Test fun partialSpeechAppendsWithoutDuplicatesAndStopCommitsFinalText() {
         component()
         rule.onNodeWithContentDescription("Search by voice").performClick()
@@ -146,14 +237,20 @@ class FloatingSearchBehaviorTest {
             inputs.last().listener.onReadyForSpeech(null)
             inputs.last().listener.onPartialResults(results("spoken"))
         }
-        rule.onNodeWithText("Listening…").assertExists()
-        rule.onNodeWithContentDescription("Search").assertTextContains("original spoken")
-        rule.runOnIdle { inputs.last().listener.onPartialResults(results("spoken query")) }
-        rule.onNodeWithContentDescription("Search").assertTextContains("original spoken query")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.TextSelectionRange,
-                TextRange("original spoken query".length)))
+        rule.onNodeWithContentDescription("Search").assertDoesNotExist()
+        rule.onNodeWithContentDescription("Clear search").assertDoesNotExist()
+        rule.onNodeWithContentDescription("Search by voice").assert(
+            SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Listening…"))
+        rule.onNodeWithText("Listening…").assertDoesNotExist()
+        rule.runOnIdle {
+            assertEquals("original spoken", query)
+            inputs.last().listener.onPartialResults(results("spoken query"))
+            assertEquals("original spoken query", query)
+        }
         rule.onNodeWithContentDescription("Stop listening").performClick().assertIsNotEnabled()
-        rule.onNodeWithText("Finishing…").assertExists()
+        rule.onNodeWithContentDescription("Search by voice").assert(
+            SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Finishing…"))
+        rule.onNodeWithText("Finishing…").assertDoesNotExist()
         rule.runOnIdle {
             assertEquals(1, inputs.last().stopCount)
             inputs.last().listener.onResults(results("final words"))
@@ -262,9 +359,11 @@ class FloatingSearchBehaviorTest {
         rule.runOnIdle { assertEquals(1, inputs.size) }
     }
 
-    @Test fun clearingWhileListeningCancelsAndKeepsFieldFocused() {
+    @Test fun backWhileListeningRestoresInputAndAllowsClearing() {
         component()
         rule.onNodeWithContentDescription("Search by voice").performClick()
+        rule.onNodeWithContentDescription("Clear search").assertDoesNotExist()
+        pressBack()
         rule.onNodeWithContentDescription("Clear search").performClick()
         rule.onNodeWithContentDescription("Search").assertIsFocused()
         rule.runOnIdle {
@@ -286,10 +385,13 @@ class FloatingSearchBehaviorTest {
         }
     }
 
-    @Test fun editingCancelsAndIgnoresLateResults() {
+    @Test fun backRetainsPartialTextAndAllowsEditingWithoutLateResults() {
         component()
         rule.onNodeWithContentDescription("Search by voice").performClick()
         rule.runOnIdle { inputs.last().listener.onPartialResults(results("partial")) }
+        rule.onNodeWithContentDescription("Search").assertDoesNotExist()
+        pressBack()
+        rule.onNodeWithContentDescription("Search").assertTextContains("original partial")
         rule.onNodeWithContentDescription("Search").performTextReplacement("manual")
         rule.runOnIdle {
             inputs.last().listener.onResults(results("late result"))
@@ -334,6 +436,7 @@ class FloatingSearchBehaviorTest {
     @Test fun sheetSupportsNarrowRtlLargeText() = hostGeometry(sheet = true, adaptive = true)
 
     private fun hostGeometry(sheet: Boolean, adaptive: Boolean = false) {
+        query = "first\nsecond\nthird"
         rule.setContent {
             AndroidKitTheme {
                 @androidx.compose.runtime.Composable
@@ -386,19 +489,23 @@ class FloatingSearchBehaviorTest {
             rule.waitUntil(5_000) {
                 kotlin.math.abs(rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.bottom - closedBottom) < 1f
             }
+            rule.onNodeWithContentDescription("Search").assertIsNotFocused()
+            rule.onNodeWithContentDescription("Search").performClick().assertIsFocused()
         }
     }
 
     private class SpeechRegistry : ActivityResultRegistry(), ActivityResultRegistryOwner {
         override val activityResultRegistry: ActivityResultRegistry get() = this
         var requestedPermission: String? = null
+        var settingsIntent: Intent? = null
         private var requestCode = 0
         override fun <I, O> onLaunch(requestCode: Int, contract: ActivityResultContract<I, O>,
             input: I, options: ActivityOptionsCompat?) {
             this.requestCode = requestCode
-            requestedPermission = input as String
+            if (input is Intent) settingsIntent = input else requestedPermission = input as String
         }
         fun complete(granted: Boolean) { dispatchResult(requestCode, granted) }
+        fun completeSettings() { dispatchResult(requestCode, Activity.RESULT_CANCELED, null) }
     }
 
     private class FakeSpeechInput : SearchSpeechInput {

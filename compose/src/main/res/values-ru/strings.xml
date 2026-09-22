@@ -42,4 +42,6 @@
     <string name="androidkit_compose_voice_stop">Остановить распознавание</string>
     <string name="androidkit_compose_voice_permission">Для голосового ввода нужен доступ к микрофону. Его можно разрешить в настройках приложения.</string>
     <string name="androidkit_compose_voice_no_speech">Речь не распознана. Попробуйте ещё раз.</string>
+    <string name="androidkit_compose_voice_input_error">Ошибка голосового ввода</string>
+    <string name="androidkit_compose_open_app_settings">Открыть настройки приложения</string>
 </resources>

@@ -42,4 +42,6 @@
     <string name="androidkit_compose_voice_stop">Spracherkennung stoppen</string>
     <string name="androidkit_compose_voice_permission">Für die Spracheingabe ist Mikrofonzugriff erforderlich. Du kannst ihn in den App-Einstellungen erlauben.</string>
     <string name="androidkit_compose_voice_no_speech">Keine Sprache erkannt. Versuche es erneut.</string>
+    <string name="androidkit_compose_voice_input_error">Fehler bei der Spracheingabe</string>
+    <string name="androidkit_compose_open_app_settings">App-Einstellungen öffnen</string>
 </resources>

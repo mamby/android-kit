@@ -317,3 +317,15 @@ validator can still accept externally supplied catalogs, but current builds use
 the sealed resource contract. Final source audit found no unreferenced translation
 resources in any Kit module or demo; locale key sets align (31 Kit, 105 demo
 including the nontranslatable app name).
+
+## 2026-09-22 Floating search feedback
+
+Added Voice input error (accessibility label for reopening the error explanation)
+and Open app settings (action opening this app's system settings) in all 18 Kit
+locales: en, fr, ar, de, es, hi, id, it, ja, ko, nl, pl, pt, ru, th, tr, vi,
+zh-Hans. Reviewed the English reference and every translation in the component's
+permission-error context. Existing Close and speech-status/error wording is reused;
+no demo duplicates or localization-contract schema changes are needed. The AAR
+resource gate discovers the two new keys. This was an AI contextual review, with
+no external terminology references or native-speaker approval. Idiomatic quality
+and all-locale device rendering remain unverified; build checks are separate.

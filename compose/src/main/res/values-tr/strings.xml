@@ -42,4 +42,6 @@
     <string name="androidkit_compose_voice_stop">Dinlemeyi durdur</string>
     <string name="androidkit_compose_voice_permission">Sesli giriş için mikrofon erişimi gereklidir. Uygulama ayarlarından izin verebilirsiniz.</string>
     <string name="androidkit_compose_voice_no_speech">Konuşma tanınamadı. Tekrar deneyin.</string>
+    <string name="androidkit_compose_voice_input_error">Sesli giriş hatası</string>
+    <string name="androidkit_compose_open_app_settings">Uygulama ayarlarını aç</string>
 </resources>

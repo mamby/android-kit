@@ -45,4 +45,8 @@
     <string name="androidkit_compose_voice_stop">Stop listening</string>
     <string name="androidkit_compose_voice_permission">Microphone access is needed for voice input. You can allow it in app settings.</string>
     <string name="androidkit_compose_voice_no_speech">No speech recognized. Try again.</string>
+    <!-- Accessibility label for the button reopening a speech-input error tooltip. -->
+    <string name="androidkit_compose_voice_input_error">Voice input error</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">Open app settings</string>
 </resources>

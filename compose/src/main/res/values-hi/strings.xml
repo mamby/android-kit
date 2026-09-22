@@ -42,4 +42,6 @@
     <string name="androidkit_compose_voice_stop">सुनना बंद करें</string>
     <string name="androidkit_compose_voice_permission">बोलकर लिखने के लिए माइक्रोफ़ोन का ऐक्सेस चाहिए। आप ऐप की सेटिंग में इसकी अनुमति दे सकते हैं।</string>
     <string name="androidkit_compose_voice_no_speech">कोई बोली पहचानी नहीं गई। फिर से कोशिश करें।</string>
+    <string name="androidkit_compose_voice_input_error">बोलकर लिखने में त्रुटि</string>
+    <string name="androidkit_compose_open_app_settings">ऐप की सेटिंग खोलें</string>
 </resources>

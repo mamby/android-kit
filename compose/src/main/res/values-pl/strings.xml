@@ -42,4 +42,6 @@
     <string name="androidkit_compose_voice_stop">Zatrzymaj nasłuchiwanie</string>
     <string name="androidkit_compose_voice_permission">Wprowadzanie głosowe wymaga dostępu do mikrofonu. Możesz go przyznać w ustawieniach aplikacji.</string>
     <string name="androidkit_compose_voice_no_speech">Nie rozpoznano mowy. Spróbuj ponownie.</string>
+    <string name="androidkit_compose_voice_input_error">Błąd wprowadzania głosowego</string>
+    <string name="androidkit_compose_open_app_settings">Otwórz ustawienia aplikacji</string>
 </resources>

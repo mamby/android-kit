@@ -48,9 +48,17 @@ AndroidKitBottomSheet(
 Use one host at a time in actual UI. Floating search occupies the existing single
 floating-control position. Apply the host padding to scrollable **content**, not
 the viewport. Keep the page default `applyImePadding = true`. The hosts handle
-keyboard movement and measure the complete control, including any error text;
+keyboard movement and measure the control as its text expands;
 do not add `imePadding()` to the search box itself. The existing top-pinned
 `AndroidKitSheetSearch` remains available and unchanged.
+
+The field starts at one line, grows to three lines, then scrolls text internally.
+Its rounded corners stay consistent as it grows. During dictation, an animated
+thin wave between the leading microphone and internal Close icons replaces the
+input in a compact single-row surface.
+Error popups do not change the field's measured height. The caret is hidden when
+the software keyboard is closed. Closing the keyboard also releases editing focus
+to dismiss selection handles; tapping the input starts editing again.
 
 Typing emits query changes immediately. Clear empties the query and focuses the
 field. The IME Search action submits only nonblank queries and hides the keyboard;
@@ -59,9 +67,10 @@ the submitted value is not trimmed or otherwise transformed.
 Voice input is enabled by default. Set `voiceInputEnabled = false` to omit the
 microphone. Tapping it requests microphone permission when needed, then starts
 the official [`SpeechRecognizer`](https://developer.android.com/reference/android/speech/SpeechRecognizer)
-service inside the component. No external speech dialog is opened. The pill shows
-a progress indicator and Stop listening control, with a localized live status
-for starting, listening and finishing. Stop ends audio capture and waits for the
+service inside the component. No external speech dialog is opened. The animated
+wave remains visible while starting, listening and finishing. Localized status
+is announced through accessibility semantics. The Close icon's accessible action
+is Stop listening: it ends audio capture and waits for the
 provider's final result; it does not submit the search.
 
 Each session preserves the existing query as a prefix. The best nonblank partial
@@ -70,8 +79,10 @@ revision. A separating space is inserted when the prefix has no trailing whitesp
 The final transcript replaces that suffix once more. Subsequent sessions append
 to the updated query. Missing/blank results leave the latest visible text intact.
 The host receives these updates through `onQueryChange`, without `onSearch`.
+The input returns with the updated query when dictation finishes or is cancelled.
+The wave is an activity animation, not a measurement of microphone volume.
 
-Typing, clearing, submitting, pressing Back, disabling voice/the field, changing
+Pressing Back, disabling voice/the field, changing
 the query externally, disposing the component or moving the owning lifecycle to
 the background cancels the session and destroys the recognizer. Late callbacks
 are ignored. Partial text already displayed is retained unless the user/host edits
@@ -83,9 +94,13 @@ The library manifest declares `RECORD_AUDIO`, marks microphone hardware optional
 and includes Android's required `RecognitionService` package-visibility query.
 Runtime permission is requested only after tapping the microphone, using the
 [Activity Result permission contract](https://developer.android.com/training/permissions/requesting).
-Denial leaves typing available and shows guidance for enabling access in app settings.
-Service failures and no-speech errors are localized and accessible; editing or
-retrying clears them. Recognition does not continue in the background.
+Denial leaves typing available and shows guidance with an Open app settings action.
+Errors appear in a localized tooltip above the field, with a Close action and a
+six-second timeout extended by the system accessibility recommendation. Permission
+errors retain an indicator after dismissal or editing; tapping it reopens the
+explanation. Granting permission in settings clears the error without starting
+recording. Other errors disappear after dismissal; editing or retrying clears them.
+Recognition does not continue in the background.
 
 Kit requests partial results and, on Android 14+, balanced automatic language
 switching (which also enables detection). Both depend on provider support and

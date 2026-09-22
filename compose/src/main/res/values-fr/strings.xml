@@ -37,4 +37,6 @@
     <string name="androidkit_compose_voice_stop">Arrêter l’écoute</string>
     <string name="androidkit_compose_voice_permission">La saisie vocale nécessite l’accès au microphone. Vous pouvez l’autoriser dans les paramètres de l’application.</string>
     <string name="androidkit_compose_voice_no_speech">Aucune parole reconnue. Réessayez.</string>
+    <string name="androidkit_compose_voice_input_error">Erreur de saisie vocale</string>
+    <string name="androidkit_compose_open_app_settings">Ouvrir les paramètres de l’application</string>
 </resources>
