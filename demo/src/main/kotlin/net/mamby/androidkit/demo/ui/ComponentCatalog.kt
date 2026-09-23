@@ -114,6 +114,10 @@ enum class ComponentDemo(
         ComponentId.AndroidKitFloatingActionBar,
         R.string.variation_text_only,
     ),
+    AndroidKitFloatingActionBarMixed(
+        ComponentId.AndroidKitFloatingActionBar,
+        R.string.variation_mixed_items,
+    ),
 
     AndroidKitActionFlyoutText(
         ComponentId.AndroidKitActionFlyout,

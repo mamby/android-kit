@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -174,7 +175,11 @@ private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () ->
         Text(query, modifier = Modifier.weight(1f),
             style = AndroidKitThemeTokens.settingSectionStyle.entryLabelTextStyle)
         IconButton(onClick = onRemove) {
-            Icon(AndroidKitIcons.Trash, contentDescription = strings.removeRecentSearch)
+            Icon(
+                imageVector = AndroidKitIcons.Trash,
+                contentDescription = strings.removeRecentSearch,
+                modifier = Modifier.size(dimensions.floatingActionIconSize),
+            )
         }
     }
 }

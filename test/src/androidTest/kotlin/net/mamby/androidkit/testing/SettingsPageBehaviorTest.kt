@@ -228,6 +228,8 @@ class SettingsPageBehaviorTest {
             }
         }
         rule.onNodeWithText("Language").performClick()
+        rule.onNodeWithContentDescription("Search languages").performTextReplacement("😀")
+        rule.onNodeWithText("No matching languages").assertIsDisplayed()
         rule.onNodeWithContentDescription("Search languages").performTextReplacement("missing")
         rule.onNodeWithText("No matching languages").assertIsDisplayed()
         rule.onNodeWithContentDescription("Search languages").performTextReplacement("FRANCAIS")

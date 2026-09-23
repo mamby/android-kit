@@ -69,6 +69,7 @@
     <string name="variation_icons_labels">أيقونات وتسميات</string>
     <string name="variation_horizontal_icons_labels">أيقونات وتسميات أفقية</string>
     <string name="variation_text_only">نص فقط</string>
+    <string name="variation_mixed_items">عناصر مختلطة</string>
     <string name="variation_text_items">عناصر نصية</string>
     <string name="variation_icon_items">عناصر بأيقونات</string>
     <string name="variation_interactive">سيناريوهات تفاعلية</string>

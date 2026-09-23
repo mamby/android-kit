@@ -438,7 +438,9 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
     val displayOptions = selection.displayOptions(strings.system)
     val options = remember(displayOptions, query) {
         val search = normalizeSettingsSearchText(query)
-        displayOptions.filter { search.isEmpty() || normalizeSettingsSearchText(it.label).contains(search) }
+        displayOptions.filter {
+            query.isBlank() || search.isNotEmpty() && normalizeSettingsSearchText(it.label).contains(search)
+        }
     }
     val listState = rememberLazyListState()
     val dimensions = AndroidKitThemeTokens.dimensions

@@ -76,6 +76,13 @@ fun androidKitCompactLabelsStress() {
 
 @PreviewTest
 @Preview(name = "Floating title actions", widthDp = 360, heightDp = 800, showBackground = true)
+@Preview(
+    name = "Floating title actions large font",
+    widthDp = 360,
+    heightDp = 800,
+    fontScale = 1.5f,
+    showBackground = true,
+)
 @Composable
 fun androidKitFloatingTitleActions() {
     AndroidKitTheme(definition = AndroidKitThemes.Light) {

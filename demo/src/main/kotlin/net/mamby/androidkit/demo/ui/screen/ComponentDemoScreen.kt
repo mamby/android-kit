@@ -541,6 +541,30 @@ private fun AndroidKitFloatingActionBarDemo(
                 }
             }
 
+            ComponentDemo.AndroidKitFloatingActionBarMixed -> {
+                icon(
+                    onClick = onAction,
+                    icon = editIcon,
+                    contentDescription = edit,
+                )
+                text(onClick = onAction, label = save)
+                iconAndLabel(
+                    onClick = onAction,
+                    icon = shareIcon,
+                    label = share,
+                    layout = AndroidKitFloatingActionBarIconAndLabelLayout.Horizontal,
+                )
+                separator()
+                flyout {
+                    flyoutItemGroups.forEachIndexed { index, group ->
+                        if (index > 0) separator()
+                        group.forEach { (icon, label) ->
+                            item(icon = icon, label = label, onClick = onAction)
+                        }
+                    }
+                }
+            }
+
             else -> error("Unexpected AndroidKitFloatingActionBar demo: $demo")
         }
     }
