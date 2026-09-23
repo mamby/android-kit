@@ -2,6 +2,7 @@ $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 Push-Location $repo
 try {
+    & ./test/gradle/verify-settings-search-lexicon.ps1
     $cases = @(
         @{ Name = 'valid'; Expected = $null },
         @{ Name = 'override'; Expected = 'is owned by AndroidKit' },

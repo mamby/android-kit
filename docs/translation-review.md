@@ -334,3 +334,21 @@ Removed the unused Voice input error icon label from all 18 locales after removi
 
 ## Floating tooltip demo
 Added floating_tooltip_demo_message in demo English, French and Arabic. Reviewed it as explanatory sample content about the shared transparency setting. Reused Confirm and variation labels; the Kit Close label is unchanged. AI contextual review only, without native-speaker approval or new external terminology references. No new Kit vocabulary or locale-contract schema changes.
+## 2026-09-23 Global Settings search
+
+Added the Search settings surface and an offline Settings-search lexicon for all
+18 supported locales. The current-language UI strings cover Search settings,
+Recent searches, Clear all, Remove recent search, No matching settings, and No
+recent searches. The language-independent raw lexicon contains each translated
+built-in label plus broad semantic aliases for Language, Theme, Transparency,
+App lock, lock timing/actions, About, Website, Source code, Version, Contact,
+Privacy, Terms, and third-party licenses. Contact includes support, help,
+assistance, feedback, question/ask, FAQ, suggestion, issue/problem, and bug-report
+intents without changing Contact into a dedicated bug tracker.
+
+English resources and actual component behavior were the semantic references.
+Automated validation checks the exact 18-locale inventory, required entry IDs,
+nonblank and normalized-unique terms, and correspondence with each locale's
+visible label. This was machine-assisted review; it is not native-speaker
+approval. Device truncation, pronunciation, and every alias's idiomatic quality
+remain separate review concerns.

@@ -33,8 +33,6 @@ import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
-import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
-import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
@@ -52,11 +50,11 @@ class SettingsPageBehaviorTest {
         var visible by mutableStateOf(true)
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     if (visible) {
-                        section(key = "status") { info(label = "Status", value = value) }
+                        section(key = "status") { info(key = "status", label = "Status", value = value) }
                     }
-                    section(key = "remaining") { info(label = "Remaining") }
+                    section(key = "remaining") { info(key = "remaining", label = "Remaining") }
                 }
             }
         }
@@ -78,7 +76,7 @@ class SettingsPageBehaviorTest {
         var locks = 0
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("security", label = "Security") {
                         appLock(AndroidKitAppLockSetting(
                         checked = checked, onCheckedChange = {},
@@ -114,7 +112,7 @@ class SettingsPageBehaviorTest {
         var requests = 0
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("security", label = "Security") {
                         appLock(AndroidKitAppLockSetting(
                         checked = true, onCheckedChange = {},
@@ -145,7 +143,7 @@ class SettingsPageBehaviorTest {
         var hasSection by mutableStateOf(true)
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     if (hasSection) {
                         section("security", label = "Security") {
                             appLock(AndroidKitAppLockSetting(
@@ -191,14 +189,14 @@ class SettingsPageBehaviorTest {
         var showEmpty by mutableStateOf(true)
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
-                    section("first") { button("First", {}) }
+                TestSettingsPage {
+                    section("first") { button("first", "First", {}) }
                     if (showEmpty) {
                         section("general", label = "General") {}
                         section("security", label = "Security") {}
                         section("empty", label = "Hidden custom") {}
                     }
-                    section("last") { button("Last", {}) }
+                    section("last") { button("last", "Last", {}) }
                 }
             }
         }
@@ -216,7 +214,7 @@ class SettingsPageBehaviorTest {
         var selected by mutableStateOf("en")
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("general", label = "General") {
                         language(AndroidKitLanguageSetting(
                         selection = AndroidKitSettingsSelection(
@@ -245,7 +243,7 @@ class SettingsPageBehaviorTest {
         var selected by mutableStateOf("light")
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("general", label = "General") {
                         theme(AndroidKitSettingsSelection(
                         selectedId = selected, onSelected = { selected = it },
@@ -265,7 +263,7 @@ class SettingsPageBehaviorTest {
     fun systemOptionShowsCurrentHostValueInSettingsRowAndPicker() {
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("general", label = "General") {
                         theme(AndroidKitSettingsSelection(
                         selectedId = "system", onSelected = {},
@@ -292,7 +290,7 @@ class SettingsPageBehaviorTest {
         var lockRequests = 0
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("general", label = "General") {
                         transparency(AndroidKitFloatingOpacitySetting(
                         value = level,
@@ -321,14 +319,14 @@ class SettingsPageBehaviorTest {
         var level by mutableFloatStateOf(0f)
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("general", label = "General") {
                         transparency(AndroidKitFloatingOpacitySetting(
                         value = level,
                         onValueChange = { level = it }, onValueChangeFinished = {},
                         ))
                     }
-                    section(key = "scroll") { info(label = "Scroll content") }
+                    section(key = "scroll") { info(key = "scroll", label = "Scroll content") }
                 }
             }
         }
@@ -349,9 +347,9 @@ class SettingsPageBehaviorTest {
         var showLanguage by mutableStateOf(true)
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     section("visibility") {
-                        toggle("Show language", showLanguage, { showLanguage = it })
+                        toggle("show-language", "Show language", showLanguage, { showLanguage = it })
                     }
                     section("general", label = "General") {
                         if (showLanguage) language(AndroidKitLanguageSetting(
@@ -384,14 +382,14 @@ class SettingsPageBehaviorTest {
         var showSection by mutableStateOf(true)
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage) {
+                TestSettingsPage {
                     if (showSection) {
                         section("conditional", label = "Conditional") {
-                            button("Conditional entry", {})
+                            button("conditional", "Conditional entry", {})
                         }
                     }
                     section("persistent", label = "Persistent") {
-                        button("Persistent entry", {})
+                        button("persistent", "Persistent entry", {})
                     }
                 }
             }
@@ -412,17 +410,22 @@ class SettingsPageBehaviorTest {
             AndroidKitTheme {
                 val holder = rememberSaveableStateHolder()
                 holder.SaveableStateProvider(destination) {
-                    AndroidKitSettingsPage(
-                        configuration = AndroidKitSettingsPageConfiguration.Subpage,
+                    TestSettingsPage(
                         title = destination,
                         listState = rememberLazyListState(),
                         onBack = if (destination == "child") ({ destination = "root" }) else null,
                     ) {
                         if (destination == "root") {
-                            repeat(30) { index -> section(key = "item-$index") { info(label = "Entry $index") } }
-                            section("navigation") { navigation("Open child", { destination = "child" }) }
+                            repeat(30) { index -> section(key = "item-$index") {
+                                info(key = "entry-$index", label = "Entry $index")
+                            } }
+                            section("navigation") {
+                                navigation("open-child", "Open child", { destination = "child" })
+                            }
                         } else {
-                            section(key = "child-content") { info(label = "Child content") }
+                            section(key = "child-content") {
+                                info(key = "child-content", label = "Child content")
+                            }
                         }
                     }
                 }

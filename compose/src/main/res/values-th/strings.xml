@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">การป้อนข้อมูลด้วยเสียงต้องเข้าถึงไมโครโฟน คุณอนุญาตได้ในการตั้งค่าแอป</string>
     <string name="androidkit_compose_voice_no_speech">ไม่พบคำพูดที่รู้จำได้ โปรดลองอีกครั้ง</string>
     <string name="androidkit_compose_open_app_settings">เปิดการตั้งค่าแอป</string>
+    <string name="androidkit_compose_search_settings">ค้นหาการตั้งค่า</string>
+    <string name="androidkit_compose_recent_searches">การค้นหาล่าสุด</string>
+    <string name="androidkit_compose_clear_all">ล้างทั้งหมด</string>
+    <string name="androidkit_compose_remove_recent_search">นำการค้นหาล่าสุดออก</string>
+    <string name="androidkit_compose_no_matching_settings">ไม่พบการตั้งค่าที่ตรงกัน</string>
+    <string name="androidkit_compose_no_recent_searches">ไม่มีการค้นหาล่าสุด</string>
 </resources>

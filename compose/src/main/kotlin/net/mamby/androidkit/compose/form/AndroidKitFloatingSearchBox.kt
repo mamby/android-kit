@@ -127,10 +127,22 @@ internal fun AndroidKitFloatingSearchBox(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     var fieldFocused by remember { mutableStateOf(false) }
+    var refocusAfterClear by remember { mutableStateOf(false) }
+    var preserveFocusAfterClear by remember { mutableStateOf(false) }
     var previousImeVisible by remember { mutableStateOf(imeVisible) }
     LaunchedEffect(imeVisible) {
-        if (previousImeVisible && !imeVisible && fieldFocused) focusManager.clearFocus()
+        if (previousImeVisible && !imeVisible && fieldFocused && !preserveFocusAfterClear) {
+            focusManager.clearFocus()
+        }
+        if (imeVisible) preserveFocusAfterClear = false
         previousImeVisible = imeVisible
+    }
+    LaunchedEffect(refocusAfterClear, query) {
+        if (refocusAfterClear) {
+            focusRequester.requestFocus()
+            keyboard?.show()
+            refocusAfterClear = false
+        }
     }
     var fieldValue by remember { mutableStateOf(TextFieldValue(query, TextRange(query.length))) }
     val displayedValue = if (fieldValue.text == query) fieldValue
@@ -300,7 +312,10 @@ internal fun AndroidKitFloatingSearchBox(
                     }
                 },
                 modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
-                    .onFocusChanged { fieldFocused = it.isFocused }
+                    .onFocusChanged {
+                        fieldFocused = it.isFocused
+                        if (!it.isFocused && !refocusAfterClear) preserveFocusAfterClear = false
+                    }
                     .semantics {
                         contentDescription = label
                         if (tooltipState.isVisible && errorMessage != null) error(errorMessage)
@@ -325,8 +340,8 @@ internal fun AndroidKitFloatingSearchBox(
                                     tooltipState.dismiss()
                                     permissionPending = false
                                     onQueryChange("")
-                                    focusRequester.requestFocus()
-                                    keyboard?.show()
+                                    preserveFocusAfterClear = true
+                                    refocusAfterClear = true
                                 },
                             ) {
                                 Icon(AndroidKitIcons.Close, strings.clearSearch,

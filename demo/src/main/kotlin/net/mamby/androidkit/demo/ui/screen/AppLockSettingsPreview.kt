@@ -9,8 +9,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitAppLockTimeoutSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
-import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
+import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
+import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 
 /** Interactive UI fixture; the catalog's real authentication remains host-owned. */
@@ -20,22 +21,27 @@ private fun AppLockSettingsPreview() {
     var checked by rememberSaveable { mutableStateOf(true) }
     var selected by rememberSaveable { mutableStateOf("5") }
     AndroidKitTheme {
-        AndroidKitSettingsPage(configuration = AndroidKitSettingsPageConfiguration.Subpage, title = "App lock UI preview") {
-            section("security") {
-                appLock(AndroidKitAppLockSetting(
-                    checked = checked, onCheckedChange = { checked = it },
-                    timeout = AndroidKitAppLockTimeoutSetting(
-                        options = listOf(
-                            AndroidKitSettingsOption("0", "Immediately"),
-                            AndroidKitSettingsOption("1", "After 1 minute"),
-                            AndroidKitSettingsOption("5", "After 5 minutes"),
-                            AndroidKitSettingsOption("15", "After 15 minutes"),
+        val catalog = androidKitSettingsCatalog(
+            AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+        ) {
+            main("preview", "App lock UI preview") {
+                section("security") {
+                    appLock(AndroidKitAppLockSetting(
+                        checked = checked, onCheckedChange = { checked = it },
+                        timeout = AndroidKitAppLockTimeoutSetting(
+                            options = listOf(
+                                AndroidKitSettingsOption("0", "Immediately"),
+                                AndroidKitSettingsOption("1", "After 1 minute"),
+                                AndroidKitSettingsOption("5", "After 5 minutes"),
+                                AndroidKitSettingsOption("15", "After 15 minutes"),
+                            ),
+                            selectedId = selected, onSelected = { selected = it },
                         ),
-                        selectedId = selected, onSelected = { selected = it },
-                    ),
-                    onLockNow = {},
-                ))
+                        onLockNow = {},
+                    ))
+                }
             }
         }
+        AndroidKitSettingsPage(catalog, "preview")
     }
 }

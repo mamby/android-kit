@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">La entrada de voz necesita acceso al micrófono. Puedes permitirlo en los ajustes de la aplicación.</string>
     <string name="androidkit_compose_voice_no_speech">No se ha reconocido ninguna voz. Inténtalo de nuevo.</string>
     <string name="androidkit_compose_open_app_settings">Abrir ajustes de la aplicación</string>
+    <string name="androidkit_compose_search_settings">Buscar en Ajustes</string>
+    <string name="androidkit_compose_recent_searches">Búsquedas recientes</string>
+    <string name="androidkit_compose_clear_all">Borrar todo</string>
+    <string name="androidkit_compose_remove_recent_search">Eliminar búsqueda reciente</string>
+    <string name="androidkit_compose_no_matching_settings">No hay ajustes coincidentes</string>
+    <string name="androidkit_compose_no_recent_searches">No hay búsquedas recientes</string>
 </resources>

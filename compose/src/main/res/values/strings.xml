@@ -36,6 +36,12 @@
     <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
     <string name="androidkit_compose_search">Search</string>
     <string name="androidkit_compose_clear_search">Clear search</string>
+    <string name="androidkit_compose_search_settings">Search settings</string>
+    <string name="androidkit_compose_recent_searches">Recent searches</string>
+    <string name="androidkit_compose_clear_all">Clear all</string>
+    <string name="androidkit_compose_remove_recent_search">Remove recent search</string>
+    <string name="androidkit_compose_no_matching_settings">No matching settings</string>
+    <string name="androidkit_compose_no_recent_searches">No recent searches</string>
     <string name="androidkit_compose_voice_search">Search by voice</string>
     <string name="androidkit_compose_voice_search_unavailable">Voice input is unavailable. You can still type your search.</string>
     <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->

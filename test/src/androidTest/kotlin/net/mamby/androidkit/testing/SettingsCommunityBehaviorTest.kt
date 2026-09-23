@@ -16,7 +16,8 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLegalEntry
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
-import net.mamby.androidkit.compose.form.AndroidKitSettingsPageConfiguration
+import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
+import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -31,13 +32,17 @@ class SettingsCommunityBehaviorTest {
         var aboutClicks = 0
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(
-                    configuration = AndroidKitSettingsPageConfiguration.Main(
-                        about = AndroidKitSettingsLink(onClick = { aboutClicks++ }),
-                    ),
+                val catalog = androidKitSettingsCatalog(
+                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
-                    section("host") { info("Host setting") }
+                    main("main", "Settings") {
+                        section("host") { info("host", "Host setting") }
+                    }
+                    about("about", AndroidKitSettingsAbout("Android Kit", "1.0")) {
+                        aboutClicks++
+                    }
                 }
+                AndroidKitSettingsPage(catalog, "main")
             }
         }
         assertOrder("Host setting", "About")
@@ -59,9 +64,7 @@ class SettingsCommunityBehaviorTest {
         val link = AndroidKitSettingsLink(onClick = { builtInClicks++ })
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(
-                    configuration = AndroidKitSettingsPageConfiguration.About(
-                        AndroidKitSettingsAbout(appName = "Android Kit",
+                val about = AndroidKitSettingsAbout(appName = "Android Kit",
                             description = "Reusable Android components.",
                             version = "1.0", privacyPolicy = link, termsOfUse = link,
                             libraries = link, contact = link, website = link, sourceCode = link,
@@ -69,9 +72,14 @@ class SettingsCommunityBehaviorTest {
                                 AndroidKitSettingsLegalEntry("contributors", "Contributors", { additionalClicks++ }),
                                 AndroidKitSettingsLegalEntry("notices", "Notices", { disabledClicks++ }, enabled = false),
                             ),
-                        ),
-                    ),
-                )
+                        )
+                val catalog = androidKitSettingsCatalog(
+                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+                ) {
+                    main("main", "Settings")
+                    about("about", about, {})
+                }
+                AndroidKitSettingsPage(catalog, "about")
             }
         }
         assertOrder("Android Kit", "Website", "Source code", "Version",
@@ -100,17 +108,20 @@ class SettingsCommunityBehaviorTest {
         val link = AndroidKitSettingsLink(onClick = { clicks++ })
         rule.setContent {
             AndroidKitTheme {
-                AndroidKitSettingsPage(
-                    configuration = AndroidKitSettingsPageConfiguration.About(
-                        AndroidKitSettingsAbout(appName = "Android Kit", version = version,
+                val about = AndroidKitSettingsAbout(appName = "Android Kit", version = version,
                             contact = link,
                             privacyPolicy = link,
                             termsOfUse = link,
                             libraries = link,
                             description = "   ",
-                        ),
-                    ),
-                )
+                        )
+                val catalog = androidKitSettingsCatalog(
+                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+                ) {
+                    main("main", "Settings")
+                    about("about", about, {})
+                }
+                AndroidKitSettingsPage(catalog, "about")
             }
         }
         rule.onNodeWithText("1.0").assertIsDisplayed()

@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">Sesli giriş için mikrofon erişimi gereklidir. Uygulama ayarlarından izin verebilirsiniz.</string>
     <string name="androidkit_compose_voice_no_speech">Konuşma tanınamadı. Tekrar deneyin.</string>
     <string name="androidkit_compose_open_app_settings">Uygulama ayarlarını aç</string>
+    <string name="androidkit_compose_search_settings">Ayarlarda ara</string>
+    <string name="androidkit_compose_recent_searches">Son aramalar</string>
+    <string name="androidkit_compose_clear_all">Tümünü temizle</string>
+    <string name="androidkit_compose_remove_recent_search">Son aramayı kaldır</string>
+    <string name="androidkit_compose_no_matching_settings">Eşleşen ayar yok</string>
+    <string name="androidkit_compose_no_recent_searches">Son arama yok</string>
 </resources>

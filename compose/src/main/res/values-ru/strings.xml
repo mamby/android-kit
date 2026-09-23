@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">Для голосового ввода нужен доступ к микрофону. Его можно разрешить в настройках приложения.</string>
     <string name="androidkit_compose_voice_no_speech">Речь не распознана. Попробуйте ещё раз.</string>
     <string name="androidkit_compose_open_app_settings">Открыть настройки приложения</string>
+    <string name="androidkit_compose_search_settings">Поиск в настройках</string>
+    <string name="androidkit_compose_recent_searches">Недавние запросы</string>
+    <string name="androidkit_compose_clear_all">Очистить всё</string>
+    <string name="androidkit_compose_remove_recent_search">Удалить недавний запрос</string>
+    <string name="androidkit_compose_no_matching_settings">Подходящие настройки не найдены</string>
+    <string name="androidkit_compose_no_recent_searches">Недавних запросов нет</string>
 </resources>

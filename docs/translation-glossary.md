@@ -22,6 +22,9 @@ Arabic and Simplified Chinese. Do not impose English loanwords on every language
 | System | Follow the device setting; a resolved value may be appended | Système | Restricting a generic label to system language |
 | More | Overflow menu, also an accessibility label | Plus | Ajouter (a creation action) |
 | Formatters | Utilities formatting dates, numbers and lists for a locale | Outils de formatage | Formateurs (people providing training) |
+| Search settings | Title/action for global search across the Settings catalog | Rechercher dans les paramètres | A web search or searching only the current page |
+| Recent searches | Previously submitted or activated Settings queries | Recherches récentes | Recently changed settings |
+| Report a bug | Search alias that resolves to Contact | Signaler un bug | Claiming that Contact itself is a dedicated bug tracker |
 
 The subtitle is a noun phrase, not a command to send a message. If a future
 component actually submits feedback, its action needs its own English reference

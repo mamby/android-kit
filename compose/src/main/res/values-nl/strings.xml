@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">Voor spraakinvoer is toegang tot de microfoon nodig. Je kunt dit toestaan in de app-instellingen.</string>
     <string name="androidkit_compose_voice_no_speech">Geen spraak herkend. Probeer het opnieuw.</string>
     <string name="androidkit_compose_open_app_settings">App-instellingen openen</string>
+    <string name="androidkit_compose_search_settings">Instellingen doorzoeken</string>
+    <string name="androidkit_compose_recent_searches">Recente zoekopdrachten</string>
+    <string name="androidkit_compose_clear_all">Alles wissen</string>
+    <string name="androidkit_compose_remove_recent_search">Recente zoekopdracht verwijderen</string>
+    <string name="androidkit_compose_no_matching_settings">Geen overeenkomende instellingen</string>
+    <string name="androidkit_compose_no_recent_searches">Geen recente zoekopdrachten</string>
 </resources>

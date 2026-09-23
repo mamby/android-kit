@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">语音输入需要麦克风权限。您可以在应用设置中允许访问。</string>
     <string name="androidkit_compose_voice_no_speech">未识别到语音。请重试。</string>
     <string name="androidkit_compose_open_app_settings">打开应用设置</string>
+    <string name="androidkit_compose_search_settings">搜索设置</string>
+    <string name="androidkit_compose_recent_searches">最近的搜索</string>
+    <string name="androidkit_compose_clear_all">全部清除</string>
+    <string name="androidkit_compose_remove_recent_search">移除最近的搜索</string>
+    <string name="androidkit_compose_no_matching_settings">没有匹配的设置</string>
+    <string name="androidkit_compose_no_recent_searches">没有最近的搜索</string>
 </resources>

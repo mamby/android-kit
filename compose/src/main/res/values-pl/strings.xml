@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">Wprowadzanie głosowe wymaga dostępu do mikrofonu. Możesz go przyznać w ustawieniach aplikacji.</string>
     <string name="androidkit_compose_voice_no_speech">Nie rozpoznano mowy. Spróbuj ponownie.</string>
     <string name="androidkit_compose_open_app_settings">Otwórz ustawienia aplikacji</string>
+    <string name="androidkit_compose_search_settings">Przeszukaj ustawienia</string>
+    <string name="androidkit_compose_recent_searches">Ostatnie wyszukiwania</string>
+    <string name="androidkit_compose_clear_all">Wyczyść wszystko</string>
+    <string name="androidkit_compose_remove_recent_search">Usuń ostatnie wyszukiwanie</string>
+    <string name="androidkit_compose_no_matching_settings">Brak pasujących ustawień</string>
+    <string name="androidkit_compose_no_recent_searches">Brak ostatnich wyszukiwań</string>
 </resources>

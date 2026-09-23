@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">La digitazione vocale richiede l’accesso al microfono. Puoi consentirlo nelle impostazioni dell’app.</string>
     <string name="androidkit_compose_voice_no_speech">Nessuna voce riconosciuta. Riprova.</string>
     <string name="androidkit_compose_open_app_settings">Apri impostazioni dell’app</string>
+    <string name="androidkit_compose_search_settings">Cerca nelle impostazioni</string>
+    <string name="androidkit_compose_recent_searches">Ricerche recenti</string>
+    <string name="androidkit_compose_clear_all">Cancella tutto</string>
+    <string name="androidkit_compose_remove_recent_search">Rimuovi ricerca recente</string>
+    <string name="androidkit_compose_no_matching_settings">Nessuna impostazione corrispondente</string>
+    <string name="androidkit_compose_no_recent_searches">Nessuna ricerca recente</string>
 </resources>

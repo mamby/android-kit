@@ -24,3 +24,6 @@ data class ComponentDemoRoute(val demo: ComponentDemo) : CatalogRoute
 
 @Serializable
 data object AboutRoute : CatalogRoute
+
+@Serializable
+data object SettingsSearchRoute : CatalogRoute

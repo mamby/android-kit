@@ -56,25 +56,32 @@ public annotation class AndroidKitSettingSectionDsl
 @AndroidKitSettingSectionDsl
 public sealed interface AndroidKitSettingSectionScope {
     public fun button(
+        key: String,
         label: String,
         onClick: () -> Unit,
         modifier: Modifier = Modifier,
         supportingText: String? = null,
         icon: ImageVector? = null,
         enabled: Boolean = true,
+        searchable: Boolean = true,
+        searchTerms: AndroidKitSettingsSearchTerms? = null,
     ): Unit
 
     /** Opens a host-owned destination using the shared navigation-row presentation. */
     public fun navigation(
+        key: String,
         label: String,
         onClick: () -> Unit,
         modifier: Modifier = Modifier,
         supportingText: String? = null,
         icon: ImageVector? = null,
         enabled: Boolean = true,
-    ): Unit = button(label, onClick, modifier, supportingText, icon, enabled)
+        searchable: Boolean = true,
+        searchTerms: AndroidKitSettingsSearchTerms? = null,
+    ): Unit = button(key, label, onClick, modifier, supportingText, icon, enabled, searchable, searchTerms)
 
     public fun toggle(
+        key: String,
         label: String,
         checked: Boolean,
         onCheckedChange: (Boolean) -> Unit,
@@ -83,9 +90,12 @@ public sealed interface AndroidKitSettingSectionScope {
         icon: ImageVector? = null,
         enabled: Boolean = true,
         colors: SwitchColors? = null,
+        searchable: Boolean = true,
+        searchTerms: AndroidKitSettingsSearchTerms? = null,
     ): Unit
 
     public fun slider(
+        key: String,
         label: String,
         value: Float,
         onValueChange: (Float) -> Unit,
@@ -98,10 +108,13 @@ public sealed interface AndroidKitSettingSectionScope {
         valueLabel: String? = null,
         enabled: Boolean = true,
         colors: SliderColors? = null,
+        searchable: Boolean = true,
+        searchTerms: AndroidKitSettingsSearchTerms? = null,
     ): Unit
 
-    public fun info(label: String, value: String? = null, supportingText: String? = null,
-        icon: ImageVector? = null, modifier: Modifier = Modifier): Unit
+    public fun info(key: String, label: String, value: String? = null, supportingText: String? = null,
+        icon: ImageVector? = null, modifier: Modifier = Modifier, searchable: Boolean = true,
+        searchTerms: AndroidKitSettingsSearchTerms? = null): Unit
 
 }
 
@@ -123,6 +136,7 @@ internal fun SettingsSection(
     dividerPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
     ),
+    onEntryAction: ((SettingsEntryDefinition) -> Unit)? = null,
 ): Unit {
     if (entries.isEmpty()) return
 
@@ -159,6 +173,7 @@ internal fun SettingsSection(
                         entry = entry,
                         style = style,
                         contentPadding = entryContentPadding,
+                        onEntryAction = onEntryAction,
                     )
                 }
             }
@@ -178,24 +193,32 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
     val entries: MutableList<SettingsEntryDefinition> = mutableListOf()
 
     override fun button(
+        key: String,
         label: String,
         onClick: () -> Unit,
         modifier: Modifier,
         supportingText: String?,
         icon: ImageVector?,
         enabled: Boolean,
+        searchable: Boolean,
+        searchTerms: AndroidKitSettingsSearchTerms?,
     ) {
+        requireEntryKey(key)
         entries += SettingsEntryDefinition.Button(
+            key = key,
             label = label,
             onClick = onClick,
             modifier = modifier,
             supportingText = supportingText,
             icon = icon,
             enabled = enabled,
+            searchable = searchable,
+            searchTerms = searchTerms,
         )
     }
 
     override fun toggle(
+        key: String,
         label: String,
         checked: Boolean,
         onCheckedChange: (Boolean) -> Unit,
@@ -204,8 +227,12 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
         icon: ImageVector?,
         enabled: Boolean,
         colors: SwitchColors?,
+        searchable: Boolean,
+        searchTerms: AndroidKitSettingsSearchTerms?,
     ) {
+        requireEntryKey(key)
         entries += SettingsEntryDefinition.Toggle(
+            key = key,
             label = label,
             checked = checked,
             onCheckedChange = onCheckedChange,
@@ -214,10 +241,13 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
             icon = icon,
             enabled = enabled,
             colors = colors,
+            searchable = searchable,
+            searchTerms = searchTerms,
         )
     }
 
     override fun slider(
+        key: String,
         label: String,
         value: Float,
         onValueChange: (Float) -> Unit,
@@ -230,8 +260,12 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
         valueLabel: String?,
         enabled: Boolean,
         colors: SliderColors?,
+        searchable: Boolean,
+        searchTerms: AndroidKitSettingsSearchTerms?,
     ) {
+        requireEntryKey(key)
         entries += SettingsEntryDefinition.Slider(
+            key = key,
             label = label,
             value = value,
             onValueChange = onValueChange,
@@ -244,42 +278,63 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
             valueLabel = valueLabel,
             enabled = enabled,
             colors = colors,
+            searchable = searchable,
+            searchTerms = searchTerms,
         )
     }
 
-    override fun info(label: String, value: String?, supportingText: String?,
-        icon: ImageVector?, modifier: Modifier) {
-        entries += SettingsEntryDefinition.Info(label, value, supportingText, icon, modifier)
+    override fun info(key: String, label: String, value: String?, supportingText: String?,
+        icon: ImageVector?, modifier: Modifier, searchable: Boolean,
+        searchTerms: AndroidKitSettingsSearchTerms?) {
+        requireEntryKey(key)
+        entries += SettingsEntryDefinition.Info(key, label, value, supportingText, icon, modifier,
+            searchable, searchTerms)
     }
 
     fun copyableInfo(
+        key: String,
         label: String,
         supportingText: String? = null,
         onClickLabel: String,
         onClick: () -> Unit,
         icon: ImageVector? = null,
+        searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) {
-        entries += SettingsEntryDefinition.CopyableInfo(label, supportingText, onClickLabel, onClick, icon)
+        requireEntryKey(key)
+        entries += SettingsEntryDefinition.CopyableInfo(key, label, supportingText, onClickLabel,
+            onClick, icon, searchTerms = searchTerms)
+    }
+
+    private fun requireEntryKey(key: String) {
+        require(key.isNotBlank()) { "Settings entry keys must not be blank." }
+        require(entries.none { it.key == key }) { "Settings entry keys must be unique within a section: $key" }
     }
 
 }
 
 internal sealed interface SettingsEntryDefinition {
+    val key: String
     val label: String
     val modifier: Modifier
     val supportingText: String?
     val icon: ImageVector?
+    val searchable: Boolean
+    val searchTerms: AndroidKitSettingsSearchTerms?
 
     class Button(
+        override val key: String,
         override val label: String,
         val onClick: () -> Unit,
         override val modifier: Modifier,
         override val supportingText: String?,
         override val icon: ImageVector?,
         val enabled: Boolean,
+        override val searchable: Boolean = true,
+        override val searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) : SettingsEntryDefinition
 
     class Toggle(
+        override val key: String,
         override val label: String,
         val checked: Boolean,
         val onCheckedChange: (Boolean) -> Unit,
@@ -288,9 +343,12 @@ internal sealed interface SettingsEntryDefinition {
         override val icon: ImageVector?,
         val enabled: Boolean,
         val colors: SwitchColors?,
+        override val searchable: Boolean = true,
+        override val searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) : SettingsEntryDefinition
 
     class Slider(
+        override val key: String,
         override val label: String,
         val value: Float,
         val onValueChange: (Float) -> Unit,
@@ -306,23 +364,31 @@ internal sealed interface SettingsEntryDefinition {
         val minimumLabel: String? = null,
         val maximumLabel: String? = null,
         val isOpacitySlider: Boolean = false,
+        override val searchable: Boolean = true,
+        override val searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) : SettingsEntryDefinition
 
     class Info(
+        override val key: String,
         override val label: String,
         val value: String?,
         override val supportingText: String?,
         override val icon: ImageVector?,
         override val modifier: Modifier,
+        override val searchable: Boolean = true,
+        override val searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) : SettingsEntryDefinition
 
     class CopyableInfo(
+        override val key: String,
         override val label: String,
         override val supportingText: String?,
         val onClickLabel: String,
         val onClick: () -> Unit,
         override val icon: ImageVector?,
         override val modifier: Modifier = Modifier,
+        override val searchable: Boolean = true,
+        override val searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) : SettingsEntryDefinition
 
 }
@@ -332,10 +398,11 @@ private fun SettingsEntry(
     entry: SettingsEntryDefinition,
     style: AndroidKitSettingSectionStyle,
     contentPadding: PaddingValues,
+    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit = when (entry) {
-    is SettingsEntryDefinition.Button -> SettingsButtonEntry(entry, style, contentPadding)
-    is SettingsEntryDefinition.Slider -> SettingsSliderEntry(entry, style, contentPadding)
-    is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry, style, contentPadding)
+    is SettingsEntryDefinition.Button -> SettingsButtonEntry(entry, style, contentPadding, onEntryAction)
+    is SettingsEntryDefinition.Slider -> SettingsSliderEntry(entry, style, contentPadding, onEntryAction)
+    is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry, style, contentPadding, onEntryAction)
     is SettingsEntryDefinition.CopyableInfo -> SettingsEntryContent(
         label = entry.label,
         supportingText = entry.supportingText,
@@ -345,7 +412,7 @@ private fun SettingsEntry(
             .clickable(
                 onClickLabel = entry.onClickLabel,
                 role = Role.Button,
-                onClick = entry.onClick,
+                onClick = { onEntryAction?.invoke(entry); entry.onClick() },
             )
             .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget),
         style = style,
@@ -373,6 +440,7 @@ private fun SettingsButtonEntry(
     entry: SettingsEntryDefinition.Button,
     style: AndroidKitSettingSectionStyle,
     contentPadding: PaddingValues,
+    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     SettingsEntryContent(
@@ -381,7 +449,8 @@ private fun SettingsButtonEntry(
         icon = entry.icon,
         modifier = entry.modifier
             .fillMaxWidth()
-            .clickable(enabled = entry.enabled, role = Role.Button, onClick = entry.onClick)
+            .clickable(enabled = entry.enabled, role = Role.Button,
+                onClick = { onEntryAction?.invoke(entry); entry.onClick() })
             .heightIn(min = dimensions.minimumTouchTarget),
         style = style,
         contentPadding = contentPadding,
@@ -399,6 +468,7 @@ private fun SettingsToggleEntry(
     entry: SettingsEntryDefinition.Toggle,
     style: AndroidKitSettingSectionStyle,
     contentPadding: PaddingValues,
+    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     SettingsEntryContent(
@@ -411,7 +481,7 @@ private fun SettingsToggleEntry(
                 value = entry.checked,
                 enabled = entry.enabled,
                 role = Role.Switch,
-                onValueChange = entry.onCheckedChange,
+                onValueChange = { value -> onEntryAction?.invoke(entry); entry.onCheckedChange(value) },
             )
             .heightIn(min = dimensions.minimumTouchTarget),
         style = style,
@@ -432,6 +502,7 @@ private fun SettingsSliderEntry(
     entry: SettingsEntryDefinition.Slider,
     style: AndroidKitSettingSectionStyle,
     contentPadding: PaddingValues,
+    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     Column(
@@ -494,7 +565,10 @@ private fun SettingsSliderEntry(
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics { contentDescription = entry.label },
-            onValueChangeFinished = entry.onValueChangeFinished,
+            onValueChangeFinished = {
+                onEntryAction?.invoke(entry)
+                entry.onValueChangeFinished?.invoke()
+            },
             enabled = entry.enabled,
             colors = colors,
             interactionSource = interactionSource,

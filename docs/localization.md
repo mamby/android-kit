@@ -9,7 +9,12 @@ host-owned. The About title and built-in More/Close controls are Kit-owned.
 This is a breaking API change: remove `AndroidKitTheme(strings = ...)`,
 `AndroidKitStrings`, `AndroidKitThemeTokens.strings`, and toolbar flyout
 `contentDescription` overrides. Use host resources for host content.
-Do not pass a custom title to the predefined About settings configuration.
+Do not pass custom labels for predefined About entries or the Settings search
+surface. Kit-owned Settings search terms are bundled for every supported locale;
+host-owned entries may supply `AndroidKitSettingsSearchTerms` for cross-language
+matching while their visible copy remains host-owned.
+The multilingual lexicon is an unqualified `res/raw` resource so app-bundle
+language splitting cannot remove terms for languages other than the active one.
 
 ## Required build enforcement
 

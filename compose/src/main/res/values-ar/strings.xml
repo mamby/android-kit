@@ -38,4 +38,10 @@
     <string name="androidkit_compose_voice_permission">يتطلب الإدخال الصوتي الوصول إلى الميكروفون. يمكنك السماح بذلك في إعدادات التطبيق.</string>
     <string name="androidkit_compose_voice_no_speech">لم يتم التعرّف على أي كلام. حاول مرة أخرى.</string>
     <string name="androidkit_compose_open_app_settings">فتح إعدادات التطبيق</string>
+    <string name="androidkit_compose_search_settings">البحث في الإعدادات</string>
+    <string name="androidkit_compose_recent_searches">عمليات البحث الأخيرة</string>
+    <string name="androidkit_compose_clear_all">مسح الكل</string>
+    <string name="androidkit_compose_remove_recent_search">إزالة البحث الأخير</string>
+    <string name="androidkit_compose_no_matching_settings">لا توجد إعدادات مطابقة</string>
+    <string name="androidkit_compose_no_recent_searches">لا توجد عمليات بحث حديثة</string>
 </resources>

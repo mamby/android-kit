@@ -33,6 +33,8 @@ import net.mamby.androidkit.demo.ui.screen.DummyNavigationScreen
 import net.mamby.androidkit.demo.ui.screen.LocalizationScreen
 import net.mamby.androidkit.demo.ui.screen.SettingsScreen
 import net.mamby.androidkit.demo.ui.screen.AboutScreen
+import net.mamby.androidkit.demo.ui.screen.SettingsSearchScreen
+import net.mamby.androidkit.demo.ui.screen.demoSettingsCatalog
 import net.mamby.androidkit.navigation3.rememberMultiBackStackNavigationState
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -114,6 +116,30 @@ internal fun AndroidKitCatalogApp(
             }
         ).take(navigationDemoConfiguration.itemCount)
         val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
+        val settingsCatalog = demoSettingsCatalog(
+            onAbout = { navigation.navigate(AboutRoute) },
+            onSearch = { navigation.navigate(SettingsSearchRoute) },
+            recentSearches = settings.recentSettingsSearches,
+            onRecentSearchesChange = settingsViewModel::setRecentSettingsSearches,
+            appLockEnabled = settings.appLockEnabled,
+            appLockTimeout = settings.appLockTimeout,
+            onAppLockTimeoutChange = settingsViewModel::setAppLockTimeout,
+            onAppLockChange = { onAuthenticate(it) },
+            appLockBusy = settingsViewModel.authenticating,
+            appLockError = settingsViewModel.authenticationError,
+            onLockNow = settingsViewModel::lock,
+            themeChoice = settings.themeChoice,
+            onThemeChoice = settingsViewModel::setThemeChoice,
+            floatingSurfaceOpacityLevel = previewedFloatingSurfaceOpacityLevel,
+            onFloatingSurfaceOpacityLevelChange = { level ->
+                previewedFloatingSurfaceOpacityLevel = level
+            },
+            onFloatingSurfaceOpacityLevelChangeFinished = {
+                settingsViewModel.setFloatingSurfaceOpacityLevel(
+                    previewedFloatingSurfaceOpacityLevel,
+                )
+            },
+        )
 
         BackHandler(enabled = !navigation.isAtRoot || navigation.selectedRoot != roots.first()) {
             navigation.goBack()
@@ -167,30 +193,14 @@ internal fun AndroidKitCatalogApp(
                         }
                         entry<LocalizationRoute> { LocalizationScreen() }
                         entry<SettingsRoute> {
-                            SettingsScreen(
-                                onAbout = { navigation.navigate(AboutRoute) },
-                                appLockEnabled = settings.appLockEnabled,
-                                appLockTimeout = settings.appLockTimeout,
-                                onAppLockTimeoutChange = settingsViewModel::setAppLockTimeout,
-                                onAppLockChange = { onAuthenticate(it) },
-                                appLockBusy = settingsViewModel.authenticating,
-                                appLockError = settingsViewModel.authenticationError,
-                                onLockNow = settingsViewModel::lock,
-                                themeChoice = settings.themeChoice,
-                                onThemeChoice = settingsViewModel::setThemeChoice,
-                                floatingSurfaceOpacityLevel =
-                                    previewedFloatingSurfaceOpacityLevel,
-                                onFloatingSurfaceOpacityLevelChange = { level ->
-                                    previewedFloatingSurfaceOpacityLevel = level
-                                },
-                                onFloatingSurfaceOpacityLevelChangeFinished = {
-                                    settingsViewModel.setFloatingSurfaceOpacityLevel(
-                                        previewedFloatingSurfaceOpacityLevel,
-                                    )
-                                },
-                            )
+                            SettingsScreen(settingsCatalog)
                         }
-                        entry<AboutRoute> { AboutScreen(onBack = navigation::goBack) }
+                        entry<AboutRoute> {
+                            AboutScreen(settingsCatalog, onBack = navigation::goBack)
+                        }
+                        entry<SettingsSearchRoute> {
+                            SettingsSearchScreen(settingsCatalog, onBack = navigation::goBack)
+                        }
                         entry<DemoRootRoute> { route ->
                             DummyNavigationScreen(index = route.index)
                         }

@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
+import org.json.JSONArray
 
 internal data class DemoSettings(
     val demoToggles: Set<DemoToggle> = DemoToggle.entries.filter { it.defaultValue }.toSet(),
@@ -37,6 +38,7 @@ internal data class DemoSettings(
     val floatingNavigationLayout: DemoFloatingNavigationLayout =
         DemoFloatingNavigationLayout.FiveItemsWithMore,
     val showCompactNavigationLabels: Boolean = false,
+    val recentSettingsSearches: List<String> = emptyList(),
 )
 
 enum class DemoAppLockTimeout(val duration: Duration) {
@@ -104,6 +106,9 @@ internal class DemoSettingsRepository(context: Context) {
                 ),
                 showCompactNavigationLabels = preferences[ShowCompactNavigationLabelsKey]
                     ?: false,
+                recentSettingsSearches = preferences[RecentSettingsSearchesKey]
+                    ?.let(::decodeStringList)
+                    .orEmpty(),
             )
         }
 
@@ -121,6 +126,10 @@ internal class DemoSettingsRepository(context: Context) {
 
     suspend fun setAppLockTimeout(timeout: DemoAppLockTimeout) {
         dataStore.edit { it[AppLockTimeoutKey] = timeout.name }
+    }
+
+    suspend fun setRecentSettingsSearches(queries: List<String>) {
+        dataStore.edit { it[RecentSettingsSearchesKey] = JSONArray(queries).toString() }
     }
 
     suspend fun setThemeChoice(choice: DemoThemeChoice) {
@@ -272,6 +281,10 @@ internal class DemoSettingsViewModel(
         }
     }
 
+    fun setRecentSettingsSearches(queries: List<String>) {
+        viewModelScope.launch { repository.setRecentSettingsSearches(queries) }
+    }
+
 }
 
 private val Context.demoSettingsDataStore: DataStore<Preferences> by preferencesDataStore(
@@ -295,6 +308,12 @@ private val FloatingNavigationLayoutKey = stringPreferencesKey(
 private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
     "show_compact_navigation_labels",
 )
+private val RecentSettingsSearchesKey = stringPreferencesKey("recent_settings_searches")
+
+private fun decodeStringList(value: String): List<String> = runCatching {
+    val array = JSONArray(value)
+    List(array.length()) { index -> array.getString(index) }
+}.getOrDefault(emptyList())
 
 internal const val MinimumFloatingSurfaceOpacityLevel: Float =
     AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel

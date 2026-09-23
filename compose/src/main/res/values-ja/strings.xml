@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">音声入力にはマイクへのアクセスが必要です。アプリの設定で許可できます。</string>
     <string name="androidkit_compose_voice_no_speech">音声を認識できませんでした。もう一度お試しください。</string>
     <string name="androidkit_compose_open_app_settings">アプリの設定を開く</string>
+    <string name="androidkit_compose_search_settings">設定を検索</string>
+    <string name="androidkit_compose_recent_searches">最近の検索</string>
+    <string name="androidkit_compose_clear_all">すべて消去</string>
+    <string name="androidkit_compose_remove_recent_search">最近の検索を削除</string>
+    <string name="androidkit_compose_no_matching_settings">一致する設定はありません</string>
+    <string name="androidkit_compose_no_recent_searches">最近の検索はありません</string>
 </resources>

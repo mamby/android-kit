@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">A introdução por voz requer acesso ao microfone. Pode permiti-lo nas definições da aplicação.</string>
     <string name="androidkit_compose_voice_no_speech">Não foi reconhecida nenhuma fala. Tente novamente.</string>
     <string name="androidkit_compose_open_app_settings">Abrir definições da aplicação</string>
+    <string name="androidkit_compose_search_settings">Pesquisar nas definições</string>
+    <string name="androidkit_compose_recent_searches">Pesquisas recentes</string>
+    <string name="androidkit_compose_clear_all">Limpar tudo</string>
+    <string name="androidkit_compose_remove_recent_search">Remover pesquisa recente</string>
+    <string name="androidkit_compose_no_matching_settings">Nenhuma definição correspondente</string>
+    <string name="androidkit_compose_no_recent_searches">Nenhuma pesquisa recente</string>
 </resources>

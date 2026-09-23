@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">Input suara memerlukan akses mikrofon. Anda dapat mengizinkannya di setelan aplikasi.</string>
     <string name="androidkit_compose_voice_no_speech">Tidak ada ucapan yang dikenali. Coba lagi.</string>
     <string name="androidkit_compose_open_app_settings">Buka setelan aplikasi</string>
+    <string name="androidkit_compose_search_settings">Cari setelan</string>
+    <string name="androidkit_compose_recent_searches">Penelusuran terbaru</string>
+    <string name="androidkit_compose_clear_all">Hapus semua</string>
+    <string name="androidkit_compose_remove_recent_search">Hapus penelusuran terbaru</string>
+    <string name="androidkit_compose_no_matching_settings">Tidak ada setelan yang cocok</string>
+    <string name="androidkit_compose_no_recent_searches">Tidak ada penelusuran terbaru</string>
 </resources>

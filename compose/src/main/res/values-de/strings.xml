@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">Für die Spracheingabe ist Mikrofonzugriff erforderlich. Du kannst ihn in den App-Einstellungen erlauben.</string>
     <string name="androidkit_compose_voice_no_speech">Keine Sprache erkannt. Versuche es erneut.</string>
     <string name="androidkit_compose_open_app_settings">App-Einstellungen öffnen</string>
+    <string name="androidkit_compose_search_settings">Einstellungen durchsuchen</string>
+    <string name="androidkit_compose_recent_searches">Letzte Suchanfragen</string>
+    <string name="androidkit_compose_clear_all">Alle löschen</string>
+    <string name="androidkit_compose_remove_recent_search">Letzte Suche entfernen</string>
+    <string name="androidkit_compose_no_matching_settings">Keine passenden Einstellungen</string>
+    <string name="androidkit_compose_no_recent_searches">Keine letzten Suchanfragen</string>
 </resources>

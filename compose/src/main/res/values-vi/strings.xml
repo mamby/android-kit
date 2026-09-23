@@ -43,4 +43,10 @@
     <string name="androidkit_compose_voice_permission">Tính năng nhập bằng giọng nói cần quyền truy cập micrô. Bạn có thể cấp quyền trong phần cài đặt ứng dụng.</string>
     <string name="androidkit_compose_voice_no_speech">Không nhận dạng được lời nói. Hãy thử lại.</string>
     <string name="androidkit_compose_open_app_settings">Mở phần cài đặt ứng dụng</string>
+    <string name="androidkit_compose_search_settings">Tìm kiếm trong phần cài đặt</string>
+    <string name="androidkit_compose_recent_searches">Tìm kiếm gần đây</string>
+    <string name="androidkit_compose_clear_all">Xóa tất cả</string>
+    <string name="androidkit_compose_remove_recent_search">Xóa tìm kiếm gần đây</string>
+    <string name="androidkit_compose_no_matching_settings">Không có cài đặt phù hợp</string>
+    <string name="androidkit_compose_no_recent_searches">Không có tìm kiếm gần đây</string>
 </resources>

@@ -1,0 +1,1726 @@
+{
+  "schema": 1,
+  "locales": [
+    "en",
+    "ar",
+    "de",
+    "es",
+    "fr",
+    "hi",
+    "id",
+    "it",
+    "ja",
+    "ko",
+    "nl",
+    "pl",
+    "pt",
+    "ru",
+    "th",
+    "tr",
+    "vi",
+    "zh-Hans"
+  ],
+  "entries": {
+    "language": {
+      "en": [
+        "Language",
+        "locale",
+        "translation"
+      ],
+      "ar": [
+        "اللغة",
+        "الإعدادات المحلية",
+        "الترجمة"
+      ],
+      "de": [
+        "Sprache",
+        "gebietsschema",
+        "übersetzung"
+      ],
+      "es": [
+        "Idioma",
+        "configuración regional",
+        "traducción"
+      ],
+      "fr": [
+        "Langue",
+        "paramètres régionaux",
+        "traduction"
+      ],
+      "hi": [
+        "भाषा",
+        "स्थान",
+        "अनुवाद"
+      ],
+      "id": [
+        "Bahasa",
+        "lokal",
+        "terjemahan"
+      ],
+      "it": [
+        "Lingua",
+        "impostazioni locali",
+        "traduzione"
+      ],
+      "ja": [
+        "言語",
+        "ロケール",
+        "翻訳"
+      ],
+      "ko": [
+        "언어",
+        "로케일",
+        "번역"
+      ],
+      "nl": [
+        "Taal",
+        "landinstelling",
+        "vertaling"
+      ],
+      "pl": [
+        "Język",
+        "ustawienia regionalne",
+        "tłumaczenie"
+      ],
+      "pt": [
+        "Idioma",
+        "localidade",
+        "tradução"
+      ],
+      "ru": [
+        "Язык",
+        "локаль",
+        "перевод"
+      ],
+      "th": [
+        "ภาษา",
+        "โลแคล",
+        "การแปล"
+      ],
+      "tr": [
+        "Dil",
+        "yerel ayar",
+        "çeviri"
+      ],
+      "vi": [
+        "Ngôn ngữ",
+        "khu vực",
+        "bản dịch"
+      ],
+      "zh-Hans": [
+        "语言",
+        "区域设置",
+        "翻译"
+      ]
+    },
+    "theme": {
+      "en": [
+        "Theme",
+        "appearance",
+        "light",
+        "dark"
+      ],
+      "ar": [
+        "المظهر",
+        "فاتح",
+        "داكن"
+      ],
+      "de": [
+        "Design",
+        "darstellung",
+        "erscheinungsbild",
+        "hell",
+        "dunkel"
+      ],
+      "es": [
+        "Tema",
+        "apariencia",
+        "claro",
+        "oscuro"
+      ],
+      "fr": [
+        "Thème",
+        "apparence",
+        "clair",
+        "sombre"
+      ],
+      "hi": [
+        "थीम",
+        "दिखावट",
+        "हल्की",
+        "गहरी"
+      ],
+      "id": [
+        "Tema",
+        "tampilan",
+        "terang",
+        "gelap"
+      ],
+      "it": [
+        "Tema",
+        "aspetto",
+        "chiaro",
+        "scuro"
+      ],
+      "ja": [
+        "テーマ",
+        "外観",
+        "ライト",
+        "ダーク"
+      ],
+      "ko": [
+        "테마",
+        "모양",
+        "라이트",
+        "다크"
+      ],
+      "nl": [
+        "Thema",
+        "weergave",
+        "uiterlijk",
+        "licht",
+        "donker"
+      ],
+      "pl": [
+        "Motyw",
+        "wygląd",
+        "jasny",
+        "ciemny"
+      ],
+      "pt": [
+        "Tema",
+        "aparência",
+        "claro",
+        "escuro"
+      ],
+      "ru": [
+        "Тема",
+        "оформление",
+        "внешний вид",
+        "светлая",
+        "тёмная"
+      ],
+      "th": [
+        "ธีม",
+        "ลักษณะที่ปรากฏ",
+        "สว่าง",
+        "มืด"
+      ],
+      "tr": [
+        "Tema",
+        "görünüm",
+        "açık",
+        "koyu"
+      ],
+      "vi": [
+        "Giao diện",
+        "sáng",
+        "tối"
+      ],
+      "zh-Hans": [
+        "主题",
+        "外观",
+        "浅色",
+        "深色"
+      ]
+    },
+    "transparency": {
+      "en": [
+        "Transparency",
+        "opacity",
+        "see through"
+      ],
+      "ar": [
+        "الشفافية",
+        "التعتيم",
+        "شفاف"
+      ],
+      "de": [
+        "Transparenz",
+        "deckkraft",
+        "durchsichtigkeit"
+      ],
+      "es": [
+        "Transparencia",
+        "opacidad",
+        "transparente"
+      ],
+      "fr": [
+        "Transparence",
+        "opacité",
+        "transparent"
+      ],
+      "hi": [
+        "पारदर्शिता",
+        "अपारदर्शिता",
+        "पारदर्शी"
+      ],
+      "id": [
+        "Transparansi",
+        "opasitas",
+        "transparan"
+      ],
+      "it": [
+        "Trasparenza",
+        "opacità",
+        "trasparente"
+      ],
+      "ja": [
+        "透明度",
+        "不透明度",
+        "透明"
+      ],
+      "ko": [
+        "투명도",
+        "불투명도",
+        "투명"
+      ],
+      "nl": [
+        "Transparantie",
+        "dekking",
+        "doorzichtig"
+      ],
+      "pl": [
+        "Przezroczystość",
+        "krycie",
+        "przezroczysty"
+      ],
+      "pt": [
+        "Transparência",
+        "opacidade",
+        "transparente"
+      ],
+      "ru": [
+        "Прозрачность",
+        "непрозрачность",
+        "прозрачный"
+      ],
+      "th": [
+        "ความโปร่งใส",
+        "ความทึบ",
+        "โปร่งใส"
+      ],
+      "tr": [
+        "Şeffaflık",
+        "opaklık",
+        "saydam"
+      ],
+      "vi": [
+        "Độ trong suốt",
+        "độ mờ",
+        "trong suốt"
+      ],
+      "zh-Hans": [
+        "透明度",
+        "不透明度",
+        "透明"
+      ]
+    },
+    "app-lock": {
+      "en": [
+        "App lock",
+        "lock",
+        "security",
+        "biometric"
+      ],
+      "ar": [
+        "قفل التطبيق",
+        "القفل",
+        "الأمان",
+        "المقاييس الحيوية"
+      ],
+      "de": [
+        "App-Sperre",
+        "sperre",
+        "sicherheit",
+        "biometrie"
+      ],
+      "es": [
+        "Bloqueo de la aplicación",
+        "bloqueo",
+        "seguridad",
+        "biometría"
+      ],
+      "fr": [
+        "Verrouillage de l’application",
+        "verrouillage",
+        "sécurité",
+        "biométrie"
+      ],
+      "hi": [
+        "ऐप लॉक",
+        "लॉक",
+        "सुरक्षा",
+        "बायोमेट्रिक"
+      ],
+      "id": [
+        "Kunci aplikasi",
+        "kunci",
+        "keamanan",
+        "biometrik"
+      ],
+      "it": [
+        "Blocco app",
+        "blocco",
+        "sicurezza",
+        "biometria"
+      ],
+      "ja": [
+        "アプリロック",
+        "ロック",
+        "セキュリティ",
+        "生体認証"
+      ],
+      "ko": [
+        "앱 잠금",
+        "잠금",
+        "보안",
+        "생체 인식"
+      ],
+      "nl": [
+        "Appvergrendeling",
+        "vergrendeling",
+        "beveiliging",
+        "biometrie"
+      ],
+      "pl": [
+        "Blokada aplikacji",
+        "blokada",
+        "bezpieczeństwo",
+        "biometria"
+      ],
+      "pt": [
+        "Bloqueio da aplicação",
+        "bloqueio",
+        "segurança",
+        "biometria"
+      ],
+      "ru": [
+        "Блокировка приложения",
+        "блокировка",
+        "безопасность",
+        "биометрия"
+      ],
+      "th": [
+        "ล็อกแอป",
+        "ล็อก",
+        "ความปลอดภัย",
+        "ไบโอเมตริก"
+      ],
+      "tr": [
+        "Uygulama kilidi",
+        "kilit",
+        "güvenlik",
+        "biyometri"
+      ],
+      "vi": [
+        "Khóa ứng dụng",
+        "khóa",
+        "bảo mật",
+        "sinh trắc học"
+      ],
+      "zh-Hans": [
+        "应用锁",
+        "锁定",
+        "安全",
+        "生物识别"
+      ]
+    },
+    "app-lock-timeout": {
+      "en": [
+        "Lock after leaving the app",
+        "auto lock",
+        "timeout",
+        "lock delay"
+      ],
+      "ar": [
+        "القفل بعد مغادرة التطبيق",
+        "القفل التلقائي",
+        "مهلة",
+        "تأخير القفل"
+      ],
+      "de": [
+        "Nach Verlassen der App sperren",
+        "automatische sperre",
+        "zeitlimit",
+        "sperrverzögerung"
+      ],
+      "es": [
+        "Bloquear después de salir de la aplicación",
+        "bloqueo automático",
+        "tiempo de espera",
+        "retraso de bloqueo"
+      ],
+      "fr": [
+        "Verrouiller après avoir quitté l’application",
+        "verrouillage automatique",
+        "délai",
+        "temporisation"
+      ],
+      "hi": [
+        "ऐप से बाहर निकलने के बाद लॉक करें",
+        "अपने आप लॉक",
+        "समय सीमा",
+        "लॉक में देरी"
+      ],
+      "id": [
+        "Kunci setelah keluar dari aplikasi",
+        "kunci otomatis",
+        "batas waktu",
+        "jeda penguncian"
+      ],
+      "it": [
+        "Blocca dopo l’uscita dall’app",
+        "blocco automatico",
+        "timeout",
+        "ritardo blocco"
+      ],
+      "ja": [
+        "アプリを離れた後にロック",
+        "自動ロック",
+        "タイムアウト",
+        "ロックの遅延"
+      ],
+      "ko": [
+        "앱을 나간 후 잠그기",
+        "자동 잠금",
+        "시간 제한",
+        "잠금 지연"
+      ],
+      "nl": [
+        "Vergrendelen na het verlaten van de app",
+        "automatisch vergrendelen",
+        "time-out",
+        "vergrendelingsvertraging"
+      ],
+      "pl": [
+        "Zablokuj po opuszczeniu aplikacji",
+        "automatyczna blokada",
+        "limit czasu",
+        "opóźnienie blokady"
+      ],
+      "pt": [
+        "Bloquear após sair da aplicação",
+        "bloqueio automático",
+        "tempo limite",
+        "atraso de bloqueio"
+      ],
+      "ru": [
+        "Блокировать после выхода из приложения",
+        "автоблокировка",
+        "тайм-аут",
+        "задержка блокировки"
+      ],
+      "th": [
+        "ล็อกหลังออกจากแอป",
+        "ล็อกอัตโนมัติ",
+        "หมดเวลา",
+        "หน่วงเวลาล็อก"
+      ],
+      "tr": [
+        "Uygulamadan çıktıktan sonra kilitle",
+        "otomatik kilit",
+        "zaman aşımı",
+        "kilit gecikmesi"
+      ],
+      "vi": [
+        "Khóa sau khi rời ứng dụng",
+        "tự động khóa",
+        "thời gian chờ",
+        "độ trễ khóa"
+      ],
+      "zh-Hans": [
+        "离开应用后锁定",
+        "自动锁定",
+        "超时",
+        "锁定延迟"
+      ]
+    },
+    "lock-now": {
+      "en": [
+        "Lock now",
+        "secure now"
+      ],
+      "ar": [
+        "قفل الآن",
+        "القفل الآن",
+        "التأمين الآن"
+      ],
+      "de": [
+        "Jetzt sperren",
+        "jetzt sichern"
+      ],
+      "es": [
+        "Bloquear ahora",
+        "proteger ahora"
+      ],
+      "fr": [
+        "Verrouiller maintenant",
+        "sécuriser maintenant"
+      ],
+      "hi": [
+        "अभी लॉक करें",
+        "अभी सुरक्षित करें"
+      ],
+      "id": [
+        "Kunci sekarang",
+        "amankan sekarang"
+      ],
+      "it": [
+        "Blocca ora",
+        "proteggi ora"
+      ],
+      "ja": [
+        "今すぐロック",
+        "今すぐ保護"
+      ],
+      "ko": [
+        "지금 잠그기",
+        "지금 잠금",
+        "지금 보호"
+      ],
+      "nl": [
+        "Nu vergrendelen",
+        "nu beveiligen"
+      ],
+      "pl": [
+        "Zablokuj teraz",
+        "zabezpiecz teraz"
+      ],
+      "pt": [
+        "Bloquear agora",
+        "proteger agora"
+      ],
+      "ru": [
+        "Заблокировать сейчас",
+        "защитить сейчас"
+      ],
+      "th": [
+        "ล็อกตอนนี้",
+        "รักษาความปลอดภัยตอนนี้"
+      ],
+      "tr": [
+        "Şimdi kilitle",
+        "şimdi güvene al"
+      ],
+      "vi": [
+        "Khóa ngay",
+        "bảo mật ngay"
+      ],
+      "zh-Hans": [
+        "立即锁定",
+        "立即保护"
+      ]
+    },
+    "about": {
+      "en": [
+        "About",
+        "app info",
+        "application information",
+        "details"
+      ],
+      "ar": [
+        "حول",
+        "معلومات التطبيق",
+        "تفاصيل التطبيق"
+      ],
+      "de": [
+        "Über",
+        "app-info",
+        "anwendungsinformationen",
+        "details"
+      ],
+      "es": [
+        "Acerca de",
+        "información de la aplicación",
+        "detalles"
+      ],
+      "fr": [
+        "À propos",
+        "infos sur l’application",
+        "informations sur l’application",
+        "détails"
+      ],
+      "hi": [
+        "परिचय",
+        "ऐप की जानकारी",
+        "एप्लिकेशन की जानकारी",
+        "विवरण"
+      ],
+      "id": [
+        "Tentang",
+        "info aplikasi",
+        "informasi aplikasi",
+        "detail"
+      ],
+      "it": [
+        "Informazioni",
+        "informazioni app",
+        "dettagli"
+      ],
+      "ja": [
+        "このアプリについて",
+        "アプリ情報",
+        "アプリケーション情報",
+        "詳細"
+      ],
+      "ko": [
+        "소개",
+        "앱 정보",
+        "애플리케이션 정보",
+        "세부정보"
+      ],
+      "nl": [
+        "Over",
+        "app-info",
+        "toepassingsinformatie",
+        "details"
+      ],
+      "pl": [
+        "Informacje",
+        "informacje o aplikacji",
+        "szczegóły"
+      ],
+      "pt": [
+        "Sobre",
+        "informações da aplicação",
+        "detalhes"
+      ],
+      "ru": [
+        "О приложении",
+        "информация о приложении",
+        "сведения"
+      ],
+      "th": [
+        "เกี่ยวกับ",
+        "ข้อมูลแอป",
+        "ข้อมูลแอปพลิเคชัน",
+        "รายละเอียด"
+      ],
+      "tr": [
+        "Hakkında",
+        "uygulama bilgileri",
+        "ayrıntılar"
+      ],
+      "vi": [
+        "Giới thiệu",
+        "thông tin ứng dụng",
+        "chi tiết"
+      ],
+      "zh-Hans": [
+        "关于",
+        "应用信息",
+        "应用详情",
+        "详细信息"
+      ]
+    },
+    "website": {
+      "en": [
+        "Website",
+        "site",
+        "homepage",
+        "home page"
+      ],
+      "ar": [
+        "الموقع الإلكتروني",
+        "الموقع",
+        "موقع الويب",
+        "الصفحة الرئيسية"
+      ],
+      "de": [
+        "Website",
+        "webseite",
+        "site",
+        "startseite"
+      ],
+      "es": [
+        "Sitio web",
+        "sitio",
+        "página de inicio"
+      ],
+      "fr": [
+        "Site web",
+        "site",
+        "page d’accueil"
+      ],
+      "hi": [
+        "वेबसाइट",
+        "साइट",
+        "होम पेज"
+      ],
+      "id": [
+        "Situs web",
+        "situs",
+        "beranda"
+      ],
+      "it": [
+        "Sito web",
+        "sito",
+        "pagina iniziale"
+      ],
+      "ja": [
+        "ウェブサイト",
+        "サイト",
+        "ホームページ"
+      ],
+      "ko": [
+        "웹사이트",
+        "사이트",
+        "홈페이지"
+      ],
+      "nl": [
+        "Website",
+        "site",
+        "startpagina"
+      ],
+      "pl": [
+        "Strona internetowa",
+        "witryna",
+        "strona główna"
+      ],
+      "pt": [
+        "Site",
+        "sítio web",
+        "página inicial"
+      ],
+      "ru": [
+        "Веб-сайт",
+        "сайт",
+        "главная страница"
+      ],
+      "th": [
+        "เว็บไซต์",
+        "ไซต์",
+        "หน้าแรก"
+      ],
+      "tr": [
+        "Web sitesi",
+        "site",
+        "ana sayfa"
+      ],
+      "vi": [
+        "Trang web",
+        "website",
+        "trang chủ"
+      ],
+      "zh-Hans": [
+        "网站",
+        "站点",
+        "主页"
+      ]
+    },
+    "source-code": {
+      "en": [
+        "Source code",
+        "source",
+        "code",
+        "repository",
+        "repo",
+        "project repository"
+      ],
+      "ar": [
+        "الشفرة المصدرية",
+        "المصدر",
+        "الرمز",
+        "المستودع",
+        "مستودع المشروع"
+      ],
+      "de": [
+        "Quellcode",
+        "quelle",
+        "code",
+        "repository",
+        "projekt-repository"
+      ],
+      "es": [
+        "Código fuente",
+        "fuente",
+        "código",
+        "repositorio",
+        "repositorio del proyecto"
+      ],
+      "fr": [
+        "Code source",
+        "source",
+        "code",
+        "dépôt",
+        "dépôt du projet"
+      ],
+      "hi": [
+        "सोर्स कोड",
+        "स्रोत",
+        "कोड",
+        "रिपॉज़िटरी",
+        "प्रोजेक्ट रिपॉज़िटरी"
+      ],
+      "id": [
+        "Kode sumber",
+        "sumber",
+        "kode",
+        "repositori",
+        "repositori proyek"
+      ],
+      "it": [
+        "Codice sorgente",
+        "sorgente",
+        "codice",
+        "repository",
+        "repository del progetto"
+      ],
+      "ja": [
+        "ソースコード",
+        "ソース",
+        "コード",
+        "リポジトリ",
+        "プロジェクトリポジトリ"
+      ],
+      "ko": [
+        "소스 코드",
+        "소스",
+        "코드",
+        "저장소",
+        "프로젝트 저장소"
+      ],
+      "nl": [
+        "Broncode",
+        "bron",
+        "code",
+        "repository",
+        "projectrepository"
+      ],
+      "pl": [
+        "Kod źródłowy",
+        "źródło",
+        "kod",
+        "repozytorium",
+        "repozytorium projektu"
+      ],
+      "pt": [
+        "Código-fonte",
+        "fonte",
+        "código",
+        "repositório",
+        "repositório do projeto"
+      ],
+      "ru": [
+        "Исходный код",
+        "код",
+        "репозиторий",
+        "репозиторий проекта"
+      ],
+      "th": [
+        "ซอร์สโค้ด",
+        "ต้นฉบับ",
+        "โค้ด",
+        "ที่เก็บ",
+        "ที่เก็บโครงการ"
+      ],
+      "tr": [
+        "Kaynak kodu",
+        "kaynak",
+        "kod",
+        "depo",
+        "proje deposu"
+      ],
+      "vi": [
+        "Mã nguồn",
+        "nguồn",
+        "mã",
+        "kho lưu trữ",
+        "kho dự án"
+      ],
+      "zh-Hans": [
+        "源代码",
+        "代码",
+        "仓库",
+        "项目仓库"
+      ]
+    },
+    "version": {
+      "en": [
+        "Version",
+        "app version",
+        "build",
+        "release"
+      ],
+      "ar": [
+        "الإصدار",
+        "إصدار التطبيق",
+        "رقم البناء"
+      ],
+      "de": [
+        "Version",
+        "app-version",
+        "build",
+        "veröffentlichung"
+      ],
+      "es": [
+        "Versión",
+        "versión de la aplicación",
+        "compilación",
+        "lanzamiento"
+      ],
+      "fr": [
+        "Version",
+        "version de l’application",
+        "build",
+        "publication"
+      ],
+      "hi": [
+        "संस्करण",
+        "ऐप संस्करण",
+        "बिल्ड",
+        "रिलीज़"
+      ],
+      "id": [
+        "Versi",
+        "versi aplikasi",
+        "build",
+        "rilis"
+      ],
+      "it": [
+        "Versione",
+        "versione app",
+        "build",
+        "rilascio"
+      ],
+      "ja": [
+        "バージョン",
+        "アプリのバージョン",
+        "ビルド",
+        "リリース"
+      ],
+      "ko": [
+        "버전",
+        "앱 버전",
+        "빌드",
+        "출시"
+      ],
+      "nl": [
+        "Versie",
+        "appversie",
+        "build",
+        "release"
+      ],
+      "pl": [
+        "Wersja",
+        "wersja aplikacji",
+        "kompilacja",
+        "wydanie"
+      ],
+      "pt": [
+        "Versão",
+        "versão da aplicação",
+        "compilação",
+        "lançamento"
+      ],
+      "ru": [
+        "Версия",
+        "версия приложения",
+        "сборка",
+        "выпуск"
+      ],
+      "th": [
+        "เวอร์ชัน",
+        "เวอร์ชันแอป",
+        "บิลด์",
+        "รุ่น"
+      ],
+      "tr": [
+        "Sürüm",
+        "uygulama sürümü",
+        "derleme",
+        "yayın"
+      ],
+      "vi": [
+        "Phiên bản",
+        "phiên bản ứng dụng",
+        "bản dựng",
+        "bản phát hành"
+      ],
+      "zh-Hans": [
+        "版本",
+        "应用版本",
+        "构建",
+        "发布"
+      ]
+    },
+    "contact": {
+      "en": [
+        "Contact",
+        "support",
+        "help",
+        "assistance",
+        "feedback",
+        "question",
+        "ask",
+        "faq",
+        "suggestion",
+        "issue",
+        "problem",
+        "bug report",
+        "report a bug"
+      ],
+      "ar": [
+        "التواصل",
+        "الدعم",
+        "المساعدة",
+        "تعليقات",
+        "سؤال",
+        "اسأل",
+        "الأسئلة الشائعة",
+        "اقتراح",
+        "مشكلة",
+        "بلاغ خطأ",
+        "الإبلاغ عن خطأ"
+      ],
+      "de": [
+        "Kontakt",
+        "support",
+        "hilfe",
+        "unterstützung",
+        "feedback",
+        "frage",
+        "fragen",
+        "faq",
+        "vorschlag",
+        "problem",
+        "fehlerbericht",
+        "fehler melden"
+      ],
+      "es": [
+        "Contacto",
+        "soporte",
+        "ayuda",
+        "asistencia",
+        "comentarios",
+        "pregunta",
+        "preguntar",
+        "preguntas frecuentes",
+        "faq",
+        "sugerencia",
+        "incidencia",
+        "problema",
+        "informe de error",
+        "notificar un error"
+      ],
+      "fr": [
+        "Contact",
+        "assistance",
+        "aide",
+        "support",
+        "commentaires",
+        "question",
+        "demander",
+        "faq",
+        "suggestion",
+        "problème",
+        "incident",
+        "rapport de bug",
+        "signaler un bug"
+      ],
+      "hi": [
+        "संपर्क",
+        "सहायता",
+        "मदद",
+        "समर्थन",
+        "फ़ीडबैक",
+        "सवाल",
+        "पूछें",
+        "अक्सर पूछे जाने वाले सवाल",
+        "faq",
+        "सुझाव",
+        "समस्या",
+        "बग रिपोर्ट",
+        "बग की रिपोर्ट करें"
+      ],
+      "id": [
+        "Kontak",
+        "dukungan",
+        "bantuan",
+        "asistensi",
+        "masukan",
+        "pertanyaan",
+        "tanya",
+        "faq",
+        "saran",
+        "masalah",
+        "laporan bug",
+        "laporkan bug"
+      ],
+      "it": [
+        "Contatti",
+        "supporto",
+        "aiuto",
+        "assistenza",
+        "feedback",
+        "domanda",
+        "chiedere",
+        "faq",
+        "suggerimento",
+        "problema",
+        "segnalazione bug",
+        "segnala un bug"
+      ],
+      "ja": [
+        "お問い合わせ",
+        "サポート",
+        "ヘルプ",
+        "支援",
+        "フィードバック",
+        "質問",
+        "尋ねる",
+        "よくある質問",
+        "faq",
+        "提案",
+        "問題",
+        "不具合報告",
+        "バグを報告"
+      ],
+      "ko": [
+        "문의",
+        "지원",
+        "도움말",
+        "도움",
+        "의견",
+        "질문",
+        "자주 묻는 질문",
+        "faq",
+        "제안",
+        "문제",
+        "버그 신고",
+        "버그 보고"
+      ],
+      "nl": [
+        "Contact",
+        "ondersteuning",
+        "hulp",
+        "assistentie",
+        "feedback",
+        "vraag",
+        "vragen",
+        "faq",
+        "suggestie",
+        "probleem",
+        "bugrapport",
+        "een bug melden"
+      ],
+      "pl": [
+        "Kontakt",
+        "wsparcie",
+        "pomoc",
+        "asysta",
+        "opinie",
+        "pytanie",
+        "zapytaj",
+        "faq",
+        "sugestia",
+        "problem",
+        "zgłoszenie błędu",
+        "zgłoś błąd"
+      ],
+      "pt": [
+        "Contacto",
+        "suporte",
+        "ajuda",
+        "assistência",
+        "comentários",
+        "pergunta",
+        "perguntar",
+        "perguntas frequentes",
+        "faq",
+        "sugestão",
+        "problema",
+        "relatório de erro",
+        "comunicar um erro"
+      ],
+      "ru": [
+        "Контакты",
+        "поддержка",
+        "помощь",
+        "обратная связь",
+        "вопрос",
+        "спросить",
+        "частые вопросы",
+        "faq",
+        "предложение",
+        "проблема",
+        "отчёт об ошибке",
+        "сообщить об ошибке"
+      ],
+      "th": [
+        "ติดต่อ",
+        "การสนับสนุน",
+        "ความช่วยเหลือ",
+        "คำติชม",
+        "คำถาม",
+        "ถาม",
+        "คำถามที่พบบ่อย",
+        "faq",
+        "ข้อเสนอแนะ",
+        "ปัญหา",
+        "รายงานข้อบกพร่อง",
+        "แจ้งข้อบกพร่อง"
+      ],
+      "tr": [
+        "İletişim",
+        "destek",
+        "yardım",
+        "asistan",
+        "geri bildirim",
+        "soru",
+        "sor",
+        "sss",
+        "faq",
+        "öneri",
+        "sorun",
+        "hata raporu",
+        "hata bildir"
+      ],
+      "vi": [
+        "Liên hệ",
+        "hỗ trợ",
+        "trợ giúp",
+        "phản hồi",
+        "câu hỏi",
+        "hỏi",
+        "faq",
+        "câu hỏi thường gặp",
+        "đề xuất",
+        "sự cố",
+        "vấn đề",
+        "báo cáo lỗi",
+        "báo lỗi"
+      ],
+      "zh-Hans": [
+        "联系",
+        "支持",
+        "帮助",
+        "协助",
+        "反馈",
+        "问题",
+        "提问",
+        "常见问题",
+        "faq",
+        "建议",
+        "故障",
+        "错误报告",
+        "报告错误"
+      ]
+    },
+    "privacy": {
+      "en": [
+        "Privacy policy",
+        "privacy",
+        "data protection",
+        "personal data",
+        "data policy"
+      ],
+      "ar": [
+        "سياسة الخصوصية",
+        "الخصوصية",
+        "حماية البيانات",
+        "البيانات الشخصية",
+        "سياسة البيانات"
+      ],
+      "de": [
+        "Datenschutzerklärung",
+        "datenschutz",
+        "daten schützen",
+        "personenbezogene daten",
+        "datenrichtlinie"
+      ],
+      "es": [
+        "Política de privacidad",
+        "privacidad",
+        "protección de datos",
+        "datos personales",
+        "política de datos"
+      ],
+      "fr": [
+        "Politique de confidentialité",
+        "confidentialité",
+        "protection des données",
+        "données personnelles",
+        "politique de données"
+      ],
+      "hi": [
+        "गोपनीयता नीति",
+        "निजता",
+        "डेटा सुरक्षा",
+        "निजी डेटा",
+        "डेटा नीति"
+      ],
+      "id": [
+        "Kebijakan privasi",
+        "privasi",
+        "perlindungan data",
+        "data pribadi",
+        "kebijakan data"
+      ],
+      "it": [
+        "Informativa sulla privacy",
+        "privacy",
+        "protezione dei dati",
+        "dati personali",
+        "informativa sui dati"
+      ],
+      "ja": [
+        "プライバシーポリシー",
+        "プライバシー",
+        "データ保護",
+        "個人データ",
+        "データポリシー"
+      ],
+      "ko": [
+        "개인정보 처리방침",
+        "개인정보 보호",
+        "데이터 보호",
+        "개인 데이터",
+        "데이터 정책"
+      ],
+      "nl": [
+        "Privacybeleid",
+        "privacy",
+        "gegevensbescherming",
+        "persoonsgegevens",
+        "gegevensbeleid"
+      ],
+      "pl": [
+        "Polityka prywatności",
+        "prywatność",
+        "ochrona danych",
+        "dane osobowe",
+        "polityka danych"
+      ],
+      "pt": [
+        "Política de privacidade",
+        "privacidade",
+        "proteção de dados",
+        "dados pessoais",
+        "política de dados"
+      ],
+      "ru": [
+        "Политика конфиденциальности",
+        "конфиденциальность",
+        "защита данных",
+        "личные данные",
+        "политика данных"
+      ],
+      "th": [
+        "นโยบายความเป็นส่วนตัว",
+        "ความเป็นส่วนตัว",
+        "การปกป้องข้อมูล",
+        "ข้อมูลส่วนบุคคล",
+        "นโยบายข้อมูล"
+      ],
+      "tr": [
+        "Gizlilik politikası",
+        "gizlilik",
+        "veri koruma",
+        "kişisel veriler",
+        "veri politikası"
+      ],
+      "vi": [
+        "Chính sách quyền riêng tư",
+        "quyền riêng tư",
+        "bảo vệ dữ liệu",
+        "dữ liệu cá nhân",
+        "chính sách dữ liệu"
+      ],
+      "zh-Hans": [
+        "隐私政策",
+        "隐私",
+        "数据保护",
+        "个人数据",
+        "数据政策"
+      ]
+    },
+    "terms": {
+      "en": [
+        "Terms of use",
+        "terms",
+        "conditions",
+        "terms and conditions",
+        "legal"
+      ],
+      "ar": [
+        "شروط الاستخدام",
+        "الشروط",
+        "الأحكام",
+        "الشروط والأحكام",
+        "قانوني"
+      ],
+      "de": [
+        "Nutzungsbedingungen",
+        "bedingungen",
+        "rechtliches"
+      ],
+      "es": [
+        "Condiciones de uso",
+        "términos",
+        "condiciones",
+        "términos y condiciones",
+        "legal"
+      ],
+      "fr": [
+        "Conditions d’utilisation",
+        "conditions",
+        "conditions générales",
+        "juridique"
+      ],
+      "hi": [
+        "उपयोग की शर्तें",
+        "शर्तें",
+        "नियम",
+        "नियम और शर्तें",
+        "कानूनी"
+      ],
+      "id": [
+        "Ketentuan penggunaan",
+        "ketentuan",
+        "syarat",
+        "syarat dan ketentuan",
+        "legal"
+      ],
+      "it": [
+        "Condizioni d’uso",
+        "termini",
+        "condizioni",
+        "termini e condizioni",
+        "note legali"
+      ],
+      "ja": [
+        "利用規約",
+        "規約",
+        "条件",
+        "法的情報"
+      ],
+      "ko": [
+        "이용 약관",
+        "약관",
+        "조건",
+        "이용약관",
+        "법률"
+      ],
+      "nl": [
+        "Gebruiksvoorwaarden",
+        "voorwaarden",
+        "algemene voorwaarden",
+        "juridisch"
+      ],
+      "pl": [
+        "Warunki użytkowania",
+        "warunki",
+        "regulamin",
+        "warunki korzystania",
+        "informacje prawne"
+      ],
+      "pt": [
+        "Termos de utilização",
+        "termos",
+        "condições",
+        "termos e condições",
+        "legal"
+      ],
+      "ru": [
+        "Условия использования",
+        "условия",
+        "правовая информация"
+      ],
+      "th": [
+        "ข้อกำหนดการใช้งาน",
+        "ข้อกำหนด",
+        "เงื่อนไข",
+        "ข้อกำหนดและเงื่อนไข",
+        "กฎหมาย"
+      ],
+      "tr": [
+        "Kullanım koşulları",
+        "şartlar",
+        "koşullar",
+        "hüküm ve koşullar",
+        "yasal"
+      ],
+      "vi": [
+        "Điều khoản sử dụng",
+        "điều khoản",
+        "điều kiện",
+        "điều khoản và điều kiện",
+        "pháp lý"
+      ],
+      "zh-Hans": [
+        "使用条款",
+        "条款",
+        "条件",
+        "条款和条件",
+        "法律"
+      ]
+    },
+    "libraries": {
+      "en": [
+        "Third-party licenses",
+        "licenses",
+        "dependencies",
+        "libraries",
+        "third party software",
+        "notices",
+        "acknowledgements"
+      ],
+      "ar": [
+        "تراخيص الجهات الخارجية",
+        "التراخيص",
+        "التبعيات",
+        "المكتبات",
+        "برامج الجهات الخارجية",
+        "الإشعارات",
+        "شكر وتقدير"
+      ],
+      "de": [
+        "Drittanbieterlizenzen",
+        "lizenzen",
+        "abhängigkeiten",
+        "bibliotheken",
+        "drittanbieter-software",
+        "hinweise",
+        "danksagungen"
+      ],
+      "es": [
+        "Licencias de terceros",
+        "licencias",
+        "dependencias",
+        "bibliotecas",
+        "software de terceros",
+        "avisos",
+        "reconocimientos"
+      ],
+      "fr": [
+        "Licences de tiers",
+        "licences",
+        "dépendances",
+        "bibliothèques",
+        "logiciels tiers",
+        "mentions",
+        "remerciements"
+      ],
+      "hi": [
+        "तृतीय-पक्ष लाइसेंस",
+        "लाइसेंस",
+        "निर्भरताएँ",
+        "लाइब्रेरी",
+        "तीसरे पक्ष का सॉफ़्टवेयर",
+        "सूचनाएँ",
+        "आभार"
+      ],
+      "id": [
+        "Lisensi pihak ketiga",
+        "lisensi",
+        "dependensi",
+        "pustaka",
+        "perangkat lunak pihak ketiga",
+        "pemberitahuan",
+        "penghargaan"
+      ],
+      "it": [
+        "Licenze di terze parti",
+        "licenze",
+        "dipendenze",
+        "librerie",
+        "software di terze parti",
+        "avvisi",
+        "riconoscimenti"
+      ],
+      "ja": [
+        "サードパーティのライセンス",
+        "ライセンス",
+        "依存関係",
+        "ライブラリ",
+        "サードパーティソフトウェア",
+        "通知",
+        "謝辞"
+      ],
+      "ko": [
+        "타사 라이선스",
+        "라이선스",
+        "종속 항목",
+        "라이브러리",
+        "타사 소프트웨어",
+        "고지",
+        "감사의 말"
+      ],
+      "nl": [
+        "Licenties van derden",
+        "licenties",
+        "afhankelijkheden",
+        "bibliotheken",
+        "software van derden",
+        "kennisgevingen",
+        "dankbetuigingen"
+      ],
+      "pl": [
+        "Licencje podmiotów trzecich",
+        "licencje",
+        "zależności",
+        "biblioteki",
+        "oprogramowanie innych firm",
+        "uwagi",
+        "podziękowania"
+      ],
+      "pt": [
+        "Licenças de terceiros",
+        "licenças",
+        "dependências",
+        "bibliotecas",
+        "software de terceiros",
+        "avisos",
+        "agradecimentos"
+      ],
+      "ru": [
+        "Лицензии третьих сторон",
+        "лицензии",
+        "зависимости",
+        "библиотеки",
+        "стороннее ПО",
+        "уведомления",
+        "благодарности"
+      ],
+      "th": [
+        "ใบอนุญาตของบุคคลที่สาม",
+        "ใบอนุญาต",
+        "การขึ้นต่อกัน",
+        "ไลบรารี",
+        "ซอฟต์แวร์ของบุคคลที่สาม",
+        "ประกาศ",
+        "กิตติกรรมประกาศ"
+      ],
+      "tr": [
+        "Üçüncü taraf lisansları",
+        "lisanslar",
+        "bağımlılıklar",
+        "kitaplıklar",
+        "üçüncü taraf yazılım",
+        "bildirimler",
+        "teşekkürler"
+      ],
+      "vi": [
+        "Giấy phép bên thứ ba",
+        "giấy phép",
+        "phần phụ thuộc",
+        "thư viện",
+        "phần mềm bên thứ ba",
+        "thông báo",
+        "lời cảm ơn"
+      ],
+      "zh-Hans": [
+        "第三方许可证",
+        "许可证",
+        "依赖项",
+        "库",
+        "第三方软件",
+        "声明",
+        "致谢"
+      ]
+    }
+  }
+}
+
