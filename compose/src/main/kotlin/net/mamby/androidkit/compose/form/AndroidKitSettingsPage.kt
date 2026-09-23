@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import java.text.Normalizer
 import java.util.Locale
+import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
@@ -422,11 +423,17 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
     }
     val listState = rememberLazyListState()
     val dimensions = AndroidKitThemeTokens.dimensions
-    val style = AndroidKitThemeTokens.bottomSheetStyle
     AndroidKitBottomSheet(
         visible = true, title = if (picker.searchLabel != null) strings.language else strings.theme, onDismiss = onDismiss,
         fitContent = picker.searchLabel == null,
-        search = picker.searchLabel?.let { AndroidKitSheetSearch(query, { query = it }, it) },
+        floatingAction = picker.searchLabel?.let { label ->
+            AndroidKitFloatingAction.Search(
+                query = query,
+                onQueryChange = { query = it },
+                onSearch = {},
+                label = label,
+            )
+        },
         scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
         dismissGesturesEnabled = !listState.canScrollBackward,
     ) { padding ->

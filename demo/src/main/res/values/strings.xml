@@ -109,4 +109,5 @@
     <string name="open_floating_search_sheet">Open search sheet</string>
     <string name="floating_search_submitted">Last submitted search: %1$s</string>
     <string name="floating_search_empty">No matching examples.</string>
+    <string name="floating_tooltip_demo_message">This tooltip shares the floating surface transparency.</string>
 </resources>

@@ -16,7 +16,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.heightIn
@@ -31,8 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.RichTooltip
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -73,6 +70,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.style.TextAlign
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
+import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltip
+import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltipAction
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitDefaults
 import net.mamby.androidkit.compose.theme.FloatingSurface
@@ -92,6 +91,28 @@ public fun AndroidKitFloatingSearchBox(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    voiceInputEnabled: Boolean = true,
+): Unit {
+    AndroidKitFloatingSearchBox(
+        query = query,
+        onQueryChange = onQueryChange,
+        onSearch = onSearch,
+        label = AndroidKitThemeTokens.strings.search,
+        modifier = modifier,
+        enabled = enabled,
+        voiceInputEnabled = voiceInputEnabled,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun AndroidKitFloatingSearchBox(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    label: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     voiceInputEnabled: Boolean = true,
@@ -212,29 +233,26 @@ public fun AndroidKitFloatingSearchBox(
         focusable = visibleError == DictationError.Permission,
         tooltip = {
             if (errorMessage != null) {
-                RichTooltip(
-                    action = {
-                        FlowRow {
-                            if (visibleError == DictationError.Permission) {
-                                TextButton(onClick = {
-                                    try {
-                                        settingsLauncher.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                            Uri.fromParts("package", context.packageName, null)))
-                                        tooltipState.dismiss()
-                                    } catch (_: ActivityNotFoundException) {
-                                        settingsLaunchFailed = true
-                                    } catch (_: SecurityException) {
-                                        settingsLaunchFailed = true
-                                    }
-                                }) { Text(strings.openAppSettings) }
-                            }
-                            TextButton(onClick = { tooltipState.dismiss() }) { Text(strings.close) }
-                        }
-                    },
-                ) {
-                    Text(if (settingsLaunchFailed) strings.voiceSearchUnavailable else errorMessage,
-                        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
-                }
+                AndroidKitFloatingTooltip(
+                    text = if (settingsLaunchFailed) strings.voiceSearchUnavailable else errorMessage,
+                    onDismiss = { tooltipState.dismiss() },
+                    action = if (visibleError == DictationError.Permission) {
+                        AndroidKitFloatingTooltipAction(
+                            label = strings.openAppSettings,
+                            onClick = {
+                                try {
+                                    settingsLauncher.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                        Uri.fromParts("package", context.packageName, null)))
+                                    tooltipState.dismiss()
+                                } catch (_: ActivityNotFoundException) {
+                                    settingsLaunchFailed = true
+                                } catch (_: SecurityException) {
+                                    settingsLaunchFailed = true
+                                }
+                            },
+                        )
+                    } else null,
+                )
             }
         },
     ) {
@@ -284,7 +302,7 @@ public fun AndroidKitFloatingSearchBox(
                 modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
                     .onFocusChanged { fieldFocused = it.isFocused }
                     .semantics {
-                        contentDescription = strings.search
+                        contentDescription = label
                         if (tooltipState.isVisible && errorMessage != null) error(errorMessage)
                     },
                 enabled = enabled,
@@ -292,7 +310,7 @@ public fun AndroidKitFloatingSearchBox(
                 maxLines = 3,
                 textStyle = AndroidKitThemeTokens.typography.bodyLarge,
                 shape = shape,
-                placeholder = { Text(strings.search) },
+                placeholder = { Text(label) },
                 leadingIcon = {
                     Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))
                 },

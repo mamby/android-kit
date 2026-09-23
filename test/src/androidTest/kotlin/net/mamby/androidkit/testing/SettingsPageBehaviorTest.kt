@@ -230,9 +230,9 @@ class SettingsPageBehaviorTest {
             }
         }
         rule.onNodeWithText("Language").performClick()
-        rule.onNodeWithText("Search languages").performTextReplacement("missing")
+        rule.onNodeWithContentDescription("Search languages").performTextReplacement("missing")
         rule.onNodeWithText("No matching languages").assertIsDisplayed()
-        rule.onNodeWithText("Search languages").performTextReplacement("FRANCAIS")
+        rule.onNodeWithContentDescription("Search languages").performTextReplacement("FRANCAIS")
         rule.onNodeWithText("Français").performClick()
         rule.runOnIdle { assertEquals("fr", selected) }
         rule.onNodeWithText("Language").performClick()

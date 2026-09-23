@@ -13,14 +13,31 @@ import net.mamby.androidkit.compose.form.AndroidKitFloatingSearchBox
 
 /** Data for floating chrome. AndroidKit exclusively renders its controls. */
 public sealed interface AndroidKitFloatingAction {
-    public class Search(
+    public class Search private constructor(
         public val query: String,
         public val onQueryChange: (String) -> Unit,
         public val onSearch: (String) -> Unit,
-        public val enabled: Boolean = true,
-        public val voiceInputEnabled: Boolean = true,
-        public val modifier: Modifier = Modifier,
-    ) : AndroidKitFloatingAction
+        public val enabled: Boolean,
+        public val voiceInputEnabled: Boolean,
+        public val modifier: Modifier,
+        internal val label: String?,
+    ) : AndroidKitFloatingAction {
+        public constructor(
+            query: String,
+            onQueryChange: (String) -> Unit,
+            onSearch: (String) -> Unit,
+            enabled: Boolean = true,
+            voiceInputEnabled: Boolean = true,
+            modifier: Modifier = Modifier,
+        ) : this(query, onQueryChange, onSearch, enabled, voiceInputEnabled, modifier, null)
+
+        internal constructor(
+            query: String,
+            onQueryChange: (String) -> Unit,
+            onSearch: (String) -> Unit,
+            label: String,
+        ) : this(query, onQueryChange, onSearch, true, true, Modifier, label)
+    }
 
     public class Button private constructor(
         internal val vector: ImageVector?,
@@ -60,6 +77,7 @@ internal fun RenderFloatingAction(action: AndroidKitFloatingAction?) {
             query = action.query,
             onQueryChange = action.onQueryChange,
             onSearch = action.onSearch,
+            label = action.label ?: AndroidKitThemeTokens.strings.search,
             modifier = action.modifier,
             enabled = action.enabled,
             voiceInputEnabled = action.voiceInputEnabled,

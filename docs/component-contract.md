@@ -11,6 +11,9 @@ default only when explicitly requested.
 
 Existing component style APIs described below remain until explicitly migrated;
 they are not a precedent for adding equivalent extensibility to new components.
+`AndroidKitFloatingTooltip` accepts text, one optional typed action, and a Close
+callback. Its chrome is sealed and uses shared floating-surface transparency,
+border and shadow. The Material tooltip anchor retains placement and state ownership.
 Render scopes and implementations stay internal or private; public declaration
 scopes cannot be implemented by consumers.
 

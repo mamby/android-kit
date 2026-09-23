@@ -108,4 +108,5 @@
     <string name="open_floating_search_sheet">فتح لوحة البحث</string>
     <string name="floating_search_submitted">آخر بحث تم إرساله: %1$s</string>
     <string name="floating_search_empty">لا توجد أمثلة مطابقة.</string>
+    <string name="floating_tooltip_demo_message">يستخدم هذا التلميح إعداد الشفافية المشترك للأسطح العائمة.</string>
 </resources>

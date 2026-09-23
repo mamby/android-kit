@@ -331,3 +331,6 @@ no external terminology references or native-speaker approval. Idiomatic quality
 and all-locale device rendering remain unverified; build checks are separate.
 
 Removed the unused Voice input error icon label from all 18 locales after removing the icon. Permission guidance and Open app settings wording are unchanged; microphone retry now reopens the guidance. No new translated wording was introduced.
+
+## Floating tooltip demo
+Added floating_tooltip_demo_message in demo English, French and Arabic. Reviewed it as explanatory sample content about the shared transparency setting. Reused Confirm and variation labels; the Kit Close label is unchanged. AI contextual review only, without native-speaker approval or new external terminology references. No new Kit vocabulary or locale-contract schema changes.

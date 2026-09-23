@@ -108,4 +108,5 @@
     <string name="open_floating_search_sheet">Ouvrir le panneau de recherche</string>
     <string name="floating_search_submitted">Dernière recherche lancée : %1$s</string>
     <string name="floating_search_empty">Aucun exemple correspondant.</string>
+    <string name="floating_tooltip_demo_message">Cette infobulle utilise la transparence des surfaces flottantes.</string>
 </resources>

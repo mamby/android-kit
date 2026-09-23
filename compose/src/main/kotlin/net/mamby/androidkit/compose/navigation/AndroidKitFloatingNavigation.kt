@@ -44,6 +44,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
+import androidx.compose.runtime.key
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -53,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
@@ -251,7 +253,8 @@ private enum class CompactNavigationItemsSlot {
 }
 
 private class CompactNavigationLayoutState {
-    var selectionBounds by mutableStateOf<IntRect?>(null)
+    var itemBounds by mutableStateOf<Map<Any, IntRect>>(emptyMap())
+    var selectedItemKey by mutableStateOf<Any?>(null)
     var overflowStartIndex by mutableIntStateOf(Int.MAX_VALUE)
 }
 
@@ -301,11 +304,11 @@ private fun <Key : Any> FloatingNavigationBar(
                 style = surfaceStyle,
             ) {
                 Box {
-                    NavigationSelectionBackground(
+                    CompactNavigationSelectionBackground(
                         modifier = Modifier.matchParentSize(),
                         containerColor = style.compactContainerColor,
                         selectedContainerColor = style.selectedContainerColor,
-                        selectionBounds = layoutState.selectionBounds,
+                        layoutState = layoutState,
                         selectionShape = style.itemShape,
                         opacity = visuals.opacity,
                     )
@@ -459,26 +462,33 @@ private fun <Key : Any> CompactNavigationItemsLayout(
         val backgroundPaddingPx = backgroundContentPadding.roundToPx()
         layout(width = layoutWidth, height = layoutHeight) {
             layoutState.overflowStartIndex = visibleCount
-            layoutState.selectionBounds = null
+            val itemBounds = mutableMapOf<Any, IntRect>()
+            var selectedItemKey: Any? = null
             var x = 0
             (visiblePlaceables + listOfNotNull(morePlaceable)).forEachIndexed { index, placeable ->
                 val y = (layoutHeight - placeable.height) / 2
-                if (index == selectedPlaceableIndex) {
-                    val relativeX = when (layoutDirection) {
-                        LayoutDirection.Ltr -> x
-                        LayoutDirection.Rtl -> layoutWidth - x - placeable.width
-                    }
-                    layoutState.selectionBounds = IntRect(
-                        offset = IntOffset(
-                            x = relativeX + backgroundPaddingPx,
-                            y = y + backgroundPaddingPx,
-                        ),
-                        size = IntSize(placeable.width, placeable.height),
-                    )
+                val itemKey = if (index < visibleCount) {
+                    CompactNavigationDestinationKey(requestedItems[index].key)
+                } else {
+                    CompactNavigationItemsSlot.More
                 }
+                if (index == selectedPlaceableIndex) selectedItemKey = itemKey
+                val relativeX = when (layoutDirection) {
+                    LayoutDirection.Ltr -> x
+                    LayoutDirection.Rtl -> layoutWidth - x - placeable.width
+                }
+                itemBounds[itemKey] = IntRect(
+                    offset = IntOffset(
+                        x = relativeX + backgroundPaddingPx,
+                        y = y + backgroundPaddingPx,
+                    ),
+                    size = IntSize(placeable.width, placeable.height),
+                )
                 placeable.placeRelative(x = x, y = y)
                 x += placeable.width
             }
+            layoutState.itemBounds = itemBounds
+            layoutState.selectedItemKey = selectedItemKey
         }
     }
 }
@@ -699,7 +709,7 @@ private fun <Key : Any> NavigationOverflowFlyout(
                 modifier = Modifier.matchParentSize(),
                 containerColor = flyoutContainerColor,
                 selectedContainerColor = style.selectedContainerColor,
-                selectionBounds = relativeSelectionBounds,
+                selections = listOfNotNull(relativeSelectionBounds?.let { NavigationSelection(it) }),
                 selectionShape = style.itemShape,
                 opacity = flyoutVisuals.opacity,
             )
@@ -755,11 +765,43 @@ private fun <Key : Any> NavigationOverflowFlyout(
     }
 }
 
+private data class CompactNavigationDestinationKey(val key: Any)
+
+private class NavigationSelection(
+    val bounds: IntRect,
+    val scale: () -> Float = { 1f },
+)
+
+@Composable
+private fun CompactNavigationSelectionBackground(
+    layoutState: CompactNavigationLayoutState,
+    containerColor: Color,
+    selectedContainerColor: Color,
+    selectionShape: Shape,
+    opacity: Float,
+    modifier: Modifier = Modifier,
+) {
+    val selections = layoutState.itemBounds.map { (itemKey, bounds) ->
+        key(itemKey) {
+            val scale = rememberNavigationHighlightScale(itemKey == layoutState.selectedItemKey)
+            NavigationSelection(bounds) { scale.value }
+        }
+    }
+    NavigationSelectionBackground(
+        containerColor = containerColor,
+        selectedContainerColor = selectedContainerColor,
+        selectionShape = selectionShape,
+        opacity = opacity,
+        modifier = modifier,
+        selections = selections,
+    )
+}
+
 @Composable
 private fun NavigationSelectionBackground(
     containerColor: Color,
     selectedContainerColor: Color,
-    selectionBounds: IntRect?,
+    selections: List<NavigationSelection>,
     selectionShape: Shape,
     opacity: Float,
     modifier: Modifier = Modifier,
@@ -773,7 +815,10 @@ private fun NavigationSelectionBackground(
     }
     Canvas(modifier = backgroundModifier) {
         drawRect(containerColor.copy(alpha = 1f))
-        selectionBounds?.let { bounds ->
+        selections.forEach { selection ->
+            val scale = selection.scale()
+            if (scale <= 0f) return@forEach
+            val bounds = selection.bounds
             val selectionSize = Size(
                 width = bounds.width.toFloat(),
                 height = bounds.height.toFloat(),
@@ -789,6 +834,7 @@ private fun NavigationSelectionBackground(
                         left = bounds.left.toFloat(),
                         top = bounds.top.toFloat(),
                     )
+                    scale(scale, scale, pivot = Offset(selectionSize.width / 2, selectionSize.height / 2))
                 },
             ) {
                 drawNavigationSelectionOutline(

@@ -62,7 +62,8 @@ different value.
 
 `AndroidKitLanguageSetting` uses Kit-owned search and empty-result labels.
 Language search ignores case and accents. The search field is part of the
-sheet's measured chrome so it stays below the title while the choices scroll.
+sheet's measured floating chrome so it stays above the sheet edge while the
+choices scroll with reserved clearance.
 Selection and dismissal clear the query. Theme selection uses the same choice
 presentation in a sheet that fits its content.
 
