@@ -40,6 +40,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,6 +49,7 @@ import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
@@ -70,10 +72,12 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
@@ -84,7 +88,10 @@ import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
 import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
 import net.mamby.androidkit.compose.action.AndroidKitActionFlyoutHorizontalAlignment
+import net.mamby.androidkit.compose.action.AndroidKitIconAndLabelAction
+import net.mamby.androidkit.compose.action.AndroidKitTextAction
 import net.mamby.androidkit.compose.action.MaximumDirectHeaderActions
+import net.mamby.androidkit.compose.action.isAndroidKitAction
 import net.mamby.androidkit.compose.action.partitionAndroidKitActions
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetStyle
@@ -555,10 +562,15 @@ internal fun BottomSheetChrome(
             .fillMaxWidth()
             .background(containerColor),
     ) {
+        val actionWidths = bottomSheetActionWidths(
+            items = actions,
+            dimensions = dimensions,
+        )
         val directActionCount = directBottomSheetActionCount(
             items = actions,
             availableWidth = maxWidth,
             hasNavigation = onBack != null,
+            actionWidths = actionWidths,
             dimensions = dimensions,
         )
         val actionItems = partitionAndroidKitActions(
@@ -608,6 +620,7 @@ internal fun BottomSheetChrome(
                     enabled = actionsEnabled,
                     tint = style.contentColor,
                     style = style,
+                    actionWidths = actionWidths,
                     dimensions = dimensions,
                 )
                 Spacer(modifier = Modifier.width(dimensions.spaceSmall))
@@ -630,9 +643,10 @@ private fun BottomSheetActionButtons(
     enabled: Boolean,
     tint: Color,
     style: AndroidKitBottomSheetStyle,
+    actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
 ) {
-    val hasOverflow = overflowItems.any { it is AndroidKitAction }
+    val hasOverflow = overflowItems.any { it.isAndroidKitAction }
     var overflowExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(enabled, hasOverflow) {
@@ -647,6 +661,25 @@ private fun BottomSheetActionButtons(
                     contentDescription = item.label,
                     tint = tint,
                     dimensions = dimensions,
+                    enabled = enabled && item.enabled,
+                    onClick = item.onClick,
+                )
+
+                is AndroidKitTextAction -> BottomSheetLabeledActionButton(
+                    label = item.label,
+                    tint = tint,
+                    dimensions = dimensions,
+                    width = actionWidths.getValue(item),
+                    enabled = enabled && item.enabled,
+                    onClick = item.onClick,
+                )
+
+                is AndroidKitIconAndLabelAction -> BottomSheetLabeledActionButton(
+                    icon = item.icon,
+                    label = item.label,
+                    tint = tint,
+                    dimensions = dimensions,
+                    width = actionWidths.getValue(item),
                     enabled = enabled && item.enabled,
                     onClick = item.onClick,
                 )
@@ -712,9 +745,10 @@ private fun directBottomSheetActionCount(
     items: List<AndroidKitActionItem>,
     availableWidth: Dp,
     hasNavigation: Boolean,
+    actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
 ): Int {
-    val actionCount = items.count { it is AndroidKitAction }
+    val actionCount = items.count { it.isAndroidKitAction }
     val navigationWidth = if (hasNavigation) {
         dimensions.bottomSheetIconButtonSize + dimensions.bottomSheetBackTitleSpacing
     } else {
@@ -727,14 +761,15 @@ private fun directBottomSheetActionCount(
                 items = items,
                 directActionCount = directCount,
             ).direct
-            val actionControlCount = directCount + if (actionCount > directCount) 1 else 0
             val actionRowWidth = bottomSheetActionRowWidth(
-                controlCount = actionControlCount,
-                separatorCount = directItems.count { it === AndroidKitActionSeparator },
+                items = directItems,
+                hasOverflow = actionCount > directCount,
+                actionWidths = actionWidths,
                 dimensions = dimensions,
             )
+            val hasActionControls = actionRowWidth > 0.dp
             val trailingControlsWidth = dimensions.bottomSheetIconButtonSize +
-                if (actionControlCount > 0) dimensions.spaceSmall + actionRowWidth else 0.dp
+                if (hasActionControls) dimensions.spaceSmall + actionRowWidth else 0.dp
 
             navigationWidth +
                 dimensions.minimumTouchTarget +
@@ -744,11 +779,98 @@ private fun directBottomSheetActionCount(
 }
 
 private fun bottomSheetActionRowWidth(
-    controlCount: Int,
-    separatorCount: Int,
+    items: List<AndroidKitActionItem>,
+    hasOverflow: Boolean,
+    actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
-): Dp = dimensions.bottomSheetIconButtonSize * controlCount +
-    (dimensions.spaceSmall * 2 + DividerDefaults.Thickness) * separatorCount
+): Dp = items.fold(0.dp) { width, item ->
+    width + when (item) {
+        is AndroidKitAction,
+        is AndroidKitTextAction,
+        is AndroidKitIconAndLabelAction,
+        -> actionWidths.getValue(item)
+
+        AndroidKitActionSeparator ->
+            dimensions.spaceSmall * 2 + DividerDefaults.Thickness
+    }
+} + if (hasOverflow) dimensions.bottomSheetIconButtonSize else 0.dp
+
+@Composable
+private fun bottomSheetActionWidths(
+    items: List<AndroidKitActionItem>,
+    dimensions: AndroidKitDimensions,
+): Map<AndroidKitActionItem, Dp> {
+    val textMeasurer = rememberTextMeasurer(cacheSize = items.size.coerceAtLeast(1))
+    val density = LocalDensity.current
+    val labelStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle
+    return items.filter { it.isAndroidKitAction }.associateWith { item ->
+        val contentWidth = when (item) {
+            is AndroidKitAction -> 0.dp
+            is AndroidKitTextAction -> with(density) {
+                textMeasurer.measure(
+                    text = item.label,
+                    style = labelStyle,
+                    maxLines = 1,
+                ).size.width.toDp()
+            }
+
+            is AndroidKitIconAndLabelAction -> dimensions.bottomSheetIconSize +
+                dimensions.spaceExtraSmall + with(density) {
+                textMeasurer.measure(
+                    text = item.label,
+                    style = labelStyle,
+                    maxLines = 1,
+                ).size.width.toDp()
+            }
+
+            AndroidKitActionSeparator -> 0.dp
+        }
+        maxOf(
+            dimensions.bottomSheetIconButtonSize,
+            contentWidth + dimensions.spaceSmall * 2,
+        )
+    }
+}
+
+@Composable
+private fun BottomSheetLabeledActionButton(
+    label: String,
+    tint: Color,
+    dimensions: AndroidKitDimensions,
+    width: Dp,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    icon: ImageVector? = null,
+) {
+    CompositionLocalProvider(
+        LocalMinimumInteractiveComponentSize provides dimensions.bottomSheetIconButtonSize,
+    ) {
+        TextButton(
+            onClick = onClick,
+            modifier = Modifier
+                .width(width)
+                .heightIn(min = dimensions.bottomSheetIconButtonSize),
+            enabled = enabled,
+            colors = ButtonDefaults.textButtonColors(contentColor = tint),
+            contentPadding = PaddingValues(horizontal = dimensions.spaceSmall),
+        ) {
+            if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(dimensions.bottomSheetIconSize),
+                )
+                Spacer(modifier = Modifier.width(dimensions.spaceExtraSmall))
+            }
+            Text(
+                text = label,
+                style = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
 
 @Composable
 private fun BottomSheetIconButton(

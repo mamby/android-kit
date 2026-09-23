@@ -27,9 +27,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
+import net.mamby.androidkit.compose.action.AndroidKitIconAndLabelAction
 import net.mamby.androidkit.compose.action.RenderFloatingAction
 import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
+import net.mamby.androidkit.compose.action.AndroidKitTextAction
+import net.mamby.androidkit.compose.action.isAndroidKitAction
 import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
 import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -37,6 +40,10 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 public typealias AndroidKitPageActionItem = AndroidKitActionItem
 
 public typealias AndroidKitPageAction = AndroidKitAction
+
+public typealias AndroidKitPageTextAction = AndroidKitTextAction
+
+public typealias AndroidKitPageIconAndLabelAction = AndroidKitIconAndLabelAction
 
 public typealias AndroidKitPageActionSeparator = AndroidKitActionSeparator
 
@@ -69,7 +76,7 @@ public fun AndroidKitPage(
     val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
     val hasTitleBar = title != null ||
         onBack != null ||
-        actions.any { it is AndroidKitAction }
+        actions.any { it.isAndroidKitAction }
     AndroidKitPageLayout(
         modifier = modifier
             .toggleTitleBarOnUnconsumedTap(

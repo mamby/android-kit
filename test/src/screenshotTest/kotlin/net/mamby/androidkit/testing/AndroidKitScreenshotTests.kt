@@ -17,6 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
 import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
+import net.mamby.androidkit.compose.action.AndroidKitIconAndLabelAction
+import net.mamby.androidkit.compose.action.AndroidKitTextAction
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.ListItem
@@ -90,12 +92,11 @@ fun androidKitFloatingTitleActions() {
             title = "A centered page title that must ellipsize",
             onBack = {},
             actions = listOf(
-                AndroidKitAction(
-                    materialSymbol(R.drawable.ic_symbol_edit),
+                AndroidKitTextAction(
                     "Edit",
                     {},
                 ),
-                AndroidKitAction(
+                AndroidKitIconAndLabelAction(
                     materialSymbol(R.drawable.ic_symbol_share),
                     "Share",
                     {},
@@ -136,12 +137,11 @@ fun androidKitBottomSheetHeaderActions() {
             title = "Sheet actions",
             onDismiss = {},
             actions = listOf(
-                AndroidKitAction(
-                    materialSymbol(R.drawable.ic_symbol_edit),
+                AndroidKitTextAction(
                     "Edit",
                     {},
                 ),
-                AndroidKitAction(
+                AndroidKitIconAndLabelAction(
                     materialSymbol(R.drawable.ic_symbol_share),
                     "Share",
                     {},

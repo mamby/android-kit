@@ -14,8 +14,35 @@ public class AndroidKitAction(
     public val enabled: Boolean = true,
 ) : AndroidKitActionItem
 
+/** An action rendered as text when shown directly. */
+@Immutable
+public class AndroidKitTextAction(
+    public val label: String,
+    public val onClick: () -> Unit,
+    public val enabled: Boolean = true,
+) : AndroidKitActionItem
+
+/** An action rendered with a horizontal icon and label when shown directly. */
+@Immutable
+public class AndroidKitIconAndLabelAction(
+    public val icon: ImageVector,
+    public val label: String,
+    public val onClick: () -> Unit,
+    public val enabled: Boolean = true,
+) : AndroidKitActionItem
+
 @Immutable
 public data object AndroidKitActionSeparator : AndroidKitActionItem
+
+internal val AndroidKitActionItem.isAndroidKitAction: Boolean
+    get() = when (this) {
+        is AndroidKitAction,
+        is AndroidKitTextAction,
+        is AndroidKitIconAndLabelAction,
+        -> true
+
+        AndroidKitActionSeparator -> false
+    }
 
 internal data class PartitionedAndroidKitActions(
     val direct: List<AndroidKitActionItem>,
@@ -29,7 +56,7 @@ internal fun partitionAndroidKitActions(
     var splitIndex = 0
     var directActionsRemaining = directActionCount
     while (splitIndex < items.size && directActionsRemaining > 0) {
-        if (items[splitIndex] is AndroidKitAction) directActionsRemaining -= 1
+        if (items[splitIndex].isAndroidKitAction) directActionsRemaining -= 1
         splitIndex += 1
     }
 
@@ -43,7 +70,11 @@ internal fun List<AndroidKitActionItem>.normalizedAndroidKitActions():
     List<AndroidKitActionItem> = buildList {
         this@normalizedAndroidKitActions.forEach { item ->
             when (item) {
-                is AndroidKitAction -> add(item)
+                is AndroidKitAction,
+                is AndroidKitTextAction,
+                is AndroidKitIconAndLabelAction,
+                -> add(item)
+
                 AndroidKitActionSeparator -> {
                     if (isNotEmpty() && last() !== AndroidKitActionSeparator) add(item)
                 }

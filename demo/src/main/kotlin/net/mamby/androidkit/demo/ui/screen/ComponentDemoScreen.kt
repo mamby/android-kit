@@ -25,7 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import net.mamby.androidkit.compose.action.AndroidKitAction
+import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
+import net.mamby.androidkit.compose.action.AndroidKitIconAndLabelAction
+import net.mamby.androidkit.compose.action.AndroidKitTextAction
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarIconAndLabelLayout
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
@@ -44,6 +47,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.DemoToggle
 import net.mamby.androidkit.demo.ui.DemoPageAction
+import net.mamby.androidkit.demo.ui.DemoHeaderActionPresentation
 import net.mamby.androidkit.demo.ui.fabPositions
 import net.mamby.androidkit.demo.ui.ComponentDemo
 import net.mamby.androidkit.demo.ui.ComponentId
@@ -77,6 +81,10 @@ internal fun ComponentDemoScreen(
     onDemoToggleChange: (DemoToggle, Boolean) -> Unit,
     selectedPageAction: DemoPageAction?,
     onPageActionSelected: (DemoPageAction) -> Unit,
+    pageHeaderActionPresentation: DemoHeaderActionPresentation,
+    onPageHeaderActionPresentationChange: (DemoHeaderActionPresentation) -> Unit,
+    sheetHeaderActionPresentation: DemoHeaderActionPresentation,
+    onSheetHeaderActionPresentationChange: (DemoHeaderActionPresentation) -> Unit,
     floatingNavigationLayout: DemoFloatingNavigationLayout,
     onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
@@ -91,6 +99,8 @@ internal fun ComponentDemoScreen(
             onToggleChange = onDemoToggleChange,
             selectedAction = selectedPageAction,
             onActionSelected = onPageActionSelected,
+            actionPresentation = pageHeaderActionPresentation,
+            onActionPresentationChange = onPageHeaderActionPresentationChange,
             onBack = onBack,
         )
         ComponentId.AndroidKitFloatingActionButton -> AndroidKitFloatingActionButtonDemo(
@@ -104,6 +114,8 @@ internal fun ComponentDemoScreen(
             onFloatingNavigationLayoutChange = onFloatingNavigationLayoutChange,
             showCompactNavigationLabels = showCompactNavigationLabels,
             onShowCompactNavigationLabelsChange = onShowCompactNavigationLabelsChange,
+            sheetHeaderActionPresentation = sheetHeaderActionPresentation,
+            onSheetHeaderActionPresentationChange = onSheetHeaderActionPresentationChange,
             onBack = onBack,
         )
     }
@@ -115,6 +127,8 @@ private fun AndroidKitPageDemo(
     onToggleChange: (DemoToggle, Boolean) -> Unit,
     selectedAction: DemoPageAction?,
     onActionSelected: (DemoPageAction) -> Unit,
+    actionPresentation: DemoHeaderActionPresentation,
+    onActionPresentationChange: (DemoHeaderActionPresentation) -> Unit,
     onBack: () -> Unit,
 ) {
     var showSupportPreview by rememberSaveable { mutableStateOf(false) }
@@ -131,20 +145,12 @@ private fun AndroidKitPageDemo(
         )
     }
     val actions = if (DemoToggle.PageActions in toggles) {
-        buildList {
-            DemoPageAction.entries.filter { it != DemoPageAction.Confirm }.forEach { action ->
-                if (action == DemoPageAction.Share || action == DemoPageAction.Delete) {
-                    add(AndroidKitActionSeparator)
-                }
-                add(
-                    AndroidKitAction(
-                        icon = materialSymbol(action.icon),
-                        label = stringResource(action.label),
-                        onClick = { onActionSelected(action) },
-                    ),
-                )
-            }
-        }
+        demoHeaderActions(
+            actions = DemoPageAction.entries.filter { it != DemoPageAction.Confirm },
+            presentation = actionPresentation,
+            separatorsBefore = setOf(DemoPageAction.Share, DemoPageAction.Delete),
+            onAction = onActionSelected,
+        )
     } else emptyList()
     AndroidKitPage(
         title = if (DemoToggle.PageTitle in toggles) stringResource(R.string.demo_page_title) else null,
@@ -174,6 +180,21 @@ private fun AndroidKitPageDemo(
             listOf(
                 DemoToggle.PageTitle,
                 DemoToggle.PageActions,
+            ).forEach { toggle ->
+                item(key = toggle.name) {
+                    DemoToggleRow(toggle, toggles, onToggleChange)
+                }
+            }
+            DemoHeaderActionPresentation.entries.forEach { presentation ->
+                item(key = "page_header_actions_${presentation.name}") {
+                    HeaderActionPresentationToggle(
+                        presentation = presentation,
+                        selected = actionPresentation,
+                        onSelected = onActionPresentationChange,
+                    )
+                }
+            }
+            listOf(
                 DemoToggle.PageImmersive,
                 DemoToggle.PageFab,
                 DemoToggle.PageSupport,
@@ -243,6 +264,8 @@ private fun StandardComponentDemo(
     onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
+    sheetHeaderActionPresentation: DemoHeaderActionPresentation,
+    onSheetHeaderActionPresentationChange: (DemoHeaderActionPresentation) -> Unit,
     onBack: () -> Unit,
 ) {
     var actionCount by rememberSaveable { mutableIntStateOf(0) }
@@ -263,7 +286,12 @@ private fun StandardComponentDemo(
                                 actionCount = actionCount,
                                 onAction = { actionCount += 1 },
                             )
-                            ComponentId.AndroidKitBottomSheet -> AndroidKitBottomSheetDemo(variation)
+                            ComponentId.AndroidKitBottomSheet -> AndroidKitBottomSheetDemo(
+                                demo = variation,
+                                actionPresentation = sheetHeaderActionPresentation,
+                                onActionPresentationChange =
+                                    onSheetHeaderActionPresentationChange,
+                            )
                             ComponentId.AndroidKitFloatingActionBar -> {
                                 AndroidKitFloatingActionBarDemo(variation, onAction = { actionCount += 1 })
                                 Text(stringResource(R.string.action_count, actionCount))
@@ -330,7 +358,11 @@ private fun AndroidKitCardDemo(
 }
 
 @Composable
-private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
+private fun AndroidKitBottomSheetDemo(
+    demo: ComponentDemo,
+    actionPresentation: DemoHeaderActionPresentation,
+    onActionPresentationChange: (DemoHeaderActionPresentation) -> Unit,
+) {
     var visible by rememberSaveable { mutableStateOf(false) }
     var showingDetail by rememberSaveable { mutableStateOf(true) }
     var headerActionCount by rememberSaveable { mutableIntStateOf(0) }
@@ -355,26 +387,27 @@ private fun AndroidKitBottomSheetDemo(demo: ComponentDemo) {
     val cancel = stringResource(R.string.action_cancel)
     val confirm = stringResource(R.string.action_confirm)
     val headerActions = if (hasHeaderActions) {
-        listOf(
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_save),
-                label = stringResource(R.string.action_save),
-                onClick = { headerActionCount += 1 },
+        demoHeaderActions(
+            actions = listOf(
+                DemoPageAction.Save,
+                DemoPageAction.Share,
+                DemoPageAction.Delete,
             ),
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_share),
-                label = stringResource(R.string.action_share),
-                onClick = { headerActionCount += 1 },
-            ),
-            AndroidKitActionSeparator,
-            AndroidKitAction(
-                icon = materialSymbol(R.drawable.ic_symbol_delete),
-                label = stringResource(R.string.action_delete),
-                onClick = { headerActionCount += 1 },
-            ),
+            presentation = actionPresentation,
+            separatorsBefore = setOf(DemoPageAction.Delete),
+            onAction = { headerActionCount += 1 },
         )
     } else {
         emptyList()
+    }
+    if (hasHeaderActions) {
+        DemoHeaderActionPresentation.entries.forEach { presentation ->
+            HeaderActionPresentationToggle(
+                presentation = presentation,
+                selected = actionPresentation,
+                onSelected = onActionPresentationChange,
+            )
+        }
     }
     AndroidKitBottomSheet(
         visible = visible,
@@ -564,7 +597,6 @@ private fun AndroidKitFloatingActionBarDemo(
                     }
                 }
             }
-
             else -> error("Unexpected AndroidKitFloatingActionBar demo: $demo")
         }
     }
@@ -706,6 +738,86 @@ private fun DemoToggleRow(
         },
     ) {
         Text(stringResource(toggle.label))
+    }
+}
+
+@Composable
+private fun HeaderActionPresentationToggle(
+    presentation: DemoHeaderActionPresentation,
+    selected: DemoHeaderActionPresentation,
+    onSelected: (DemoHeaderActionPresentation) -> Unit,
+) {
+    ListItem(
+        trailingContent = {
+            Switch(
+                checked = presentation == selected,
+                onCheckedChange = { checked ->
+                    when {
+                        checked -> onSelected(presentation)
+                        presentation == selected &&
+                            presentation != DemoHeaderActionPresentation.Mixed -> {
+                            onSelected(DemoHeaderActionPresentation.Mixed)
+                        }
+                    }
+                },
+            )
+        },
+    ) {
+        Text(stringResource(presentation.label))
+    }
+}
+
+@Composable
+private fun demoHeaderActions(
+    actions: List<DemoPageAction>,
+    presentation: DemoHeaderActionPresentation,
+    separatorsBefore: Set<DemoPageAction>,
+    onAction: (DemoPageAction) -> Unit,
+): List<AndroidKitActionItem> = buildList {
+    actions.forEachIndexed { index, action ->
+        if (action in separatorsBefore) add(AndroidKitActionSeparator)
+        val label = stringResource(action.label)
+        val icon = materialSymbol(action.icon)
+        add(
+            when (presentation) {
+                DemoHeaderActionPresentation.IconsOnly -> AndroidKitAction(
+                    icon = icon,
+                    label = label,
+                    onClick = { onAction(action) },
+                )
+
+                DemoHeaderActionPresentation.Mixed -> when (index) {
+                    0 -> AndroidKitTextAction(
+                        label = label,
+                        onClick = { onAction(action) },
+                    )
+
+                    1 -> AndroidKitIconAndLabelAction(
+                        icon = icon,
+                        label = label,
+                        onClick = { onAction(action) },
+                    )
+
+                    else -> AndroidKitAction(
+                        icon = icon,
+                        label = label,
+                        onClick = { onAction(action) },
+                    )
+                }
+
+                DemoHeaderActionPresentation.TextOnly -> AndroidKitTextAction(
+                    label = label,
+                    onClick = { onAction(action) },
+                )
+
+                DemoHeaderActionPresentation.HorizontalIconAndText ->
+                    AndroidKitIconAndLabelAction(
+                        icon = icon,
+                        label = label,
+                        onClick = { onAction(action) },
+                    )
+            },
+        )
     }
 }
 

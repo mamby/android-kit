@@ -576,6 +576,20 @@ internal fun AndroidKitActionFlyout(
                 enabled = item.enabled,
             )
 
+            is AndroidKitTextAction -> FloatingToolbarFlyoutItem.Action(
+                icon = null,
+                label = item.label,
+                onClick = item.onClick,
+                enabled = item.enabled,
+            )
+
+            is AndroidKitIconAndLabelAction -> FloatingToolbarFlyoutItem.Action(
+                icon = item.icon,
+                label = item.label,
+                onClick = item.onClick,
+                enabled = item.enabled,
+            )
+
             AndroidKitActionSeparator -> FloatingToolbarFlyoutItem.Separator(Modifier)
         }
     },

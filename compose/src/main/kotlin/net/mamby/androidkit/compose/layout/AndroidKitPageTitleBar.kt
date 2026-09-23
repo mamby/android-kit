@@ -36,8 +36,12 @@ import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
+import net.mamby.androidkit.compose.action.AndroidKitFloatingToolbarIconAndLabelLayout
+import net.mamby.androidkit.compose.action.AndroidKitIconAndLabelAction
 import net.mamby.androidkit.compose.action.AndroidKitPageActionToolbar
+import net.mamby.androidkit.compose.action.AndroidKitTextAction
 import net.mamby.androidkit.compose.action.MaximumDirectHeaderActions
+import net.mamby.androidkit.compose.action.isAndroidKitAction
 import net.mamby.androidkit.compose.action.partitionAndroidKitActions
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
@@ -56,17 +60,23 @@ internal fun AndroidKitPageTitleBar(
     style: AndroidKitPageTitleBarStyle,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    val pageActions = actions.filterIsInstance<AndroidKitAction>()
+    val pageActions = actions.filter { it.isAndroidKitAction }
     if (title == null && onBack == null && pageActions.isEmpty()) return
 
     val hasButtons = onBack != null || pageActions.isNotEmpty()
     val hasTitle = title != null
     val visualHeight = pageTitleBarVisualHeight(
         title = title,
+        actions = actions,
         style = style,
         dimensions = dimensions,
     )
     val controlSize = maxOf(dimensions.minimumTouchTarget, visualHeight)
+    val actionWidths = pageTitleBarActionWidths(
+        items = actions,
+        controlSize = controlSize,
+        dimensions = dimensions,
+    )
 
     Box(
         modifier = Modifier
@@ -103,24 +113,22 @@ internal fun AndroidKitPageTitleBar(
                     hasTitle = hasTitle,
                     hasNavigation = onBack != null,
                     controlSize = controlSize,
+                    actionWidths = actionWidths,
                     dimensions = dimensions,
                 )
                 val actionItems = partitionAndroidKitActions(
                     items = actions,
                     directActionCount = directActionCount,
                 )
-                val endControlCount = directActionCount +
-                    if (actionItems.overflow.isNotEmpty()) 1 else 0
                 val leadingWidth = controlRowWidth(
                     controlCount = onBack?.let { 1 } ?: 0,
                     controlSize = controlSize,
                     dimensions = dimensions,
                 )
                 val endWidth = pageActionRowWidth(
-                    controlCount = endControlCount,
-                    separatorCount = actionItems.direct.count {
-                        it === AndroidKitActionSeparator
-                    },
+                    items = actionItems.direct,
+                    hasOverflow = actionItems.overflow.isNotEmpty(),
+                    actionWidths = actionWidths,
                     dimensions = dimensions,
                     controlSize = controlSize,
                 )
@@ -178,7 +186,7 @@ internal fun AndroidKitPageTitleBar(
                     }
                 }
 
-                if (endControlCount > 0) {
+                if (endWidth > 0.dp) {
                     AndroidKitPageActionToolbar(
                         visualHeight = visualHeight,
                         modifier = Modifier.align(Alignment.CenterEnd),
@@ -193,6 +201,20 @@ internal fun AndroidKitPageTitleBar(
                                     enabled = pageActionItem.enabled,
                                 )
 
+                                is AndroidKitTextAction -> text(
+                                    onClick = pageActionItem.onClick,
+                                    label = pageActionItem.label,
+                                    enabled = pageActionItem.enabled,
+                                )
+
+                                is AndroidKitIconAndLabelAction -> iconAndLabel(
+                                    onClick = pageActionItem.onClick,
+                                    icon = pageActionItem.icon,
+                                    label = pageActionItem.label,
+                                    layout = AndroidKitFloatingToolbarIconAndLabelLayout.Horizontal,
+                                    enabled = pageActionItem.enabled,
+                                )
+
                                 AndroidKitActionSeparator -> separator()
                             }
                         }
@@ -201,6 +223,19 @@ internal fun AndroidKitPageTitleBar(
                                 actionItems.overflow.forEach { pageActionItem ->
                                     when (pageActionItem) {
                                         is AndroidKitAction -> item(
+                                            icon = pageActionItem.icon,
+                                            label = pageActionItem.label,
+                                            onClick = pageActionItem.onClick,
+                                            enabled = pageActionItem.enabled,
+                                        )
+
+                                        is AndroidKitTextAction -> item(
+                                            label = pageActionItem.label,
+                                            onClick = pageActionItem.onClick,
+                                            enabled = pageActionItem.enabled,
+                                        )
+
+                                        is AndroidKitIconAndLabelAction -> item(
                                             icon = pageActionItem.icon,
                                             label = pageActionItem.label,
                                             onClick = pageActionItem.onClick,
@@ -262,9 +297,10 @@ private fun directPageTitleBarActionCount(
     hasTitle: Boolean,
     hasNavigation: Boolean,
     controlSize: Dp,
+    actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
 ): Int {
-    val actionCount = items.count { it is AndroidKitAction }
+    val actionCount = items.count { it.isAndroidKitAction }
     val navigationWidth = controlRowWidth(
         controlCount = if (hasNavigation) 1 else 0,
         controlSize = controlSize,
@@ -279,16 +315,14 @@ private fun directPageTitleBarActionCount(
                 items = items,
                 directActionCount = directCount,
             ).direct
-            val endControlCount = directCount + if (actionCount > directCount) 1 else 0
             val endWidth = pageActionRowWidth(
-                controlCount = endControlCount,
-                separatorCount = directItems.count {
-                    it === AndroidKitActionSeparator
-                },
+                items = directItems,
+                hasOverflow = actionCount > directCount,
+                actionWidths = actionWidths,
                 dimensions = dimensions,
                 controlSize = controlSize,
             )
-            val titleEndSpacing = if (hasTitle && endControlCount > 0) {
+            val titleEndSpacing = if (hasTitle && endWidth > 0.dp) {
                 dimensions.spaceExtraSmall
             } else {
                 0.dp
@@ -299,16 +333,22 @@ private fun directPageTitleBarActionCount(
 }
 
 private fun pageActionRowWidth(
-    controlCount: Int,
-    separatorCount: Int,
+    items: List<AndroidKitActionItem>,
+    hasOverflow: Boolean,
+    actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
     controlSize: Dp,
-): Dp = controlRowWidth(
-    controlCount = controlCount,
-    dimensions = dimensions,
-    controlSize = controlSize,
-) +
-    (dimensions.spaceSmall * 2 + DividerDefaults.Thickness) * separatorCount
+): Dp = items.fold(0.dp) { width, item ->
+    width + when (item) {
+        is AndroidKitAction,
+        is AndroidKitTextAction,
+        is AndroidKitIconAndLabelAction,
+        -> actionWidths.getValue(item)
+
+        AndroidKitActionSeparator ->
+            dimensions.spaceSmall * 2 + DividerDefaults.Thickness
+    }
+} + if (hasOverflow) controlSize else 0.dp
 
 private fun controlRowWidth(
     controlCount: Int,
@@ -323,22 +363,79 @@ private fun controlRowWidth(
 @Composable
 private fun pageTitleBarVisualHeight(
     title: String?,
+    actions: List<AndroidKitActionItem>,
     style: AndroidKitPageTitleBarStyle,
     dimensions: AndroidKitDimensions,
 ): Dp {
-    if (title == null) return dimensions.pageTitleBarButtonSize
-
-    val textMeasurer = rememberTextMeasurer(cacheSize = 1)
+    val textMeasurer = rememberTextMeasurer(cacheSize = 2)
     val density = LocalDensity.current
-    val titleTextHeight = with(density) {
-        textMeasurer.measure(
-            text = title,
-            style = style.titleTextStyle,
-            maxLines = 1,
-        ).size.height.toDp()
+    val titleTextHeight = title?.let { pageTitle ->
+        with(density) {
+            textMeasurer.measure(
+                text = pageTitle,
+                style = style.titleTextStyle,
+                maxLines = 1,
+            ).size.height.toDp()
+        }
+    } ?: 0.dp
+    val hasLabeledAction = actions.any {
+        it is AndroidKitTextAction || it is AndroidKitIconAndLabelAction
+    }
+    val actionTextHeight = if (hasLabeledAction) {
+        with(density) {
+            textMeasurer.measure(
+                text = actions.firstNotNullOf { item ->
+                    when (item) {
+                        is AndroidKitTextAction -> item.label
+                        is AndroidKitIconAndLabelAction -> item.label
+                        else -> null
+                    }
+                },
+                style = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle,
+                maxLines = 1,
+            ).size.height.toDp()
+        }
+    } else {
+        0.dp
     }
     return maxOf(
         dimensions.pageTitleBarButtonSize,
         titleTextHeight + dimensions.spaceSmall * 2,
+        actionTextHeight + dimensions.spaceSmall * 2,
     )
+}
+
+@Composable
+private fun pageTitleBarActionWidths(
+    items: List<AndroidKitActionItem>,
+    controlSize: Dp,
+    dimensions: AndroidKitDimensions,
+): Map<AndroidKitActionItem, Dp> {
+    val textMeasurer = rememberTextMeasurer(cacheSize = items.size.coerceAtLeast(1))
+    val density = LocalDensity.current
+    val labelStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle
+    return items.filter { it.isAndroidKitAction }.associateWith { item ->
+        val contentWidth = when (item) {
+            is AndroidKitAction -> 0.dp
+            is AndroidKitTextAction -> with(density) {
+                textMeasurer.measure(
+                    text = item.label,
+                    style = labelStyle,
+                    maxLines = 1,
+                ).size.width.toDp()
+            }
+
+            is AndroidKitIconAndLabelAction -> dimensions.floatingActionIconSize +
+                dimensions.spaceExtraSmall + with(density) {
+                textMeasurer.measure(
+                    text = item.label,
+                    style = labelStyle,
+                    maxLines = 1,
+                ).size.width.toDp()
+            }
+
+            AndroidKitActionSeparator -> 0.dp
+        }
+        maxOf(controlSize, contentWidth + dimensions.spaceSmall * 2)
+    }
 }

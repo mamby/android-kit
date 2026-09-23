@@ -36,3 +36,10 @@ internal enum class DemoPageAction(@StringRes val label: Int, val icon: Int) {
     Delete(R.string.action_delete, R.drawable.ic_symbol_delete),
     Confirm(R.string.action_confirm, R.drawable.ic_symbol_check),
 }
+
+internal enum class DemoHeaderActionPresentation(@StringRes val label: Int) {
+    IconsOnly(R.string.variation_icons_only),
+    Mixed(R.string.variation_mixed_items),
+    TextOnly(R.string.variation_text_only),
+    HorizontalIconAndText(R.string.variation_horizontal_icons_labels),
+}

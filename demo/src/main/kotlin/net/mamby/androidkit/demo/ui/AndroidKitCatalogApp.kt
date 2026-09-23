@@ -181,6 +181,14 @@ internal fun AndroidKitCatalogApp(
                                 onDemoToggleChange = settingsViewModel::setDemoToggle,
                                 selectedPageAction = settings.selectedPageAction,
                                 onPageActionSelected = settingsViewModel::setSelectedPageAction,
+                                pageHeaderActionPresentation =
+                                    settings.pageHeaderActionPresentation,
+                                onPageHeaderActionPresentationChange =
+                                    settingsViewModel::setPageHeaderActionPresentation,
+                                sheetHeaderActionPresentation =
+                                    settings.sheetHeaderActionPresentation,
+                                onSheetHeaderActionPresentationChange =
+                                    settingsViewModel::setSheetHeaderActionPresentation,
                                 floatingNavigationLayout = settings.floatingNavigationLayout,
                                 onFloatingNavigationLayoutChange =
                                     settingsViewModel::setFloatingNavigationLayout,

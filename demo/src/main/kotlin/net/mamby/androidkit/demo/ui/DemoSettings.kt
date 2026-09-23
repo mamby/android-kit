@@ -31,6 +31,10 @@ import org.json.JSONArray
 internal data class DemoSettings(
     val demoToggles: Set<DemoToggle> = DemoToggle.entries.filter { it.defaultValue }.toSet(),
     val selectedPageAction: DemoPageAction? = null,
+    val pageHeaderActionPresentation: DemoHeaderActionPresentation =
+        DemoHeaderActionPresentation.Mixed,
+    val sheetHeaderActionPresentation: DemoHeaderActionPresentation =
+        DemoHeaderActionPresentation.Mixed,
     val appLockEnabled: Boolean = false,
     val appLockTimeout: DemoAppLockTimeout = DemoAppLockTimeout.Immediately,
     val themeChoice: DemoThemeChoice = DemoThemeChoice.System,
@@ -90,6 +94,12 @@ internal class DemoSettingsRepository(context: Context) {
                 selectedPageAction = DemoPageAction.entries.firstOrNull {
                     it.name == preferences[SelectedPageActionKey]
                 },
+                pageHeaderActionPresentation = DemoHeaderActionPresentation.entries.firstOrNull {
+                    it.name == preferences[PageHeaderActionPresentationKey]
+                } ?: DemoHeaderActionPresentation.Mixed,
+                sheetHeaderActionPresentation = DemoHeaderActionPresentation.entries.firstOrNull {
+                    it.name == preferences[SheetHeaderActionPresentationKey]
+                } ?: DemoHeaderActionPresentation.Mixed,
                 appLockEnabled = preferences[AppLockEnabledKey] ?: false,
                 appLockTimeout = DemoAppLockTimeout.entries.firstOrNull {
                     it.name == preferences[AppLockTimeoutKey]
@@ -118,6 +128,18 @@ internal class DemoSettingsRepository(context: Context) {
 
     suspend fun setSelectedPageAction(action: DemoPageAction) {
         dataStore.edit { it[SelectedPageActionKey] = action.name }
+    }
+
+    suspend fun setPageHeaderActionPresentation(
+        presentation: DemoHeaderActionPresentation,
+    ) {
+        dataStore.edit { it[PageHeaderActionPresentationKey] = presentation.name }
+    }
+
+    suspend fun setSheetHeaderActionPresentation(
+        presentation: DemoHeaderActionPresentation,
+    ) {
+        dataStore.edit { it[SheetHeaderActionPresentationKey] = presentation.name }
     }
 
     suspend fun setAppLockEnabled(enabled: Boolean) {
@@ -247,6 +269,14 @@ internal class DemoSettingsViewModel(
         viewModelScope.launch { repository.setSelectedPageAction(action) }
     }
 
+    fun setPageHeaderActionPresentation(presentation: DemoHeaderActionPresentation) {
+        viewModelScope.launch { repository.setPageHeaderActionPresentation(presentation) }
+    }
+
+    fun setSheetHeaderActionPresentation(presentation: DemoHeaderActionPresentation) {
+        viewModelScope.launch { repository.setSheetHeaderActionPresentation(presentation) }
+    }
+
     fun setThemeChoice(choice: DemoThemeChoice) {
         viewModelScope.launch {
             repository.setThemeChoice(choice)
@@ -292,6 +322,12 @@ private val Context.demoSettingsDataStore: DataStore<Preferences> by preferences
 )
 
 private val SelectedPageActionKey = stringPreferencesKey("selected_page_action")
+private val PageHeaderActionPresentationKey = stringPreferencesKey(
+    "page_header_action_presentation",
+)
+private val SheetHeaderActionPresentationKey = stringPreferencesKey(
+    "sheet_header_action_presentation",
+)
 private val AppLockEnabledKey = booleanPreferencesKey("app_lock_enabled")
 private val AppLockTimeoutKey = stringPreferencesKey("app_lock_timeout")
 private val ThemeChoiceKey = stringPreferencesKey("theme_choice")
