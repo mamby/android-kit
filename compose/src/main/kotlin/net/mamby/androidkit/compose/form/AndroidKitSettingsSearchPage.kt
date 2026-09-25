@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -99,7 +98,13 @@ public fun AndroidKitSettingsSearchPage(
                         Text(strings.recentSearches,
                             style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle)
                         if (recentQueries.isNotEmpty()) {
-                            TextButton(onClick = { catalog.search.onRecentQueriesChange(emptyList()) }) {
+                            TextButton(
+                                onClick = { catalog.search.onRecentQueriesChange(emptyList()) },
+                                contentPadding = PaddingValues(
+                                    horizontal = (dimensions.minimumTouchTarget -
+                                        dimensions.floatingActionBarIconSize) / 2,
+                                ),
+                            ) {
                                 Text(strings.clearAll)
                             }
                         }
@@ -108,19 +113,23 @@ public fun AndroidKitSettingsSearchPage(
                 if (recentQueries.isEmpty()) {
                     item(key = "no-recents") { SearchEmptyMessage(strings.noRecentSearches) }
                 } else {
-                    items(recentQueries, key = { "recent:$it" }) { recent ->
-                        RecentSearchRow(
-                            query = recent,
-                            onSelect = { query = recent },
-                            onRemove = {
-                                val removed = normalizeSettingsSearchText(recent)
-                                catalog.search.onRecentQueriesChange(
-                                    recentQueries.filterNot {
-                                        normalizeSettingsSearchText(it) == removed
+                    item(key = "recent-list") {
+                        Column(verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
+                            recentQueries.forEach { recent ->
+                                RecentSearchRow(
+                                    query = recent,
+                                    onSelect = { query = recent },
+                                    onRemove = {
+                                        val removed = normalizeSettingsSearchText(recent)
+                                        catalog.search.onRecentQueriesChange(
+                                            recentQueries.filterNot {
+                                                normalizeSettingsSearchText(it) == removed
+                                            },
+                                        )
                                     },
                                 )
-                            },
-                        )
+                            }
+                        }
                     }
                 }
             } else if (matches.isEmpty()) {
@@ -166,19 +175,20 @@ private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () ->
     Row(
         modifier = Modifier.fillMaxWidth()
             .clickable(onClick = onSelect)
-            .heightIn(min = dimensions.minimumTouchTarget)
-            .padding(start = dimensions.spaceMedium),
+            .heightIn(min = dimensions.minimumTouchTarget),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
     ) {
-        Icon(AndroidKitIcons.History, contentDescription = null)
         Text(query, modifier = Modifier.weight(1f),
-            style = AndroidKitThemeTokens.settingSectionStyle.entryLabelTextStyle)
-        IconButton(onClick = onRemove) {
+            style = AndroidKitThemeTokens.typography.bodyMedium)
+        IconButton(
+            onClick = onRemove,
+            modifier = Modifier.size(dimensions.minimumTouchTarget),
+        ) {
             Icon(
                 imageVector = AndroidKitIcons.Trash,
                 contentDescription = strings.removeRecentSearch,
-                modifier = Modifier.size(dimensions.floatingActionIconSize),
+                modifier = Modifier.size(dimensions.floatingActionBarIconSize),
             )
         }
     }

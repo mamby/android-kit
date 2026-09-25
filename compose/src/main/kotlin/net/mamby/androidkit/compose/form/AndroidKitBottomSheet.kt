@@ -12,6 +12,7 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -653,7 +654,10 @@ private fun BottomSheetActionButtons(
         if (!enabled || !hasOverflow) overflowExpanded = false
     }
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         directItems.forEach { item ->
             when (item) {
                 is AndroidKitAction -> BottomSheetIconButton(
@@ -731,7 +735,6 @@ private fun BottomSheetActionSeparator(
     dimensions: AndroidKitDimensions,
 ) {
     Box(
-        modifier = Modifier.padding(horizontal = dimensions.spaceSmall),
         contentAlignment = Alignment.Center,
     ) {
         VerticalDivider(
@@ -790,10 +793,10 @@ private fun bottomSheetActionRowWidth(
         is AndroidKitIconAndLabelAction,
         -> actionWidths.getValue(item)
 
-        AndroidKitActionSeparator ->
-            dimensions.spaceSmall * 2 + DividerDefaults.Thickness
+        AndroidKitActionSeparator -> DividerDefaults.Thickness
     }
-} + if (hasOverflow) dimensions.bottomSheetIconButtonSize else 0.dp
+} + (if (hasOverflow) dimensions.bottomSheetIconButtonSize else 0.dp) +
+    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0)
 
 @Composable
 private fun bottomSheetActionWidths(

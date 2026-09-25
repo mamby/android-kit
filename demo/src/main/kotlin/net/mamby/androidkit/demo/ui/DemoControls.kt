@@ -14,6 +14,8 @@ internal enum class DemoToggle(@StringRes val label: Int, val defaultValue: Bool
     BottomEnd(R.string.variation_bottom_end, true),
     PageTitle(R.string.variation_with_title, true),
     PageActions(R.string.variation_back_title_actions),
+    PageActionsWithoutMore(R.string.variation_header_actions_without_more),
+    SheetActionsWithoutMore(R.string.variation_header_actions_without_more),
     PageImmersive(R.string.variation_immersive_mode),
     PageFab(R.string.variation_with_floating_action_button),
     PageSupport(R.string.demo_support_prompt),

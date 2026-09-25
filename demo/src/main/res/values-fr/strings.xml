@@ -69,6 +69,7 @@
     <string name="variation_icons_labels">Icônes et libellés</string>
     <string name="variation_horizontal_icons_labels">Icônes et libellés horizontaux</string>
     <string name="variation_text_only">Texte uniquement</string>
+    <string name="variation_header_actions_without_more">Actions d’en-tête sans bouton « Plus »</string>
     <string name="variation_mixed_items">Éléments mixtes</string>
     <string name="variation_text_items">Éléments textuels</string>
     <string name="variation_icon_items">Éléments avec icône</string>

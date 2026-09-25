@@ -352,3 +352,12 @@ nonblank and normalized-unique terms, and correspondence with each locale's
 visible label. This was machine-assisted review; it is not native-speaker
 approval. Device truncation, pronunciation, and every alias's idiomatic quality
 remain separate review concerns.
+
+## 2026-09-25 Header actions demo
+
+Added `variation_header_actions_without_more` in demo English, French, and Arabic
+for the page and bottom-sheet action-list toggle. The English reference describes
+the two-action example; French uses the glossary's “Plus” for the overflow button,
+and Arabic follows the demo's existing “المزيد” wording. Locale keys were checked
+against the call sites. This is an editorial review without external references or
+native-speaker approval; device truncation and RTL rendering remain unverified.

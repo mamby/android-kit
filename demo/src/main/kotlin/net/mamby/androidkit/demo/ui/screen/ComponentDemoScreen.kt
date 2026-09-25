@@ -110,6 +110,8 @@ internal fun ComponentDemoScreen(
         )
         else -> StandardComponentDemo(
             demo = demo,
+            toggles = demoToggles,
+            onToggleChange = onDemoToggleChange,
             floatingNavigationLayout = floatingNavigationLayout,
             onFloatingNavigationLayoutChange = onFloatingNavigationLayoutChange,
             showCompactNavigationLabels = showCompactNavigationLabels,
@@ -145,10 +147,19 @@ private fun AndroidKitPageDemo(
         )
     }
     val actions = if (DemoToggle.PageActions in toggles) {
+        val shownActions = if (DemoToggle.PageActionsWithoutMore in toggles) {
+            listOf(DemoPageAction.Save, DemoPageAction.Share)
+        } else {
+            DemoPageAction.entries.filter { it != DemoPageAction.Confirm }
+        }
         demoHeaderActions(
-            actions = DemoPageAction.entries.filter { it != DemoPageAction.Confirm },
+            actions = shownActions,
             presentation = actionPresentation,
-            separatorsBefore = setOf(DemoPageAction.Share, DemoPageAction.Delete),
+            separatorsBefore = if (DemoToggle.PageActionsWithoutMore in toggles) {
+                setOf(DemoPageAction.Share)
+            } else {
+                setOf(DemoPageAction.Share, DemoPageAction.Delete)
+            },
             onAction = onActionSelected,
         )
     } else emptyList()
@@ -180,6 +191,7 @@ private fun AndroidKitPageDemo(
             listOf(
                 DemoToggle.PageTitle,
                 DemoToggle.PageActions,
+                DemoToggle.PageActionsWithoutMore,
             ).forEach { toggle ->
                 item(key = toggle.name) {
                     DemoToggleRow(toggle, toggles, onToggleChange)
@@ -260,6 +272,8 @@ private fun AndroidKitFloatingActionButtonDemo(
 @Composable
 private fun StandardComponentDemo(
     demo: ComponentDemo,
+    toggles: Set<DemoToggle>,
+    onToggleChange: (DemoToggle, Boolean) -> Unit,
     floatingNavigationLayout: DemoFloatingNavigationLayout,
     onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
@@ -288,6 +302,8 @@ private fun StandardComponentDemo(
                             )
                             ComponentId.AndroidKitBottomSheet -> AndroidKitBottomSheetDemo(
                                 demo = variation,
+                                toggles = toggles,
+                                onToggleChange = onToggleChange,
                                 actionPresentation = sheetHeaderActionPresentation,
                                 onActionPresentationChange =
                                     onSheetHeaderActionPresentationChange,
@@ -360,6 +376,8 @@ private fun AndroidKitCardDemo(
 @Composable
 private fun AndroidKitBottomSheetDemo(
     demo: ComponentDemo,
+    toggles: Set<DemoToggle>,
+    onToggleChange: (DemoToggle, Boolean) -> Unit,
     actionPresentation: DemoHeaderActionPresentation,
     onActionPresentationChange: (DemoHeaderActionPresentation) -> Unit,
 ) {
@@ -388,19 +406,24 @@ private fun AndroidKitBottomSheetDemo(
     val confirm = stringResource(R.string.action_confirm)
     val headerActions = if (hasHeaderActions) {
         demoHeaderActions(
-            actions = listOf(
-                DemoPageAction.Save,
-                DemoPageAction.Share,
-                DemoPageAction.Delete,
-            ),
+            actions = if (DemoToggle.SheetActionsWithoutMore in toggles) {
+                listOf(DemoPageAction.Save, DemoPageAction.Share)
+            } else {
+                listOf(DemoPageAction.Save, DemoPageAction.Share, DemoPageAction.Delete)
+            },
             presentation = actionPresentation,
-            separatorsBefore = setOf(DemoPageAction.Delete),
+            separatorsBefore = if (DemoToggle.SheetActionsWithoutMore in toggles) {
+                setOf(DemoPageAction.Share)
+            } else {
+                setOf(DemoPageAction.Delete)
+            },
             onAction = { headerActionCount += 1 },
         )
     } else {
         emptyList()
     }
     if (hasHeaderActions) {
+        DemoToggleRow(DemoToggle.SheetActionsWithoutMore, toggles, onToggleChange)
         DemoHeaderActionPresentation.entries.forEach { presentation ->
             HeaderActionPresentationToggle(
                 presentation = presentation,

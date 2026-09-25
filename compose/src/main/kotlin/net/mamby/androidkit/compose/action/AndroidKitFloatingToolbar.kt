@@ -139,7 +139,7 @@ internal fun AndroidKitPageActionToolbar(
     modifier: Modifier = Modifier,
     style: AndroidKitFloatingToolbarStyle = AndroidKitThemeTokens.floatingToolbarStyle,
     contentPadding: PaddingValues = PaddingValues.Zero,
-    itemSpacing: Dp = 0.dp,
+    itemSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
     content: AndroidKitFloatingToolbarScope.() -> Unit,
 ): Unit {
     FloatingToolbar(
@@ -644,7 +644,7 @@ private fun FloatingToolbarSeparator(
     style: AndroidKitFloatingToolbarStyle,
 ): Unit {
     Box(
-        modifier = modifier.padding(horizontal = AndroidKitThemeTokens.dimensions.spaceSmall),
+        modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
         VerticalDivider(

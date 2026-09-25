@@ -345,10 +345,10 @@ private fun pageActionRowWidth(
         is AndroidKitIconAndLabelAction,
         -> actionWidths.getValue(item)
 
-        AndroidKitActionSeparator ->
-            dimensions.spaceSmall * 2 + DividerDefaults.Thickness
+        AndroidKitActionSeparator -> DividerDefaults.Thickness
     }
-} + if (hasOverflow) controlSize else 0.dp
+} + (if (hasOverflow) controlSize else 0.dp) +
+    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0)
 
 private fun controlRowWidth(
     controlCount: Int,
