@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
@@ -27,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -166,6 +171,21 @@ private fun FloatingToolbar(
     content: AndroidKitFloatingToolbarScope.() -> Unit,
 ): Unit {
     val scope = FloatingToolbarScopeImpl().apply(content)
+    val layoutDirection = LocalLayoutDirection.current
+    val resolvedContentPadding = PaddingValues(
+        start = if (scope.items.firstOrNull()?.needsGapAtStart() == true) {
+            contentPadding.calculateStartPadding(layoutDirection)
+        } else {
+            0.dp
+        },
+        top = contentPadding.calculateTopPadding(),
+        end = if (scope.items.lastOrNull()?.needsGapAtEnd() == true) {
+            contentPadding.calculateEndPadding(layoutDirection)
+        } else {
+            0.dp
+        },
+        bottom = contentPadding.calculateBottomPadding(),
+    )
     var expandedToolbarFlyoutIndex by remember { mutableStateOf<Int?>(null) }
     val flyoutAvailability = scope.items.map { item ->
         (item as? FloatingToolbarItemDefinition.Flyout)?.enabled == true
@@ -186,11 +206,17 @@ private fun FloatingToolbar(
     val toolbarContent: @Composable () -> Unit = {
         Box {
             Row(
-                modifier = Modifier.padding(contentPadding),
-                horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+                modifier = Modifier.padding(resolvedContentPadding),
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 scope.items.forEachIndexed { index, item ->
+                    if (
+                        index > 0 &&
+                        scope.items[index - 1].needsGapAtEnd() && item.needsGapAtStart()
+                    ) {
+                        Spacer(modifier = Modifier.width(itemSpacing))
+                    }
                     FloatingToolbarItem(
                         item = item,
                         style = style,
@@ -409,6 +435,23 @@ private sealed interface FloatingToolbarItemDefinition {
     ) : FloatingToolbarItemDefinition
 
 
+}
+
+private fun FloatingToolbarItemDefinition.needsGapAtStart(): Boolean = when (this) {
+    is FloatingToolbarItemDefinition.Icon,
+    is FloatingToolbarItemDefinition.Flyout -> false
+    is FloatingToolbarItemDefinition.IconAndLabel ->
+        layout == AndroidKitFloatingToolbarIconAndLabelLayout.Vertical
+    is FloatingToolbarItemDefinition.Text,
+    is FloatingToolbarItemDefinition.Separator -> true
+}
+
+private fun FloatingToolbarItemDefinition.needsGapAtEnd(): Boolean = when (this) {
+    is FloatingToolbarItemDefinition.Icon,
+    is FloatingToolbarItemDefinition.Flyout -> false
+    is FloatingToolbarItemDefinition.IconAndLabel,
+    is FloatingToolbarItemDefinition.Text,
+    is FloatingToolbarItemDefinition.Separator -> true
 }
 
 private sealed interface FloatingToolbarFlyoutItem {
@@ -676,19 +719,30 @@ private fun FloatingToolbarItemContent(
     } else {
         floatingSurfaceVisuals(surfaceStyle).disabledContentColor
     }
-    val itemModifier = if (visualSize == null) {
+    val interactiveModifier = if (visualSize == null) {
         modifier
             .clip(style.itemShape)
             .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
             .minimumInteractiveComponentSize()
-            .padding(horizontal = dimensions.spaceSmall)
     } else {
         modifier
             .minimumInteractiveComponentSize()
             .sizeIn(minWidth = visualSize, minHeight = visualSize)
             .clip(style.itemShape)
             .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
-            .padding(horizontal = dimensions.spaceSmall)
+    }
+    val hasHorizontalIconAndLabel = icon != null && showLabel &&
+        iconAndLabelLayout == AndroidKitFloatingToolbarIconAndLabelLayout.Horizontal
+    val itemModifier = if (hasHorizontalIconAndLabel) {
+        val minimumControlWidth = actionControlMinimumWidth(visualSize ?: 0.dp)
+        interactiveModifier
+            .sizeIn(minWidth = minimumControlWidth)
+            .padding(
+                start = dimensions.actionControlIconInset(style.iconSize, minimumControlWidth),
+                end = dimensions.actionControlContentInset,
+            )
+    } else {
+        interactiveModifier.padding(horizontal = dimensions.actionControlContentInset)
     }
     val content: @Composable () -> Unit = {
         icon?.let {

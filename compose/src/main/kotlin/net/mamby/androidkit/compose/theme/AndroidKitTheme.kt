@@ -218,7 +218,18 @@ public data class AndroidKitDimensions(
     public val contentProtectionBlurRadius: Dp = 0.dp,
     public val contentProtectionFadeLength: Dp = 4.dp,
     public val pageTitlelessTopPadding: Dp = 12.dp,
-)
+) {
+    /**
+     * Minimum horizontal inset around action-control content, independent of icon artwork.
+     * Shared by toolbar rendering and page action measurement; outer icon edges need no extra gap.
+     */
+    internal val actionControlContentInset: Dp
+        get() = spaceSmall
+
+    /** Matches the inset of an icon centered in an icon-only action's minimum width. */
+    internal fun actionControlIconInset(iconSize: Dp, minimumControlWidth: Dp): Dp =
+        maxOf(actionControlContentInset, (minimumControlWidth - iconSize) / 2)
+}
 
 @Immutable
 internal data class AndroidKitStrings(

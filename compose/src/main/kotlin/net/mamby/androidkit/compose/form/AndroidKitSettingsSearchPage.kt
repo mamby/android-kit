@@ -1,7 +1,9 @@
 package net.mamby.androidkit.compose.form
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -29,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextAlign
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
@@ -77,27 +81,60 @@ public fun AndroidKitSettingsSearchPage(
             onSearch = { recordRecent() },
         ),
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = listState,
-            contentPadding = PaddingValues(
-                start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
-                top = padding.calculateTopPadding(),
-                end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
-                bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
-            ),
-            verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
-        ) {
-            if (query.isBlank()) {
-                item(key = "recent-heading") {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
+        if (query.isBlank() && recentQueries.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize().padding(padding)
+                    .padding(horizontal = dimensions.screenPadding),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(dimensions.spaceLarge),
+                ) {
+                    Box(
+                        modifier = Modifier.size(dimensions.floatingActionButtonSize + dimensions.spaceLarge)
+                            .background(AndroidKitThemeTokens.colorScheme.primaryContainer, CircleShape),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Text(strings.recentSearches,
-                            style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle)
-                        if (recentQueries.isNotEmpty()) {
+                        Icon(
+                            imageVector = AndroidKitIcons.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(dimensions.actionFlyoutIconSize),
+                            tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
+                        )
+                    }
+                    Text(
+                        text = strings.noRecentSearches,
+                        style = AndroidKitThemeTokens.typography.bodyLarge,
+                        color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = listState,
+                contentPadding = PaddingValues(
+                    start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
+                    top = padding.calculateTopPadding(),
+                    end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
+                    bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
+                ),
+                verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
+            ) {
+                if (query.isBlank()) {
+                    item(key = "recent-heading") {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Text(
+                                text = strings.recentSearches,
+                                style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
+                                color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                            )
                             TextButton(
                                 onClick = { catalog.search.onRecentQueriesChange(emptyList()) },
                                 contentPadding = PaddingValues(
@@ -109,10 +146,6 @@ public fun AndroidKitSettingsSearchPage(
                             }
                         }
                     }
-                }
-                if (recentQueries.isEmpty()) {
-                    item(key = "no-recents") { SearchEmptyMessage(strings.noRecentSearches) }
-                } else {
                     item(key = "recent-list") {
                         Column(verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
                             recentQueries.forEach { recent ->
@@ -131,17 +164,17 @@ public fun AndroidKitSettingsSearchPage(
                             }
                         }
                     }
-                }
-            } else if (matches.isEmpty()) {
-                item(key = "no-matches") { SearchEmptyMessage(strings.noMatchingSettings) }
-            } else {
-                matches.forEach { result ->
-                    item(key = "result:${result.pageKey}:${result.section.key}") {
-                        SettingsSection(
-                            entries = result.entries,
-                            label = result.contextLabel,
-                            onEntryAction = { recordRecent() },
-                        )
+                } else if (matches.isEmpty()) {
+                    item(key = "no-matches") { SearchEmptyMessage(strings.noMatchingSettings) }
+                } else {
+                    matches.forEach { result ->
+                        item(key = "result:${result.pageKey}:${result.section.key}") {
+                            SettingsSection(
+                                entries = result.entries,
+                                label = result.contextLabel,
+                                onEntryAction = { recordRecent() },
+                            )
+                        }
                     }
                 }
             }
@@ -179,8 +212,12 @@ private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () ->
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
     ) {
-        Text(query, modifier = Modifier.weight(1f),
-            style = AndroidKitThemeTokens.typography.bodyMedium)
+        Text(
+            text = query,
+            modifier = Modifier.weight(1f),
+            style = AndroidKitThemeTokens.typography.bodyMedium,
+            color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
+        )
         IconButton(
             onClick = onRemove,
             modifier = Modifier.size(dimensions.minimumTouchTarget),

@@ -41,6 +41,7 @@ import net.mamby.androidkit.compose.action.AndroidKitIconAndLabelAction
 import net.mamby.androidkit.compose.action.AndroidKitPageActionToolbar
 import net.mamby.androidkit.compose.action.AndroidKitTextAction
 import net.mamby.androidkit.compose.action.MaximumDirectHeaderActions
+import net.mamby.androidkit.compose.action.actionControlMinimumWidth
 import net.mamby.androidkit.compose.action.isAndroidKitAction
 import net.mamby.androidkit.compose.action.partitionAndroidKitActions
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
@@ -71,7 +72,7 @@ internal fun AndroidKitPageTitleBar(
         style = style,
         dimensions = dimensions,
     )
-    val controlSize = maxOf(dimensions.minimumTouchTarget, visualHeight)
+    val controlSize = actionControlMinimumWidth(visualHeight)
     val actionWidths = pageTitleBarActionWidths(
         items = actions,
         controlSize = controlSize,
@@ -347,9 +348,32 @@ private fun pageActionRowWidth(
 
         AndroidKitActionSeparator -> DividerDefaults.Thickness
     }
-} + (if (hasOverflow) controlSize else 0.dp) +
-    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0) +
-    (if (items.isNotEmpty() || hasOverflow) dimensions.spaceSmall * 2 else 0.dp)
+} + (if (hasOverflow) {
+    maxOf(controlSize, dimensions.floatingActionIconSize + dimensions.actionControlContentInset * 2)
+} else {
+    0.dp
+}) +
+    dimensions.spaceSmall * (
+        items.zipWithNext().count { (previous, next) ->
+            previous.needsPageActionGapAtEnd() && next.needsPageActionGapAtStart()
+        } +
+            (if (items.firstOrNull()?.needsPageActionGapAtStart() == true) 1 else 0) +
+            (if (!hasOverflow && items.lastOrNull()?.needsPageActionGapAtEnd() == true) 1 else 0)
+        )
+
+private fun AndroidKitActionItem.needsPageActionGapAtStart(): Boolean = when (this) {
+    is AndroidKitAction,
+    is AndroidKitIconAndLabelAction -> false
+    is AndroidKitTextAction,
+    AndroidKitActionSeparator -> true
+}
+
+private fun AndroidKitActionItem.needsPageActionGapAtEnd(): Boolean = when (this) {
+    is AndroidKitAction -> false
+    is AndroidKitIconAndLabelAction,
+    is AndroidKitTextAction,
+    AndroidKitActionSeparator -> true
+}
 
 private fun controlRowWidth(
     controlCount: Int,
@@ -417,7 +441,7 @@ private fun pageTitleBarActionWidths(
     val labelStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle
     return items.filter { it.isAndroidKitAction }.associateWith { item ->
         val contentWidth = when (item) {
-            is AndroidKitAction -> 0.dp
+            is AndroidKitAction -> dimensions.floatingActionIconSize
             is AndroidKitTextAction -> with(density) {
                 textMeasurer.measure(
                     text = item.label,
@@ -437,6 +461,11 @@ private fun pageTitleBarActionWidths(
 
             AndroidKitActionSeparator -> 0.dp
         }
-        maxOf(controlSize, contentWidth + dimensions.spaceSmall * 2)
+        val startInset = if (item is AndroidKitIconAndLabelAction) {
+            dimensions.actionControlIconInset(dimensions.floatingActionIconSize, controlSize)
+        } else {
+            dimensions.actionControlContentInset
+        }
+        maxOf(controlSize, contentWidth + startInset + dimensions.actionControlContentInset)
     }
 }

@@ -17,6 +17,18 @@ border and shadow. The Material tooltip anchor retains placement and state owner
 Render scopes and implementations stay internal or private; public declaration
 scopes cannot be implemented by consumers.
 
+Toolbar actions, floating action bars, and page action controls share an internal
+content inset derived from the small spacing token (8 dp by default). The renderer
+reserves this inset around the content box, including icon-only and More buttons;
+it does not depend on whitespace in icon artwork. Page action width measurement
+uses the same inset and the icon box width. A horizontal icon-and-label action uses
+the leading inset of an icon centered in an icon-only action's minimum width,
+including Material's minimum interactive size and the page's visual control size.
+This keeps its leading icon aligned with icon-only controls such as More in LTR
+and RTL. Minimum interactive sizing can reserve additional space.
+External horizontal padding is omitted at icon-facing edges,
+and an inter-item gap is added only when both facing edges require it.
+
 App-specific body content remains composable inside `AndroidKitPage`,
 `AndroidKitCard`, and `AndroidKitBottomSheet`. The `content` parameter of
 `AndroidKitFloatingNavigation` is the destination screen displayed alongside the
