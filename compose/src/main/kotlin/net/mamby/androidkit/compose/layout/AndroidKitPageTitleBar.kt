@@ -348,7 +348,8 @@ private fun pageActionRowWidth(
         AndroidKitActionSeparator -> DividerDefaults.Thickness
     }
 } + (if (hasOverflow) controlSize else 0.dp) +
-    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0)
+    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0) +
+    (if (items.isNotEmpty() || hasOverflow) dimensions.spaceSmall * 2 else 0.dp)
 
 private fun controlRowWidth(
     controlCount: Int,

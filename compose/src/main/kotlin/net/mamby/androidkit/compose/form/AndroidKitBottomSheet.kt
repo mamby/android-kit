@@ -655,6 +655,7 @@ private fun BottomSheetActionButtons(
     }
 
     Row(
+        modifier = Modifier.padding(horizontal = dimensions.spaceSmall),
         horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -796,7 +797,8 @@ private fun bottomSheetActionRowWidth(
         AndroidKitActionSeparator -> DividerDefaults.Thickness
     }
 } + (if (hasOverflow) dimensions.bottomSheetIconButtonSize else 0.dp) +
-    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0)
+    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0) +
+    (if (items.isNotEmpty() || hasOverflow) dimensions.spaceSmall * 2 else 0.dp)
 
 @Composable
 private fun bottomSheetActionWidths(

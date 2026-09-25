@@ -138,7 +138,9 @@ internal fun AndroidKitPageActionToolbar(
     visualHeight: Dp,
     modifier: Modifier = Modifier,
     style: AndroidKitFloatingToolbarStyle = AndroidKitThemeTokens.floatingToolbarStyle,
-    contentPadding: PaddingValues = PaddingValues.Zero,
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = AndroidKitThemeTokens.dimensions.spaceSmall,
+    ),
     itemSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
     content: AndroidKitFloatingToolbarScope.() -> Unit,
 ): Unit {
