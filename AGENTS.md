@@ -17,6 +17,14 @@ requested. Existing style APIs are not authorization to copy their extensibility
 into new components, nor a request to migrate them outside the current scope.
 See [docs/component-contract.md](docs/component-contract.md).
 
+## Local host apps
+
+The active AndroidKit host apps are `D:\src\local-events` and
+`D:\src\personal-health-vault`. For local snapshot releases, update the
+AndroidKit BOM in `D:\src\local-events\src\android\app\build.gradle.kts` and
+`androidKitVersion` in
+`D:\src\personal-health-vault\src\android\gradle.properties`.
+
 All automated test source belongs to the top-level `test` module. Before changing
 or executing the test suites, read [docs/testing.md](docs/testing.md). Do not put
 tests inside published modules. Do not commit generated screenshots, screenshot
