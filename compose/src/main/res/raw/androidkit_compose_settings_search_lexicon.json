@@ -118,202 +118,399 @@
         "Theme",
         "appearance",
         "light",
-        "dark"
+        "dark",
+        "color",
+        "contrast",
+        "color scheme",
+        "palette",
+        "display",
+        "light mode",
+        "dark mode"
       ],
       "ar": [
         "المظهر",
         "فاتح",
-        "داكن"
+        "داكن",
+        "اللون",
+        "التباين",
+        "نظام الألوان",
+        "لوحة الألوان",
+        "العرض",
+        "الوضع الفاتح",
+        "الوضع الداكن"
       ],
       "de": [
         "Design",
         "darstellung",
         "erscheinungsbild",
         "hell",
-        "dunkel"
+        "dunkel",
+        "Farbe",
+        "Kontrast",
+        "Farbschema",
+        "Farbpalette",
+        "Anzeige",
+        "heller Modus",
+        "dunkler Modus"
       ],
       "es": [
         "Tema",
         "apariencia",
         "claro",
-        "oscuro"
+        "oscuro",
+        "color",
+        "contraste",
+        "combinación de colores",
+        "paleta de colores",
+        "pantalla",
+        "modo claro",
+        "modo oscuro"
       ],
       "fr": [
         "Thème",
         "apparence",
         "clair",
-        "sombre"
+        "sombre",
+        "couleur",
+        "contraste",
+        "jeu de couleurs",
+        "palette de couleurs",
+        "affichage",
+        "mode clair",
+        "mode sombre"
       ],
       "hi": [
         "थीम",
         "दिखावट",
         "हल्की",
-        "गहरी"
+        "गहरी",
+        "रंग",
+        "कंट्रास्ट",
+        "रंग योजना",
+        "रंग पैलेट",
+        "डिस्प्ले",
+        "लाइट मोड",
+        "डार्क मोड"
       ],
       "id": [
         "Tema",
         "tampilan",
         "terang",
-        "gelap"
+        "gelap",
+        "warna",
+        "kontras",
+        "skema warna",
+        "palet warna",
+        "layar",
+        "mode terang",
+        "mode gelap"
       ],
       "it": [
         "Tema",
         "aspetto",
         "chiaro",
-        "scuro"
+        "scuro",
+        "colore",
+        "contrasto",
+        "combinazione di colori",
+        "tavolozza dei colori",
+        "schermo",
+        "modalità chiara",
+        "modalità scura"
       ],
       "ja": [
         "テーマ",
         "外観",
         "ライト",
-        "ダーク"
+        "ダーク",
+        "色",
+        "コントラスト",
+        "配色",
+        "カラーパレット",
+        "表示",
+        "ライトモード",
+        "ダークモード"
       ],
       "ko": [
         "테마",
         "모양",
         "라이트",
-        "다크"
+        "다크",
+        "색상",
+        "대비",
+        "색상 구성표",
+        "색상 팔레트",
+        "디스플레이",
+        "라이트 모드",
+        "다크 모드"
       ],
       "nl": [
         "Thema",
         "weergave",
         "uiterlijk",
         "licht",
-        "donker"
+        "donker",
+        "kleur",
+        "contrast",
+        "kleurenschema",
+        "kleurenpalet",
+        "scherm",
+        "lichte modus",
+        "donkere modus"
       ],
       "pl": [
         "Motyw",
         "wygląd",
         "jasny",
-        "ciemny"
+        "ciemny",
+        "kolor",
+        "kontrast",
+        "schemat kolorów",
+        "paleta kolorów",
+        "wyświetlacz",
+        "tryb jasny",
+        "tryb ciemny"
       ],
       "pt": [
         "Tema",
         "aparência",
         "claro",
-        "escuro"
+        "escuro",
+        "cor",
+        "contraste",
+        "esquema de cores",
+        "paleta de cores",
+        "ecrã",
+        "modo claro",
+        "modo escuro"
       ],
       "ru": [
         "Тема",
         "оформление",
         "внешний вид",
         "светлая",
-        "тёмная"
+        "тёмная",
+        "цвет",
+        "контрастность",
+        "цветовая схема",
+        "цветовая палитра",
+        "экран",
+        "светлый режим",
+        "тёмный режим"
       ],
       "th": [
         "ธีม",
         "ลักษณะที่ปรากฏ",
         "สว่าง",
-        "มืด"
+        "มืด",
+        "สี",
+        "ความคมชัด",
+        "ชุดสี",
+        "จานสี",
+        "การแสดงผล",
+        "โหมดสว่าง",
+        "โหมดมืด"
       ],
       "tr": [
         "Tema",
         "görünüm",
         "açık",
-        "koyu"
+        "koyu",
+        "renk",
+        "kontrast",
+        "renk şeması",
+        "renk paleti",
+        "ekran",
+        "açık mod",
+        "koyu mod"
       ],
       "vi": [
         "Giao diện",
         "sáng",
-        "tối"
+        "tối",
+        "màu sắc",
+        "độ tương phản",
+        "bảng màu",
+        "màn hình",
+        "chế độ sáng",
+        "chế độ tối"
       ],
       "zh-Hans": [
         "主题",
         "外观",
         "浅色",
-        "深色"
+        "深色",
+        "颜色",
+        "对比度",
+        "配色方案",
+        "调色板",
+        "显示",
+        "浅色模式",
+        "深色模式"
       ]
     },
     "transparency": {
       "en": [
         "Transparency",
         "opacity",
-        "see through"
+        "see through",
+        "effects",
+        "visual effects",
+        "translucent",
+        "background opacity"
       ],
       "ar": [
         "الشفافية",
         "التعتيم",
-        "شفاف"
+        "شفاف",
+        "تأثيرات",
+        "تأثيرات بصرية",
+        "شبه شفاف",
+        "تعتيم الخلفية"
       ],
       "de": [
         "Transparenz",
         "deckkraft",
-        "durchsichtigkeit"
+        "durchsichtigkeit",
+        "Effekte",
+        "visuelle Effekte",
+        "durchscheinend",
+        "Hintergrunddeckkraft"
       ],
       "es": [
         "Transparencia",
         "opacidad",
-        "transparente"
+        "transparente",
+        "efectos",
+        "efectos visuales",
+        "translúcido",
+        "opacidad del fondo"
       ],
       "fr": [
         "Transparence",
         "opacité",
-        "transparent"
+        "transparent",
+        "effets",
+        "effets visuels",
+        "translucide",
+        "opacité de l’arrière-plan"
       ],
       "hi": [
         "पारदर्शिता",
         "अपारदर्शिता",
-        "पारदर्शी"
+        "पारदर्शी",
+        "प्रभाव",
+        "दृश्य प्रभाव",
+        "अर्धपारदर्शी",
+        "पृष्ठभूमि की अपारदर्शिता"
       ],
       "id": [
         "Transparansi",
         "opasitas",
-        "transparan"
+        "transparan",
+        "efek",
+        "efek visual",
+        "tembus cahaya",
+        "opasitas latar belakang"
       ],
       "it": [
         "Trasparenza",
         "opacità",
-        "trasparente"
+        "trasparente",
+        "effetti",
+        "effetti visivi",
+        "traslucido",
+        "opacità dello sfondo"
       ],
       "ja": [
         "透明度",
         "不透明度",
-        "透明"
+        "透明",
+        "エフェクト",
+        "視覚効果",
+        "半透明",
+        "背景の不透明度"
       ],
       "ko": [
         "투명도",
         "불투명도",
-        "투명"
+        "투명",
+        "효과",
+        "시각 효과",
+        "반투명",
+        "배경 불투명도"
       ],
       "nl": [
         "Transparantie",
         "dekking",
-        "doorzichtig"
+        "doorzichtig",
+        "effecten",
+        "visuele effecten",
+        "doorschijnend",
+        "achtergronddekking"
       ],
       "pl": [
         "Przezroczystość",
         "krycie",
-        "przezroczysty"
+        "przezroczysty",
+        "efekty",
+        "efekty wizualne",
+        "półprzezroczysty",
+        "krycie tła"
       ],
       "pt": [
         "Transparência",
         "opacidade",
-        "transparente"
+        "transparente",
+        "efeitos",
+        "efeitos visuais",
+        "translúcido",
+        "opacidade do fundo"
       ],
       "ru": [
         "Прозрачность",
         "непрозрачность",
-        "прозрачный"
+        "прозрачный",
+        "эффекты",
+        "визуальные эффекты",
+        "полупрозрачный",
+        "непрозрачность фона"
       ],
       "th": [
         "ความโปร่งใส",
         "ความทึบ",
-        "โปร่งใส"
+        "โปร่งใส",
+        "เอฟเฟกต์",
+        "เอฟเฟกต์ภาพ",
+        "โปร่งแสง",
+        "ความทึบของพื้นหลัง"
       ],
       "tr": [
         "Şeffaflık",
         "opaklık",
-        "saydam"
+        "saydam",
+        "efektler",
+        "görsel efektler",
+        "yarı saydam",
+        "arka plan opaklığı"
       ],
       "vi": [
         "Độ trong suốt",
         "độ mờ",
-        "trong suốt"
+        "trong suốt",
+        "hiệu ứng",
+        "hiệu ứng hình ảnh",
+        "bán trong suốt",
+        "độ mờ nền"
       ],
       "zh-Hans": [
         "透明度",
         "不透明度",
-        "透明"
+        "透明",
+        "效果",
+        "视觉效果",
+        "半透明",
+        "背景不透明度"
       ]
     },
     "app-lock": {
@@ -321,109 +518,236 @@
         "App lock",
         "lock",
         "security",
-        "biometric"
+        "biometric",
+        "biometrics",
+        "PIN",
+        "password",
+        "face",
+        "fingerprint",
+        "pattern",
+        "unlock",
+        "authentication"
       ],
       "ar": [
         "قفل التطبيق",
         "القفل",
         "الأمان",
-        "المقاييس الحيوية"
+        "المقاييس الحيوية",
+        "بصمة الإصبع",
+        "التعرف على الوجه",
+        "رمز PIN",
+        "كلمة المرور",
+        "النمط",
+        "فتح القفل",
+        "المصادقة"
       ],
       "de": [
         "App-Sperre",
         "sperre",
         "sicherheit",
-        "biometrie"
+        "biometrie",
+        "Fingerabdruck",
+        "Gesichtserkennung",
+        "PIN",
+        "Passwort",
+        "Muster",
+        "entsperren",
+        "Authentifizierung"
       ],
       "es": [
         "Bloqueo de la aplicación",
         "bloqueo",
         "seguridad",
-        "biometría"
+        "biometría",
+        "huella dactilar",
+        "reconocimiento facial",
+        "PIN",
+        "contraseña",
+        "patrón",
+        "desbloquear",
+        "autenticación"
       ],
       "fr": [
         "Verrouillage de l’application",
         "verrouillage",
         "sécurité",
-        "biométrie"
+        "biométrie",
+        "empreinte digitale",
+        "reconnaissance faciale",
+        "code PIN",
+        "mot de passe",
+        "schéma",
+        "déverrouiller",
+        "authentification"
       ],
       "hi": [
         "ऐप लॉक",
         "लॉक",
         "सुरक्षा",
-        "बायोमेट्रिक"
+        "बायोमेट्रिक",
+        "फ़िंगरप्रिंट",
+        "चेहरे की पहचान",
+        "पिन",
+        "पासवर्ड",
+        "पैटर्न",
+        "अनलॉक",
+        "प्रमाणीकरण"
       ],
       "id": [
         "Kunci aplikasi",
         "kunci",
         "keamanan",
-        "biometrik"
+        "biometrik",
+        "sidik jari",
+        "pengenalan wajah",
+        "PIN",
+        "kata sandi",
+        "pola",
+        "buka kunci",
+        "autentikasi"
       ],
       "it": [
         "Blocco app",
         "blocco",
         "sicurezza",
-        "biometria"
+        "biometria",
+        "impronta digitale",
+        "riconoscimento facciale",
+        "PIN",
+        "password",
+        "sequenza",
+        "sbloccare",
+        "autenticazione"
       ],
       "ja": [
         "アプリロック",
         "ロック",
         "セキュリティ",
-        "生体認証"
+        "生体認証",
+        "指紋認証",
+        "顔認証",
+        "PIN",
+        "パスワード",
+        "パターン",
+        "ロック解除",
+        "認証"
       ],
       "ko": [
         "앱 잠금",
         "잠금",
         "보안",
-        "생체 인식"
+        "생체 인식",
+        "지문 인식",
+        "얼굴 인식",
+        "PIN",
+        "비밀번호",
+        "패턴",
+        "잠금 해제",
+        "인증"
       ],
       "nl": [
         "Appvergrendeling",
         "vergrendeling",
         "beveiliging",
-        "biometrie"
+        "biometrie",
+        "vingerafdruk",
+        "gezichtsherkenning",
+        "pincode",
+        "wachtwoord",
+        "patroon",
+        "ontgrendelen",
+        "authenticatie"
       ],
       "pl": [
         "Blokada aplikacji",
         "blokada",
         "bezpieczeństwo",
-        "biometria"
+        "biometria",
+        "odcisk palca",
+        "rozpoznawanie twarzy",
+        "PIN",
+        "hasło",
+        "wzór",
+        "odblokuj",
+        "uwierzytelnianie"
       ],
       "pt": [
         "Bloqueio da aplicação",
         "bloqueio",
         "segurança",
-        "biometria"
+        "biometria",
+        "impressão digital",
+        "reconhecimento facial",
+        "PIN",
+        "palavra-passe",
+        "padrão",
+        "desbloquear",
+        "autenticação"
       ],
       "ru": [
         "Блокировка приложения",
         "блокировка",
         "безопасность",
-        "биометрия"
+        "биометрия",
+        "отпечаток пальца",
+        "распознавание лица",
+        "ПИН-код",
+        "пароль",
+        "графический ключ",
+        "разблокировать",
+        "аутентификация"
       ],
       "th": [
         "ล็อกแอป",
         "ล็อก",
         "ความปลอดภัย",
-        "ไบโอเมตริก"
+        "ไบโอเมตริก",
+        "ลายนิ้วมือ",
+        "การจดจำใบหน้า",
+        "PIN",
+        "รหัสผ่าน",
+        "รูปแบบ",
+        "ปลดล็อก",
+        "การยืนยันตัวตน"
       ],
       "tr": [
         "Uygulama kilidi",
         "kilit",
         "güvenlik",
-        "biyometri"
+        "biyometri",
+        "parmak izi",
+        "yüz tanıma",
+        "PIN",
+        "şifre",
+        "desen",
+        "kilidi aç",
+        "kimlik doğrulama"
       ],
       "vi": [
         "Khóa ứng dụng",
         "khóa",
         "bảo mật",
-        "sinh trắc học"
+        "sinh trắc học",
+        "vân tay",
+        "nhận diện khuôn mặt",
+        "mã PIN",
+        "mật khẩu",
+        "hình mở khóa",
+        "mở khóa",
+        "xác thực"
       ],
       "zh-Hans": [
         "应用锁",
         "锁定",
         "安全",
-        "生物识别"
+        "生物识别",
+        "指纹",
+        "人脸识别",
+        "PIN 码",
+        "密码",
+        "图案",
+        "解锁",
+        "身份验证"
       ]
     },
     "app-lock-timeout": {
@@ -431,109 +755,127 @@
         "Lock after leaving the app",
         "auto lock",
         "timeout",
-        "lock delay"
+        "lock delay",
+        "relock"
       ],
       "ar": [
         "القفل بعد مغادرة التطبيق",
         "القفل التلقائي",
         "مهلة",
-        "تأخير القفل"
+        "تأخير القفل",
+        "إعادة القفل"
       ],
       "de": [
         "Nach Verlassen der App sperren",
         "automatische sperre",
         "zeitlimit",
-        "sperrverzögerung"
+        "sperrverzögerung",
+        "erneut sperren"
       ],
       "es": [
         "Bloquear después de salir de la aplicación",
         "bloqueo automático",
         "tiempo de espera",
-        "retraso de bloqueo"
+        "retraso de bloqueo",
+        "volver a bloquear"
       ],
       "fr": [
         "Verrouiller après avoir quitté l’application",
         "verrouillage automatique",
         "délai",
-        "temporisation"
+        "temporisation",
+        "reverrouiller"
       ],
       "hi": [
         "ऐप से बाहर निकलने के बाद लॉक करें",
         "अपने आप लॉक",
         "समय सीमा",
-        "लॉक में देरी"
+        "लॉक में देरी",
+        "फिर से लॉक करें"
       ],
       "id": [
         "Kunci setelah keluar dari aplikasi",
         "kunci otomatis",
         "batas waktu",
-        "jeda penguncian"
+        "jeda penguncian",
+        "kunci kembali"
       ],
       "it": [
         "Blocca dopo l’uscita dall’app",
         "blocco automatico",
         "timeout",
-        "ritardo blocco"
+        "ritardo blocco",
+        "bloccare di nuovo"
       ],
       "ja": [
         "アプリを離れた後にロック",
         "自動ロック",
         "タイムアウト",
-        "ロックの遅延"
+        "ロックの遅延",
+        "再ロック"
       ],
       "ko": [
         "앱을 나간 후 잠그기",
         "자동 잠금",
         "시간 제한",
-        "잠금 지연"
+        "잠금 지연",
+        "다시 잠그기"
       ],
       "nl": [
         "Vergrendelen na het verlaten van de app",
         "automatisch vergrendelen",
         "time-out",
-        "vergrendelingsvertraging"
+        "vergrendelingsvertraging",
+        "opnieuw vergrendelen"
       ],
       "pl": [
         "Zablokuj po opuszczeniu aplikacji",
         "automatyczna blokada",
         "limit czasu",
-        "opóźnienie blokady"
+        "opóźnienie blokady",
+        "zablokuj ponownie"
       ],
       "pt": [
         "Bloquear após sair da aplicação",
         "bloqueio automático",
         "tempo limite",
-        "atraso de bloqueio"
+        "atraso de bloqueio",
+        "voltar a bloquear"
       ],
       "ru": [
         "Блокировать после выхода из приложения",
         "автоблокировка",
         "тайм-аут",
-        "задержка блокировки"
+        "задержка блокировки",
+        "заблокировать снова"
       ],
       "th": [
         "ล็อกหลังออกจากแอป",
         "ล็อกอัตโนมัติ",
         "หมดเวลา",
-        "หน่วงเวลาล็อก"
+        "หน่วงเวลาล็อก",
+        "ล็อกอีกครั้ง"
       ],
       "tr": [
         "Uygulamadan çıktıktan sonra kilitle",
         "otomatik kilit",
         "zaman aşımı",
-        "kilit gecikmesi"
+        "kilit gecikmesi",
+        "yeniden kilitle"
       ],
       "vi": [
         "Khóa sau khi rời ứng dụng",
         "tự động khóa",
         "thời gian chờ",
-        "độ trễ khóa"
+        "độ trễ khóa",
+        "khóa lại"
       ],
       "zh-Hans": [
         "离开应用后锁定",
         "自动锁定",
         "超时",
-        "锁定延迟"
+        "锁定延迟",
+        "重新锁定"
       ]
     },
     "lock-now": {
@@ -1059,7 +1401,15 @@
         "issue",
         "problem",
         "bug report",
-        "report a bug"
+        "report a bug",
+        "forum",
+        "social networks",
+        "social media",
+        "blog",
+        "community",
+        "discussion",
+        "get in touch",
+        "message"
       ],
       "ar": [
         "التواصل",
@@ -1072,7 +1422,15 @@
         "اقتراح",
         "مشكلة",
         "بلاغ خطأ",
-        "الإبلاغ عن خطأ"
+        "الإبلاغ عن خطأ",
+        "منتدى",
+        "شبكات التواصل الاجتماعي",
+        "وسائل التواصل الاجتماعي",
+        "مدونة",
+        "مجتمع",
+        "نقاش",
+        "تواصل معنا",
+        "رسالة"
       ],
       "de": [
         "Kontakt",
@@ -1086,7 +1444,15 @@
         "vorschlag",
         "problem",
         "fehlerbericht",
-        "fehler melden"
+        "fehler melden",
+        "Forum",
+        "soziale Netzwerke",
+        "soziale Medien",
+        "Blog",
+        "Community",
+        "Diskussion",
+        "Kontakt aufnehmen",
+        "Nachricht"
       ],
       "es": [
         "Contacto",
@@ -1102,7 +1468,15 @@
         "incidencia",
         "problema",
         "informe de error",
-        "notificar un error"
+        "notificar un error",
+        "foro",
+        "redes sociales",
+        "medios sociales",
+        "blog",
+        "comunidad",
+        "debate",
+        "ponerse en contacto",
+        "mensaje"
       ],
       "fr": [
         "Contact",
@@ -1117,7 +1491,15 @@
         "problème",
         "incident",
         "rapport de bug",
-        "signaler un bug"
+        "signaler un bug",
+        "forum",
+        "réseaux sociaux",
+        "médias sociaux",
+        "blog",
+        "communauté",
+        "discussion",
+        "prendre contact",
+        "message"
       ],
       "hi": [
         "संपर्क",
@@ -1132,7 +1514,15 @@
         "सुझाव",
         "समस्या",
         "बग रिपोर्ट",
-        "बग की रिपोर्ट करें"
+        "बग की रिपोर्ट करें",
+        "फ़ोरम",
+        "सामाजिक नेटवर्क",
+        "सोशल मीडिया",
+        "ब्लॉग",
+        "समुदाय",
+        "चर्चा",
+        "संपर्क करें",
+        "संदेश"
       ],
       "id": [
         "Kontak",
@@ -1146,7 +1536,15 @@
         "saran",
         "masalah",
         "laporan bug",
-        "laporkan bug"
+        "laporkan bug",
+        "forum",
+        "jejaring sosial",
+        "media sosial",
+        "blog",
+        "komunitas",
+        "diskusi",
+        "hubungi kami",
+        "pesan"
       ],
       "it": [
         "Contatti",
@@ -1160,7 +1558,15 @@
         "suggerimento",
         "problema",
         "segnalazione bug",
-        "segnala un bug"
+        "segnala un bug",
+        "forum",
+        "reti sociali",
+        "social media",
+        "blog",
+        "comunità",
+        "discussione",
+        "mettersi in contatto",
+        "messaggio"
       ],
       "ja": [
         "お問い合わせ",
@@ -1175,7 +1581,15 @@
         "提案",
         "問題",
         "不具合報告",
-        "バグを報告"
+        "バグを報告",
+        "フォーラム",
+        "ソーシャルネットワーク",
+        "ソーシャルメディア",
+        "ブログ",
+        "コミュニティ",
+        "ディスカッション",
+        "連絡する",
+        "メッセージ"
       ],
       "ko": [
         "문의",
@@ -1189,7 +1603,15 @@
         "제안",
         "문제",
         "버그 신고",
-        "버그 보고"
+        "버그 보고",
+        "포럼",
+        "소셜 네트워크",
+        "소셜 미디어",
+        "블로그",
+        "커뮤니티",
+        "토론",
+        "연락하기",
+        "메시지"
       ],
       "nl": [
         "Contact",
@@ -1203,7 +1625,15 @@
         "suggestie",
         "probleem",
         "bugrapport",
-        "een bug melden"
+        "een bug melden",
+        "forum",
+        "sociale netwerken",
+        "sociale media",
+        "blog",
+        "gemeenschap",
+        "discussie",
+        "contact opnemen",
+        "bericht"
       ],
       "pl": [
         "Kontakt",
@@ -1217,7 +1647,15 @@
         "sugestia",
         "problem",
         "zgłoszenie błędu",
-        "zgłoś błąd"
+        "zgłoś błąd",
+        "forum",
+        "sieci społecznościowe",
+        "media społecznościowe",
+        "blog",
+        "społeczność",
+        "dyskusja",
+        "skontaktuj się",
+        "wiadomość"
       ],
       "pt": [
         "Contacto",
@@ -1232,7 +1670,15 @@
         "sugestão",
         "problema",
         "relatório de erro",
-        "comunicar um erro"
+        "comunicar um erro",
+        "fórum",
+        "redes sociais",
+        "meios de comunicação social",
+        "blogue",
+        "comunidade",
+        "discussão",
+        "entrar em contacto",
+        "mensagem"
       ],
       "ru": [
         "Контакты",
@@ -1246,7 +1692,15 @@
         "предложение",
         "проблема",
         "отчёт об ошибке",
-        "сообщить об ошибке"
+        "сообщить об ошибке",
+        "форум",
+        "социальные сети",
+        "социальные медиа",
+        "блог",
+        "сообщество",
+        "обсуждение",
+        "связаться",
+        "сообщение"
       ],
       "th": [
         "ติดต่อ",
@@ -1260,7 +1714,15 @@
         "ข้อเสนอแนะ",
         "ปัญหา",
         "รายงานข้อบกพร่อง",
-        "แจ้งข้อบกพร่อง"
+        "แจ้งข้อบกพร่อง",
+        "ฟอรัม",
+        "เครือข่ายสังคม",
+        "โซเชียลมีเดีย",
+        "บล็อก",
+        "ชุมชน",
+        "การสนทนา",
+        "ติดต่อเรา",
+        "ข้อความ"
       ],
       "tr": [
         "İletişim",
@@ -1275,7 +1737,15 @@
         "öneri",
         "sorun",
         "hata raporu",
-        "hata bildir"
+        "hata bildir",
+        "forum",
+        "sosyal ağlar",
+        "sosyal medya",
+        "blog",
+        "topluluk",
+        "tartışma",
+        "iletişime geç",
+        "mesaj"
       ],
       "vi": [
         "Liên hệ",
@@ -1290,7 +1760,15 @@
         "sự cố",
         "vấn đề",
         "báo cáo lỗi",
-        "báo lỗi"
+        "báo lỗi",
+        "diễn đàn",
+        "mạng xã hội",
+        "phương tiện truyền thông xã hội",
+        "blog",
+        "cộng đồng",
+        "thảo luận",
+        "liên lạc",
+        "tin nhắn"
       ],
       "zh-Hans": [
         "联系",
@@ -1305,7 +1783,15 @@
         "建议",
         "故障",
         "错误报告",
-        "报告错误"
+        "报告错误",
+        "论坛",
+        "社交网络",
+        "社交媒体",
+        "博客",
+        "社区",
+        "讨论",
+        "联系我们",
+        "消息"
       ]
     },
     "privacy": {
@@ -1565,7 +2051,10 @@
         "libraries",
         "third party software",
         "notices",
-        "acknowledgements"
+        "acknowledgements",
+        "open source",
+        "credits",
+        "attribution"
       ],
       "ar": [
         "تراخيص الجهات الخارجية",
@@ -1574,7 +2063,10 @@
         "المكتبات",
         "برامج الجهات الخارجية",
         "الإشعارات",
-        "شكر وتقدير"
+        "شكر وتقدير",
+        "مفتوح المصدر",
+        "شكر",
+        "نسب المصنف"
       ],
       "de": [
         "Drittanbieterlizenzen",
@@ -1583,7 +2075,10 @@
         "bibliotheken",
         "drittanbieter-software",
         "hinweise",
-        "danksagungen"
+        "danksagungen",
+        "Open Source",
+        "Mitwirkende",
+        "Namensnennung"
       ],
       "es": [
         "Licencias de terceros",
@@ -1592,7 +2087,10 @@
         "bibliotecas",
         "software de terceros",
         "avisos",
-        "reconocimientos"
+        "reconocimientos",
+        "código abierto",
+        "créditos",
+        "atribución"
       ],
       "fr": [
         "Licences de tiers",
@@ -1601,7 +2099,10 @@
         "bibliothèques",
         "logiciels tiers",
         "mentions",
-        "remerciements"
+        "remerciements",
+        "open source",
+        "crédits",
+        "attribution"
       ],
       "hi": [
         "तृतीय-पक्ष लाइसेंस",
@@ -1610,7 +2111,10 @@
         "लाइब्रेरी",
         "तीसरे पक्ष का सॉफ़्टवेयर",
         "सूचनाएँ",
-        "आभार"
+        "आभार",
+        "ओपन सोर्स",
+        "श्रेय",
+        "एट्रिब्यूशन"
       ],
       "id": [
         "Lisensi pihak ketiga",
@@ -1619,7 +2123,10 @@
         "pustaka",
         "perangkat lunak pihak ketiga",
         "pemberitahuan",
-        "penghargaan"
+        "penghargaan",
+        "sumber terbuka",
+        "kredit",
+        "atribusi"
       ],
       "it": [
         "Licenze di terze parti",
@@ -1628,7 +2135,10 @@
         "librerie",
         "software di terze parti",
         "avvisi",
-        "riconoscimenti"
+        "riconoscimenti",
+        "open source",
+        "crediti",
+        "attribuzione"
       ],
       "ja": [
         "サードパーティのライセンス",
@@ -1637,7 +2147,10 @@
         "ライブラリ",
         "サードパーティソフトウェア",
         "通知",
-        "謝辞"
+        "謝辞",
+        "オープンソース",
+        "クレジット",
+        "帰属表示"
       ],
       "ko": [
         "타사 라이선스",
@@ -1646,7 +2159,10 @@
         "라이브러리",
         "타사 소프트웨어",
         "고지",
-        "감사의 말"
+        "감사의 말",
+        "오픈 소스",
+        "크레딧",
+        "저작자 표시"
       ],
       "nl": [
         "Licenties van derden",
@@ -1655,7 +2171,10 @@
         "bibliotheken",
         "software van derden",
         "kennisgevingen",
-        "dankbetuigingen"
+        "dankbetuigingen",
+        "open source",
+        "credits",
+        "naamsvermelding"
       ],
       "pl": [
         "Licencje podmiotów trzecich",
@@ -1664,7 +2183,10 @@
         "biblioteki",
         "oprogramowanie innych firm",
         "uwagi",
-        "podziękowania"
+        "podziękowania",
+        "otwarte oprogramowanie",
+        "autorzy",
+        "uznanie autorstwa"
       ],
       "pt": [
         "Licenças de terceiros",
@@ -1673,7 +2195,10 @@
         "bibliotecas",
         "software de terceiros",
         "avisos",
-        "agradecimentos"
+        "agradecimentos",
+        "código aberto",
+        "créditos",
+        "atribuição"
       ],
       "ru": [
         "Лицензии третьих сторон",
@@ -1682,7 +2207,10 @@
         "библиотеки",
         "стороннее ПО",
         "уведомления",
-        "благодарности"
+        "благодарности",
+        "открытый исходный код",
+        "титры",
+        "указание авторства"
       ],
       "th": [
         "ใบอนุญาตของบุคคลที่สาม",
@@ -1691,7 +2219,10 @@
         "ไลบรารี",
         "ซอฟต์แวร์ของบุคคลที่สาม",
         "ประกาศ",
-        "กิตติกรรมประกาศ"
+        "กิตติกรรมประกาศ",
+        "โอเพนซอร์ส",
+        "เครดิต",
+        "การระบุแหล่งที่มา"
       ],
       "tr": [
         "Üçüncü taraf lisansları",
@@ -1700,7 +2231,10 @@
         "kitaplıklar",
         "üçüncü taraf yazılım",
         "bildirimler",
-        "teşekkürler"
+        "teşekkürler",
+        "açık kaynak",
+        "katkıda bulunanlar",
+        "atıf"
       ],
       "vi": [
         "Giấy phép bên thứ ba",
@@ -1709,7 +2243,10 @@
         "thư viện",
         "phần mềm bên thứ ba",
         "thông báo",
-        "lời cảm ơn"
+        "lời cảm ơn",
+        "mã nguồn mở",
+        "ghi công",
+        "ghi nhận tác giả"
       ],
       "zh-Hans": [
         "第三方许可证",
@@ -1718,7 +2255,10 @@
         "库",
         "第三方软件",
         "声明",
-        "致谢"
+        "致谢",
+        "开源",
+        "鸣谢",
+        "署名"
       ]
     }
   }

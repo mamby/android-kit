@@ -361,3 +361,24 @@ the two-action example; French uses the glossary's “Plus” for the overflow b
 and Arabic follows the demo's existing “المزيد” wording. Locale keys were checked
 against the call sites. This is an editorial review without external references or
 native-speaker approval; device truncation and RTL rendering remain unverified.
+
+## 2026-09-26 Settings search keyword expansion
+
+Expanded the built-in Settings search lexicon in all 18 supported locales for
+App lock authentication methods (biometrics, fingerprint, face, PIN, password,
+pattern, and unlocking), Theme colors and contrast, Transparency effects and
+translucency, Contact/community destinations, App lock timing, and third-party
+license credits. No visible labels or demo duplicates changed. The English
+reference describes search intent: App lock remains host-confirmed, Theme does
+not gain a separate contrast control, Transparency still adjusts opacity, and
+Contact's actual destination remains host-owned. Forum, social-network, and blog
+queries therefore find Contact but do not promise those specific destinations.
+
+Checked the [Android BiometricPrompt reference](https://developer.android.com/reference/android/hardware/biometrics/BiometricPrompt)
+for fingerprint, face, PIN, pattern, and password terminology and the
+[Android theme guidance](https://developer.android.com/design/ui/mobile/guides/styles/themes)
+for color and contrast. Other aliases are contextual editorial choices based on
+the English setting semantics and the existing locale vocabulary. This was an
+AI-assisted review of every affected locale, not native-speaker approval.
+Idiomatic quality, device pronunciation, and live destination behavior remain
+unverified; the lexicon validator checks structure and labels separately.
