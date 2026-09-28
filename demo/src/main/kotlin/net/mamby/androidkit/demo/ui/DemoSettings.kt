@@ -43,6 +43,7 @@ internal data class DemoSettings(
         DemoFloatingNavigationLayout.FiveItemsWithMore,
     val showCompactNavigationLabels: Boolean = false,
     val recentSettingsSearches: List<String> = emptyList(),
+    val recentContentSearches: List<String> = emptyList(),
 )
 
 enum class DemoAppLockTimeout(val duration: Duration) {
@@ -119,6 +120,9 @@ internal class DemoSettingsRepository(context: Context) {
                 recentSettingsSearches = preferences[RecentSettingsSearchesKey]
                     ?.let(::decodeStringList)
                     .orEmpty(),
+                recentContentSearches = preferences[RecentContentSearchesKey]
+                    ?.let(::decodeStringList)
+                    .orEmpty(),
             )
         }
 
@@ -152,6 +156,10 @@ internal class DemoSettingsRepository(context: Context) {
 
     suspend fun setRecentSettingsSearches(queries: List<String>) {
         dataStore.edit { it[RecentSettingsSearchesKey] = JSONArray(queries).toString() }
+    }
+
+    suspend fun setRecentContentSearches(queries: List<String>) {
+        dataStore.edit { it[RecentContentSearchesKey] = JSONArray(queries).toString() }
     }
 
     suspend fun setThemeChoice(choice: DemoThemeChoice) {
@@ -315,6 +323,10 @@ internal class DemoSettingsViewModel(
         viewModelScope.launch { repository.setRecentSettingsSearches(queries) }
     }
 
+    fun setRecentContentSearches(queries: List<String>) {
+        viewModelScope.launch { repository.setRecentContentSearches(queries) }
+    }
+
 }
 
 private val Context.demoSettingsDataStore: DataStore<Preferences> by preferencesDataStore(
@@ -345,6 +357,7 @@ private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
     "show_compact_navigation_labels",
 )
 private val RecentSettingsSearchesKey = stringPreferencesKey("recent_settings_searches")
+private val RecentContentSearchesKey = stringPreferencesKey("recent_content_searches")
 
 private fun decodeStringList(value: String): List<String> = runCatching {
     val array = JSONArray(value)

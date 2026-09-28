@@ -48,5 +48,6 @@
     <string name="androidkit_compose_clear_all">Очистить всё</string>
     <string name="androidkit_compose_remove_recent_search">Удалить недавний запрос</string>
     <string name="androidkit_compose_no_matching_settings">Подходящие настройки не найдены</string>
+    <string name="androidkit_compose_no_matching_results">Подходящие результаты не найдены</string>
     <string name="androidkit_compose_no_recent_searches">Недавних запросов нет</string>
 </resources>

@@ -14,6 +14,7 @@ enum class ComponentId(
     AndroidKitBottomSheet("AndroidKitBottomSheet"),
     AndroidKitFloatingActionBar("AndroidKitFloatingActionBar"),
     AndroidKitFloatingSearchBox("AndroidKitFloatingSearchBox"),
+    AndroidKitSearchPage("AndroidKitSearchPage"),
     AndroidKitFloatingTooltip("AndroidKitFloatingTooltip"),
     AndroidKitActionFlyout("AndroidKitActionFlyout"),
     AndroidKitFloatingNavigation("AndroidKitFloatingNavigation"),
@@ -34,6 +35,7 @@ enum class ComponentDemo(
         ComponentId.AndroidKitFloatingSearchBox,
         R.string.variation_interactive,
     ),
+    AndroidKitSearchPageInteractive(ComponentId.AndroidKitSearchPage, R.string.variation_interactive),
     AndroidKitPageTitle(ComponentId.AndroidKitPage, R.string.variation_with_title),
     AndroidKitPageTitleActions(
         ComponentId.AndroidKitPage,

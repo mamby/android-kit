@@ -48,5 +48,6 @@
     <string name="androidkit_compose_clear_all">सभी मिटाएँ</string>
     <string name="androidkit_compose_remove_recent_search">हाल की खोज हटाएँ</string>
     <string name="androidkit_compose_no_matching_settings">कोई मेल खाती सेटिंग नहीं</string>
+    <string name="androidkit_compose_no_matching_results">कोई मेल खाते परिणाम नहीं</string>
     <string name="androidkit_compose_no_recent_searches">कोई हाल की खोज नहीं</string>
 </resources>

@@ -3,8 +3,6 @@ package net.mamby.androidkit.compose.form
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import java.text.Normalizer
-import java.util.Locale
 import net.mamby.androidkit.compose.R
 import org.json.JSONObject
 
@@ -63,13 +61,4 @@ internal fun AndroidKitSettingsSearchTerms.expandedTerms(
     if (tag == BuiltInLanguageTag) values.flatMap { lexicon.termsByEntryId[it].orEmpty() } else values
 }
 
-private val SearchMarks = Regex("\\p{M}+")
-private val SearchSeparators = Regex("[^\\p{L}\\p{N}]+")
-
-internal fun normalizeSettingsSearchText(value: String): String =
-    Normalizer.normalize(value.trim(), Normalizer.Form.NFD)
-        .replace(SearchMarks, "")
-        .lowercase(Locale.ROOT)
-        .replace(SearchSeparators, " ")
-        .trim()
-        .replace(Regex("\\s+"), " ")
+internal fun normalizeSettingsSearchText(value: String): String = normalizeSearchText(value)

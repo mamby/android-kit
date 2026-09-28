@@ -59,6 +59,11 @@ escape hatch. Migrate consumers and the demo with the library.
   speech input. See [floating search](floating-search.md) for usage and compatibility.
   Search has no component style override: its shape, typography, icons and control
   arrangement are internal and follow Kit's design and shared theme tokens.
+  `AndroidKitSearchPage` adds local matching of typed host data and intentionally
+  retains a host-owned lazy result body for topic-specific presentation. Its
+  Search title, input, recent searches, empty states and layout remain Kit-owned.
+  Settings search uses the same implementation with its original catalog controls.
+  See [search pages](search-page.md).
   Standalone buttons use `AndroidKitFloatingActionButton(action)`. Button icons
   accept vectors or painters; Kit owns icon rendering. Optional tooltip text is data.
 - Pages: use title, back callback, and action data; the custom `topBar` is removed.

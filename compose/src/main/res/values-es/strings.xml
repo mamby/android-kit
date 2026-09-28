@@ -48,5 +48,6 @@
     <string name="androidkit_compose_clear_all">Borrar todo</string>
     <string name="androidkit_compose_remove_recent_search">Eliminar búsqueda reciente</string>
     <string name="androidkit_compose_no_matching_settings">No hay ajustes coincidentes</string>
+    <string name="androidkit_compose_no_matching_results">No hay resultados coincidentes</string>
     <string name="androidkit_compose_no_recent_searches">No hay búsquedas recientes</string>
 </resources>

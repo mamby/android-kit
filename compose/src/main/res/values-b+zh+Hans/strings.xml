@@ -48,5 +48,6 @@
     <string name="androidkit_compose_clear_all">全部清除</string>
     <string name="androidkit_compose_remove_recent_search">移除最近的搜索</string>
     <string name="androidkit_compose_no_matching_settings">没有匹配的设置</string>
+    <string name="androidkit_compose_no_matching_results">没有匹配的结果</string>
     <string name="androidkit_compose_no_recent_searches">没有最近的搜索</string>
 </resources>

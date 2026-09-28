@@ -382,3 +382,21 @@ the English setting semantics and the existing locale vocabulary. This was an
 AI-assisted review of every affected locale, not native-speaker approval.
 Idiomatic quality, device pronunciation, and live destination behavior remain
 unverified; the lexicon validator checks structure and labels separately.
+
+## 2026-09-28 General search page
+
+Added `androidkit_compose_no_matching_results` in English and all 17 translated
+Kit locales. English "No matching results" describes a nonblank query with no
+matching host-content items; it does not describe missing history, loading, or
+a connection failure. Each translation was reviewed against this usage and its
+locale's existing No matching settings/languages vocabulary. French uses the
+glossary's corresponding-results wording; Arabic remains Modern Standard Arabic,
+Portuguese remains neutral European Portuguese, and Chinese remains Simplified.
+Existing Search, recent-history, voice-input, and Settings labels are reused
+without changes. No new demo duplicates are needed because the demo resolves
+the Kit-owned search vocabulary directly.
+
+This is contextual AI-assisted review across all 18 resource sets, with no new
+external terminology references or native-speaker approval. XML/key alignment
+and resource/build checks establish structural coverage separately; idiomatic
+quality and device pronunciation for the new empty message remain unverified.

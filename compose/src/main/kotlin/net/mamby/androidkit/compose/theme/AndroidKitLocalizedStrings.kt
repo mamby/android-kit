@@ -23,6 +23,7 @@ internal fun localizedAndroidKitStrings(): AndroidKitStrings = AndroidKitStrings
     clearAll = stringResource(R.string.androidkit_compose_clear_all),
     removeRecentSearch = stringResource(R.string.androidkit_compose_remove_recent_search),
     noMatchingSettings = stringResource(R.string.androidkit_compose_no_matching_settings),
+    noMatchingResults = stringResource(R.string.androidkit_compose_no_matching_results),
     noRecentSearches = stringResource(R.string.androidkit_compose_no_recent_searches),
     voiceSearch = stringResource(R.string.androidkit_compose_voice_search),
     voiceSearchUnavailable = stringResource(R.string.androidkit_compose_voice_search_unavailable),

@@ -89,10 +89,19 @@ internal fun ComponentDemoScreen(
     onFloatingNavigationLayoutChange: (DemoFloatingNavigationLayout) -> Unit,
     showCompactNavigationLabels: Boolean,
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
+    recentContentSearches: List<String>,
+    onRecentContentSearchesChange: (List<String>) -> Unit,
+    onOpenDemo: (ComponentDemo) -> Unit,
     onBack: () -> Unit,
 ) {
     when (demo.component) {
         ComponentId.AndroidKitFloatingSearchBox -> FloatingSearchDemoScreen(onBack)
+        ComponentId.AndroidKitSearchPage -> SearchPageDemoScreen(
+            recentQueries = recentContentSearches,
+            onRecentQueriesChange = onRecentContentSearchesChange,
+            onOpenDemo = onOpenDemo,
+            onBack = onBack,
+        )
         ComponentId.AndroidKitFloatingTooltip -> FloatingTooltipDemoScreen(onBack)
         ComponentId.AndroidKitPage -> AndroidKitPageDemo(
             toggles = demoToggles,

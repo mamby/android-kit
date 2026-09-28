@@ -247,6 +247,7 @@ internal data class AndroidKitStrings(
     val clearAll: String,
     val removeRecentSearch: String,
     val noMatchingSettings: String,
+    val noMatchingResults: String,
     val noRecentSearches: String,
     val voiceSearch: String,
     val voiceSearchUnavailable: String,

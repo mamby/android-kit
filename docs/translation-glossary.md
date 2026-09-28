@@ -23,7 +23,8 @@ Arabic and Simplified Chinese. Do not impose English loanwords on every language
 | More | Overflow menu, also an accessibility label | Plus | Ajouter (a creation action) |
 | Formatters | Utilities formatting dates, numbers and lists for a locale | Outils de formatage | Formateurs (people providing training) |
 | Search settings | Title/action for global search across the Settings catalog | Rechercher dans les paramètres | A web search or searching only the current page |
-| Recent searches | Previously submitted or activated Settings queries | Recherches récentes | Recently changed settings |
+| Recent searches | Previously submitted or activated search queries | Recherches récentes | Recently changed settings |
+| No matching results | Empty state for a nonblank host-content query with no matches | Aucun résultat correspondant | No recent searches, a loading or connection failure |
 | Report a bug | Search alias that resolves to Contact | Signaler un bug | Claiming that Contact itself is a dedicated bug tracker |
 
 The subtitle is a noun phrase, not a command to send a message. If a future

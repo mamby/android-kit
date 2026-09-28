@@ -48,5 +48,6 @@
     <string name="androidkit_compose_clear_all">모두 지우기</string>
     <string name="androidkit_compose_remove_recent_search">최근 검색어 삭제</string>
     <string name="androidkit_compose_no_matching_settings">일치하는 설정 없음</string>
+    <string name="androidkit_compose_no_matching_results">일치하는 결과 없음</string>
     <string name="androidkit_compose_no_recent_searches">최근 검색어 없음</string>
 </resources>

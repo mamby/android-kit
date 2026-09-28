@@ -48,5 +48,6 @@
     <string name="androidkit_compose_clear_all">Tümünü temizle</string>
     <string name="androidkit_compose_remove_recent_search">Son aramayı kaldır</string>
     <string name="androidkit_compose_no_matching_settings">Eşleşen ayar yok</string>
+    <string name="androidkit_compose_no_matching_results">Eşleşen sonuç yok</string>
     <string name="androidkit_compose_no_recent_searches">Son arama yok</string>
 </resources>

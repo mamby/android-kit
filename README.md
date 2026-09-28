@@ -40,6 +40,8 @@ with typed entries, including menus opened from standalone buttons.
 Use [`AndroidKitSettingsPage`](docs/settings.md) for shared settings presentation,
 optional host-configured controls, custom sections, and host-owned subpages.
 Language lists and all setting values belong to the host application.
+Use [`AndroidKitSearchPage`](docs/search-page.md) for local search of typed host
+content with shared search chrome and history, and a host-owned result body.
 Shared component labels are translated inside Kit and cannot be overridden through
 its API. Hosts must apply the [localization build gate](docs/localization.md), which
 rejects Kit resource overrides and languages without Kit translations.

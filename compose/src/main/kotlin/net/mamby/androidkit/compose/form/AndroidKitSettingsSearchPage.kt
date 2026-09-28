@@ -1,29 +1,7 @@
 package net.mamby.androidkit.compose.form
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,16 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.style.TextAlign
-import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
-import net.mamby.androidkit.compose.icon.AndroidKitIcons
-import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
-
-private const val MaximumRecentSettingsSearches = 10
 
 /** Global Settings search rendered from the same catalog as every Settings page. */
 @Composable
@@ -55,131 +25,28 @@ public fun AndroidKitSettingsSearchPage(
     val strings = AndroidKitThemeTokens.strings
     val lexicon = rememberSettingsSearchLexicon()
     val collected = collectCatalogSearchSections(catalog) { activePicker = it }
-    val recentQueries = catalog.search.recentQueries.sanitizedRecentSettingsQueries()
     val matches = remember(collected.sections, query, lexicon) {
         searchSettings(collected.sections, query, lexicon)
     }
-    fun recordRecent() {
-        val value = query.trim()
-        if (value.isEmpty()) return
-        val normalized = normalizeSettingsSearchText(value)
-        val updated = buildList {
-            add(value)
-            recentQueries.forEach { existing ->
-                if (normalizeSettingsSearchText(existing) != normalized) add(existing)
-            }
-        }.take(MaximumRecentSettingsSearches)
-        catalog.search.onRecentQueriesChange(updated)
-    }
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val direction = LocalLayoutDirection.current
-    AndroidKitPage(
+    AndroidKitSearchPage(
+        query = query,
+        onQueryChange = { query = it },
+        recentQueries = catalog.search.recentQueries,
+        onRecentQueriesChange = catalog.search.onRecentQueriesChange,
         title = strings.searchSettings,
+        noMatchesMessage = strings.noMatchingSettings,
+        hasResults = matches.isNotEmpty(),
         modifier = modifier,
         onBack = onBack,
-        floatingActionButton = AndroidKitFloatingAction.Search(
-            query = query,
-            onQueryChange = { query = it },
-            onSearch = { recordRecent() },
-        ),
-    ) { padding ->
-        if (query.isBlank() && recentQueries.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize().padding(padding)
-                    .padding(horizontal = dimensions.screenPadding),
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(dimensions.spaceLarge),
-                ) {
-                    Box(
-                        modifier = Modifier.size(dimensions.floatingActionButtonSize + dimensions.spaceLarge)
-                            .background(AndroidKitThemeTokens.colorScheme.primaryContainer, CircleShape),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = AndroidKitIcons.Search,
-                            contentDescription = null,
-                            modifier = Modifier.size(dimensions.actionFlyoutIconSize),
-                            tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
-                        )
-                    }
-                    Text(
-                        text = strings.noRecentSearches,
-                        style = AndroidKitThemeTokens.typography.bodyLarge,
-                        color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = listState,
-                contentPadding = PaddingValues(
-                    start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
-                    top = padding.calculateTopPadding(),
-                    end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
-                    bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
-                ),
-                verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
-            ) {
-                if (query.isBlank()) {
-                    item(key = "recent-heading") {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            Text(
-                                text = strings.recentSearches,
-                                style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
-                                color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
-                            )
-                            TextButton(
-                                onClick = { catalog.search.onRecentQueriesChange(emptyList()) },
-                                contentPadding = PaddingValues(
-                                    horizontal = (dimensions.minimumTouchTarget -
-                                        dimensions.floatingActionBarIconSize) / 2,
-                                ),
-                            ) {
-                                Text(strings.clearAll)
-                            }
-                        }
-                    }
-                    item(key = "recent-list") {
-                        Column(verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
-                            recentQueries.forEach { recent ->
-                                RecentSearchRow(
-                                    query = recent,
-                                    onSelect = { query = recent },
-                                    onRemove = {
-                                        val removed = normalizeSettingsSearchText(recent)
-                                        catalog.search.onRecentQueriesChange(
-                                            recentQueries.filterNot {
-                                                normalizeSettingsSearchText(it) == removed
-                                            },
-                                        )
-                                    },
-                                )
-                            }
-                        }
-                    }
-                } else if (matches.isEmpty()) {
-                    item(key = "no-matches") { SearchEmptyMessage(strings.noMatchingSettings) }
-                } else {
-                    matches.forEach { result ->
-                        item(key = "result:${result.pageKey}:${result.section.key}") {
-                            SettingsSection(
-                                entries = result.entries,
-                                label = result.contextLabel,
-                                onEntryAction = { recordRecent() },
-                            )
-                        }
-                    }
-                }
+        listState = listState,
+    ) { recordRecent ->
+        matches.forEach { result ->
+            item(key = "result:${result.pageKey}:${result.section.key}") {
+                SettingsSection(
+                    entries = result.entries,
+                    label = result.contextLabel,
+                    onEntryAction = { recordRecent() },
+                )
             }
         }
     }
@@ -194,54 +61,6 @@ public fun AndroidKitSettingsSearchPage(
             RenderSettingsPicker(scope, activePicker) { activePicker = null }
         }
     }
-}
-
-private fun List<String>.sanitizedRecentSettingsQueries(): List<String> {
-    val normalized = mutableSetOf<String>()
-    return map(String::trim)
-        .filter(String::isNotEmpty)
-        .filter { normalized.add(normalizeSettingsSearchText(it)) }
-        .take(MaximumRecentSettingsSearches)
-}
-
-@Composable
-private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () -> Unit) {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val strings = AndroidKitThemeTokens.strings
-    Row(
-        modifier = Modifier.fillMaxWidth()
-            .clickable(onClick = onSelect)
-            .heightIn(min = dimensions.minimumTouchTarget),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-    ) {
-        Text(
-            text = query,
-            modifier = Modifier.weight(1f),
-            style = AndroidKitThemeTokens.typography.bodyMedium,
-            color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
-        )
-        IconButton(
-            onClick = onRemove,
-            modifier = Modifier.size(dimensions.minimumTouchTarget),
-        ) {
-            Icon(
-                imageVector = AndroidKitIcons.Trash,
-                contentDescription = strings.removeRecentSearch,
-                modifier = Modifier.size(dimensions.floatingActionBarIconSize),
-            )
-        }
-    }
-}
-
-@Composable
-private fun SearchEmptyMessage(message: String) {
-    Text(
-        text = message,
-        modifier = Modifier.fillMaxWidth().padding(AndroidKitThemeTokens.dimensions.spaceMedium),
-        style = AndroidKitThemeTokens.settingSectionStyle.supportingTextStyle,
-        color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
-    )
 }
 
 private data class CollectedSearchSections(
@@ -262,7 +81,7 @@ private data class SettingsSearchResult(
     val section: SettingsRenderedSection,
     val entries: List<SettingsEntryDefinition>,
     val contextLabel: String,
-    val score: Int,
+    val score: SearchMatch,
     val order: Int,
 )
 
@@ -305,12 +124,11 @@ private fun searchSettings(
     query: String,
     lexicon: SettingsSearchLexicon,
 ): List<SettingsSearchResult> {
-    val tokens = normalizeSettingsSearchText(query).split(' ').filter(String::isNotBlank)
+    val tokens = searchQueryTokens(query)
     if (tokens.isEmpty()) return emptyList()
     return sections.mapNotNull { source ->
         val matches = source.section.entries.mapIndexedNotNull { index, entry ->
             if (!entry.searchable) return@mapIndexedNotNull null
-            val label = normalizeSettingsSearchText(entry.label)
             val direct = listOfNotNull(
                 entry.label,
                 entry.supportingText,
@@ -325,19 +143,8 @@ private fun searchSettings(
                 source.section.searchTerms?.expandedTerms(lexicon)?.let(::addAll)
                 entry.searchTerms?.expandedTerms(lexicon)?.let(::addAll)
             }
-            val directText = normalizeSettingsSearchText(direct.joinToString(" "))
-            val allText = normalizeSettingsSearchText((direct + aliases).joinToString(" "))
-            if (!tokens.all(allText::contains)) return@mapIndexedNotNull null
-            val normalizedQuery = tokens.joinToString(" ")
-            val score = when {
-                label == normalizedQuery -> 0
-                label.startsWith(normalizedQuery) -> 1
-                label.contains(normalizedQuery) -> 2
-                tokens.all(directText::contains) -> 3
-                else -> 4
-            }
-            Triple(entry, score, index)
-        }.sortedWith(compareBy<Triple<SettingsEntryDefinition, Int, Int>> { it.second }.thenBy { it.third })
+            searchMatch(entry.label, direct, aliases, tokens)?.let { score -> Triple(entry, score, index) }
+        }.sortedWith(compareBy<Triple<SettingsEntryDefinition, SearchMatch, Int>> { it.second }.thenBy { it.third })
         if (matches.isEmpty()) null else SettingsSearchResult(
             pageKey = source.pageKey,
             section = source.section,

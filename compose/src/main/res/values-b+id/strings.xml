@@ -48,5 +48,6 @@
     <string name="androidkit_compose_clear_all">Hapus semua</string>
     <string name="androidkit_compose_remove_recent_search">Hapus penelusuran terbaru</string>
     <string name="androidkit_compose_no_matching_settings">Tidak ada setelan yang cocok</string>
+    <string name="androidkit_compose_no_matching_results">Tidak ada hasil yang cocok</string>
     <string name="androidkit_compose_no_recent_searches">Tidak ada penelusuran terbaru</string>
 </resources>

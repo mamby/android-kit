@@ -196,6 +196,9 @@ internal fun AndroidKitCatalogApp(
                                     settings.showCompactNavigationLabels,
                                 onShowCompactNavigationLabelsChange =
                                     settingsViewModel::setShowCompactNavigationLabels,
+                                recentContentSearches = settings.recentContentSearches,
+                                onRecentContentSearchesChange = settingsViewModel::setRecentContentSearches,
+                                onOpenDemo = { navigation.navigate(ComponentDemoRoute(demo = it)) },
                                 onBack = navigation::goBack,
                             )
                         }
