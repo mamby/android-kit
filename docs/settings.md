@@ -66,7 +66,8 @@ all now require a stable key.
 `AndroidKitSettingsSearchPage` searches every catalog page, including pages that
 have not been opened. It uses the shared [search page](search-page.md) implementation
 for the floating field, recent searches, empty states, scrolling and managed
-clearance. The Settings adapter owns catalog indexing and result controls;
+clearance. Opening the page focuses its input and requests the software keyboard.
+The Settings adapter owns catalog indexing and result controls;
 results remain in the current app language. Its public API is unchanged.
 
 Matching is case-, accent-, punctuation-, and whitespace-insensitive. Every query

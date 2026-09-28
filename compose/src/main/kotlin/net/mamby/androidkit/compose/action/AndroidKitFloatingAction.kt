@@ -21,6 +21,7 @@ public sealed interface AndroidKitFloatingAction {
         public val voiceInputEnabled: Boolean,
         public val modifier: Modifier,
         internal val label: String?,
+        internal val requestFocusOnOpen: Boolean,
     ) : AndroidKitFloatingAction {
         public constructor(
             query: String,
@@ -29,14 +30,16 @@ public sealed interface AndroidKitFloatingAction {
             enabled: Boolean = true,
             voiceInputEnabled: Boolean = true,
             modifier: Modifier = Modifier,
-        ) : this(query, onQueryChange, onSearch, enabled, voiceInputEnabled, modifier, null)
+        ) : this(query, onQueryChange, onSearch, enabled, voiceInputEnabled, modifier, null, false)
 
         internal constructor(
             query: String,
             onQueryChange: (String) -> Unit,
             onSearch: (String) -> Unit,
             label: String,
-        ) : this(query, onQueryChange, onSearch, true, true, Modifier, label)
+            voiceInputEnabled: Boolean = true,
+            requestFocusOnOpen: Boolean = false,
+        ) : this(query, onQueryChange, onSearch, true, voiceInputEnabled, Modifier, label, requestFocusOnOpen)
     }
 
     public class Button private constructor(
@@ -81,6 +84,7 @@ internal fun RenderFloatingAction(action: AndroidKitFloatingAction?) {
             modifier = action.modifier,
             enabled = action.enabled,
             voiceInputEnabled = action.voiceInputEnabled,
+            requestFocusOnOpen = action.requestFocusOnOpen,
         )
         is AndroidKitFloatingAction.Button -> AndroidKitFloatingActionButton(action)
         is AndroidKitFloatingAction.Bar -> AndroidKitFloatingActionBar(

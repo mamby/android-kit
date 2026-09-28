@@ -8,6 +8,7 @@ import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Build
+import android.view.WindowManager
 import android.speech.RecognizerIntent
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
@@ -72,11 +73,20 @@ import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class FloatingSearchBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Before
+    fun keepTestActivityScreenOn() {
+        rule.activityRule.scenario.onActivity {
+            it.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
     private var query by mutableStateOf("original")
     private var enabled by mutableStateOf(true)
     private var voiceEnabled by mutableStateOf(true)

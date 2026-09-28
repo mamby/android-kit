@@ -10,6 +10,8 @@ content clearance.
 `AndroidKitFloatingSearchBox` is controlled input: hosts own the query, persistence,
 search execution and results. Kit owns the pill surface, text field, search and
 microphone icons, clear control and localized vocabulary. It does not autofocus.
+The dedicated [search page](search-page.md), including Settings search, requests
+focus and opens the keyboard on entry.
 
 ```kotlin
 var query by rememberSaveable { mutableStateOf("") }

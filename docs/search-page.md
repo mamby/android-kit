@@ -10,6 +10,10 @@ result body through a `LazyListScope` content slot: different topics can use
 different cards, rows, grouping, and controls. Search chrome has no style or
 rendering override. Result rows are an intentional host-owned body surface.
 
+Opening the page focuses the search field and requests the software keyboard.
+This happens once on entry; query, result, and history updates do not refocus the
+field or reopen a dismissed keyboard. Reopening the page requests focus again.
+
 ```kotlin
 val searchItems = records.map { record ->
     AndroidKitSearchItem(

@@ -1,17 +1,23 @@
 package net.mamby.androidkit.testing
 
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
@@ -22,17 +28,73 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextReplacement
+import androidx.test.espresso.Espresso.pressBack
+import java.util.concurrent.atomic.AtomicBoolean
 import net.mamby.androidkit.compose.form.AndroidKitSearchGroup
 import net.mamby.androidkit.compose.form.AndroidKitSearchItem
 import net.mamby.androidkit.compose.form.AndroidKitSearchPage
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class SearchPageBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Before
+    fun keepTestActivityScreenOn() {
+        rule.activityRule.scenario.onActivity {
+            it.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
+    @Test
+    fun openingAndReopeningFocusesInputWithoutReopeningDismissedKeyboardOnUpdates() {
+        var shown by mutableStateOf(true)
+        var query by mutableStateOf("coffee")
+        var recents by mutableStateOf(emptyList<String>())
+        val imeVisible = AtomicBoolean()
+        rule.setContent {
+            val visible = WindowInsets.isImeVisible
+            SideEffect { imeVisible.set(visible) }
+            AndroidKitTheme {
+                if (shown) {
+                    AndroidKitSearchPage(
+                        items = listOf(topicItem("coffee", "Coffee", "Coffee outing")),
+                        query = query,
+                        onQueryChange = { query = it },
+                        recentQueries = recents,
+                        onRecentQueriesChange = { recents = it },
+                        voiceInputEnabled = false,
+                    ) { matches -> hostResults(matches) }
+                }
+            }
+        }
+        val search = rule.onNode(hasContentDescription("Search") and hasSetTextAction())
+        rule.waitUntil(5_000) { imeVisible.get() }
+        search.assertIsFocused().assertTextEquals("coffee")
+
+        pressBack()
+        rule.waitUntil(5_000) { !imeVisible.get() }
+        search.assertIsNotFocused()
+        rule.runOnIdle {
+            query = "tea"
+            recents = listOf("Earlier")
+        }
+        search.assertIsNotFocused().assertTextEquals("tea")
+        rule.runOnIdle {
+            assertFalse(imeVisible.get())
+            shown = false
+        }
+        search.assertDoesNotExist()
+        rule.runOnIdle { shown = true }
+        rule.waitUntil(5_000) { imeVisible.get() }
+        search.assertIsFocused().assertTextEquals("tea")
+        rule.runOnIdle { assertEquals(listOf("Earlier"), recents) }
+    }
 
     @Test
     fun hostResultsReceiveTypedDataInRelevanceOrder() {
@@ -46,14 +108,13 @@ class SearchPageBehaviorTest {
         rule.setContent {
             AndroidKitTheme {
                 AndroidKitSearchPage(items, "clinic", {}, emptyList(), {}, voiceInputEnabled = false) { matches ->
+                    item(key = "order") { Text(matches.joinToString { it.data.value }) }
                     hostResults(matches)
                 }
             }
         }
-        val positions = listOf("Exact", "Prefix", "Visible", "Alias", "Alias second").map { value ->
-            rule.onNodeWithText("Event: $value").fetchSemanticsNode().boundsInRoot.top
-        }
-        assertTrue(positions.zipWithNext().all { (first, second) -> first < second })
+        rule.onNodeWithText("Exact, Prefix, Visible, Alias, Alias second").assertIsDisplayed()
+        rule.onNodeWithText("Event: Exact").assertIsDisplayed()
         rule.onNodeWithText("Clinic visits").assertDoesNotExist()
     }
 

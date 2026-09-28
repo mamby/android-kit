@@ -116,6 +116,7 @@ internal fun AndroidKitFloatingSearchBox(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     voiceInputEnabled: Boolean = true,
+    requestFocusOnOpen: Boolean = false,
 ): Unit {
     val strings = AndroidKitThemeTokens.strings
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -130,6 +131,12 @@ internal fun AndroidKitFloatingSearchBox(
     var refocusAfterClear by remember { mutableStateOf(false) }
     var preserveFocusAfterClear by remember { mutableStateOf(false) }
     var previousImeVisible by remember { mutableStateOf(imeVisible) }
+    LaunchedEffect(Unit) {
+        if (requestFocusOnOpen && enabled) {
+            focusRequester.requestFocus()
+            keyboard?.show()
+        }
+    }
     LaunchedEffect(imeVisible) {
         if (previousImeVisible && !imeVisible && fieldFocused && !preserveFocusAfterClear) {
             focusManager.clearFocus()

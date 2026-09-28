@@ -1,8 +1,12 @@
 package net.mamby.androidkit.testing
 
 import android.content.ClipboardManager
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +17,7 @@ import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.FontScale
 import androidx.compose.ui.test.WindowSize
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -22,10 +27,13 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.test.espresso.Espresso.pressBack
+import java.util.concurrent.atomic.AtomicBoolean
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
@@ -42,11 +50,19 @@ import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class SettingsSearchBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Before
+    fun keepTestActivityScreenOn() {
+        rule.activityRule.scenario.onActivity {
+            it.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
 
     @Test
     fun everyCatalogPageHasTheSearchAction() {
@@ -119,6 +135,7 @@ class SettingsSearchBehaviorTest {
         }
 
         val search = rule.onNodeWithContentDescription("Search")
+        search.assertIsFocused()
         search.performTextReplacement("hilfe")
         rule.onNodeWithText("Contact").assertIsDisplayed().performClick()
         rule.runOnIdle { assertEquals(1, contactClicks) }
@@ -292,7 +309,10 @@ class SettingsSearchBehaviorTest {
 
     @Test
     fun searchPageRetainsSemanticsWithRtlAndLargeText() {
+        val imeVisible = AtomicBoolean()
         rule.setContent {
+            val visible = WindowInsets.isImeVisible
+            SideEffect { imeVisible.set(visible) }
             DeviceConfigurationOverride(DeviceConfigurationOverride.WindowSize(DpSize(320.dp, 640.dp))) {
                 DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(1.5f)) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -307,9 +327,13 @@ class SettingsSearchBehaviorTest {
             }
         }
 
-        rule.onNodeWithContentDescription("Search").assertIsDisplayed()
+        rule.waitUntil(5_000) { imeVisible.get() }
+        rule.onNodeWithContentDescription("Search").assertIsDisplayed().assertIsFocused()
+        // Dismiss the device IME before checking history in the simulated smaller viewport.
+        pressBack()
+        rule.waitUntil(5_000) { !imeVisible.get() }
         rule.onNodeWithText("Recent searches").assertIsDisplayed()
-        rule.onNodeWithText("Theme").assertIsDisplayed().performClick()
+        rule.onNodeWithText("Theme").performScrollTo().assertIsDisplayed().performClick()
         rule.onNodeWithContentDescription("Search").assertTextEquals("Theme")
     }
 

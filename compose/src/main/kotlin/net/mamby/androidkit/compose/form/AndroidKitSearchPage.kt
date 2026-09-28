@@ -43,6 +43,7 @@ private const val MaximumRecentSearches = 10
  * Hosts own [query], [content], callbacks, navigation and persistence.
  * Item keys must be unique across the page; items sharing a group key must share its title.
  * Recent queries are recorded on IME submission or a result action, never while typing.
+ * Opening the page focuses the input and requests the software keyboard once per entry.
  * Render [content] with stable item keys and respect each item's enabled state. Calling a matched
  * item's onClick records the query before invoking the host callback; disabled callbacks do nothing.
  */
@@ -143,7 +144,9 @@ internal fun AndroidKitSearchPage(
             query = query,
             onQueryChange = onQueryChange,
             onSearch = { recordRecent() },
+            label = strings.search,
             voiceInputEnabled = voiceInputEnabled,
+            requestFocusOnOpen = true,
         ),
     ) { padding ->
         if (query.isBlank() && recents.isEmpty()) {
