@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Îți place aplicația?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Dacă dorești să sprijini dezvoltarea ei, donațiile sunt apreciate, dar nu sunt niciodată obligatorii.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Află mai multe</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Nu acum</string>
+    <string name="androidkit_compose_support_prompt_donate">Donează</string>
+</resources>

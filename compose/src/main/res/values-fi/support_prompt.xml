@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Pidätkö sovelluksesta?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Jos haluat tukea sen kehitystä, arvostamme lahjoituksia, mutta ne eivät koskaan ole pakollisia.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Lisätietoja</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Ei nyt</string>
+    <string name="androidkit_compose_support_prompt_donate">Lahjoita</string>
+</resources>

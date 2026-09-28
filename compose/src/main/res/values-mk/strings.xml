@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Назад</string>
+    <string name="androidkit_compose_close">Затвори</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">Повеќе</string>
+    <string name="androidkit_compose_hide_title_bar">Сокриј ја лентата за наслов</string>
+    <string name="androidkit_compose_show_title_bar">Прикажи ја лентата за наслов</string>
+    <string name="androidkit_compose_language">Јазик</string>
+    <string name="androidkit_compose_theme">Тема</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">Проѕирност</string>
+    <string name="androidkit_compose_min">Минимум</string>
+    <string name="androidkit_compose_max">Максимум</string>
+    <string name="androidkit_compose_search_languages">Барај јазици</string>
+    <string name="androidkit_compose_no_matching_languages">Нема соодветни јазици</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">Систем</string>
+    <string name="androidkit_compose_app_lock">Заклучување на апликации</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">Заклучете откако ќе ја напуштите апликацијата</string>
+    <string name="androidkit_compose_lock_now">Заклучи сега</string>
+    <string name="androidkit_compose_about">За апликацијата</string>
+    <string name="androidkit_compose_version">Верзија</string>
+    <string name="androidkit_compose_copy_version">Копирај верзија</string>
+    <string name="androidkit_compose_contact">Контакт</string>
+    <string name="androidkit_compose_privacy_policy">Политика за приватност</string>
+    <string name="androidkit_compose_terms_of_use">Услови за користење</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">Лиценци од трета страна</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Повратни информации или прашања</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">Веб-страница</string>
+    <string name="androidkit_compose_source_code">Изворниот код</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Пребарување</string>
+    <string name="androidkit_compose_clear_search">Исчистете го пребарувањето</string>
+    <string name="androidkit_compose_search_settings">Пребарувај во поставките</string>
+    <string name="androidkit_compose_recent_searches">Неодамнешни пребарувања</string>
+    <string name="androidkit_compose_clear_all">Исчистете ги сите</string>
+    <string name="androidkit_compose_remove_recent_search">Отстранете го неодамнешното пребарување</string>
+    <string name="androidkit_compose_no_matching_settings">Нема соодветни поставки</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">Нема резултати кои се совпаѓаат</string>
+    <string name="androidkit_compose_no_recent_searches">Нема неодамнешни пребарувања</string>
+    <string name="androidkit_compose_voice_search">Пребарување со глас</string>
+    <string name="androidkit_compose_voice_search_unavailable">Гласовниот влез е недостапен. Сè уште можете да го напишете вашето пребарување.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">Стартување на микрофонот…</string>
+    <string name="androidkit_compose_voice_listening">Слушање…</string>
+    <string name="androidkit_compose_voice_finishing">Завршување…</string>
+    <string name="androidkit_compose_voice_stop">Престанете да слушате</string>
+    <string name="androidkit_compose_voice_permission">Потребен е пристап до микрофон за гласовен внес. Можете да го дозволите тоа во поставките на апликацијата.</string>
+    <string name="androidkit_compose_voice_no_speech">Не е препознаен говор. Обидете се повторно.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">Отворете ги поставките за апликацијата</string>
+</resources>

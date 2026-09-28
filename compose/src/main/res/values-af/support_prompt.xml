@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Geniet jy die toepassing?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">As jy die ontwikkeling daarvan wil ondersteun, word skenkings waardeer, maar dit is nooit verpligtend nie.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Leer meer</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Nie nou nie</string>
+    <string name="androidkit_compose_support_prompt_donate">Skenk</string>
+</resources>

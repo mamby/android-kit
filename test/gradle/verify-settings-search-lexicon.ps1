@@ -7,11 +7,22 @@ $lexicon = Get-Content -Raw (
     Join-Path $repo 'compose/src/main/res/raw/androidkit_compose_settings_search_lexicon.json'
 ) | ConvertFrom-Json -AsHashtable
 
-$localeDirectories = [ordered]@{
-    en = 'values'; ar = 'values-ar'; de = 'values-de'; es = 'values-es'; fr = 'values-fr'
-    hi = 'values-hi'; id = 'values-in'; it = 'values-it'; ja = 'values-ja'; ko = 'values-ko'
-    nl = 'values-nl'; pl = 'values-pl'; pt = 'values-pt'; ru = 'values-ru'; th = 'values-th'
-    tr = 'values-tr'; vi = 'values-vi'; 'zh-Hans' = 'values-b+zh+Hans'
+$localeDirectories = @{}
+foreach ($locale in $contract.supportedLocales) {
+    $subtags = $locale.Split('-')
+    $subtags[0] = switch ($subtags[0]) {
+        'id' { 'in' }
+        'he' { 'iw' }
+        'yi' { 'ji' }
+        default { $subtags[0] }
+    }
+    $localeDirectories[$locale] = if ($locale -eq 'en') {
+        'values'
+    } elseif ($subtags.Count -eq 1) {
+        "values-$($subtags[0])"
+    } else {
+        "values-b+$($subtags -join '+')"
+    }
 }
 $resourceKeys = [ordered]@{
     language = 'androidkit_compose_language'; theme = 'androidkit_compose_theme'
@@ -59,6 +70,8 @@ foreach ($entryId in $resourceKeys.Keys) {
         )
         $resourceName = $resourceKeys[$entryId]
         $label = [string]($resources.resources.string | Where-Object name -eq $resourceName).'#text'
+        # Android removes string-resource escapes after XML parsing.
+        $label = [regex]::Unescape($label)
         if ($label -notin $terms) {
             throw "Settings search lexicon entry $entryId does not contain its $locale label."
         }

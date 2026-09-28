@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Ви се допаѓа апликацијата?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Ако сакате да го поддржите нејзиниот развој, донациите се добредојдени, но никогаш не се задолжителни.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Дознајте повеќе</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Не сега</string>
+    <string name="androidkit_compose_support_prompt_donate">Донирај</string>
+</resources>

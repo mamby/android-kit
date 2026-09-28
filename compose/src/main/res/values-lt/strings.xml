@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Atgal</string>
+    <string name="androidkit_compose_close">Uždaryti</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">Daugiau</string>
+    <string name="androidkit_compose_hide_title_bar">Slėpti pavadinimo juostą</string>
+    <string name="androidkit_compose_show_title_bar">Rodyti pavadinimo juostą</string>
+    <string name="androidkit_compose_language">Kalba</string>
+    <string name="androidkit_compose_theme">Tema</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">Permatomumas</string>
+    <string name="androidkit_compose_min">mažiausiai</string>
+    <string name="androidkit_compose_max">daugiausia</string>
+    <string name="androidkit_compose_search_languages">Ieškokite kalbų</string>
+    <string name="androidkit_compose_no_matching_languages">nėra atitinkamų kalbų</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">sistema</string>
+    <string name="androidkit_compose_app_lock">programos užraktas</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">Užrakinkite išėjus iš programos</string>
+    <string name="androidkit_compose_lock_now">Užrakinkite dabar</string>
+    <string name="androidkit_compose_about">Apie</string>
+    <string name="androidkit_compose_version">versija</string>
+    <string name="androidkit_compose_copy_version">Kopijuoti versiją</string>
+    <string name="androidkit_compose_contact">Susisiekite</string>
+    <string name="androidkit_compose_privacy_policy">Privatumo politika</string>
+    <string name="androidkit_compose_terms_of_use">Naudojimo sąlygos</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">trečiųjų šalių licencijos</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Atsiliepimai arba klausimai</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">svetainė</string>
+    <string name="androidkit_compose_source_code">šaltinio kodas</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Ieškoti</string>
+    <string name="androidkit_compose_clear_search">Išvalyti paiešką</string>
+    <string name="androidkit_compose_search_settings">Ieškoti nustatymuose</string>
+    <string name="androidkit_compose_recent_searches">Naujausios paieškos</string>
+    <string name="androidkit_compose_clear_all">Išvalyti viską</string>
+    <string name="androidkit_compose_remove_recent_search">Pašalinkite naujausią paiešką</string>
+    <string name="androidkit_compose_no_matching_settings">nėra atitinkančių nustatymų</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">nėra atitinkančių rezultatų</string>
+    <string name="androidkit_compose_no_recent_searches">jokių naujausių paieškų</string>
+    <string name="androidkit_compose_voice_search">paieška balsu</string>
+    <string name="androidkit_compose_voice_search_unavailable">balso įvestis nepasiekiama. Vis tiek galite įvesti savo paiešką.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">paleidžiamas mikrofonas…</string>
+    <string name="androidkit_compose_voice_listening">Klausau…</string>
+    <string name="androidkit_compose_voice_finishing">baigiama…</string>
+    <string name="androidkit_compose_voice_stop">nustokite klausytis</string>
+    <string name="androidkit_compose_voice_permission">norint įvesti balsą reikalinga prieiga prie mikrofono. Galite tai leisti programos nustatymuose.</string>
+    <string name="androidkit_compose_voice_no_speech">Kalba neatpažinta. Bandykite dar kartą.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">atidarykite programos nustatymus</string>
+</resources>

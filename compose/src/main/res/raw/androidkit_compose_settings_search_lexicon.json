@@ -2,23 +2,77 @@
   "schema": 1,
   "locales": [
     "en",
+    "af",
+    "am",
     "ar",
+    "az",
+    "be",
+    "bg",
+    "bn",
+    "ca",
+    "cs",
+    "da",
     "de",
+    "el",
     "es",
+    "et",
+    "eu",
+    "fa",
+    "fi",
+    "fil",
     "fr",
+    "gl",
+    "gu",
+    "he",
     "hi",
+    "hr",
+    "hu",
+    "hy",
     "id",
+    "is",
     "it",
     "ja",
+    "ka",
+    "kk",
+    "km",
+    "kn",
     "ko",
+    "lo",
+    "lt",
+    "lv",
+    "mk",
+    "ml",
+    "mn",
+    "mr",
+    "ms",
+    "my",
+    "nb",
+    "ne",
     "nl",
+    "or",
+    "pa",
     "pl",
     "pt",
+    "ro",
     "ru",
+    "si",
+    "sk",
+    "sl",
+    "sq",
+    "sr",
+    "sv",
+    "sw",
+    "ta",
+    "te",
     "th",
     "tr",
+    "uk",
+    "ur",
+    "uz",
     "vi",
-    "zh-Hans"
+    "zh-Hans",
+    "zh-Hant",
+    "zu"
   ],
   "entries": {
     "language": {
@@ -111,6 +165,323 @@
         "语言",
         "区域设置",
         "翻译"
+      ],
+      "ro": [
+        "Limbă",
+        "setări de limbă",
+        "setările regionale",
+        "traducere"
+      ],
+      "cs": [
+        "Jazyk",
+        "nastavení jazyka",
+        "regionální nastavení",
+        "překlad"
+      ],
+      "sk": [
+        "Jazyk",
+        "jazykové nastavenia",
+        "regionálne nastavenia",
+        "preklad"
+      ],
+      "hu": [
+        "Nyelv",
+        "nyelvi beállítások",
+        "regionális beállítások",
+        "fordítás"
+      ],
+      "bg": [
+        "Език",
+        "езикови настройки",
+        "регионални настройки",
+        "превод"
+      ],
+      "hr": [
+        "Jezik",
+        "jezične postavke",
+        "regionalne postavke",
+        "prijevod"
+      ],
+      "sr": [
+        "Језик",
+        "подешавања језика",
+        "регионалне поставке",
+        "превод"
+      ],
+      "sl": [
+        "Jezik",
+        "jezikovne nastavitve",
+        "regionalne nastavitve",
+        "prevod"
+      ],
+      "el": [
+        "Γλώσσα",
+        "ρυθμίσεις γλώσσας. περιφερειακές ρυθμίσεις· μετάφραση"
+      ],
+      "uk": [
+        "Мова",
+        "налаштування мови",
+        "регіональні налаштування",
+        "переклад"
+      ],
+      "be": [
+        "Мова",
+        "налады мовы",
+        "рэгіянальныя параметры",
+        "пераклад"
+      ],
+      "lt": [
+        "Kalba",
+        "kalbos nustatymai",
+        "regioninės sąlygos",
+        "vertimas"
+      ],
+      "lv": [
+        "Valoda",
+        "valodas iestatījumi",
+        "reģionālie iestatījumi",
+        "tulkojums"
+      ],
+      "et": [
+        "Keel",
+        "keeleseaded",
+        "piirkondlikud seaded",
+        "tõlge"
+      ],
+      "sv": [
+        "Språk",
+        "språkinställningar",
+        "regionala miljöer",
+        "översättning"
+      ],
+      "da": [
+        "Sprog",
+        "sprogindstillinger",
+        "regionale indstillinger",
+        "oversættelse"
+      ],
+      "nb": [
+        "Språk",
+        "språkinnstillinger",
+        "regionale innstillinger",
+        "oversettelse"
+      ],
+      "fi": [
+        "Kieli",
+        "kieliasetukset",
+        "alueelliset asetukset",
+        "käännös"
+      ],
+      "is": [
+        "Tungumál",
+        "tungumálastillingar",
+        "svæðisbundin stilling",
+        "þýðing"
+      ],
+      "ca": [
+        "Llengua",
+        "configuració d'idioma",
+        "entorns regionals",
+        "traducció"
+      ],
+      "eu": [
+        "Hizkuntza",
+        "hizkuntza ezarpenak",
+        "eskualdeko ezarpenak",
+        "itzulpena"
+      ],
+      "gl": [
+        "Lingua",
+        "axustes de idioma",
+        "configuracións rexionais",
+        "tradución"
+      ],
+      "sq": [
+        "Gjuha",
+        "cilësimet e gjuhës",
+        "cilësimet rajonale",
+        "përkthimi"
+      ],
+      "mk": [
+        "Јазик",
+        "јазични поставки",
+        "регионални поставки",
+        "превод"
+      ],
+      "he": [
+        "שפה",
+        "הגדרות שפה",
+        "הגדרות אזוריות",
+        "תרגום"
+      ],
+      "fa": [
+        "زبان",
+        "تنظیمات زبان؛ تنظیمات منطقه ای؛ ترجمه"
+      ],
+      "hy": [
+        "Լեզու",
+        "լեզվի կարգավորումներ",
+        "տարածաշրջանային պարամետրեր",
+        "թարգմանությունը"
+      ],
+      "az": [
+        "Dil",
+        "dil parametrləri",
+        "regional parametrlər",
+        "tərcümə"
+      ],
+      "ka": [
+        "ენა",
+        "ენის პარამეტრები",
+        "რეგიონალური პარამეტრები",
+        "თარგმანი"
+      ],
+      "kk": [
+        "Тіл",
+        "тіл параметрлері",
+        "аймақтық параметрлер",
+        "аударма"
+      ],
+      "uz": [
+        "Til",
+        "til sozlamalari",
+        "mintaqaviy sozlamalar",
+        "tarjima"
+      ],
+      "bn": [
+        "ভাষা",
+        "ভাষা সেটিংস",
+        "আঞ্চলিক সেটিংস",
+        "অনুবাদ"
+      ],
+      "ur": [
+        "زبان",
+        "زبان زبان کی ترتیبات؛ علاقائی ترتیبات؛ ترجمہ"
+      ],
+      "pa": [
+        "ਭਾਸ਼ਾ",
+        "ਭਾਸ਼ਾ ਸੈਟਿੰਗ",
+        "ਖੇਤਰੀ ਸੈਟਿੰਗ",
+        "ਅਨੁਵਾਦ"
+      ],
+      "gu": [
+        "ભાષા",
+        "ભાષા સેટિંગ્સ",
+        "પ્રાદેશિક સેટિંગ્સ",
+        "અનુવાદ"
+      ],
+      "mr": [
+        "भाषा",
+        "भाषा सेटिंग्ज",
+        "प्रादेशिक सेटिंग्ज",
+        "भाषांतर"
+      ],
+      "ta": [
+        "மொழி",
+        "மொழி அமைப்புகள்",
+        "பிராந்திய அமைப்புகள்",
+        "மொழிபெயர்ப்பு"
+      ],
+      "te": [
+        "భాష",
+        "భాష సెట్టింగులు",
+        "ప్రాంతీయ సెట్టింగులు",
+        "అనువాదం"
+      ],
+      "kn": [
+        "ಭಾಷೆ",
+        "ಭಾಷಾ ಸೆಟ್ಟಿಂಗ್ಗಳು",
+        "ಪ್ರಾದೇಶಿಕ ಸೆಟ್ಟಿಂಗ್ಗಳು",
+        "ಅನುವಾದ"
+      ],
+      "ml": [
+        "ഭാഷ",
+        "ഭാഷാ ക്രമീകരണങ്ങൾ",
+        "പ്രാദേശിക ക്രമീകരണങ്ങൾ",
+        "വിവർത്തനം"
+      ],
+      "or": [
+        "ଭାଷା",
+        "ଲୋକେଲ୍",
+        "ଅନୁବାଦ"
+      ],
+      "ne": [
+        "भाषा",
+        "भाषा सेटिङहरू",
+        "क्षेत्रीय सेटिङहरू",
+        "अनुवाद"
+      ],
+      "si": [
+        "භාෂාව",
+        "භාෂා සැකසුම්",
+        "කලාපීය සැකසුම්",
+        "පරිවර්තනය"
+      ],
+      "zh-Hant": [
+        "語言",
+        "語言設定",
+        "區域設定",
+        "翻譯"
+      ],
+      "ms": [
+        "Bahasa",
+        "tetapan bahasa",
+        "tetapan serantau",
+        "terjemahan"
+      ],
+      "fil": [
+        "Wika",
+        "mga setting ng wika",
+        "mga setting ng rehiyon",
+        "pagsasalin"
+      ],
+      "my": [
+        "ဘာသာစကား",
+        "ဘာသာစကားဆက်တင်များ",
+        "ဒေသဆိုင်ရာဆက်တင်များ",
+        "ဘာသာပြန်"
+      ],
+      "km": [
+        "ភាសា",
+        "ការកំណត់ភាសា",
+        "ការកំណត់តំបន់",
+        "ការបកប្រែ"
+      ],
+      "lo": [
+        "ພາສາ",
+        "ການຕັ້ງຄ່າພາສາ",
+        "ການຕັ້ງຄ່າພາກພື້ນ",
+        "ການແປ"
+      ],
+      "mn": [
+        "Хэл",
+        "хэлний тохиргоо",
+        "бүс нутгийн тохиргоо",
+        "орчуулга"
+      ],
+      "sw": [
+        "Lugha",
+        "mipangilio ya lugha",
+        "mipangilio ya kikanda",
+        "tafsiri"
+      ],
+      "af": [
+        "Taal",
+        "taalinstellings",
+        "streeksinstellings",
+        "vertaling"
+      ],
+      "am": [
+        "ቋንቋ",
+        "የቋንቋ ቅንጅቶች",
+        "የክልል መቼቶች",
+        "ትርጉም"
+      ],
+      "zu": [
+        "Ulimi",
+        "izilungiselelo zolimi",
+        "izilungiselelo zesifunda",
+        "ukuhumusha"
       ]
     },
     "theme": {
@@ -347,6 +718,682 @@
         "显示",
         "浅色模式",
         "深色模式"
+      ],
+      "ro": [
+        "Temă",
+        "aspect",
+        "temă luminoasă",
+        "temă întunecată",
+        "culoare",
+        "contrast",
+        "schema de culori",
+        "paleta de culori",
+        "setări de afișare",
+        "modul de lumină",
+        "modul întunecat"
+      ],
+      "cs": [
+        "Motiv",
+        "Téma",
+        "vzhled",
+        "světelné téma",
+        "temné téma",
+        "barva",
+        "kontrast",
+        "barevné schéma",
+        "barevná paleta",
+        "nastavení displeje",
+        "světelný režim",
+        "tmavý režim"
+      ],
+      "sk": [
+        "Motív",
+        "Téma",
+        "vzhľad",
+        "svetelná téma",
+        "temná téma",
+        "farba",
+        "kontrast",
+        "farebná schéma",
+        "farebná paleta",
+        "nastavenia displeja",
+        "svetelný režim",
+        "tmavý režim"
+      ],
+      "hu": [
+        "Téma",
+        "megjelenés",
+        "könnyű téma",
+        "sötét téma",
+        "szín",
+        "kontraszt",
+        "színséma",
+        "színpaletta",
+        "megjelenítési beállítások",
+        "fény mód",
+        "sötét mód"
+      ],
+      "bg": [
+        "Тема",
+        "външен вид",
+        "лека тема",
+        "тъмна тема",
+        "цвят",
+        "контраст",
+        "цветова схема",
+        "цветова палитра",
+        "настройки на дисплея",
+        "светлинен режим",
+        "тъмен режим"
+      ],
+      "hr": [
+        "Tema",
+        "izgled",
+        "svijetla tema",
+        "tamna tema",
+        "boja",
+        "kontrast",
+        "shema boja",
+        "paleta boja",
+        "postavke zaslona",
+        "svjetlosni način rada",
+        "tamni način rada"
+      ],
+      "sr": [
+        "Тема",
+        "Тхеме",
+        "изглед",
+        "светла тема",
+        "мрачна тема",
+        "боја",
+        "контраст",
+        "шема боја",
+        "палета боја",
+        "подешавања екрана",
+        "светлосни режим",
+        "тамни режим"
+      ],
+      "sl": [
+        "Tema",
+        "videz",
+        "lahka tema",
+        "temna tema",
+        "barva",
+        "kontrast",
+        "barvna shema",
+        "barvna paleta",
+        "nastavitve zaslona",
+        "svetlobni način",
+        "temni način"
+      ],
+      "el": [
+        "Θέμα",
+        "εμφάνιση",
+        "ελαφρύ θέμα? σκοτεινό θέμα? χρώμα",
+        "αντίθεση",
+        "συνδυασμός χρωμάτων? παλέτα χρωμάτων? Ρυθμίσεις οθόνης. λειτουργία φωτός? σκοτεινή λειτουργία"
+      ],
+      "uk": [
+        "Тема",
+        "зовнішній вигляд",
+        "світла тема",
+        "темна тема",
+        "колір",
+        "контрастність",
+        "колірна гамма",
+        "колірна палітра",
+        "налаштування дисплея",
+        "світловий режим",
+        "темний режим"
+      ],
+      "be": [
+        "Тэма",
+        "знешні выгляд",
+        "светлая тэма",
+        "цёмная тэма",
+        "колер",
+        "кантрасна",
+        "каляровая гама",
+        "каляровая палітра",
+        "налады дысплея",
+        "светлавы рэжым",
+        "цёмны рэжым"
+      ],
+      "lt": [
+        "Tema",
+        "išvaizda",
+        "šviesi tema",
+        "tamsi tema",
+        "spalva",
+        "kontrastas",
+        "spalvų schema",
+        "spalvų paletė",
+        "ekrano nustatymai",
+        "šviesos režimas",
+        "tamsus režimas"
+      ],
+      "lv": [
+        "Motīvs",
+        "izskats",
+        "gaišais motīvs",
+        "tumšais motīvs",
+        "krāsa",
+        "kontrasts",
+        "krāsu shēma",
+        "krāsu palete",
+        "displeja iestatījumi",
+        "gaišais režīms",
+        "tumšais režīms"
+      ],
+      "et": [
+        "Teema",
+        "välimus",
+        "kerge teema",
+        "tume teema",
+        "värv",
+        "kontrast",
+        "värviskeem",
+        "värvipalett",
+        "kuva seaded",
+        "valgusrežiim",
+        "tume režiim"
+      ],
+      "sv": [
+        "Tema",
+        "utseende",
+        "lätt tema",
+        "mörkt tema",
+        "färg",
+        "kontrast",
+        "färgschema",
+        "färgpalett",
+        "skärminställningar",
+        "ljusläge",
+        "mörkt läge"
+      ],
+      "da": [
+        "Tema",
+        "udseende",
+        "lys tema",
+        "mørkt tema",
+        "farve",
+        "kontrast",
+        "farveskema",
+        "farvepalet",
+        "skærmindstillinger",
+        "lys tilstand",
+        "mørk tilstand"
+      ],
+      "nb": [
+        "Tema",
+        "utseende",
+        "lys tema",
+        "mørkt tema",
+        "farge",
+        "kontrast",
+        "fargevalg",
+        "fargepalett",
+        "skjerminnstillinger",
+        "lysmodus",
+        "mørk modus"
+      ],
+      "fi": [
+        "Teema",
+        "ulkonäkö",
+        "kevyt teema",
+        "tumma teema",
+        "väri",
+        "kontrasti",
+        "värimaailma",
+        "väripaletti",
+        "näyttöasetukset",
+        "valotilassa",
+        "tumma tila"
+      ],
+      "is": [
+        "Þema",
+        "útlit",
+        "létt þema",
+        "dökkt þema",
+        "litur",
+        "andstæða",
+        "litasamsetning",
+        "litavali",
+        "skjástillingar",
+        "ljós háttur",
+        "dökk stilling"
+      ],
+      "ca": [
+        "Tema",
+        "aparença",
+        "tema lleuger",
+        "tema fosc",
+        "color",
+        "contrast",
+        "esquema de colors",
+        "paleta de colors",
+        "configuració de visualització",
+        "mode de llum",
+        "mode fosc"
+      ],
+      "eu": [
+        "Gaia",
+        "itxura",
+        "gai argia",
+        "gai iluna",
+        "kolorea",
+        "kontrastea",
+        "kolore eskema",
+        "kolore paleta",
+        "pantailaren ezarpenak",
+        "argi modua",
+        "modu iluna"
+      ],
+      "gl": [
+        "Tema",
+        "aparencia",
+        "tema lixeiro",
+        "tema escuro",
+        "cor",
+        "contraste",
+        "esquema de cores",
+        "paleta de cores",
+        "axustes de visualización",
+        "modo de luz",
+        "modo escuro"
+      ],
+      "sq": [
+        "Tema",
+        "pamja",
+        "temë e lehtë",
+        "temë e errët",
+        "ngjyra",
+        "kontrast",
+        "skema e ngjyrave",
+        "paleta e ngjyrave",
+        "cilësimet e ekranit",
+        "modaliteti i dritës",
+        "modaliteti i errët"
+      ],
+      "mk": [
+        "Тема",
+        "изглед",
+        "светла тема",
+        "темна тема",
+        "боја",
+        "контраст",
+        "шема на бои",
+        "палета на бои",
+        "поставки за прикажување",
+        "режим на светлина",
+        "темниот режим"
+      ],
+      "he": [
+        "ערכת נושא",
+        "נושא",
+        "הוֹפָעָה",
+        "נושא קל",
+        "נושא אפל",
+        "צֶבַע",
+        "לְהַשְׁווֹת",
+        "ערכת צבעים",
+        "לוח צבעים",
+        "הגדרות תצוגה",
+        "מצב אור",
+        "מצב כהה"
+      ],
+      "fa": [
+        "طرح زمینه",
+        "تم",
+        "ظاهر؛ تم سبک؛ تم تاریک؛ رنگ؛ کنتراست؛ طرح رنگ؛ پالت رنگ؛ تنظیمات نمایش؛ حالت نور؛ حالت تاریک"
+      ],
+      "hy": [
+        "Թեմա",
+        "տեսքը",
+        "թեթև թեմա",
+        "մութ թեմա",
+        "գույն",
+        "հակադրություն",
+        "գունային սխեման",
+        "գունային պալիտրա",
+        "ցուցադրման կարգավորումներ",
+        "լույսի ռեժիմ",
+        "մութ ռեժիմ"
+      ],
+      "az": [
+        "Mövzu",
+        "görünüş",
+        "yüngül mövzu",
+        "qaranlıq mövzu",
+        "rəng",
+        "kontrast",
+        "rəng sxemi",
+        "rəng palitrası",
+        "ekran parametrləri",
+        "işıq rejimi",
+        "qaranlıq rejim"
+      ],
+      "ka": [
+        "თემა",
+        "გარეგნობა",
+        "მსუბუქი თემა",
+        "მუქი თემა",
+        "ფერი",
+        "კონტრასტი",
+        "ფერის სქემა",
+        "ფერის პალიტრა",
+        "ჩვენების პარამეტრები",
+        "სინათლის რეჟიმი",
+        "მუქი რეჟიმი"
+      ],
+      "kk": [
+        "Тақырып",
+        "сыртқы түрі",
+        "жеңіл тақырып",
+        "қараңғы тақырып",
+        "түс",
+        "контраст",
+        "түс схемасы",
+        "түстер палитрасы",
+        "дисплей параметрлері",
+        "жарық режимі",
+        "қараңғы режим"
+      ],
+      "uz": [
+        "Mavzu",
+        "tashqi ko'rinish",
+        "engil mavzu",
+        "qorong'u mavzu",
+        "rang",
+        "kontrast",
+        "rang sxemasi",
+        "ranglar palitrasi",
+        "displey sozlamalari",
+        "yorug'lik rejimi",
+        "qorong'u rejim"
+      ],
+      "bn": [
+        "থিম",
+        "চেহারা হালকা থিম",
+        "অন্ধকার থিম",
+        "রঙ বৈপরীত্য রঙের স্কিম",
+        "রঙ প্যালেট",
+        "প্রদর্শন সেটিংস",
+        "হালকা মোড",
+        "অন্ধকার মোড"
+      ],
+      "ur": [
+        "تھیم",
+        "تھیم ظاہری شکل ہلکی تھیم؛ سیاہ تھیم؛ رنگ برعکس؛ رنگ سکیم؛ رنگ پیلیٹ؛ ڈسپلے کی ترتیبات؛ روشنی موڈ؛ سیاہ موڈ"
+      ],
+      "pa": [
+        "ਥੀਮ",
+        "ਦਿੱਖ",
+        "ਹਲਕਾ ਥੀਮ",
+        "ਹਨੇਰਾ ਥੀਮ",
+        "ਰੰਗ",
+        "ਉਲਟ",
+        "ਰੰਗ ਸਕੀਮ",
+        "ਰੰਗ ਪੈਲਅਟ",
+        "ਡਿਸਪਲੇ ਸੈਟਿੰਗ",
+        "ਲਾਈਟ ਮੋਡ",
+        "ਹਨੇਰਾ ਮੋਡ"
+      ],
+      "gu": [
+        "થીમ",
+        "દેખાવ હળવી થીમ",
+        "શ્યામ થીમ",
+        "રંગ વિપરીત",
+        "રંગ યોજના",
+        "કલર પેલેટ",
+        "પ્રદર્શન સેટિંગ્સ",
+        "પ્રકાશ મોડ",
+        "ડાર્ક મોડ"
+      ],
+      "mr": [
+        "थीम",
+        "देखावा हलकी थीम",
+        "गडद थीम",
+        "रंग तीव्रता रंग योजना",
+        "रंग पॅलेट",
+        "प्रदर्शन सेटिंग्ज",
+        "प्रकाश मोड",
+        "गडद मोड"
+      ],
+      "ta": [
+        "தீம்",
+        "தோற்றம்",
+        "ஒளி தீம்",
+        "இருண்ட தீம்",
+        "நிறம்",
+        "மாறுபாடு",
+        "வண்ணத் திட்டம்",
+        "வண்ண தட்டு",
+        "காட்சி அமைப்புகள்",
+        "ஒளி முறை",
+        "இருண்ட முறை"
+      ],
+      "te": [
+        "థీమ్",
+        "ప్రదర్శన",
+        "కాంతి థీమ్",
+        "చీకటి థీమ్",
+        "రంగు",
+        "విరుద్ధంగా",
+        "రంగు పథకం",
+        "రంగుల పాలెట్",
+        "ప్రదర్శన సెట్టింగులు",
+        "కాంతి మోడ్",
+        "డార్క్ మోడ్"
+      ],
+      "kn": [
+        "ಥೀಮ್",
+        "ನೋಟ",
+        "ಬೆಳಕಿನ ಥೀಮ್",
+        "ಡಾರ್ಕ್ ಥೀಮ್",
+        "ಬಣ್ಣ",
+        "ಕಾಂಟ್ರಾಸ್ಟ್",
+        "ಬಣ್ಣದ ಯೋಜನೆ",
+        "ಬಣ್ಣದ ಪ್ಯಾಲೆಟ್",
+        "ಪ್ರದರ್ಶನ ಸೆಟ್ಟಿಂಗ್ಗಳು",
+        "ಬೆಳಕಿನ ಮೋಡ್",
+        "ಡಾರ್ಕ್ ಮೋಡ್"
+      ],
+      "ml": [
+        "തീം",
+        "രൂപം",
+        "ലൈറ്റ് തീം",
+        "ഇരുണ്ട തീം",
+        "നിറം",
+        "വൈരുദ്ധ്യം",
+        "വർണ്ണ സ്കീം",
+        "വർണ്ണ പാലറ്റ്",
+        "പ്രദർശന ക്രമീകരണങ്ങൾ",
+        "ലൈറ്റ് മോഡ്",
+        "ഇരുണ്ട മോഡ്"
+      ],
+      "or": [
+        "ଥିମ୍",
+        "ଦୃଶ୍ୟରୂପ",
+        "ହାଲୁକା ଥିମ୍",
+        "ଗାଢ଼ ଥିମ୍",
+        "ରଙ୍ଗ",
+        "କନ୍ଟ୍ରାଷ୍ଟ",
+        "ରଙ୍ଗ ଯୋଜନା"
+      ],
+      "ne": [
+        "थिम",
+        "विषयवस्तु",
+        "उपस्थिति",
+        "हल्का विषयवस्तु",
+        "गाढा विषयवस्तु",
+        "रंग",
+        "विपरीत",
+        "रंग योजना",
+        "रंग प्यालेट",
+        "प्रदर्शन सेटिङहरू",
+        "प्रकाश मोड",
+        "गाढा मोड"
+      ],
+      "si": [
+        "තේමාව",
+        "පෙනුම",
+        "සැහැල්ලු තේමාව",
+        "අඳුරු තේමාව",
+        "වර්ණය",
+        "වෙනස",
+        "වර්ණ පටිපාටිය",
+        "වර්ණ පුවරුව",
+        "සංදර්ශක සැකසුම්",
+        "ආලෝක මාදිලිය",
+        "අඳුරු මාදිලිය"
+      ],
+      "zh-Hant": [
+        "主題",
+        "外觀",
+        "淺色主題",
+        "黑暗主題",
+        "顏色",
+        "對比",
+        "配色",
+        "調色板",
+        "顯示設定",
+        "燈光模式",
+        "深色模式"
+      ],
+      "ms": [
+        "Tema",
+        "penampilan",
+        "tema ringan",
+        "tema gelap",
+        "warna",
+        "kontras",
+        "skema warna",
+        "palet warna",
+        "tetapan paparan",
+        "mod cahaya",
+        "mod gelap"
+      ],
+      "fil": [
+        "Tema",
+        "hitsura",
+        "magaan na tema",
+        "madilim na tema",
+        "kulay",
+        "kaibahan",
+        "scheme ng kulay",
+        "paleta ng kulay",
+        "mga setting ng display",
+        "light mode",
+        "madilim na mode"
+      ],
+      "my": [
+        "အပြင်အဆင်",
+        "အသွင်အပြင်",
+        "အလင်းဆောင်ပုဒ်",
+        "အမှောင်အပြင်အဆင်",
+        "အရောင်",
+        "ဆန့်ကျင်ဘက်",
+        "အရောင်အစီအစဉ်",
+        "အရောင် palette",
+        "ပြသမှုဆက်တင်များ",
+        "အလင်းမုဒ်",
+        "အမှောင်မုဒ်"
+      ],
+      "km": [
+        "រចនាប័ទ្ម",
+        "ប្រធានបទ",
+        "រូបរាង",
+        "ប្រធានបទពន្លឺ",
+        "ប្រធានបទងងឹត",
+        "ពណ៌",
+        "កម្រិតពណ៌",
+        "ពណ៌ចម្រុះ",
+        "ក្ដារលាយពណ៌",
+        "ការកំណត់ការបង្ហាញ",
+        "របៀបពន្លឺ",
+        "របៀបងងឹត"
+      ],
+      "lo": [
+        "ຮູບແບບ",
+        "ຫົວຂໍ້",
+        "ຮູບລັກສະນະ",
+        "ຫົວຂໍ້ແສງສະຫວ່າງ",
+        "ຫົວຂໍ້ຊ້ໍາ",
+        "ສີ",
+        "ກົງກັນຂ້າມ",
+        "ໂຄງການສີ",
+        "palette ສີ",
+        "ການຕັ້ງຄ່າການສະແດງ",
+        "ໂໝດແສງ",
+        "ໂໝດມືດ"
+      ],
+      "mn": [
+        "Загвар",
+        "Сэдэв",
+        "гадаад төрх",
+        "хөнгөн сэдэв",
+        "харанхуй сэдэв",
+        "өнгө",
+        "ялгаатай",
+        "өнгөний схем",
+        "өнгөт палитр",
+        "дэлгэцийн тохиргоо",
+        "гэрлийн горим",
+        "харанхуй горим"
+      ],
+      "sw": [
+        "Mandhari",
+        "kuonekana",
+        "mandhari nyepesi",
+        "mandhari ya giza",
+        "rangi",
+        "tofauti",
+        "mpango wa rangi",
+        "palette ya rangi",
+        "mipangilio ya maonyesho",
+        "hali ya mwanga",
+        "hali ya giza"
+      ],
+      "af": [
+        "Tema",
+        "voorkoms",
+        "ligte tema",
+        "donker tema",
+        "kleur",
+        "kontras",
+        "kleurskema",
+        "kleurpalet",
+        "vertoon instellings",
+        "ligte modus",
+        "donker modus"
+      ],
+      "am": [
+        "ገጽታ",
+        "ጭብጥ",
+        "መልክ",
+        "የብርሃን ጭብጥ",
+        "ጨለማ ጭብጥ",
+        "ቀለም",
+        "ንፅፅር",
+        "የቀለም ዘዴ",
+        "የቀለም ቤተ-ስዕል",
+        "የማሳያ ቅንጅቶች",
+        "የብርሃን ሁነታ",
+        "ጨለማ ሁነታ"
+      ],
+      "zu": [
+        "Itimu",
+        "ukubukeka",
+        "itimu ekhanyayo",
+        "itimu emnyama",
+        "umbala",
+        "umehluko",
+        "uhlelo lombala",
+        "iphalethi yombala",
+        "izilungiselelo zokubonisa",
+        "imodi yokukhanya",
+        "imodi emnyama"
       ]
     },
     "transparency": {
@@ -511,6 +1558,378 @@
         "视觉效果",
         "半透明",
         "背景不透明度"
+      ],
+      "ro": [
+        "Transparență",
+        "opacitate",
+        "efecte vizuale",
+        "translucid",
+        "opacitatea fundalului"
+      ],
+      "cs": [
+        "Průhlednost",
+        "neprůhlednost",
+        "vizuální efekty",
+        "průsvitný",
+        "neprůhlednost pozadí"
+      ],
+      "sk": [
+        "Priehľadnosť",
+        "Transparentnosť",
+        "nepriehľadnosť",
+        "vizuálne efekty",
+        "priesvitný",
+        "nepriehľadnosť pozadia"
+      ],
+      "hu": [
+        "Átlátszóság",
+        "átlátszatlanság",
+        "vizuális effektusok",
+        "áttetsző",
+        "háttér átlátszatlansága"
+      ],
+      "bg": [
+        "Прозрачност",
+        "непрозрачност",
+        "визуални ефекти",
+        "полупрозрачен",
+        "непрозрачност на фона"
+      ],
+      "hr": [
+        "Prozirnost",
+        "Transparentnost",
+        "neprozirnost",
+        "vizualni efekti",
+        "proziran",
+        "neprozirnost pozadine"
+      ],
+      "sr": [
+        "Провидност",
+        "Транспарентност",
+        "непрозирност",
+        "визуелни ефекти",
+        "провидан",
+        "непрозирност позадине"
+      ],
+      "sl": [
+        "Prosojnost",
+        "Preglednost",
+        "motnost",
+        "vizualni učinki",
+        "prosojen",
+        "motnost ozadja"
+      ],
+      "el": [
+        "Διαφάνεια",
+        "αδιαφάνεια",
+        "οπτικά εφέ? ημιδιαφανής",
+        "αδιαφάνεια φόντου"
+      ],
+      "uk": [
+        "Прозорість",
+        "непрозорість",
+        "візуальні ефекти",
+        "напівпрозорий",
+        "непрозорість фону"
+      ],
+      "be": [
+        "Празрыстасць",
+        "непразрыста",
+        "візуальныя эфекты",
+        "напаўпразрыста",
+        "непразрыстасць фону"
+      ],
+      "lt": [
+        "Permatomumas",
+        "skaidrumas",
+        "neskaidrumas",
+        "vaizdiniai efektai",
+        "permatomas",
+        "fono neskaidrumas"
+      ],
+      "lv": [
+        "Caurspīdīgums",
+        "necaurredzamība",
+        "vizuālie efekti",
+        "puscaurspīdīgs",
+        "fona necaurredzamība"
+      ],
+      "et": [
+        "Läbipaistvus",
+        "läbipaistmatus",
+        "visuaalsed efektid",
+        "poolläbipaistev",
+        "tausta läbipaistmatus"
+      ],
+      "sv": [
+        "Genomskinlighet",
+        "Öppenhet",
+        "opacitet",
+        "visuella effekter",
+        "genomskinlig",
+        "bakgrundens opacitet"
+      ],
+      "da": [
+        "Gennemsigtighed",
+        "opacitet",
+        "visuelle effekter",
+        "gennemskinnelig",
+        "baggrunds opacitet"
+      ],
+      "nb": [
+        "Gjennomsiktighet",
+        "Åpenhet",
+        "opasitet",
+        "visuelle effekter",
+        "gjennomskinnelig",
+        "bakgrunnsopasitet"
+      ],
+      "fi": [
+        "Läpinäkyvyys",
+        "opasiteetti",
+        "visuaaliset tehosteet",
+        "läpikuultava",
+        "taustan peittävyys"
+      ],
+      "is": [
+        "Gagnsæi",
+        "ógagnsæi",
+        "sjónræn áhrif",
+        "hálfgagnsær",
+        "ógagnsæi bakgrunns"
+      ],
+      "ca": [
+        "Transparència",
+        "opacitat",
+        "efectes visuals",
+        "translúcid",
+        "opacitat de fons"
+      ],
+      "eu": [
+        "Gardentasuna",
+        "opakutasuna",
+        "ikusizko efektuak",
+        "zeharrargitsuak",
+        "atzeko planoko opakutasuna"
+      ],
+      "gl": [
+        "Transparencia",
+        "opacidade",
+        "efectos visuais",
+        "translúcido",
+        "opacidade do fondo"
+      ],
+      "sq": [
+        "Transparenca",
+        "errësirë",
+        "efekte vizuale",
+        "i tejdukshëm",
+        "patejdukshmëria e sfondit"
+      ],
+      "mk": [
+        "Проѕирност",
+        "Транспарентност",
+        "непроѕирност",
+        "визуелни ефекти",
+        "проѕирен",
+        "непроѕирност на позадината"
+      ],
+      "he": [
+        "שקיפות",
+        "אֲטִימוּת",
+        "אפקטים חזותיים",
+        "שָׁקוּף לְמֶחֱצָה",
+        "אטימות רקע"
+      ],
+      "fa": [
+        "شفافیت",
+        "کدورت؛ جلوه های بصری؛ شفاف کدورت پس زمینه"
+      ],
+      "hy": [
+        "Թափանցիկություն",
+        "անթափանցիկություն",
+        "տեսողական էֆեկտներ",
+        "կիսաթափանցիկ",
+        "ֆոնի անթափանցիկություն"
+      ],
+      "az": [
+        "Şəffaflıq",
+        "qeyri-şəffaflıq",
+        "vizual effektlər",
+        "şəffaf",
+        "fon qeyri-şəffaflığı"
+      ],
+      "ka": [
+        "გამჭვირვალობა",
+        "ვიზუალური ეფექტები",
+        "გამჭვირვალე",
+        "ფონის გამჭვირვალობა"
+      ],
+      "kk": [
+        "Мөлдірлік",
+        "Транспаренттілік",
+        "визуалды әсерлер",
+        "мөлдір",
+        "фон мөлдірлігі"
+      ],
+      "uz": [
+        "Shaffoflik",
+        "vizual effektlar",
+        "shaffof",
+        "fonning shaffofligi"
+      ],
+      "bn": [
+        "স্বচ্ছতা",
+        "অস্বচ্ছতা",
+        "চাক্ষুষ প্রভাব",
+        "স্বচ্ছ",
+        "পটভূমির অস্বচ্ছতা"
+      ],
+      "ur": [
+        "شفافیت",
+        "شفافیت؛ دھندلاپن بصری اثرات؛ پارباسی پس منظر کی دھندلاپن"
+      ],
+      "pa": [
+        "ਪਾਰਦਰਸ਼ਤਾ",
+        "ਧੁੰਦਲਾਪਨ",
+        "ਵਿਜ਼ੂਅਲ ਪ੍ਰਭਾਵ",
+        "ਪਾਰਦਰਸ਼ੀ",
+        "ਪਿਛੋਕੜ ਧੁੰਦਲਾਪਨ"
+      ],
+      "gu": [
+        "પારદર્શકતા",
+        "પારદર્શિતા",
+        "અસ્પષ્ટતા દ્રશ્ય અસરો",
+        "અર્ધપારદર્શક પૃષ્ઠભૂમિ અસ્પષ્ટતા"
+      ],
+      "mr": [
+        "पारदर्शकता",
+        "अपारदर्शकता दृश्य प्रभाव",
+        "पारदर्शक पार्श्वभूमी अस्पष्टता"
+      ],
+      "ta": [
+        "ஒளிபுகும் தன்மை",
+        "வெளிப்படைத்தன்மை",
+        "ஒளிபுகாநிலை",
+        "காட்சி விளைவுகள்",
+        "ஒளிஊடுருவக்கூடிய",
+        "பின்னணி ஒளிபுகாநிலை"
+      ],
+      "te": [
+        "పారదర్శకత",
+        "అస్పష్టత",
+        "విజువల్ ఎఫెక్ట్స్",
+        "అపారదర్శక",
+        "నేపథ్య అస్పష్టత"
+      ],
+      "kn": [
+        "ಪಾರದರ್ಶಕತೆ",
+        "ಅಪಾರದರ್ಶಕತೆ",
+        "ದೃಶ್ಯ ಪರಿಣಾಮಗಳು",
+        "ಅರೆಪಾರದರ್ಶಕ",
+        "ಹಿನ್ನೆಲೆ ಅಪಾರದರ್ಶಕತೆ"
+      ],
+      "ml": [
+        "സുതാര്യത",
+        "അതാര്യത",
+        "വിഷ്വൽ ഇഫക്റ്റുകൾ",
+        "അർദ്ധസുതാര്യമായ",
+        "പശ്ചാത്തല അതാര്യത"
+      ],
+      "or": [
+        "ସ୍ୱଚ୍ଛତା",
+        "ଅସ୍ୱଚ୍ଛତା",
+        "ଦୃଶ୍ୟ ପ୍ରଭାବ",
+        "ପୃଷ୍ଠଭୂମିର ଅସ୍ୱଚ୍ଛତା"
+      ],
+      "ne": [
+        "पारदर्शिता",
+        "अस्पष्टता",
+        "दृश्य प्रभाव",
+        "पारदर्शी",
+        "पृष्ठभूमि अस्पष्टता"
+      ],
+      "si": [
+        "විනිවිදභාවය",
+        "පාරාන්ධතාව",
+        "දෘශ්ය ප්රයෝග",
+        "පාරභාසක",
+        "පසුබිම් පාරාන්ධතාව"
+      ],
+      "zh-Hant": [
+        "透明度",
+        "不透明度",
+        "視覺效果",
+        "半透明",
+        "背景不透明度"
+      ],
+      "ms": [
+        "Ketelusan",
+        "kelegapan",
+        "kesan visual",
+        "lut sinar",
+        "kelegapan latar belakang"
+      ],
+      "fil": [
+        "Transparency",
+        "opacity",
+        "visual effect",
+        "translucent",
+        "opacity ng background"
+      ],
+      "my": [
+        "ဖောက်ထွင်းမြင်နိုင်မှု",
+        "ပွင့်လင်းမြင်သာမှု၊ ပွင့်လင်းမြင်သာမှု",
+        "အမြင်အာရုံသက်ရောက်မှု",
+        "translucent",
+        "နောက်ခံအလင်းပိတ်"
+      ],
+      "km": [
+        "ភាពថ្លា",
+        "តម្លាភាព",
+        "ភាពស្រអាប់",
+        "ផលប៉ះពាល់ដែលមើលឃើញ",
+        "ថ្លា",
+        "ភាពស្រអាប់ផ្ទៃខាងក្រោយ"
+      ],
+      "lo": [
+        "ຄວາມໂປ່ງໃສ",
+        "ຜົນກະທົບທາງສາຍຕາ",
+        "ແປ",
+        "ຄວາມໂປ່ງໃສຂອງພື້ນຫຼັງ"
+      ],
+      "mn": [
+        "Нэвт харагдах байдал",
+        "Ил тод байдал",
+        "тунгалаг байдал",
+        "харааны эффект",
+        "тунгалаг",
+        "дэвсгэрийн тунгалаг байдал"
+      ],
+      "sw": [
+        "Uwazi",
+        "athari za kuona",
+        "ufinyu wa mandharinyuma"
+      ],
+      "af": [
+        "Deursigtigheid",
+        "ondeursigtigheid",
+        "visuele effekte",
+        "deurskynend",
+        "agtergrond ondeursigtigheid"
+      ],
+      "am": [
+        "ግልጽነት",
+        "የእይታ ውጤቶች",
+        "ገላጭ",
+        "የጀርባ ግልጽነት"
+      ],
+      "zu": [
+        "Ukubonakala ngale",
+        "Ukungafihli",
+        "imiphumela ebonakalayo",
+        "translucent",
+        "ukufiphala kwangemuva"
       ]
     },
     "app-lock": {
@@ -748,6 +2167,728 @@
         "图案",
         "解锁",
         "身份验证"
+      ],
+      "ro": [
+        "Blocare aplicație",
+        "blocați aplicația",
+        "securitatea aplicației",
+        "autentificare biometrică",
+        "biometrie",
+        "cod PIN",
+        "parolă",
+        "recunoașterea feței",
+        "amprenta",
+        "blocare model",
+        "deblocarea",
+        "autentificare"
+      ],
+      "cs": [
+        "Zámek aplikace",
+        "uzamknout aplikaci",
+        "zabezpečení aplikací",
+        "biometrické ověřování",
+        "biometrie",
+        "PIN kód",
+        "heslo",
+        "rozpoznávání obličeje",
+        "otisk prstu",
+        "zámek vzoru",
+        "odemknout",
+        "autentizace"
+      ],
+      "sk": [
+        "Zámok aplikácie",
+        "uzamknúť aplikáciu",
+        "bezpečnosť aplikácií",
+        "biometrické overovanie",
+        "biometria",
+        "PIN kód",
+        "heslo",
+        "rozpoznávanie tváre",
+        "odtlačok prsta",
+        "zámok vzoru",
+        "odomknúť",
+        "autentifikácia"
+      ],
+      "hu": [
+        "Alkalmazászár",
+        "zárolja az alkalmazást",
+        "alkalmazásbiztonság",
+        "biometrikus hitelesítés",
+        "biometrikus adatok",
+        "PIN kód",
+        "jelszó",
+        "arcfelismerés",
+        "ujjlenyomat",
+        "mintás zár",
+        "kinyit",
+        "hitelesítés"
+      ],
+      "bg": [
+        "Заключване на приложението",
+        "сигурност на приложението",
+        "биометрично удостоверяване",
+        "биометрия",
+        "ПИН код",
+        "парола",
+        "разпознаване на лица",
+        "пръстов отпечатък",
+        "заключване на модела",
+        "отключване",
+        "удостоверяване"
+      ],
+      "hr": [
+        "Zaključavanje aplikacije",
+        "zaključaj aplikaciju",
+        "sigurnost aplikacije",
+        "biometrijska autentifikacija",
+        "biometrija",
+        "PIN kod",
+        "lozinka",
+        "prepoznavanje lica",
+        "otisak prsta",
+        "zaključavanje uzorka",
+        "otključati",
+        "autentifikacija"
+      ],
+      "sr": [
+        "Закључавање апликације",
+        "закључајте апликацију",
+        "безбедност апликација",
+        "биометријска аутентификација",
+        "биометрија",
+        "ПИН код",
+        "лозинка",
+        "препознавање лица",
+        "отисак прста",
+        "брава са узорком",
+        "откључати",
+        "аутентификација"
+      ],
+      "sl": [
+        "Zaklepanje aplikacije",
+        "zakleni aplikacijo",
+        "varnost aplikacij",
+        "biometrična avtentikacija",
+        "biometrija",
+        "koda PIN",
+        "geslo",
+        "prepoznavanje obraza",
+        "prstni odtis",
+        "zaklepanje vzorca",
+        "odklepanje",
+        "avtentikacija"
+      ],
+      "el": [
+        "Κλείδωμα εφαρμογής",
+        "Κλείδωμα εφαρμογής. Κλείδωμα της εφαρμογής. ασφάλεια εφαρμογών· βιομετρικός έλεγχος ταυτότητας· βιομετρικά? Κωδικός PIN. σύνθημα",
+        "αναγνώριση προσώπου? δακτυλικό αποτύπωμα",
+        "μοτίβο κλειδαριά? ξεκλειδώνω",
+        "έλεγχος ταυτότητας"
+      ],
+      "uk": [
+        "Блокування програми",
+        "заблокувати додаток",
+        "безпека програми",
+        "біометрична аутентифікація",
+        "біометрія",
+        "PIN код",
+        "пароль",
+        "розпізнавання обличчя",
+        "відбиток пальця",
+        "шаблонний замок",
+        "розблокувати",
+        "аутентифікація"
+      ],
+      "be": [
+        "Блакаванне праграмы",
+        "заблакаваць прыкладанне",
+        "бяспека прыкладанняў",
+        "біяметрычная аўтэнтыфікацыя",
+        "біяметрыя",
+        "ПІН-код",
+        "пароль",
+        "распазнаванне асоб",
+        "адбітак пальца",
+        "шаблон замка",
+        "адмыкаць",
+        "аўтэнтыфікацыя"
+      ],
+      "lt": [
+        "programos užraktas",
+        "užrakinti programą",
+        "programos saugumas",
+        "biometrinis autentifikavimas",
+        "biometriniai duomenys",
+        "PIN kodas",
+        "slaptažodis",
+        "veido atpažinimas",
+        "pirštų atspaudai",
+        "modelio užraktas",
+        "atrakinti",
+        "autentifikavimas"
+      ],
+      "lv": [
+        "Lietotnes bloķēšana",
+        "bloķēt lietotni",
+        "lietotnes drošība",
+        "biometriskā autentifikācija",
+        "biometrija",
+        "PIN kods",
+        "parole",
+        "sejas atpazīšana",
+        "pirksta nospiedums",
+        "grafiskā atslēga",
+        "atbloķēt",
+        "autentifikācija"
+      ],
+      "et": [
+        "Rakenduse lukk",
+        "lukustada rakendus",
+        "rakenduste turvalisus",
+        "biomeetriline autentimine",
+        "biomeetria",
+        "PIN-kood",
+        "parool",
+        "näotuvastus",
+        "sõrmejälg",
+        "mustriga lukk",
+        "avada",
+        "autentimine"
+      ],
+      "sv": [
+        "Applås",
+        "låsa appen",
+        "app säkerhet",
+        "biometrisk autentisering",
+        "biometri",
+        "PIN-kod",
+        "lösenord",
+        "ansiktsigenkänning",
+        "fingeravtryck",
+        "mönsterlås",
+        "låsa upp",
+        "autentisering"
+      ],
+      "da": [
+        "App-lås",
+        "lås appen",
+        "app sikkerhed",
+        "biometrisk autentificering",
+        "biometri",
+        "PIN-kode",
+        "adgangskode",
+        "ansigtsgenkendelse",
+        "fingeraftryk",
+        "mønster lås",
+        "låse op",
+        "autentificering"
+      ],
+      "nb": [
+        "Applås",
+        "lås appen",
+        "app sikkerhet",
+        "biometrisk autentisering",
+        "biometri",
+        "PIN-kode",
+        "passord",
+        "ansiktsgjenkjenning",
+        "fingeravtrykk",
+        "mønster lås",
+        "låse opp",
+        "autentisering"
+      ],
+      "fi": [
+        "Sovelluksen lukitus",
+        "lukitse sovellus",
+        "sovellusten turvallisuus",
+        "biometrinen todennus",
+        "biometriset tiedot",
+        "PIN-koodi",
+        "salasana",
+        "kasvojentunnistus",
+        "sormenjälki",
+        "kuvio lukko",
+        "avata",
+        "todennus"
+      ],
+      "is": [
+        "App læsing",
+        "læstu appinu",
+        "app öryggi",
+        "líffræðileg tölfræði auðkenning",
+        "líffræðileg tölfræði",
+        "PIN númer",
+        "lykilorð",
+        "andlitsþekking",
+        "fingrafar",
+        "mynsturlás",
+        "opna",
+        "auðkenning"
+      ],
+      "ca": [
+        "bloqueig de l'aplicació",
+        "bloqueig d'aplicacions",
+        "bloquejar l'aplicació",
+        "seguretat de l'aplicació",
+        "autenticació biomètrica",
+        "biometria",
+        "codi PIN",
+        "contrasenya",
+        "reconeixement facial",
+        "empremta digital",
+        "bloqueig del patró",
+        "desbloquejar",
+        "autenticació"
+      ],
+      "eu": [
+        "Aplikazioaren blokeoa",
+        "blokeatu aplikazioa",
+        "aplikazioen segurtasuna",
+        "autentifikazio biometrikoa",
+        "biometria",
+        "PIN kodea",
+        "pasahitza",
+        "aurpegien aitorpena",
+        "hatz marka",
+        "ereduaren blokeoa",
+        "desblokeatu",
+        "autentifikazioa"
+      ],
+      "gl": [
+        "bloqueo da aplicación",
+        "bloqueo de aplicacións",
+        "bloquear a aplicación",
+        "seguridade da aplicación",
+        "autenticación biométrica",
+        "biometría",
+        "código PIN",
+        "contrasinal",
+        "recoñecemento facial",
+        "impresión dixital",
+        "bloqueo de patrón",
+        "desbloquear",
+        "autenticación"
+      ],
+      "sq": [
+        "Kyçja e aplikacionit",
+        "bllokoni aplikacionin",
+        "siguria e aplikacionit",
+        "vërtetimi biometrik",
+        "biometrike",
+        "Kodi PIN",
+        "fjalëkalimi",
+        "njohja e fytyrës",
+        "gjurmë gishtash",
+        "bllokimi i modelit",
+        "zhblloko",
+        "vërtetimi"
+      ],
+      "mk": [
+        "Заклучување на апликации",
+        "заклучете ја апликацијата",
+        "безбедност на апликацијата",
+        "биометриска автентикација",
+        "биометрика",
+        "ПИН-код",
+        "лозинка",
+        "препознавање на лица",
+        "отпечаток од прст",
+        "заклучување на моделот",
+        "отклучување",
+        "автентикација"
+      ],
+      "he": [
+        "נעילת אפליקציה",
+        "לנעול את האפליקציה",
+        "אבטחת אפליקציות",
+        "אימות ביומטרי",
+        "ביומטריה",
+        "קוד PIN",
+        "סִיסמָה",
+        "זיהוי פנים",
+        "טְבִיעַת אֶצבָּעוֹת",
+        "מנעול דפוס",
+        "לִפְתוֹחַ",
+        "אימות"
+      ],
+      "fa": [
+        "قفل برنامه",
+        "قفل کردن برنامه؛ امنیت برنامه؛ احراز هویت بیومتریک؛ بیومتریک؛ کد پین؛ رمز عبور؛ تشخیص چهره؛ اثر انگشت؛ قفل الگو؛ باز کردن قفل؛ احراز هویت"
+      ],
+      "hy": [
+        "հավելվածի կողպեք",
+        "կողպեք հավելվածը",
+        "հավելվածի անվտանգություն",
+        "կենսաչափական վավերացում",
+        "կենսաչափություն",
+        "PIN կոդը",
+        "գաղտնաբառ",
+        "դեմքի ճանաչում",
+        "մատնահետք",
+        "օրինակի կողպեք",
+        "բացել",
+        "իսկությունը"
+      ],
+      "az": [
+        "Proqram kilidi",
+        "proqramı kilidləyin",
+        "proqram təhlükəsizliyi",
+        "biometrik autentifikasiya",
+        "biometrik məlumatlar",
+        "PİN kodu",
+        "parol",
+        "üz tanıma",
+        "barmaq izi",
+        "model kilidi",
+        "kilidini açmaq",
+        "autentifikasiya"
+      ],
+      "ka": [
+        "აპლიკაციის დაბლოკვა",
+        "აპლიკაციის უსაფრთხოება",
+        "ბიომეტრიული ავთენტიფიკაცია",
+        "ბიომეტრია",
+        "PIN კოდი",
+        "პაროლი",
+        "სახის ამოცნობა",
+        "თითის ანაბეჭდი",
+        "ნიმუშის საკეტი",
+        "განბლოკვა",
+        "ავთენტიფიკაცია"
+      ],
+      "kk": [
+        "қолданбаны құлыптау",
+        "қолданба қауіпсіздігі",
+        "биометриялық аутентификация",
+        "биометрия",
+        "PIN коды",
+        "пароль",
+        "тұлғаны тану",
+        "саусақ ізі",
+        "үлгі құлпы",
+        "құлпын ашу",
+        "аутентификация"
+      ],
+      "uz": [
+        "Ilova blokirovkasi",
+        "ilovani blokirovka qilish",
+        "ilova xavfsizligi",
+        "biometrik autentifikatsiya",
+        "biometrik",
+        "PIN kod",
+        "parol",
+        "yuzni tanib olish",
+        "barmoq izi",
+        "naqsh qulfi",
+        "qulfni ochish",
+        "autentifikatsiya"
+      ],
+      "bn": [
+        "অ্যাপ লক",
+        "অ্যাপটি লক করুন",
+        "অ্যাপ নিরাপত্তা",
+        "বায়োমেট্রিক প্রমাণীকরণ",
+        "বায়োমেট্রিক্স",
+        "পিন কোড",
+        "পাসওয়ার্ড",
+        "মুখ স্বীকৃতি",
+        "আঙুলের ছাপ",
+        "প্যাটার্ন লক",
+        "আনলক",
+        "প্রমাণীকরণ"
+      ],
+      "ur": [
+        "ایپ لاک",
+        "ایپ لاک؛ ایپ کو لاک کریں؛ ایپ سیکیورٹی؛ بائیو میٹرک تصدیق؛ بایومیٹرکس؛ پن کوڈ؛ پاس ورڈ چہرے کی شناخت؛ فنگر پرنٹ؛ پیٹرن تالا؛ غیر مقفل تصدیق"
+      ],
+      "pa": [
+        "ਐਪ ਲੌਕ",
+        "ਐਪ ਨੂੰ ਲਾਕ ਕਰੋ",
+        "ਐਪ ਸੁਰੱਖਿਆ",
+        "ਬਾਇਓਮੈਟ੍ਰਿਕ ਪ੍ਰਮਾਣਿਕਤਾ",
+        "ਬਾਇਓਮੈਟ੍ਰਿਕਸ",
+        "ਪਿੰਨ ਕੋਡ",
+        "ਪਾਸਵਰਡ",
+        "ਚਿਹਰੇ ਦੀ ਪਛਾਣ",
+        "ਫਿੰਗਰਪ੍ਰਿੰਟ",
+        "ਪੈਟਰਨ ਲਾਕ",
+        "ਤਾਲਾ ਖੋਲ੍ਹਣਾ",
+        "ਪ੍ਰਮਾਣਿਕਤਾ"
+      ],
+      "gu": [
+        "એપ લોક",
+        "એપ્લિકેશનને લોક કરો",
+        "એપ્લિકેશન સુરક્ષા",
+        "બાયોમેટ્રિક પ્રમાણીકરણ",
+        "બાયોમેટ્રિક્સ",
+        "પિન કોડ",
+        "પાસવર્ડ",
+        "ચહેરો ઓળખ",
+        "ફિંગરપ્રિન્ટ",
+        "પેટર્ન લોક",
+        "તાળું ખોલવું પ્રમાણીકરણ"
+      ],
+      "mr": [
+        "ॲप लॉक",
+        "ॲप लॉक करा",
+        "ॲप सुरक्षा",
+        "बायोमेट्रिक प्रमाणीकरण",
+        "बायोमेट्रिक्स",
+        "पिन कोड",
+        "पासवर्ड",
+        "चेहरा ओळख",
+        "फिंगरप्रिंट",
+        "नमुना लॉक",
+        "अनलॉक",
+        "प्रमाणीकरण"
+      ],
+      "ta": [
+        "பயன்பாட்டு பூட்டு",
+        "பயன்பாட்டைப் பூட்டு",
+        "பயன்பாட்டு பாதுகாப்பு",
+        "பயோமெட்ரிக் அங்கீகாரம்",
+        "பயோமெட்ரிக்ஸ்",
+        "பின் குறியீடு",
+        "கடவுச்சொல்",
+        "முகம் அங்கீகாரம்",
+        "கைரேகை",
+        "மாதிரி பூட்டு",
+        "திறத்தல்",
+        "அங்கீகாரம்"
+      ],
+      "te": [
+        "యాప్ లాక్",
+        "అనువర్తనాన్ని లాక్ చేయండి",
+        "యాప్ భద్రత",
+        "బయోమెట్రిక్ ప్రమాణీకరణ",
+        "బయోమెట్రిక్స్",
+        "పిన్ కోడ్",
+        "పాస్వర్డ్",
+        "ముఖ గుర్తింపు",
+        "వేలిముద్ర",
+        "నమూనా లాక్",
+        "అన్లాక్",
+        "ప్రమాణీకరణ"
+      ],
+      "kn": [
+        "ಅಪ್ಲಿಕೇಶನ್ ಲಾಕ್",
+        "ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಲಾಕ್ ಮಾಡಿ",
+        "ಅಪ್ಲಿಕೇಶನ್ ಭದ್ರತೆ",
+        "ಬಯೋಮೆಟ್ರಿಕ್ ದೃಢೀಕರಣ",
+        "ಬಯೋಮೆಟ್ರಿಕ್ಸ್",
+        "ಪಿನ್ ಕೋಡ್",
+        "ಗುಪ್ತಪದ",
+        "ಮುಖ ಗುರುತಿಸುವಿಕೆ",
+        "ಬೆರಳಚ್ಚು",
+        "ಮಾದರಿ ಲಾಕ್",
+        "ಅನ್ಲಾಕ್",
+        "ದೃಢೀಕರಣ"
+      ],
+      "ml": [
+        "ആപ്പ് ലോക്ക്",
+        "ആപ്പ് ലോക്ക് ചെയ്യുക",
+        "ആപ്പ് സുരക്ഷ",
+        "ബയോമെട്രിക് ആധികാരികത",
+        "ബയോമെട്രിക്സ്",
+        "പിൻ കോഡ്",
+        "പാസ്വേഡ്",
+        "മുഖം തിരിച്ചറിയൽ",
+        "വിരലടയാളം",
+        "പാറ്റേൺ ലോക്ക്",
+        "അൺലോക്ക്",
+        "പ്രാമാണീകരണം"
+      ],
+      "or": [
+        "ଆପ୍ ଲକ୍",
+        "ସୁରକ୍ଷା",
+        "ବାୟୋମେଟ୍ରିକ୍",
+        "PIN",
+        "ପାସୱାର୍ଡ",
+        "ମୁହଁ",
+        "ଅଙ୍ଗୁଳି ଛାପ",
+        "ପ୍ୟାଟର୍ନ",
+        "ଅନଲକ୍",
+        "ପରିଚୟ ଯାଞ୍ଚ"
+      ],
+      "ne": [
+        "एप लक",
+        "एप लक गर्नुहोस्",
+        "अनुप्रयोग सुरक्षा",
+        "बायोमेट्रिक प्रमाणीकरण",
+        "बायोमेट्रिक्स",
+        "पिन कोड",
+        "पासवर्ड",
+        "अनुहार पहिचान",
+        "औंठाछाप",
+        "ढाँचा लक",
+        "अनलक",
+        "प्रमाणीकरण"
+      ],
+      "si": [
+        "යෙදුම් අගුල",
+        "යෙදුම අගුළු දමන්න",
+        "යෙදුම් ආරක්ෂාව",
+        "ජෛවමිතික සත්‍යාපනය",
+        "ජෛවමිතික",
+        "PIN කේතය",
+        "මුරපදය",
+        "මුහුණු හඳුනාගැනීම",
+        "ඇඟිලි සලකුණ",
+        "රටා අගුල",
+        "අගුළු ඇරීම",
+        "සත්යාපනය"
+      ],
+      "zh-Hant": [
+        "應用程式鎖定",
+        "应用锁",
+        "锁定应用程序",
+        "应用程序安全",
+        "生物识别认证",
+        "生物识别",
+        "PIN 码",
+        "密码",
+        "人脸识别",
+        "指纹",
+        "图案锁",
+        "开锁",
+        "认证"
+      ],
+      "ms": [
+        "Kunci apl",
+        "kunci aplikasi",
+        "keselamatan aplikasi",
+        "pengesahan biometrik",
+        "biometrik",
+        "Kod PIN",
+        "kata laluan",
+        "pengecaman muka",
+        "cap jari",
+        "kunci corak",
+        "buka kunci",
+        "pengesahan"
+      ],
+      "fil": [
+        "Lock ng app",
+        "App lock",
+        "i-lock ang app",
+        "seguridad ng app",
+        "biometric na pagpapatunay",
+        "biometrics",
+        "PIN code",
+        "password",
+        "pagkilala sa mukha",
+        "fingerprint",
+        "pattern lock",
+        "i-unlock",
+        "pagpapatunay"
+      ],
+      "my": [
+        "အက်ပ်လော့ခ်",
+        "အက်ပ်လော့ခ်၊ app ကိုလော့ခ်ချ",
+        "အက်ပ်လုံခြုံရေး၊ ဇီဝဗေဒဆိုင်ရာ စစ်မှန်ကြောင်းအထောက်အထားပြခြင်း၊ ဇီဝဗေဒဆိုင်ရာ၊ PIN ကုဒ်",
+        "စကားဝှက်",
+        "မျက်နှာအသိအမှတ်ပြုမှု",
+        "လက်ဗွေ",
+        "ပုံစံသော့ခတ်",
+        "သော့ဖွင့်",
+        "စစ်မှန်ကြောင်းအထောက်အထားပြ"
+      ],
+      "km": [
+        "ចាក់សោកម្មវិធី",
+        "សុវត្ថិភាពកម្មវិធី",
+        "ការផ្ទៀងផ្ទាត់ជីវមាត្រ",
+        "ជីវមាត្រ",
+        "កូដ PIN",
+        "ពាក្យសម្ងាត់",
+        "ការទទួលស្គាល់មុខ",
+        "ស្នាមម្រាមដៃ",
+        "ចាក់សោលំនាំ",
+        "ដោះសោ",
+        "ការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ"
+      ],
+      "lo": [
+        "ລັອກແອັບ",
+        "ລັອກ app ໄດ້",
+        "ຄວາມປອດໄພຂອງແອັບຯ",
+        "ການກວດສອບທາງຊີວະມິຕິ",
+        "biometrics",
+        "ລະຫັດ PIN",
+        "ລະຫັດຜ່ານ",
+        "ການຮັບຮູ້ໃບຫນ້າ",
+        "ລາຍນິ້ວມື",
+        "lock ຮູບແບບ",
+        "ປົດລັອກ",
+        "ການຢັ້ງຢືນ"
+      ],
+      "mn": [
+        "Програмын түгжээ",
+        "програмыг түгжих",
+        "програмын аюулгүй байдал",
+        "биометрийн баталгаажуулалт",
+        "биометр",
+        "ПИН код",
+        "нууц үг",
+        "нүүр царайг таних",
+        "хурууны хээ",
+        "загварын түгжээ",
+        "түгжээг тайлах",
+        "баталгаажуулалт"
+      ],
+      "sw": [
+        "Kufunga programu",
+        "funga programu",
+        "usalama wa programu",
+        "uthibitishaji wa biometriska",
+        "biometriska",
+        "Msimbo wa PIN",
+        "nenosiri",
+        "utambuzi wa uso",
+        "alama za vidole",
+        "lock ya muundo",
+        "kufungua",
+        "uthibitishaji"
+      ],
+      "af": [
+        "Toepassingslot",
+        "sluit die toepassing",
+        "toepassing sekuriteit",
+        "biometriese verifikasie",
+        "biometrie",
+        "PIN-kode",
+        "wagwoord",
+        "gesigherkenning",
+        "vingerafdruk",
+        "patroon slot",
+        "ontsluit",
+        "verifikasie"
+      ],
+      "am": [
+        "የመተግበሪያ መቆለፊያ",
+        "መተግበሪያውን መቆለፍ",
+        "የመተግበሪያ ደህንነት",
+        "የባዮሜትሪክ ማረጋገጫ",
+        "ባዮሜትሪክስ",
+        "ፒን ኮድ",
+        "የይለፍ ቃል፤ የፊት ለይቶ ማወቅ",
+        "የጣት አሻራ",
+        "የስርዓተ-ጥለት መቆለፊያ",
+        "ክፈት",
+        "ማረጋገጥ"
+      ],
+      "zu": [
+        "Ukhiye wohlelo lokusebenza",
+        "vala uhlelo lokusebenza",
+        "ukuphepha kohlelo lokusebenza",
+        "ukuqinisekiswa kwe-biometric",
+        "i-biometrics",
+        "I-PIN khodi",
+        "iphasiwedi",
+        "ukuqashelwa ubuso",
+        "izigxivizo zeminwe",
+        "ukukhiya iphethini",
+        "vula",
+        "ubuqiniso"
       ]
     },
     "app-lock-timeout": {
@@ -876,6 +3017,388 @@
         "超时",
         "锁定延迟",
         "重新锁定"
+      ],
+      "ro": [
+        "Blocare după părăsirea aplicației",
+        "blocare automată a aplicației",
+        "timeout de blocare",
+        "întârziere blocare",
+        "încuie din nou"
+      ],
+      "cs": [
+        "Uzamknout po opuštění aplikace",
+        "Zamknout po opuštění aplikace",
+        "automatický zámek aplikací",
+        "časový limit zámku",
+        "zpoždění zámku",
+        "znovu zamknout"
+      ],
+      "sk": [
+        "Uzamknutie po opustení aplikácie",
+        "automatický zámok aplikácie",
+        "časový limit uzamknutia",
+        "oneskorenie uzamknutia",
+        "znova uzamknúť"
+      ],
+      "hu": [
+        "Zárolás az alkalmazás elhagyása után",
+        "automatikus alkalmazászár",
+        "zár időkorlátja",
+        "zár késleltetése",
+        "ismét zár"
+      ],
+      "bg": [
+        "Заключване след напускане на приложението",
+        "автоматично заключване на приложения",
+        "изчакване за заключване",
+        "закъснение при заключване",
+        "заключете отново"
+      ],
+      "hr": [
+        "Zaključaj nakon napuštanja aplikacije",
+        "automatsko zaključavanje aplikacije",
+        "vrijeme čekanja zaključavanja",
+        "odgoda zaključavanja",
+        "ponovno zaključati"
+      ],
+      "sr": [
+        "Закључајте након напуштања апликације",
+        "Закључај након напуштања апликације",
+        "аутоматско закључавање апликација",
+        "лоцк тимеоут",
+        "кашњење закључавања",
+        "поново закључати"
+      ],
+      "sl": [
+        "Zakleni, ko zapustiš aplikacijo",
+        "Zaklepanje po izhodu iz aplikacije",
+        "samodejno zaklepanje aplikacij",
+        "časovna omejitev zaklepanja",
+        "zakasnitev zaklepanja",
+        "znova zakleniti"
+      ],
+      "el": [
+        "Κλείδωμα μετά την έξοδο από την εφαρμογή",
+        "Κλείδωμα μετά την έξοδο από την εφαρμογή. Αυτόματο κλείδωμα εφαρμογών. timeout κλειδώματος? καθυστέρηση κλειδώματος? κλείδωσε ξανά"
+      ],
+      "uk": [
+        "блокування після виходу з програми",
+        "автоматичне блокування програми",
+        "тайм-аут блокування",
+        "затримка блокування",
+        "знову заблокувати"
+      ],
+      "be": [
+        "блакіроўка пасля выхаду з праграмы",
+        "аўтаматычная блакіроўка прыкладанняў",
+        "тайм-аўт блакіроўкі",
+        "затрымка блакавання",
+        "заблакаваць зноў"
+      ],
+      "lt": [
+        "Užrakinkite išėjus iš programos",
+        "Užrakinti išėjus iš programėlės",
+        "automatinis programos užraktas",
+        "užrakinimo laikas",
+        "užrakto vėlavimas",
+        "vėl užrakinti"
+      ],
+      "lv": [
+        "Bloķēt pēc lietotnes aizvēršanas",
+        "automātiska lietotnes bloķēšana",
+        "bloķēšanas taimauts",
+        "bloķēšanas aizture",
+        "bloķēt atkārtoti"
+      ],
+      "et": [
+        "Lukustage pärast rakendusest lahkumist",
+        "Lukusta pärast rakendusest lahkumist",
+        "automaatne rakenduste lukustus",
+        "lukustuse ajalõpp",
+        "luku viivitus",
+        "uuesti lukku"
+      ],
+      "sv": [
+        "Lås efter att ha lämnat appen",
+        "automatiskt applås",
+        "lås timeout",
+        "låsfördröjning",
+        "lås igen"
+      ],
+      "da": [
+        "Lås efter at have forladt appen",
+        "automatisk applås",
+        "lås timeout",
+        "låseforsinkelse",
+        "lås igen"
+      ],
+      "nb": [
+        "Lås etter å ha forlatt appen",
+        "automatisk applås",
+        "lås timeout",
+        "låseforsinkelse",
+        "lås igjen"
+      ],
+      "fi": [
+        "Lukitse sovelluksesta poistumisen jälkeen",
+        "automaattinen sovellusten lukitus",
+        "lukituksen aikakatkaisu",
+        "lukon viive",
+        "lukko taas"
+      ],
+      "is": [
+        "Læstu eftir að hafa farið úr appinu",
+        "sjálfvirkur app læsing",
+        "læsa tímamörk",
+        "töf á læsingu",
+        "læsa aftur"
+      ],
+      "ca": [
+        "Bloquejar després de sortir de l'aplicació",
+        "bloqueig automàtic de l'aplicació",
+        "temps d'espera de bloqueig",
+        "retard de bloqueig",
+        "tancar de nou"
+      ],
+      "eu": [
+        "Blokeatu aplikazioa utzi ondoren",
+        "aplikazioen blokeo automatikoa",
+        "blokeatzeko denbora-muga",
+        "blokeo atzerapena",
+        "blokeatu berriro"
+      ],
+      "gl": [
+        "bloquear despois de saír da aplicación",
+        "bloqueo automático da aplicación",
+        "tempo de espera de bloqueo",
+        "atraso de bloqueo",
+        "bloquear de novo"
+      ],
+      "sq": [
+        "Blloko pasi largohesh nga aplikacioni",
+        "Blloko pas daljes nga aplikacioni",
+        "kyçje automatike e aplikacionit",
+        "koha e mbylljes",
+        "vonesa e bllokimit",
+        "mbyll përsëri"
+      ],
+      "mk": [
+        "Заклучете откако ќе ја напуштите апликацијата",
+        "автоматско заклучување на апликации",
+        "истек на заклучување",
+        "доцнење за заклучување",
+        "повторно заклучете"
+      ],
+      "he": [
+        "נעילה לאחר עזיבת האפליקציה",
+        "נעילת אפליקציה אוטומטית",
+        "פסק זמן נעילה",
+        "עיכוב נעילה",
+        "לנעול שוב"
+      ],
+      "fa": [
+        "بعد از خروج از برنامه قفل کنید",
+        "قفل کردن پس از خروج از برنامه. قفل خودکار برنامه؛ تایم اوت قفل؛ تاخیر قفل؛ دوباره قفل کن"
+      ],
+      "hy": [
+        "Կողպեք հավելվածից դուրս գալուց հետո",
+        "ավտոմատ հավելվածի կողպում",
+        "կողպեքի ժամկետը",
+        "կողպեքի հետաձգում",
+        "կրկին կողպեք"
+      ],
+      "az": [
+        "Proqramı tərk etdikdən sonra kilidləyin",
+        "avtomatik proqram kilidi",
+        "kilidləmə müddəti",
+        "kilidləmə gecikməsi",
+        "yenidən kilidləyin"
+      ],
+      "ka": [
+        "ჩაკეტვა აპლიკაციის დატოვების შემდეგ",
+        "ჩაკეტვა აპიდან გასვლის შემდეგ",
+        "აპლიკაციის ავტომატური დაბლოკვა",
+        "დაბლოკვის ვადა",
+        "დაბლოკვის დაგვიანება",
+        "ისევ ჩაკეტვა"
+      ],
+      "kk": [
+        "қолданбадан шыққаннан кейін құлыптау",
+        "қолданбаны автоматты түрде құлыптау",
+        "құлыптау күту уақыты",
+        "құлыптаудың кешігуі",
+        "қайтадан құлыптаңыз"
+      ],
+      "uz": [
+        "Ilovadan chiqqandan keyin qulflang",
+        "Ilovadan chiqqandan keyin qulflash",
+        "ilovalarni avtomatik blokirovka qilish",
+        "blokirovka vaqti tugashi",
+        "qulfni kechiktirish",
+        "yana qulflang"
+      ],
+      "bn": [
+        "অ্যাপ ছাড়ার পরে লক করুন",
+        "স্বয়ংক্রিয় অ্যাপ লক",
+        "লক টাইমআউট",
+        "লক বিলম্ব",
+        "আবার তালা"
+      ],
+      "ur": [
+        "ایپ چھوڑنے کے بعد لاک کریں۔",
+        "ایپ چھوڑنے کے بعد لاک کریں؛ خودکار ایپ لاک؛ لاک ٹائم آؤٹ؛ تالے میں تاخیر؛ دوبارہ تالا"
+      ],
+      "pa": [
+        "ਐਪ ਛੱਡਣ ਤੋਂ ਬਾਅਦ ਲਾਕ ਕਰੋ",
+        "ਐਪ ਛੱਡਣ ਤੋਂ ਬਾਅਦ ਲਾਕ",
+        "ਆਟੋਮੈਟਿਕ ਐਪ ਲੌਕ",
+        "ਲੌਕ ਟਾਈਮਆਉਟ",
+        "ਲਾਕ ਦੇਰੀ",
+        "ਦੁਬਾਰਾ ਤਾਲਾ"
+      ],
+      "gu": [
+        "એપ છોડ્યા પછી લોક કરો",
+        "એપ છોડ્યા પછી લોક",
+        "સ્વચાલિત એપ્લિકેશન લોક",
+        "લોક સમયસમાપ્તિ",
+        "લોક વિલંબ",
+        "ફરીથી તાળું"
+      ],
+      "mr": [
+        "ॲप सोडल्यानंतर लॉक करा",
+        "स्वयंचलित ॲप लॉक",
+        "लॉक कालबाह्य",
+        "लॉक विलंब",
+        "पुन्हा लॉक करा"
+      ],
+      "ta": [
+        "பயன்பாட்டை விட்டு வெளியேறிய பிறகு பூட்டு",
+        "பயன்பாட்டை விட்டு வெளியேறிய பின் பூட்டு",
+        "தானியங்கி பயன்பாட்டு பூட்டு",
+        "பூட்டு நேரம் முடிந்தது",
+        "பூட்டு தாமதம்",
+        "மீண்டும் பூட்டு"
+      ],
+      "te": [
+        "యాప్ నుండి నిష్క్రమించిన తర్వాత లాక్ చేయండి",
+        "ఆటోమేటిక్ యాప్ లాక్",
+        "లాక్ సమయం ముగిసింది",
+        "లాక్ ఆలస్యం",
+        "మళ్ళీ లాక్"
+      ],
+      "kn": [
+        "ಅಪ್ಲಿಕೇಶನ್ ತೊರೆದ ನಂತರ ಲಾಕ್ ಮಾಡಿ",
+        "ಸ್ವಯಂಚಾಲಿತ ಅಪ್ಲಿಕೇಶನ್ ಲಾಕ್",
+        "ಲಾಕ್ ಸಮಯ ಮೀರಿದೆ",
+        "ಲಾಕ್ ವಿಳಂಬ",
+        "ಮತ್ತೆ ಲಾಕ್"
+      ],
+      "ml": [
+        "ആപ്പ് വിട്ടതിന് ശേഷം ലോക്ക് ചെയ്യുക",
+        "ഓട്ടോമാറ്റിക് ആപ്പ് ലോക്ക്",
+        "ലോക്ക് ടൈംഔട്ട്",
+        "ലോക്ക് കാലതാമസം",
+        "വീണ്ടും പൂട്ടുക"
+      ],
+      "or": [
+        "ଆପ୍ ଛାଡ଼ିବା ପରେ ଲକ୍ କରନ୍ତୁ",
+        "ସ୍ୱୟଂଚାଳିତ ଲକ୍",
+        "ଲକ୍ ବିଳମ୍ବ",
+        "ପୁଣି ଲକ୍"
+      ],
+      "ne": [
+        "एप छोडे पछि लक गर्नुहोस्",
+        "एप छोडेपछि लक गर्नुहोस्",
+        "स्वचालित एप लक",
+        "लक टाइमआउट",
+        "लक ढिलाइ",
+        "फेरि ताला"
+      ],
+      "si": [
+        "යෙදුමෙන් ඉවත් වූ පසු අගුළු දමන්න",
+        "ස්වයංක්රීය යෙදුම් අගුල",
+        "අගුලු දැමීම කල් ඉකුත්වීම",
+        "අගුළු ප්රමාදය",
+        "නැවත අගුලු දමන්න"
+      ],
+      "zh-Hant": [
+        "離開應用程式後鎖定",
+        "自動應用程式鎖定",
+        "鎖定逾時",
+        "鎖定延遲",
+        "再次鎖定"
+      ],
+      "ms": [
+        "Kunci selepas meninggalkan apl",
+        "Kunci selepas meninggalkan aplikasi",
+        "kunci aplikasi automatik",
+        "kunci tamat masa",
+        "kelewatan kunci",
+        "kunci semula"
+      ],
+      "fil": [
+        "I-lock pagkatapos umalis sa app",
+        "awtomatikong lock ng app",
+        "lock timeout",
+        "pagkaantala ng lock",
+        "lock ulit"
+      ],
+      "my": [
+        "အက်ပ်မှထွက်ပြီးနောက် လော့ခ်ချပါ။",
+        "အက်ပ်မှထွက်ပြီးနောက် လော့ခ်ချပါ။ အလိုအလျောက်အက်ပ်လော့ခ်၊ သော့ခတ်ချိန်လွန်",
+        "သော့ခတ်နှောင့်နှေးမှု",
+        "သော့ခတ်ပြန်သည်။"
+      ],
+      "km": [
+        "ចាក់សោបន្ទាប់ពីចាកចេញពីកម្មវិធី",
+        "ចាក់សោកម្មវិធីដោយស្វ័យប្រវត្តិ",
+        "អស់ពេលចាក់សោ",
+        "ការពន្យាពេលចាក់សោ",
+        "ចាក់សោម្តងទៀត"
+      ],
+      "lo": [
+        "ລັອກຫຼັງຈາກອອກຈາກແອັບ",
+        "Lock ຫຼັງຈາກອອກຈາກ app",
+        "lock app ອັດຕະໂນມັດ",
+        "lock ໝົດເວລາ",
+        "lock ຊັກຊ້າ",
+        "ລັອກອີກ"
+      ],
+      "mn": [
+        "Програмаас гарсны дараа түгжих",
+        "програмын автомат түгжээ",
+        "түгжих завсарлага",
+        "түгжээний саатал",
+        "дахин түгжих"
+      ],
+      "sw": [
+        "Funga baada ya kuondoka kwenye programu",
+        "kufuli programu kiotomatiki",
+        "kuisha kwa muda",
+        "kuchelewa kwa kufuli",
+        "funga tena"
+      ],
+      "af": [
+        "Sluit nadat u die toepassing verlaat het",
+        "Sluit nadat jy die toepassing verlaat het",
+        "outomatiese toepassingslot",
+        "sluit time-out",
+        "slot vertraging",
+        "weer sluit"
+      ],
+      "am": [
+        "መተግበሪያውን ከለቀቁ በኋላ ቆልፍ",
+        "አውቶማቲክ መተግበሪያ መቆለፊያ",
+        "የመቆለፊያ ጊዜ ማብቂያ",
+        "የመቆለፊያ መዘግየት",
+        "እንደገና መቆለፍ"
+      ],
+      "zu": [
+        "Khiya ngemuva kokushiya uhlelo lokusebenza",
+        "ukukhiya uhlelo lokusebenza okuzenzakalelayo",
+        "ukuvala isikhathi sokuvala",
+        "ukulibaziseka kokukhiya",
+        "vala futhi"
       ]
     },
     "lock-now": {
@@ -952,6 +3475,234 @@
       "zh-Hans": [
         "立即锁定",
         "立即保护"
+      ],
+      "ro": [
+        "Blocați acum",
+        "Încuie acum",
+        "securizați aplicația acum"
+      ],
+      "cs": [
+        "Zamkněte hned",
+        "zabezpečte aplikaci nyní"
+      ],
+      "sk": [
+        "Zamknite teraz",
+        "zabezpečte aplikáciu teraz"
+      ],
+      "hu": [
+        "Zárd le most",
+        "Zár most",
+        "biztosítsa az alkalmazást most"
+      ],
+      "bg": [
+        "Заключете сега",
+        "защитете приложението сега"
+      ],
+      "hr": [
+        "Zaključaj sada",
+        "osigurajte aplikaciju sada"
+      ],
+      "sr": [
+        "Закључај сада",
+        "обезбедите апликацију сада"
+      ],
+      "sl": [
+        "Zakleni zdaj",
+        "zavarujte aplikacijo zdaj"
+      ],
+      "el": [
+        "Κλειδώστε τώρα",
+        "Κλειδώστε τώρα. ασφαλίστε την εφαρμογή τώρα"
+      ],
+      "uk": [
+        "Заблокуйте зараз",
+        "Заблокувати зараз",
+        "захистити програму зараз"
+      ],
+      "be": [
+        "Заблакіраваць",
+        "Заблакіраваць зараз",
+        "абараніць прыкладанне зараз"
+      ],
+      "lt": [
+        "Užrakinkite dabar",
+        "Užrakinti dabar",
+        "apsaugokite programą dabar"
+      ],
+      "lv": [
+        "Bloķēt tūlīt",
+        "aizsargāt lietotni tūlīt"
+      ],
+      "et": [
+        "Lukusta kohe",
+        "turvake rakendus kohe"
+      ],
+      "sv": [
+        "Lås nu",
+        "säkra appen nu"
+      ],
+      "da": [
+        "Lås nu",
+        "sikre appen nu"
+      ],
+      "nb": [
+        "Lås nå",
+        "sikre appen nå"
+      ],
+      "fi": [
+        "Lukitse nyt",
+        "suojaa sovellus nyt"
+      ],
+      "is": [
+        "Læstu núna",
+        "tryggðu appið núna"
+      ],
+      "ca": [
+        "Bloqueja ara",
+        "protegir l'aplicació ara"
+      ],
+      "eu": [
+        "Blokeatu orain",
+        "babestu aplikazioa orain"
+      ],
+      "gl": [
+        "Bloquear agora",
+        "protexe a aplicación agora"
+      ],
+      "sq": [
+        "Mbylle tani",
+        "Blloko tani",
+        "sigurojeni aplikacionin tani"
+      ],
+      "mk": [
+        "Заклучи сега",
+        "обезбедете ја апликацијата сега"
+      ],
+      "he": [
+        "נעל עכשיו",
+        "אבטח את האפליקציה כעת"
+      ],
+      "fa": [
+        "اکنون قفل کنید",
+        "اکنون قفل کنید. اکنون برنامه را ایمن کنید"
+      ],
+      "hy": [
+        "Կողպեք հիմա",
+        "ապահովեք հավելվածը հիմա"
+      ],
+      "az": [
+        "İndi kilidləyin",
+        "proqramı indi qoruyun"
+      ],
+      "ka": [
+        "ჩაკეტეთ ახლავე",
+        "ჩაკეტეთ ახლა",
+        "დაიცავით აპლიკაცია ახლავე"
+      ],
+      "kk": [
+        "Қазір құлыптаңыз",
+        "Қазір құлыптау",
+        "қолданбаны қазір қорғаңыз"
+      ],
+      "uz": [
+        "Endi qulflang",
+        "Hozir qulflang",
+        "ilovani hozir himoyalang"
+      ],
+      "bn": [
+        "এখন লক করুন",
+        "এখন অ্যাপটি সুরক্ষিত করুন"
+      ],
+      "ur": [
+        "ابھی لاک کریں۔",
+        "ابھی لاک کریں ایپ کو ابھی محفوظ کریں۔"
+      ],
+      "pa": [
+        "ਹੁਣ ਲਾਕ ਕਰੋ",
+        "ਹੁਣ ਲਾਕ",
+        "ਹੁਣ ਐਪ ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰੋ"
+      ],
+      "gu": [
+        "હવે લોક કરો",
+        "હવે તાળું",
+        "હવે એપ્લિકેશનને સુરક્ષિત કરો"
+      ],
+      "mr": [
+        "आता लॉक करा",
+        "आता ॲप सुरक्षित करा"
+      ],
+      "ta": [
+        "இப்போது பூட்டு",
+        "இப்போது பயன்பாட்டைப் பாதுகாக்கவும்"
+      ],
+      "te": [
+        "ఇప్పుడు లాక్ చేయండి",
+        "అనువర్తనాన్ని ఇప్పుడే సురక్షితం చేయండి"
+      ],
+      "kn": [
+        "ಈಗ ಲಾಕ್ ಮಾಡಿ",
+        "ಈಗ ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಸುರಕ್ಷಿತಗೊಳಿಸಿ"
+      ],
+      "ml": [
+        "ഇപ്പോൾ ലോക്ക് ചെയ്യുക",
+        "ഇപ്പോൾ ആപ്പ് സുരക്ഷിതമാക്കുക"
+      ],
+      "or": [
+        "ଏବେ ଲକ୍ କରନ୍ତୁ",
+        "ଏବେ ସୁରକ୍ଷିତ କରନ୍ତୁ"
+      ],
+      "ne": [
+        "अहिले लक गर्नुहोस्",
+        "अब एप सुरक्षित गर्नुहोस्"
+      ],
+      "si": [
+        "දැන් අගුළු දමන්න",
+        "දැන් යෙදුම සුරක්ෂිත කරන්න"
+      ],
+      "zh-Hant": [
+        "立即鎖定",
+        "現在鎖定",
+        "立即保護應用程式"
+      ],
+      "ms": [
+        "Kunci sekarang",
+        "selamatkan apl sekarang"
+      ],
+      "fil": [
+        "I-lock ngayon",
+        "secure ang app ngayon"
+      ],
+      "my": [
+        "ယခု လော့ခ်ချပါ။",
+        "ယခု လော့ခ်ချပါ။ အက်ပ်ကို ယခု လုံခြုံအောင်ထားပါ။"
+      ],
+      "km": [
+        "ចាក់សោឥឡូវនេះ",
+        "ធានាកម្មវិធីឥឡូវនេះ"
+      ],
+      "lo": [
+        "ລັອກດຽວນີ້",
+        "ຮັບປະກັນແອັບຯດຽວນີ້"
+      ],
+      "mn": [
+        "Одоо түгжих",
+        "програмыг одоо аюулгүй болго"
+      ],
+      "sw": [
+        "Funga sasa",
+        "salama programu sasa"
+      ],
+      "af": [
+        "Sluit nou",
+        "beveilig die toepassing nou"
+      ],
+      "am": [
+        "አሁን ቆልፍ",
+        "መተግበሪያውን አሁን ይጠብቁ"
+      ],
+      "zu": [
+        "Khiya manje",
+        "vikela uhlelo lokusebenza manje"
       ]
     },
     "about": {
@@ -1054,6 +3805,332 @@
         "应用信息",
         "应用详情",
         "详细信息"
+      ],
+      "ro": [
+        "Despre",
+        "informații despre aplicație",
+        "detaliile aplicației"
+      ],
+      "cs": [
+        "O aplikaci",
+        "O",
+        "informace o aplikaci",
+        "podrobnosti o aplikaci"
+      ],
+      "sk": [
+        "O aplikácii",
+        "O",
+        "informácie o aplikácii",
+        "podrobnosti o aplikácii"
+      ],
+      "hu": [
+        "Névjegy",
+        "Körülbelül",
+        "alkalmazás információ",
+        "pályázati információk",
+        "alkalmazás részleteit"
+      ],
+      "bg": [
+        "Относно",
+        "Около",
+        "информация за приложението",
+        "подробности за приложението"
+      ],
+      "hr": [
+        "O aplikaciji",
+        "O",
+        "informacije o aplikaciji",
+        "informacije o prijavi",
+        "detalji aplikacije"
+      ],
+      "sr": [
+        "О апликацији",
+        "Абоут",
+        "информације о апликацији",
+        "детаљи апликације"
+      ],
+      "sl": [
+        "O aplikaciji",
+        "O",
+        "informacije o aplikaciji",
+        "podrobnosti aplikacije"
+      ],
+      "el": [
+        "Σχετικά",
+        "Περίπου",
+        "πληροφορίες εφαρμογής. πληροφορίες εφαρμογής· λεπτομέρειες εφαρμογής"
+      ],
+      "uk": [
+        "Про програму",
+        "Про",
+        "інформація про додаток",
+        "інформація про заявку",
+        "деталі програми"
+      ],
+      "be": [
+        "Пра праграму",
+        "Аб",
+        "інфармацыя аб дадатку",
+        "інфармацыя аб заяўцы",
+        "дэталі прыкладання"
+      ],
+      "lt": [
+        "Apie",
+        "programėlės informacija",
+        "informacija apie paraišką"
+      ],
+      "lv": [
+        "Par lietotni",
+        "Par",
+        "informācija par lietotni",
+        "ziņas par lietotni",
+        "informācija par programmu"
+      ],
+      "et": [
+        "Teave",
+        "rakenduse teave",
+        "taotlusteave",
+        "rakenduse üksikasjad"
+      ],
+      "sv": [
+        "Om",
+        "app info",
+        "applikationsinformation",
+        "appdetaljer"
+      ],
+      "da": [
+        "Om",
+        "app info",
+        "ansøgningsoplysninger",
+        "app detaljer"
+      ],
+      "nb": [
+        "Om",
+        "Omtrent",
+        "app info",
+        "søknadsinformasjon",
+        "appdetaljer"
+      ],
+      "fi": [
+        "Tietoja",
+        "sovelluksen tiedot",
+        "sovellustiedot"
+      ],
+      "is": [
+        "Um",
+        "app upplýsingar",
+        "umsóknarupplýsingar",
+        "upplýsingar um app"
+      ],
+      "ca": [
+        "Quant a",
+        "Sobre",
+        "informació de l'aplicació",
+        "detalls de l'aplicació"
+      ],
+      "eu": [
+        "Honi buruz",
+        "buruz",
+        "aplikazioaren informazioa",
+        "aplikazioaren xehetasunak"
+      ],
+      "gl": [
+        "Acerca de",
+        "información da aplicación",
+        "detalles da aplicación"
+      ],
+      "sq": [
+        "Rreth",
+        "informacione për aplikacionin",
+        "informacion për aplikimin",
+        "detajet e aplikacionit"
+      ],
+      "mk": [
+        "За апликацијата",
+        "За",
+        "информации за апликацијата",
+        "детали за апликацијата"
+      ],
+      "he": [
+        "מידע על האפליקציה",
+        "בערך",
+        "מידע על אפליקציה",
+        "מידע על יישום",
+        "פרטי האפליקציה"
+      ],
+      "fa": [
+        "درباره",
+        "اطلاعات برنامه؛ اطلاعات برنامه؛ جزئیات برنامه"
+      ],
+      "hy": [
+        "Հավելվածի մասին",
+        "Մոտ",
+        "հավելվածի տեղեկատվություն",
+        "դիմումի տեղեկատվություն",
+        "հավելվածի մանրամասները"
+      ],
+      "az": [
+        "Haqqında",
+        "proqram məlumatı",
+        "ərizə məlumatları",
+        "proqram təfərrüatları"
+      ],
+      "ka": [
+        "აპლიკაციის შესახებ",
+        "შესახებ",
+        "აპლიკაციის ინფორმაცია",
+        "განაცხადის ინფორმაცია",
+        "აპლიკაციის დეტალები"
+      ],
+      "kk": [
+        "Қолданба туралы",
+        "туралы",
+        "қолданба туралы ақпарат",
+        "қолданба мәліметтері"
+      ],
+      "uz": [
+        "Ilova haqida",
+        "Haqida",
+        "ilova haqida ma'lumot",
+        "ariza haqida ma'lumot",
+        "ilova tafsilotlari"
+      ],
+      "bn": [
+        "সম্পর্কে",
+        "অ্যাপ্লিকেশন তথ্য",
+        "আবেদন তথ্য",
+        "অ্যাপের বিবরণ"
+      ],
+      "ur": [
+        "تعارف",
+        "کے بارے میں ایپ کی معلومات؛ درخواست کی معلومات؛ ایپ کی تفصیلات"
+      ],
+      "pa": [
+        "ਬਾਰੇ",
+        "ਐਪ ਜਾਣਕਾਰੀ",
+        "ਐਪਲੀਕੇਸ਼ਨ ਜਾਣਕਾਰੀ",
+        "ਐਪ ਵੇਰਵੇ"
+      ],
+      "gu": [
+        "વિશે",
+        "એપ્લિકેશન માહિતી",
+        "એપ્લિકેશન વિગતો"
+      ],
+      "mr": [
+        "विषयी",
+        "बद्दल",
+        "ॲप माहिती",
+        "अर्ज माहिती",
+        "ॲप तपशील"
+      ],
+      "ta": [
+        "பற்றி",
+        "பயன்பாட்டுத் தகவல்",
+        "விண்ணப்ப தகவல்",
+        "பயன்பாட்டு விவரங்கள்"
+      ],
+      "te": [
+        "గురించి",
+        "యాప్ సమాచారం",
+        "అప్లికేషన్ సమాచారం",
+        "యాప్ వివరాలు"
+      ],
+      "kn": [
+        "ಕುರಿತು",
+        "ಸುಮಾರು",
+        "ಅಪ್ಲಿಕೇಶನ್ ಮಾಹಿತಿ",
+        "ಅಪ್ಲಿಕೇಶನ್ ವಿವರಗಳು"
+      ],
+      "ml": [
+        "വിവരങ്ങൾ",
+        "കുറിച്ച്",
+        "ആപ്പ് വിവരം",
+        "അപേക്ഷ വിവരങ്ങൾ",
+        "ആപ്പ് വിശദാംശങ്ങൾ"
+      ],
+      "or": [
+        "ବିଷୟରେ",
+        "ଆପ୍ ସୂଚନା",
+        "ବିବରଣୀ"
+      ],
+      "ne": [
+        "बारेमा",
+        "बारे",
+        "अनुप्रयोग जानकारी",
+        "आवेदन जानकारी",
+        "एप विवरण"
+      ],
+      "si": [
+        "පිළිබඳව",
+        "ගැන",
+        "යෙදුම් තොරතුරු",
+        "අයදුම්පත් තොරතුරු",
+        "යෙදුම් විස්තර"
+      ],
+      "zh-Hant": [
+        "關於",
+        "應用程式資訊",
+        "申請資訊",
+        "應用程式詳細信息"
+      ],
+      "ms": [
+        "Perihal",
+        "Mengenai",
+        "maklumat aplikasi",
+        "maklumat permohonan",
+        "butiran apl"
+      ],
+      "fil": [
+        "Tungkol sa",
+        "impormasyon ng app",
+        "impormasyon ng aplikasyon",
+        "mga detalye ng app"
+      ],
+      "my": [
+        "အကြောင်း",
+        "အကြောင်း၊ အက်ပ်အချက်အလက်",
+        "လျှောက်လွှာအချက်အလက်",
+        "အက်ပ်အသေးစိတ်"
+      ],
+      "km": [
+        "អំពី",
+        "ព័ត៌មានកម្មវិធី",
+        "ព័ត៌មានលម្អិតកម្មវិធី"
+      ],
+      "lo": [
+        "ກ່ຽວກັບ",
+        "app ຂໍ້​ມູນ​",
+        "ຂໍ້ມູນຄໍາຮ້ອງສະຫມັກ",
+        "ລາຍ​ລະ​ອຽດ app"
+      ],
+      "mn": [
+        "Тухай",
+        "програмын мэдээлэл",
+        "хэрэглээний мэдээлэл",
+        "програмын дэлгэрэнгүй мэдээлэл"
+      ],
+      "sw": [
+        "Kuhusu",
+        "habari ya programu",
+        "habari ya maombi",
+        "maelezo ya programu"
+      ],
+      "af": [
+        "Oor",
+        "inligting oor die toepassing",
+        "aansoek inligting",
+        "app besonderhede"
+      ],
+      "am": [
+        "ስለ",
+        "የመተግበሪያ መረጃ",
+        "የመተግበሪያ ዝርዝሮች"
+      ],
+      "zu": [
+        "Mayelana",
+        "ulwazi lohlelo lokusebenza",
+        "ulwazi lwesicelo",
+        "imininingwane yohlelo lokusebenza"
       ]
     },
     "website": {
@@ -1149,6 +4226,269 @@
         "网站",
         "站点",
         "主页"
+      ],
+      "ro": [
+        "Site-ul web",
+        "Website",
+        "pagină web",
+        "pagina de start"
+      ],
+      "cs": [
+        "Webové stránky",
+        "webová stránka",
+        "domovskou stránku"
+      ],
+      "sk": [
+        "Webstránka",
+        "Internetová stránka",
+        "webová stránka",
+        "domovskej stránke"
+      ],
+      "hu": [
+        "Weboldal",
+        "kezdőlap"
+      ],
+      "bg": [
+        "Уебсайт",
+        "уеб страница",
+        "начална страница"
+      ],
+      "hr": [
+        "Web stranica",
+        "početna stranica"
+      ],
+      "sr": [
+        "Веб-сајт",
+        "Вебсите",
+        "веб страница",
+        "хомепаге"
+      ],
+      "sl": [
+        "Spletna stran",
+        "domača stran"
+      ],
+      "el": [
+        "Ιστότοπος",
+        "ιστοσελίδα",
+        "αρχική σελίδα"
+      ],
+      "uk": [
+        "Веб-сайт",
+        "веб-сторінка",
+        "домашня сторінка"
+      ],
+      "be": [
+        "вэб-сайт",
+        "вэб-старонка",
+        "хатняя старонка"
+      ],
+      "lt": [
+        "svetainė",
+        "interneto puslapis",
+        "pagrindiniame puslapyje"
+      ],
+      "lv": [
+        "Tīmekļa vietne",
+        "mājaslapa"
+      ],
+      "et": [
+        "veebisait",
+        "veebileht",
+        "koduleht"
+      ],
+      "sv": [
+        "Hemsida",
+        "Webbplats",
+        "webbsida"
+      ],
+      "da": [
+        "Hjemmeside",
+        "webside"
+      ],
+      "nb": [
+        "Nettsted",
+        "nettside",
+        "hjemmeside"
+      ],
+      "fi": [
+        "Verkkosivusto",
+        "Web-sivu",
+        "kotisivulle"
+      ],
+      "is": [
+        "Vefsíða",
+        "vefsíðu",
+        "heimasíðu"
+      ],
+      "ca": [
+        "Lloc web",
+        "pàgina web",
+        "pàgina d'inici"
+      ],
+      "eu": [
+        "Webgunea",
+        "web orria",
+        "hasierako orrialdea"
+      ],
+      "gl": [
+        "Páxina web",
+        "páxina de inicio"
+      ],
+      "sq": [
+        "Faqja e internetit",
+        "ueb faqe",
+        "faqen kryesore"
+      ],
+      "mk": [
+        "Веб-страница",
+        "почетната страница"
+      ],
+      "he": [
+        "אתר אינטרנט",
+        "דַף אִינטֶרנֶט",
+        "דף הבית"
+      ],
+      "fa": [
+        "وب سایت",
+        "صفحه وب؛ صفحه اصلی"
+      ],
+      "hy": [
+        "Կայք",
+        "վեբ էջ",
+        "գլխավոր էջ"
+      ],
+      "az": [
+        "Veb sayt",
+        "veb səhifə",
+        "ana səhifə"
+      ],
+      "ka": [
+        "საიტი",
+        "ვებგვერდი",
+        "ვებ გვერდი",
+        "საწყისი გვერდი"
+      ],
+      "kk": [
+        "Веб-сайт",
+        "веб парақ",
+        "басты бет"
+      ],
+      "uz": [
+        "Veb-sayt",
+        "veb sahifa",
+        "bosh sahifa"
+      ],
+      "bn": [
+        "ওয়েবসাইট",
+        "ওয়েব পেজ",
+        "হোমপেজ"
+      ],
+      "ur": [
+        "ویب سائٹ",
+        "ویب سائٹ؛ ویب صفحہ؛ ہوم پیج"
+      ],
+      "pa": [
+        "ਵੈੱਬਸਾਈਟ",
+        "ਵੇਬ ਪੇਜ",
+        "ਹੋਮਪੇਜ"
+      ],
+      "gu": [
+        "વેબસાઈટ",
+        "વેબ પૃષ્ઠ",
+        "હોમપેજ"
+      ],
+      "mr": [
+        "वेबसाइट",
+        "वेब पृष्ठ",
+        "मुख्यपृष्ठ"
+      ],
+      "ta": [
+        "இணையதளம்",
+        "இணைய பக்கம்",
+        "முகப்புப்பக்கம்"
+      ],
+      "te": [
+        "వెబ్‌సైట్",
+        "వెబ్ పేజీ",
+        "హోమ్‌పేజీ"
+      ],
+      "kn": [
+        "ವೆಬ್‌ಸೈಟ್",
+        "ವೆಬ್ ಪುಟ",
+        "ಮುಖಪುಟ"
+      ],
+      "ml": [
+        "വെബ്സൈറ്റ്",
+        "വെബ് പേജ്",
+        "ഹോംപേജ്"
+      ],
+      "or": [
+        "ୱେବସାଇଟ୍",
+        "ୱେବ୍ ପୃଷ୍ଠା",
+        "ମୂଳ ପୃଷ୍ଠା"
+      ],
+      "ne": [
+        "वेबसाइट",
+        "वेब पृष्ठ",
+        "गृहपृष्ठ"
+      ],
+      "si": [
+        "වෙබ් අඩවිය",
+        "වෙබ් පිටුව",
+        "මුල් පිටුව"
+      ],
+      "zh-Hant": [
+        "網站",
+        "網頁",
+        "首頁"
+      ],
+      "ms": [
+        "Laman web",
+        "laman utama"
+      ],
+      "fil": [
+        "Website",
+        "web page",
+        "homepage"
+      ],
+      "my": [
+        "ဝဘ်ဆိုဒ်",
+        "ဝက်ဘ်စာမျက်နှာ",
+        "ပင်မစာမျက်နှာ"
+      ],
+      "km": [
+        "គេហទំព័រ",
+        "ទំព័រដើម"
+      ],
+      "lo": [
+        "ເວັບໄຊທ໌",
+        "ຫນ້າເວັບ",
+        "ຫນ້າທໍາອິດ"
+      ],
+      "mn": [
+        "Вэб сайт",
+        "Вэбсайт",
+        "вэб хуудас",
+        "нүүр хуудас"
+      ],
+      "sw": [
+        "Tovuti",
+        "ukurasa wa wavuti",
+        "ukurasa wa nyumbani"
+      ],
+      "af": [
+        "Webwerf",
+        "webblad",
+        "tuisblad"
+      ],
+      "am": [
+        "ድር ጣቢያ",
+        "ድረ-ገጽ",
+        "መነሻ ገጽ"
+      ],
+      "zu": [
+        "Iwebhusayithi",
+        "ikhasi eliyisiqalo"
       ]
     },
     "source-code": {
@@ -1276,6 +4616,327 @@
         "代码",
         "仓库",
         "项目仓库"
+      ],
+      "ro": [
+        "Cod sursă",
+        "cod software",
+        "depozit sursă",
+        "depozitul de proiecte"
+      ],
+      "cs": [
+        "Zdrojový kód",
+        "softwarový kód",
+        "zdrojové úložiště",
+        "úložiště projektu"
+      ],
+      "sk": [
+        "Zdrojový kód",
+        "softvérový kód",
+        "zdrojové úložisko",
+        "projektové úložisko"
+      ],
+      "hu": [
+        "Forráskód",
+        "szoftver kód",
+        "forrástár",
+        "projekt tárház"
+      ],
+      "bg": [
+        "Изходен код",
+        "софтуерен код",
+        "източник хранилище",
+        "проектно хранилище"
+      ],
+      "hr": [
+        "Izvorni kod",
+        "softverski kod",
+        "izvorno spremište",
+        "repozitorij projekta"
+      ],
+      "sr": [
+        "Изворни код",
+        "софтверски код",
+        "изворни репозиториј",
+        "репозиторијум пројекта"
+      ],
+      "sl": [
+        "Izvorna koda",
+        "programska koda",
+        "izvorno skladišče",
+        "repozitorij projekta"
+      ],
+      "el": [
+        "Πηγαίος κώδικας",
+        "κώδικας λογισμικού· αποθετήριο πηγής? αποθετήριο έργου"
+      ],
+      "uk": [
+        "Вихідний код",
+        "програмний код",
+        "вихідний репозиторій",
+        "репозиторій проекту"
+      ],
+      "be": [
+        "Зыходны код",
+        "праграмны код",
+        "сховішча крыніц",
+        "рэпазітар праектаў"
+      ],
+      "lt": [
+        "šaltinio kodas",
+        "programinės įrangos kodas",
+        "šaltinių saugykla",
+        "projekto saugykla"
+      ],
+      "lv": [
+        "Pirmkods",
+        "programmatūras kods",
+        "pirmkoda repozitorijs",
+        "projekta repozitorijs"
+      ],
+      "et": [
+        "lähtekood",
+        "tarkvara kood",
+        "allikate hoidla",
+        "projekti hoidla"
+      ],
+      "sv": [
+        "Källkod",
+        "programvara kod",
+        "källförråd",
+        "projektförråd"
+      ],
+      "da": [
+        "Kildekode",
+        "software kode",
+        "kildelager",
+        "projektdepot"
+      ],
+      "nb": [
+        "Kildekode",
+        "programvarekode",
+        "kildelager",
+        "prosjektlager"
+      ],
+      "fi": [
+        "Lähdekoodi",
+        "ohjelmistokoodi",
+        "lähde arkisto",
+        "projektin arkisto"
+      ],
+      "is": [
+        "Frumkóði",
+        "hugbúnaðarkóði",
+        "uppspretta geymsla",
+        "verkefnageymslu"
+      ],
+      "ca": [
+        "Codi font",
+        "codi de programari",
+        "repositori font",
+        "repositori del projecte"
+      ],
+      "eu": [
+        "Iturburu kodea",
+        "software kodea",
+        "iturburu-biltegia",
+        "proiektuen biltegia"
+      ],
+      "gl": [
+        "código fonte",
+        "código de software",
+        "repositorio de fontes",
+        "repositorio de proxectos"
+      ],
+      "sq": [
+        "Kodi burimor",
+        "kodi i softuerit",
+        "depoja e burimit",
+        "depo e projektit"
+      ],
+      "mk": [
+        "Изворниот код",
+        "софтверски код",
+        "изворно складиште",
+        "складиште на проекти"
+      ],
+      "he": [
+        "קוד מקור",
+        "קוד תוכנה",
+        "מאגר מקורות",
+        "מאגר פרויקטים"
+      ],
+      "fa": [
+        "کد منبع",
+        "کد نرم افزار",
+        "مخزن منبع؛ مخزن پروژه"
+      ],
+      "hy": [
+        "Աղբյուրի կոդը",
+        "ծրագրային ծածկագիր",
+        "աղբյուրի պահեստ",
+        "նախագծի շտեմարան"
+      ],
+      "az": [
+        "Mənbə kodu",
+        "proqram kodu",
+        "mənbə anbarı",
+        "layihə deposu"
+      ],
+      "ka": [
+        "წყარო კოდი",
+        "პროგრამული კოდი",
+        "წყაროს საცავი",
+        "პროექტის საცავი"
+      ],
+      "kk": [
+        "Бастапқы код",
+        "бағдарламалық код",
+        "дереккөз репозиторийі",
+        "жоба репозиторийі"
+      ],
+      "uz": [
+        "Manba kodi",
+        "dasturiy ta'minot kodi",
+        "manba ombori",
+        "loyiha ombori"
+      ],
+      "bn": [
+        "সোর্স কোড",
+        "সফ্টওয়্যার কোড",
+        "উৎস ভান্ডার",
+        "প্রকল্প সংগ্রহস্থল"
+      ],
+      "ur": [
+        "سورس کوڈ",
+        "ماخذ کوڈ؛ سافٹ ویئر کوڈ؛ ماخذ ذخیرہ؛ پروجیکٹ ذخیرہ"
+      ],
+      "pa": [
+        "ਸਰੋਤ ਕੋਡ",
+        "ਸਾਫਟਵੇਅਰ ਕੋਡ",
+        "ਸਰੋਤ ਭੰਡਾਰ",
+        "ਪ੍ਰੋਜੈਕਟ ਰਿਪੋਜ਼ਟਰੀ"
+      ],
+      "gu": [
+        "સોર્સ કોડ",
+        "સોફ્ટવેર કોડ",
+        "સ્ત્રોત ભંડાર",
+        "પ્રોજેક્ટ રીપોઝીટરી"
+      ],
+      "mr": [
+        "स्त्रोत कोड",
+        "सॉफ्टवेअर कोड",
+        "स्रोत भांडार",
+        "प्रकल्प भांडार"
+      ],
+      "ta": [
+        "மூல குறியீடு",
+        "மென்பொருள் குறியீடு",
+        "மூல களஞ்சியம்",
+        "திட்ட களஞ்சியம்"
+      ],
+      "te": [
+        "సోర్స్ కోడ్",
+        "సాఫ్ట్వేర్ కోడ్",
+        "మూల రిపోజిటరీ",
+        "ప్రాజెక్ట్ రిపోజిటరీ"
+      ],
+      "kn": [
+        "ಮೂಲ ಕೋಡ್",
+        "ಸಾಫ್ಟ್ವೇರ್ ಕೋಡ್",
+        "ಮೂಲ ಭಂಡಾರ",
+        "ಯೋಜನೆಯ ಭಂಡಾರ"
+      ],
+      "ml": [
+        "സോഴ്സ് കോഡ്",
+        "സോഫ്റ്റ്വെയർ കോഡ്",
+        "ഉറവിട ശേഖരം",
+        "പദ്ധതി ശേഖരം"
+      ],
+      "or": [
+        "ସୋର୍ସ କୋଡ୍",
+        "କୋଡ୍",
+        "ରିପୋଜିଟୋରି",
+        "ପ୍ରକଳ୍ପ ରିପୋଜିଟୋରି"
+      ],
+      "ne": [
+        "स्रोत कोड",
+        "सफ्टवेयर कोड",
+        "स्रोत भण्डार",
+        "परियोजना भण्डार"
+      ],
+      "si": [
+        "මූලාශ්‍ර කේතය",
+        "මූලාශ්ර කේතය",
+        "මෘදුකාංග කේතය",
+        "මූලාශ්ර ගබඩාව",
+        "ව්යාපෘති ගබඩාව"
+      ],
+      "zh-Hant": [
+        "原始碼",
+        "軟體程式碼",
+        "來源儲存庫",
+        "專案庫"
+      ],
+      "ms": [
+        "Kod sumber",
+        "kod perisian",
+        "repositori sumber",
+        "repositori projek"
+      ],
+      "fil": [
+        "Source code",
+        "software code",
+        "mapagkukunan na imbakan",
+        "imbakan ng proyekto"
+      ],
+      "my": [
+        "အရင်းအမြစ်ကုဒ်",
+        "ဆော့ဖ်ဝဲကုဒ်",
+        "အရင်းအမြစ်သိုလှောင်မှု",
+        "ပရောဂျက်သိုလှောင်မှု"
+      ],
+      "km": [
+        "កូដប្រភព",
+        "ប្រភពកូដ",
+        "កូដកម្មវិធី",
+        "ឃ្លាំងប្រភព",
+        "ឃ្លាំងគម្រោង"
+      ],
+      "lo": [
+        "ລະຫັດແຫຼ່ງ",
+        "ລະຫັດຊອບແວ",
+        "repository ແຫຼ່ງ",
+        "ຄັງ​ເກັບ​ຂໍ້​ມູນ​ໂຄງ​ການ​"
+      ],
+      "mn": [
+        "Эх код",
+        "програм хангамжийн код",
+        "эх сурвалжийн агуулах",
+        "төслийн агуулах"
+      ],
+      "sw": [
+        "Msimbo wa chanzo",
+        "msimbo wa programu",
+        "hifadhi ya chanzo",
+        "hazina ya mradi"
+      ],
+      "af": [
+        "Bronkode",
+        "sagteware kode",
+        "bronbewaarplek",
+        "projekbewaarplek"
+      ],
+      "am": [
+        "ምንጭ ኮድ",
+        "የሶፍትዌር ኮድ",
+        "ምንጭ ማከማቻ",
+        "የፕሮጀክት ማከማቻ"
+      ],
+      "zu": [
+        "Ikhodi yomthombo",
+        "ikhodi yesofthiwe",
+        "inqolobane yomthombo",
+        "inqolobane yephrojekthi"
       ]
     },
     "version": {
@@ -1385,6 +5046,326 @@
         "应用版本",
         "构建",
         "发布"
+      ],
+      "ro": [
+        "Versiune",
+        "versiunea aplicației",
+        "crearea de software",
+        "lansare de software"
+      ],
+      "cs": [
+        "Verze",
+        "verze aplikace",
+        "tvorba softwaru",
+        "vydání softwaru"
+      ],
+      "sk": [
+        "Verzia",
+        "verzia aplikácie",
+        "tvorba softvéru",
+        "vydanie softvéru"
+      ],
+      "hu": [
+        "Verzió",
+        "alkalmazás verziója",
+        "szoftver összeállítás",
+        "szoftver kiadás"
+      ],
+      "bg": [
+        "Версия",
+        "версия на приложението",
+        "изграждане на софтуер",
+        "версия на софтуера"
+      ],
+      "hr": [
+        "Verzija",
+        "verzija aplikacije",
+        "izgradnja softvera",
+        "izdanje softvera"
+      ],
+      "sr": [
+        "Верзија",
+        "верзија апликације",
+        "израда софтвера",
+        "издање софтвера"
+      ],
+      "sl": [
+        "Različica",
+        "različica aplikacije",
+        "izdelava programske opreme",
+        "izdaja programske opreme"
+      ],
+      "el": [
+        "Έκδοση",
+        "έκδοση εφαρμογής? κατασκευή λογισμικού? έκδοση λογισμικού"
+      ],
+      "uk": [
+        "Версія",
+        "версія програми",
+        "збірка програмного забезпечення",
+        "випуск програмного забезпечення"
+      ],
+      "be": [
+        "Версія",
+        "версія прыкладання",
+        "зборка праграмнага забеспячэння",
+        "выпуск праграмнага забеспячэння"
+      ],
+      "lt": [
+        "versija",
+        "programos versija",
+        "programinės įrangos kūrimas",
+        "programinės įrangos leidimas"
+      ],
+      "lv": [
+        "Versija",
+        "lietotnes versija",
+        "programmatūras būvējums",
+        "programmatūras laidiens"
+      ],
+      "et": [
+        "versioon",
+        "rakenduse versioon",
+        "tarkvara koostamine",
+        "tarkvara väljalase"
+      ],
+      "sv": [
+        "Version",
+        "appversion",
+        "mjukvarubygge",
+        "programversion"
+      ],
+      "da": [
+        "Version",
+        "app version",
+        "opbygning af software",
+        "softwareudgivelse"
+      ],
+      "nb": [
+        "Versjon",
+        "appversjon",
+        "programvare bygge",
+        "programvareutgivelse"
+      ],
+      "fi": [
+        "Versio",
+        "sovelluksen versio",
+        "ohjelmiston rakentaminen",
+        "ohjelmiston julkaisu"
+      ],
+      "is": [
+        "Útgáfa",
+        "app útgáfa",
+        "hugbúnaðargerð",
+        "hugbúnaðarútgáfu"
+      ],
+      "ca": [
+        "versió",
+        "versió de l'aplicació",
+        "creació de programari",
+        "llançament de programari"
+      ],
+      "eu": [
+        "Bertsioa",
+        "aplikazioaren bertsioa",
+        "softwarearen eraikuntza",
+        "software-oharra"
+      ],
+      "gl": [
+        "Versión",
+        "versión da aplicación",
+        "creación de software",
+        "lanzamento de software"
+      ],
+      "sq": [
+        "Versioni",
+        "versioni i aplikacionit",
+        "ndërtimi i softuerit",
+        "lëshimi i softuerit"
+      ],
+      "mk": [
+        "Верзија",
+        "верзија на апликацијата",
+        "изработка на софтвер",
+        "софтверско издание"
+      ],
+      "he": [
+        "גרסה",
+        "גרסת האפליקציה",
+        "בניית תוכנה",
+        "שחרור תוכנה"
+      ],
+      "fa": [
+        "نسخه",
+        "نسخه برنامه؛ ساخت نرم افزار؛ انتشار نرم افزار"
+      ],
+      "hy": [
+        "Տարբերակ",
+        "հավելվածի տարբերակ",
+        "ծրագրային ապահովման պատրաստում",
+        "ծրագրային ապահովման թողարկում"
+      ],
+      "az": [
+        "Versiya",
+        "proqram versiyası",
+        "proqram təminatının qurulması",
+        "proqram təminatı buraxılışı"
+      ],
+      "ka": [
+        "ვერსია",
+        "აპლიკაციის ვერსია",
+        "პროგრამული უზრუნველყოფის აგება",
+        "პროგრამული უზრუნველყოფის გამოშვება"
+      ],
+      "kk": [
+        "Нұсқа",
+        "қолданба нұсқасы",
+        "бағдарламалық қамтамасыз етуді құрастыру",
+        "бағдарламалық құралдың шығарылымы"
+      ],
+      "uz": [
+        "Versiya",
+        "ilova versiyasi",
+        "dasturiy ta'minotni yaratish",
+        "dasturiy ta'minot chiqarilishi"
+      ],
+      "bn": [
+        "সংস্করণ",
+        "অ্যাপ সংস্করণ",
+        "সফ্টওয়্যার নির্মাণ",
+        "সফ্টওয়্যার রিলিজ"
+      ],
+      "ur": [
+        "ورژن",
+        "ورژن؛ ایپ ورژن؛ سافٹ ویئر کی تعمیر؛ سافٹ ویئر کی رہائی"
+      ],
+      "pa": [
+        "ਸੰਸਕਰਣ",
+        "ਐਪ ਸੰਸਕਰਣ",
+        "ਸਾਫਟਵੇਅਰ ਬਿਲਡ",
+        "ਸਾਫਟਵੇਅਰ ਰੀਲੀਜ਼"
+      ],
+      "gu": [
+        "સંસ્કરણ",
+        "એપ્લિકેશન સંસ્કરણ",
+        "સોફ્ટવેર બિલ્ડ",
+        "સોફ્ટવેર પ્રકાશન"
+      ],
+      "mr": [
+        "आवृत्ती",
+        "ॲप आवृत्ती",
+        "सॉफ्टवेअर बिल्ड",
+        "सॉफ्टवेअर प्रकाशन"
+      ],
+      "ta": [
+        "பதிப்பு",
+        "பயன்பாட்டின் பதிப்பு",
+        "மென்பொருள் உருவாக்கம்",
+        "மென்பொருள் வெளியீடு"
+      ],
+      "te": [
+        "వెర్షన్",
+        "యాప్ వెర్షన్",
+        "సాఫ్ట్వేర్ బిల్డ్",
+        "సాఫ్ట్వేర్ విడుదల"
+      ],
+      "kn": [
+        "ಆವೃತ್ತಿ",
+        "ಅಪ್ಲಿಕೇಶನ್ ಆವೃತ್ತಿ",
+        "ಸಾಫ್ಟ್ವೇರ್ ನಿರ್ಮಾಣ",
+        "ಸಾಫ್ಟ್ವೇರ್ ಬಿಡುಗಡೆ"
+      ],
+      "ml": [
+        "പതിപ്പ്",
+        "അപ്ലിക്കേഷൻ പതിപ്പ്",
+        "സോഫ്റ്റ്വെയർ നിർമ്മാണം",
+        "സോഫ്റ്റ്വെയർ റിലീസ്"
+      ],
+      "or": [
+        "ସଂସ୍କରଣ",
+        "ଆପ୍ ସଂସ୍କରଣ",
+        "ବିଲ୍ଡ",
+        "ରିଲିଜ୍"
+      ],
+      "ne": [
+        "संस्करण",
+        "एप संस्करण",
+        "सफ्टवेयर निर्माण",
+        "सफ्टवेयर रिलीज"
+      ],
+      "si": [
+        "අනුවාදය",
+        "යෙදුම් අනුවාදය",
+        "මෘදුකාංග ගොඩනැගීම",
+        "මෘදුකාංග නිකුතුව"
+      ],
+      "zh-Hant": [
+        "版本",
+        "應用程式版本",
+        "軟體建置",
+        "軟體發布"
+      ],
+      "ms": [
+        "Versi",
+        "versi aplikasi",
+        "binaan perisian",
+        "keluaran perisian"
+      ],
+      "fil": [
+        "Bersyon",
+        "bersyon ng app",
+        "pagbuo ng software",
+        "paglabas ng software"
+      ],
+      "my": [
+        "ဗားရှင်း",
+        "အက်ပ်ဗားရှင်း",
+        "ဆော့ဖ်ဝဲတည်ဆောက်မှု",
+        "ဆော့ဖ်ဝဲလ်ထုတ်ပြန်ခြင်း။"
+      ],
+      "km": [
+        "កំណែ",
+        "កំណែកម្មវិធី",
+        "ការបង្កើតកម្មវិធី",
+        "ការចេញផ្សាយកម្មវិធី"
+      ],
+      "lo": [
+        "ເວີຊັນ",
+        "ສະບັບ",
+        "ສະບັບ app",
+        "ການສ້າງຊອບແວ",
+        "ການປ່ອຍຊອບແວ"
+      ],
+      "mn": [
+        "Хувилбар",
+        "програмын хувилбар",
+        "програм хангамж бүтээх",
+        "програм хангамжийн хувилбар"
+      ],
+      "sw": [
+        "Toleo",
+        "toleo la programu",
+        "uundaji wa programu",
+        "kutolewa kwa programu"
+      ],
+      "af": [
+        "Weergawe",
+        "toepassing weergawe",
+        "sagteware bou",
+        "sagteware vrystelling"
+      ],
+      "am": [
+        "ስሪት",
+        "ሥሪት",
+        "የመተግበሪያ ስሪት",
+        "የሶፍትዌር ግንባታ",
+        "ሶፍትዌር መልቀቅ"
+      ],
+      "zu": [
+        "Inguqulo",
+        "inguqulo yohlelo lokusebenza",
+        "ukwakhiwa kwesoftware",
+        "ukukhishwa kwesoftware"
       ]
     },
     "contact": {
@@ -1792,6 +5773,1113 @@
         "讨论",
         "联系我们",
         "消息"
+      ],
+      "ro": [
+        "Contact",
+        "suport pentru utilizatori",
+        "Ajutor",
+        "asistenţă",
+        "feedback",
+        "întrebare",
+        "pune o întrebare",
+        "întrebări frecvente",
+        "sugestie",
+        "problema aplicației",
+        "raport de eroare",
+        "raportați o eroare",
+        "forum",
+        "rețele sociale",
+        "social media",
+        "blog",
+        "comunitate",
+        "discuţie",
+        "ia legatura",
+        "mesaj"
+      ],
+      "cs": [
+        "Kontakt",
+        "uživatelská podpora",
+        "pomoc",
+        "zpětná vazba",
+        "otázka",
+        "položit otázku",
+        "často kladené otázky",
+        "návrh",
+        "problém s aplikací",
+        "hlášení o chybě",
+        "nahlásit chybu",
+        "forum",
+        "sociální sítě",
+        "sociální média",
+        "blog",
+        "společenství",
+        "diskuse",
+        "dostat se do kontaktu",
+        "zprávu"
+      ],
+      "sk": [
+        "Kontakt",
+        "užívateľská podpora",
+        "pomoc",
+        "spätná väzba",
+        "otázka",
+        "položiť otázku",
+        "často kladené otázky",
+        "návrh",
+        "problém s aplikáciou",
+        "hlásenie chyby",
+        "nahlásiť chybu",
+        "fórum",
+        "sociálne siete",
+        "sociálne médiá",
+        "blog",
+        "komunita",
+        "diskusia",
+        "dostať do kontaktu",
+        "správu"
+      ],
+      "hu": [
+        "Kapcsolat",
+        "felhasználói támogatás",
+        "Segítség",
+        "támogatás",
+        "visszacsatolás",
+        "kérdés",
+        "tegyen fel egy kérdést",
+        "gyakran ismételt kérdések",
+        "javaslat",
+        "alkalmazásprobléma",
+        "alkalmazás probléma",
+        "hibajelentés",
+        "hiba bejelentése",
+        "fórum",
+        "közösségi hálózatok",
+        "közösségi média",
+        "blog",
+        "közösség",
+        "vita",
+        "vegye fel a kapcsolatot",
+        "üzenetet"
+      ],
+      "bg": [
+        "Контакт",
+        "потребителска поддръжка",
+        "помощ",
+        "обратна връзка",
+        "въпрос",
+        "задайте въпрос",
+        "често задавани въпроси",
+        "предложение",
+        "проблем с приложението",
+        "доклад за грешки",
+        "докладвайте за грешка",
+        "форум",
+        "социални мрежи",
+        "социални медии",
+        "блог",
+        "общност",
+        "дискусия",
+        "свържете се",
+        "съобщение"
+      ],
+      "hr": [
+        "Kontakt",
+        "korisnička podrška",
+        "pomoć",
+        "povratna informacija",
+        "pitanje",
+        "postaviti pitanje",
+        "često postavljana pitanja",
+        "prijedlog",
+        "problem s aplikacijom",
+        "izvješće o greškama",
+        "prijavi grešku",
+        "forum",
+        "društvene mreže",
+        "društveni mediji",
+        "blog",
+        "zajednica",
+        "rasprava",
+        "stupiti u kontakt",
+        "poruka"
+      ],
+      "sr": [
+        "Контакт",
+        "корисничка подршка",
+        "помоћ",
+        "повратне информације",
+        "питање",
+        "поставити питање",
+        "често постављана питања",
+        "предлог",
+        "проблем са апликацијом",
+        "извештај о грешкама",
+        "пријави грешку",
+        "форум",
+        "друштвене мреже",
+        "друштвени медији",
+        "блог",
+        "заједница",
+        "дискусија",
+        "ступити у контакт",
+        "порука"
+      ],
+      "sl": [
+        "Kontakt",
+        "podpora uporabnikom",
+        "pomoč",
+        "povratne informacije",
+        "vprašanje",
+        "postaviti vprašanje",
+        "pogosta vprašanja",
+        "predlog",
+        "težava z aplikacijo",
+        "poročilo o napakah",
+        "prijavi napako",
+        "forum",
+        "socialna omrežja",
+        "družbeni mediji",
+        "blog",
+        "skupnost",
+        "razprava",
+        "stopiti v stik",
+        "sporočilo"
+      ],
+      "el": [
+        "Επικοινωνία",
+        "υποστήριξη χρηστών· βοήθεια",
+        "βοήθεια",
+        "ανατροφοδότηση",
+        "ερώτηση",
+        "Κάντε μια ερώτηση? Συχνές ερωτήσεις? πρόταση",
+        "θέμα εφαρμογής? πρόβλημα εφαρμογής? αναφορά σφαλμάτων? αναφέρετε ένα σφάλμα. δικαστήριο",
+        "κοινωνικά δίκτυα· μέσα κοινωνικής δικτύωσης? blog? κοινότητα",
+        "συζήτηση",
+        "επικοινωνήστε? μήνυμα"
+      ],
+      "uk": [
+        "Контакт",
+        "підтримка користувачів",
+        "допомогти",
+        "допомога",
+        "зворотний зв'язок",
+        "запитання",
+        "поставити питання",
+        "запитання, що часто задаються",
+        "пропозиція",
+        "проблема з додатком",
+        "повідомлення про помилку",
+        "повідомити про помилку",
+        "форум",
+        "соціальні мережі",
+        "блог",
+        "громада",
+        "дискусія",
+        "зв'язатися",
+        "повідомлення"
+      ],
+      "be": [
+        "Кантакт",
+        "падтрымка карыстальнікаў",
+        "дапамогу",
+        "дапамога",
+        "зваротная сувязь",
+        "пытанне",
+        "задаць пытанне",
+        "часта задаюць пытанні",
+        "прапанова",
+        "праблема прыкладання",
+        "справаздача аб памылках",
+        "паведаміць пра памылку",
+        "форум",
+        "сацыяльныя сеткі",
+        "блог",
+        "супольнасць",
+        "дыскусія",
+        "звязвацца",
+        "паведамленне"
+      ],
+      "lt": [
+        "Susisiekite",
+        "Kontaktas",
+        "vartotojų palaikymas",
+        "pagalba",
+        "grįžtamasis ryšys",
+        "klausimas",
+        "užduoti klausimą",
+        "dažnai užduodami klausimai",
+        "pasiūlymas",
+        "programos problema",
+        "pranešimas apie klaidas",
+        "pranešti apie klaidą",
+        "forumas",
+        "socialiniai tinklai",
+        "socialinė žiniasklaida",
+        "dienoraštis",
+        "bendruomenė",
+        "diskusija",
+        "susisiekti",
+        "žinutę"
+      ],
+      "lv": [
+        "Kontakti",
+        "lietotāju atbalsts",
+        "palīdzība",
+        "atsauksmes",
+        "jautājums",
+        "uzdot jautājumu",
+        "biežāk uzdotie jautājumi",
+        "ieteikums",
+        "problēma ar lietotni",
+        "kļūdas ziņojums",
+        "ziņot par kļūdu",
+        "forums",
+        "sociālie tīkli",
+        "sociālie mediji",
+        "emuārs",
+        "kopiena",
+        "diskusija",
+        "sazināties",
+        "ziņa"
+      ],
+      "et": [
+        "võtke ühendust",
+        "kontakt",
+        "kasutajatugi",
+        "abi",
+        "tagasiside",
+        "küsimus",
+        "esitada küsimus",
+        "korduma kippuvad küsimused",
+        "soovitus",
+        "rakenduse probleem",
+        "veateade",
+        "teatage veast",
+        "foorum",
+        "sotsiaalvõrgustikud",
+        "sotsiaalmeedia",
+        "ajaveebi",
+        "kogukond",
+        "arutelu",
+        "võta ühendust",
+        "sõnum"
+      ],
+      "sv": [
+        "Kontakt",
+        "användarsupport",
+        "hjälp",
+        "bistånd",
+        "feed-back",
+        "fråga",
+        "ställa en fråga",
+        "vanliga frågor",
+        "förslag",
+        "appproblem",
+        "app problem",
+        "felrapport",
+        "rapportera ett fel",
+        "forum",
+        "sociala nätverk",
+        "sociala medier",
+        "blogg",
+        "gemenskap",
+        "diskussion",
+        "ta kontakt",
+        "meddelande"
+      ],
+      "da": [
+        "Kontakt",
+        "brugersupport",
+        "hjælp",
+        "feedback",
+        "spørgsmål",
+        "stille et spørgsmål",
+        "ofte stillede spørgsmål",
+        "forslag",
+        "app problem",
+        "fejlrapport",
+        "rapporter en fejl",
+        "forum",
+        "sociale netværk",
+        "sociale medier",
+        "blog",
+        "fællesskab",
+        "diskussion",
+        "tage kontakt",
+        "besked"
+      ],
+      "nb": [
+        "Kontakt",
+        "brukerstøtte",
+        "hjelp",
+        "assistanse",
+        "tilbakemelding",
+        "spørsmål",
+        "stille et spørsmål",
+        "ofte stilte spørsmål",
+        "forslag",
+        "app problem",
+        "feilrapport",
+        "rapporter en feil",
+        "forum",
+        "sosiale nettverk",
+        "sosiale medier",
+        "blogg",
+        "fellesskap",
+        "diskusjon",
+        "ta kontakt",
+        "melding"
+      ],
+      "fi": [
+        "Ota yhteyttä",
+        "Yhteystiedot",
+        "käyttäjätuki",
+        "auttaa",
+        "apua",
+        "palaute",
+        "kysymys",
+        "kysy kysymys",
+        "usein kysytyt kysymykset",
+        "ehdotus",
+        "sovellusongelma",
+        "virheraportti",
+        "ilmoita virheestä",
+        "foorumi",
+        "sosiaaliset verkostot",
+        "sosiaalinen media",
+        "blogi",
+        "yhteisö",
+        "keskustelu",
+        "viestiä"
+      ],
+      "is": [
+        "Hafðu samband",
+        "Tengiliður",
+        "notendastuðningur",
+        "hjálp",
+        "aðstoð",
+        "endurgjöf",
+        "spurning",
+        "spyrja spurningu",
+        "algengar spurningar",
+        "uppástunga",
+        "app mál",
+        "app vandamál",
+        "villuskýrsla",
+        "tilkynna villu",
+        "vettvangur",
+        "félagsleg net",
+        "samfélagsmiðlar",
+        "blogg",
+        "samfélag",
+        "umræður",
+        "hafa samband",
+        "skilaboð"
+      ],
+      "ca": [
+        "Contacte",
+        "suport a l'usuari",
+        "ajuda",
+        "assistència",
+        "retroalimentació",
+        "pregunta",
+        "fer una pregunta",
+        "preguntes freqüents",
+        "suggeriment",
+        "problema de l'aplicació",
+        "informe d'error",
+        "informar d'un error",
+        "fòrum",
+        "xarxes socials",
+        "bloc",
+        "comunitat",
+        "discussió",
+        "posar-se en contacte",
+        "missatge"
+      ],
+      "eu": [
+        "Harremanetarako",
+        "erabiltzaileen laguntza",
+        "laguntza",
+        "iritzia",
+        "galdera",
+        "galdera bat egin",
+        "maiz egiten diren galderak",
+        "iradokizuna",
+        "aplikazioaren arazoa",
+        "akatsen txostena",
+        "akats bat jakinarazi",
+        "foroa",
+        "sare sozialak",
+        "bloga",
+        "komunitatea",
+        "eztabaida",
+        "harremanetan jarri",
+        "mezua"
+      ],
+      "gl": [
+        "Contacto",
+        "apoio ao usuario",
+        "axuda",
+        "asistencia",
+        "retroalimentación",
+        "pregunta",
+        "facer unha pregunta",
+        "preguntas frecuentes",
+        "suxestión",
+        "problema da aplicación",
+        "informe de erros",
+        "informar dun erro",
+        "foro",
+        "redes sociais",
+        "blog",
+        "comunidade",
+        "discusión",
+        "póñase en contacto",
+        "mensaxe"
+      ],
+      "sq": [
+        "Kontakt",
+        "mbështetje për përdoruesit",
+        "ndihmë",
+        "reagime",
+        "pyetje",
+        "bëj një pyetje",
+        "pyetjet e bëra shpesh",
+        "sugjerim",
+        "problemi i aplikacionit",
+        "problem me aplikacionin",
+        "raporti i gabimeve",
+        "raportoni një gabim",
+        "forum",
+        "rrjetet sociale",
+        "media sociale",
+        "blog",
+        "komuniteti",
+        "diskutim",
+        "kontakto",
+        "mesazh"
+      ],
+      "mk": [
+        "Контакт",
+        "корисничка поддршка",
+        "помош",
+        "повратни информации",
+        "прашање",
+        "постави прашање",
+        "често поставувани прашања",
+        "предлог",
+        "проблем со апликацијата",
+        "извештај за грешки",
+        "пријави бубачка",
+        "форум",
+        "социјални мрежи",
+        "социјални медиуми",
+        "блог",
+        "заедница",
+        "дискусија",
+        "стапи во контакт",
+        "порака"
+      ],
+      "he": [
+        "צור קשר",
+        "איש קשר",
+        "תמיכת משתמשים",
+        "עֶזרָה",
+        "סִיוּעַ",
+        "מָשׁוֹב",
+        "שְׁאֵלָה",
+        "לשאול שאלה",
+        "שאלות נפוצות",
+        "הַצָעָה",
+        "בעיה באפליקציה",
+        "דוח באג",
+        "דווח על באג",
+        "פוֹרוּם",
+        "רשתות חברתיות",
+        "מדיה חברתית",
+        "בלוג",
+        "קהילה",
+        "דִיוּן",
+        "לְהִתְקַשֵׁר",
+        "הודעה"
+      ],
+      "fa": [
+        "تماس",
+        "پشتیبانی کاربر؛ کمک کمک بازخورد؛ سوال؛ سوال پرسیدن؛ سوالات متداول؛ پیشنهاد؛ مشکل برنامه؛ مشکل برنامه؛ گزارش اشکال؛ گزارش یک اشکال؛ انجمن",
+        "شبکه های اجتماعی؛ رسانه های اجتماعی؛ وبلاگ؛ جامعه؛ بحث؛ تماس بگیرید؛ پیام"
+      ],
+      "hy": [
+        "Կապ",
+        "օգտագործողի աջակցություն",
+        "օգնություն",
+        "հետադարձ կապ",
+        "հարց",
+        "հարց տալ",
+        "հաճախակի տրվող հարցեր",
+        "առաջարկություն",
+        "հավելվածի խնդիր",
+        "սխալի մասին հաշվետվություն",
+        "զեկուցել սխալի մասին",
+        "ֆորում",
+        "սոցիալական ցանցեր",
+        "սոցիալական մեդիա",
+        "բլոգ",
+        "համայնք",
+        "քննարկում",
+        "կապ հաստատել",
+        "հաղորդագրություն"
+      ],
+      "az": [
+        "Əlaqə",
+        "istifadəçi dəstəyi",
+        "kömək",
+        "yardım",
+        "rəy",
+        "sual",
+        "sual vermək",
+        "tez-tez verilən suallar",
+        "təklif",
+        "proqram problemi",
+        "səhv hesabatı",
+        "səhv haqqında məlumat verin",
+        "forum",
+        "sosial şəbəkələr",
+        "sosial media",
+        "blog",
+        "icma",
+        "müzakirə",
+        "əlaqə saxlamaq",
+        "mesaj"
+      ],
+      "ka": [
+        "კონტაქტი",
+        "მომხმარებლის მხარდაჭერა",
+        "დახმარება",
+        "უკუკავშირი",
+        "კითხვა",
+        "დასვით შეკითხვა",
+        "ხშირად დასმული კითხვები",
+        "წინადადება",
+        "აპლიკაციის საკითხი",
+        "აპლიკაციის პრობლემა",
+        "შეცდომის ანგარიში",
+        "შეატყობინეთ შეცდომის შესახებ",
+        "ფორუმი",
+        "სოციალური ქსელები",
+        "სოციალური მედია",
+        "ბლოგი",
+        "საზოგადოება",
+        "დისკუსია",
+        "დაუკავშირდეს",
+        "შეტყობინება"
+      ],
+      "kk": [
+        "Байланыс",
+        "пайдаланушыны қолдау",
+        "көмек",
+        "кері байланыс",
+        "сұрақ",
+        "сұрақ қою",
+        "жиі қойылатын сұрақтар",
+        "ұсыныс",
+        "қолданба мәселесі",
+        "қате туралы есеп",
+        "қате туралы хабарлау",
+        "форум",
+        "әлеуметтік желілер",
+        "әлеуметтік медиа",
+        "блог",
+        "қауымдастық",
+        "талқылау",
+        "байланысқа шығу",
+        "хабар"
+      ],
+      "uz": [
+        "Aloqa",
+        "foydalanuvchini qo'llab-quvvatlash",
+        "yordam berish",
+        "fikr-mulohaza",
+        "savol",
+        "savol berish",
+        "tez-tez so'raladigan savollar",
+        "taklif",
+        "ilova muammosi",
+        "xato haqida hisobot",
+        "xato haqida xabar berish",
+        "forum",
+        "ijtimoiy tarmoqlar",
+        "blog",
+        "jamiyat",
+        "muhokama qilish",
+        "aloqaga kirish",
+        "xabar"
+      ],
+      "bn": [
+        "যোগাযোগ",
+        "ব্যবহারকারী সমর্থন",
+        "সাহায্য সাহায্য",
+        "প্রতিক্রিয়া প্রশ্ন একটি প্রশ্ন জিজ্ঞাসা করুন",
+        "প্রায়শই জিজ্ঞাসিত প্রশ্ন",
+        "পরামর্শ অ্যাপ সমস্যা",
+        "অ্যাপ্লিকেশন সমস্যা",
+        "বাগ রিপোর্ট",
+        "একটি বাগ রিপোর্ট করুন",
+        "ফোরাম সামাজিক নেটওয়ার্ক",
+        "সামাজিক মিডিয়া",
+        "ব্লগ",
+        "সম্প্রদায়",
+        "আলোচনা যোগাযোগ করা",
+        "বার্তা"
+      ],
+      "ur": [
+        "رابطہ کریں۔",
+        "رابطہ؛ صارف کی حمایت؛ مدد مدد رائے سوال؛ ایک سوال پوچھیں؛ اکثر پوچھے گئے سوالات؛ تجویز ایپ کا مسئلہ؛ ایپ کا مسئلہ؛ بگ رپورٹ؛ ایک بگ کی اطلاع دیں؛ فورم سوشل نیٹ ورکس؛ سوشل میڈیا؛ بلاگ کمیونٹی؛ بحث رابطہ کریں؛ پیغام"
+      ],
+      "pa": [
+        "ਸੰਪਰਕ ਕਰੋ",
+        "ਸੰਪਰਕ",
+        "ਉਪਭੋਗਤਾ ਸਹਾਇਤਾ",
+        "ਮਦਦ ਕਰੋ",
+        "ਸਹਾਇਤਾ",
+        "ਫੀਡਬੈਕ",
+        "ਸਵਾਲ",
+        "ਇੱਕ ਸਵਾਲ ਪੁੱਛੋ",
+        "ਅਕਸਰ ਪੁੱਛੇ ਜਾਂਦੇ ਸਵਾਲ",
+        "ਸੁਝਾਅ",
+        "ਐਪ ਸਮੱਸਿਆ",
+        "ਬੱਗ ਰਿਪੋਰਟ",
+        "ਇੱਕ ਬੱਗ ਦੀ ਰਿਪੋਰਟ ਕਰੋ",
+        "ਫੋਰਮ",
+        "ਸਮਾਜਿਕ ਨੈੱਟਵਰਕ",
+        "ਸੋਸ਼ਲ ਮੀਡੀਆ",
+        "ਬਲੌਗ",
+        "ਭਾਈਚਾਰੇ",
+        "ਚਰਚਾ",
+        "ਸੰਪਰਕ ਵਿੱਚ ਰਹੋ",
+        "ਸੁਨੇਹਾ"
+      ],
+      "gu": [
+        "સંપર્ક",
+        "વપરાશકર્તા આધાર",
+        "મદદ",
+        "સહાય",
+        "પ્રતિસાદ પ્રશ્ન એક પ્રશ્ન પૂછો",
+        "વારંવાર પૂછાતા પ્રશ્નો",
+        "સૂચન એપ્લિકેશન સમસ્યા",
+        "એપ્લિકેશન સમસ્યા",
+        "બગ રિપોર્ટ",
+        "બગની જાણ કરો",
+        "ફોરમ",
+        "સામાજિક નેટવર્ક્સ",
+        "સામાજિક મીડિયા",
+        "બ્લોગ",
+        "સમુદાય",
+        "ચર્ચા સંપર્કમાં રહો",
+        "સંદેશ"
+      ],
+      "mr": [
+        "संपर्क",
+        "वापरकर्ता समर्थन",
+        "मदत",
+        "अभिप्राय प्रश्न",
+        "एक प्रश्न विचारा",
+        "वारंवार विचारले जाणारे प्रश्न",
+        "सूचना ॲप समस्या",
+        "ॲप समस्या",
+        "बग अहवाल",
+        "बग नोंदवा",
+        "मंच",
+        "सामाजिक नेटवर्क",
+        "सोशल मीडिया",
+        "ब्लॉग",
+        "समुदाय",
+        "चर्चा",
+        "संपर्कात रहा",
+        "संदेश"
+      ],
+      "ta": [
+        "தொடர்பு கொள்ளவும்",
+        "தொடர்பு",
+        "பயனர் ஆதரவு",
+        "உதவி",
+        "பின்னூட்டம்",
+        "கேள்வி",
+        "ஒரு கேள்வி கேள்",
+        "அடிக்கடி கேட்கப்படும் கேள்விகள்",
+        "பரிந்துரை",
+        "பயன்பாட்டு சிக்கல்",
+        "பயன்பாட்டின் சிக்கல்",
+        "பிழை அறிக்கை",
+        "ஒரு பிழையைப் புகாரளிக்கவும்",
+        "மன்றம்",
+        "சமூக வலைப்பின்னல்கள்",
+        "சமூக ஊடகங்கள்",
+        "வலைப்பதிவு",
+        "சமூகம்",
+        "விவாதம்",
+        "தொடர்பு கொள்ளுங்கள்",
+        "செய்தி"
+      ],
+      "te": [
+        "సంప్రదించండి",
+        "వినియోగదారు మద్దతు",
+        "సహాయం",
+        "అభిప్రాయం",
+        "ప్రశ్న",
+        "ఒక ప్రశ్న అడగండి",
+        "తరచుగా అడిగే ప్రశ్నలు",
+        "సూచన",
+        "యాప్ సమస్య",
+        "బగ్ నివేదిక",
+        "బగ్‌ను నివేదించండి",
+        "ఫోరమ్",
+        "సామాజిక నెట్వర్క్లు",
+        "సోషల్ మీడియా",
+        "బ్లాగు",
+        "సంఘం",
+        "చర్చ",
+        "సన్నిహితంగా ఉండండి",
+        "సందేశం"
+      ],
+      "kn": [
+        "ಸಂಪರ್ಕಿಸಿ",
+        "ಸಂಪರ್ಕ",
+        "ಬಳಕೆದಾರ ಬೆಂಬಲ",
+        "ಸಹಾಯ",
+        "ನೆರವು",
+        "ಪ್ರತಿಕ್ರಿಯೆ",
+        "ಪ್ರಶ್ನೆ",
+        "ಪ್ರಶ್ನೆ ಕೇಳಿ",
+        "ಪದೇ ಪದೇ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು",
+        "ಸಲಹೆ",
+        "ಅಪ್ಲಿಕೇಶನ್ ಸಮಸ್ಯೆ",
+        "ದೋಷ ವರದಿ",
+        "ದೋಷವನ್ನು ವರದಿ ಮಾಡಿ",
+        "ವೇದಿಕೆ",
+        "ಸಾಮಾಜಿಕ ಜಾಲಗಳು",
+        "ಸಾಮಾಜಿಕ ಮಾಧ್ಯಮ",
+        "ಬ್ಲಾಗ್",
+        "ಸಮುದಾಯ",
+        "ಚರ್ಚೆ",
+        "ಸಂಪರ್ಕದಲ್ಲಿರಿ",
+        "ಸಂದೇಶ"
+      ],
+      "ml": [
+        "ബന്ധപ്പെടുക",
+        "ഉപയോക്തൃ പിന്തുണ",
+        "സഹായം",
+        "പ്രതികരണം",
+        "ചോദ്യം",
+        "ഒരു ചോദ്യം ചോദിക്കുക",
+        "പതിവായി ചോദിക്കുന്ന ചോദ്യങ്ങൾ",
+        "നിർദ്ദേശം",
+        "ആപ്പ് പ്രശ്നം",
+        "ബഗ് റിപ്പോർട്ട്",
+        "ഒരു ബഗ് റിപ്പോർട്ട് ചെയ്യുക",
+        "ഫോറം",
+        "സോഷ്യൽ നെറ്റ്വർക്കുകൾ",
+        "സോഷ്യൽ മീഡിയ",
+        "ബ്ലോഗ്",
+        "സമൂഹം",
+        "ചർച്ച",
+        "സന്ദേശം"
+      ],
+      "or": [
+        "ଯୋଗାଯୋଗ",
+        "ସହାୟତା",
+        "ମତାମତ",
+        "ପ୍ରଶ୍ନ",
+        "ପରାମର୍ଶ",
+        "ସମସ୍ୟା",
+        "ବଗ୍ ରିପୋର୍ଟ",
+        "ଫୋରମ୍",
+        "ସାମାଜିକ ନେଟୱର୍କ",
+        "ବ୍ଲଗ୍",
+        "ସମୁଦାୟ",
+        "ଆଲୋଚନା",
+        "ସନ୍ଦେଶ"
+      ],
+      "ne": [
+        "सम्पर्क गर्नुहोस्",
+        "सम्पर्क",
+        "प्रयोगकर्ता समर्थन",
+        "मद्दत",
+        "सहयोग",
+        "प्रतिक्रिया",
+        "प्रश्न",
+        "प्रश्न सोध्नुहोस्",
+        "प्रायः सोधिने प्रश्नहरू",
+        "सुझाव",
+        "अनुप्रयोग मुद्दा",
+        "अनुप्रयोग समस्या",
+        "बग रिपोर्ट",
+        "बग रिपोर्ट गर्नुहोस्",
+        "फोरम",
+        "सामाजिक सञ्जाल",
+        "सामाजिक मिडिया",
+        "ब्लग",
+        "समुदाय",
+        "छलफल",
+        "सम्पर्कमा रहनुहोस्",
+        "सन्देश"
+      ],
+      "si": [
+        "අමතන්න",
+        "පරිශීලක සහාය",
+        "උදව්",
+        "ආධාර",
+        "ප්රතිපෝෂණ",
+        "ප්රශ්නය",
+        "ප්රශ්නයක් අසන්න",
+        "නිතර අසන ප්රශ්න",
+        "යෝජනාව",
+        "යෙදුම් ගැටළුව",
+        "දෝෂ වාර්තාව",
+        "දෝෂයක් වාර්තා කරන්න",
+        "සංසදය",
+        "සමාජ ජාල",
+        "සමාජ මාධ්ය",
+        "බ්ලොග්",
+        "ප්රජාව",
+        "සාකච්ඡාව",
+        "සම්බන්ධ වන්න",
+        "පණිවිඩය"
+      ],
+      "zh-Hant": [
+        "聯絡",
+        "接触",
+        "用户支持",
+        "帮助",
+        "协助",
+        "反馈",
+        "问题",
+        "提出问题",
+        "常见问题",
+        "建议",
+        "应用程序问题",
+        "错误报告",
+        "报告错误",
+        "论坛",
+        "社交网络",
+        "社交媒体",
+        "博客",
+        "社区",
+        "讨论",
+        "取得联系",
+        "留言"
+      ],
+      "ms": [
+        "Hubungi",
+        "sokongan pengguna",
+        "bantuan",
+        "maklum balas",
+        "soalan",
+        "tanya soalan",
+        "soalan lazim",
+        "cadangan",
+        "isu aplikasi",
+        "masalah aplikasi",
+        "laporan pepijat",
+        "melaporkan pepijat",
+        "forum",
+        "rangkaian sosial",
+        "media sosial",
+        "blog",
+        "komuniti",
+        "perbincangan",
+        "berhubung",
+        "mesej"
+      ],
+      "fil": [
+        "Makipag-ugnayan",
+        "Kontakin",
+        "suporta ng gumagamit",
+        "tulong",
+        "puna",
+        "tanong",
+        "magtanong",
+        "mga madalas itanong",
+        "mungkahi",
+        "isyu sa app",
+        "problema sa app",
+        "ulat ng bug",
+        "mag-ulat ng isang bug",
+        "forum",
+        "mga social network",
+        "social media",
+        "blog",
+        "komunidad",
+        "talakayan",
+        "mensahe"
+      ],
+      "my": [
+        "ဆက်သွယ်ရန်",
+        "အသုံးပြုသူထောက်ခံမှု",
+        "ကူညီကြပါ",
+        "အကူအညီ",
+        "တုံ့ပြန်ချက်",
+        "မေးခွန်း",
+        "မေးခွန်းတစ်ခုမေးပါ မကြာခဏမေးလေ့ရှိသောမေးခွန်းများ",
+        "အကြံပြုချက် အက်ပ်ပြဿနာ၊ အက်ပ်ပြဿနာ၊ bug အစီရင်ခံစာ",
+        "bug တစ်ခုသတင်းပို့",
+        "ဖိုရမ်",
+        "လူမှုကွန်ရက်များ",
+        "လူမှုမီဒီယာ",
+        "ဘလော့ဂ်",
+        "အသိုင်းအဝိုင်း",
+        "ဆွေးနွေးမှု",
+        "သတင်းစကား"
+      ],
+      "km": [
+        "ទំនាក់ទំនង",
+        "ការគាំទ្រអ្នកប្រើប្រាស់",
+        "ជំនួយ",
+        "មតិកែលម្អ",
+        "សំណួរ",
+        "សួរសំណួរមួយ",
+        "សំណួរដែលសួរញឹកញាប់",
+        "សំណូមពរ",
+        "បញ្ហាកម្មវិធី",
+        "របាយការណ៍កំហុស",
+        "រាយការណ៍កំហុសមួយ",
+        "វេទិកា",
+        "បណ្តាញសង្គម",
+        "ប្រព័ន្ធផ្សព្វផ្សាយសង្គម",
+        "ប្លុក",
+        "សហគមន៍",
+        "ការពិភាក្សា",
+        "សារ"
+      ],
+      "lo": [
+        "ຕິດຕໍ່",
+        "ສະຫນັບສະຫນູນຜູ້ໃຊ້",
+        "ຊ່ວຍເຫຼືອ",
+        "ການຊ່ວຍເຫຼືອ",
+        "ຄໍາຄຶດຄໍາເຫັນ",
+        "ຄໍາຖາມ",
+        "ຖາມຄໍາຖາມ",
+        "ຄໍາຖາມທີ່ຖາມເລື້ອຍໆ",
+        "ຄຳແນະນຳ",
+        "ບັນຫາ app",
+        "ບົດ​ລາຍ​ງານ bug​",
+        "ລາຍງານແມງໄມ້",
+        "forum",
+        "ເຄືອຂ່າຍສັງຄົມ",
+        "ສື່ມວນຊົນສັງຄົມ",
+        "blog",
+        "ຊຸມຊົນ",
+        "ສົນທະນາ",
+        "ຂໍ້ຄວາມ"
+      ],
+      "mn": [
+        "Холбоо барих",
+        "хэрэглэгчийн дэмжлэг",
+        "тусламж",
+        "санал хүсэлт",
+        "асуулт",
+        "асуулт асуух",
+        "байнга асуудаг асуултууд",
+        "санал",
+        "програмын асуудал",
+        "алдааны тайлан",
+        "алдаа мэдээлэх",
+        "форум",
+        "нийгмийн сүлжээ",
+        "олон нийтийн мэдээллийн хэрэгсэл",
+        "блог",
+        "нийгэмлэг",
+        "хэлэлцүүлэг",
+        "мессеж"
+      ],
+      "sw": [
+        "Mawasiliano",
+        "msaada wa mtumiaji",
+        "msaada",
+        "maoni",
+        "swali",
+        "uliza swali",
+        "maswali yanayoulizwa mara kwa mara",
+        "pendekezo",
+        "suala la programu",
+        "tatizo la programu",
+        "ripoti ya mdudu",
+        "ripoti mdudu",
+        "jukwaa",
+        "mitandao ya kijamii",
+        "blogu",
+        "jumuiya",
+        "majadiliano",
+        "wasiliana",
+        "ujumbe"
+      ],
+      "af": [
+        "Kontak",
+        "gebruikersondersteuning",
+        "help",
+        "bystand",
+        "terugvoer",
+        "vraag",
+        "vra 'n vraag",
+        "gereelde vrae",
+        "voorstel",
+        "app kwessie",
+        "app probleem",
+        "foutverslag",
+        "rapporteer 'n fout",
+        "forum",
+        "sosiale netwerke",
+        "sosiale media",
+        "blog",
+        "gemeenskap",
+        "bespreking",
+        "kontak maak",
+        "boodskap"
+      ],
+      "am": [
+        "ያግኙን",
+        "እውቂያ",
+        "የተጠቃሚ ድጋፍ",
+        "እርዳታ",
+        "ግብረመልስ",
+        "ጥያቄ",
+        "አንድ ጥያቄ ይጠይቁ",
+        "በተደጋጋሚ የሚጠየቁ ጥያቄዎች",
+        "አስተያየት",
+        "የመተግበሪያ ጉዳይ",
+        "የመተግበሪያ ችግር",
+        "የሳንካ ሪፖርት",
+        "ስህተትን ሪፖርት ያድርጉ",
+        "መድረክ",
+        "ማህበራዊ አውታረ መረቦች",
+        "ማህበራዊ ሚዲያ",
+        "ብሎግ",
+        "ማህበረሰብ",
+        "ውይይት",
+        "መገናኘት",
+        "መልእክት"
+      ],
+      "zu": [
+        "Xhumana",
+        "ukwesekwa komsebenzisi",
+        "Usizo",
+        "impendulo",
+        "umbuzo",
+        "buza umbuzo",
+        "imibuzo ejwayelekile ukubuzwa",
+        "isiphakamiso",
+        "udaba lohlelo lokusebenza",
+        "inkinga yohlelo lokusebenza",
+        "umbiko wesiphazamisi",
+        "bika iphutha",
+        "inkundla",
+        "amanethiwekhi omphakathi",
+        "inkundla yezokuxhumana",
+        "ibhulogi",
+        "umphakathi",
+        "ingxoxo",
+        "thintana",
+        "umyalezo"
       ]
     },
     "privacy": {
@@ -1920,6 +7008,378 @@
         "数据保护",
         "个人数据",
         "数据政策"
+      ],
+      "ro": [
+        "Politica de confidențialitate",
+        "confidențialitate",
+        "protecția datelor",
+        "date personale",
+        "politica de date"
+      ],
+      "cs": [
+        "Zásady ochrany osobních údajů",
+        "soukromí",
+        "ochrana dat",
+        "osobní údaje",
+        "datová politika"
+      ],
+      "sk": [
+        "Zásady ochrany osobných údajov",
+        "súkromie",
+        "ochrana údajov",
+        "osobné údaje",
+        "dátovú politiku"
+      ],
+      "hu": [
+        "Adatvédelmi szabályzat",
+        "magánélet",
+        "adatvédelem",
+        "személyes adatok",
+        "adatpolitika"
+      ],
+      "bg": [
+        "Политика за поверителност",
+        "поверителност",
+        "защита на данните",
+        "лични данни",
+        "политика за данни"
+      ],
+      "hr": [
+        "Politika privatnosti",
+        "privatnost",
+        "zaštita podataka",
+        "osobni podaci",
+        "politika podataka"
+      ],
+      "sr": [
+        "Политика приватности",
+        "приватност",
+        "заштита података",
+        "лични подаци",
+        "политика података"
+      ],
+      "sl": [
+        "Politika zasebnosti",
+        "zasebnost",
+        "varstvo podatkov",
+        "osebni podatki",
+        "politiko podatkov"
+      ],
+      "el": [
+        "Πολιτική απορρήτου",
+        "Πολιτική απορρήτου. μυστικότητα",
+        "προστασία δεδομένων· προσωπική πληροφορία",
+        "πολιτική δεδομένων"
+      ],
+      "uk": [
+        "Політика конфіденційності",
+        "приватність",
+        "захист даних",
+        "особисті дані",
+        "політика даних"
+      ],
+      "be": [
+        "Палітыка прыватнасці",
+        "прыватнасць",
+        "абарона дадзеных",
+        "асабістыя дадзеныя",
+        "палітыка дадзеных"
+      ],
+      "lt": [
+        "Privatumo politika",
+        "privatumas",
+        "duomenų apsauga",
+        "asmens duomenys",
+        "duomenų politika"
+      ],
+      "lv": [
+        "Privātuma politika",
+        "privātums",
+        "datu aizsardzība",
+        "personas dati",
+        "datu politika"
+      ],
+      "et": [
+        "Privaatsuspoliitika",
+        "privaatsus",
+        "andmekaitse",
+        "isikuandmed",
+        "andmepoliitika"
+      ],
+      "sv": [
+        "Sekretesspolicy",
+        "privatliv",
+        "dataskydd",
+        "personuppgifter",
+        "datapolicy"
+      ],
+      "da": [
+        "Privatlivspolitik",
+        "privatliv",
+        "databeskyttelse",
+        "personlige data",
+        "datapolitik"
+      ],
+      "nb": [
+        "Personvernerklæring",
+        "Retningslinjer for personvern",
+        "privatliv",
+        "databeskyttelse",
+        "personlige data",
+        "datapolitikk"
+      ],
+      "fi": [
+        "Tietosuojakäytäntö",
+        "yksityisyys",
+        "tietosuoja",
+        "henkilötiedot",
+        "tietopolitiikka"
+      ],
+      "is": [
+        "Persónuverndarstefna",
+        "næði",
+        "gagnavernd",
+        "persónuupplýsingar",
+        "gagnastefnu"
+      ],
+      "ca": [
+        "Política de privadesa",
+        "privadesa",
+        "protecció de dades",
+        "dades personals",
+        "política de dades"
+      ],
+      "eu": [
+        "Pribatutasun politika",
+        "pribatutasuna",
+        "datuen babesa",
+        "datu pertsonalak",
+        "datuen politika"
+      ],
+      "gl": [
+        "Política de privacidade",
+        "privacidade",
+        "protección de datos",
+        "datos persoais",
+        "política de datos"
+      ],
+      "sq": [
+        "Politika e privatësisë",
+        "privatësi",
+        "mbrojtjen e të dhënave",
+        "të dhënat personale",
+        "politika e të dhënave"
+      ],
+      "mk": [
+        "Политика за приватност",
+        "приватност",
+        "заштита на податоците",
+        "лични податоци",
+        "политика за податоци"
+      ],
+      "he": [
+        "מדיניות פרטיות",
+        "פְּרָטִיוּת",
+        "הגנת מידע",
+        "נתונים אישיים",
+        "מדיניות נתונים"
+      ],
+      "fa": [
+        "سیاست حفظ حریم خصوصی",
+        "حریم خصوصی؛ حفاظت از داده ها؛ داده های شخصی؛ سیاست داده"
+      ],
+      "hy": [
+        "Գաղտնիության քաղաքականություն",
+        "գաղտնիություն",
+        "տվյալների պաշտպանություն",
+        "անձնական տվյալներ",
+        "տվյալների քաղաքականություն"
+      ],
+      "az": [
+        "Məxfilik siyasəti",
+        "məxfilik",
+        "məlumatların qorunması",
+        "şəxsi məlumatlar",
+        "məlumat siyasəti"
+      ],
+      "ka": [
+        "კონფიდენციალურობის პოლიტიკა",
+        "კონფიდენციალურობა",
+        "მონაცემთა დაცვა",
+        "პერსონალური მონაცემები",
+        "მონაცემთა პოლიტიკა"
+      ],
+      "kk": [
+        "Құпиялық саясаты",
+        "Құпиялылық саясаты",
+        "құпиялылық",
+        "деректерді қорғау",
+        "жеке деректер",
+        "деректер саясаты"
+      ],
+      "uz": [
+        "Maxfiylik siyosati",
+        "maxfiylik",
+        "ma'lumotlarni himoya qilish",
+        "shaxsiy ma'lumotlar",
+        "ma'lumotlar siyosati"
+      ],
+      "bn": [
+        "গোপনীয়তা নীতি",
+        "গোপনীয়তা",
+        "তথ্য সুরক্ষা",
+        "ব্যক্তিগত তথ্য",
+        "তথ্য নীতি"
+      ],
+      "ur": [
+        "رازداری کی پالیسی",
+        "رازداری کی پالیسی؛ رازداری ڈیٹا تحفظ؛ ذاتی ڈیٹا؛ ڈیٹا پالیسی"
+      ],
+      "pa": [
+        "ਗੋਪਨੀਯਤਾ ਨੀਤੀ",
+        "ਗੋਪਨੀਯਤਾ",
+        "ਡਾਟਾ ਸੁਰੱਖਿਆ",
+        "ਨਿੱਜੀ ਡਾਟਾ",
+        "ਡਾਟਾ ਨੀਤੀ"
+      ],
+      "gu": [
+        "ગોપનીયતા નીતિ",
+        "ગોપનીયતા",
+        "માહિતી સુરક્ષા",
+        "વ્યક્તિગત ડેટા",
+        "ડેટા નીતિ"
+      ],
+      "mr": [
+        "गोपनीयता धोरण",
+        "गोपनीयता",
+        "डेटा संरक्षण",
+        "वैयक्तिक डेटा",
+        "डेटा धोरण"
+      ],
+      "ta": [
+        "தனியுரிமைக் கொள்கை",
+        "தனியுரிமை",
+        "தரவு பாதுகாப்பு",
+        "தனிப்பட்ட தரவு",
+        "தரவு கொள்கை"
+      ],
+      "te": [
+        "గోప్యతా విధానం",
+        "గోప్యత",
+        "డేటా రక్షణ",
+        "వ్యక్తిగత డేటా",
+        "డేటా విధానం"
+      ],
+      "kn": [
+        "ಗೌಪ್ಯತೆ ನೀತಿ",
+        "ಗೌಪ್ಯತೆ",
+        "ಡೇಟಾ ರಕ್ಷಣೆ",
+        "ವೈಯಕ್ತಿಕ ಡೇಟಾ",
+        "ಡೇಟಾ ನೀತಿ"
+      ],
+      "ml": [
+        "സ്വകാര്യതാ നയം",
+        "സ്വകാര്യത",
+        "ഡാറ്റ സംരക്ഷണം",
+        "വ്യക്തിഗത ഡാറ്റ",
+        "ഡാറ്റ നയം"
+      ],
+      "or": [
+        "ଗୋପନୀୟତା ନୀତି",
+        "ଗୋପନୀୟତା",
+        "ତଥ୍ୟ ସୁରକ୍ଷା",
+        "ବ୍ୟକ୍ତିଗତ ତଥ୍ୟ"
+      ],
+      "ne": [
+        "गोपनीयता नीति",
+        "गोपनीयता",
+        "डाटा सुरक्षा",
+        "व्यक्तिगत डाटा",
+        "डाटा नीति"
+      ],
+      "si": [
+        "රහස්‍යතා ප්‍රතිපත්තිය",
+        "පෞද්ගලිකත්වය",
+        "දත්ත ආරක්ෂාව",
+        "පුද්ගලික දත්ත",
+        "දත්ත ප්රතිපත්තිය"
+      ],
+      "zh-Hant": [
+        "隱私權政策",
+        "隱私權",
+        "資料保護",
+        "個人資料",
+        "資料政策"
+      ],
+      "ms": [
+        "Dasar privasi",
+        "privasi",
+        "perlindungan data",
+        "data peribadi",
+        "dasar data"
+      ],
+      "fil": [
+        "Patakaran sa privacy",
+        "privacy",
+        "proteksyon ng data",
+        "personal na data",
+        "patakaran sa datos"
+      ],
+      "my": [
+        "ကိုယ်ရေးကိုယ်တာမူဝါဒ",
+        "ကိုယ်ရေးကိုယ်တာမူဝါဒ၊ ကိုယ်ရေးကိုယ်တာ",
+        "ဒေတာကာကွယ်မှု",
+        "ကိုယ်ရေးကိုယ်တာအချက်အလက်",
+        "ဒေတာမူဝါဒ"
+      ],
+      "km": [
+        "គោលការណ៍ឯកជនភាព",
+        "ឯកជនភាព",
+        "ការការពារទិន្នន័យ",
+        "ទិន្នន័យផ្ទាល់ខ្លួន",
+        "គោលនយោបាយទិន្នន័យ"
+      ],
+      "lo": [
+        "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
+        "ຄວາມເປັນສ່ວນຕົວ",
+        "ການປົກປ້ອງຂໍ້ມູນ",
+        "ຂໍ້ມູນສ່ວນຕົວ",
+        "ນະ​ໂຍ​ບາຍ​ຂໍ້​ມູນ​"
+      ],
+      "mn": [
+        "Нууцлалын бодлого",
+        "нууцлал",
+        "өгөгдөл хамгаалах",
+        "хувийн мэдээлэл",
+        "мэдээллийн бодлого"
+      ],
+      "sw": [
+        "Sera ya faragha",
+        "faragha",
+        "ulinzi wa data",
+        "data ya kibinafsi",
+        "sera ya data"
+      ],
+      "af": [
+        "Privaatheidsbeleid",
+        "privaatheid",
+        "databeskerming",
+        "persoonlike data",
+        "databeleid"
+      ],
+      "am": [
+        "የግላዊነት ፖሊሲ",
+        "ግላዊነት",
+        "የውሂብ ጥበቃ",
+        "የግል መረጃ",
+        "የውሂብ ፖሊሲ"
+      ],
+      "zu": [
+        "Inqubomgomo yobumfihlo",
+        "ubumfihlo",
+        "ukuvikelwa kwedatha",
+        "idatha yomuntu siqu",
+        "inqubomgomo yedatha"
       ]
     },
     "terms": {
@@ -2041,6 +7501,275 @@
         "条件",
         "条款和条件",
         "法律"
+      ],
+      "ro": [
+        "Condiții de utilizare",
+        "Termeni și condiții",
+        "informatii juridice"
+      ],
+      "cs": [
+        "Podmínky použití",
+        "podmínky",
+        "právní informace"
+      ],
+      "sk": [
+        "Podmienky používania",
+        "zmluvné podmienky",
+        "právne informácie"
+      ],
+      "hu": [
+        "Felhasználási feltételek",
+        "feltételek és feltételek",
+        "jogi információk"
+      ],
+      "bg": [
+        "Условия за ползване",
+        "правила и условия",
+        "правна информация"
+      ],
+      "hr": [
+        "Uvjeti korištenja",
+        "odredbe i uvjeti",
+        "pravne informacije"
+      ],
+      "sr": [
+        "Услови коришћења",
+        "услови и одредбе",
+        "правне информације"
+      ],
+      "sl": [
+        "Pogoji uporabe",
+        "pogoji",
+        "pravne informacije"
+      ],
+      "el": [
+        "Όροι χρήσης",
+        "Όροι χρήσης. όροι και προϋποθέσεις· νομικές πληροφορίες"
+      ],
+      "uk": [
+        "Умови використання",
+        "умови",
+        "правова інформація"
+      ],
+      "be": [
+        "Умовы выкарыстання",
+        "тэрміны і ўмовы",
+        "прававая інфармацыя"
+      ],
+      "lt": [
+        "Naudojimo sąlygos",
+        "Naudojimosi sąlygos",
+        "terminai ir sąlygos",
+        "teisinę informaciją"
+      ],
+      "lv": [
+        "Lietošanas noteikumi",
+        "noteikumi un nosacījumi",
+        "juridiskā informācija"
+      ],
+      "et": [
+        "Kasutustingimused",
+        "tingimused",
+        "juriidilist teavet"
+      ],
+      "sv": [
+        "Användarvillkor",
+        "villkor",
+        "juridisk information"
+      ],
+      "da": [
+        "Betingelser for brug",
+        "Vilkår for brug",
+        "vilkår og betingelser",
+        "juridiske oplysninger"
+      ],
+      "nb": [
+        "Vilkår for bruk",
+        "vilkår og betingelser",
+        "juridisk informasjon"
+      ],
+      "fi": [
+        "Käyttöehdot",
+        "ehdot",
+        "juridiset tiedot"
+      ],
+      "is": [
+        "Notkunarskilmálar",
+        "skilmálar og skilyrði",
+        "lagalegar upplýsingar"
+      ],
+      "ca": [
+        "Condicions d'ús",
+        "termes i condicions",
+        "informació legal"
+      ],
+      "eu": [
+        "Erabilera-baldintzak",
+        "termino eta baldintzak",
+        "informazio juridikoa"
+      ],
+      "gl": [
+        "Condicións de uso",
+        "termos e condicións",
+        "información legal"
+      ],
+      "sq": [
+        "Kushtet e përdorimit",
+        "termat dhe kushtet",
+        "informacion ligjor"
+      ],
+      "mk": [
+        "Услови за користење",
+        "рокови и услови",
+        "правни информации"
+      ],
+      "he": [
+        "תנאי שימוש",
+        "תנאים והגבלות",
+        "מידע משפטי"
+      ],
+      "fa": [
+        "شرایط استفاده",
+        "شرایط و ضوابط؛ اطلاعات حقوقی"
+      ],
+      "hy": [
+        "Օգտագործման պայմաններ",
+        "պայմաններ և պայմաններ",
+        "իրավական տեղեկատվություն"
+      ],
+      "az": [
+        "İstifadə şərtləri",
+        "qaydalar və şərtlər",
+        "hüquqi məlumat"
+      ],
+      "ka": [
+        "გამოყენების პირობები",
+        "ვადები და პირობები",
+        "იურიდიული ინფორმაცია"
+      ],
+      "kk": [
+        "Пайдалану шарттары",
+        "ережелер мен шарттар",
+        "құқықтық ақпарат"
+      ],
+      "uz": [
+        "Foydalanish shartlari",
+        "huquqiy ma'lumotlar"
+      ],
+      "bn": [
+        "ব্যবহারের শর্তাবলী",
+        "শর্তাবলী",
+        "আইনি তথ্য"
+      ],
+      "ur": [
+        "استعمال کی شرائط",
+        "استعمال کی شرائط؛ شرائط و ضوابط؛ قانونی معلومات"
+      ],
+      "pa": [
+        "ਵਰਤੋਂ ਦੀਆਂ ਸ਼ਰਤਾਂ",
+        "ਨਿਬੰਧਨ ਅਤੇ ਸ਼ਰਤਾਂ",
+        "ਕਾਨੂੰਨੀ ਜਾਣਕਾਰੀ"
+      ],
+      "gu": [
+        "ઉપયોગની શરતો",
+        "નિયમો અને શરતો",
+        "કાનૂની માહિતી"
+      ],
+      "mr": [
+        "वापराच्या अटी",
+        "अटी आणि शर्ती",
+        "कायदेशीर माहिती"
+      ],
+      "ta": [
+        "பயன்பாட்டு விதிமுறைகள்",
+        "விதிமுறைகள் மற்றும் நிபந்தனைகள்",
+        "சட்ட தகவல்"
+      ],
+      "te": [
+        "ఉపయోగ నిబంధనలు",
+        "నిబంధనలు మరియు షరతులు",
+        "చట్టపరమైన సమాచారం"
+      ],
+      "kn": [
+        "ಬಳಕೆಯ ನಿಯಮಗಳು",
+        "ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳು",
+        "ಕಾನೂನು ಮಾಹಿತಿ"
+      ],
+      "ml": [
+        "ഉപയോഗ നിബന്ധനകൾ",
+        "ഉപാധികളും നിബന്ധനകളും",
+        "നിയമപരമായ വിവരങ്ങൾ"
+      ],
+      "or": [
+        "ବ୍ୟବହାର ସର୍ତ୍ତାବଳୀ",
+        "ସର୍ତ୍ତ",
+        "ଆଇନଗତ ସୂଚନା"
+      ],
+      "ne": [
+        "प्रयोगका सर्तहरू",
+        "नियम र सर्तहरू",
+        "कानूनी जानकारी"
+      ],
+      "si": [
+        "භාවිත නියමයන්",
+        "නියම සහ කොන්දේසි",
+        "නීතිමය තොරතුරු"
+      ],
+      "zh-Hant": [
+        "使用條款",
+        "條款和條件",
+        "法律資訊"
+      ],
+      "ms": [
+        "Syarat penggunaan",
+        "terma dan syarat",
+        "maklumat undang-undang"
+      ],
+      "fil": [
+        "Mga tuntunin sa paggamit",
+        "mga tuntunin at kundisyon",
+        "legal na impormasyon"
+      ],
+      "my": [
+        "အသုံးပြုမှုစည်းမျဉ်းများ",
+        "စည်းကမ်းနှင့်သတ်မှတ်ချက်များ",
+        "ဥပဒေအချက်အလက်"
+      ],
+      "km": [
+        "លក្ខខណ្ឌប្រើប្រាស់",
+        "លក្ខខណ្ឌនិងលក្ខខណ្ឌ",
+        "ព័ត៌មានផ្លូវច្បាប់"
+      ],
+      "lo": [
+        "ເງື່ອນໄຂການນໍາໃຊ້",
+        "ຂໍ້ກໍານົດແລະເງື່ອນໄຂ",
+        "ຂໍ້​ມູນ​ທາງ​ດ້ານ​ກົດ​ຫມາຍ​"
+      ],
+      "mn": [
+        "Ашиглах нөхцөл",
+        "нөхцөл, нөхцөл",
+        "хууль эрх зүйн мэдээлэл"
+      ],
+      "sw": [
+        "Masharti ya matumizi",
+        "sheria na masharti",
+        "habari za kisheria"
+      ],
+      "af": [
+        "Gebruiksvoorwaardes",
+        "bepalings en voorwaardes",
+        "regsinligting"
+      ],
+      "am": [
+        "የአጠቃቀም ደንቦች",
+        "የአጠቃቀም ውል",
+        "ውሎች እና ሁኔታዎች",
+        "የህግ መረጃ"
+      ],
+      "zu": [
+        "Imigomo yokusebenzisa",
+        "Imibandela",
+        "ulwazi lwezomthetho"
       ]
     },
     "libraries": {
@@ -2259,8 +7988,630 @@
         "开源",
         "鸣谢",
         "署名"
+      ],
+      "ro": [
+        "Licențe de la terți",
+        "licente software",
+        "dependențe de software",
+        "biblioteci de software",
+        "software de la terți",
+        "avizele legale",
+        "mulțumiri",
+        "sursă deschisă",
+        "credite contribuabil",
+        "atribuire"
+      ],
+      "cs": [
+        "Licence třetích stran",
+        "softwarové licence",
+        "softwarové závislosti",
+        "Softwarové knihovny",
+        "software třetích stran",
+        "právní upozornění",
+        "potvrzení",
+        "open source",
+        "kredity přispěvatelů",
+        "atribuce"
+      ],
+      "sk": [
+        "Licencie tretích strán",
+        "softvérové ​​licencie",
+        "softvérové ​​závislosti",
+        "softvérové ​​knižnice",
+        "softvér tretích strán",
+        "právne upozornenia",
+        "potvrdenia",
+        "otvorený zdroj",
+        "kredity prispievateľov",
+        "pripisovanie"
+      ],
+      "hu": [
+        "Harmadik fél licencei",
+        "szoftverlicencek",
+        "szoftver függőségek",
+        "szoftverkönyvtárak",
+        "harmadik féltől származó szoftverek",
+        "jogi közlemények",
+        "elismerések",
+        "nyílt forráskódú",
+        "közreműködői kreditek",
+        "attribúció"
+      ],
+      "bg": [
+        "Лицензи на трети страни",
+        "софтуерни лицензи",
+        "софтуерни зависимости",
+        "софтуерни библиотеки",
+        "софтуер на трети страни",
+        "правни бележки",
+        "признания",
+        "отворен код",
+        "кредити за сътрудници",
+        "приписване"
+      ],
+      "hr": [
+        "Licence treće strane",
+        "Licence trećih strana",
+        "softverske licence",
+        "ovisnosti o softveru",
+        "softverske knjižnice",
+        "softver treće strane",
+        "pravne obavijesti",
+        "priznanja",
+        "otvoreni kod",
+        "krediti suradnika",
+        "atribucija"
+      ],
+      "sr": [
+        "Лиценце треће стране",
+        "Лиценце трећих лица",
+        "софтверске лиценце",
+        "софтверске зависности",
+        "софтверске библиотеке",
+        "софтвер треће стране",
+        "правна обавештења",
+        "признања",
+        "опен соурце",
+        "кредити доприноса",
+        "приписивање"
+      ],
+      "sl": [
+        "licence tretjih oseb",
+        "programske licence",
+        "odvisnosti od programske opreme",
+        "programske knjižnice",
+        "programska oprema tretjih oseb",
+        "pravna obvestila",
+        "priznanja",
+        "odprta koda",
+        "dobroimetje za prispevke",
+        "pripisovanje"
+      ],
+      "el": [
+        "Άδειες τρίτων",
+        "Άδειες τρίτων. άδειες λογισμικού· Εξαρτήσεις λογισμικού· βιβλιοθήκες λογισμικού? λογισμικό τρίτων κατασκευαστών· νομικές ειδοποιήσεις· Ευχαριστίες? ανοιχτού κώδικα? πιστώσεις συνεισφέρων· απόδοση"
+      ],
+      "uk": [
+        "Ліцензії третіх сторін",
+        "ліцензії на програмне забезпечення",
+        "програмні залежності",
+        "програмні бібліотеки",
+        "програмне забезпечення сторонніх виробників",
+        "правові повідомлення",
+        "подяки",
+        "відкритий код",
+        "кредити вкладників",
+        "атрибуція"
+      ],
+      "be": [
+        "Ліцэнзіі іншых вытворцаў",
+        "Ліцэнзіі трэціх асоб",
+        "ліцэнзіі на праграмнае забеспячэнне",
+        "праграмныя залежнасці",
+        "праграмныя бібліятэкі",
+        "праграмнае забеспячэнне іншых вытворцаў",
+        "юрыдычныя паведамленні",
+        "падзякі",
+        "адкрыты зыходны код",
+        "крэдыты ўкладчыкаў",
+        "атрыбуцыя"
+      ],
+      "lt": [
+        "trečiųjų šalių licencijos",
+        "programinės įrangos licencijos",
+        "programinės įrangos priklausomybės",
+        "programinės įrangos bibliotekos",
+        "trečiosios šalies programinė įranga",
+        "teisiniai pranešimai",
+        "pripažinimai",
+        "atviro kodo",
+        "įmokų kreditai",
+        "priskyrimas"
+      ],
+      "lv": [
+        "Trešo pušu licences",
+        "programmatūras licences",
+        "programmatūras atkarības",
+        "programmatūras bibliotēkas",
+        "trešo pušu programmatūra",
+        "juridiski paziņojumi",
+        "atsauces",
+        "atvērtais pirmkods",
+        "informācija par autoriem",
+        "autorības norāde"
+      ],
+      "et": [
+        "kolmanda osapoole litsentsid",
+        "tarkvaralitsentsid",
+        "tarkvara sõltuvused",
+        "tarkvara raamatukogud",
+        "kolmanda osapoole tarkvara",
+        "juriidilised teated",
+        "tunnustused",
+        "avatud lähtekoodiga",
+        "panustaja krediiti",
+        "omistamine"
+      ],
+      "sv": [
+        "Tredjepartslicenser",
+        "mjukvarulicenser",
+        "programvara beroenden",
+        "Programvarubibliotek",
+        "programvara från tredje part",
+        "juridiska meddelanden",
+        "erkännanden",
+        "öppen källkod",
+        "bidragsgivares krediter",
+        "tillskrivning"
+      ],
+      "da": [
+        "Tredjepartslicenser",
+        "softwarelicenser",
+        "software afhængigheder",
+        "software biblioteker",
+        "tredjepartssoftware",
+        "juridiske meddelelser",
+        "anerkendelser",
+        "åben kildekode",
+        "bidragyderkreditter",
+        "tilskrivning"
+      ],
+      "nb": [
+        "Tredjepartslisenser",
+        "programvarelisenser",
+        "programvareavhengigheter",
+        "programvare biblioteker",
+        "tredjeparts programvare",
+        "juridiske merknader",
+        "anerkjennelser",
+        "åpen kildekode",
+        "bidragsyter kreditter",
+        "attribusjon"
+      ],
+      "fi": [
+        "Kolmannen osapuolen lisenssit",
+        "ohjelmistolisenssit",
+        "ohjelmistoriippuvuudet",
+        "ohjelmistokirjastot",
+        "kolmannen osapuolen ohjelmistot",
+        "oikeudelliset huomautukset",
+        "tunnustukset",
+        "avoimen lähdekoodin",
+        "rahoittajahyvitykset",
+        "attribuutio"
+      ],
+      "is": [
+        "Leyfi þriðju aðila",
+        "hugbúnaðarleyfi",
+        "hugbúnaðarfíkn",
+        "hugbúnaðarsöfn",
+        "hugbúnað frá þriðja aðila",
+        "lagalegar tilkynningar",
+        "viðurkenningar",
+        "opinn uppspretta",
+        "framlagsinneignir",
+        "úthlutun"
+      ],
+      "ca": [
+        "Llicències de tercers",
+        "llicències de programari",
+        "dependències de programari",
+        "biblioteques de programari",
+        "programari de tercers",
+        "avisos legals",
+        "agraïments",
+        "codi obert",
+        "crèdits de col·laboradors",
+        "atribució"
+      ],
+      "eu": [
+        "Hirugarrenen lizentziak",
+        "software lizentziak",
+        "software menpekotasunak",
+        "software liburutegiak",
+        "hirugarrenen softwarea",
+        "legezko oharrak",
+        "aitorpenak",
+        "kode irekia",
+        "laguntzaileen kredituak",
+        "atribuzioa"
+      ],
+      "gl": [
+        "Licenzas de terceiros",
+        "licenzas de software",
+        "dependencias de software",
+        "bibliotecas de software",
+        "software de terceiros",
+        "avisos legais",
+        "recoñecementos",
+        "código aberto",
+        "créditos de colaborador",
+        "atribución"
+      ],
+      "sq": [
+        "Licenca të palëve të treta",
+        "licencat e softuerit",
+        "varësitë e softuerit",
+        "bibliotekat e softuerit",
+        "softuer të palëve të treta",
+        "njoftime ligjore",
+        "mirënjohje",
+        "burim i hapur",
+        "kreditë e kontribuesve",
+        "atribuimi"
+      ],
+      "mk": [
+        "Лиценци од трета страна",
+        "Лиценци за трети лица",
+        "софтверски лиценци",
+        "софтверски зависности",
+        "софтверски библиотеки",
+        "софтвер од трета страна",
+        "правни известувања",
+        "признанија",
+        "отворен код",
+        "кредити на соработници",
+        "припишување"
+      ],
+      "he": [
+        "רישיונות של צד שלישי",
+        "רישיונות צד שלישי",
+        "רישיונות תוכנה",
+        "תלות בתוכנה",
+        "ספריות תוכנה",
+        "תוכנת צד שלישי",
+        "הודעות משפטיות",
+        "תודות",
+        "קוד פתוח",
+        "קרדיטים של תורמים",
+        "שִׁיוּך"
+      ],
+      "fa": [
+        "مجوزهای شخص ثالث",
+        "مجوزهای شخص ثالث. مجوزهای نرم افزار؛ وابستگی های نرم افزاری؛ کتابخانه های نرم افزاری؛ نرم افزار شخص ثالث؛ اطلاعیه های قانونی؛ قدردانی ها؛ منبع باز؛ اعتبارات مشارکت کننده؛ نسبت دادن"
+      ],
+      "hy": [
+        "Երրորդ կողմի լիցենզիաներ",
+        "ծրագրային ապահովման լիցենզիաներ",
+        "ծրագրային կախվածություն",
+        "ծրագրային գրադարաններ",
+        "երրորդ կողմի ծրագրակազմ",
+        "իրավական ծանուցումներ",
+        "շնորհակալագրեր",
+        "բաց կոդով",
+        "ներդրող վարկեր",
+        "վերագրում"
+      ],
+      "az": [
+        "Üçüncü tərəf lisenziyaları",
+        "proqram təminatı lisenziyaları",
+        "proqram təminatından asılılıqlar",
+        "proqram kitabxanaları",
+        "üçüncü tərəf proqram təminatı",
+        "hüquqi bildirişlər",
+        "etiraflar",
+        "açıq mənbə",
+        "töhfəçi kreditləri",
+        "atribut"
+      ],
+      "ka": [
+        "მესამე მხარის ლიცენზიები",
+        "პროგრამული უზრუნველყოფის ლიცენზიები",
+        "პროგრამული დამოკიდებულებები",
+        "პროგრამული ბიბლიოთეკები",
+        "მესამე მხარის პროგრამული უზრუნველყოფა",
+        "იურიდიული შეტყობინებები",
+        "აღიარება",
+        "ღია წყარო",
+        "კონტრიბუტორის კრედიტები",
+        "მიკუთვნება"
+      ],
+      "kk": [
+        "Үшінші тарап лицензиялары",
+        "бағдарламалық қамтамасыз ету лицензиялары",
+        "бағдарламалық қамтамасыз ету тәуелділігі",
+        "бағдарламалық қамтамасыз ету кітапханалары",
+        "үшінші тарап бағдарламалық жасақтамасы",
+        "заңды хабарламалар",
+        "растаулар",
+        "ашық дереккөз",
+        "салымшылардың несиелері",
+        "атрибуция"
+      ],
+      "uz": [
+        "Uchinchi tomon litsenziyalari",
+        "dasturiy ta'minot litsenziyalari",
+        "dasturiy ta'minotga bog'liqlik",
+        "dasturiy ta'minot kutubxonalari",
+        "uchinchi tomon dasturiy ta'minoti",
+        "huquqiy ogohlantirishlar",
+        "minnatdorchilik",
+        "ochiq manba",
+        "hissa qo'shadigan kreditlar",
+        "atribut"
+      ],
+      "bn": [
+        "তৃতীয় পক্ষের লাইসেন্স",
+        "সফ্টওয়্যার লাইসেন্স",
+        "সফ্টওয়্যার নির্ভরতা",
+        "সফ্টওয়্যার লাইব্রেরি",
+        "তৃতীয় পক্ষের সফ্টওয়্যার",
+        "আইনি নোটিশ",
+        "স্বীকৃতি",
+        "ওপেন সোর্স",
+        "অবদানকারী ক্রেডিট",
+        "বৈশিষ্ট্য"
+      ],
+      "ur": [
+        "فریق ثالث کے لائسنس",
+        "تیسری پارٹی کے لائسنس؛ سافٹ ویئر لائسنس؛ سافٹ ویئر انحصار؛ سافٹ ویئر لائبریریاں؛ تیسری پارٹی کے سافٹ ویئر؛ قانونی نوٹس؛ اعترافات اوپن سورس؛ معاون کریڈٹ؛ انتساب"
+      ],
+      "pa": [
+        "ਥਰਡ-ਪਾਰਟੀ ਲਾਇਸੰਸ",
+        "ਸਾਫਟਵੇਅਰ ਲਾਇਸੰਸ",
+        "ਸਾਫਟਵੇਅਰ ਨਿਰਭਰਤਾ",
+        "ਸਾਫਟਵੇਅਰ ਲਾਇਬ੍ਰੇਰੀਆਂ",
+        "ਤੀਜੀ-ਧਿਰ ਸਾਫਟਵੇਅਰ",
+        "ਕਾਨੂੰਨੀ ਨੋਟਿਸ",
+        "ਮਾਨਤਾਵਾਂ",
+        "ਓਪਨ ਸੋਰਸ",
+        "ਯੋਗਦਾਨੀ ਕ੍ਰੈਡਿਟ",
+        "ਵਿਸ਼ੇਸ਼ਤਾ"
+      ],
+      "gu": [
+        "થર્ડ પાર્ટી લાઇસન્સ",
+        "સોફ્ટવેર લાઇસન્સ",
+        "સોફ્ટવેર અવલંબન",
+        "સોફ્ટવેર પુસ્તકાલયો",
+        "તૃતીય-પક્ષ સોફ્ટવેર",
+        "કાનૂની સૂચનાઓ",
+        "સ્વીકૃતિઓ",
+        "ઓપન સોર્સ",
+        "ફાળો આપનાર ક્રેડિટ્સ",
+        "એટ્રિબ્યુશન"
+      ],
+      "mr": [
+        "तृतीय-पक्ष परवाने",
+        "सॉफ्टवेअर परवाने",
+        "सॉफ्टवेअर अवलंबित्व",
+        "सॉफ्टवेअर लायब्ररी",
+        "तृतीय-पक्ष सॉफ्टवेअर",
+        "कायदेशीर सूचना",
+        "पावती मुक्त स्रोत",
+        "योगदानकर्ता क्रेडिट्स",
+        "विशेषता"
+      ],
+      "ta": [
+        "மூன்றாம் தரப்பு உரிமங்கள்",
+        "மென்பொருள் உரிமங்கள்",
+        "மென்பொருள் சார்புகள்",
+        "மென்பொருள் நூலகங்கள்",
+        "மூன்றாம் தரப்பு மென்பொருள்",
+        "சட்ட அறிவிப்புகள்",
+        "ஒப்புகைகள்",
+        "திறந்த மூல",
+        "பங்களிப்பாளர் வரவுகள்",
+        "பண்பு"
+      ],
+      "te": [
+        "థర్డ్-పార్టీ లైసెన్స్‌లు",
+        "సాఫ్ట్‌వేర్ లైసెన్స్‌లు",
+        "సాఫ్ట్‌వేర్ డిపెండెన్సీలు",
+        "సాఫ్ట్‌వేర్ లైబ్రరీలు",
+        "మూడవ పార్టీ సాఫ్ట్‌వేర్",
+        "లీగల్ నోటీసులు",
+        "రసీదులు",
+        "ఓపెన్ సోర్స్",
+        "కంట్రిబ్యూటర్ క్రెడిట్స్",
+        "ఆపాదింపు"
+      ],
+      "kn": [
+        "ಮೂರನೇ ವ್ಯಕ್ತಿಯ ಪರವಾನಗಿಗಳು",
+        "ಸಾಫ್ಟ್ವೇರ್ ಪರವಾನಗಿಗಳು",
+        "ಸಾಫ್ಟ್ವೇರ್ ಅವಲಂಬನೆಗಳು",
+        "ಸಾಫ್ಟ್ವೇರ್ ಲೈಬ್ರರಿಗಳು",
+        "ಮೂರನೇ ವ್ಯಕ್ತಿಯ ಸಾಫ್ಟ್ವೇರ್",
+        "ಕಾನೂನು ಸೂಚನೆಗಳು",
+        "ಸ್ವೀಕೃತಿಗಳು",
+        "ತೆರೆದ ಮೂಲ",
+        "ಕೊಡುಗೆದಾರರ ಸಾಲಗಳು",
+        "ಗುಣಲಕ್ಷಣ"
+      ],
+      "ml": [
+        "മൂന്നാം കക്ഷി ലൈസൻസുകൾ",
+        "സോഫ്റ്റ്വെയർ ലൈസൻസുകൾ",
+        "സോഫ്റ്റ്വെയർ ഡിപൻഡൻസികൾ",
+        "സോഫ്റ്റ്വെയർ ലൈബ്രറികൾ",
+        "മൂന്നാം കക്ഷി സോഫ്റ്റ്വെയർ",
+        "നിയമപരമായ അറിയിപ്പുകൾ",
+        "അംഗീകാരങ്ങൾ",
+        "ഓപ്പൺ സോഴ്സ്",
+        "സംഭാവക ക്രെഡിറ്റുകൾ",
+        "കടപ്പാട്"
+      ],
+      "or": [
+        "ତୃତୀୟ ପକ୍ଷ ଲାଇସେନ୍ସ",
+        "ସଫ୍ଟୱେର୍ ଲାଇସେନ୍ସ",
+        "ଲାଇବ୍ରେରି",
+        "ଡିପେଣ୍ଡେନ୍ସି",
+        "ଆଇନଗତ ବିଜ୍ଞପ୍ତି",
+        "ଓପନ୍ ସୋର୍ସ",
+        "ଅବଦାନକାରୀ"
+      ],
+      "ne": [
+        "तेस्रो-पक्ष इजाजतपत्रहरू",
+        "सफ्टवेयर लाइसेन्स",
+        "सफ्टवेयर निर्भरता",
+        "सफ्टवेयर पुस्तकालयहरू",
+        "तेस्रो-पक्ष सफ्टवेयर",
+        "कानूनी सूचनाहरू",
+        "स्वीकृतिहरू",
+        "खुला स्रोत",
+        "योगदानकर्ता क्रेडिट",
+        "विशेषता"
+      ],
+      "si": [
+        "තෙවන පාර්ශ්ව බලපත්‍ර",
+        "මෘදුකාංග බලපත්ර",
+        "මෘදුකාංග පරායත්තතා",
+        "මෘදුකාංග පුස්තකාල",
+        "තෙවන පාර්ශවීය මෘදුකාංග",
+        "නීතිමය දැනුම්දීම්",
+        "පිළිගැනීම්",
+        "විවෘත මූලාශ්රය",
+        "දායක ණය",
+        "ආරෝපණය"
+      ],
+      "zh-Hant": [
+        "第三方授權條款",
+        "第三方许可证",
+        "软件许可证",
+        "软件依赖性",
+        "软件库",
+        "第三方软件",
+        "法律声明",
+        "致谢",
+        "开源",
+        "贡献者积分",
+        "归因"
+      ],
+      "ms": [
+        "Lesen pihak ketiga",
+        "lesen perisian",
+        "kebergantungan perisian",
+        "perpustakaan perisian",
+        "perisian pihak ketiga",
+        "notis undang-undang",
+        "pengakuan",
+        "sumber terbuka",
+        "kredit penyumbang",
+        "atribusi"
+      ],
+      "fil": [
+        "Mga lisensya ng third-party",
+        "mga lisensya ng software",
+        "mga dependency ng software",
+        "mga aklatan ng software",
+        "software ng third-party",
+        "mga legal na abiso",
+        "mga pagkilala",
+        "open source",
+        "mga kredito ng nag-aambag",
+        "pagpapatungkol"
+      ],
+      "my": [
+        "ပြင်ပကုမ္ပဏီလိုင်စင်များ",
+        "ဆော့ဖ်ဝဲလိုင်စင်များ",
+        "ဆော့ဖ်ဝဲလ်မှီခိုမှု",
+        "ဆော့ဖ်ဝဲစာကြည့်တိုက်များ",
+        "ပြင်ပဆော့ဖ်ဝဲ၊ ဥပဒေသတိပေးချက်များ၊ အသိအမှတ်ပြုချက်များ",
+        "ပွင့်လင်းအရင်းအမြစ်",
+        "ပံ့ပိုးသူ ခရက်ဒစ်များ ထည့်တွက်ပါ။"
+      ],
+      "km": [
+        "អាជ្ញាប័ណ្ណភាគីទីបី",
+        "អាជ្ញាប័ណ្ណកម្មវិធី",
+        "ភាពអាស្រ័យនៃកម្មវិធី",
+        "បណ្ណាល័យកម្មវិធី",
+        "កម្មវិធីភាគីទីបី",
+        "ការជូនដំណឹងផ្លូវច្បាប់",
+        "ការទទួលស្គាល់",
+        "ប្រភពបើកចំហ",
+        "ឥណទានអ្នករួមចំណែក",
+        "គុណលក្ខណៈ"
+      ],
+      "lo": [
+        "ໃບອະນຸຍາດພາກສ່ວນທີສາມ",
+        "ໃບອະນຸຍາດຊອບແວ",
+        "ການຂຶ້ນກັບຊອບແວ",
+        "ຫ້ອງສະຫມຸດຊອບແວ",
+        "ຊອບແວພາກສ່ວນທີສາມ",
+        "ແຈ້ງການທາງກົດໝາຍ",
+        "ການຮັບຮູ້",
+        "ແຫຼ່ງເປີດ",
+        "ສິນເຊື່ອຜູ້ປະກອບສ່ວນ",
+        "ຄຸນສົມບັດ"
+      ],
+      "mn": [
+        "Гуравдагч этгээдийн лиценз",
+        "програм хангамжийн лиценз",
+        "програм хангамжийн хамаарал",
+        "програм хангамжийн сангууд",
+        "гуравдагч талын програм хангамж",
+        "хууль ёсны мэдэгдэл",
+        "хүлээн зөвшөөрөлт",
+        "нээлттэй эх сурвалж",
+        "хувь нэмэр оруулагчийн зээл",
+        "хамаарал"
+      ],
+      "sw": [
+        "Leseni za watu wengine",
+        "leseni za programu",
+        "utegemezi wa programu",
+        "maktaba ya programu",
+        "programu ya mtu wa tatu",
+        "matangazo ya kisheria",
+        "shukrani",
+        "chanzo wazi",
+        "mikopo ya wachangiaji",
+        "sifa"
+      ],
+      "af": [
+        "Derdeparty-lisensies",
+        "sagteware lisensies",
+        "sagteware afhanklikhede",
+        "sagteware biblioteke",
+        "derdeparty sagteware",
+        "regskennisgewings",
+        "erkennings",
+        "oopbron",
+        "bydraerkrediete",
+        "toeskrywing"
+      ],
+      "am": [
+        "የሶስተኛ ወገን ፍቃዶች",
+        "የሶፍትዌር ፍቃዶች",
+        "የሶፍትዌር ጥገኛዎች",
+        "የሶፍትዌር ቤተ-መጻሕፍት",
+        "የሶስተኛ ወገን ሶፍትዌር",
+        "የህግ ማሳሰቢያዎች",
+        "እውቅናዎች",
+        "ክፍት ምንጭ",
+        "አበርካች ምስጋናዎች",
+        "ባህሪ"
+      ],
+      "zu": [
+        "Amalayisense ezinkampani zangaphandle",
+        "amalayisensi esofthiwe",
+        "ukuncika kwesoftware",
+        "imitapo yolwazi yesoftware",
+        "isofthiwe yomuntu wesithathu",
+        "izaziso zomthetho",
+        "ukuvuma",
+        "umthombo ovulekile",
+        "amakhredithi omnikeli",
+        "isibaluli"
       ]
     }
   }
 }
-

@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Uyalujabulela uhlelo lokusebenza?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Uma ungathanda ukweseka ukuthuthukiswa kwalo, iminikelo iyabongwa, kodwa ayikaze ibe yimpoqo.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Funda kabanzi</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Hhayi manje</string>
+    <string name="androidkit_compose_support_prompt_donate">Nikela</string>
+</resources>

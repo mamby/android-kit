@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Kas rakendus meeldib teile?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Kui soovite selle arendamist toetada, oleme annetuste eest tänulikud, kuid need pole kunagi kohustuslikud.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Lisateave</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Mitte praegu</string>
+    <string name="androidkit_compose_support_prompt_donate">Anneta</string>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">តើអ្នកចូលចិត្តកម្មវិធីនេះទេ?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">ប្រសិនបើអ្នកចង់គាំទ្រការអភិវឌ្ឍកម្មវិធី ការបរិច្ចាគត្រូវបានអរគុណ ប៉ុន្តែមិនមែនជាកាតព្វកិច្ចឡើយ។</string>
+    <string name="androidkit_compose_support_prompt_learn_more">ស្វែងយល់បន្ថែម</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">មិនមែនឥឡូវនេះ</string>
+    <string name="androidkit_compose_support_prompt_donate">បរិច្ចាគ</string>
+</resources>

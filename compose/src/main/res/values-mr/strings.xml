@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">मागे</string>
+    <string name="androidkit_compose_close">बंद करा</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">अधिक</string>
+    <string name="androidkit_compose_hide_title_bar">शीर्षक पट्टी लपवा</string>
+    <string name="androidkit_compose_show_title_bar">शीर्षक पट्टी दाखवा</string>
+    <string name="androidkit_compose_language">भाषा</string>
+    <string name="androidkit_compose_theme">थीम</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">पारदर्शकता</string>
+    <string name="androidkit_compose_min">किमान</string>
+    <string name="androidkit_compose_max">कमाल</string>
+    <string name="androidkit_compose_search_languages">भाषा शोधा</string>
+    <string name="androidkit_compose_no_matching_languages">कोणतीही जुळणारी भाषा नाही</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">प्रणाली</string>
+    <string name="androidkit_compose_app_lock">ॲप लॉक</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">ॲप सोडल्यानंतर लॉक करा</string>
+    <string name="androidkit_compose_lock_now">आता लॉक करा</string>
+    <string name="androidkit_compose_about">विषयी</string>
+    <string name="androidkit_compose_version">आवृत्ती</string>
+    <string name="androidkit_compose_copy_version">आवृत्ती कॉपी करा</string>
+    <string name="androidkit_compose_contact">संपर्क</string>
+    <string name="androidkit_compose_privacy_policy">गोपनीयता धोरण</string>
+    <string name="androidkit_compose_terms_of_use">वापराच्या अटी</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">तृतीय-पक्ष परवाने</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">अभिप्राय किंवा प्रश्न</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">वेबसाइट</string>
+    <string name="androidkit_compose_source_code">स्त्रोत कोड</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">शोधा</string>
+    <string name="androidkit_compose_clear_search">शोध साफ करा</string>
+    <string name="androidkit_compose_search_settings">सेटिंग्जमध्ये शोधा</string>
+    <string name="androidkit_compose_recent_searches">अलीकडील शोध</string>
+    <string name="androidkit_compose_clear_all">सर्व साफ करा</string>
+    <string name="androidkit_compose_remove_recent_search">अलीकडील शोध काढा</string>
+    <string name="androidkit_compose_no_matching_settings">जुळणारी सेटिंग्ज नाहीत</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">जुळणारे परिणाम नाहीत</string>
+    <string name="androidkit_compose_no_recent_searches">कोणतेही अलीकडील शोध नाहीत</string>
+    <string name="androidkit_compose_voice_search">आवाजाने शोधा</string>
+    <string name="androidkit_compose_voice_search_unavailable">व्हॉइस इनपुट अनुपलब्ध आहे. तुम्ही अजूनही तुमचा शोध टाइप करू शकता.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">मायक्रोफोन सुरू करत आहे...</string>
+    <string name="androidkit_compose_voice_listening">ऐकत आहे...</string>
+    <string name="androidkit_compose_voice_finishing">पूर्ण करत आहे…</string>
+    <string name="androidkit_compose_voice_stop">ऐकणे थांबवा</string>
+    <string name="androidkit_compose_voice_permission">व्हॉइस इनपुटसाठी मायक्रोफोन प्रवेश आवश्यक आहे. तुम्ही ॲप सेटिंग्जमध्ये याला अनुमती देऊ शकता.</string>
+    <string name="androidkit_compose_voice_no_speech">कोणतेही भाषण ओळखले नाही. पुन्हा प्रयत्न करा.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">ॲप सेटिंग्ज उघडा</string>
+</resources>

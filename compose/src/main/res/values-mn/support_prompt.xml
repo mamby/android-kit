@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Програм таалагдаж байна уу?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Хөгжүүлэлтийг нь дэмжихийг хүсвэл хандив өгсөнд талархана. Гэхдээ хандив өгөх нь хэзээ ч заавал биш.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Дэлгэрэнгүй</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Одоо биш</string>
+    <string name="androidkit_compose_support_prompt_donate">Хандивлах</string>
+</resources>

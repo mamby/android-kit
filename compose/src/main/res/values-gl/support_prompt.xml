@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Gústache a aplicación?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Se queres apoiar o seu desenvolvemento, agradecemos as doazóns, pero nunca son obrigatorias.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Máis información</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Agora non</string>
+    <string name="androidkit_compose_support_prompt_donate">Facer unha doazón</string>
+</resources>

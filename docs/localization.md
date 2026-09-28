@@ -101,10 +101,10 @@ instructions guides future edits; it is not an automated semantic build gate.
 
 ## Language coverage and maintenance
 
-Kit ships English, French, Arabic, German, Spanish, Hindi, Indonesian, Italian,
-Japanese, Korean, Dutch, Polish, Portuguese, Russian, Thai, Turkish, Vietnamese,
-and Simplified Chinese resources. New translations are machine-assisted and have
-not received native-speaker review. A neutral
+Kit and the demo ship 72 locales. The complete language-tag list lives in
+`compose/src/main/assets/androidkit-localization-contract.json`; the demo's
+`androidKitSupportedLocales` declaration matches it. New translations are
+machine-assisted and have not received native-speaker review. A neutral
 translation such as French also covers French regional locales. To support a new
 language, add complete Kit translations, update
 `compose/src/main/assets/androidkit-localization-contract.json`, and release Kit
@@ -116,13 +116,21 @@ Hosts still choose and persist their application language with official locale
 APIs. Host language selection must not advertise languages absent from its declared
 supported set.
 
-The demo translates its own content into all 18 Kit languages. Its Gradle
+The demo translates its own content into all 72 Kit languages. Its Gradle
 `androidKitSupportedLocales` declaration also generates the packaged locale
 filters and `BuildConfig.SUPPORTED_LANGUAGE_TAGS`, which both demo language
 selectors use in language-tag order. Native labels include any script or region
 from the tag. Add complete demo resources when enabling another language; do not
 maintain a separate Kotlin language list. Android's generated locale configuration
 continues to expose the packaged languages to system settings.
+
+Norwegian uses Bokmål (`nb`). Serbian uses Cyrillic (`sr`), Punjabi uses Gurmukhi
+(`pa`), Uzbek and Azerbaijani use Latin (`uz`, `az`), and Kazakh and Mongolian use
+Cyrillic (`kk`, `mn`). These baseline translations do not claim coverage of every
+script variant. Chinese has separate Simplified (`zh-Hans`) and Traditional
+(`zh-Hant`) resources. Portuguese retains the existing European vocabulary;
+Traditional Chinese uses Taiwan-oriented UI terminology. Hebrew uses `values-iw`
+for Android resource lookup while declarations and language pickers use `he`.
 
 Canonical text lives in `compose/src/main/res/values`, with matching resources in
 each supported locale directory. Indonesian uses `values-in` and the `in` resource

@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">એપ્લિકેશન ગમે છે?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">જો તમે તેના વિકાસને ટેકો આપવા ઇચ્છતા હો, તો દાન આવકાર્ય છે, પરંતુ ક્યારેય ફરજિયાત નથી.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">વધુ જાણો</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">હમણાં નહીં</string>
+    <string name="androidkit_compose_support_prompt_donate">દાન આપો</string>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">از برنامه راضی هستید؟</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">اگر مایلید از توسعهٔ آن حمایت کنید، از کمک‌های مالی شما سپاسگزاریم، اما این کمک‌ها هرگز الزامی نیستند.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">اطلاعات بیشتر</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">الان نه</string>
+    <string name="androidkit_compose_support_prompt_donate">کمک مالی</string>
+</resources>

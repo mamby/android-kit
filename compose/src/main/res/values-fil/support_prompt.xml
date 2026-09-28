@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Nagugustuhan mo ba ang app?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Kung gusto mong suportahan ang pagbuo nito, pinahahalagahan ang mga donasyon, pero hindi kailanman kailangan ang mga ito.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Alamin pa</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Huwag muna</string>
+    <string name="androidkit_compose_support_prompt_donate">Mag-donate</string>
+</resources>

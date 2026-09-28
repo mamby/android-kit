@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Orqaga</string>
+    <string name="androidkit_compose_close">Yopish</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">Ko\'proq</string>
+    <string name="androidkit_compose_hide_title_bar">Sarlavha satrini yashirish</string>
+    <string name="androidkit_compose_show_title_bar">Sarlavha satrini ko\'rsatish</string>
+    <string name="androidkit_compose_language">Til</string>
+    <string name="androidkit_compose_theme">Mavzu</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">Shaffoflik</string>
+    <string name="androidkit_compose_min">Minimal</string>
+    <string name="androidkit_compose_max">Maksimal</string>
+    <string name="androidkit_compose_search_languages">Tillarni qidirish</string>
+    <string name="androidkit_compose_no_matching_languages">Mos tillar yo\'q</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">tizim</string>
+    <string name="androidkit_compose_app_lock">Ilova blokirovkasi</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">Ilovadan chiqqandan keyin qulflang</string>
+    <string name="androidkit_compose_lock_now">Endi qulflang</string>
+    <string name="androidkit_compose_about">Ilova haqida</string>
+    <string name="androidkit_compose_version">Versiya</string>
+    <string name="androidkit_compose_copy_version">Versiyani nusxalash</string>
+    <string name="androidkit_compose_contact">Aloqa</string>
+    <string name="androidkit_compose_privacy_policy">Maxfiylik siyosati</string>
+    <string name="androidkit_compose_terms_of_use">Foydalanish shartlari</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">Uchinchi tomon litsenziyalari</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Fikr yoki savollar</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">Veb-sayt</string>
+    <string name="androidkit_compose_source_code">Manba kodi</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Qidiruv</string>
+    <string name="androidkit_compose_clear_search">Qidiruvni tozalash</string>
+    <string name="androidkit_compose_search_settings">Sozlamalardan qidirish</string>
+    <string name="androidkit_compose_recent_searches">Oxirgi qidiruvlar</string>
+    <string name="androidkit_compose_clear_all">Hammasini tozalash</string>
+    <string name="androidkit_compose_remove_recent_search">Oxirgi qidiruvni olib tashlang</string>
+    <string name="androidkit_compose_no_matching_settings">Mos keladigan sozlamalar yo\'q</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">Mos natijalar yo\'q</string>
+    <string name="androidkit_compose_no_recent_searches">Oxirgi qidiruvlar yo\'q</string>
+    <string name="androidkit_compose_voice_search">Ovoz orqali qidirish</string>
+    <string name="androidkit_compose_voice_search_unavailable">Ovozli kiritish mavjud emas. Siz hali ham qidiruvingizni yozishingiz mumkin.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">Mikrofon ishga tushmoqda…</string>
+    <string name="androidkit_compose_voice_listening">tinglanmoqda…</string>
+    <string name="androidkit_compose_voice_finishing">Tugatish…</string>
+    <string name="androidkit_compose_voice_stop">Tinglashni to\'xtating</string>
+    <string name="androidkit_compose_voice_permission">Ovozli kiritish uchun mikrofonga kirish kerak. Siz bunga ilova sozlamalarida ruxsat berishingiz mumkin.</string>
+    <string name="androidkit_compose_voice_no_speech">Nutq tan olinmadi. Qayta urinib ko\'ring.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">Ilova sozlamalarini oching</string>
+</resources>

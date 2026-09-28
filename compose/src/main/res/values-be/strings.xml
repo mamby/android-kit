@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Назад</string>
+    <string name="androidkit_compose_close">Зачыніць</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">Больш</string>
+    <string name="androidkit_compose_hide_title_bar">Схаваць радок загалоўка</string>
+    <string name="androidkit_compose_show_title_bar">Паказаць радок загалоўка</string>
+    <string name="androidkit_compose_language">Мова</string>
+    <string name="androidkit_compose_theme">Тэма</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">Празрыстасць</string>
+    <string name="androidkit_compose_min">мінімум</string>
+    <string name="androidkit_compose_max">Максімум</string>
+    <string name="androidkit_compose_search_languages">Пошук моў</string>
+    <string name="androidkit_compose_no_matching_languages">Няма адпаведных моў</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">Сістэма</string>
+    <string name="androidkit_compose_app_lock">Блакаванне праграмы</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">блакіроўка пасля выхаду з праграмы</string>
+    <string name="androidkit_compose_lock_now">Заблакіраваць</string>
+    <string name="androidkit_compose_about">Пра праграму</string>
+    <string name="androidkit_compose_version">Версія</string>
+    <string name="androidkit_compose_copy_version">Капіяваць версію</string>
+    <string name="androidkit_compose_contact">Кантакт</string>
+    <string name="androidkit_compose_privacy_policy">Палітыка прыватнасці</string>
+    <string name="androidkit_compose_terms_of_use">Умовы выкарыстання</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">Ліцэнзіі іншых вытворцаў</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Зваротная сувязь або пытанні</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">вэб-сайт</string>
+    <string name="androidkit_compose_source_code">Зыходны код</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Пошук</string>
+    <string name="androidkit_compose_clear_search">Ачысціць пошук</string>
+    <string name="androidkit_compose_search_settings">Пошук у наладах</string>
+    <string name="androidkit_compose_recent_searches">Апошнія пошукі</string>
+    <string name="androidkit_compose_clear_all">Ачысціць усё</string>
+    <string name="androidkit_compose_remove_recent_search">Выдаліць апошні пошук</string>
+    <string name="androidkit_compose_no_matching_settings">Няма адпаведных налад</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">Няма адпаведных вынікаў</string>
+    <string name="androidkit_compose_no_recent_searches">Нядаўніх пошукаў няма</string>
+    <string name="androidkit_compose_voice_search">галасавы пошук</string>
+    <string name="androidkit_compose_voice_search_unavailable">Галасавы ўвод недаступны. Вы ўсё яшчэ можаце ўвесці пошукавы запыт.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">Запуск мікрафона…</string>
+    <string name="androidkit_compose_voice_listening">Слухаю…</string>
+    <string name="androidkit_compose_voice_finishing">Завяршэнне...</string>
+    <string name="androidkit_compose_voice_stop">Спыніць слуханне</string>
+    <string name="androidkit_compose_voice_permission">для галасавога ўводу неабходны доступ да мікрафона. Вы можаце дазволіць гэта ў наладах праграмы.</string>
+    <string name="androidkit_compose_voice_no_speech">Гаворка не распазнана. Паспрабуйце яшчэ раз.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">Адкрыйце налады праграмы</string>
+</resources>

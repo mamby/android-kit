@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Подобається програма?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Якщо бажаєте підтримати її розробку, ми вдячні за пожертви, але вони ніколи не є обов\'язковими.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Дізнатися більше</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Не зараз</string>
+    <string name="androidkit_compose_support_prompt_donate">Пожертвувати</string>
+</resources>

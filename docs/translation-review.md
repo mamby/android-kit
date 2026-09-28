@@ -1,5 +1,78 @@
 # Shared vocabulary translation review
 
+## Kit and demo language expansion (2026-09-28)
+
+Added 54 languages to the existing 18, giving Kit and the demo 72 matching
+locales. Each new locale has all 49 Kit strings (including the separate five-key
+support-prompt resource), all 113 demo strings, and terms for all 14 built-in
+Settings search entries. The contract, demo declaration, locale filters and
+generated language selectors share that coverage.
+
+New tags: `af`, `am`, `az`, `be`, `bg`, `bn`, `ca`, `cs`, `da`, `el`, `et`, `eu`,
+`fa`, `fi`, `fil`, `gl`, `gu`, `he`, `hr`, `hu`, `hy`, `is`, `ka`, `kk`, `km`, `kn`,
+`lo`, `lt`, `lv`, `mk`, `ml`, `mn`, `mr`, `ms`, `my`, `nb`, `ne`, `or`, `pa`, `ro`,
+`si`, `sk`, `sl`, `sq`, `sr`, `sv`, `sw`, `ta`, `te`, `uk`, `ur`, `uz`, `zh-Hant`,
+`zu`. Norwegian is Bokmål, Serbian is Cyrillic, Punjabi is Gurmukhi, Uzbek and
+Azerbaijani are Latin, and Kazakh and Mongolian are Cyrillic. Traditional Chinese
+uses Taiwan-oriented UI vocabulary. Other script variants are not independently
+translated by this expansion.
+
+English resources, the component/demo usage and the glossary defined the source
+meaning. The initial resources and search terms were prepared with
+[Google Translate](https://translate.google.com/), then received AI editorial
+review. No claim of independent human or native-speaker review is made. Particular
+attention went to About versus approximately, visual transparency versus openness,
+Minimum versus minutes, Copy version as an action, Settings search as an action,
+and financial support versus technical assistance. The support-prompt translations
+were prepared editorially against the English source: donations stay optional,
+and Not now does not promise a reminder.
+
+Voice-state review distinguishes listening and finalizing from a command to
+listen or an already-completed state. Corrections include Finnish, Gujarati and
+Malay finalizing states, Basque and Hungarian listening states, Romanian speech
+states, and Belarusian, Hebrew and Urdu stop actions. Marathi finalizing uses a
+localized phrase instead of an unnecessary English loanword.
+
+The demo translation inputs clarified bottom-sheet panels, surrounding interface
+controls, body-managed scrolling, logical start/end edges, and explicit-locale
+formatters. Identifiers, Prism, PDF and positional format arguments were preserved.
+Instructions referring to More use the actual Kit label for that locale. Odia
+received a complete editorial replacement of malformed machine output. Traditional
+Chinese action labels and shared terminology were corrected. Latvian was regenerated
+and checked separately from Lithuanian after a stale batch was detected.
+
+Search aliases use software-specific context for PIN codes, builds, releases,
+dependencies, notices and contributor credits. Each entry includes its actual
+localized label; duplicate normalized aliases are removed. The existing 18 locales
+retain their translations and aliases.
+
+Sources actually consulted for technical semantics were Android's
+[localization guidance](https://developer.android.com/guide/topics/resources/localization),
+[per-app language guidance](https://developer.android.com/guide/topics/resources/app-languages),
+and [string-resource escaping rules](https://developer.android.com/guide/topics/resources/string-resource).
+These establish platform behavior and translator context, not native terminology
+approval for 54 languages.
+
+Resource verification covers every XML string file, key parity, nonempty values,
+positional format arguments, unreplaced translation markers, replacement characters,
+the locale declaration and all 14 search entries across all 72 locales. The
+existing localization regression fixtures now use Esperanto and Irish for
+unsupported-language cases, because Swahili and Ukrainian are supported. The
+lexicon validator derives resource directories from the contract and decodes
+Android string escapes before comparing labels.
+
+Validation results: XML/key/format checks passed for all 72 locales; the Settings
+search lexicon check passed; all 16 localization contract regression cases passed;
+and both generated debug locale configurations contained the 72 declared locales
+after canonicalizing Android's `in`/`iw` aliases to `id`/`he`.
+The final `:compose:lintDebug :demo:assembleDebug :demo:lintDebug` run completed
+with `BUILD SUCCESSFUL` and exit code 0 after the voice-state corrections.
+
+Build/resource evidence is recorded separately from language quality. Idiomatic
+phrasing, low-resource-language terminology, accessibility pronunciation, RTL
+layout, text expansion and large-font layout still need competent human/device
+review. A successful resource build does not certify those aspects.
+
 ## Floating search (2026-09-21)
 
 Inline dictation replaces the original external-dialog behavior. Added

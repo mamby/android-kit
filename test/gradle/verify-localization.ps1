@@ -9,8 +9,8 @@ try {
         @{ Name = 'alias'; Expected = 'is owned by AndroidKit' },
         @{ Name = 'generated'; Expected = 'is owned by AndroidKit' },
         @{ Name = 'dependency'; Expected = 'is owned by AndroidKit' },
-        @{ Name = 'unsupported'; Expected = 'locale sw is not supported' },
-        @{ Name = 'locale-config'; Expected = 'locale uk is not supported' },
+        @{ Name = 'unsupported'; Expected = 'locale eo is not supported' },
+        @{ Name = 'locale-config'; Expected = 'locale ga is not supported' },
         @{ Name = 'legacy-alias-valid'; Expected = $null },
         @{ Name = 'alias-id'; Expected = 'incompatible Android locale qualifier id' },
         @{ Name = 'alias-he'; Expected = 'incompatible Android locale qualifier he' },
@@ -32,8 +32,8 @@ try {
         }
         Write-Output "PASS: $($case.Name)"
     }
-    $result = & ./gradlew.bat '-PandroidKitSupportedLocales=en,sw' :demo:validateDebugAndroidKitLocalization --console=plain --quiet 2>&1
-    if ($LASTEXITCODE -eq 0 -or !($result -join [Environment]::NewLine).Contains('locale sw is not supported')) {
+    $result = & ./gradlew.bat '-PandroidKitSupportedLocales=en,eo' :demo:validateDebugAndroidKitLocalization --console=plain --quiet 2>&1
+    if ($LASTEXITCODE -eq 0 -or !($result -join [Environment]::NewLine).Contains('locale eo is not supported')) {
         throw "Unsupported declared locale was not rejected: $result"
     }
     Write-Output 'PASS: unsupported declared locale'

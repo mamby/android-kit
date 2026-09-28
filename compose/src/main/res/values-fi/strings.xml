@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Takaisin</string>
+    <string name="androidkit_compose_close">Sulje</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">Lisää</string>
+    <string name="androidkit_compose_hide_title_bar">Piilota otsikkopalkki</string>
+    <string name="androidkit_compose_show_title_bar">Näytä otsikkopalkki</string>
+    <string name="androidkit_compose_language">Kieli</string>
+    <string name="androidkit_compose_theme">Teema</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">Läpinäkyvyys</string>
+    <string name="androidkit_compose_min">Minimi</string>
+    <string name="androidkit_compose_max">Maksimi</string>
+    <string name="androidkit_compose_search_languages">Hae kieliä</string>
+    <string name="androidkit_compose_no_matching_languages">Ei vastaavia kieliä</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">Järjestelmä</string>
+    <string name="androidkit_compose_app_lock">Sovelluksen lukitus</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">Lukitse sovelluksesta poistumisen jälkeen</string>
+    <string name="androidkit_compose_lock_now">Lukitse nyt</string>
+    <string name="androidkit_compose_about">Tietoja</string>
+    <string name="androidkit_compose_version">Versio</string>
+    <string name="androidkit_compose_copy_version">Kopioi versio</string>
+    <string name="androidkit_compose_contact">Ota yhteyttä</string>
+    <string name="androidkit_compose_privacy_policy">Tietosuojakäytäntö</string>
+    <string name="androidkit_compose_terms_of_use">Käyttöehdot</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">Kolmannen osapuolen lisenssit</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Palaute tai kysymyksiä</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">Verkkosivusto</string>
+    <string name="androidkit_compose_source_code">Lähdekoodi</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Haku</string>
+    <string name="androidkit_compose_clear_search">Tyhjennä haku</string>
+    <string name="androidkit_compose_search_settings">Hae asetuksista</string>
+    <string name="androidkit_compose_recent_searches">Viimeaikaiset haut</string>
+    <string name="androidkit_compose_clear_all">Tyhjennä kaikki</string>
+    <string name="androidkit_compose_remove_recent_search">Poista viimeisin haku</string>
+    <string name="androidkit_compose_no_matching_settings">Ei vastaavia asetuksia</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">Ei vastaavia tuloksia</string>
+    <string name="androidkit_compose_no_recent_searches">Ei viimeaikaisia hakuja</string>
+    <string name="androidkit_compose_voice_search">Puhehaku</string>
+    <string name="androidkit_compose_voice_search_unavailable">Äänisyöttö ei ole käytettävissä. Voit silti kirjoittaa haun.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">Käynnistetään mikrofoni…</string>
+    <string name="androidkit_compose_voice_listening">Kuuntelen…</string>
+    <string name="androidkit_compose_voice_finishing">Viimeistellään…</string>
+    <string name="androidkit_compose_voice_stop">Lopeta kuunteleminen</string>
+    <string name="androidkit_compose_voice_permission">Äänisyöttöä varten tarvitaan mikrofoni. Voit sallia sen sovelluksen asetuksista.</string>
+    <string name="androidkit_compose_voice_no_speech">Puhetta ei tunnistettu. Yritä uudelleen.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">Avaa sovelluksen asetukset</string>
+</resources>

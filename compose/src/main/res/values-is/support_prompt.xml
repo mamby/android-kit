@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">Líkar þér við forritið?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">Ef þú vilt styðja þróun þess eru framlög vel þegin, en þau eru aldrei skylda.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">Frekari upplýsingar</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">Ekki núna</string>
+    <string name="androidkit_compose_support_prompt_donate">Styrkja</string>
+</resources>

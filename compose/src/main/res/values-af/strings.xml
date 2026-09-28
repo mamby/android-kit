@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Terug</string>
+    <string name="androidkit_compose_close">Sluit</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">Meer</string>
+    <string name="androidkit_compose_hide_title_bar">Versteek titelbalk</string>
+    <string name="androidkit_compose_show_title_bar">Wys titelbalk</string>
+    <string name="androidkit_compose_language">Taal</string>
+    <string name="androidkit_compose_theme">Tema</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">Deursigtigheid</string>
+    <string name="androidkit_compose_min">Minimum</string>
+    <string name="androidkit_compose_max">Maksimum</string>
+    <string name="androidkit_compose_search_languages">Soek na tale</string>
+    <string name="androidkit_compose_no_matching_languages">Geen bypassende tale nie</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">Stelsel</string>
+    <string name="androidkit_compose_app_lock">Toepassingslot</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">Sluit nadat u die toepassing verlaat het</string>
+    <string name="androidkit_compose_lock_now">Sluit nou</string>
+    <string name="androidkit_compose_about">Oor</string>
+    <string name="androidkit_compose_version">Weergawe</string>
+    <string name="androidkit_compose_copy_version">Kopieer weergawe</string>
+    <string name="androidkit_compose_contact">Kontak</string>
+    <string name="androidkit_compose_privacy_policy">Privaatheidsbeleid</string>
+    <string name="androidkit_compose_terms_of_use">Gebruiksvoorwaardes</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">Derdeparty-lisensies</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Terugvoer of vrae</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">Webwerf</string>
+    <string name="androidkit_compose_source_code">Bronkode</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Soek</string>
+    <string name="androidkit_compose_clear_search">Vee soektog uit</string>
+    <string name="androidkit_compose_search_settings">Soek instellings</string>
+    <string name="androidkit_compose_recent_searches">Onlangse soektogte</string>
+    <string name="androidkit_compose_clear_all">Maak alles skoon</string>
+    <string name="androidkit_compose_remove_recent_search">Verwyder onlangse soektog</string>
+    <string name="androidkit_compose_no_matching_settings">Geen ooreenstemmende instellings nie</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">Geen ooreenstemmende resultate nie</string>
+    <string name="androidkit_compose_no_recent_searches">Geen onlangse soektogte nie</string>
+    <string name="androidkit_compose_voice_search">Soek met stem</string>
+    <string name="androidkit_compose_voice_search_unavailable">Steminvoer is nie beskikbaar nie. Jy kan steeds jou soektog tik.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">Begin tans mikrofoon …</string>
+    <string name="androidkit_compose_voice_listening">Luister …</string>
+    <string name="androidkit_compose_voice_finishing">Voltooi …</string>
+    <string name="androidkit_compose_voice_stop">Hou op luister</string>
+    <string name="androidkit_compose_voice_permission">Mikrofoontoegang word benodig vir steminvoer. Jy kan dit toelaat in programinstellings.</string>
+    <string name="androidkit_compose_voice_no_speech">Geen spraak herken nie. Probeer weer.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">Maak toepassinginstellings oop</string>
+</resources>

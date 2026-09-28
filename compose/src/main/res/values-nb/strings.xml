@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">Tilbake</string>
+    <string name="androidkit_compose_close">Lukk</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">Mer</string>
+    <string name="androidkit_compose_hide_title_bar">Skjul tittellinjen</string>
+    <string name="androidkit_compose_show_title_bar">Vis tittellinje</string>
+    <string name="androidkit_compose_language">Språk</string>
+    <string name="androidkit_compose_theme">Tema</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">Gjennomsiktighet</string>
+    <string name="androidkit_compose_min">Minimum</string>
+    <string name="androidkit_compose_max">Maksimum</string>
+    <string name="androidkit_compose_search_languages">Søk etter språk</string>
+    <string name="androidkit_compose_no_matching_languages">Ingen samsvarende språk</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">System</string>
+    <string name="androidkit_compose_app_lock">Applås</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">Lås etter å ha forlatt appen</string>
+    <string name="androidkit_compose_lock_now">Lås nå</string>
+    <string name="androidkit_compose_about">Om</string>
+    <string name="androidkit_compose_version">Versjon</string>
+    <string name="androidkit_compose_copy_version">Kopier versjon</string>
+    <string name="androidkit_compose_contact">Kontakt</string>
+    <string name="androidkit_compose_privacy_policy">Personvernerklæring</string>
+    <string name="androidkit_compose_terms_of_use">Vilkår for bruk</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">Tredjepartslisenser</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">Tilbakemelding eller spørsmål</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">Nettsted</string>
+    <string name="androidkit_compose_source_code">Kildekode</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">Søk</string>
+    <string name="androidkit_compose_clear_search">Slett søk</string>
+    <string name="androidkit_compose_search_settings">Søk i innstillinger</string>
+    <string name="androidkit_compose_recent_searches">Nylige søk</string>
+    <string name="androidkit_compose_clear_all">Fjern alt</string>
+    <string name="androidkit_compose_remove_recent_search">Fjern nylige søk</string>
+    <string name="androidkit_compose_no_matching_settings">Ingen samsvarende innstillinger</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">Ingen samsvarende resultater</string>
+    <string name="androidkit_compose_no_recent_searches">Ingen nylige søk</string>
+    <string name="androidkit_compose_voice_search">Søk med stemmen</string>
+    <string name="androidkit_compose_voice_search_unavailable">Stemmeinndata er utilgjengelig. Du kan fortsatt skrive inn søket ditt.</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">Starter mikrofonen …</string>
+    <string name="androidkit_compose_voice_listening">Lytter...</string>
+    <string name="androidkit_compose_voice_finishing">Fullfører...</string>
+    <string name="androidkit_compose_voice_stop">Slutt å lytte</string>
+    <string name="androidkit_compose_voice_permission">Mikrofontilgang er nødvendig for taleinndata. Du kan tillate det i appinnstillingene.</string>
+    <string name="androidkit_compose_voice_no_speech">Ingen tale gjenkjent. Prøv igjen.</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">Åpne appinnstillinger</string>
+</resources>

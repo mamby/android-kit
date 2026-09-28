@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">အက်ပ်ကို နှစ်သက်ပါသလား။</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">အက်ပ်ဖွံ့ဖြိုးတိုးတက်မှုကို ပံ့ပိုးလိုပါက လှူဒါန်းမှုများကို ကျေးဇူးတင်စွာ လက်ခံပါသည်။ သို့သော် လှူဒါန်းရန် မည်သည့်အခါမျှ မလိုအပ်ပါ။</string>
+    <string name="androidkit_compose_support_prompt_learn_more">ပိုမိုလေ့လာရန်</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">ယခု မဟုတ်သေးပါ</string>
+    <string name="androidkit_compose_support_prompt_donate">လှူဒါန်းရန်</string>
+</resources>

@@ -3,7 +3,11 @@
 English resource values and their UX context define meaning. These are project
 terminology decisions, not a claim that every term has native-speaker approval.
 Keep the existing regional conventions: European Portuguese, Modern Standard
-Arabic and Simplified Chinese. Do not impose English loanwords on every language.
+Arabic and Simplified Chinese. Traditional Chinese uses Taiwan-oriented UI terms.
+Norwegian uses Bokmål, Serbian uses Cyrillic, Punjabi uses Gurmukhi, Uzbek and
+Azerbaijani use Latin, and Kazakh and Mongolian use Cyrillic. Do not impose English
+loanwords on every language. See the [coverage review](translation-review.md#kit-and-demo-language-expansion-2026-09-28)
+for the expansion's linguistic limitations.
 
 ## Meaning and French terminology
 

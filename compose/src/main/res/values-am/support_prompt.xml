@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">መተግበሪያውን ወደዱት?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">ልማቱን መደገፍ ከፈለጉ፣ ልገሳዎች ይደነቃሉ፤ ግን ፈጽሞ አስገዳጅ አይደሉም።</string>
+    <string name="androidkit_compose_support_prompt_learn_more">ተጨማሪ ይወቁ</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">አሁን አይደለም</string>
+    <string name="androidkit_compose_support_prompt_donate">ለግስ</string>
+</resources>

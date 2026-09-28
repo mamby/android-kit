@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="androidkit_compose_back">ត្រឡប់មកវិញ</string>
+    <string name="androidkit_compose_close">បិទ</string>
+    <!-- Overflow menu/navigation label, also read by accessibility services; not Add. -->
+    <string name="androidkit_compose_more">ច្រើនទៀត</string>
+    <string name="androidkit_compose_hide_title_bar">លាក់របារចំណងជើង</string>
+    <string name="androidkit_compose_show_title_bar">បង្ហាញរបារចំណងជើង</string>
+    <string name="androidkit_compose_language">ភាសា</string>
+    <string name="androidkit_compose_theme">រចនាប័ទ្ម</string>
+    <!-- Visual surface transparency, not organizational transparency or opacity. -->
+    <string name="androidkit_compose_transparency">ភាពថ្លា</string>
+    <string name="androidkit_compose_min">អប្បបរមា</string>
+    <string name="androidkit_compose_max">អតិបរមា</string>
+    <string name="androidkit_compose_search_languages">ស្វែងរកភាសា</string>
+    <string name="androidkit_compose_no_matching_languages">គ្មានភាសាដែលត្រូវគ្នា។</string>
+    <!-- Follow the device setting; the component may append the resolved value. -->
+    <string name="androidkit_compose_system">ប្រព័ន្ធ</string>
+    <string name="androidkit_compose_app_lock">ចាក់សោកម្មវិធី</string>
+    <!-- Label/title for a delay picker: immediately, 1, 5 or 15 minutes after leaving. -->
+    <string name="androidkit_compose_lock_after_leaving_app">ចាក់សោបន្ទាប់ពីចាកចេញពីកម្មវិធី</string>
+    <string name="androidkit_compose_lock_now">ចាក់សោឥឡូវនេះ</string>
+    <string name="androidkit_compose_about">អំពី</string>
+    <string name="androidkit_compose_version">កំណែ</string>
+    <string name="androidkit_compose_copy_version">ចម្លងកំណែ</string>
+    <string name="androidkit_compose_contact">ទំនាក់ទំនង</string>
+    <string name="androidkit_compose_privacy_policy">គោលការណ៍ឯកជនភាព</string>
+    <string name="androidkit_compose_terms_of_use">លក្ខខណ្ឌប្រើប្រាស់</string>
+    <!-- Licenses for external software, including work by individuals, not only companies. -->
+    <string name="androidkit_compose_third_party_licenses">អាជ្ញាប័ណ្ណភាគីទីបី</string>
+    <!-- Contact-row subtitle: user feedback or questions about the app; never a news/RSS feed or store rating. -->
+    <string name="androidkit_compose_contact_description">មតិយោបល់ ឬសំណួរ</string>
+    <!-- About app website and source repository destination labels. -->
+    <string name="androidkit_compose_website">គេហទំព័រ</string>
+    <string name="androidkit_compose_source_code">កូដប្រភព</string>
+    <!-- Floating search: placeholder, clear action, microphone action, and recoverable speech-launch error. -->
+    <string name="androidkit_compose_search">ស្វែងរក</string>
+    <string name="androidkit_compose_clear_search">ជម្រះការស្វែងរក</string>
+    <string name="androidkit_compose_search_settings">ស្វែងរកក្នុងការកំណត់</string>
+    <string name="androidkit_compose_recent_searches">ការស្វែងរកថ្មីៗ</string>
+    <string name="androidkit_compose_clear_all">ជម្រះទាំងអស់។</string>
+    <string name="androidkit_compose_remove_recent_search">លុបការស្វែងរកថ្មីៗ</string>
+    <string name="androidkit_compose_no_matching_settings">គ្មានការកំណត់ដែលត្រូវគ្នាទេ។</string>
+    <!-- Empty state for a nonblank query with no matching host-content search items. -->
+    <string name="androidkit_compose_no_matching_results">គ្មានលទ្ធផលដែលត្រូវគ្នា។</string>
+    <string name="androidkit_compose_no_recent_searches">គ្មានការស្វែងរកថ្មីៗទេ។</string>
+    <string name="androidkit_compose_voice_search">ស្វែងរកតាមសំឡេង</string>
+    <string name="androidkit_compose_voice_search_unavailable">ការបញ្ចូលសំឡេងមិនអាចប្រើបានទេ។ អ្នកនៅតែអាចវាយការស្វែងរករបស់អ្នក។</string>
+    <!-- Inline dictation: starting/listening/finalizing states, stop action, permission guidance and no-speech error. -->
+    <string name="androidkit_compose_voice_starting">កំពុងចាប់ផ្តើមមីក្រូហ្វូន...</string>
+    <string name="androidkit_compose_voice_listening">កំពុងស្តាប់…</string>
+    <string name="androidkit_compose_voice_finishing">កំពុង​បញ្ចប់...</string>
+    <string name="androidkit_compose_voice_stop">ឈប់ស្តាប់</string>
+    <string name="androidkit_compose_voice_permission">ការចូលប្រើមីក្រូហ្វូនគឺចាំបាច់សម្រាប់ការបញ្ចូលសំឡេង។ អ្នកអាចអនុញ្ញាតវានៅក្នុងការកំណត់កម្មវិធី។</string>
+    <string name="androidkit_compose_voice_no_speech">គ្មានសុន្ទរកថាត្រូវបានទទួលស្គាល់។ ព្យាយាមម្តងទៀត។</string>
+    <!-- Tooltip action opening this application's system settings to manage microphone access. -->
+    <string name="androidkit_compose_open_app_settings">បើកការកំណត់កម្មវិធី</string>
+</resources>

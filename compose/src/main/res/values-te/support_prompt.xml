@@ -1,0 +1,9 @@
+<resources>
+    <string name="androidkit_compose_support_prompt_title">యాప్ నచ్చిందా?</string>
+    <!-- Voluntary financial support: preserve appreciation and unconditional optionality. -->
+    <string name="androidkit_compose_support_prompt_description">దాని అభివృద్ధికి మద్దతు ఇవ్వాలనుకుంటే, విరాళాలను స్వాగతిస్తాము. అయితే అవి ఎప్పుడూ తప్పనిసరి కావు.</string>
+    <string name="androidkit_compose_support_prompt_learn_more">మరింత తెలుసుకోండి</string>
+    <!-- Dismisses the prompt. Does not promise a donation or schedule a reminder for later. -->
+    <string name="androidkit_compose_support_prompt_not_now">ఇప్పుడు వద్దు</string>
+    <string name="androidkit_compose_support_prompt_donate">విరాళం ఇవ్వండి</string>
+</resources>
