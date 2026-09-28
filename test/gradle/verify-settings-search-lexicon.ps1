@@ -9,7 +9,7 @@ $lexicon = Get-Content -Raw (
 
 $localeDirectories = [ordered]@{
     en = 'values'; ar = 'values-ar'; de = 'values-de'; es = 'values-es'; fr = 'values-fr'
-    hi = 'values-hi'; id = 'values-b+id'; it = 'values-it'; ja = 'values-ja'; ko = 'values-ko'
+    hi = 'values-hi'; id = 'values-in'; it = 'values-it'; ja = 'values-ja'; ko = 'values-ko'
     nl = 'values-nl'; pl = 'values-pl'; pt = 'values-pt'; ru = 'values-ru'; th = 'values-th'
     tr = 'values-tr'; vi = 'values-vi'; 'zh-Hans' = 'values-b+zh+Hans'
 }

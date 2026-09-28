@@ -10,7 +10,15 @@ try {
         @{ Name = 'generated'; Expected = 'is owned by AndroidKit' },
         @{ Name = 'dependency'; Expected = 'is owned by AndroidKit' },
         @{ Name = 'unsupported'; Expected = 'locale sw is not supported' },
-        @{ Name = 'locale-config'; Expected = 'locale uk is not supported' }
+        @{ Name = 'locale-config'; Expected = 'locale uk is not supported' },
+        @{ Name = 'legacy-alias-valid'; Expected = $null },
+        @{ Name = 'alias-id'; Expected = 'incompatible Android locale qualifier id' },
+        @{ Name = 'alias-he'; Expected = 'incompatible Android locale qualifier he' },
+        @{ Name = 'alias-yi'; Expected = 'incompatible Android locale qualifier yi' },
+        @{ Name = 'alias-dependency'; Expected = 'incompatible Android locale qualifier id' },
+        @{ Name = 'filter-id'; Expected = 'incompatible Android locale qualifier id' },
+        @{ Name = 'filter-he'; Expected = 'incompatible Android locale qualifier he' },
+        @{ Name = 'filter-yi'; Expected = 'incompatible Android locale qualifier yi' }
     )
     foreach ($case in $cases) {
         # mergeDebugAssets exercises the packaging dependency, not just the validator task.

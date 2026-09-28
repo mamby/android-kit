@@ -21,7 +21,8 @@ not carry test-only dependencies or fixtures.
 Run `./test/gradle/verify-localization.ps1` from PowerShell. It verifies that asset
 merging accepts host-owned content and rejects Kit resource overrides, aliases,
 generated overrides, dependency overrides, unsupported locale resources, locale
-configuration entries, and unsupported declared languages. Fixture sources live
+configuration entries, unsupported declared languages, and incompatible language
+aliases in resource directories, dependency AARs and locale filters. Fixture sources live
 under `test/gradle`; no application source files are edited by the test runner.
 
 ## Instrumented behavior tests

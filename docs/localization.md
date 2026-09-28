@@ -19,7 +19,7 @@ language splitting cannot remove terms for languages other than the active one.
 ## Required build enforcement
 
 Every consuming application must apply the supplied Gradle script after its
-Android application plugin (AGP 8.4 or newer):
+Android application plugin (AGP 8.8 or newer):
 
 ```kotlin
 apply(from = rootProject.file("gradle/validate-androidkit-resources.gradle"))
@@ -48,7 +48,10 @@ Validation fails for:
   prefix, including value aliases and configuration-specific overrides;
 - a declared host language, host resource locale, or locale-config entry unsupported
   by Kit;
-- a missing or incompatible Kit contract, or incomplete bundled translations.
+- a missing or incompatible Kit contract, or incomplete bundled translations;
+- incompatible Indonesian (`id`), Hebrew (`he`) or Yiddish (`yi`) resource
+  qualifiers or locale filters. Android resource lookup requires `in`, `iw` and
+  `ji` respectively; language tags in pickers and declarations remain standard.
 
 The validation task is a required generated-assets dependency of APK/AAB packaging
 and is also attached to `check` and variant lint tasks. It generates an empty
@@ -114,7 +117,11 @@ APIs. Host language selection must not advertise languages absent from its decla
 supported set.
 
 Canonical text lives in `compose/src/main/res/values`, with matching resources in
-each supported locale directory. Every internal `AndroidKitStrings` field is required
+each supported locale directory. Indonesian uses `values-in` and the `in` resource
+filter because Android converts the standard `id` language tag to `in` for resource
+lookup. Keep `id` in language pickers and the localization contract. See Android's
+[resource lookup implementation](https://github.com/aosp-mirror/platform_frameworks_base/blob/master/core/java/android/content/res/ResourcesImpl.java).
+Every internal `AndroidKitStrings` field is required
 and resolved in `AndroidKitLocalizedStrings.kt`; there are no Kotlin English
 defaults. Keep all translations generic and free of demo branding. Kit resources
 are private through `values/public.xml`.

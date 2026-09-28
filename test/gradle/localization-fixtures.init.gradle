@@ -27,15 +27,17 @@ gradle.beforeProject { app ->
                     outputDirectory.set(app.layout.buildDirectory.dir('localization-fixtures/generated/res'))
                 }
                 variant.sources.res.addGeneratedSourceDirectory(generate) { it.outputDirectory }
-            } else if (scenario == 'dependency') {
+            } else if (scenario in ['dependency', 'alias-dependency']) {
                 def aar = app.tasks.register('dependencyLocalizationFixture', Zip) {
-                    from(new File(root, 'override')) { into('res') }
+                    from(new File(root, scenario == 'dependency' ? 'override' : 'alias-id')) { into('res') }
                     archiveFileName.set('localization-fixture.aar')
                     destinationDirectory.set(app.layout.buildDirectory.dir('localization-fixtures/dependency'))
                 }
                 app.tasks.matching { it.name == 'validateDebugAndroidKitLocalization' }.configureEach {
                     dependencyAars.from(aar.flatMap { it.archiveFile })
                 }
+            } else if (scenario.startsWith('filter-')) {
+                variant.androidResources.localeFilters.add('b+' + scenario.substring('filter-'.length()))
             } else {
                 variant.sources.res.addStaticSourceDirectory(new File(root, scenario).absolutePath)
             }
