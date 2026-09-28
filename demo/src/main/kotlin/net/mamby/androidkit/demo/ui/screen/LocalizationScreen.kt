@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.demo.BuildConfig
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.localization.AppLocaleManager
 import net.mamby.androidkit.localization.LocalizedFormatters
@@ -134,9 +135,10 @@ private fun LanguageChip(
 
 internal fun nativeLanguageName(languageTag: String): String =
     Locale.forLanguageTag(languageTag).let { locale ->
-        locale.getDisplayLanguage(locale).replaceFirstChar { character ->
-            if (character.isLowerCase()) character.titlecase() else character.toString()
+        locale.getDisplayName(locale).replaceFirstChar { character ->
+            if (character.isLowerCase()) character.toString().uppercase(locale) else character.toString()
         }
     }
 
-internal val SupportedLanguageTags: List<String> = listOf("en", "fr", "ar")
+internal val SupportedLanguageTags: List<String> = BuildConfig.SUPPORTED_LANGUAGE_TAGS
+    .split(',').sortedWith(String.CASE_INSENSITIVE_ORDER)

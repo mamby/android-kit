@@ -210,6 +210,46 @@ class SettingsPageBehaviorTest {
     }
 
     @Test
+    fun languagePickerOrdersMixedScriptsByIdAndReordersNewOptions() {
+        var options by mutableStateOf(listOf(
+            AndroidKitSettingsOption("ja", "日本語"),
+            AndroidKitSettingsOption("fr", "Français"),
+            AndroidKitSettingsOption("ar", "العربية"),
+            AndroidKitSettingsOption("en", "English"),
+        ))
+        var selected by mutableStateOf("system")
+        rule.setContent {
+            AndroidKitTheme {
+                TestSettingsPage {
+                    section("general") {
+                        language(AndroidKitLanguageSetting(AndroidKitSettingsSelection(
+                            options = options,
+                            selectedId = selected,
+                            onSelected = { selected = it },
+                            systemOption = AndroidKitSettingsSystemOption("system", "Device language"),
+                        )))
+                    }
+                }
+            }
+        }
+        rule.onNodeWithText("Language").performClick()
+        fun assertOrder(vararg labels: String) {
+            val positions = labels.map { label ->
+                rule.onNode(hasText(label) and
+                    SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.RadioButton))
+                    .fetchSemanticsNode().boundsInRoot.top
+            }
+            positions.zipWithNext().forEach { (before, after) -> assertTrue(before < after) }
+        }
+        assertOrder("System (Device language)", "العربية", "English", "Français", "日本語")
+        rule.runOnIdle { options = options + AndroidKitSettingsOption("de", "Deutsch") }
+        assertOrder("System (Device language)", "العربية", "Deutsch", "English", "Français", "日本語")
+        rule.onNodeWithContentDescription("Search languages").performTextReplacement("DEUTSCH")
+        rule.onNodeWithText("Deutsch").performClick()
+        rule.runOnIdle { assertEquals("de", selected) }
+    }
+
+    @Test
     fun languageSearchUsesHostOptionsAndStableIdsAndResetsOnReopen() {
         var selected by mutableStateOf("en")
         rule.setContent {

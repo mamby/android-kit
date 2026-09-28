@@ -8,6 +8,9 @@ plugins {
 
 apply(from = rootProject.file("gradle/validate-androidkit-resources.gradle"))
 
+val supportedLanguageTags = providers.gradleProperty("androidKitSupportedLocales")
+    .get().split(',').map(String::trim).sortedWith(String.CASE_INSENSITIVE_ORDER)
+
 android {
     namespace = "net.mamby.androidkit.demo"
     compileSdk = 37
@@ -20,6 +23,7 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         vectorDrawables.useSupportLibrary = true
+        buildConfigField("String", "SUPPORTED_LANGUAGE_TAGS", "\"${supportedLanguageTags.joinToString(",")}\"")
     }
 
     buildFeatures {
@@ -28,7 +32,17 @@ android {
     }
 
     androidResources {
-        localeFilters += listOf("en", "fr", "ar")
+        localeFilters += supportedLanguageTags.map { tag ->
+            // Android resource lookup requires legacy aliases, even inside BCP 47 qualifiers.
+            val subtags = tag.split('-').toMutableList()
+            subtags[0] = when (subtags[0]) {
+                "id" -> "in"
+                "he" -> "iw"
+                "yi" -> "ji"
+                else -> subtags[0]
+            }
+            if (subtags.size == 1) subtags.single() else subtags.joinToString("+", prefix = "b+")
+        }
         generateLocaleConfig = true
     }
 

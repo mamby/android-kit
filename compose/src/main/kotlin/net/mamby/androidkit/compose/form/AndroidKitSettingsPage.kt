@@ -40,6 +40,7 @@ import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitStrings
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import java.util.Locale
 
 /** Stable identity is independent of the translated label and filtered list position. */
 public data class AndroidKitSettingsOption(
@@ -79,6 +80,7 @@ public data class AndroidKitSettingsSelection(
     }
 }
 
+/** Language options are ordered by stable ID (use BCP 47 language tags), with System first. */
 public data class AndroidKitLanguageSetting(public val selection: AndroidKitSettingsSelection)
 
 public data class AndroidKitFloatingOpacitySetting(
@@ -302,7 +304,10 @@ internal class SettingsPageScopeImpl(
             entries,
             onLanguage = { setting ->
                 require(declaredKinds.add("language")) { "Duplicate language entry in $key" }
-                entries.addPicker(sectionKey, "language", SettingsPickerDefinition(setting.selection,
+                val selection = setting.selection.copy(
+                    options = setting.selection.options.sortedBy { it.id.lowercase(Locale.ROOT) },
+                )
+                entries.addPicker(sectionKey, "language", SettingsPickerDefinition(selection,
                     strings.searchLanguages, strings.noMatchingLanguages), AndroidKitIcons.Language, strings)
             },
             onTheme = { setting ->

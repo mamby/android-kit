@@ -61,6 +61,12 @@ host-confirmed and may expose its timeout picker and Lock now callback while
 enabled. Custom rows use `button`, `navigation`, `toggle`, `slider`, or `info`;
 all now require a stable key.
 
+Language pickers keep System first and sort the remaining options by their stable
+IDs, case-insensitively, regardless of the script used in native labels or the
+host's insertion order. Use standard BCP 47 language tags as language option IDs
+(for example, `id` and `zh-Hans`). New options are sorted on the next render;
+filtering preserves this order. Theme and timeout options retain host order.
+
 ## Global search
 
 `AndroidKitSettingsSearchPage` searches every catalog page, including pages that

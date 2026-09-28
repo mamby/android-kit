@@ -84,3 +84,28 @@ Official help pages can themselves include machine translations. Use them as
 evidence of specific terminology, inspect context, and seek other product or
 competent human evidence if wording remains doubtful. No single source certifies
 an entire language. See [the required workflow](localization.md#translation-quality-workflow).
+
+## Demo component terminology
+
+These contextual decisions apply to every demo locale. They describe the demo's
+actual behavior; localized sentences remain editorial translations.
+
+| English reference | Required meaning |
+| --- | --- |
+| Localization | Adapting language and regional formatting; not geographic location or just translation into one language. |
+| Locale | Language, optional script/region, and formatting conventions; passed explicitly to the formatter. |
+| Bottom sheet / sheet | The panel opened over the page; not a spreadsheet, paper sheet, or a full-screen destination. |
+| Chrome | Interface elements around the body, such as its title and header actions; not the Chrome browser. |
+| Without header, fit to content | The sheet hides its header and sizes to content. Its drag handle and floating Cancel/Confirm actions can remain. |
+| Content-managed scrolling | The sheet body owns the scrollable container; not content moderation or automatic data management. |
+| Start / end | Logical layout edges that reverse with reading direction; never fixed left/right. |
+| Overflow / More | Items that do not fit move to the Kit's More menu; instructions must quote that locale's actual Kit label. |
+| Supporting text | An optional explanatory subtitle; unrelated to financial support. |
+| Support prompt | A request for voluntary support, with no payment collected in the demo; not a technical-support dialog. |
+| None | No demo action has been selected; not an unavailable or failed action. |
+
+Keep Android Kit, Prism, PDF, API names and the component identifiers displayed
+by the developer catalog recognizable. They are names and identifiers, rather
+than untranslated application instructions. New native language labels use
+`Locale.getDisplayName(locale)` so script/region variants can be distinguished;
+sorting uses stable language tags, independently of their writing systems.

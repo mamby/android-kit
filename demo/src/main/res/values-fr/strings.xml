@@ -38,7 +38,7 @@
     <string name="theme_prism">Prism</string>
     <string name="sheet_title">Feuille réutilisable</string>
     <string name="sheet_detail_title">Détail de la feuille</string>
-    <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit le chrome adaptatif, les espacements et les libellés d’accessibilité.</string>
+    <string name="sheet_body">L’appelant contrôle la visibilité et le contenu. Android Kit fournit les éléments d’interface adaptatifs, les espacements et les libellés d’accessibilité.</string>
     <string name="sheet_list_item">Élément à défilement géré %1$d</string>
     <string name="variation_basic">Simple</string>
     <string name="variation_with_title">Avec titre</string>
@@ -63,7 +63,7 @@
     <string name="variation_standard">Standard</string>
     <string name="variation_back_navigation">Navigation retour</string>
     <string name="variation_header_actions">Actions d’en-tête</string>
-    <string name="variation_chromeless_fit_content">Contenu ajusté sans chrome</string>
+    <string name="variation_chromeless_fit_content">Sans en-tête, ajustée au contenu</string>
     <string name="variation_content_managed">Défilement géré par le contenu</string>
     <string name="variation_icons_only">Icônes uniquement</string>
     <string name="variation_icons_labels">Icônes et libellés</string>

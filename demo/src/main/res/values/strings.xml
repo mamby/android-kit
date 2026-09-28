@@ -39,6 +39,7 @@
     <string name="theme_prism">Prism</string>
     <string name="sheet_title">Reusable sheet</string>
     <string name="sheet_detail_title">Sheet detail</string>
+    <!-- Sheet means a bottom sheet. Chrome means the surrounding UI controls, not the browser. -->
     <string name="sheet_body">The caller owns visibility and content. Android Kit supplies the adaptive chrome, spacing and accessibility labels.</string>
     <string name="sheet_list_item">Content-managed item %1$d</string>
     <string name="variation_basic">Basic</string>
@@ -46,6 +47,7 @@
     <string name="variation_with_floating_action_button">With floating action button</string>
     <string name="variation_back_title_actions">Back, title and actions</string>
     <string name="variation_immersive_mode">Immersive mode</string>
+    <!-- Start/end are logical layout edges: they reverse in RTL. Never translate as fixed left/right. -->
     <string name="variation_top_start">Top start</string>
     <string name="variation_top_center">Top center</string>
     <string name="variation_top_end">Top end</string>
@@ -57,7 +59,8 @@
     <string name="variation_standard">Standard</string>
     <string name="variation_back_navigation">Back navigation</string>
     <string name="variation_header_actions">Header actions</string>
-    <string name="variation_chromeless_fit_content">Chromeless fit content</string>
+    <!-- A sheet without header chrome, sized to its content; content-managed means the body owns scrolling. -->
+    <string name="variation_chromeless_fit_content">Without header, fit to content</string>
     <string name="variation_content_managed">Content-managed scrolling</string>
     <string name="variation_icons_only">Icons only</string>
     <string name="variation_icons_labels">Icons and labels</string>
@@ -101,6 +104,7 @@
     <string name="flyout_demo_pdf">PDF</string>
     <string name="flyout_demo_plain_text">Plain text</string>
     <string name="flyout_demo_image">Image (unavailable)</string>
+    <!-- Support is voluntary financial support, not technical assistance. -->
     <string name="settings_support_preview">This is a catalog preview. Apps provide their own support destination; no payment is collected here.</string>
     <string name="settings_about_description">A catalog of reusable Android UI components and patterns.</string>
     <string name="settings_contributors">Contributors</string>

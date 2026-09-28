@@ -21,7 +21,7 @@
     <string name="localization_title">التوطين</string>
     <string name="language_section">لغة التطبيق</string>
     <string name="language_section_description">يستخدم تغيير اللغة واجهة برمجة اللغات الرسمية لكل تطبيق.</string>
-    <string name="language_system">لغة النظام</string>
+    <string name="language_system">النظام</string>
     <string name="format_section">أمثلة منسّقة</string>
     <string name="format_section_description">تستقبل أدوات التنسيق إعداداً محلياً صريحاً ولا تعتمد على حالة العملية العامة.</string>
     <string name="format_date">التاريخ</string>
@@ -63,7 +63,7 @@
     <string name="variation_standard">قياسي</string>
     <string name="variation_back_navigation">التنقل بالرجوع</string>
     <string name="variation_header_actions">إجراءات الرأس</string>
-    <string name="variation_chromeless_fit_content">محتوى ملائم بلا إطار</string>
+    <string name="variation_chromeless_fit_content">دون شريط عنوان وبحجم المحتوى</string>
     <string name="variation_content_managed">تمرير يديره المحتوى</string>
     <string name="variation_icons_only">أيقونات فقط</string>
     <string name="variation_icons_labels">أيقونات وتسميات</string>

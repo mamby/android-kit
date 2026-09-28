@@ -400,3 +400,121 @@ This is contextual AI-assisted review across all 18 resource sets, with no new
 external terminology references or native-speaker approval. XML/key alignment
 and resource/build checks establish structural coverage separately; idiomatic
 quality and device pronunciation for the new empty message remain unverified.
+
+## 2026-09-28 Complete demo language coverage
+
+Expanded demo-owned translations from English/French/Arabic to every language in
+the current Kit contract. Each locale has 112 strings in `strings.xml` and one
+`demo_support_prompt` string: 113 translatable keys, 2,034 values across 18 sets.
+The English-only `app_name` is intentionally nontranslatable. Added 1,695 values
+in the 15 new locale sets, including all ten paragraphs of `demo_scroll_text`.
+Indonesian resources use `values-in` while the declared/picker tag remains `id`;
+Simplified Chinese uses `values-b+zh+Hans` and `zh-Hans`.
+
+### Contextual review coverage
+
+Read the English resources with `ComponentDemoScreen`, `DemoControls`,
+`DummyNavigationScreen`, `LocalizationScreen`, `SettingsScreen`, the floating
+search/tooltip demos and their Kit controls. Reviewed all keys in each locale
+against English in a separate editorial pass: actions versus headings, optional
+supporting text, More-menu destinations, logical start/end placement, sheet/header
+ownership, locale formatting, authentication, exact lock delays, unavailable
+export choices, voluntary support, and search submission/empty states.
+
+| Locale | Keys reviewed | Result / register |
+| --- | ---: | --- |
+| en | 113 | Source/context review; clarified the header-free sheet label. |
+| fr | 113 | Existing vocabulary retained; clarified chrome and the fitted sheet. |
+| ar | 113 | Modern Standard Arabic; corrected generic System and fitted-sheet wording. |
+| de | 113 | New complete set; developer terminology and polite instructions. |
+| es | 113 | New complete set; neutral Spanish and existing Kit vocabulary. |
+| hi | 113 | New complete set; Kit More label अधिक reused verbatim. |
+| id | 113 | New complete set; standard Indonesian and Android resource alias. |
+| it | 113 | New complete set; actions kept distinct from descriptive labels. |
+| ja | 113 | New complete set; standard Japanese UI terminology and logical edges. |
+| ko | 113 | New complete set; standard Korean UI terminology and logical edges. |
+| nl | 113 | New complete set; Dutch UI terms and locale-formatting context. |
+| pl | 113 | New complete set; grammatical action forms and minute expressions. |
+| pt | 113 | New complete set; European Portuguese (Guardar, Partilhar, ecrã, definições). |
+| ru | 113 | New complete set; Russian UI terms and grammatical minute expressions. |
+| th | 113 | New complete set; bottom panel distinguished from a worksheet. |
+| tr | 113 | New complete set; Turkish UI terms and fixed lock delays. |
+| vi | 113 | New complete set; Kit More label Thêm tùy chọn reused verbatim. |
+| zh-Hans | 113 | New complete set; Simplified Chinese and financial-support context. |
+
+### Corrections and terminology evidence
+
+Changed the English `variation_chromeless_fit_content` from “Chromeless fit
+content” to “Without header, fit to content”. The call site sets `showChrome =
+false` and `fitContent = true` but still supplies Cancel/Confirm floating actions
+and retains the drag handle. “Without controls” would therefore be misleading.
+Reviewed and updated this label in every locale. Added English translator comments
+for logical edges, chrome, content-managed scrolling and voluntary support.
+French `sheet_body` now describes interface elements instead of the ambiguous
+word chrome. Arabic `language_system` now uses the Kit's generic System wording.
+Checked demo instructions against every locale's actual Kit More label; corrected
+the initially inconsistent Hindi and Vietnamese labels. Developer component/API
+identifiers, Android Kit, Prism and PDF remain recognizable names. The app-lock
+Compose preview now reads the same localized resources as the running demo.
+
+Sources actually consulted on 2026-09-28:
+
+- [Android per-app languages](https://developer.android.com/guide/topics/resources/app-languages)
+  for official locale selection, generated locale configuration and supported tags.
+- [Android string resources](https://developer.android.com/guide/topics/resources/string-resource)
+  for resource escaping and positional format arguments.
+- [Android Locale reference](https://developer.android.com/reference/java/util/Locale)
+  for language tags and native display names with script/region context.
+- [Android French bottom sheets](https://developer.android.com/develop/ui/compose/components/bottom-sheets?hl=fr)
+  and [Arabic bottom sheets](https://developer.android.com/develop/ui/compose/components/bottom-sheets?hl=ar)
+  for panel visibility/state context. Their mixed and sometimes literal terminology
+  was considered alongside the existing project vocabulary, not copied blindly.
+- [Android Japanese bottom-sheet guide](https://developer.android.com/develop/ui/compose/quick-guides/content/create-bottom-sheet?hl=ja)
+  for ボトムシート and sheet opening/closing terminology.
+- [Google Indonesian sign-in codelab](https://codelabs.developers.google.com/sign-in-with-google-android?hl=id)
+  for corroborating panel terminology in a real authentication UI context.
+- Android biometric-authentication guidance in
+  [Arabic](https://developer.android.com/identity/sign-in/biometric-auth?hl=ar)
+  and [Hindi](https://developer.android.com/identity/sign-in/biometric-auth?hl=hi)
+  for lock-screen/biometric terminology. Retained the accepted Arabic term;
+  refined Hindi to the platform's बायोमेट्रिक ऑथेंटिकेशन wording.
+
+Other wording is an editorial choice grounded in English, the accepted glossary
+and the actual component behavior. Official localized documentation may itself
+be machine-translated. This review is AI-assisted, including its second pass;
+it is not independent human or native-speaker approval for any language.
+Idiomatic nuance, especially technical chrome/scrolling/locale terms in Hindi,
+Thai and Indonesian, remains a priority for competent language review.
+
+### Language ordering and maintenance
+
+The shared Language setting sorts options case-insensitively by stable ID, using
+BCP 47 tags rather than comparing native labels across scripts. System stays
+first. Rendering sorts newly supplied options as well; filtering preserves order.
+Theme and timeout ordering remains host-owned. Demo build locale filters and both
+demo selectors derive from `androidKitSupportedLocales`; the native display name
+includes script/region when provided. Enabling a new language still requires
+complete Kit and demo translations and updating the Kit contract/declaration.
+
+### Verification boundary
+
+XML parsing and checks for duplicate/missing/empty keys, replacement/directional
+control characters, exact positional arguments, ten paragraphs, 1/5/15-minute
+delays and alignment with Kit More labels passed for all 18 sets. The declared
+demo language inventory matches the Kit contract. The generated debug Android
+locale configuration contains all 18 languages, and generated BuildConfig has
+the same inventory in tag order. Strict `:demo:assembleDebug :demo:lintDebug`
+completed successfully; lint reports 0 errors and one existing launcher-folder
+`ObsoleteSdkInt` warning. Resource checks do not establish linguistic quality.
+
+After resolving device/activity startup failures and narrowing the new test's
+locator to radio rows, direct AndroidJUnitRunner instrumentation on the connected
+Samsung SM-A546B / Android 16 completed with `OK (3 tests)`: mixed-script language
+ordering including a newly introduced option and selection after filtering,
+language-search behavior, and unchanged host-defined theme choices. The test APK
+compiled with strict verification. Initial Gradle/device attempts failed before
+Compose hierarchy assertions; the final direct run is the behavioral evidence.
+
+Full all-language rendering,
+truncation, larger-text layouts, RTL presentation and TalkBack pronunciation were
+not reviewed on device. No native-speaker or human linguistic sign-off is claimed.

@@ -116,6 +116,14 @@ Hosts still choose and persist their application language with official locale
 APIs. Host language selection must not advertise languages absent from its declared
 supported set.
 
+The demo translates its own content into all 18 Kit languages. Its Gradle
+`androidKitSupportedLocales` declaration also generates the packaged locale
+filters and `BuildConfig.SUPPORTED_LANGUAGE_TAGS`, which both demo language
+selectors use in language-tag order. Native labels include any script or region
+from the tag. Add complete demo resources when enabling another language; do not
+maintain a separate Kotlin language list. Android's generated locale configuration
+continues to expose the packaged languages to system settings.
+
 Canonical text lives in `compose/src/main/res/values`, with matching resources in
 each supported locale directory. Indonesian uses `values-in` and the `in` resource
 filter because Android converts the standard `id` language tag to `in` for resource
