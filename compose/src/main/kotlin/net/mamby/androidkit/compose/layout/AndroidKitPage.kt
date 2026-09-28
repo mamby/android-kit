@@ -3,12 +3,12 @@ package net.mamby.androidkit.compose.layout
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.MutableWindowInsets
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -17,13 +17,14 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
@@ -72,8 +73,6 @@ public fun AndroidKitPage(
     val dimensions = AndroidKitThemeTokens.dimensions
     val measuredContentInsets = contentWindowInsets
     val measuredContentPadding = measuredContentInsets.asPaddingValues()
-    val statusBarClearance = measuredContentPadding.calculateTopPadding()
-    val navigationBottomClearance = measuredContentPadding.calculateBottomPadding()
     val hasTitleBar = title != null ||
         onBack != null ||
         actions.any { it.isAndroidKitAction }
@@ -89,12 +88,7 @@ public fun AndroidKitPage(
         floatingActionMargin = floatingActionMargin,
         floatingActionAlignment = floatingActionAlignment,
         floatingActionButton = { RenderFloatingAction(floatingActionButton) },
-    ) { floatingActionHeight ->
-        val floatingActionClearance = if (floatingActionHeight == 0.dp) {
-            0.dp
-        } else {
-            floatingActionHeight + floatingActionMargin
-        }
+    ) { floatingActionPadding ->
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = style.containerColor,
@@ -123,14 +117,15 @@ public fun AndroidKitPage(
                         ),
                 ) {
                     content(
-                        contentPadding.withAdditionalPadding(
+                        contentPadding.withContentClearance(
+                            windowInsetsPadding = measuredContentPadding,
                             additionalTop = if (hasTitleBar) {
                                 dimensions.spaceMedium
                             } else {
-                                statusBarClearance + dimensions.pageTitlelessTopPadding
+                                dimensions.pageTitlelessTopPadding
                             },
-                            additionalBottom = navigationBottomClearance +
-                                floatingActionClearance,
+                            includeTopInset = !hasTitleBar,
+                            floatingActionPadding = floatingActionPadding,
                         ),
                     )
                 }
@@ -139,6 +134,7 @@ public fun AndroidKitPage(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AndroidKitPageLayout(
     contentWindowInsets: WindowInsets,
@@ -146,8 +142,22 @@ private fun AndroidKitPageLayout(
     floatingActionAlignment: Alignment.Horizontal,
     floatingActionButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable (floatingActionHeight: Dp) -> Unit,
+    content: @Composable (floatingActionPadding: PaddingValues) -> Unit,
 ): Unit {
+    val floatingActionInsets = remember { MutableWindowInsets() }
+    // Stable slots and deferred padding reads keep animated viewport constraints out of
+    // composition. Clearance updates during measurement, before the body is measured.
+    val floatingActionSlot: @Composable () -> Unit = {
+        Box(
+            modifier = Modifier.consumeWindowInsets(
+                contentWindowInsets.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom),
+            ),
+            contentAlignment = Alignment.Center,
+        ) {
+            floatingActionButton()
+        }
+    }
+    val contentSlot: @Composable () -> Unit = { content(floatingActionInsets.asPaddingValues()) }
     SubcomposeLayout(modifier = modifier) { constraints ->
         val margin = floatingActionMargin.roundToPx()
         val leftInset = contentWindowInsets.getLeft(this, layoutDirection)
@@ -161,29 +171,21 @@ private fun AndroidKitPageLayout(
             maxHeight = (constraints.maxHeight - bottomInset - margin * 2)
                 .coerceAtLeast(0),
         )
-        val floatingActionPlaceables = subcompose(AndroidKitPageSlot.FloatingAction) {
-            Box(
-                modifier = Modifier.consumeWindowInsets(
-                    contentWindowInsets.only(
-                        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
-                    ),
-                ),
-                contentAlignment = Alignment.Center,
-            ) {
-                floatingActionButton()
-            }
-        }.map { measurable -> measurable.measure(floatingActionConstraints) }
-        val floatingActionHeight = floatingActionPlaceables.maxOfOrNull { it.height } ?: 0
-        val contentPlaceables = subcompose(AndroidKitPageSlot.Content) {
-            content(floatingActionHeight.toDp())
-        }.map { measurable -> measurable.measure(constraints) }
+        val floatingActionPlaceables = subcompose(AndroidKitPageSlot.FloatingAction, floatingActionSlot)
+            .map { measurable -> measurable.measure(floatingActionConstraints) }
+        val measuredFloatingActionHeight = floatingActionPlaceables.maxOfOrNull { it.height } ?: 0
+        floatingActionInsets.insets = WindowInsets(
+            bottom = if (measuredFloatingActionHeight == 0) 0 else measuredFloatingActionHeight + margin,
+        )
+        val contentPlaceables = subcompose(AndroidKitPageSlot.Content, contentSlot)
+            .map { measurable -> measurable.measure(constraints) }
         val width = maxOf(
             contentPlaceables.maxOfOrNull { it.width } ?: 0,
             floatingActionPlaceables.maxOfOrNull { it.width } ?: 0,
         ).coerceIn(constraints.minWidth, constraints.maxWidth)
         val height = maxOf(
             contentPlaceables.maxOfOrNull { it.height } ?: 0,
-            floatingActionHeight,
+            measuredFloatingActionHeight,
         ).coerceIn(constraints.minHeight, constraints.maxHeight)
         val availableFloatingActionWidth =
             (width - leftInset - rightInset - margin * 2).coerceAtLeast(0)
@@ -209,15 +211,24 @@ private enum class AndroidKitPageSlot {
 }
 
 @Composable
-private fun PaddingValues.withAdditionalPadding(
+private fun PaddingValues.withContentClearance(
+    windowInsetsPadding: PaddingValues,
     additionalTop: Dp,
-    additionalBottom: Dp,
-): PaddingValues {
-    val layoutDirection = LocalLayoutDirection.current
-    return PaddingValues(
-        start = calculateStartPadding(layoutDirection),
-        top = calculateTopPadding() + additionalTop,
-        end = calculateEndPadding(layoutDirection),
-        bottom = calculateBottomPadding() + additionalBottom,
-    )
+    includeTopInset: Boolean,
+    floatingActionPadding: PaddingValues,
+): PaddingValues = remember(this, windowInsetsPadding, additionalTop, includeTopInset, floatingActionPadding) {
+    val scaffoldPadding = this
+    object : PaddingValues {
+        override fun calculateLeftPadding(layoutDirection: LayoutDirection): Dp =
+            scaffoldPadding.calculateLeftPadding(layoutDirection)
+
+        override fun calculateTopPadding(): Dp = scaffoldPadding.calculateTopPadding() +
+            additionalTop + if (includeTopInset) windowInsetsPadding.calculateTopPadding() else 0.dp
+
+        override fun calculateRightPadding(layoutDirection: LayoutDirection): Dp =
+            scaffoldPadding.calculateRightPadding(layoutDirection)
+
+        override fun calculateBottomPadding(): Dp = scaffoldPadding.calculateBottomPadding() +
+            windowInsetsPadding.calculateBottomPadding() + floatingActionPadding.calculateBottomPadding()
+    }
 }

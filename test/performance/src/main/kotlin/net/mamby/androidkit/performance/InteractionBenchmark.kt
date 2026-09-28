@@ -36,6 +36,16 @@ class InteractionBenchmark {
         setupBlock = { launchCatalog() },
         measureBlock = { openAndDismissBottomSheet() },
     )
+
+    @Test
+    fun keyboardOpeningAndClosing() = benchmarkRule.measureRepeated(
+        packageName = DemoPackageName,
+        metrics = listOf(FrameTimingMetric()),
+        compilationMode = CompilationMode.Full(),
+        iterations = InteractionIterations,
+        setupBlock = { openSearchPage() },
+        measureBlock = { repeat(3) { toggleSearchKeyboard() } },
+    )
 }
 
 @OptIn(ExperimentalMetricApi::class)

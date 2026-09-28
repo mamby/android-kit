@@ -7,8 +7,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.MutableWindowInsets
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -201,30 +202,28 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CompactNavigationLayout(
     navigation: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ): Unit {
+    val navigationInsets = remember { MutableWindowInsets() }
+    val contentSlot: @Composable () -> Unit = {
+        CompositionLocalProvider(LocalAndroidKitFloatingNavigationInsets provides navigationInsets) {
+            content()
+        }
+    }
     SubcomposeLayout(modifier = modifier) { constraints ->
         val navigationPlaceables = subcompose(CompactNavigationSlot.Navigation, navigation)
             .map { measurable ->
                 measurable.measure(constraints.copy(minHeight = 0))
             }
         val navigationHeight = navigationPlaceables.maxOfOrNull { it.height } ?: 0
-        val contentPlaceables = subcompose(CompactNavigationSlot.Content) {
-            CompositionLocalProvider(
-                LocalAndroidKitFloatingNavigationInsets provides WindowInsets(
-                    left = 0,
-                    top = 0,
-                    right = 0,
-                    bottom = navigationHeight,
-                ),
-            ) {
-                content()
-            }
-        }.map { measurable -> measurable.measure(constraints) }
+        navigationInsets.insets = WindowInsets(left = 0, top = 0, right = 0, bottom = navigationHeight)
+        val contentPlaceables = subcompose(CompactNavigationSlot.Content, contentSlot)
+            .map { measurable -> measurable.measure(constraints) }
 
         layout(constraints.maxWidth, constraints.maxHeight) {
             contentPlaceables.forEach { it.placeRelative(0, 0) }
@@ -282,7 +281,7 @@ private fun <Key : Any> FloatingNavigationBar(
                     detectTapGestures(onTap = {})
                 },
         )
-        BoxWithConstraints(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(
@@ -293,11 +292,9 @@ private fun <Key : Any> FloatingNavigationBar(
                 .padding(dimensions.floatingNavigationMargin),
             contentAlignment = Alignment.Center,
         ) {
-            val barMaxWidth = maxWidth.coerceAtMost(dimensions.floatingNavigationMaxWidth)
-
             FloatingSurface(
                 modifier = Modifier
-                    .widthIn(max = barMaxWidth)
+                    .widthIn(max = dimensions.floatingNavigationMaxWidth)
                     .testTag(CompactNavigationBarTestTag),
                 shape = style.barShape,
                 containerColor = Color.Transparent,

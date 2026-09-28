@@ -37,6 +37,7 @@ google-services.json
 
 # Android Profiling
 *.hprof
+/trace_processor
 
 # Local screenshot-test reference images
 test/src/screenshotTestDebug/reference/

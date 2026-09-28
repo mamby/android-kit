@@ -134,7 +134,6 @@ internal fun AndroidKitFloatingSearchBox(
     LaunchedEffect(Unit) {
         if (requestFocusOnOpen && enabled) {
             focusRequester.requestFocus()
-            keyboard?.show()
         }
     }
     LaunchedEffect(imeVisible) {

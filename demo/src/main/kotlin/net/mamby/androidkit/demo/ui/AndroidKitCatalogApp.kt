@@ -145,16 +145,8 @@ internal fun AndroidKitCatalogApp(
             navigation.goBack()
         }
 
-        AndroidKitFloatingNavigation(
-            items = navigationItems,
-            selectedKey = navigation.selectedRoot,
-            onSelected = navigation::openRoot,
-            modifier = Modifier.semantics { testTagsAsResourceId = true },
-            compactVisibleDestinationCount =
-                navigationDemoConfiguration.visibleDestinationCount,
-            showCompactLabels = navigationDemoConfiguration.showLabels,
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
+        val content: @Composable () -> Unit = {
+            Box(modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
                 NavDisplay(
                     backStack = navigation.currentBackStack,
                     onBack = navigation::goBack,
@@ -218,6 +210,20 @@ internal fun AndroidKitCatalogApp(
                     },
                 )
             }
+        }
+
+        if (navigation.isAtRoot) {
+            AndroidKitFloatingNavigation(
+                items = navigationItems,
+                selectedKey = navigation.selectedRoot,
+                onSelected = navigation::openRoot,
+                compactVisibleDestinationCount =
+                    navigationDemoConfiguration.visibleDestinationCount,
+                showCompactLabels = navigationDemoConfiguration.showLabels,
+                content = content,
+            )
+        } else {
+            content()
         }
     }
 }
