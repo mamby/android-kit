@@ -53,6 +53,10 @@ escape hatch. Migrate consumers and the demo with the library.
   present. See [settings.md](settings.md).
 - Cards: replace `header` and `headerSupportingContent` with `title` and
   `supportingText`. Explicit typography and supporting color belong in card style.
+  `AndroidKitSectionCard` provides built-in informational, action and multiline
+  entries plus custom composable entry bodies. Settings uses the same custom
+  entry API; the surrounding card remains sealed.
+  See [section cards](section-card.md).
 - Floating controls: supply `AndroidKitFloatingAction.Button(icon, label, onClick)`
   or `AndroidKitFloatingAction.Bar { ... }` to page/sheet floating-action parameters.
   `AndroidKitFloatingAction.Search` adds controlled floating search with device
@@ -80,6 +84,13 @@ persistence, application-content localization, navigation decisions, and applica
 state belong to consumers. Kit-owned vocabulary is translated only in Kit and is
 not overridable. Consumers must apply the [localization build gate](localization.md).
 Existing edge-to-edge, scroll-padding, IME, and dismissal contracts remain.
+
+`AndroidKitSectionCard` explicitly opens only entry bodies through
+`AndroidKitSectionCardEntry.Custom(key) { ... }`. Its title, description, card
+chrome and dividers stay Kit-owned. Custom bodies inherit Kit entry typography
+and card content color; hosts own their body layout, controls and accessibility.
+Settings uses this same entry mechanism. This exception does not open rendering
+slots on other sealed components.
 
 ```kotlin
 val addAction = AndroidKitFloatingAction.Button(

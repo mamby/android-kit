@@ -304,6 +304,7 @@ private fun StandardComponentDemo(
                     )) {
                         Text(stringResource(variation.titleResource), style = MaterialTheme.typography.titleMedium)
                         when (demo.component) {
+                            ComponentId.AndroidKitSectionCard -> SectionCardDemo()
                             ComponentId.AndroidKitCard -> AndroidKitCardDemo(
                                 demo = variation,
                                 actionCount = actionCount,

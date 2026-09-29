@@ -1,6 +1,5 @@
 package net.mamby.androidkit.compose.form
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
@@ -16,10 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderColors
@@ -46,6 +42,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import net.mamby.androidkit.compose.presentation.SectionCardEntryContent
+import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitSettingSectionStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
@@ -138,55 +137,21 @@ internal fun SettingsSection(
     ),
     onEntryAction: ((SettingsEntryDefinition) -> Unit)? = null,
 ): Unit {
-    if (entries.isEmpty()) return
-
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(sectionSpacing),
-    ) {
-        label?.let {
-            Text(
-                text = it,
-                modifier = Modifier.padding(sectionTextPadding),
-                style = style.sectionLabelTextStyle,
-                color = style.secondaryContentColor,
-            )
-        }
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = style.shape,
-            colors = CardDefaults.cardColors(
-                containerColor = style.containerColor,
-                contentColor = style.contentColor,
-            ),
-            border = BorderStroke(style.borderWidth, style.borderColor),
-        ) {
-            Column {
-                entries.forEachIndexed { index, entry ->
-                    if (index > 0) {
-                        HorizontalDivider(
-                            modifier = Modifier.padding(dividerPadding),
-                            color = style.dividerColor,
-                        )
-                    }
-                    SettingsEntry(
-                        entry = entry,
-                        style = style,
-                        contentPadding = entryContentPadding,
-                        onEntryAction = onEntryAction,
-                    )
-                }
+    AndroidKitSectionCard(
+        entries = entries.map { entry ->
+            AndroidKitSectionCardEntry.Custom(entry.key) {
+                SettingsEntry(entry, style, entryContentPadding, onEntryAction)
             }
-        }
-        description?.let {
-            Text(
-                text = it,
-                modifier = Modifier.padding(sectionTextPadding),
-                style = style.descriptionTextStyle,
-                color = style.secondaryContentColor,
-            )
-        }
-    }
+        },
+        modifier = modifier,
+        title = label,
+        description = description,
+        style = style,
+        sectionSpacing = sectionSpacing,
+        sectionTextPadding = sectionTextPadding,
+        dividerPadding = dividerPadding,
+        entryContentPadding = entryContentPadding,
+    )
 }
 
 internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
@@ -403,7 +368,7 @@ private fun SettingsEntry(
     is SettingsEntryDefinition.Button -> SettingsButtonEntry(entry, style, contentPadding, onEntryAction)
     is SettingsEntryDefinition.Slider -> SettingsSliderEntry(entry, style, contentPadding, onEntryAction)
     is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry, style, contentPadding, onEntryAction)
-    is SettingsEntryDefinition.CopyableInfo -> SettingsEntryContent(
+    is SettingsEntryDefinition.CopyableInfo -> SectionCardEntryContent(
         label = entry.label,
         supportingText = entry.supportingText,
         icon = entry.icon,
@@ -424,7 +389,7 @@ private fun SettingsEntry(
             tint = style.secondaryContentColor,
         )
     }
-    is SettingsEntryDefinition.Info -> SettingsEntryContent(
+    is SettingsEntryDefinition.Info -> SectionCardEntryContent(
         label = entry.label, supportingText = entry.supportingText, icon = entry.icon,
         modifier = entry.modifier.fillMaxWidth()
             .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget),
@@ -443,7 +408,7 @@ private fun SettingsButtonEntry(
     onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    SettingsEntryContent(
+    SectionCardEntryContent(
         label = entry.label,
         supportingText = entry.supportingText,
         icon = entry.icon,
@@ -471,7 +436,7 @@ private fun SettingsToggleEntry(
     onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
-    SettingsEntryContent(
+    SectionCardEntryContent(
         label = entry.label,
         supportingText = entry.supportingText,
         icon = entry.icon,
@@ -630,47 +595,5 @@ private fun SettingsSliderEntry(
                 Text(entry.maximumLabel, style = style.supportingTextStyle, color = style.secondaryContentColor)
             }
         }
-    }
-}
-
-@Composable
-private fun SettingsEntryContent(
-    label: String,
-    supportingText: String?,
-    icon: ImageVector?,
-    modifier: Modifier,
-    style: AndroidKitSettingSectionStyle,
-    contentPadding: PaddingValues,
-    trailingContent: @Composable () -> Unit,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    Row(
-        modifier = modifier.padding(contentPadding),
-        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        icon?.let {
-            Icon(
-                imageVector = it,
-                contentDescription = null,
-            )
-        }
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
-        ) {
-            Text(
-                text = label,
-                style = style.entryLabelTextStyle,
-            )
-            supportingText?.let {
-                Text(
-                    text = it,
-                    style = style.supportingTextStyle,
-                    color = style.secondaryContentColor,
-                )
-            }
-        }
-        trailingContent()
     }
 }

@@ -11,6 +11,7 @@ enum class ComponentId(
     AndroidKitPage("AndroidKitPage"),
     AndroidKitFloatingActionButton("AndroidKitFloatingActionButton"),
     AndroidKitCard("AndroidKitCard"),
+    AndroidKitSectionCard("AndroidKitSectionCard"),
     AndroidKitBottomSheet("AndroidKitBottomSheet"),
     AndroidKitFloatingActionBar("AndroidKitFloatingActionBar"),
     AndroidKitFloatingSearchBox("AndroidKitFloatingSearchBox"),
@@ -75,6 +76,7 @@ enum class ComponentDemo(
         R.string.variation_bottom_end,
     ),
 
+    AndroidKitSectionCardInteractive(ComponentId.AndroidKitSectionCard, R.string.variation_interactive),
     AndroidKitCardBasic(ComponentId.AndroidKitCard, R.string.variation_basic),
     AndroidKitCardSupportingText(ComponentId.AndroidKitCard, R.string.variation_supporting_text),
     AndroidKitCardRichContent(ComponentId.AndroidKitCard, R.string.variation_rich_content),

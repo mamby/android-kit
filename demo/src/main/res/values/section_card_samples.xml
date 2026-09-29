@@ -1,0 +1,8 @@
+<resources>
+    <!-- Fixed fictional host data for layout inspection; UI chrome uses existing localized resources. -->
+    <string name="section_card_sample_name" translatable="false">Alex Morgan</string>
+    <string name="section_card_sample_email" translatable="false">alex@example.com</string>
+    <string name="section_card_sample_other_email" translatable="false">alex.morgan@example.org</string>
+    <string name="section_card_sample_address" translatable="false">42 Example Street\nApartment 5\nExample City</string>
+    <string name="section_card_sample_notes" translatable="false">Notes: Ask about the next design review.\n\nBring the annotated draft and allow extra time to discuss the accessibility feedback, including keyboard navigation and larger text.</string>
+</resources>
