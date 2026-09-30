@@ -25,6 +25,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,6 +46,8 @@ private const val MaximumRecentSearches = 10
 
 /**
  * A local search page with Kit-owned matching, chrome and recents, and a host-owned result body.
+ * [searchMode] defaults to live matching. OnSubmit keeps the last submitted results while editing;
+ * clearing resets results, and choosing history only fills the draft until IME submission.
  * Hosts own [query], [content], callbacks, navigation and persistence.
  * Item keys must be unique across the page; items sharing a group key must share its title.
  * Recent queries are recorded on IME submission or a result action, never while typing.
@@ -64,6 +71,7 @@ public fun <T> AndroidKitSearchPage(
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
     voiceInputEnabled: Boolean = true,
+    searchMode: AndroidKitSearchMode = AndroidKitSearchMode.Live,
     content: LazyListScope.(matches: List<AndroidKitSearchItem<T>>) -> Unit,
 ): Unit {
     val itemSnapshot = items.toList()
@@ -74,11 +82,25 @@ public fun <T> AndroidKitSearchPage(
         }) { "Search items sharing a group key must share its title." }
         itemSnapshot
     }
-    val matches = remember(validatedItems, query) { searchItems(validatedItems, query) }
+    var submittedQuery by rememberSaveable(searchMode) { mutableStateOf("") }
+    LaunchedEffect(query.isBlank()) {
+        if (query.isBlank()) submittedQuery = ""
+    }
+    val resultsQuery = when (searchMode) {
+        AndroidKitSearchMode.Live -> query
+        AndroidKitSearchMode.OnSubmit -> submittedQuery.takeUnless { query.isBlank() }.orEmpty()
+    }
+    val matches = remember(validatedItems, resultsQuery) { searchItems(validatedItems, resultsQuery) }
     val strings = AndroidKitThemeTokens.strings
     AndroidKitSearchPage(
         query = query,
-        onQueryChange = onQueryChange,
+        onQueryChange = {
+            if (it.isBlank()) submittedQuery = ""
+            onQueryChange(it)
+        },
+        resultsQuery = resultsQuery,
+        searchMode = searchMode,
+        onSearch = { submittedQuery = it },
         recentQueries = recentQueries,
         onRecentQueriesChange = onRecentQueriesChange,
         title = strings.search,
@@ -131,11 +153,14 @@ internal fun AndroidKitSearchPage(
     onBack: (() -> Unit)?,
     listState: LazyListState,
     voiceInputEnabled: Boolean = true,
+    resultsQuery: String = query,
+    searchMode: AndroidKitSearchMode = AndroidKitSearchMode.Live,
+    onSearch: (String) -> Unit = {},
     results: LazyListScope.(recordRecent: () -> Unit) -> Unit,
 ): Unit {
     val recents = recentQueries.sanitizedRecentSearchQueries()
-    fun recordRecent() {
-        val value = query.trim()
+    fun recordRecent(valueToRecord: String = resultsQuery) {
+        val value = valueToRecord.trim()
         if (value.isEmpty()) return
         val normalized = normalizeSearchText(value)
         onRecentQueriesChange(
@@ -152,7 +177,9 @@ internal fun AndroidKitSearchPage(
         floatingActionButton = AndroidKitFloatingAction.Search(
             query = query,
             onQueryChange = onQueryChange,
-            onSearch = { recordRecent() },
+            onSearch = onSearch,
+            onSubmit = { recordRecent(query) },
+            searchMode = searchMode,
             label = strings.search,
             voiceInputEnabled = voiceInputEnabled,
             requestFocusOnOpen = true,
@@ -162,7 +189,7 @@ internal fun AndroidKitSearchPage(
             modifier = Modifier.fillMaxSize().padding(padding)
                 .padding(horizontal = dimensions.screenPadding),
         ) {
-            if (query.isBlank()) {
+            if (resultsQuery.isBlank()) {
                 RecentSearchHeading(
                     visible = recentQueriesVisible,
                     onVisibilityChange = onRecentQueriesVisibleChange,
@@ -178,15 +205,18 @@ internal fun AndroidKitSearchPage(
                         state = listState,
                         contentPadding = PaddingValues(bottom = dimensions.spaceMedium),
                         verticalArrangement = Arrangement.spacedBy(
-                            if (query.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
+                            if (resultsQuery.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
                         ),
                     ) {
-                        if (query.isBlank() && recentQueriesVisible) {
+                        if (resultsQuery.isBlank() && recentQueriesVisible) {
                             items(recents, key = { recent -> "recent:${normalizeSearchText(recent)}" }) { recent ->
                                 Box(Modifier.animateItem(fadeInSpec = null)) {
                                     RecentSearchRow(
                                         query = recent,
-                                        onSelect = { onQueryChange(recent) },
+                                        onSelect = {
+                                            onQueryChange(recent)
+                                            if (searchMode == AndroidKitSearchMode.Live) onSearch(recent)
+                                        },
                                         onRemove = {
                                             val removed = normalizeSearchText(recent)
                                             onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
@@ -194,14 +224,14 @@ internal fun AndroidKitSearchPage(
                                     )
                                 }
                             }
-                        } else if (query.isNotBlank() && !hasResults) {
+                        } else if (resultsQuery.isNotBlank() && !hasResults) {
                             item(key = "no-matches") { SearchEmptyMessage(noMatchesMessage) }
-                        } else if (query.isNotBlank()) {
+                        } else if (resultsQuery.isNotBlank()) {
                             results { recordRecent() }
                         }
                     }
                 }
-                if (query.isBlank() && (!recentQueriesVisible || recents.isEmpty())) {
+                if (resultsQuery.isBlank() && (!recentQueriesVisible || recents.isEmpty())) {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Column(
                             modifier = Modifier.verticalScroll(rememberScrollState()),

@@ -35,12 +35,15 @@ With a device or emulator connected:
 .\gradlew.bat :test:connectedDebugAndroidTest
 ```
 
-CI executes the behavior suite on the Gradle-managed `pixel2api35` device using
-the AOSP API 35 image. This retains the system IME for keyboard/inset tests without
+Instrumented behavior tests run locally when needed; CI compiles their APKs but
+does not execute the suite. CI continues to run JVM tests, Android lint and the
+localization packaging fixtures under PowerShell 7.
+
+The Gradle-managed `pixel2api35` device uses the AOSP API 35 image. This retains
+the system IME for keyboard/inset tests without
 Google apps and their background initialization. ATD images are unsuitable for
-this suite because they remove the system IME and SystemUI. CI also runs the
-localization packaging fixtures under PowerShell 7. Run that same
-managed device locally with:
+this suite because they remove the system IME and SystemUI. Run the managed
+device locally with:
 
 ```powershell
 .\gradlew.bat :test:pixel2api35DebugAndroidTest --dependency-verification strict

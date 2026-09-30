@@ -22,8 +22,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -44,6 +46,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.focus.FocusRequester
@@ -66,9 +69,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.error
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltip
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltipAction
@@ -82,7 +85,9 @@ import kotlinx.coroutines.launch
 /**
  * Controlled search input. Hosts own placement, system/IME insets and query persistence.
  * Use AndroidKitFloatingAction.Search for measured placement in Kit pages and sheets.
- * Voice input appends live dictation using the device speech service without submitting.
+ * [searchMode] controls search requests; edits always update input through [onQueryChange].
+ * Live requests include dictation and clear. The IME requests nonblank queries in either mode.
+ * Host-driven query changes and recomposition do not execute searches.
  * Shape, typography, icons and control rendering are Kit-owned; shared theme tokens supply colors.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,6 +99,7 @@ public fun AndroidKitFloatingSearchBox(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     voiceInputEnabled: Boolean = true,
+    searchMode: AndroidKitSearchMode = AndroidKitSearchMode.OnSubmit,
 ): Unit {
     AndroidKitFloatingSearchBox(
         query = query,
@@ -103,6 +109,7 @@ public fun AndroidKitFloatingSearchBox(
         modifier = modifier,
         enabled = enabled,
         voiceInputEnabled = voiceInputEnabled,
+        searchMode = searchMode,
     )
 }
 
@@ -117,6 +124,8 @@ internal fun AndroidKitFloatingSearchBox(
     enabled: Boolean = true,
     voiceInputEnabled: Boolean = true,
     requestFocusOnOpen: Boolean = false,
+    searchMode: AndroidKitSearchMode = AndroidKitSearchMode.OnSubmit,
+    onSubmit: (() -> Unit)? = null,
 ): Unit {
     val strings = AndroidKitThemeTokens.strings
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -150,15 +159,19 @@ internal fun AndroidKitFloatingSearchBox(
             refocusAfterClear = false
         }
     }
-    var fieldValue by remember { mutableStateOf(TextFieldValue(query, TextRange(query.length))) }
-    val displayedValue = if (fieldValue.text == query) fieldValue
-        else TextFieldValue(query, TextRange(query.length))
+    val fieldState = rememberTextFieldState(initialText = query, initialSelection = TextRange(query.length))
+    LaunchedEffect(query) {
+        if (fieldState.text.toString() != query) fieldState.setTextAndPlaceCursorAtEnd(query)
+    }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val factory = LocalSearchSpeechInputFactory.current
     val currentEnabled by rememberUpdatedState(enabled && voiceInputEnabled)
     val currentQuery by rememberUpdatedState(query)
-    val currentOnQueryChange by rememberUpdatedState(onQueryChange)
+    val currentOnQueryChange by rememberUpdatedState<(String) -> Unit>({ value ->
+        onQueryChange(value)
+        if (searchMode == AndroidKitSearchMode.Live) onSearch(value)
+    })
     var permissionPending by remember { mutableStateOf(false) }
     val tooltipState = rememberTooltipState(isPersistent = true)
     var errorPresentation by remember { mutableIntStateOf(0) }
@@ -203,13 +216,24 @@ internal fun AndroidKitFloatingSearchBox(
         }
     }
     SideEffect {
-        if (fieldValue.text != query) fieldValue = displayedValue
         if (!currentEnabled) {
             permissionPending = false
             dictation.cancel()
         } else dictation.hostQueryChanged(query)
     }
     BackHandler(enabled = dictation.active) { dictation.cancel() }
+    LaunchedEffect(fieldState) {
+        snapshotFlow { fieldState.text.toString() }.collect { text ->
+            // Host updates, clear and dictation already own their query/search callbacks.
+            if (text != currentQuery) {
+                dictation.cancel()
+                if (dictation.error != DictationError.Permission) dictation.clearError()
+                tooltipState.dismiss()
+                permissionPending = false
+                currentOnQueryChange(text)
+            }
+        }
+    }
 
     val speechStatus = when (dictation.phase) {
         DictationPhase.Starting -> strings.voiceStarting
@@ -306,17 +330,7 @@ internal fun AndroidKitFloatingSearchBox(
                     }
                 }
             } else TextField(
-                value = displayedValue,
-                onValueChange = {
-                    fieldValue = it
-                    if (it.text != query) {
-                        dictation.cancel()
-                        if (dictation.error != DictationError.Permission) dictation.clearError()
-                        tooltipState.dismiss()
-                        permissionPending = false
-                        onQueryChange(it.text)
-                    }
-                },
+                state = fieldState,
                 modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
                     .onFocusChanged {
                         fieldFocused = it.isFocused
@@ -327,11 +341,18 @@ internal fun AndroidKitFloatingSearchBox(
                         if (tooltipState.isVisible && errorMessage != null) error(errorMessage)
                     },
                 enabled = enabled,
-                minLines = 1,
-                maxLines = 3,
+                lineLimits = TextFieldLineLimits.SingleLine,
                 textStyle = AndroidKitThemeTokens.typography.bodyLarge,
                 shape = shape,
-                placeholder = { Text(label) },
+                contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(),
+                placeholder = {
+                    Text(
+                        text = label,
+                        style = AndroidKitThemeTokens.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
                 leadingIcon = {
                     Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))
                 },
@@ -345,7 +366,7 @@ internal fun AndroidKitFloatingSearchBox(
                                     if (dictation.error != DictationError.Permission) dictation.clearError()
                                     tooltipState.dismiss()
                                     permissionPending = false
-                                    onQueryChange("")
+                                    currentOnQueryChange("")
                                     preserveFocusAfterClear = true
                                     refocusAfterClear = true
                                 },
@@ -382,14 +403,15 @@ internal fun AndroidKitFloatingSearchBox(
                     }
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = {
+                onKeyboardAction = {
                     if (enabled && query.isNotBlank()) {
                         dictation.cancel()
                         permissionPending = false
                         keyboard?.hide()
                         onSearch(query)
+                        onSubmit?.invoke()
                     }
-                }),
+                },
                 colors = TextFieldDefaults.colors(
                     cursorColor = if (imeVisible) AndroidKitThemeTokens.colorScheme.primary else Color.Transparent,
                     focusedTextColor = visuals.contentColor,

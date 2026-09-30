@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.form.AndroidKitSearchGroup
 import net.mamby.androidkit.compose.form.AndroidKitSearchItem
 import net.mamby.androidkit.compose.form.AndroidKitSearchPage
+import net.mamby.androidkit.compose.form.AndroidKitSearchMode
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.ui.ComponentDemo
 import net.mamby.androidkit.demo.ui.ComponentId
@@ -57,6 +58,7 @@ internal fun SearchPageDemoScreen(
         onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
         onBack = listDetailBackAction(onBack),
         modifier = Modifier.testTag("search_page_demo"),
+        searchMode = AndroidKitSearchMode.OnSubmit,
     ) { matches ->
         matches.groupBy { it.group }.forEach { (group, groupItems) ->
             item(key = "group:${group?.key}") {

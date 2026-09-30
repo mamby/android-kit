@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -103,7 +104,7 @@ class FloatingSearchBehaviorTest {
     private var testLifecycleOwner: LifecycleOwner? = null
     private var testAccessibilityManager: AccessibilityManager? = null
 
-    private fun component() {
+    private fun component(adaptive: Boolean = false, label: String = "Search") {
         rule.setContent {
             val base = LocalContext.current
             val context = androidx.compose.runtime.remember {
@@ -125,9 +126,18 @@ class FloatingSearchBehaviorTest {
                 LocalLifecycleOwner provides (testLifecycleOwner ?: LocalLifecycleOwner.current),
                 LocalContext provides context, LocalSearchSpeechInputFactory provides factory) {
                 TestKitTheme {
-                    if (shown) AndroidKitFloatingSearchBox(query, { query = it }, submissions::add,
-                        modifier = Modifier.width(320.dp).testTag("search"),
-                        enabled = enabled, voiceInputEnabled = voiceEnabled)
+                    val content: @Composable () -> Unit = {
+                        if (shown) AndroidKitFloatingSearchBox(query, { query = it }, submissions::add,
+                            label = label, modifier = Modifier.width(320.dp).testTag("search"),
+                            enabled = enabled, voiceInputEnabled = voiceEnabled)
+                    }
+                    if (adaptive) {
+                        DeviceConfigurationOverride(DeviceConfigurationOverride.WindowSize(DpSize(320.dp, 640.dp))) {
+                            DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(1.5f)) {
+                                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl, content = content)
+                            }
+                        }
+                    } else content()
                 }
             }
         }
@@ -160,26 +170,42 @@ class FloatingSearchBehaviorTest {
         rule.onNodeWithContentDescription("Search by voice").assertDoesNotExist()
     }
 
-    @Test fun fieldExpandsToThreeLinesThenScrollsAndShrinksWhenCleared() {
+    @Test fun fieldHeightStaysEqualWhenFocusedEditedAndCleared() = stableInputHeight()
+
+    @Test fun longPlaceholderAndInputKeepEqualHeightInNarrowRtlLargeText() =
+        stableInputHeight(adaptive = true, label = "Search the entire catalog of available components")
+
+    private fun stableInputHeight(adaptive: Boolean = false, label: String = "Search") {
         query = ""
-        component()
-        val oneLine = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
-        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo")
-        val twoLines = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
-        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree")
-        val threeLines = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
-        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree\nfour\nfive\nsix")
-        val sixLines = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
-        assertTrue(twoLines > oneLine)
-        assertTrue(threeLines > twoLines)
-        assertEquals(threeLines, sixLines)
-        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree\nfour\nfive\nsix\nseven\neight\nnine")
-        assertEquals(sixLines, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
-        rule.onNodeWithContentDescription("Search").performTextReplacement("one\ntwo\nthree\nfour\nfive\nsix")
-        rule.onNodeWithContentDescription("Search").performImeAction()
-        rule.runOnIdle { assertEquals(listOf("one\ntwo\nthree\nfour\nfive\nsix"), submissions) }
+        component(adaptive = adaptive, label = label)
+        val field = rule.onNodeWithContentDescription(label)
+        val height = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height
+        fun assertHeight() {
+            assertEquals(height, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
+        }
+        field.performClick()
+        assertHeight()
+        for (text in listOf("a", "A long search query that must scroll horizontally instead of wrapping")) {
+            field.performTextReplacement(text)
+            rule.runOnIdle { assertEquals(text, query) }
+            assertHeight()
+            rule.onNodeWithContentDescription("Clear search").performClick()
+            rule.runOnIdle { assertEquals("", query) }
+            assertHeight()
+        }
+        val externalQuery = "first\nsecond\nthird"
+        rule.runOnIdle { query = externalQuery }
+        assertHeight()
+        field.performImeAction()
+        rule.runOnIdle { assertEquals(listOf(externalQuery), submissions) }
         rule.onNodeWithContentDescription("Clear search").performClick()
-        assertEquals(oneLine, rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.height)
+        assertHeight()
+        rule.runOnIdle { voiceEnabled = false }
+        assertHeight()
+        field.performTextReplacement("a")
+        assertHeight()
+        rule.onNodeWithContentDescription("Clear search").performClick()
+        assertHeight()
     }
 
     @Test fun speechFeedbackAndErrorPopupDoNotChangeFieldHeight() {

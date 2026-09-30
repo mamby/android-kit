@@ -10,6 +10,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionButtonStyle
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarStyle
 import net.mamby.androidkit.compose.form.AndroidKitFloatingSearchBox
+import net.mamby.androidkit.compose.form.AndroidKitSearchMode
 
 /** Data for floating chrome. AndroidKit exclusively renders its controls. */
 public sealed interface AndroidKitFloatingAction {
@@ -22,6 +23,8 @@ public sealed interface AndroidKitFloatingAction {
         public val modifier: Modifier,
         internal val label: String?,
         internal val requestFocusOnOpen: Boolean,
+        public val searchMode: AndroidKitSearchMode,
+        internal val onSubmit: (() -> Unit)?,
     ) : AndroidKitFloatingAction {
         public constructor(
             query: String,
@@ -30,7 +33,8 @@ public sealed interface AndroidKitFloatingAction {
             enabled: Boolean = true,
             voiceInputEnabled: Boolean = true,
             modifier: Modifier = Modifier,
-        ) : this(query, onQueryChange, onSearch, enabled, voiceInputEnabled, modifier, null, false)
+            searchMode: AndroidKitSearchMode = AndroidKitSearchMode.OnSubmit,
+        ) : this(query, onQueryChange, onSearch, enabled, voiceInputEnabled, modifier, null, false, searchMode, null)
 
         internal constructor(
             query: String,
@@ -39,7 +43,9 @@ public sealed interface AndroidKitFloatingAction {
             label: String,
             voiceInputEnabled: Boolean = true,
             requestFocusOnOpen: Boolean = false,
-        ) : this(query, onQueryChange, onSearch, true, voiceInputEnabled, Modifier, label, requestFocusOnOpen)
+            searchMode: AndroidKitSearchMode = AndroidKitSearchMode.OnSubmit,
+            onSubmit: (() -> Unit)? = null,
+        ) : this(query, onQueryChange, onSearch, true, voiceInputEnabled, Modifier, label, requestFocusOnOpen, searchMode, onSubmit)
     }
 
     public class Button private constructor(
@@ -85,6 +91,8 @@ internal fun RenderFloatingAction(action: AndroidKitFloatingAction?) {
             enabled = action.enabled,
             voiceInputEnabled = action.voiceInputEnabled,
             requestFocusOnOpen = action.requestFocusOnOpen,
+            searchMode = action.searchMode,
+            onSubmit = action.onSubmit,
         )
         is AndroidKitFloatingAction.Button -> AndroidKitFloatingActionButton(action)
         is AndroidKitFloatingAction.Bar -> AndroidKitFloatingActionBar(

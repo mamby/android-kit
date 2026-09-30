@@ -3,6 +3,8 @@
 In the demo catalog, open **Components → SearchPage**. Search the component
 catalog by typing or dictation, then open a demo from its result card. The demo
 owns those cards and persists its recent queries separately from Settings search.
+The SearchPage demo uses `OnSubmit`: press the keyboard Search action to show
+matches. The floating-search demo and Settings search retain live matching.
 
 `AndroidKitSearchPage` owns the Search title, floating field, dictation, recent
 searches, empty states, scrolling, and measured page/IME clearance. Hosts own the
@@ -13,6 +15,22 @@ rendering override. Result rows are an intentional host-owned body surface.
 Opening the page focuses the search field and requests the software keyboard.
 This happens once on entry; query, result, and history updates do not refocus the
 field or reopen a dismissed keyboard. Reopening the page requests focus again.
+
+## Search timing
+
+`searchMode` accepts the same `AndroidKitSearchMode.Live` / `OnSubmit` enum as
+the floating search box and floating action. The page defaults to `Live` to
+preserve existing behavior. With `OnSubmit`, input remains a draft until the
+nonblank IME Search action. Before the first submission, history remains visible;
+after submission, the previous results remain visible while editing the next
+query. Result actions record the query that produced those results. Clearing
+resets results and returns to history. Selecting history fills the draft and
+requires submission in `OnSubmit`. The last submitted query survives saved-state
+restoration; switching modes resets that stored query.
+
+This page still matches supplied items locally. The timing option does not add
+a remote-result API. Hosts can already execute remote searches through the
+floating box/action's `onSearch`; fetching and remote result state stay host-owned.
 
 ```kotlin
 val searchItems = records.map { record ->

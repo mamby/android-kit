@@ -50,12 +50,15 @@ AndroidKitBottomSheet(
 Use one host at a time in actual UI. Floating search occupies the existing single
 floating-control position. Apply the host padding to scrollable **content**, not
 the viewport. Keep the page default `applyImePadding = true`. The hosts handle
-keyboard movement and measure the control as its text expands;
+keyboard movement and measure the control's height;
 do not add `imePadding()` to the search box itself. The existing top-pinned
 `AndroidKitSheetSearch` remains available and unchanged.
 
-The field starts at one line, grows to three lines, then scrolls text internally.
-Its rounded corners stay consistent as it grows. During dictation, a softly pulsing
+The field stays on one line and scrolls long input horizontally. The placeholder
+also stays on one line, using the input's typography and an ellipsis when needed.
+Height adapts to font scale without changing when input is entered or cleared.
+The Material 3 state-based text field uses its official no-label content padding.
+During dictation, a softly pulsing
 halo around the leading microphone, localized status, and the internal Close icon
 replace the input in a compact row.
 Error popups do not change the field's measured height. The caret is hidden when
@@ -65,6 +68,17 @@ to dismiss selection handles; tapping the input starts editing again.
 Typing emits query changes immediately. Clear empties the query and focuses the
 field. The IME Search action submits only nonblank queries and hides the keyboard;
 the submitted value is not trimmed or otherwise transformed.
+
+Both `AndroidKitFloatingSearchBox` and `AndroidKitFloatingAction.Search` accept
+`searchMode = AndroidKitSearchMode.Live` or `AndroidKitSearchMode.OnSubmit`.
+Their default is `OnSubmit`, preserving the existing callback contract.
+`onQueryChange` always updates the draft. In `Live`, `onSearch` also receives
+each edit, dictated transcript revision, and clear (including the empty string).
+In `OnSubmit`, only the nonblank IME Search action calls `onSearch`.
+The IME action explicitly requests search in either mode, so a live host may
+receive the same query again. Recomposition, restored input, and external query
+updates never request execution. Hosts own remote execution, debounce,
+cancellation, and handling stale responses; no network work runs inside Kit.
 
 Voice input is enabled by default. Set `voiceInputEnabled = false` to omit the
 microphone. Tapping it requests microphone permission when needed, then starts
@@ -80,7 +94,8 @@ transcript replaces the current dictated suffix; it never appends every partial
 revision. A separating space is inserted when the prefix has no trailing whitespace.
 The final transcript replaces that suffix once more. Subsequent sessions append
 to the updated query. Missing/blank results leave the latest visible text intact.
-The host receives these updates through `onQueryChange`, without `onSearch`.
+The host receives these updates through `onQueryChange`; `Live` also calls
+`onSearch`, while `OnSubmit` waits for the IME Search action.
 The input returns with the updated query when dictation finishes or is cancelled.
 The halo is an activity animation, not a measurement of microphone volume.
 
