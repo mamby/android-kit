@@ -36,7 +36,8 @@ android {
                 create("pixel2api35") {
                     device = "Pixel 2"
                     apiLevel = 35
-                    systemImageSource = "google"
+                    // Platform UI tests need the system IME, but not Google background services.
+                    systemImageSource = "aosp"
                     testedAbi = "x86_64"
                 }
             }

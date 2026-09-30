@@ -18,12 +18,15 @@ import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.ActivityResultRegistryOwner
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -58,6 +61,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.WindowCompat
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
@@ -75,6 +79,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.atomic.AtomicBoolean
 
 class FloatingSearchBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
@@ -447,8 +452,18 @@ class FloatingSearchBehaviorTest {
     @Test fun sheetSupportsNarrowRtlLargeText() = hostGeometry(sheet = true, adaptive = true)
 
     private fun hostGeometry(sheet: Boolean, adaptive: Boolean = false) {
+        rule.activityRule.scenario.onActivity {
+            WindowCompat.enableEdgeToEdge(it.window)
+        }
+        // Wait before rendering: the sheet's dialog takes focus from the activity window.
+        rule.waitUntil("The test window has focus", PlatformWindowTimeoutMillis) {
+            rule.runOnUiThread { rule.activity.hasWindowFocus() }
+        }
         query = "first\nsecond\nthird"
+        val imeVisible = AtomicBoolean()
         rule.setContent {
+            val visible = WindowInsets.isImeVisible
+            SideEffect { imeVisible.set(visible) }
             TestKitTheme {
                 @androidx.compose.runtime.Composable
                 fun Host() {
@@ -496,14 +511,16 @@ class FloatingSearchBehaviorTest {
         if (!adaptive) {
             val closedBottom = rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.bottom
             rule.onNodeWithContentDescription("Search").performClick()
-            rule.waitUntil(5_000) {
-                rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.bottom < closedBottom
+            rule.waitUntil("The IME is visible and the floating search has moved above it", PlatformWindowTimeoutMillis) {
+                imeVisible.get() &&
+                    rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.bottom < closedBottom
             }
             rule.onNodeWithTag("list").performScrollToIndex(50)
             assertClearance()
             pressBack()
-            rule.waitUntil(5_000) {
-                kotlin.math.abs(rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.bottom - closedBottom) < 1f
+            rule.waitUntil("The IME is hidden and the floating search has returned", PlatformWindowTimeoutMillis) {
+                !imeVisible.get() &&
+                    kotlin.math.abs(rule.onNodeWithTag("search").fetchSemanticsNode().boundsInRoot.bottom - closedBottom) < 1f
             }
             rule.onNodeWithContentDescription("Search").assertIsNotFocused()
             rule.onNodeWithContentDescription("Search").performClick().assertIsFocused()
@@ -542,3 +559,6 @@ class FloatingSearchBehaviorTest {
 
 private const val VoiceError = "Voice input is unavailable. You can still type your search."
 private const val PermissionError = "Microphone access is needed for voice input. You can allow it in app settings."
+
+// Window focus and the system IME run on the device's wall clock, not Compose's test clock.
+private const val PlatformWindowTimeoutMillis = 15_000L
