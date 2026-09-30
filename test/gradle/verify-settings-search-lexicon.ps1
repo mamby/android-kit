@@ -36,14 +36,8 @@ $resourceKeys = [ordered]@{
 }
 
 function Normalize([string]$value) {
-    $builder = [System.Text.StringBuilder]::new()
-    foreach ($character in $value.Normalize([Text.NormalizationForm]::FormD).ToCharArray()) {
-        if ([Globalization.CharUnicodeInfo]::GetUnicodeCategory($character) -ne
-            [Globalization.UnicodeCategory]::NonSpacingMark) {
-            [void]$builder.Append($character)
-        }
-    }
-    return ([regex]::Replace($builder.ToString().ToLowerInvariant(), '[^\p{L}\p{N}]+', ' ')).Trim()
+    $withoutMarks = [regex]::Replace($value.Trim().Normalize([Text.NormalizationForm]::FormD), '\p{M}+', '')
+    return ([regex]::Replace($withoutMarks.ToLowerInvariant(), '[^\p{L}\p{N}]+', ' ')).Trim()
 }
 
 $expectedLocales = @($contract.supportedLocales | Sort-Object)

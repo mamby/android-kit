@@ -5,6 +5,8 @@ not carry test-only dependencies or fixtures.
 
 ## Test layers
 
+- `test/src/test` contains device-independent matching and Unicode normalization
+  contract tests, executed by `:test:testDebugUnitTest` and CI.
 - `test/src/androidTest` contains behavior and integration tests for intent
   factories, explicit-locale formatting, Compose state restoration, component
   semantics, compact navigation overflow and independent Navigation 3 stacks.
@@ -18,7 +20,7 @@ not carry test-only dependencies or fixtures.
 
 ## Localization contract build tests
 
-Run `./test/gradle/verify-localization.ps1` from PowerShell. It verifies that asset
+Run `./test/gradle/verify-localization.ps1` from PowerShell 7. It verifies that asset
 merging accepts host-owned content and rejects Kit resource overrides, aliases,
 generated overrides, dependency overrides, unsupported locale resources, locale
 configuration entries, unsupported declared languages, and incompatible language
@@ -32,6 +34,25 @@ With a device or emulator connected:
 ```powershell
 .\gradlew.bat :test:connectedDebugAndroidTest
 ```
+
+CI executes the behavior suite on the Gradle-managed `pixel2api35` device and
+runs the localization packaging fixtures under PowerShell 7. Run that same
+managed device locally with:
+
+```powershell
+.\gradlew.bat :test:pixel2api35DebugAndroidTest --dependency-verification strict
+```
+
+Behavior fixtures use English Kit resources without changing the device's
+language. Dedicated RTL and font-scale overrides remain active. Section-card
+and lock-page interaction checks also run the official Compose accessibility
+checks; these complement manual TalkBack and keyboard verification.
+
+Keep detailed shared search-history behavior in `SearchPageBehaviorTest`;
+Settings tests verify catalog integration and host callbacks. Navigation tests
+cover independent histories, saved-state restoration, reset, and replacement
+guards. No coverage percentage is claimed; unused JaCoCo configuration has been
+removed.
 
 ## Screenshot baselines
 
@@ -52,6 +73,10 @@ information. While a local reference set is available, validate later changes wi
 
 The validation report is generated under
 `test/build/reports/screenshotTest/preview/debug`.
+
+Screenshot comparisons remain local because approved references are not
+committed. CI must not regenerate references to treat current rendering as an
+approved baseline.
 
 Do not update reference images merely to make a failure disappear. First decide
 whether the visual change is an intentional API or design change.

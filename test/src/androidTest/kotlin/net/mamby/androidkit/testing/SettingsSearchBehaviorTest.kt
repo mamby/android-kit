@@ -45,8 +45,6 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchTerms
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
-import net.mamby.androidkit.compose.form.normalizeSettingsSearchText
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
@@ -69,7 +67,7 @@ class SettingsSearchBehaviorTest {
         var page by mutableStateOf("main")
         var searchRequests = 0
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
                     AndroidKitSettingsSearchConfiguration({ searchRequests++ }, emptyList(), {}),
                 ) {
@@ -94,7 +92,7 @@ class SettingsSearchBehaviorTest {
         var contactClicks = 0
         var recents by mutableStateOf(emptyList<String>())
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
                     AndroidKitSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) {
@@ -156,7 +154,7 @@ class SettingsSearchBehaviorTest {
     fun recentQueriesCanBeRemovedIndividuallyOrTogether() {
         var recents by mutableStateOf(listOf("Theme", "Privacy"))
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
                     AndroidKitSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) { main("main", "Settings") }
@@ -172,10 +170,10 @@ class SettingsSearchBehaviorTest {
     }
 
     @Test
-    fun recentQueriesAreSubmittedRestoredDeduplicatedAndCapped() {
-        var recents by mutableStateOf((0 until 10).map { "Old $it" })
+    fun catalogActionsAndSubmissionUpdateHostHistory() {
+        var recents by mutableStateOf(listOf("Earlier"))
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
                     AndroidKitSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) {
@@ -190,24 +188,14 @@ class SettingsSearchBehaviorTest {
         val search = rule.onNodeWithContentDescription("Search")
         search.performTextReplacement("alpha")
         rule.onNodeWithText("Alpha").performClick()
-        search.performTextReplacement("ÁLPHA")
-        rule.onNodeWithText("Alpha").performClick()
         rule.runOnIdle {
-            assertEquals(10, recents.size)
-            assertEquals("ÁLPHA", recents.first())
-            assertEquals(1, recents.count { normalizeSettingsSearchText(it) == "alpha" })
+            assertEquals(listOf("alpha", "Earlier"), recents)
         }
 
         search.performTextReplacement("nothing here")
         search.performImeAction()
         rule.onNodeWithText("No matching settings").assertIsDisplayed()
-        rule.runOnIdle { assertEquals("nothing here", recents.first()) }
-
-        search.performTextReplacement("")
-        val beforeRestore = recents
-        rule.onNodeWithText("nothing here").performClick()
-        search.assertTextEquals("nothing here")
-        rule.runOnIdle { assertEquals(beforeRestore, recents) }
+        rule.runOnIdle { assertEquals(listOf("nothing here", "alpha", "Earlier"), recents) }
     }
 
     @Test
@@ -217,7 +205,7 @@ class SettingsSearchBehaviorTest {
         var opacityCommits = 0
         var showConditional by mutableStateOf(true)
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
                     AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
@@ -287,13 +275,14 @@ class SettingsSearchBehaviorTest {
 
     @Test
     fun versionResultCopiesDirectlyWithoutOpeningAbout() {
+        var aboutRequests = 0
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
                     AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings")
-                    about("about", AndroidKitSettingsAbout("App", "1.2.3"), {})
+                    about("about", AndroidKitSettingsAbout("App", "1.2.3"), { aboutRequests++ })
                 }
                 AndroidKitSettingsSearchPage(catalog)
             }
@@ -304,6 +293,7 @@ class SettingsSearchBehaviorTest {
         rule.runOnIdle {
             val clipboard = rule.activity.getSystemService(ClipboardManager::class.java)
             assertEquals("1.2.3", clipboard.primaryClip?.getItemAt(0)?.text?.toString())
+            assertEquals(0, aboutRequests)
         }
     }
 
@@ -316,7 +306,7 @@ class SettingsSearchBehaviorTest {
             DeviceConfigurationOverride(DeviceConfigurationOverride.WindowSize(DpSize(320.dp, 640.dp))) {
                 DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(1.5f)) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                        AndroidKitTheme {
+                        TestKitTheme {
                             val catalog = androidKitSettingsCatalog(
                                 AndroidKitSettingsSearchConfiguration({}, listOf("Theme"), {}),
                             ) { main("main", "Settings") }

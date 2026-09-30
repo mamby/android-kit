@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.screenshot)
-    jacoco
 }
 
 android {
@@ -32,18 +31,24 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+        managedDevices {
+            localDevices {
+                create("pixel2api35") {
+                    device = "Pixel 2"
+                    apiLevel = 35
+                    systemImageSource = "google"
+                    testedAbi = "x86_64"
+                }
+            }
+        }
     }
 
     experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
-jacoco {
-    toolVersion = "0.8.15"
-}
-
-// Exercise Kit-internal speech state without exposing test hooks in the public API.
+// Exercise internal matching and speech contracts without public test hooks.
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    if (name == "compileDebugAndroidTestKotlin") {
+    if (name == "compileDebugAndroidTestKotlin" || name == "compileDebugUnitTestKotlin") {
         friendPaths.from(project(":compose").tasks.named("bundleLibCompileToJarDebug").map { it.outputs.files })
     }
 }
@@ -71,13 +76,16 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
 
     testImplementation(libs.junit4)
+    testImplementation(composeBom)
 
     androidTestImplementation(libs.junit4)
     androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.compose.ui.test.junit4.accessibility)
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.test.rules)
     androidTestImplementation(libs.test.junit.ext)
     androidTestImplementation(libs.test.espresso.core)
+    androidTestImplementation(libs.appcompat)
 
     debugImplementation(libs.compose.ui.test.manifest)
 

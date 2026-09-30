@@ -17,7 +17,6 @@ import net.mamby.androidkit.compose.action.AndroidKitFloatingToolbarIconAndLabel
 import net.mamby.androidkit.compose.action.AndroidKitFloatingToolbarScope
 import net.mamby.androidkit.compose.action.AndroidKitPageActionToolbar
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -41,7 +40,7 @@ class ActionControlSpacingTest(
         var labelGapPx = 0f
         var moreLabel = ""
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 CompositionLocalProvider(
                     LocalLayoutDirection provides direction,
                     LocalMinimumInteractiveComponentSize provides interactiveSize.dp,

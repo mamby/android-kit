@@ -20,6 +20,9 @@ import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitIconAndLabelAction
 import net.mamby.androidkit.compose.action.AndroidKitTextAction
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
+import net.mamby.androidkit.compose.form.AndroidKitFloatingSearchBox
+import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry
 import androidx.compose.material3.Switch
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.TextButton
@@ -212,6 +215,43 @@ fun androidKitDarkSurfaceOpaque() {
     )
 }
 
+@PreviewTest
+@Preview(name = "Section card", widthDp = 360, heightDp = 640, showBackground = true)
+@Preview(name = "Section card RTL large font", widthDp = 320, heightDp = 900,
+    fontScale = 1.5f, locale = "ar", showBackground = true)
+@Preview(name = "Section card dark", widthDp = 360, heightDp = 640,
+    uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun androidKitSectionCardStates() {
+    AndroidKitTheme {
+        AndroidKitSectionCard(
+            title = "Details",
+            entries = listOf(
+                AndroidKitSectionCardEntry.Info("address", "Address", "42 Example Street, Apartment 5, Example City"),
+                AndroidKitSectionCardEntry.Action("open", "alex@example.org", "Send email", {}),
+                AndroidKitSectionCardEntry.Action("disabled", "Unavailable action", "Unavailable", {}, enabled = false),
+                AndroidKitSectionCardEntry.Multiline("notes", "First line\n\nA longer note that wraps across several lines.", "Notes"),
+            ),
+        )
+    }
+}
+
+@PreviewTest
+@Preview(name = "Search multiline", widthDp = 360, heightDp = 240, showBackground = true)
+@Preview(name = "Search RTL large font", widthDp = 320, heightDp = 360,
+    fontScale = 1.5f, locale = "ar", showBackground = true)
+@Preview(name = "Search dark", widthDp = 360, heightDp = 240,
+    uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun androidKitSearchFieldStates() {
+    AndroidKitTheme {
+        androidx.compose.foundation.layout.Column {
+            AndroidKitFloatingSearchBox("First line\nSecond line\nThird line", {}, {}, voiceInputEnabled = false)
+            AndroidKitFloatingSearchBox("Disabled search", {}, {}, enabled = false, voiceInputEnabled = false)
+        }
+    }
+}
+
 @Composable
 private fun ScreenshotGallery(
     theme: AndroidKitThemeDefinition,
@@ -248,11 +288,10 @@ private fun ScreenshotGallery(
                             AndroidKitCard(title = "Actions") {
                                 TextButton(onClick = {}) { Text("Primary action") }
                                 ListItem(
-                                    headlineContent = { Text("Encrypted backups") },
                                     supportingContent = { Text("Stored on this device") },
                                     leadingContent = { Icon(settingsIcon, contentDescription = null) },
                                     trailingContent = { Switch(checked = true, onCheckedChange = {}) },
-                                )
+                                ) { Text("Encrypted backups") }
                             }
                         }
                         item {

@@ -6,6 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -18,7 +22,6 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsLegalEntry
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
 import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -31,7 +34,7 @@ class SettingsCommunityBehaviorTest {
     fun mainShowsOneAboutDestination() {
         var aboutClicks = 0
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
                     AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
@@ -48,6 +51,7 @@ class SettingsCommunityBehaviorTest {
         assertOrder("Host setting", "About")
         rule.onNodeWithText("Contact, legal and more").assertDoesNotExist()
         scrollTo("About")
+        rule.onAllNodesWithText("About").assertCountEquals(1)
         rule.onNodeWithText("About").performClick()
         rule.runOnIdle { assertEquals(1, aboutClicks) }
         scrollTo("About")
@@ -63,7 +67,7 @@ class SettingsCommunityBehaviorTest {
         var disabledClicks = 0
         val link = AndroidKitSettingsLink(onClick = { builtInClicks++ })
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val about = AndroidKitSettingsAbout(appName = "Android Kit",
                             description = "Reusable Android components.",
                             version = "1.0", privacyPolicy = link, termsOfUse = link,
@@ -92,7 +96,7 @@ class SettingsCommunityBehaviorTest {
         scrollTo("Contributors")
         rule.onNodeWithText("Contributors").performClick()
         scrollTo("Notices")
-        rule.onNodeWithText("Notices").assertIsNotEnabled()
+        rule.onNodeWithText("Notices").assertIsNotEnabled().performTouchInput { click() }
         rule.runOnIdle {
             assertEquals(6, builtInClicks)
             assertEquals(1, additionalClicks)
@@ -107,7 +111,7 @@ class SettingsCommunityBehaviorTest {
         var version by mutableStateOf("1.0")
         val link = AndroidKitSettingsLink(onClick = { clicks++ })
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val about = AndroidKitSettingsAbout(appName = "Android Kit", version = version,
                             contact = link,
                             privacyPolicy = link,
@@ -125,6 +129,7 @@ class SettingsCommunityBehaviorTest {
             }
         }
         rule.onNodeWithText("1.0").assertIsDisplayed()
+        rule.onNodeWithText("   ", useUnmergedTree = true).assertDoesNotExist()
         scrollTo("Privacy policy")
         scrollTo("Terms of use")
         scrollTo("Third-party licenses")

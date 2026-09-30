@@ -43,6 +43,7 @@ import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -70,7 +71,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import net.mamby.androidkit.compose.layout.AndroidKitPage
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -120,7 +120,7 @@ class FloatingSearchBehaviorTest {
                 LocalAccessibilityManager provides (testAccessibilityManager ?: LocalAccessibilityManager.current),
                 LocalLifecycleOwner provides (testLifecycleOwner ?: LocalLifecycleOwner.current),
                 LocalContext provides context, LocalSearchSpeechInputFactory provides factory) {
-                AndroidKitTheme {
+                TestKitTheme {
                     if (shown) AndroidKitFloatingSearchBox(query, { query = it }, submissions::add,
                         modifier = Modifier.width(320.dp).testTag("search"),
                         enabled = enabled, voiceInputEnabled = voiceEnabled)
@@ -450,7 +450,7 @@ class FloatingSearchBehaviorTest {
     private fun hostGeometry(sheet: Boolean, adaptive: Boolean = false) {
         query = "first\nsecond\nthird"
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 @androidx.compose.runtime.Composable
                 fun Host() {
                     val action = AndroidKitFloatingAction.Search(
@@ -487,6 +487,11 @@ class FloatingSearchBehaviorTest {
             val last = rule.onNodeWithText("Item 50").fetchSemanticsNode().boundsInRoot
             assertTrue("Last item ($last) must clear the floating search ($search)", last.bottom <= search.top)
             assertTrue("Search must have visible width", search.width > 0)
+            val window = rule.onAllNodes(isRoot(), useUnmergedTree = true)
+                .fetchSemanticsNodes().maxBy { it.boundsInRoot.height }.boundsInRoot
+            assertTrue("Search must stay inside the viewport: $search, $window",
+                search.left >= window.left && search.right <= window.right &&
+                    search.top >= window.top && search.bottom <= window.bottom)
         }
         assertClearance()
         if (!adaptive) {

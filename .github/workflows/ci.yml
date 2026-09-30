@@ -31,7 +31,44 @@ jobs:
             :demo:assembleDebug \
             :test:assembleDebug \
             :test:assembleDebugAndroidTest \
+            :test:compileDebugScreenshotTestKotlin \
+            :test:testDebugUnitTest \
             :test:performance:assembleBenchmarkRelease
+      - name: Verify localization packaging contracts
+        shell: pwsh
+        run: ./test/gradle/verify-localization.ps1
+
+  behavior:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+      - name: Install Android SDK packages
+        run: |
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-37.0" \
+            "build-tools;37.0.0" \
+            "emulator"
+      - name: Allow the runner to use KVM
+        run: sudo chmod a+rw /dev/kvm
+      - name: Run instrumented behavior tests
+        run: |
+          chmod +x gradlew
+          ./gradlew --dependency-verification strict \
+            -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect \
+            :test:pixel2api35DebugAndroidTest
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: behavior-test-results
+          path: |
+            test/build/reports/androidTests/
+            test/build/outputs/androidTest-results/
 
   lint:
     runs-on: ubuntu-latest

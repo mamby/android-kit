@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
@@ -22,14 +23,18 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.WindowSize
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasScrollAction
+import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.DpSize
@@ -39,7 +44,6 @@ import net.mamby.androidkit.compose.layout.AndroidKitPageAction
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -80,7 +84,7 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitFloatingNavigation(
                         items = navigationItems,
                         selectedKey = selected,
@@ -129,7 +133,7 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme(
+                TestKitTheme(
                     definition = AndroidKitThemes.Light.copy(
                         floatingSurfaceOpacityLevel = opacityLevel,
                     ),
@@ -211,7 +215,7 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
                             AndroidKitFloatingNavigationItem(
@@ -259,12 +263,11 @@ class ComposeBehaviorTest {
     @Test
     fun androidKitPageIncludesMeasuredNavigationAndActionClearance() {
         var showLabels by mutableStateOf(false)
-        var bottomPadding = 0.dp
         composeRule.setContent {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 360.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
                             AndroidKitFloatingNavigationItem(
@@ -284,23 +287,30 @@ class ComposeBehaviorTest {
                     ) {
                         AndroidKitPage(
                             title = "Clearance",
-                            floatingActionButton = AndroidKitFloatingAction.Button(onClick = {}, icon = materialSymbol(R.drawable.ic_symbol_edit), label = "Action"),
+                            floatingActionButton = AndroidKitFloatingAction.Button(
+                                onClick = {}, icon = materialSymbol(R.drawable.ic_symbol_edit), label = "Action",
+                                modifier = Modifier.testTag("clearanceAction"),
+                            ),
                         ) { contentPadding ->
-                            bottomPadding = contentPadding.calculateBottomPadding()
-                            Box(Modifier.fillMaxSize())
+                            LazyColumn(Modifier.fillMaxSize().testTag("clearanceList"), contentPadding = contentPadding) {
+                                items(40) { index -> Text("Clearance item $index", Modifier.height(48.dp)) }
+                            }
                         }
                     }
                 }
             }
         }
 
-        composeRule.waitUntil { bottomPadding > 100.dp }
-        val iconOnlyBottomPadding = bottomPadding
-        composeRule.runOnIdle { showLabels = true }
-        composeRule.waitForIdle()
-
-        assertTrue(iconOnlyBottomPadding > 100.dp)
-        assertTrue(bottomPadding > 100.dp)
+        for (labels in listOf(false, true)) {
+            composeRule.runOnIdle { showLabels = labels }
+            composeRule.onNodeWithTag("clearanceList").performScrollToIndex(39)
+            val last = composeRule.onNodeWithText("Clearance item 39").assertIsDisplayed()
+                .fetchSemanticsNode().boundsInRoot
+            val action = composeRule.onNodeWithTag("clearanceAction").fetchSemanticsNode().boundsInRoot
+            val navigation = composeRule.onNodeWithTag(FloatingNavigationBarTestTag).fetchSemanticsNode().boundsInRoot
+            assertTrue("Last item must clear the floating action, labels=$labels", last.bottom <= action.top)
+            assertTrue("Floating action must clear navigation, labels=$labels", action.bottom <= navigation.top)
+        }
     }
 
     @Test
@@ -309,7 +319,7 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -358,7 +368,7 @@ class ComposeBehaviorTest {
     @Test
     fun immersiveTitleBarTogglesWhenContentConsumesOnlyTheInitialDown() {
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitPage(
                     title = "Immersive title",
                     titleBarImmersiveMode = true,
@@ -385,7 +395,7 @@ class ComposeBehaviorTest {
     fun immersiveTitleBarRemainsVisibleWhenAnActionIsTapped() {
         var actionCount = 0
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitPage(
                     title = "Immersive title",
                     actions = listOf(
@@ -417,7 +427,7 @@ class ComposeBehaviorTest {
     @Test
     fun immersiveTitleBarRemainsVisibleWhileContentScrolls() {
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitPage(
                     title = "Immersive title",
                     titleBarImmersiveMode = true,
@@ -451,7 +461,7 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
                             AndroidKitFloatingNavigationItem(
@@ -504,7 +514,7 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
                             AndroidKitFloatingNavigationItem(
@@ -557,7 +567,7 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(220.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitFloatingNavigation(
                         items = listOf(
                             AndroidKitFloatingNavigationItem(
@@ -603,50 +613,15 @@ class ComposeBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 360.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitFloatingNavigation(
-                        items = listOf(
+                        items = (0 until 30).map { index ->
                             AndroidKitFloatingNavigationItem(
-                                "home",
-                                "Home",
-                                materialSymbol(R.drawable.ic_symbol_home),
-                            ),
-                            AndroidKitFloatingNavigationItem(
-                                "list",
-                                "Lists",
-                                materialSymbol(R.drawable.ic_symbol_list),
-                            ),
-                            AndroidKitFloatingNavigationItem(
-                                "edit",
-                                "Editor",
-                                materialSymbol(R.drawable.ic_symbol_edit),
-                            ),
-                            AndroidKitFloatingNavigationItem(
-                                "one",
-                                "Overflow 1",
-                                materialSymbol(R.drawable.ic_symbol_language),
-                            ),
-                            AndroidKitFloatingNavigationItem(
-                                "two",
-                                "Overflow 2",
-                                materialSymbol(R.drawable.ic_symbol_language),
-                            ),
-                            AndroidKitFloatingNavigationItem(
-                                key = "three",
-                                label = "Overflow 3",
-                                icon = materialSymbol(R.drawable.ic_symbol_language),
-                            ),
-                            AndroidKitFloatingNavigationItem(
-                                "four",
-                                "Overflow 4",
-                                materialSymbol(R.drawable.ic_symbol_language),
-                            ),
-                            AndroidKitFloatingNavigationItem(
-                                key = "settings",
-                                label = "Settings",
-                                icon = materialSymbol(R.drawable.ic_symbol_settings),
-                            ),
-                        ),
+                                key = if (index == 0) "home" else "destination-$index",
+                                label = "Destination $index",
+                                icon = materialSymbol(R.drawable.ic_symbol_home),
+                            )
+                        },
                         selectedKey = selected,
                         onSelected = { selected = it },
                         compactVisibleDestinationCount = 3,
@@ -661,10 +636,13 @@ class ComposeBehaviorTest {
             .onNodeWithContentDescription("More", useUnmergedTree = true)
             .performClick()
 
-        val settingsBounds = composeRule.onNodeWithText("Settings").fetchSemanticsNode().boundsInRoot
-        val firstOverflowBounds = composeRule.onNodeWithText("Overflow 1").fetchSemanticsNode().boundsInRoot
-        assertTrue(firstOverflowBounds.top < settingsBounds.top)
-        composeRule.onNode(hasScrollAction()).assertExists()
+        val first = composeRule.onNodeWithText("Destination 3").fetchSemanticsNode().boundsInRoot
+        val second = composeRule.onNodeWithText("Destination 4").fetchSemanticsNode().boundsInRoot
+        assertTrue(first.top < second.top)
+        composeRule.onNode(hasScrollAction()).performScrollToNode(hasTextExactly("Destination 29"))
+        composeRule.onNodeWithText("Destination 29").assertIsDisplayed().performClick()
+        composeRule.runOnIdle { assertEquals("destination-29", selected) }
+        composeRule.onNodeWithText("Destination 29").assertDoesNotExist()
     }
 }
 

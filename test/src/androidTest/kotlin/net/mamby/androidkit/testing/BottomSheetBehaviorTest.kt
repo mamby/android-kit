@@ -46,7 +46,6 @@ import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetDefaults
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
 import org.junit.Assert.assertEquals
@@ -63,7 +62,7 @@ class BottomSheetBehaviorTest {
         var visible by mutableStateOf(false)
         var dismissCount by mutableIntStateOf(0)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = visible,
                     title = SheetTitle,
@@ -83,11 +82,11 @@ class BottomSheetBehaviorTest {
     }
 
     @Test
-    fun closeReportsDismissalAfterTheSheetIsRemoved() {
+    fun closeRemovesTheSheetAndReportsDismissalOnce() {
         var visible by mutableStateOf(true)
         var dismissCount by mutableIntStateOf(0)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = visible,
                     title = SheetTitle,
@@ -112,7 +111,7 @@ class BottomSheetBehaviorTest {
         var directActionCount by mutableIntStateOf(0)
         var overflowActionCount by mutableIntStateOf(0)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = true,
                     title = SheetTitle,
@@ -156,7 +155,7 @@ class BottomSheetBehaviorTest {
     fun disabledGesturesLockTheCloseAction() {
         var dismissCount by mutableIntStateOf(0)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = true,
                     title = SheetTitle,
@@ -180,7 +179,7 @@ class BottomSheetBehaviorTest {
         var backCount by mutableIntStateOf(0)
         var dismissCount by mutableIntStateOf(0)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = true,
                     title = SheetTitle,
@@ -207,7 +206,7 @@ class BottomSheetBehaviorTest {
         var visible by mutableStateOf(true)
         var dismissCount by mutableIntStateOf(0)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = visible,
                     title = SheetTitle,
@@ -230,7 +229,7 @@ class BottomSheetBehaviorTest {
     @Test
     fun chromelessModeKeepsContentAndRemovesHeaderControls() {
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = true,
                     title = SheetTitle,
@@ -252,7 +251,7 @@ class BottomSheetBehaviorTest {
     fun verticalAndContentManagedModesExposeTheExpectedScrollOwner() {
         var contentManaged by mutableStateOf(false)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = true,
                     title = SheetTitle,
@@ -292,7 +291,7 @@ class BottomSheetBehaviorTest {
     @Test
     fun contentManagedModeKeepsViewportBehindChromeAndItemsClear() {
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = true,
                     title = SheetTitle,
@@ -339,7 +338,7 @@ class BottomSheetBehaviorTest {
             AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel,
         )
         composeRule.setContent {
-            AndroidKitTheme(
+            TestKitTheme(
                 definition = AndroidKitThemes.Light.copy(
                     floatingSurfaceOpacityLevel = opacityLevel,
                 ),
@@ -394,7 +393,7 @@ class BottomSheetBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitBottomSheet(
                         visible = true,
                         title = SheetTitle,
@@ -457,7 +456,7 @@ class BottomSheetBehaviorTest {
         var visible by mutableStateOf(true)
         var dismissCount by mutableIntStateOf(0)
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitBottomSheet(
                     visible = visible,
                     title = SheetTitle,
@@ -503,7 +502,7 @@ class BottomSheetBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitBottomSheet(
                         visible = true,
                         title = SheetTitle,
@@ -545,11 +544,12 @@ class BottomSheetBehaviorTest {
             DeviceConfigurationOverride(
                 DeviceConfigurationOverride.WindowSize(DpSize(360.dp, 800.dp)),
             ) {
-                AndroidKitTheme {
+                TestKitTheme {
                     AndroidKitBottomSheet(
                         visible = true,
                         title = SheetTitle,
                         onDismiss = {},
+                        modifier = Modifier.testTag("clampedSheet"),
                         maxHeightFraction = 2f,
                         scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
                     ) {
@@ -564,12 +564,10 @@ class BottomSheetBehaviorTest {
             }
         }
 
-        val titleTop = composeRule.onNodeWithText(SheetTitle)
-            .fetchSemanticsNode()
-            .boundsInRoot
-            .top
-        val minimumTop = 80.dp.value * composeRule.activity.resources.displayMetrics.density
-        assertTrue(titleTop >= minimumTop)
+        val windowHeight = composeRule.onAllNodes(isRoot(), useUnmergedTree = true)
+            .fetchSemanticsNodes().maxOf { it.boundsInRoot.height }
+        val sheetHeight = composeRule.onNodeWithTag("clampedSheet").fetchSemanticsNode().boundsInRoot.height
+        assertEquals(windowHeight * AndroidKitBottomSheetDefaults.MaximumHeightFraction, sheetHeight, 1f)
         composeRule.onNodeWithTag(SheetContentTag).assertExists()
     }
 }

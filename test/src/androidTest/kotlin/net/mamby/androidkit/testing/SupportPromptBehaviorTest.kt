@@ -1,12 +1,6 @@
 package net.mamby.androidkit.testing
 
 import androidx.activity.ComponentActivity
-import android.content.res.Configuration
-import android.os.LocaleList
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
-import java.util.Locale
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -15,25 +9,9 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitSupportPrompt
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-
-@Composable
-private fun EnglishKitTheme(content: @Composable () -> Unit) {
-    val context = LocalContext.current
-    val currentConfiguration = LocalConfiguration.current
-    val resources = remember(context, currentConfiguration) {
-        val configuration = Configuration(currentConfiguration).apply {
-            setLocales(LocaleList(Locale.ENGLISH))
-        }
-        context.createConfigurationContext(configuration).resources
-    }
-    CompositionLocalProvider(LocalResources provides resources) {
-        AndroidKitTheme(content = content)
-    }
-}
 
 class SupportPromptBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
@@ -44,7 +22,7 @@ class SupportPromptBehaviorTest {
         var donated = 0
         val restoration = StateRestorationTester(rule)
         restoration.setContent {
-            EnglishKitTheme {
+            TestKitTheme {
                 AndroidKitPage(
                     supportPrompt = AndroidKitSupportPrompt(id, { donated++ }, { dismissed++ }),
                     listContent = { item(key = "body") { Text("Body") } },
@@ -67,7 +45,7 @@ class SupportPromptBehaviorTest {
         var visible by mutableStateOf(false)
         lateinit var state: androidx.compose.foundation.lazy.LazyListState
         rule.setContent {
-            EnglishKitTheme {
+            TestKitTheme {
                 state = rememberLazyListState()
                 AndroidKitPage(
                     listState = state,
@@ -98,7 +76,7 @@ class SupportPromptBehaviorTest {
     @Test fun sheetCloseEndsPresentationOnce() {
         var dismissed = 0
         rule.setContent {
-            EnglishKitTheme {
+            TestKitTheme {
                 AndroidKitPage(
                     supportPrompt = AndroidKitSupportPrompt("one", {}, { dismissed++ }),
                     listContent = { item { Text("Body") } },
@@ -115,7 +93,7 @@ class SupportPromptBehaviorTest {
     @Test fun removingConfigurationClosesSheetAndDisabledPromptCannotOpenIt() {
         var prompt by mutableStateOf<AndroidKitSupportPrompt?>(AndroidKitSupportPrompt("one", {}, {}))
         rule.setContent {
-            EnglishKitTheme {
+            TestKitTheme {
                 AndroidKitPage(supportPrompt = prompt, listContent = { item { Text("Body") } })
             }
         }

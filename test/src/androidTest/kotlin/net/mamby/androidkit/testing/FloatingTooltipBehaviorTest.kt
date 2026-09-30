@@ -24,7 +24,6 @@ import androidx.test.espresso.Espresso.pressBack
 import kotlinx.coroutines.launch
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltip
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltipAction
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -39,7 +38,7 @@ class FloatingTooltipBehaviorTest {
 
     private fun content(interactive: Boolean) {
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 expectedPadding = with(LocalDensity.current) { AndroidKitThemeTokens.dimensions.spaceMedium.roundToPx().toFloat() }
                 val state = rememberTooltipState(isPersistent = true)
                 val scope = rememberCoroutineScope()

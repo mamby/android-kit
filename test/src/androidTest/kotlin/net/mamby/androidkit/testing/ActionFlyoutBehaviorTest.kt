@@ -21,7 +21,6 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
 import net.mamby.androidkit.compose.action.AndroidKitFloatingToolbar
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -35,7 +34,7 @@ class ActionFlyoutBehaviorTest {
         var expanded by mutableStateOf(false)
         val events = mutableListOf<String>()
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val deleteIcon = materialSymbol(R.drawable.ic_symbol_delete)
                 Box {
                     Button(onClick = { expanded = true }) { Text("Open") }
@@ -76,7 +75,7 @@ class ActionFlyoutBehaviorTest {
         var expanded by mutableStateOf(true)
         var actionClicked = false
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 Box {
                     Text("Anchor")
                     AndroidKitActionFlyout(
@@ -101,7 +100,7 @@ class ActionFlyoutBehaviorTest {
         var enabled by mutableStateOf(true)
         var dismissCount = 0
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 Box {
                     Text("Anchor")
                     AndroidKitActionFlyout(
@@ -132,7 +131,7 @@ class ActionFlyoutBehaviorTest {
         var expanded by mutableStateOf(true)
         var selected: Int? = null
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 Box {
                     Text("Anchor")
                     AndroidKitActionFlyout(
@@ -161,7 +160,7 @@ class ActionFlyoutBehaviorTest {
         var expanded by mutableStateOf(false)
         val events = mutableListOf<String>()
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 Box {
                     Button(onClick = { expanded = true }) { Text("Open") }
                     AndroidKitActionFlyout(
@@ -198,7 +197,7 @@ class ActionFlyoutBehaviorTest {
         var enabled by mutableStateOf(true)
         var dismissCount = 0
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 Box {
                     Text("Anchor")
                     AndroidKitActionFlyout(
@@ -234,7 +233,7 @@ class ActionFlyoutBehaviorTest {
     fun toolbarFlyoutUsesTheSameActionDismissalBehavior() {
         var actionCount = 0
         composeRule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitFloatingToolbar {
                     flyout {
                         item(label = "Share", onClick = { actionCount += 1 })

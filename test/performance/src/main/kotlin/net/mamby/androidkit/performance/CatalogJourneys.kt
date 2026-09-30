@@ -61,9 +61,11 @@ internal fun MacrobenchmarkScope.openAndDismissBottomSheet() {
 
         onElement { simpleViewResourceName() == OpenBottomSheetTag }.click()
         onElement { simpleViewResourceName() == BottomSheetTag }
-            .onElement { isClickable }
-            .click()
+        device.pressBack()
         activeWindowRoot().waitForStable(requireStableScreenshot = false)
+        check(onElementOrNull(timeoutMs = ElementProbeTimeoutMillis) {
+            simpleViewResourceName() == BottomSheetTag
+        } == null) { "Bottom sheet remained visible after Back dismissal" }
     }
 
     device.pressBack()

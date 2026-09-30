@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry as Entry
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
@@ -69,7 +68,7 @@ class SectionCardPixelParityTest(
                 DeviceConfigurationOverride(DeviceConfigurationOverride.LayoutDirection(direction)) {
                     val palette = if (dark) AndroidKitThemes.Dark else AndroidKitThemes.Light
                     // Health uses Material typography/shapes and 12 dp medium spacing.
-                    AndroidKitTheme(AndroidKitThemeDefinition(
+                    TestKitTheme(AndroidKitThemeDefinition(
                         colorScheme = palette.colorScheme,
                         isDark = dark,
                         typography = Typography(),

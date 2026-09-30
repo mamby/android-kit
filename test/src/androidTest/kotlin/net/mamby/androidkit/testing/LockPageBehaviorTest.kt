@@ -8,11 +8,13 @@ import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import net.mamby.androidkit.compose.layout.AndroidKitLockPage
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -22,11 +24,12 @@ class LockPageBehaviorTest {
 
     @Test
     fun authenticationProgressPreventsDuplicateActionsAndErrorAllowsRetry() {
+        rule.enableAccessibilityChecks()
         var unlocking by mutableStateOf(false)
         var error by mutableStateOf<String?>(null)
         var attempts = 0
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitLockPage(
                     message = "Unlock to continue",
                     unlockLabel = "Unlock",
@@ -37,6 +40,7 @@ class LockPageBehaviorTest {
             }
         }
 
+        rule.onRoot().tryPerformAccessibilityChecks()
         rule.onNodeWithText("Unlock").performClick()
         rule.onNodeWithText("Unlock").assertDoesNotExist()
         rule.onNode(

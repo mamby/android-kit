@@ -30,6 +30,9 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -46,7 +49,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry as Entry
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -64,7 +66,7 @@ class SectionCardBehaviorTest {
         val inheritedTypography = mutableMapOf<String, TextStyle>()
         lateinit var expectedTypography: TextStyle
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val expectedStyle = AndroidKitThemeTokens.settingSectionStyle.entryLabelTextStyle
                 SideEffect { expectedTypography = expectedStyle }
                 val keys = if (reversed) listOf("second", "first") else listOf("first", "second")
@@ -100,8 +102,9 @@ class SectionCardBehaviorTest {
     @Test
     fun actionsExposeLabelsAndDisabledRowsDoNotInvokeCallbacks() {
         var calls = 0
+        rule.enableAccessibilityChecks()
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitSectionCard(listOf(
                     Entry.Action("work", "Work", "Call work", { calls++ }, supportingText = "555 0100"),
                     Entry.Action("home", "Home", "Call home", { calls += 10 }, enabled = false),
@@ -109,6 +112,7 @@ class SectionCardBehaviorTest {
                 ))
             }
         }
+        rule.onRoot().tryPerformAccessibilityChecks()
         rule.onNodeWithText("Work")
             .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
             .assert(SemanticsMatcher("action label and supporting text are retained") {
@@ -134,7 +138,7 @@ class SectionCardBehaviorTest {
         lateinit var inputModeManager: InputModeManager
         rule.setContent {
             inputModeManager = LocalInputModeManager.current
-            AndroidKitTheme {
+            TestKitTheme {
                 val first = Entry.Action("first", "First", "Select first", { selected = "first" })
                 val second = Entry.Action("second", "Second", "Select second", { selected = "second" })
                 val disabled = Entry.Action("disabled", "Disabled", "Unavailable", {}, enabled = false)
@@ -166,7 +170,7 @@ class SectionCardBehaviorTest {
             DeviceConfigurationOverride(DeviceConfigurationOverride.WindowSize(DpSize(320.dp, 640.dp))) {
                 DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(2f)) {
                     DeviceConfigurationOverride(DeviceConfigurationOverride.LayoutDirection(LayoutDirection.Rtl)) {
-                        AndroidKitTheme {
+                        TestKitTheme {
                             Column(Modifier.verticalScroll(rememberScrollState())) {
                                 AndroidKitSectionCard(
                                     title = "Details", description = "End of section",
@@ -206,7 +210,7 @@ class SectionCardBehaviorTest {
         var secondValue by mutableStateOf("second@example.org")
         val selected = mutableListOf<String>()
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val currentSecond = secondValue
                 AndroidKitSectionCard(listOf(
                     Entry.Action("first", "first@example.org", "Select first", { selected += "first@example.org" }),
@@ -227,7 +231,7 @@ class SectionCardBehaviorTest {
     fun contentUpdatesAndEmptyCardRemovesItsChrome() {
         var entries by mutableStateOf<List<Entry>>(listOf(Entry.Info("status", "Status", "Before")))
         rule.setContent {
-            AndroidKitTheme { AndroidKitSectionCard(entries, title = "Title", description = "Description") }
+            TestKitTheme { AndroidKitSectionCard(entries, title = "Title", description = "Description") }
         }
         rule.runOnIdle { entries = listOf(Entry.Info("status", "Status", "After")) }
         rule.onNodeWithText("Before").assertDoesNotExist()

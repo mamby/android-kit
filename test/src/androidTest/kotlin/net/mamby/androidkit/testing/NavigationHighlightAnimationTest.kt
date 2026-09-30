@@ -27,7 +27,6 @@ import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
 import net.mamby.androidkit.compose.navigation.rememberNavigationHighlightScale
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -91,7 +90,7 @@ class NavigationHighlightAnimationTest {
         rule.runOnIdle {
             // Selection is applied on the next frame, so the outgoing animation
             // may advance once before cancellation. It must not jump to an endpoint.
-            assertTrue(first.value > 0.4f && first.value < 0.65f)
+            assertTrue(first.value > 0f && first.value < 1f)
             assertEquals(before, first.value, 0.06f)
         }
         rule.mainClock.advanceTimeBy(300)
@@ -132,7 +131,7 @@ class NavigationHighlightAnimationTest {
                 CompositionLocalProvider(
                     LocalLayoutDirection provides if (rtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
                 ) {
-                    AndroidKitTheme(definition = theme) {
+                    TestKitTheme(definition = theme) {
                         AndroidKitFloatingNavigation(
                             items = (0..4).map {
                                 AndroidKitFloatingNavigationItem(

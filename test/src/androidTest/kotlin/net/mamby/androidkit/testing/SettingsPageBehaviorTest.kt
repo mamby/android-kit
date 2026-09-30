@@ -16,6 +16,8 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
@@ -35,7 +37,6 @@ import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -49,7 +50,7 @@ class SettingsPageBehaviorTest {
         var value by mutableStateOf("Before")
         var visible by mutableStateOf(true)
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     if (visible) {
                         section(key = "status") { info(key = "status", label = "Status", value = value) }
@@ -75,7 +76,7 @@ class SettingsPageBehaviorTest {
         var requested: String? = null
         var locks = 0
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("security", label = "Security") {
                         appLock(AndroidKitAppLockSetting(
@@ -111,7 +112,7 @@ class SettingsPageBehaviorTest {
     fun timeoutDialogBackDismissesWithoutChangingSelection() {
         var requests = 0
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("security", label = "Security") {
                         appLock(AndroidKitAppLockSetting(
@@ -142,7 +143,7 @@ class SettingsPageBehaviorTest {
         var hasTimeout by mutableStateOf(true)
         var hasSection by mutableStateOf(true)
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     if (hasSection) {
                         section("security", label = "Security") {
@@ -188,7 +189,7 @@ class SettingsPageBehaviorTest {
     fun hiddenSectionsLeaveNoGapAndCustomSectionsKeepTheirOrder() {
         var showEmpty by mutableStateOf(true)
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("first") { button("first", "First", {}) }
                     if (showEmpty) {
@@ -200,8 +201,8 @@ class SettingsPageBehaviorTest {
                 }
             }
         }
-        rule.onNodeWithText("Hidden general").assertDoesNotExist()
-        rule.onNodeWithText("Hidden security").assertDoesNotExist()
+        rule.onNodeWithText("General").assertDoesNotExist()
+        rule.onNodeWithText("Security").assertDoesNotExist()
         rule.onNodeWithText("Hidden custom").assertDoesNotExist()
         val before = rule.onNodeWithText("Last").fetchSemanticsNode().boundsInRoot.top
         assertTrue(before > rule.onNodeWithText("First").fetchSemanticsNode().boundsInRoot.top)
@@ -219,7 +220,7 @@ class SettingsPageBehaviorTest {
         ))
         var selected by mutableStateOf("system")
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("general") {
                         language(AndroidKitLanguageSetting(AndroidKitSettingsSelection(
@@ -253,7 +254,7 @@ class SettingsPageBehaviorTest {
     fun languageSearchUsesHostOptionsAndStableIdsAndResetsOnReopen() {
         var selected by mutableStateOf("en")
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("general", label = "General") {
                         language(AndroidKitLanguageSetting(
@@ -275,7 +276,10 @@ class SettingsPageBehaviorTest {
         rule.onNodeWithContentDescription("Search languages").performTextReplacement("FRANCAIS")
         rule.onNodeWithText("Français").performClick()
         rule.runOnIdle { assertEquals("fr", selected) }
+        rule.onNodeWithContentDescription("Search languages").assertDoesNotExist()
         rule.onNodeWithText("Language").performClick()
+        rule.onNodeWithContentDescription("Search languages")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("")))
         rule.onNodeWithText("English").assertIsDisplayed()
         rule.onNodeWithContentDescription("Close").performClick()
     }
@@ -284,7 +288,7 @@ class SettingsPageBehaviorTest {
     fun themePickerAcceptsHostDefinedChoices() {
         var selected by mutableStateOf("light")
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("general", label = "General") {
                         theme(AndroidKitSettingsSelection(
@@ -304,7 +308,7 @@ class SettingsPageBehaviorTest {
     @Test
     fun systemOptionShowsCurrentHostValueInSettingsRowAndPicker() {
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("general", label = "General") {
                         theme(AndroidKitSettingsSelection(
@@ -331,7 +335,7 @@ class SettingsPageBehaviorTest {
         var commits = 0
         var lockRequests = 0
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("general", label = "General") {
                         transparency(AndroidKitFloatingOpacitySetting(
@@ -360,7 +364,7 @@ class SettingsPageBehaviorTest {
     fun sliderUpdatesDoNotDuplicateTrailingPageItems() {
         var level by mutableFloatStateOf(0f)
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("general", label = "General") {
                         transparency(AndroidKitFloatingOpacitySetting(
@@ -388,7 +392,7 @@ class SettingsPageBehaviorTest {
     fun conditionalSettingsUpdateWithoutDuplicatingTheirSection() {
         var showLanguage by mutableStateOf(true)
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     section("visibility") {
                         toggle("show-language", "Show language", showLanguage, { showLanguage = it })
@@ -423,7 +427,7 @@ class SettingsPageBehaviorTest {
     fun removedVisibleSectionsDoNotRemainInThePage() {
         var showSection by mutableStateOf(true)
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 TestSettingsPage {
                     if (showSection) {
                         section("conditional", label = "Conditional") {
@@ -449,7 +453,7 @@ class SettingsPageBehaviorTest {
     fun hostNavigationRestoresParentScrollPosition() {
         var destination by mutableStateOf("root")
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 val holder = rememberSaveableStateHolder()
                 holder.SaveableStateProvider(destination) {
                     TestSettingsPage(

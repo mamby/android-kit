@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
+$gradle = Join-Path $repo $(if ($IsWindows) { 'gradlew.bat' } else { 'gradlew' })
 Push-Location $repo
 try {
     & ./test/gradle/verify-settings-search-lexicon.ps1
@@ -22,7 +23,7 @@ try {
     )
     foreach ($case in $cases) {
         # mergeDebugAssets exercises the packaging dependency, not just the validator task.
-        $result = & ./gradlew.bat -I test/gradle/localization-fixtures.init.gradle "-PandroidKitLocalizationFixture=$($case.Name)" :demo:mergeDebugAssets --console=plain --quiet 2>&1
+        $result = & $gradle --dependency-verification strict -I test/gradle/localization-fixtures.init.gradle "-PandroidKitLocalizationFixture=$($case.Name)" :demo:mergeDebugAssets --console=plain --quiet 2>&1
         $code = $LASTEXITCODE
         $log = $result -join [Environment]::NewLine
         if ($null -eq $case.Expected) {
@@ -32,7 +33,7 @@ try {
         }
         Write-Output "PASS: $($case.Name)"
     }
-    $result = & ./gradlew.bat '-PandroidKitSupportedLocales=en,eo' :demo:validateDebugAndroidKitLocalization --console=plain --quiet 2>&1
+    $result = & $gradle --dependency-verification strict '-PandroidKitSupportedLocales=en,eo' :demo:validateDebugAndroidKitLocalization --console=plain --quiet 2>&1
     if ($LASTEXITCODE -eq 0 -or !($result -join [Environment]::NewLine).Contains('locale eo is not supported')) {
         throw "Unsupported declared locale was not rejected: $result"
     }

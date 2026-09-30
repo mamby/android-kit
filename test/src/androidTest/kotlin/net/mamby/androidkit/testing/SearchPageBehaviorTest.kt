@@ -34,7 +34,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 import net.mamby.androidkit.compose.form.AndroidKitSearchGroup
 import net.mamby.androidkit.compose.form.AndroidKitSearchItem
 import net.mamby.androidkit.compose.form.AndroidKitSearchPage
-import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -61,7 +60,7 @@ class SearchPageBehaviorTest {
         rule.setContent {
             val visible = WindowInsets.isImeVisible
             SideEffect { imeVisible.set(visible) }
-            AndroidKitTheme {
+            TestKitTheme {
                 if (shown) {
                     AndroidKitSearchPage(
                         items = listOf(topicItem("coffee", "Coffee", "Coffee outing")),
@@ -111,7 +110,7 @@ class SearchPageBehaviorTest {
             topicItem("alias-second", "Appointment", "Alias second", aliases = listOf("clinic")),
         )
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitSearchPage(items, "clinic", {}, emptyList(), {}, voiceInputEnabled = false) { matches ->
                     item(key = "order") { Text(matches.joinToString { it.data.value }) }
                     hostResults(matches)
@@ -140,7 +139,7 @@ class SearchPageBehaviorTest {
             ),
         )
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitSearchPage(items, query, { query = it }, recents, { recents = it },
                     voiceInputEnabled = false) { matches -> hostResults(matches) }
             }
@@ -180,7 +179,7 @@ class SearchPageBehaviorTest {
         var query by mutableStateOf("")
         var recents by mutableStateOf((0 until 10).map { "Old $it" })
         rule.setContent {
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitSearchPage(
                     items = listOf(topicItem("alpha", "Alpha", "Alpha")),
                     query = query,
@@ -225,7 +224,7 @@ class SearchPageBehaviorTest {
         val restoration = StateRestorationTester(rule)
         restoration.setContent {
             var query by rememberSaveable { mutableStateOf("") }
-            AndroidKitTheme {
+            TestKitTheme {
                 AndroidKitSearchPage(
                     items = listOf(topicItem("coffee", "Coffee", "Coffee outing")),
                     query = query,
