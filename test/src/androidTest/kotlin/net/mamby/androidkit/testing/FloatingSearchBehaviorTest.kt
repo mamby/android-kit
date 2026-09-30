@@ -58,7 +58,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityOptionsCompat
-import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode

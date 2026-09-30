@@ -29,7 +29,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextReplacement
-import androidx.test.espresso.Espresso.pressBack
 import java.util.concurrent.atomic.AtomicBoolean
 import net.mamby.androidkit.compose.form.AndroidKitSearchGroup
 import net.mamby.androidkit.compose.form.AndroidKitSearchItem

@@ -30,7 +30,6 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.unit.dp
-import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.action.AndroidKitContextMenu
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

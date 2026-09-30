@@ -31,7 +31,6 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextReplacement
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitAppLockTimeoutSetting
-import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitLanguageSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption

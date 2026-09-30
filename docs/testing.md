@@ -48,6 +48,10 @@ language. Dedicated RTL and font-scale overrides remain active. Section-card
 and lock-page interaction checks also run the official Compose accessibility
 checks; these complement manual TalkBack and keyboard verification.
 
+System Back input uses UI Automator so it reaches the focused window, including
+dialogs, popups and the keyboard. Compose assertions still synchronize through
+the Compose test rule.
+
 Keep detailed shared search-history behavior in `SearchPageBehaviorTest`;
 Settings tests verify catalog integration and host callbacks. Navigation tests
 cover independent histories, saved-state restoration, reset, and replacement

@@ -18,7 +18,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
-import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
 import net.mamby.androidkit.compose.action.AndroidKitFloatingToolbar
 import org.junit.Assert.assertEquals

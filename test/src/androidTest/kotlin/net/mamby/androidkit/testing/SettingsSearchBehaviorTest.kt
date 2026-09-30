@@ -32,7 +32,6 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.test.espresso.Espresso.pressBack
 import java.util.concurrent.atomic.AtomicBoolean
 import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout

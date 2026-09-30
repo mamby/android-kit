@@ -39,7 +39,6 @@ import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.test.espresso.Espresso.pressBack
 import net.mamby.androidkit.compose.action.AndroidKitAction
 import net.mamby.androidkit.compose.action.AndroidKitActionSeparator
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
