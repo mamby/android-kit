@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.DropdownMenuPopup
@@ -26,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.TransformOrigin
@@ -192,7 +194,7 @@ private class ActionFlyoutScopeImpl(
     ) {
         val dimensions = AndroidKitThemeTokens.dimensions
         DropdownMenuItem(
-            modifier = modifier,
+            modifier = modifier.clip(CircleShape),
             text = {
                 Text(
                     text = label,
@@ -290,7 +292,7 @@ private fun ActionFlyoutSubmenu(
                 )
             },
             onClick = { expanded = true },
-            modifier = modifier,
+            modifier = modifier.clip(CircleShape),
             enabled = enabled,
             contentPadding = PaddingValues(
                 start = dimensions.spaceMedium, end = dimensions.spaceLarge,
@@ -348,9 +350,7 @@ public fun AndroidKitActionFlyout(
     horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment =
         AndroidKitActionFlyoutHorizontalAlignment.Start,
     style: AndroidKitActionFlyoutStyle = AndroidKitThemeTokens.actionFlyoutStyle,
-    contentPadding: PaddingValues = PaddingValues(
-        vertical = AndroidKitThemeTokens.dimensions.spaceSmall,
-    ),
+    contentPadding: PaddingValues = PaddingValues(5.dp),
     properties: PopupProperties = PopupProperties(focusable = true),
     scrollState: ScrollState = rememberScrollState(),
     offset: DpOffset = DpOffset.Zero,
