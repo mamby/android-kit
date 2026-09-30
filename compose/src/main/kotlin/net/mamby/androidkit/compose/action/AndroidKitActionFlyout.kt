@@ -27,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -47,6 +48,7 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 /** Declares menu entries. AndroidKit owns their layout, styling, and dismissal. */
 public class AndroidKitActionFlyoutScope internal constructor() {
@@ -446,7 +448,7 @@ private fun ActionFlyoutContent(
 }
 
 @Composable
-private fun ActionFlyoutPopup(
+internal fun ActionFlyoutPopup(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     onActionDismissRequest: () -> Unit,
@@ -484,6 +486,39 @@ private fun ActionFlyoutPopup(
                 ).content()
             }
         }
+    }
+}
+
+/** Uses the same edge fallback and animation origin as anchored flyouts. */
+internal class ContextMenuPositionProvider(
+    private val position: Offset?,
+    density: Density,
+) : DropdownMenuPopupPositionProvider {
+    private val delegate = ActionFlyoutPositionProvider(
+        AndroidKitActionFlyoutPlacement.Below,
+        AndroidKitActionFlyoutHorizontalAlignment.Start,
+        DpOffset.Zero,
+        density,
+    )
+
+    override val transformOrigin: TransformOrigin
+        get() = delegate.transformOrigin
+
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize,
+    ): IntOffset {
+        val point = position?.let {
+            IntOffset(anchorBounds.left + it.x.roundToInt(), anchorBounds.top + it.y.roundToInt())
+        }
+        return delegate.calculatePosition(
+            point?.let { IntRect(it, IntSize.Zero) } ?: anchorBounds,
+            windowSize,
+            layoutDirection,
+            popupContentSize,
+        )
     }
 }
 

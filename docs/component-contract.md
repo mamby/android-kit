@@ -17,6 +17,10 @@ border and shadow. The Material tooltip anchor retains placement and state owner
 Render scopes and implementations stay internal or private; public declaration
 scopes cannot be implemented by consumers.
 
+`AndroidKitContextMenu` owns point-based invocation, transient menu state and
+interaction behavior. It shares the action flyout renderer and typed menu DSL;
+its app body slot does not expose menu rendering or component style overrides.
+
 Toolbar actions, floating action bars, and page action controls share an internal
 content inset derived from the small spacing token (8 dp by default). The renderer
 reserves this inset around the content box, including icon-only and More buttons;

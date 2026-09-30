@@ -4,6 +4,9 @@
 toolbar and action-bar flyouts, header actions, cards, and navigation overflow.
 Place it in a `Box` with the control it should anchor to, inside `AndroidKitTheme`.
 
+For touch-and-hold or right-click actions positioned at the pointer, use
+[`AndroidKitContextMenu`](context-menu.md), which shares this menu renderer.
+
 ```kotlin
 var expanded by remember { mutableStateOf(false) }
 

@@ -18,6 +18,7 @@ enum class ComponentId(
     AndroidKitSearchPage("AndroidKitSearchPage"),
     AndroidKitFloatingTooltip("AndroidKitFloatingTooltip"),
     AndroidKitActionFlyout("AndroidKitActionFlyout"),
+    AndroidKitContextMenu("AndroidKitContextMenu"),
     AndroidKitFloatingNavigation("AndroidKitFloatingNavigation"),
     ;
 
@@ -31,6 +32,7 @@ enum class ComponentDemo(
     @StringRes val titleResource: Int,
 ) {
     AndroidKitPageBasic(ComponentId.AndroidKitPage, R.string.variation_basic),
+    AndroidKitContextMenuInteractive(ComponentId.AndroidKitContextMenu, R.string.variation_interactive),
     AndroidKitFloatingTooltipInteractive(ComponentId.AndroidKitFloatingTooltip, R.string.variation_interactive),
     AndroidKitFloatingSearchBoxInteractive(
         ComponentId.AndroidKitFloatingSearchBox,

@@ -102,7 +102,8 @@ class BottomSheetBehaviorTest {
 
         composeRule.onNodeWithContentDescription("Close").performClick()
 
-        composeRule.waitUntil { dismissCount == 1 }
+        composeRule.waitForIdle()
+        composeRule.runOnIdle { assertEquals(1, dismissCount) }
         composeRule.onNodeWithText(SheetTitle).assertDoesNotExist()
     }
 

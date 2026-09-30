@@ -61,7 +61,24 @@ jobs:
           chmod +x gradlew
           ./gradlew --dependency-verification strict \
             -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect \
+            --info \
             :test:pixel2api35DebugAndroidTest
+      - name: Print behavior failures
+        if: failure()
+        shell: pwsh
+        run: |
+          Get-ChildItem test/build/outputs/androidTest-results -Recurse -Filter 'TEST-*.xml' -ErrorAction SilentlyContinue | ForEach-Object {
+            [xml]$report = Get-Content -LiteralPath $_.FullName -Raw
+            foreach ($case in $report.SelectNodes('//testcase[failure or error]')) {
+              Write-Output "FAILED: $($case.classname).$($case.name)"
+              $details = $case.SelectSingleNode('failure | error').InnerText
+              if ([string]::IsNullOrWhiteSpace($details)) {
+                Write-Output 'Instrumentation ended without assertion details; inspect the uploaded logcat and test-result.pb.'
+              } else {
+                Write-Output $details
+              }
+            }
+          }
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:

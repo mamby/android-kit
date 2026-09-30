@@ -33,6 +33,7 @@ import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBar
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionBarIconAndLabelLayout
 import net.mamby.androidkit.compose.action.AndroidKitFloatingActionButton
 import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
+import net.mamby.androidkit.compose.action.AndroidKitContextMenu
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheet
 import net.mamby.androidkit.compose.form.AndroidKitBottomSheetScrollMode
 import androidx.compose.material3.ListItem
@@ -323,6 +324,7 @@ private fun StandardComponentDemo(
                                 Text(stringResource(R.string.action_count, actionCount))
                             }
                             ComponentId.AndroidKitActionFlyout -> AndroidKitActionFlyoutDemo(variation)
+                            ComponentId.AndroidKitContextMenu -> AndroidKitContextMenuDemo()
                             ComponentId.AndroidKitFloatingNavigation -> AndroidKitFloatingNavigationDemo(
                                 demo = variation,
                                 layout = floatingNavigationLayout,
@@ -632,6 +634,32 @@ private fun AndroidKitFloatingActionBarDemo(
             }
             else -> error("Unexpected AndroidKitFloatingActionBar demo: $demo")
         }
+    }
+}
+
+@Composable
+private fun AndroidKitContextMenuDemo() {
+    var count by rememberSaveable { mutableStateOf(0) }
+    val edit = stringResource(R.string.action_edit)
+    val share = stringResource(R.string.action_share)
+    val delete = stringResource(R.string.action_delete)
+    Column {
+        AndroidKitContextMenu(
+            onClick = { count += 1 },
+            menu = {
+                item(label = edit, onClick = { count += 1 })
+                submenu(label = share) {
+                    item(label = share, onClick = { count += 1 })
+                }
+                separator()
+                item(label = delete, enabled = false, onClick = {})
+            },
+        ) {
+            AndroidKitCard(title = "AndroidKitContextMenu") {
+                Text(stringResource(R.string.demo_section_body))
+            }
+        }
+        Text(stringResource(R.string.action_count, count))
     }
 }
 

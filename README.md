@@ -36,6 +36,8 @@ do not change existing component appearance unless supplied explicitly.
 
 Use [`AndroidKitActionFlyout`](docs/action-flyout.md) for anchored action menus
 with typed entries, including menus opened from standalone buttons.
+Use [`AndroidKitContextMenu`](docs/context-menu.md) for the same menu opened at
+a touch-and-hold or secondary mouse press position.
 
 Use [`AndroidKitSettingsPage`](docs/settings.md) for shared settings presentation,
 optional host-configured controls, custom sections, and host-owned subpages.
