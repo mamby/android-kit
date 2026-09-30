@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Kunne ikke lagre endringene.</string>
 
     <string name="action_add">Legg til</string>
     <string name="action_close">Lukk</string>

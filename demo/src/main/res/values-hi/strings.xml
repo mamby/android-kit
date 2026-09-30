@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">बदलाव सेव नहीं किए जा सके।</string>
     <string name="action_add">जोड़ें</string>
     <string name="action_close">बंद करें</string>
     <string name="action_retry">फिर से कोशिश करें</string>

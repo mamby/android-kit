@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Imeshindikana kuhifadhi mabadiliko.</string>
 
     <string name="action_add">Ongeza</string>
     <string name="action_close">Funga</string>

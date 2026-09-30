@@ -6,7 +6,9 @@ not carry test-only dependencies or fixtures.
 ## Test layers
 
 - `test/src/test` contains device-independent matching and Unicode normalization
-  contract tests, executed by `:test:testDebugUnitTest` and CI.
+  contract tests and the demo authentication session regressions, executed by
+  `:test:testDebugUnitTest` and CI. The demo's pure authentication state is included
+  through the JVM test source set; its test source stays in `test/src/test`.
 - `test/src/androidTest` contains behavior and integration tests for intent
   factories, explicit-locale formatting, Compose state restoration, component
   semantics, compact navigation overflow and independent Navigation 3 stacks.

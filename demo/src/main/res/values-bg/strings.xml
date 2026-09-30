@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Промените не можаха да бъдат запазени.</string>
 
     <string name="action_add">Добавяне</string>
     <string name="action_close">Затвори</string>

@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Ndryshimet nuk mund të ruheshin.</string>
 
     <string name="action_add">Shto</string>
     <string name="action_close">Mbylle</string>

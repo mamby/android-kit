@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Wijzigingen konden niet worden opgeslagen.</string>
     <string name="action_add">Toevoegen</string>
     <string name="action_close">Sluiten</string>
     <string name="action_retry">Opnieuw proberen</string>

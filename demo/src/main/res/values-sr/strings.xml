@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Није могуће сачувати измене.</string>
 
     <string name="action_add">Додај</string>
     <string name="action_close">Затвори</string>

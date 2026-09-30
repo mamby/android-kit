@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Promjene nije moguće spremiti.</string>
 
     <string name="action_add">Dodaj</string>
     <string name="action_close">Zatvori</string>

@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">മാറ്റങ്ങൾ സംരക്ഷിക്കാനായില്ല.</string>
 
     <string name="action_add">ചേർക്കുക</string>
     <string name="action_close">അടയ്ക്കുക</string>

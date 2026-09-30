@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">ذخیرهٔ تغییرات ممکن نشد.</string>
 
     <string name="action_add">اضافه کنید</string>
     <string name="action_close">بستن</string>

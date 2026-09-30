@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Ayikwazanga ukulondoloza izinguquko.</string>
 
     <string name="action_add">Engeza</string>
     <string name="action_close">Vala</string>

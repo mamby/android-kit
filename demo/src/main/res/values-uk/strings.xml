@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Не вдалося зберегти зміни.</string>
 
     <string name="action_add">Додати</string>
     <string name="action_close">Закрити</string>

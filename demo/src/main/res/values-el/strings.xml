@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Δεν ήταν δυνατή η αποθήκευση των αλλαγών.</string>
 
     <string name="action_add">Προσθήκη</string>
     <string name="action_close">Κλείσιμο</string>

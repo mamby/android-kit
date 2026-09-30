@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Không thể lưu thay đổi.</string>
     <string name="action_add">Thêm</string>
     <string name="action_close">Đóng</string>
     <string name="action_retry">Thử lại</string>

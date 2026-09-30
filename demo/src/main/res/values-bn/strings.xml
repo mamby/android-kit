@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">পরিবর্তনগুলি সংরক্ষণ করা যায়নি।</string>
 
     <string name="action_add">যোগ করুন</string>
     <string name="action_close">বন্ধ</string>

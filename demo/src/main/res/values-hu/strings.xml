@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Nem sikerült menteni a módosításokat.</string>
 
     <string name="action_add">Hozzáad</string>
     <string name="action_close">Bezárás</string>

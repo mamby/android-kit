@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Zmeny sa nepodarilo uložiť.</string>
 
     <string name="action_add">Pridaj</string>
     <string name="action_close">Zavrieť</string>

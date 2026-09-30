@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">変更を保存できませんでした。</string>
     <string name="action_add">追加</string>
     <string name="action_close">閉じる</string>
     <string name="action_retry">再試行</string>

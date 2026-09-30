@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Ezin izan dira aldaketak gorde.</string>
 
     <string name="action_add">Gehitu</string>
     <string name="action_close">Itxi</string>

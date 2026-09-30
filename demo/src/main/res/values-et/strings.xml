@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Muudatusi ei saanud salvestada.</string>
 
     <string name="action_add">Lisa</string>
     <string name="action_close">Sule</string>

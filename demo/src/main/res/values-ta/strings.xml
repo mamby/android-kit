@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">மாற்றங்களைச் சேமிக்க முடியவில்லை.</string>
 
     <string name="action_add">சேர்</string>
     <string name="action_close">மூடு</string>

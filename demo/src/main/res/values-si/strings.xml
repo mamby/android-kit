@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">වෙනස්කම් සුරැකීමට නොහැකි විය.</string>
 
     <string name="action_add">එකතු කරන්න</string>
     <string name="action_close">වසන්න</string>

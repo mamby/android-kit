@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Dəyişiklikləri yadda saxlamaq mümkün olmadı.</string>
 
     <string name="action_add">Əlavə et</string>
     <string name="action_close">Bağlayın</string>

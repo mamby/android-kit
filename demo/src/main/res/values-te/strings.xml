@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">మార్పులను సేవ్ చేయలేకపోయాము.</string>
 
     <string name="action_add">జోడించు</string>
     <string name="action_close">మూసివేయండి</string>

@@ -82,6 +82,14 @@ titles, supporting text, and aliases/context. Ties keep the input order. A
 nonblank query containing only punctuation or emoji has no matches. This is
 local in-memory search; there is no database query or network translation.
 
+Searchable text is normalized once per dataset and reused across queries.
+Normalization and matching run in cancellable background coroutines. While the
+current query or dataset is being processed, Kit shows a progress indicator and
+removes outgoing results so they cannot invoke stale actions. Query or dataset
+changes cancel superseded work. Results always use the current host data,
+availability and callbacks; changing only callbacks or availability does not
+rebuild the text index. Ranking and `Live` / `OnSubmit` timing remain the same.
+
 Call the matched item's `onClick` from the host result action. Kit records the
 query before invoking the original callback. Disabled items remain searchable,
 but their matched callbacks do nothing; the host must also render their disabled

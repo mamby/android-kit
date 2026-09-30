@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">تعذّر حفظ التغييرات.</string>
     <string name="action_add">إضافة</string>
     <string name="action_close">إغلاق</string>
     <string name="action_retry">إعادة المحاولة</string>

@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">ਤਬਦੀਲੀਆਂ ਨੂੰ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ।</string>
 
     <string name="action_add">ਸ਼ਾਮਲ ਕਰੋ</string>
     <string name="action_close">ਬੰਦ ਕਰੋ</string>

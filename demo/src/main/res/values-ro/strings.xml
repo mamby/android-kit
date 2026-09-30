@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Modificările nu au putut fi salvate.</string>
 
     <string name="action_add">Adaugă</string>
     <string name="action_close">Închide</string>

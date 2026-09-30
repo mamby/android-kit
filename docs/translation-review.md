@@ -1,5 +1,19 @@
 # Shared vocabulary translation review
 
+## Settings save failure feedback (2026-09-30)
+
+Added `settings_save_failed` to all 72 demo locales. The English reference is
+"Could not save changes." It reports a failed settings or search-history write;
+the previous persisted value remains in effect. The existing localized Retry
+action repeats the failed write. The message does not imply data loss or a
+successful save. The English source needed no correction.
+
+All affected locales received an AI semantic review against that usage and the
+terminology glossary. No external linguistic sources or native-speaker approval
+are claimed. Idiomatic wording, particularly in less familiar languages, remains
+uncertain until independent language review. Resource completeness and build
+checks establish resource validity, not linguistic quality.
+
 ## Kit and demo language expansion (2026-09-28)
 
 Added 54 languages to the existing 18, giving Kit and the demo 72 matching

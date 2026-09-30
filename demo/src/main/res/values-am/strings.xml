@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">ለውጦችን ማስቀመጥ አልተቻለም።</string>
 
     <string name="action_add">አክል</string>
     <string name="action_close">ዝጋ</string>

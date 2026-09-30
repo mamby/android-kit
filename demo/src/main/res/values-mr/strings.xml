@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">बदल जतन करता आले नाहीत.</string>
 
     <string name="action_add">ॲड</string>
     <string name="action_close">बंद करा</string>

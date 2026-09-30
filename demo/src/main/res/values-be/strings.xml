@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Не ўдалося захаваць змены.</string>
 
     <string name="action_add">Дадаць</string>
     <string name="action_close">Зачыніць</string>

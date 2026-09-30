@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Ændringerne kunne ikke gemmes.</string>
 
     <string name="action_add">Tilføj</string>
     <string name="action_close">Luk</string>

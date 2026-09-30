@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,9 +24,41 @@ public fun AndroidKitSettingsSearchPage(
     val strings = AndroidKitThemeTokens.strings
     val lexicon = rememberSettingsSearchLexicon()
     val collected = collectCatalogSearchSections(catalog) { activePicker = it }
-    val matches = remember(collected.sections, query, lexicon) {
-        searchSettings(collected.sections, query, lexicon)
+    val searchableEntries = collected.sections.flatMap { source ->
+        source.section.entries.filter { it.searchable }.map { entry ->
+            val visibleText = listOfNotNull(
+                entry.label, entry.supportingText,
+                (entry as? SettingsEntryDefinition.Info)?.value,
+                (entry as? SettingsEntryDefinition.Slider)?.valueLabel,
+            )
+            val aliases = buildList {
+                add(source.pageTitle)
+                source.section.label?.let(::add)
+                source.section.description?.let(::add)
+                source.pageTerms?.expandedTerms(lexicon)?.let(::addAll)
+                source.section.searchTerms?.expandedTerms(lexicon)?.let(::addAll)
+                entry.searchTerms?.expandedTerms(lexicon)?.let(::addAll)
+            }
+            SearchableSettingsEntry(source, entry, SearchDocument(
+                key = "${source.pageKey}:${source.section.key}:${entry.key}",
+                label = entry.label, visibleText = visibleText, aliases = aliases,
+            ))
+        }
     }
+    val matchedIndices = rememberSearchMatches(searchableEntries.map { it.document }, query)
+    // Matching returns relevance order with source-order ties. Group insertion order therefore
+    // retains the original section ranking, while controls always use the current host callbacks.
+    val matches = matchedIndices.orEmpty().map { searchableEntries[it.index] }
+        .groupBy { it.source.order }.values.map { entries ->
+            val source = entries.first().source
+            SettingsSearchResult(
+                entries = entries.map { it.entry },
+                pageKey = source.pageKey,
+                section = source.section,
+                contextLabel = listOfNotNull(source.pageTitle, source.section.label)
+                    .distinct().joinToString(" · "),
+            )
+        }
     AndroidKitSearchPage(
         query = query,
         onQueryChange = { query = it },
@@ -38,6 +69,7 @@ public fun AndroidKitSettingsSearchPage(
         title = strings.searchSettings,
         noMatchesMessage = strings.noMatchingSettings,
         hasResults = matches.isNotEmpty(),
+        isSearching = matchedIndices == null,
         modifier = modifier,
         onBack = onBack,
         listState = listState,
@@ -83,8 +115,12 @@ private data class SettingsSearchResult(
     val section: SettingsRenderedSection,
     val entries: List<SettingsEntryDefinition>,
     val contextLabel: String,
-    val score: SearchMatch,
-    val order: Int,
+)
+
+private data class SearchableSettingsEntry(
+    val source: SearchableSettingsSection,
+    val entry: SettingsEntryDefinition,
+    val document: SearchDocument,
 )
 
 @Composable
@@ -119,42 +155,4 @@ private fun collectCatalogSearchSections(
         }
     }
     return CollectedSearchSections(sections, scopes)
-}
-
-private fun searchSettings(
-    sections: List<SearchableSettingsSection>,
-    query: String,
-    lexicon: SettingsSearchLexicon,
-): List<SettingsSearchResult> {
-    val tokens = searchQueryTokens(query)
-    if (tokens.isEmpty()) return emptyList()
-    return sections.mapNotNull { source ->
-        val matches = source.section.entries.mapIndexedNotNull { index, entry ->
-            if (!entry.searchable) return@mapIndexedNotNull null
-            val direct = listOfNotNull(
-                entry.label,
-                entry.supportingText,
-                (entry as? SettingsEntryDefinition.Info)?.value,
-                (entry as? SettingsEntryDefinition.Slider)?.valueLabel,
-            )
-            val aliases = buildList {
-                add(source.pageTitle)
-                source.section.label?.let(::add)
-                source.section.description?.let(::add)
-                source.pageTerms?.expandedTerms(lexicon)?.let(::addAll)
-                source.section.searchTerms?.expandedTerms(lexicon)?.let(::addAll)
-                entry.searchTerms?.expandedTerms(lexicon)?.let(::addAll)
-            }
-            searchMatch(entry.label, direct, aliases, tokens)?.let { score -> Triple(entry, score, index) }
-        }.sortedWith(compareBy<Triple<SettingsEntryDefinition, SearchMatch, Int>> { it.second }.thenBy { it.third })
-        if (matches.isEmpty()) null else SettingsSearchResult(
-            pageKey = source.pageKey,
-            section = source.section,
-            entries = matches.map { it.first },
-            contextLabel = listOfNotNull(source.pageTitle, source.section.label)
-                .distinct().joinToString(" · "),
-            score = matches.minOf { it.second },
-            order = source.order,
-        )
-    }.sortedWith(compareBy<SettingsSearchResult> { it.score }.thenBy { it.order })
 }

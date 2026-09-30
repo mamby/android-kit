@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">ບໍ່ສາມາດບັນທຶກການປ່ຽນແປງໄດ້.</string>
 
     <string name="action_add">ຕື່ມ</string>
     <string name="action_close">ປິດ</string>

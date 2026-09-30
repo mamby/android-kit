@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import net.mamby.androidkit.demo.ui.authentication.DemoAuthenticationState
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 import org.json.JSONArray
 
@@ -154,8 +156,8 @@ internal class DemoSettingsRepository(context: Context) {
         dataStore.edit { it[SheetHeaderActionPresentationKey] = presentation.name }
     }
 
-    suspend fun setAppLockEnabled(enabled: Boolean) {
-        dataStore.edit { it[AppLockEnabledKey] = enabled }
+    suspend fun setAppLockEnabled(enabled: Boolean, isAuthorized: () -> Boolean) {
+        dataStore.edit { if (isAuthorized()) it[AppLockEnabledKey] = enabled }
     }
 
     suspend fun setAppLockTimeout(timeout: DemoAppLockTimeout) {
@@ -216,19 +218,21 @@ internal class DemoSettingsViewModel(
         private set
     var authenticationError by mutableStateOf<String?>(null)
         private set
-    private var requestedLockEnabled: Boolean? = null
-
-    private var lockGeneration = 0
+    private val authentication = DemoAuthenticationState()
+    private var authenticationCommit: Job? = null
     private var backgroundedAt: Long? = null
+    var settingsWriteFailure by mutableStateOf<DemoSettingsWriteFailure?>(null)
+        private set
+    private var writeRequest = 0L
 
     fun onBackground() {
-        // Invalidate authentication work that was started before leaving the app.
-        lockGeneration++
+        authentication.invalidate(explicit = false)
+        authenticationCommit?.cancel()
         backgroundedAt = SystemClock.elapsedRealtime()
         if ((settings.value?.appLockTimeout ?: DemoAppLockTimeout.Immediately) ==
             DemoAppLockTimeout.Immediately
         ) {
-            lock()
+            unlocked = false
         }
     }
 
@@ -237,32 +241,39 @@ internal class DemoSettingsViewModel(
         backgroundedAt = null
         val timeout = settings.value?.appLockTimeout ?: DemoAppLockTimeout.Immediately
         if (SystemClock.elapsedRealtime() - leftAt >= timeout.duration.inWholeMilliseconds) {
-            lock()
+            authentication.invalidate(explicit = false)
+            authenticationCommit?.cancel()
+            unlocked = false
         }
     }
 
     fun lock() {
-        lockGeneration++
+        authentication.invalidate(explicit = true)
+        authenticationCommit?.cancel()
         unlocked = false
     }
 
     fun beginAuthentication(enabled: Boolean?): Boolean {
         if (authenticating) return false
-        requestedLockEnabled = enabled
+        if (!authentication.begin(enabled)) return false
         authenticationError = null
         authenticating = true
         return true
     }
 
-    fun authenticationSucceeded() {
+    fun authenticationSucceeded(deviceCredential: Boolean = false) {
         if (!authenticating) return
-        val generation = lockGeneration
-        val enabled = requestedLockEnabled
-        requestedLockEnabled = null
-        viewModelScope.launch {
+        val authorization = authentication.complete(deviceCredential)
+        if (authorization == null) {
+            authenticating = false
+            return
+        }
+        authenticationCommit = viewModelScope.launch {
             try {
-                if (enabled != null) repository.setAppLockEnabled(enabled)
-                unlocked = generation == lockGeneration
+                authorization.enabled?.let { enabled ->
+                    repository.setAppLockEnabled(enabled) { authentication.isCurrent(authorization) }
+                }
+                unlocked = authentication.isCurrent(authorization)
             } catch (exception: IOException) {
                 authenticationError = exception.localizedMessage
             } finally {
@@ -272,7 +283,7 @@ internal class DemoSettingsViewModel(
     }
 
     fun authenticationFailed(message: String) {
-        requestedLockEnabled = null
+        authentication.fail()
         authenticating = false
         authenticationError = message
     }
@@ -286,72 +297,77 @@ internal class DemoSettingsViewModel(
         )
 
     fun setDemoToggle(toggle: DemoToggle, enabled: Boolean) {
-        viewModelScope.launch { repository.setDemoToggle(toggle, enabled) }
+        persist { repository.setDemoToggle(toggle, enabled) }
     }
 
     fun setSelectedPageAction(action: DemoPageAction) {
-        viewModelScope.launch { repository.setSelectedPageAction(action) }
+        persist { repository.setSelectedPageAction(action) }
     }
 
     fun setPageHeaderActionPresentation(presentation: DemoHeaderActionPresentation) {
-        viewModelScope.launch { repository.setPageHeaderActionPresentation(presentation) }
+        persist { repository.setPageHeaderActionPresentation(presentation) }
     }
 
     fun setSheetHeaderActionPresentation(presentation: DemoHeaderActionPresentation) {
-        viewModelScope.launch { repository.setSheetHeaderActionPresentation(presentation) }
+        persist { repository.setSheetHeaderActionPresentation(presentation) }
     }
 
     fun setThemeChoice(choice: DemoThemeChoice) {
-        viewModelScope.launch {
-            repository.setThemeChoice(choice)
-        }
+        persist { repository.setThemeChoice(choice) }
     }
 
     fun setAppLockTimeout(timeout: DemoAppLockTimeout) {
-        viewModelScope.launch {
-            try {
-                repository.setAppLockTimeout(timeout)
-            } catch (exception: IOException) {
-                authenticationError = exception.localizedMessage
-            }
-        }
+        persist { repository.setAppLockTimeout(timeout) }
     }
 
     fun setFloatingSurfaceOpacityLevel(level: Float) {
-        viewModelScope.launch {
-            repository.setFloatingSurfaceOpacityLevel(level)
-        }
+        persist { repository.setFloatingSurfaceOpacityLevel(level) }
     }
 
     fun setFloatingNavigationLayout(layout: DemoFloatingNavigationLayout) {
-        viewModelScope.launch {
-            repository.setFloatingNavigationLayout(layout)
-        }
+        persist { repository.setFloatingNavigationLayout(layout) }
     }
 
     fun setShowCompactNavigationLabels(showLabels: Boolean) {
-        viewModelScope.launch {
-            repository.setShowCompactNavigationLabels(showLabels)
-        }
+        persist { repository.setShowCompactNavigationLabels(showLabels) }
     }
 
     fun setRecentSettingsSearchesVisible(visible: Boolean) {
-        viewModelScope.launch { repository.setRecentSettingsSearchesVisible(visible) }
+        persist { repository.setRecentSettingsSearchesVisible(visible) }
     }
 
     fun setRecentContentSearchesVisible(visible: Boolean) {
-        viewModelScope.launch { repository.setRecentContentSearchesVisible(visible) }
+        persist { repository.setRecentContentSearchesVisible(visible) }
     }
 
     fun setRecentSettingsSearches(queries: List<String>) {
-        viewModelScope.launch { repository.setRecentSettingsSearches(queries) }
+        persist { repository.setRecentSettingsSearches(queries) }
     }
 
     fun setRecentContentSearches(queries: List<String>) {
-        viewModelScope.launch { repository.setRecentContentSearches(queries) }
+        persist { repository.setRecentContentSearches(queries) }
     }
 
+    fun dismissSettingsWriteFailure(failure: DemoSettingsWriteFailure) {
+        if (settingsWriteFailure === failure) settingsWriteFailure = null
+    }
+
+    private fun persist(update: suspend () -> Unit) {
+        val request = ++writeRequest
+        settingsWriteFailure = null
+        viewModelScope.launch {
+            try {
+                update()
+            } catch (_: IOException) {
+                if (request == writeRequest) {
+                    settingsWriteFailure = DemoSettingsWriteFailure { persist(update) }
+                }
+            }
+        }
+    }
 }
+
+internal class DemoSettingsWriteFailure(val retry: () -> Unit)
 
 private val Context.demoSettingsDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "demo_settings",

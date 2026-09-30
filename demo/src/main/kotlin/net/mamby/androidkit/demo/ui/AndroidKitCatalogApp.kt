@@ -3,6 +3,12 @@ package net.mamby.androidkit.demo.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
@@ -10,15 +16,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import net.mamby.androidkit.compose.layout.AndroidKitLockPage
@@ -67,20 +78,28 @@ internal fun AndroidKitCatalogApp(
     }
     val navigation = rememberMultiBackStackNavigationState(roots)
     val navigationDemoConfiguration = floatingNavigationDemoConfiguration(settings)
+    val entryStateHolder = rememberSaveableStateHolder()
+    val snackbarState = remember { SnackbarHostState() }
+    val writeFailure = settingsViewModel.settingsWriteFailure
+    val saveFailedMessage = stringResource(R.string.settings_save_failed)
+    val retryLabel = stringResource(R.string.action_retry)
+    LaunchedEffect(writeFailure, saveFailedMessage, retryLabel) {
+        if (writeFailure != null) {
+            previewedFloatingSurfaceOpacityLevel = settings.floatingSurfaceOpacityLevel
+            val result = snackbarState.showSnackbar(
+                message = saveFailedMessage,
+                actionLabel = retryLabel,
+                withDismissAction = true,
+                duration = SnackbarDuration.Indefinite,
+            )
+            settingsViewModel.dismissSettingsWriteFailure(writeFailure)
+            if (result == SnackbarResult.ActionPerformed) writeFailure.retry()
+        }
+    }
 
     AndroidKitTheme(
         definition = themeDefinition,
     ) {
-        if (settings.appLockEnabled && !settingsViewModel.unlocked) {
-            AndroidKitLockPage(
-                message = stringResource(R.string.lock_page_message),
-                unlockLabel = stringResource(R.string.lock_page_unlock),
-                onUnlock = { onAuthenticate(null) },
-                isUnlocking = settingsViewModel.authenticating,
-                errorMessage = settingsViewModel.authenticationError,
-            )
-            return@AndroidKitTheme
-        }
         val dummyNavigationIcons = listOf(
             materialSymbol(R.drawable.ic_symbol_home),
             materialSymbol(R.drawable.ic_symbol_favorite),
@@ -143,91 +162,113 @@ internal fun AndroidKitCatalogApp(
             },
         )
 
-        BackHandler(enabled = !navigation.isAtRoot || navigation.selectedRoot != roots.first()) {
-            navigation.goBack()
-        }
-
-        val content: @Composable () -> Unit = {
-            Box(modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
-                NavDisplay(
-                    backStack = navigation.currentBackStack,
-                    onBack = navigation::goBack,
-                    sceneStrategies = listOf(listDetailStrategy),
-                    entryDecorators = listOf(rememberSaveableStateHolderNavEntryDecorator()),
-                    entryProvider = entryProvider {
-                        entry<ComponentsRoute>(
-                            metadata = ListDetailSceneStrategy.listPane(
-                                detailPlaceholder = { ComponentPlaceholder() },
-                            ),
-                        ) {
-                            ComponentsScreen(
-                                onSelected = {
-                                    navigation.navigate(ComponentDemoRoute(demo = it))
-                                },
-                            )
-                        }
-                        entry<ComponentDemoRoute>(
-                            metadata = ListDetailSceneStrategy.detailPane(),
-                        ) { route ->
-                            ComponentDemoScreen(
-                                demo = route.demo,
-                                demoToggles = settings.demoToggles,
-                                onDemoToggleChange = settingsViewModel::setDemoToggle,
-                                selectedPageAction = settings.selectedPageAction,
-                                onPageActionSelected = settingsViewModel::setSelectedPageAction,
-                                pageHeaderActionPresentation =
-                                    settings.pageHeaderActionPresentation,
-                                onPageHeaderActionPresentationChange =
-                                    settingsViewModel::setPageHeaderActionPresentation,
-                                sheetHeaderActionPresentation =
-                                    settings.sheetHeaderActionPresentation,
-                                onSheetHeaderActionPresentationChange =
-                                    settingsViewModel::setSheetHeaderActionPresentation,
-                                floatingNavigationLayout = settings.floatingNavigationLayout,
-                                onFloatingNavigationLayoutChange =
-                                    settingsViewModel::setFloatingNavigationLayout,
-                                showCompactNavigationLabels =
-                                    settings.showCompactNavigationLabels,
-                                onShowCompactNavigationLabelsChange =
-                                    settingsViewModel::setShowCompactNavigationLabels,
-                                recentContentSearchesVisible = settings.recentContentSearchesVisible,
-                                onRecentContentSearchesVisibleChange = settingsViewModel::setRecentContentSearchesVisible,
-                                recentContentSearches = settings.recentContentSearches,
-                                onRecentContentSearchesChange = settingsViewModel::setRecentContentSearches,
-                                onOpenDemo = { navigation.navigate(ComponentDemoRoute(demo = it)) },
-                                onBack = navigation::goBack,
-                            )
-                        }
-                        entry<LocalizationRoute> { LocalizationScreen() }
-                        entry<SettingsRoute> {
-                            SettingsScreen(settingsCatalog)
-                        }
-                        entry<AboutRoute> {
-                            AboutScreen(settingsCatalog, onBack = navigation::goBack)
-                        }
-                        entry<SettingsSearchRoute> {
-                            SettingsSearchScreen(settingsCatalog, onBack = navigation::goBack)
-                        }
-                        entry<DemoRootRoute> { route ->
-                            DummyNavigationScreen(index = route.index)
-                        }
+        val provider = entryProvider<NavKey> {
+            entry<ComponentsRoute>(
+                metadata = ListDetailSceneStrategy.listPane(
+                    detailPlaceholder = { ComponentPlaceholder() },
+                ),
+            ) {
+                ComponentsScreen(
+                    onSelected = {
+                        navigation.navigate(ComponentDemoRoute(demo = it))
                     },
                 )
             }
+            entry<ComponentDemoRoute>(
+                metadata = ListDetailSceneStrategy.detailPane(),
+            ) { route ->
+                ComponentDemoScreen(
+                    demo = route.demo,
+                    demoToggles = settings.demoToggles,
+                    onDemoToggleChange = settingsViewModel::setDemoToggle,
+                    selectedPageAction = settings.selectedPageAction,
+                    onPageActionSelected = settingsViewModel::setSelectedPageAction,
+                    pageHeaderActionPresentation =
+                        settings.pageHeaderActionPresentation,
+                    onPageHeaderActionPresentationChange =
+                        settingsViewModel::setPageHeaderActionPresentation,
+                    sheetHeaderActionPresentation =
+                        settings.sheetHeaderActionPresentation,
+                    onSheetHeaderActionPresentationChange =
+                        settingsViewModel::setSheetHeaderActionPresentation,
+                    floatingNavigationLayout = settings.floatingNavigationLayout,
+                    onFloatingNavigationLayoutChange =
+                        settingsViewModel::setFloatingNavigationLayout,
+                    showCompactNavigationLabels =
+                        settings.showCompactNavigationLabels,
+                    onShowCompactNavigationLabelsChange =
+                        settingsViewModel::setShowCompactNavigationLabels,
+                    recentContentSearchesVisible = settings.recentContentSearchesVisible,
+                    onRecentContentSearchesVisibleChange = settingsViewModel::setRecentContentSearchesVisible,
+                    recentContentSearches = settings.recentContentSearches,
+                    onRecentContentSearchesChange = settingsViewModel::setRecentContentSearches,
+                    onOpenDemo = { navigation.navigate(ComponentDemoRoute(demo = it)) },
+                    onBack = navigation::goBack,
+                )
+            }
+            entry<LocalizationRoute> { LocalizationScreen() }
+            entry<SettingsRoute> {
+                SettingsScreen(settingsCatalog)
+            }
+            entry<AboutRoute> {
+                AboutScreen(settingsCatalog, onBack = navigation::goBack)
+            }
+            entry<SettingsSearchRoute> {
+                SettingsSearchScreen(settingsCatalog, onBack = navigation::goBack)
+            }
+            entry<DemoRootRoute> { route ->
+                DummyNavigationScreen(index = route.index)
+            }
         }
-
-        if (navigation.isAtRoot) {
-            AndroidKitFloatingNavigation(
-                items = navigationItems,
-                selectedKey = navigation.selectedRoot,
-                onSelected = navigation::openRoot,
-                compactVisibleDestinationCount =
-                    navigationDemoConfiguration.visibleDestinationCount,
-                showCompactLabels = navigationDemoConfiguration.showLabels,
-                content = content,
+        // Keep decoration and pop cleanup alive across shell changes and the lock gate.
+        // Entries hold callbacks, but their protected UI is composed only by NavDisplay below.
+        val entries = rememberDecoratedNavEntries(
+            entries = navigation.currentBackStack.map(provider),
+            entryDecorators = listOf(rememberSaveableStateHolderNavEntryDecorator<NavKey>(entryStateHolder)),
+        )
+        if (settings.appLockEnabled && !settingsViewModel.unlocked) {
+            AndroidKitLockPage(
+                message = stringResource(R.string.lock_page_message),
+                unlockLabel = stringResource(R.string.lock_page_unlock),
+                onUnlock = { onAuthenticate(null) },
+                isUnlocking = settingsViewModel.authenticating,
+                errorMessage = settingsViewModel.authenticationError,
             )
-        } else {
-            content()
+            return@AndroidKitTheme
+        }
+        BackHandler(enabled = !navigation.isAtRoot || navigation.selectedRoot != roots.first()) {
+            navigation.goBack()
+        }
+        val currentContent by rememberUpdatedState<@Composable () -> Unit> {
+            Box(modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
+                NavDisplay(
+                    entries = entries,
+                    onBack = navigation::goBack,
+                    sceneStrategies = listOf(listDetailStrategy),
+                )
+            }
+        }
+        // Move one NavDisplay instead of creating overlapping saved-state owners in subcomposition.
+        val content = remember { movableContentOf { currentContent() } }
+
+        Box(Modifier.fillMaxSize()) {
+            if (navigation.isAtRoot) {
+                AndroidKitFloatingNavigation(
+                    items = navigationItems,
+                    selectedKey = navigation.selectedRoot,
+                    onSelected = navigation::openRoot,
+                    compactVisibleDestinationCount =
+                        navigationDemoConfiguration.visibleDestinationCount,
+                    showCompactLabels = navigationDemoConfiguration.showLabels,
+                    content = content,
+                )
+            } else {
+                content()
+            }
+            SnackbarHost(
+                hostState = snackbarState,
+                modifier = Modifier.align(Alignment.BottomCenter).safeDrawingPadding().imePadding(),
+            )
         }
     }
 }

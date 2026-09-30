@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">변경사항을 저장할 수 없습니다.</string>
     <string name="action_add">추가</string>
     <string name="action_close">닫기</string>
     <string name="action_retry">다시 시도</string>

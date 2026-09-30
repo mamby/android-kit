@@ -37,7 +37,10 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    settingsViewModel.authenticationSucceeded()
+                    settingsViewModel.authenticationSucceeded(
+                        deviceCredential = result.authenticationType ==
+                            BiometricPrompt.AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL,
+                    )
                 }
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {

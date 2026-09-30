@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">تبدیلیاں محفوظ نہیں کی جا سکیں۔</string>
 
     <string name="action_add">شامل کریں۔</string>
     <string name="action_close">بند کریں۔</string>

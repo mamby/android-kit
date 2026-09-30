@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Не удалось сохранить изменения.</string>
     <string name="action_add">Добавить</string>
     <string name="action_close">Закрыть</string>
     <string name="action_retry">Повторить</string>

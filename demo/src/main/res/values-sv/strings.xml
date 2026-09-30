@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Det gick inte att spara ändringarna.</string>
 
     <string name="action_add">Lägg till</string>
     <string name="action_close">Stäng</string>

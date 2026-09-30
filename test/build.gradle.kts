@@ -47,6 +47,15 @@ android {
     experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
+// Include the demo's pure session state using AGP's Kotlin source API.
+androidComponents.onVariants { variant ->
+    variant.hostTests.values.forEach { hostTest ->
+        hostTest.sources.kotlin?.addStaticSourceDirectory(
+            rootProject.file("demo/src/main/kotlin/net/mamby/androidkit/demo/ui/authentication").absolutePath,
+        )
+    }
+}
+
 // Exercise internal matching and speech contracts without public test hooks.
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     if (name == "compileDebugAndroidTestKotlin" || name == "compileDebugUnitTestKotlin") {

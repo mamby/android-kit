@@ -22,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
@@ -90,7 +92,16 @@ public fun <T> AndroidKitSearchPage(
         AndroidKitSearchMode.Live -> query
         AndroidKitSearchMode.OnSubmit -> submittedQuery.takeUnless { query.isBlank() }.orEmpty()
     }
-    val matches = remember(validatedItems, resultsQuery) { searchItems(validatedItems, resultsQuery) }
+    val documents = validatedItems.map { item ->
+        SearchDocument(
+            key = item.key,
+            label = item.title,
+            visibleText = listOfNotNull(item.title, item.supportingText),
+            aliases = item.searchTerms + listOfNotNull(item.group?.title),
+        )
+    }
+    val matchedIndices = rememberSearchMatches(documents, resultsQuery)
+    val matches = matchedIndices.orEmpty().map { validatedItems[it.index] }
     val strings = AndroidKitThemeTokens.strings
     AndroidKitSearchPage(
         query = query,
@@ -106,6 +117,7 @@ public fun <T> AndroidKitSearchPage(
         title = strings.search,
         noMatchesMessage = strings.noMatchingResults,
         hasResults = matches.isNotEmpty(),
+        isSearching = matchedIndices == null,
         modifier = modifier,
         onBack = onBack,
         listState = listState,
@@ -122,19 +134,6 @@ public fun <T> AndroidKitSearchPage(
             })
         })
     }
-}
-
-private fun <T> searchItems(items: List<AndroidKitSearchItem<T>>, query: String): List<AndroidKitSearchItem<T>> {
-    val tokens = searchQueryTokens(query)
-    if (tokens.isEmpty()) return emptyList()
-    return items.mapNotNull { item ->
-        searchMatch(
-            label = item.title,
-            visibleText = listOfNotNull(item.title, item.supportingText),
-            aliases = item.searchTerms + listOfNotNull(item.group?.title),
-            tokens = tokens,
-        )?.let { match -> item to match }
-    }.sortedBy { it.second }.map { it.first }
 }
 
 /** Shared chrome also serves Settings' catalog matching and result controls. */
@@ -156,6 +155,7 @@ internal fun AndroidKitSearchPage(
     resultsQuery: String = query,
     searchMode: AndroidKitSearchMode = AndroidKitSearchMode.Live,
     onSearch: (String) -> Unit = {},
+    isSearching: Boolean = false,
     results: LazyListScope.(recordRecent: () -> Unit) -> Unit,
 ): Unit {
     val recents = recentQueries.sanitizedRecentSearchQueries()
@@ -185,8 +185,28 @@ internal fun AndroidKitSearchPage(
             requestFocusOnOpen = true,
         ),
     ) { padding ->
+        val showingHistory = resultsQuery.isBlank()
+        // Read clearance during layout so measured floating controls and IME changes stay current.
+        val viewportPadding = remember(padding, showingHistory) {
+            object : PaddingValues by padding {
+                override fun calculateTopPadding() = if (showingHistory) padding.calculateTopPadding() else 0.dp
+                override fun calculateBottomPadding() = 0.dp
+            }
+        }
+        val bodyPadding = remember(padding, showingHistory) {
+            object : PaddingValues by PaddingValues.Zero {
+                override fun calculateTopPadding() = if (showingHistory) 0.dp else padding.calculateTopPadding()
+                override fun calculateBottomPadding() = padding.calculateBottomPadding()
+            }
+        }
+        val listPadding = remember(bodyPadding, dimensions.spaceMedium) {
+            object : PaddingValues by bodyPadding {
+                override fun calculateBottomPadding() =
+                    bodyPadding.calculateBottomPadding() + dimensions.spaceMedium
+            }
+        }
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding)
+            modifier = Modifier.fillMaxSize().padding(viewportPadding)
                 .padding(horizontal = dimensions.screenPadding),
         ) {
             if (resultsQuery.isBlank()) {
@@ -203,7 +223,8 @@ internal fun AndroidKitSearchPage(
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         state = listState,
-                        contentPadding = PaddingValues(bottom = dimensions.spaceMedium),
+                        // Keep the viewport behind the floating search while the final row clears it.
+                        contentPadding = listPadding,
                         verticalArrangement = Arrangement.spacedBy(
                             if (resultsQuery.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
                         ),
@@ -224,15 +245,20 @@ internal fun AndroidKitSearchPage(
                                     )
                                 }
                             }
-                        } else if (resultsQuery.isNotBlank() && !hasResults) {
+                        } else if (resultsQuery.isNotBlank() && !hasResults && !isSearching) {
                             item(key = "no-matches") { SearchEmptyMessage(noMatchesMessage) }
-                        } else if (resultsQuery.isNotBlank()) {
+                        } else if (resultsQuery.isNotBlank() && !isSearching) {
                             results { recordRecent() }
                         }
                     }
                 }
+                if (resultsQuery.isNotBlank() && isSearching) {
+                    Box(Modifier.fillMaxSize().padding(bodyPadding), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
                 if (resultsQuery.isBlank() && (!recentQueriesVisible || recents.isEmpty())) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Box(Modifier.fillMaxSize().padding(bodyPadding), contentAlignment = Alignment.Center) {
                         Column(
                             modifier = Modifier.verticalScroll(rememberScrollState()),
                             horizontalAlignment = Alignment.CenterHorizontally,

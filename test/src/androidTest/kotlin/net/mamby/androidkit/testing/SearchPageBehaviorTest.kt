@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.SideEffect
@@ -23,6 +24,8 @@ import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasScrollToIndexAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -30,6 +33,7 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextReplacement
 import java.util.concurrent.atomic.AtomicBoolean
 import net.mamby.androidkit.compose.form.AndroidKitSearchGroup
@@ -50,6 +54,54 @@ class SearchPageBehaviorTest {
         rule.activityRule.scenario.onActivity {
             it.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
+    }
+
+    @Test
+    fun historyAndResultsScrollBehindSearchAndKeepLastRowAboveIt() {
+        var query by mutableStateOf("")
+        val imeVisible = AtomicBoolean()
+        rule.setContent {
+            val visible = WindowInsets.isImeVisible
+            SideEffect { imeVisible.set(visible) }
+            TestKitTheme {
+                AndroidKitSearchPage(
+                    items = (0 until 30).map { topicItem("topic-$it", "Topic $it", "Topic $it") },
+                    query = query,
+                    onQueryChange = { query = it },
+                    recentQueries = (0 until 10).map { "Recent $it" },
+                    onRecentQueriesChange = {},
+                    recentQueriesVisible = true,
+                    onRecentQueriesVisibleChange = {},
+                    listState = rememberLazyListState(),
+                    voiceInputEnabled = false,
+                ) { matches -> hostResults(matches) }
+            }
+        }
+        rule.waitUntil(5_000) { imeVisible.get() }
+        val search = rule.onNode(hasContentDescription("Search") and hasSetTextAction())
+        val list = rule.onNode(hasScrollToIndexAction())
+        fun assertViewportAndLastRow(lastRow: String, lastIndex: Int) {
+            list.performScrollToIndex(lastIndex)
+            val fieldBounds = search.fetchSemanticsNode().boundsInRoot
+            val viewportBounds = list.fetchSemanticsNode().boundsInRoot
+            assertTrue("List viewport must extend behind the search box", viewportBounds.bottom > fieldBounds.bottom)
+            val rowBounds = rule.onNodeWithText(lastRow).assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+            assertTrue("Last row must scroll clear of the search box", rowBounds.bottom <= fieldBounds.top)
+        }
+        val headingTop = rule.onNodeWithText("Recent searches").fetchSemanticsNode().boundsInRoot.top
+        assertViewportAndLastRow("Recent 9", 9)
+        assertEquals(headingTop, rule.onNodeWithText("Recent searches").fetchSemanticsNode().boundsInRoot.top)
+        search.performTextReplacement("topic")
+        rule.waitUntil(5_000) { rule.onAllNodes(hasText("Event: Topic", substring = true)).fetchSemanticsNodes().isNotEmpty() }
+        list.performScrollToIndex(0)
+        rule.onNodeWithText("Event: Topic 0").assertIsDisplayed()
+        val titleBounds = rule.onNode(hasContentDescription("Search") and !hasSetTextAction()).fetchSemanticsNode().boundsInRoot
+        assertTrue("Result viewport must extend behind the title bar", list.fetchSemanticsNode().boundsInRoot.top < titleBounds.bottom)
+        assertTrue("First result must clear the title bar", rule.onNodeWithText("Event: Topic 0").fetchSemanticsNode().boundsInRoot.top >= titleBounds.bottom)
+        assertViewportAndLastRow("Event: Topic 29", 29)
+        pressBack()
+        rule.waitUntil(5_000) { !imeVisible.get() }
+        assertViewportAndLastRow("Event: Topic 29", 29)
     }
 
     @Test

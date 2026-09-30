@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">အပြောင်းအလဲများကို မသိမ်းဆည်းနိုင်ခဲ့ပါ။</string>
 
     <string name="action_add">ထည့်ပါ။</string>
     <string name="action_close">ပိတ်ပါ။</string>

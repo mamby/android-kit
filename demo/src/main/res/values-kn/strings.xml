@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
 
     <string name="action_add">ಸೇರಿಸಿ</string>
     <string name="action_close">ಮುಚ್ಚಿ</string>

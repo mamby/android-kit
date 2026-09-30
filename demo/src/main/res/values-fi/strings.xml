@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Muutoksia ei voitu tallentaa.</string>
 
     <string name="action_add">Lisää</string>
     <string name="action_close">Sulje</string>

@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">No se pudieron guardar los cambios.</string>
     <string name="action_add">Añadir</string>
     <string name="action_close">Cerrar</string>
     <string name="action_retry">Reintentar</string>

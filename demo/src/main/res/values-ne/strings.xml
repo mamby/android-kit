@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">परिवर्तनहरू सुरक्षित गर्न सकिएन।</string>
 
     <string name="action_add">थप्नुहोस्</string>
     <string name="action_close">बन्द</string>

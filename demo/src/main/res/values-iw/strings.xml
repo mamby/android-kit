@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">לא ניתן לשמור את השינויים.</string>
 
     <string name="action_add">הוסף</string>
     <string name="action_close">סגור</string>

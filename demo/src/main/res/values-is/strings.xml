@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Ekki tókst að vista breytingarnar.</string>
 
     <string name="action_add">Bæta við</string>
     <string name="action_close">Lokið</string>

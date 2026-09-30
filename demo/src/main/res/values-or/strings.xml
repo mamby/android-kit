@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">ପରିବର୍ତ୍ତନଗୁଡ଼ିକୁ ସଞ୍ଚୟ କରାଯାଇପାରିଲା ନାହିଁ।</string>
 
     <string name="action_add">ଯୋଡ଼ନ୍ତୁ</string>
     <string name="action_close">ବନ୍ଦ କରନ୍ତୁ</string>

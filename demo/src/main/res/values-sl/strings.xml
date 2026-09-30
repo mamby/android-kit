@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Sprememb ni bilo mogoče shraniti.</string>
 
     <string name="action_add">Dodaj</string>
     <string name="action_close">Zapri</string>

@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">ફેરફારો સાચવી શકાયા નથી.</string>
 
     <string name="action_add">ઉમેરો</string>
     <string name="action_close">બંધ</string>

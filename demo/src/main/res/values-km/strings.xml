@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">មិនអាចរក្សាទុកការផ្លាស់ប្តូរបានទេ។</string>
 
     <string name="action_add">បន្ថែម</string>
     <string name="action_close">បិទ</string>

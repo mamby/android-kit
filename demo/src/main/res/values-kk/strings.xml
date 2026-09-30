@@ -1,4 +1,5 @@
 <resources>
+    <string name="settings_save_failed">Өзгерістерді сақтау мүмкін болмады.</string>
 
     <string name="action_add">қосу</string>
     <string name="action_close">Жабу</string>
