@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -149,38 +150,9 @@ internal fun AndroidKitSearchPage(
             requestFocusOnOpen = true,
         ),
     ) { padding ->
-        if (query.isBlank() && recents.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize().padding(padding)
-                    .padding(horizontal = dimensions.screenPadding),
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(dimensions.spaceLarge),
-                ) {
-                    Box(
-                        modifier = Modifier.size(dimensions.floatingActionButtonSize + dimensions.spaceLarge)
-                            .background(AndroidKitThemeTokens.colorScheme.primaryContainer, CircleShape),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            imageVector = AndroidKitIcons.Search,
-                            contentDescription = null,
-                            modifier = Modifier.size(dimensions.actionFlyoutIconSize),
-                            tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
-                        )
-                    }
-                    Text(
-                        text = strings.noRecentSearches,
-                        style = AndroidKitThemeTokens.typography.bodyLarge,
-                        color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-        } else {
+        Box(Modifier.fillMaxSize()) {
+            // Keep the lazy layout composed when the last recent is removed so its
+            // built-in item animator can finish the outgoing row's fade.
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 state = listState,
@@ -190,12 +162,16 @@ internal fun AndroidKitSearchPage(
                     end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
                     bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
                 ),
-                verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
+                verticalArrangement = Arrangement.spacedBy(
+                    if (query.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
+                ),
             ) {
-                if (query.isBlank()) {
+                if (query.isBlank() && recents.isNotEmpty()) {
                     item(key = "recent-heading") {
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().padding(
+                                bottom = dimensions.settingsPageSectionSpacing - dimensions.spaceSmall,
+                            ),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
@@ -212,24 +188,54 @@ internal fun AndroidKitSearchPage(
                             ) { Text(strings.clearAll) }
                         }
                     }
-                    item(key = "recent-list") {
-                        Column(verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
-                            recents.forEach { recent ->
-                                RecentSearchRow(
-                                    query = recent,
-                                    onSelect = { onQueryChange(recent) },
-                                    onRemove = {
-                                        val removed = normalizeSearchText(recent)
-                                        onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
-                                    },
-                                )
-                            }
+                    items(recents, key = { recent -> "recent:${normalizeSearchText(recent)}" }) { recent ->
+                        Box(Modifier.animateItem(fadeInSpec = null)) {
+                            RecentSearchRow(
+                                query = recent,
+                                onSelect = { onQueryChange(recent) },
+                                onRemove = {
+                                    val removed = normalizeSearchText(recent)
+                                    onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
+                                },
+                            )
                         }
                     }
-                } else if (!hasResults) {
+                } else if (query.isNotBlank() && !hasResults) {
                     item(key = "no-matches") { SearchEmptyMessage(noMatchesMessage) }
-                } else {
+                } else if (query.isNotBlank()) {
                     results { recordRecent() }
+                }
+            }
+            if (query.isBlank() && recents.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(padding)
+                        .padding(horizontal = dimensions.screenPadding),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Column(
+                        modifier = Modifier.verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(dimensions.spaceLarge),
+                    ) {
+                        Box(
+                            modifier = Modifier.size(dimensions.floatingActionButtonSize + dimensions.spaceLarge)
+                                .background(AndroidKitThemeTokens.colorScheme.primaryContainer, CircleShape),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = AndroidKitIcons.Search,
+                                contentDescription = null,
+                                modifier = Modifier.size(dimensions.actionFlyoutIconSize),
+                                tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
+                            )
+                        }
+                        Text(
+                            text = strings.noRecentSearches,
+                            style = AndroidKitThemeTokens.typography.bodyLarge,
+                            color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
             }
         }
