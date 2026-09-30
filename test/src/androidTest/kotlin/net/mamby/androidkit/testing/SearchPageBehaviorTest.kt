@@ -25,6 +25,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -53,6 +54,7 @@ class SearchPageBehaviorTest {
 
     @Test
     fun openingAndReopeningFocusesInputWithoutReopeningDismissedKeyboardOnUpdates() {
+        var recentHistoryVisible by mutableStateOf(true)
         var shown by mutableStateOf(true)
         var query by mutableStateOf("coffee")
         var recents by mutableStateOf(emptyList<String>())
@@ -68,6 +70,8 @@ class SearchPageBehaviorTest {
                         onQueryChange = { query = it },
                         recentQueries = recents,
                         onRecentQueriesChange = { recents = it },
+                        recentQueriesVisible = recentHistoryVisible,
+                        onRecentQueriesVisibleChange = { recentHistoryVisible = it },
                         voiceInputEnabled = false,
                     ) { matches -> hostResults(matches) }
                 }
@@ -102,6 +106,7 @@ class SearchPageBehaviorTest {
 
     @Test
     fun hostResultsReceiveTypedDataInRelevanceOrder() {
+        var recentHistoryVisible by mutableStateOf(true)
         val items = listOf(
             topicItem("alias", "Appointment", "Alias", aliases = listOf("clinic")),
             topicItem("prefix", "Clinic visits", "Prefix"),
@@ -111,7 +116,7 @@ class SearchPageBehaviorTest {
         )
         rule.setContent {
             TestKitTheme {
-                AndroidKitSearchPage(items, "clinic", {}, emptyList(), {}, voiceInputEnabled = false) { matches ->
+                AndroidKitSearchPage(items, "clinic", {}, emptyList(), {}, recentHistoryVisible, { recentHistoryVisible = it }, voiceInputEnabled = false) { matches ->
                     item(key = "order") { Text(matches.joinToString { it.data.value }) }
                     hostResults(matches)
                 }
@@ -124,6 +129,7 @@ class SearchPageBehaviorTest {
 
     @Test
     fun matchingUsesEveryTokenContextAndAliasesAndTracksChangingHostData() {
+        var recentHistoryVisible by mutableStateOf(true)
         var query by mutableStateOf("")
         var recents by mutableStateOf(emptyList<String>())
         var clicks = 0
@@ -140,7 +146,7 @@ class SearchPageBehaviorTest {
         )
         rule.setContent {
             TestKitTheme {
-                AndroidKitSearchPage(items, query, { query = it }, recents, { recents = it },
+                AndroidKitSearchPage(items, query, { query = it }, recents, { recents = it }, recentHistoryVisible, { recentHistoryVisible = it },
                     voiceInputEnabled = false) { matches -> hostResults(matches) }
             }
         }
@@ -176,6 +182,7 @@ class SearchPageBehaviorTest {
 
     @Test
     fun resultActionsAndSubmissionShareControlledRecentHistory() {
+        var recentHistoryVisible by mutableStateOf(true)
         var query by mutableStateOf("")
         var recents by mutableStateOf((0 until 10).map { "Old $it" })
         rule.setContent {
@@ -186,6 +193,8 @@ class SearchPageBehaviorTest {
                     onQueryChange = { query = it },
                     recentQueries = recents,
                     onRecentQueriesChange = { recents = it },
+                    recentQueriesVisible = recentHistoryVisible,
+                    onRecentQueriesVisibleChange = { recentHistoryVisible = it },
                     voiceInputEnabled = false,
                 ) { matches -> hostResults(matches) }
             }
@@ -221,6 +230,7 @@ class SearchPageBehaviorTest {
 
     @Test
     fun hostSavedQueryRestoresItsResults() {
+        var recentHistoryVisible by mutableStateOf(true)
         val restoration = StateRestorationTester(rule)
         restoration.setContent {
             var query by rememberSaveable { mutableStateOf("") }
@@ -231,6 +241,8 @@ class SearchPageBehaviorTest {
                     onQueryChange = { query = it },
                     recentQueries = emptyList(),
                     onRecentQueriesChange = {},
+                    recentQueriesVisible = recentHistoryVisible,
+                    onRecentQueriesVisibleChange = { recentHistoryVisible = it },
                     voiceInputEnabled = false,
                 ) { matches -> hostResults(matches) }
             }
@@ -262,7 +274,7 @@ class SearchPageBehaviorTest {
         }
         rule.onNodeWithText("Sensitive query").assertIsDisplayed()
         rule.mainClock.autoAdvance = false
-        rule.onNodeWithText("Hide recent searches").performClick()
+        rule.onNodeWithContentDescription("Hide recent searches").performClick()
         rule.mainClock.advanceTimeByFrame()
         rule.waitForIdle()
         rule.onNodeWithText("Sensitive query").assertDoesNotExist()
@@ -281,13 +293,13 @@ class SearchPageBehaviorTest {
         rule.onNodeWithText("Submitted privately").assertDoesNotExist()
         rule.runOnIdle { assertEquals(listOf("Submitted privately", "alpha", "Sensitive query"), recents) }
 
-        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithContentDescription("Show recent searches").performClick()
         rule.onNodeWithText("Sensitive query").assertIsDisplayed()
         rule.onNodeWithText("Clear all").performClick()
         rule.onNodeWithText("No recent searches").assertIsDisplayed()
-        rule.onNodeWithText("Hide recent searches").performClick()
+        rule.onNodeWithContentDescription("Hide recent searches").performClick()
         rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
-        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithContentDescription("Show recent searches").performClick()
         rule.onNodeWithText("No recent searches").assertIsDisplayed()
     }
 
@@ -315,10 +327,10 @@ class SearchPageBehaviorTest {
         rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
         rule.runOnIdle { secondPage = true }
         rule.onNodeWithText("Second history").assertIsDisplayed()
-        rule.onNodeWithText("Hide recent searches").performClick()
+        rule.onNodeWithContentDescription("Hide recent searches").performClick()
         restoration.emulateSavedInstanceStateRestore()
         rule.onNodeWithText("Second history").assertDoesNotExist()
-        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithContentDescription("Show recent searches").performClick()
         rule.onNodeWithText("Second history").assertIsDisplayed()
         rule.runOnIdle { secondPage = false }
         rule.onNodeWithText("First history").assertDoesNotExist()

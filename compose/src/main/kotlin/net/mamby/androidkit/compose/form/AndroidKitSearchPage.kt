@@ -1,15 +1,11 @@
 package net.mamby.androidkit.compose.form
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -24,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,11 +29,12 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
+import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 private const val MaximumRecentSearches = 10
@@ -47,7 +45,7 @@ private const val MaximumRecentSearches = 10
  * Item keys must be unique across the page; items sharing a group key must share its title.
  * Recent queries are recorded on IME submission or a result action, never while typing.
  * Hosts persist [recentQueriesVisible] per logical search page. Hiding preserves history and
- * continues recording. Supply [onRecentQueriesVisibleChange] to enable the Kit-owned control;
+ * continues recording. Hosts must supply [onRecentQueriesVisibleChange] and persist its changes;
  * keep history hidden until its persisted visibility has loaded.
  * Opening the page focuses the input and requests the software keyboard once per entry.
  * Render [content] with stable item keys and respect each item's enabled state. Calling a matched
@@ -60,12 +58,12 @@ public fun <T> AndroidKitSearchPage(
     onQueryChange: (String) -> Unit,
     recentQueries: List<String>,
     onRecentQueriesChange: (List<String>) -> Unit,
+    recentQueriesVisible: Boolean,
+    onRecentQueriesVisibleChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
     voiceInputEnabled: Boolean = true,
-    recentQueriesVisible: Boolean = true,
-    onRecentQueriesVisibleChange: ((Boolean) -> Unit)? = null,
     content: LazyListScope.(matches: List<AndroidKitSearchItem<T>>) -> Unit,
 ): Unit {
     val itemSnapshot = items.toList()
@@ -124,6 +122,8 @@ internal fun AndroidKitSearchPage(
     onQueryChange: (String) -> Unit,
     recentQueries: List<String>,
     onRecentQueriesChange: (List<String>) -> Unit,
+    recentQueriesVisible: Boolean,
+    onRecentQueriesVisibleChange: (Boolean) -> Unit,
     title: String,
     noMatchesMessage: String,
     hasResults: Boolean,
@@ -131,8 +131,6 @@ internal fun AndroidKitSearchPage(
     onBack: (() -> Unit)?,
     listState: LazyListState,
     voiceInputEnabled: Boolean = true,
-    recentQueriesVisible: Boolean = true,
-    onRecentQueriesVisibleChange: ((Boolean) -> Unit)? = null,
     results: LazyListScope.(recordRecent: () -> Unit) -> Unit,
 ): Unit {
     val recents = recentQueries.sanitizedRecentSearchQueries()
@@ -147,7 +145,6 @@ internal fun AndroidKitSearchPage(
     }
     val strings = AndroidKitThemeTokens.strings
     val dimensions = AndroidKitThemeTokens.dimensions
-    val direction = LocalLayoutDirection.current
     AndroidKitPage(
         title = title,
         modifier = modifier,
@@ -161,109 +158,128 @@ internal fun AndroidKitSearchPage(
             requestFocusOnOpen = true,
         ),
     ) { padding ->
-        Box(Modifier.fillMaxSize()) {
-            // Keep the lazy layout composed when the last recent is removed so its
-            // built-in item animator can finish the outgoing row's fade.
-            // A visibility change disposes outgoing animated rows immediately.
-            key(recentQueriesVisible) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = listState,
-                    contentPadding = PaddingValues(
-                        start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
-                        top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
-                        bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        if (query.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
-                    ),
-                ) {
-                    if (query.isBlank() && recentQueriesVisible && recents.isNotEmpty()) {
-                        item(key = "recent-heading") {
-                            FlowRow(
-                                modifier = Modifier.fillMaxWidth().padding(
-                                    bottom = dimensions.settingsPageSectionSpacing - dimensions.spaceSmall,
-                                ),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                itemVerticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = strings.recentSearches,
-                                    style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
-                                    color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
-                                )
-                                FlowRow(horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
-                                    onRecentQueriesVisibleChange?.let { onVisibilityChange ->
-                                        TextButton(onClick = { onVisibilityChange(false) }) {
-                                            Text(strings.hideRecentSearches)
-                                        }
-                                    }
-                                    TextButton(
-                                        onClick = { onRecentQueriesChange(emptyList()) },
-                                        contentPadding = PaddingValues(
-                                            horizontal = (dimensions.minimumTouchTarget - dimensions.floatingActionBarIconSize) / 2,
-                                        ),
-                                    ) { Text(strings.clearAll) }
+        Column(
+            modifier = Modifier.fillMaxSize().padding(padding)
+                .padding(horizontal = dimensions.screenPadding),
+        ) {
+            if (query.isBlank()) {
+                RecentSearchHeading(
+                    visible = recentQueriesVisible,
+                    onVisibilityChange = onRecentQueriesVisibleChange,
+                    canClear = recentQueriesVisible && recents.isNotEmpty(),
+                    onClear = { onRecentQueriesChange(emptyList()) },
+                )
+            }
+            Box(Modifier.fillMaxWidth().weight(1f)) {
+                // Retain removal fades, but dispose outgoing rows immediately on hiding.
+                key(recentQueriesVisible) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = listState,
+                        contentPadding = PaddingValues(bottom = dimensions.spaceMedium),
+                        verticalArrangement = Arrangement.spacedBy(
+                            if (query.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
+                        ),
+                    ) {
+                        if (query.isBlank() && recentQueriesVisible) {
+                            items(recents, key = { recent -> "recent:${normalizeSearchText(recent)}" }) { recent ->
+                                Box(Modifier.animateItem(fadeInSpec = null)) {
+                                    RecentSearchRow(
+                                        query = recent,
+                                        onSelect = { onQueryChange(recent) },
+                                        onRemove = {
+                                            val removed = normalizeSearchText(recent)
+                                            onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
+                                        },
+                                    )
                                 }
                             }
+                        } else if (query.isNotBlank() && !hasResults) {
+                            item(key = "no-matches") { SearchEmptyMessage(noMatchesMessage) }
+                        } else if (query.isNotBlank()) {
+                            results { recordRecent() }
                         }
-                        items(recents, key = { recent -> "recent:${normalizeSearchText(recent)}" }) { recent ->
-                            Box(Modifier.animateItem(fadeInSpec = null)) {
-                                RecentSearchRow(
-                                    query = recent,
-                                    onSelect = { onQueryChange(recent) },
-                                    onRemove = {
-                                        val removed = normalizeSearchText(recent)
-                                        onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
-                                    },
+                    }
+                }
+                if (query.isBlank() && (!recentQueriesVisible || recents.isEmpty())) {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(
+                            modifier = Modifier.verticalScroll(rememberScrollState()),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(dimensions.spaceLarge),
+                        ) {
+                            Box(
+                                modifier = Modifier.size(dimensions.floatingActionButtonSize + dimensions.spaceLarge)
+                                    .background(AndroidKitThemeTokens.colorScheme.primaryContainer, CircleShape),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(
+                                    imageVector = if (recentQueriesVisible) AndroidKitIcons.Search else AndroidKitIcons.EyeOff,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(dimensions.actionFlyoutIconSize),
+                                    tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
                                 )
                             }
-                        }
-                    } else if (query.isNotBlank() && !hasResults) {
-                        item(key = "no-matches") { SearchEmptyMessage(noMatchesMessage) }
-                    } else if (query.isNotBlank()) {
-                        results { recordRecent() }
-                    }
-                }
-            }
-            if (query.isBlank() && (!recentQueriesVisible || recents.isEmpty())) {
-                Box(
-                    modifier = Modifier.fillMaxSize().padding(padding)
-                        .padding(horizontal = dimensions.screenPadding),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Column(
-                        modifier = Modifier.verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(dimensions.spaceLarge),
-                    ) {
-                        Box(
-                            modifier = Modifier.size(dimensions.floatingActionButtonSize + dimensions.spaceLarge)
-                                .background(AndroidKitThemeTokens.colorScheme.primaryContainer, CircleShape),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Icon(
-                                imageVector = AndroidKitIcons.Search,
-                                contentDescription = null,
-                                modifier = Modifier.size(dimensions.actionFlyoutIconSize),
-                                tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
+                            Text(
+                                text = if (recentQueriesVisible) strings.noRecentSearches else strings.recentSearchesHidden,
+                                style = AndroidKitThemeTokens.typography.bodyLarge,
+                                color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
+                                textAlign = TextAlign.Center,
                             )
                         }
-                        Text(
-                            text = if (recentQueriesVisible) strings.noRecentSearches else strings.recentSearchesHidden,
-                            style = AndroidKitThemeTokens.typography.bodyLarge,
-                            color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
-                            textAlign = TextAlign.Center,
-                        )
-                        onRecentQueriesVisibleChange?.let { onVisibilityChange ->
-                            TextButton(onClick = { onVisibilityChange(!recentQueriesVisible) }) {
-                                Text(if (recentQueriesVisible) strings.hideRecentSearches else strings.showRecentSearches)
-                            }
-                        }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun RecentSearchHeading(
+    visible: Boolean,
+    onVisibilityChange: (Boolean) -> Unit,
+    canClear: Boolean,
+    onClear: () -> Unit,
+) {
+    val dimensions = AndroidKitThemeTokens.dimensions
+    val strings = AndroidKitThemeTokens.strings
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(bottom = dimensions.settingsPageSectionSpacing),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = strings.recentSearches,
+                modifier = Modifier.weight(1f, fill = false),
+                style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
+                color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            IconToggleButton(
+                checked = visible,
+                onCheckedChange = onVisibilityChange,
+                modifier = Modifier.size(dimensions.minimumTouchTarget),
+            ) {
+                Icon(
+                    imageVector = if (visible) AndroidKitIcons.EyeOff else AndroidKitIcons.Eye,
+                    contentDescription = if (visible) strings.hideRecentSearches else strings.showRecentSearches,
+                    modifier = Modifier.size(dimensions.floatingActionBarIconSize),
+                    tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                )
+            }
+        }
+        if (canClear) {
+            TextButton(
+                onClick = onClear,
+                contentPadding = PaddingValues(
+                    start = (dimensions.minimumTouchTarget - dimensions.floatingActionBarIconSize) / 2,
+                    end = dimensions.spaceExtraSmall,
+                ),
+            ) { Text(strings.clearAll, maxLines = 1) }
         }
     }
 }
@@ -280,24 +296,36 @@ private fun List<String>.sanitizedRecentSearchQueries(): List<String> {
 private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () -> Unit) {
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
-    Row(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onSelect)
-            .heightIn(min = dimensions.minimumTouchTarget),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+    AndroidKitCard(
+        onClick = onSelect,
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(start = dimensions.spaceMedium),
     ) {
-        Text(
-            text = query,
-            modifier = Modifier.weight(1f),
-            style = AndroidKitThemeTokens.typography.bodyMedium,
-            color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
-        )
-        IconButton(onClick = onRemove, modifier = Modifier.size(dimensions.minimumTouchTarget)) {
+        Row(
+            modifier = Modifier.fillMaxWidth().heightIn(min = dimensions.minimumTouchTarget),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Icon(
-                imageVector = AndroidKitIcons.Trash,
-                contentDescription = strings.removeRecentSearch,
-                modifier = Modifier.size(dimensions.floatingActionBarIconSize),
+                imageVector = AndroidKitIcons.History,
+                contentDescription = null,
+                modifier = Modifier.padding(end = dimensions.spaceSmall)
+                    .size(dimensions.floatingActionBarIconSize),
+                tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
             )
+            Text(
+                text = query,
+                modifier = Modifier.weight(1f).padding(end = dimensions.spaceMedium),
+                style = AndroidKitThemeTokens.typography.bodyLarge,
+                color = AndroidKitThemeTokens.cardStyle.contentColor,
+            )
+            IconButton(onClick = onRemove, modifier = Modifier.size(dimensions.minimumTouchTarget)) {
+                Icon(
+                    imageVector = AndroidKitIcons.Close,
+                    contentDescription = strings.removeRecentSearch,
+                    modifier = Modifier.size(dimensions.floatingActionBarIconSize),
+                    tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                )
+            }
         }
     }
 }

@@ -80,12 +80,18 @@ required; the demo uses `rememberSaveable` for the query and DataStore for histo
 
 ## Page-scoped history visibility
 
-Supply `recentQueriesVisible` and `onRecentQueriesVisibleChange` to enable the
-Kit-owned Hide recent searches / Show recent searches control. Without the
-callback, existing callers retain visible history and no visibility control.
+Both `recentQueriesVisible` and `onRecentQueriesVisibleChange` are required in
+`AndroidKitSearchPage` and `AndroidKitSettingsSearchConfiguration`. Hosts must
+wire the callback to their page-scoped persisted state. Every search page includes the
+Kit-owned eye toggle immediately after the Recent searches heading. Its localized
+accessibility action is Hide recent searches / Show recent searches. There is no
+API option to omit the privacy control. This is a source-breaking change: callers
+must supply both arguments explicitly when upgrading.
 Hiding immediately removes recent rows, including outgoing animations and their
 accessibility semantics. The empty-query body says Recent searches hidden and
-offers Show even when history is empty. Clear all remains a separate deletion
+keeps the heading and toggle available even when history is empty. Recent queries
+render as rounded Kit cards with a leading history icon and trailing X remove
+action; tapping the card restores the query. Clear all remains a separate deletion
 action when history is shown. Searching and recording continue while hidden.
 
 Hosts persist visibility alongside history, scoped by a stable logical search

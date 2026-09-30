@@ -68,7 +68,7 @@ class SettingsSearchBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({ searchRequests++ }, emptyList(), {}),
+                    rememberTestSettingsSearchConfiguration({ searchRequests++ }, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     subpage("sub", "Subpage")
@@ -93,7 +93,7 @@ class SettingsSearchBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, recents, { recents = it }),
+                    rememberTestSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) {
                     main("main", "Settings") {
                         section("general", "General") {
@@ -155,7 +155,7 @@ class SettingsSearchBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, recents, { recents = it }),
+                    rememberTestSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) { main("main", "Settings") }
                 AndroidKitSettingsSearchPage(catalog)
             }
@@ -204,9 +204,9 @@ class SettingsSearchBehaviorTest {
         }
         search.performTextReplacement("")
         rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
-        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithContentDescription("Show recent searches").performClick()
         rule.onNodeWithText("Sensitive setting").assertIsDisplayed()
-        rule.onNodeWithText("Hide recent searches").performClick()
+        rule.onNodeWithContentDescription("Hide recent searches").performClick()
         rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
     }
 
@@ -216,7 +216,7 @@ class SettingsSearchBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, recents, { recents = it }),
+                    rememberTestSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) {
                     main("main", "Settings") {
                         section("actions") { button("alpha", "Alpha", {}) }
@@ -248,7 +248,7 @@ class SettingsSearchBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+                    rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings") {
                         section("general", "General") {
@@ -320,7 +320,7 @@ class SettingsSearchBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+                    rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     about("about", AndroidKitSettingsAbout("App", "1.2.3"), { aboutRequests++ })
@@ -349,7 +349,7 @@ class SettingsSearchBehaviorTest {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                         TestKitTheme {
                             val catalog = androidKitSettingsCatalog(
-                                AndroidKitSettingsSearchConfiguration({}, listOf("Theme"), {}),
+                                rememberTestSettingsSearchConfiguration({}, listOf("Theme"), {}),
                             ) { main("main", "Settings") }
                             AndroidKitSettingsSearchPage(catalog)
                         }
@@ -371,7 +371,7 @@ class SettingsSearchBehaviorTest {
     @Test
     fun catalogRejectsDuplicatePageKeys() {
         assertThrows(IllegalArgumentException::class.java) {
-            androidKitSettingsCatalog(AndroidKitSettingsSearchConfiguration({}, emptyList(), {})) {
+            androidKitSettingsCatalog(AndroidKitSettingsSearchConfiguration({}, emptyList(), {}, false, {})) {
                 main("same", "Settings")
                 subpage("same", "Other")
             }

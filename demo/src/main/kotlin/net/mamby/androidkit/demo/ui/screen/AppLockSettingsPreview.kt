@@ -20,6 +20,7 @@ import net.mamby.androidkit.demo.R
 @Preview(showBackground = true)
 @Composable
 private fun AppLockSettingsPreview() {
+    var recentQueriesVisible by rememberSaveable { mutableStateOf(true) }
     var checked by rememberSaveable { mutableStateOf(true) }
     var selected by rememberSaveable { mutableStateOf("5") }
     val title = stringResource(R.string.settings_app_lock)
@@ -31,7 +32,13 @@ private fun AppLockSettingsPreview() {
     )
     AndroidKitTheme {
         val catalog = androidKitSettingsCatalog(
-            AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+            AndroidKitSettingsSearchConfiguration(
+                onOpenSearch = {},
+                recentQueries = emptyList(),
+                onRecentQueriesChange = {},
+                recentQueriesVisible = recentQueriesVisible,
+                onRecentQueriesVisibleChange = { recentQueriesVisible = it },
+            ),
         ) {
             main("preview", title) {
                 section("security") {

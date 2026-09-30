@@ -20,7 +20,6 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLegalEntry
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
-import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
 import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -36,7 +35,7 @@ class SettingsCommunityBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+                    rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings") {
                         section("host") { info("host", "Host setting") }
@@ -78,7 +77,7 @@ class SettingsCommunityBehaviorTest {
                             ),
                         )
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+                    rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     about("about", about, {})
@@ -120,7 +119,7 @@ class SettingsCommunityBehaviorTest {
                             description = "   ",
                         )
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration({}, emptyList(), {}),
+                    rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     about("about", about, {})

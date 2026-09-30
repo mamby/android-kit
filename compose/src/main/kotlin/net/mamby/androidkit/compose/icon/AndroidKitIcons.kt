@@ -19,8 +19,10 @@ import androidx.compose.ui.unit.dp
 internal object AndroidKitIcons {
     val Stop: ImageVector = settingsIcon("Square", "M5 3H19A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3Z")
     val Search: ImageVector = settingsIcon("Search", "M21 21L16.65 16.65 M19 11A8 8 0 1 1 3 11A8 8 0 1 1 19 11")
+    // Lucide eye / eye-off, under the same ISC license as the other chrome icons.
+    val Eye: ImageVector = settingsIcon("Eye", "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0 M15 12a3 3 0 1 1-6 0a3 3 0 1 1 6 0")
+    val EyeOff: ImageVector = settingsIcon("EyeOff", "M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49 M14.084 14.158a3 3 0 0 1-4.242-4.242 M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143 M2 2L22 22")
     val History: ImageVector = settingsIcon("History", "M3 12A9 9 0 1 0 6 5.3L3 8 M3 3V8H8 M12 7V12L15 14")
-    val Trash: ImageVector = settingsIcon("Trash2", "M3 6H21 M8 6V4A2 2 0 0 1 10 2H14A2 2 0 0 1 16 4V6 M19 6L18 22H6L5 6 M10 11V17 M14 11V17")
     val Microphone: ImageVector = settingsIcon("Mic", "M9 5A3 3 0 0 1 15 5V12A3 3 0 0 1 9 12Z M5 10V12A7 7 0 0 0 19 12V10 M12 19V22")
     val Contact: ImageVector = settingsIcon("Mail", "M4 4H20A2 2 0 0 1 22 6V18A2 2 0 0 1 20 20H4A2 2 0 0 1 2 18V6A2 2 0 0 1 4 4 M22 6L12 13L2 6")
     val Info: ImageVector = settingsIcon("Info", "M22 12A10 10 0 1 1 2 12A10 10 0 1 1 22 12 M12 16V12 M12 8H12.01")
