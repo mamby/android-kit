@@ -1,5 +1,6 @@
 package net.mamby.androidkit.compose.form
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
@@ -468,10 +471,14 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
         ) {
             if (options.isEmpty()) item(key = "empty") { Text(picker.emptyResultsLabel.orEmpty()) }
             items(options, key = { "option:${it.id}" }) { option ->
+                val selected = option.id == selection.selectedId
+                val contentColor = if (selected) MaterialTheme.colorScheme.onSecondaryContainer
+                    else AndroidKitThemeTokens.settingSectionStyle.contentColor
                 Row(
                     modifier = Modifier.fillMaxWidth()
+                        .background(if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent)
                         .selectable(
-                            selected = option.id == selection.selectedId,
+                            selected = selected,
                             role = Role.RadioButton,
                             onClick = { selection.onSelected(option.id); onDismiss() },
                         )
@@ -482,10 +489,13 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
                     horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
                 ) {
                     Text(option.label, modifier = Modifier.weight(1f),
-                        style = AndroidKitThemeTokens.settingSectionStyle.entryLabelTextStyle)
-                    if (option.id == selection.selectedId) {
+                        color = contentColor,
+                        style = AndroidKitThemeTokens.settingSectionStyle.entryLabelTextStyle.let {
+                            if (selected) it.copy(fontWeight = FontWeight.Medium) else it
+                        })
+                    if (selected) {
                         Icon(AndroidKitIcons.Check, contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary)
+                            tint = contentColor)
                     }
                 }
             }

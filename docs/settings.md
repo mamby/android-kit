@@ -67,6 +67,10 @@ host's insertion order. Use standard BCP 47 language tags as language option IDs
 (for example, `id` and `zh-Hans`). New options are sorted on the next render;
 filtering preserves this order. Theme and timeout options retain host order.
 
+Selected language and theme options retain their checkmark and use the Material 3
+`secondaryContainer` / `onSecondaryContainer` color pair with medium-weight text.
+Selection continues to use Compose radio-group semantics.
+
 ## Global search
 
 `AndroidKitSettingsSearchPage` searches every catalog page, including pages that
