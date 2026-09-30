@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">பேச்சு அங்கீகரிக்கப்படவில்லை. மீண்டும் முயற்சிக்கவும்.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">பயன்பாட்டு அமைப்புகளைத் திறக்கவும்</string>
+    <string name="androidkit_compose_hide_recent_searches">சமீபத்திய தேடல்களை மறை</string>
+    <string name="androidkit_compose_show_recent_searches">சமீபத்திய தேடல்களைக் காட்டு</string>
+    <string name="androidkit_compose_recent_searches_hidden">சமீபத்திய தேடல்கள் மறைக்கப்பட்டுள்ளன</string>
 </resources>

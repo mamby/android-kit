@@ -55,4 +55,8 @@
     <string name="androidkit_compose_voice_no_speech">No speech recognized. Try again.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Open app settings</string>
+    <!-- Page-scoped history visibility only: hiding neither deletes nor stops saving searches. -->
+    <string name="androidkit_compose_hide_recent_searches">Hide recent searches</string>
+    <string name="androidkit_compose_show_recent_searches">Show recent searches</string>
+    <string name="androidkit_compose_recent_searches_hidden">Recent searches hidden</string>
 </resources>

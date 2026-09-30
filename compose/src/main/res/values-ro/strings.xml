@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Nicio vorbire recunoscută. Încearcă din nou.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Deschideți setările aplicației</string>
+    <string name="androidkit_compose_hide_recent_searches">Ascunde căutările recente</string>
+    <string name="androidkit_compose_show_recent_searches">Afișează căutările recente</string>
+    <string name="androidkit_compose_recent_searches_hidden">Căutările recente sunt ascunse</string>
 </resources>

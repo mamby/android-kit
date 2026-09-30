@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">کوئی تقریر نہیں پہچانی گئی۔ دوبارہ کوشش کریں۔</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">ایپ کی ترتیبات کھولیں۔</string>
+    <string name="androidkit_compose_hide_recent_searches">حالیہ تلاشیں چھپائیں</string>
+    <string name="androidkit_compose_show_recent_searches">حالیہ تلاشیں دکھائیں</string>
+    <string name="androidkit_compose_recent_searches_hidden">حالیہ تلاشیں چھپی ہوئی ہیں</string>
 </resources>

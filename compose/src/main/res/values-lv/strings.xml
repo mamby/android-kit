@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Runas atpazīšana neizdevās. Mēģiniet vēlreiz.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Atvērt lietotnes iestatījumus</string>
+    <string name="androidkit_compose_hide_recent_searches">Paslēpt nesenos meklējumus</string>
+    <string name="androidkit_compose_show_recent_searches">Rādīt nesenos meklējumus</string>
+    <string name="androidkit_compose_recent_searches_hidden">Nesenie meklējumi ir paslēpti</string>
 </resources>

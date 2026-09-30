@@ -50,4 +50,7 @@
     <string name="androidkit_compose_no_matching_settings">Tidak ada setelan yang cocok</string>
     <string name="androidkit_compose_no_matching_results">Tidak ada hasil yang cocok</string>
     <string name="androidkit_compose_no_recent_searches">Tidak ada penelusuran terbaru</string>
+    <string name="androidkit_compose_hide_recent_searches">Sembunyikan penelusuran terbaru</string>
+    <string name="androidkit_compose_show_recent_searches">Tampilkan penelusuran terbaru</string>
+    <string name="androidkit_compose_recent_searches_hidden">Penelusuran terbaru disembunyikan</string>
 </resources>

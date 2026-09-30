@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Nem ismerhető fel beszéd. Próbáld újra.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Nyissa meg az alkalmazás beállításait</string>
+    <string name="androidkit_compose_hide_recent_searches">Legutóbbi keresések elrejtése</string>
+    <string name="androidkit_compose_show_recent_searches">Legutóbbi keresések megjelenítése</string>
+    <string name="androidkit_compose_recent_searches_hidden">A legutóbbi keresések el vannak rejtve</string>
 </resources>

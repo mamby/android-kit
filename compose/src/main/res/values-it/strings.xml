@@ -50,4 +50,7 @@
     <string name="androidkit_compose_no_matching_settings">Nessuna impostazione corrispondente</string>
     <string name="androidkit_compose_no_matching_results">Nessun risultato corrispondente</string>
     <string name="androidkit_compose_no_recent_searches">Nessuna ricerca recente</string>
+    <string name="androidkit_compose_hide_recent_searches">Nascondi ricerche recenti</string>
+    <string name="androidkit_compose_show_recent_searches">Mostra ricerche recenti</string>
+    <string name="androidkit_compose_recent_searches_hidden">Le ricerche recenti sono nascoste</string>
 </resources>

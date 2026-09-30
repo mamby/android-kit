@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Walang kinikilalang pananalita. Subukan muli.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Buksan ang mga setting ng app</string>
+    <string name="androidkit_compose_hide_recent_searches">Itago ang mga kamakailang paghahanap</string>
+    <string name="androidkit_compose_show_recent_searches">Ipakita ang mga kamakailang paghahanap</string>
+    <string name="androidkit_compose_recent_searches_hidden">Nakatago ang mga kamakailang paghahanap</string>
 </resources>

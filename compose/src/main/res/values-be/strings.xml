@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Гаворка не распазнана. Паспрабуйце яшчэ раз.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Адкрыйце налады праграмы</string>
+    <string name="androidkit_compose_hide_recent_searches">Схаваць апошнія пошукі</string>
+    <string name="androidkit_compose_show_recent_searches">Паказаць апошнія пошукі</string>
+    <string name="androidkit_compose_recent_searches_hidden">Апошнія пошукі схаваныя</string>
 </resources>

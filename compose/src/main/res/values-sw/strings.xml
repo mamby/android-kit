@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Hakuna hotuba iliyotambuliwa. Jaribu tena.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Fungua mipangilio ya programu</string>
+    <string name="androidkit_compose_hide_recent_searches">Ficha utafutaji wa hivi majuzi</string>
+    <string name="androidkit_compose_show_recent_searches">Onyesha utafutaji wa hivi majuzi</string>
+    <string name="androidkit_compose_recent_searches_hidden">Utafutaji wa hivi majuzi umefichwa</string>
 </resources>

@@ -121,6 +121,8 @@ internal fun AndroidKitCatalogApp(
             onSearch = { navigation.navigate(SettingsSearchRoute) },
             recentSearches = settings.recentSettingsSearches,
             onRecentSearchesChange = settingsViewModel::setRecentSettingsSearches,
+            recentSearchesVisible = settings.recentSettingsSearchesVisible,
+            onRecentSearchesVisibleChange = settingsViewModel::setRecentSettingsSearchesVisible,
             appLockEnabled = settings.appLockEnabled,
             appLockTimeout = settings.appLockTimeout,
             onAppLockTimeoutChange = settingsViewModel::setAppLockTimeout,
@@ -188,6 +190,8 @@ internal fun AndroidKitCatalogApp(
                                     settings.showCompactNavigationLabels,
                                 onShowCompactNavigationLabelsChange =
                                     settingsViewModel::setShowCompactNavigationLabels,
+                                recentContentSearchesVisible = settings.recentContentSearchesVisible,
+                                onRecentContentSearchesVisibleChange = settingsViewModel::setRecentContentSearchesVisible,
                                 recentContentSearches = settings.recentContentSearches,
                                 onRecentContentSearchesChange = settingsViewModel::setRecentContentSearches,
                                 onOpenDemo = { navigation.navigate(ComponentDemoRoute(demo = it)) },

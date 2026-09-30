@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">მეტყველება არ არის აღიარებული. სცადეთ ხელახლა.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">გახსენით აპის პარამეტრები</string>
+    <string name="androidkit_compose_hide_recent_searches">ბოლო ძიებების დამალვა</string>
+    <string name="androidkit_compose_show_recent_searches">ბოლო ძიებების ჩვენება</string>
+    <string name="androidkit_compose_recent_searches_hidden">ბოლო ძიებები დამალულია</string>
 </resources>

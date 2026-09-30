@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Ez da hizketarik ezagutzen. Saiatu berriro.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Ireki aplikazioaren ezarpenak</string>
+    <string name="androidkit_compose_hide_recent_searches">Ezkutatu azken bilaketak</string>
+    <string name="androidkit_compose_show_recent_searches">Erakutsi azken bilaketak</string>
+    <string name="androidkit_compose_recent_searches_hidden">Azken bilaketak ezkutatuta daude</string>
 </resources>

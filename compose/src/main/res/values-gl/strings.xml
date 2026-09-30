@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Non se recoñece a palabra. Téntao de novo.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">abra a configuración da aplicación</string>
+    <string name="androidkit_compose_hide_recent_searches">Agochar as buscas recentes</string>
+    <string name="androidkit_compose_show_recent_searches">Amosar as buscas recentes</string>
+    <string name="androidkit_compose_recent_searches_hidden">As buscas recentes están agochadas</string>
 </resources>

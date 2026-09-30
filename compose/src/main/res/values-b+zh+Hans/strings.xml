@@ -50,4 +50,7 @@
     <string name="androidkit_compose_no_matching_settings">没有匹配的设置</string>
     <string name="androidkit_compose_no_matching_results">没有匹配的结果</string>
     <string name="androidkit_compose_no_recent_searches">没有最近的搜索</string>
+    <string name="androidkit_compose_hide_recent_searches">隐藏最近的搜索</string>
+    <string name="androidkit_compose_show_recent_searches">显示最近的搜索</string>
+    <string name="androidkit_compose_recent_searches_hidden">最近的搜索已隐藏</string>
 </resources>

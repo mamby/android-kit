@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">कोणतेही भाषण ओळखले नाही. पुन्हा प्रयत्न करा.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">ॲप सेटिंग्ज उघडा</string>
+    <string name="androidkit_compose_hide_recent_searches">अलीकडील शोध लपवा</string>
+    <string name="androidkit_compose_show_recent_searches">अलीकडील शोध दाखवा</string>
+    <string name="androidkit_compose_recent_searches_hidden">अलीकडील शोध लपवलेले आहेत</string>
 </resources>

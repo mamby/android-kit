@@ -37,6 +37,8 @@ internal fun demoSettingsCatalog(
     onSearch: () -> Unit,
     recentSearches: List<String>,
     onRecentSearchesChange: (List<String>) -> Unit,
+    recentSearchesVisible: Boolean,
+    onRecentSearchesVisibleChange: (Boolean) -> Unit,
     appLockEnabled: Boolean,
     appLockTimeout: DemoAppLockTimeout,
     onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
@@ -101,6 +103,8 @@ internal fun demoSettingsCatalog(
             onOpenSearch = onSearch,
             recentQueries = recentSearches,
             onRecentQueriesChange = onRecentSearchesChange,
+            recentQueriesVisible = recentSearchesVisible,
+            onRecentQueriesVisibleChange = onRecentSearchesVisibleChange,
         ),
     ) {
         main(key = DemoMainSettingsPageKey, title = settingsTitle) {

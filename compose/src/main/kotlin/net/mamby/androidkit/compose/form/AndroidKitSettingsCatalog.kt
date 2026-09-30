@@ -31,6 +31,10 @@ public data class AndroidKitSettingsSearchConfiguration(
     public val onOpenSearch: () -> Unit,
     public val recentQueries: List<String>,
     public val onRecentQueriesChange: (List<String>) -> Unit,
+    /** Page-scoped visibility; hiding preserves and continues recording history. */
+    public val recentQueriesVisible: Boolean = true,
+    /** Enables the Kit-owned control; the host persists visibility independently per search. */
+    public val onRecentQueriesVisibleChange: ((Boolean) -> Unit)? = null,
 )
 
 /** A complete Settings hierarchy used by regular pages and global search. */

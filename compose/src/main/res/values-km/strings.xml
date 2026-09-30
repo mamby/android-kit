@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">គ្មានសុន្ទរកថាត្រូវបានទទួលស្គាល់។ ព្យាយាមម្តងទៀត។</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">បើកការកំណត់កម្មវិធី</string>
+    <string name="androidkit_compose_hide_recent_searches">លាក់ការស្វែងរកថ្មីៗ</string>
+    <string name="androidkit_compose_show_recent_searches">បង្ហាញការស្វែងរកថ្មីៗ</string>
+    <string name="androidkit_compose_recent_searches_hidden">ការស្វែងរកថ្មីៗត្រូវបានលាក់</string>
 </resources>

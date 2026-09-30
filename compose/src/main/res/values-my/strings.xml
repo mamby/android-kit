@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">မည်သည့်မိန့်ခွန်းကိုမျှ အသိအမှတ်မပြုပါ။ ထပ်စမ်းကြည့်ပါ။</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">အက်ပ်ဆက်တင်များကို ဖွင့်ပါ။</string>
+    <string name="androidkit_compose_hide_recent_searches">လတ်တလော ရှာဖွေမှုများကို ဖျောက်ရန်</string>
+    <string name="androidkit_compose_show_recent_searches">လတ်တလော ရှာဖွေမှုများကို ပြရန်</string>
+    <string name="androidkit_compose_recent_searches_hidden">လတ်တလော ရှာဖွေမှုများကို ဖျောက်ထားသည်</string>
 </resources>

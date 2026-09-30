@@ -591,3 +591,22 @@ Compose hierarchy assertions; the final direct run is the behavioral evidence.
 Full all-language rendering,
 truncation, larger-text layouts, RTL presentation and TalkBack pronunciation were
 not reviewed on device. No native-speaker or human linguistic sign-off is claimed.
+
+
+## Search history visibility (2026-09-30)
+
+Added three Kit-owned strings in all 72 locale directories: Hide recent searches,
+Show recent searches, and Recent searches hidden. English is the semantic
+reference. These actions conceal/reveal the saved-query list on the current
+logical search page; they neither delete history nor stop recording. The hidden
+message is a state, not a claim of incognito search, encryption, or app locking.
+No demo duplicates were introduced because both demo search pages use Kit chrome.
+
+Reviewed the actions and state against their call sites and each locale's existing
+Recent searches vocabulary. Preserved accepted nouns, including Indonesian
+Penelusuran, Korean 검색어, Czech vyhledávání, and the project's Chinese script
+variants and Portuguese register. The new phrases are editorial, machine-assisted
+translations; no external linguistic source or native-speaker approval is claimed.
+Idiomatic wording and pronunciation, particularly in less familiar locales,
+remain subject to competent language review. XML completeness and Android
+resource/build checks verify packaging, not linguistic quality.

@@ -92,6 +92,8 @@ internal fun ComponentDemoScreen(
     onShowCompactNavigationLabelsChange: (Boolean) -> Unit,
     recentContentSearches: List<String>,
     onRecentContentSearchesChange: (List<String>) -> Unit,
+    recentContentSearchesVisible: Boolean,
+    onRecentContentSearchesVisibleChange: (Boolean) -> Unit,
     onOpenDemo: (ComponentDemo) -> Unit,
     onBack: () -> Unit,
 ) {
@@ -100,6 +102,8 @@ internal fun ComponentDemoScreen(
         ComponentId.AndroidKitSearchPage -> SearchPageDemoScreen(
             recentQueries = recentContentSearches,
             onRecentQueriesChange = onRecentContentSearchesChange,
+            recentQueriesVisible = recentContentSearchesVisible,
+            onRecentQueriesVisibleChange = onRecentContentSearchesVisibleChange,
             onOpenDemo = onOpenDemo,
             onBack = onBack,
         )

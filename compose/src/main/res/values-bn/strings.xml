@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">কোন বক্তৃতা স্বীকৃত। আবার চেষ্টা করুন</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">অ্যাপ সেটিংস খুলুন</string>
+    <string name="androidkit_compose_hide_recent_searches">সাম্প্রতিক অনুসন্ধান লুকান</string>
+    <string name="androidkit_compose_show_recent_searches">সাম্প্রতিক অনুসন্ধান দেখান</string>
+    <string name="androidkit_compose_recent_searches_hidden">সাম্প্রতিক অনুসন্ধান লুকানো আছে</string>
 </resources>

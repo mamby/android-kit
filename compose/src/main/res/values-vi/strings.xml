@@ -50,4 +50,7 @@
     <string name="androidkit_compose_no_matching_settings">Không có cài đặt phù hợp</string>
     <string name="androidkit_compose_no_matching_results">Không có kết quả phù hợp</string>
     <string name="androidkit_compose_no_recent_searches">Không có tìm kiếm gần đây</string>
+    <string name="androidkit_compose_hide_recent_searches">Ẩn các tìm kiếm gần đây</string>
+    <string name="androidkit_compose_show_recent_searches">Hiện các tìm kiếm gần đây</string>
+    <string name="androidkit_compose_recent_searches_hidden">Các tìm kiếm gần đây đã được ẩn</string>
 </resources>

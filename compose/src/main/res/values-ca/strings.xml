@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">No es reconeix cap discurs. Torna-ho a provar.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Obre la configuració de l\'aplicació</string>
+    <string name="androidkit_compose_hide_recent_searches">Amaga les cerques recents</string>
+    <string name="androidkit_compose_show_recent_searches">Mostra les cerques recents</string>
+    <string name="androidkit_compose_recent_searches_hidden">Les cerques recents estan amagades</string>
 </resources>

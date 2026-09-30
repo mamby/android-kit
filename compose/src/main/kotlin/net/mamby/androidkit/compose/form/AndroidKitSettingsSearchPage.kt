@@ -33,6 +33,8 @@ public fun AndroidKitSettingsSearchPage(
         onQueryChange = { query = it },
         recentQueries = catalog.search.recentQueries,
         onRecentQueriesChange = catalog.search.onRecentQueriesChange,
+        recentQueriesVisible = catalog.search.recentQueriesVisible,
+        onRecentQueriesVisibleChange = catalog.search.onRecentQueriesVisibleChange,
         title = strings.searchSettings,
         noMatchesMessage = strings.noMatchingSettings,
         hasResults = matches.isNotEmpty(),

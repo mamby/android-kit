@@ -50,4 +50,7 @@
     <string name="androidkit_compose_no_matching_settings">Brak pasujących ustawień</string>
     <string name="androidkit_compose_no_matching_results">Brak pasujących wyników</string>
     <string name="androidkit_compose_no_recent_searches">Brak ostatnich wyszukiwań</string>
+    <string name="androidkit_compose_hide_recent_searches">Ukryj ostatnie wyszukiwania</string>
+    <string name="androidkit_compose_show_recent_searches">Pokaż ostatnie wyszukiwania</string>
+    <string name="androidkit_compose_recent_searches_hidden">Ostatnie wyszukiwania są ukryte</string>
 </resources>

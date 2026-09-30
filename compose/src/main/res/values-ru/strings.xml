@@ -50,4 +50,7 @@
     <string name="androidkit_compose_no_matching_settings">Подходящие настройки не найдены</string>
     <string name="androidkit_compose_no_matching_results">Подходящие результаты не найдены</string>
     <string name="androidkit_compose_no_recent_searches">Недавних запросов нет</string>
+    <string name="androidkit_compose_hide_recent_searches">Скрыть недавние запросы</string>
+    <string name="androidkit_compose_show_recent_searches">Показать недавние запросы</string>
+    <string name="androidkit_compose_recent_searches_hidden">Недавние запросы скрыты</string>
 </resources>

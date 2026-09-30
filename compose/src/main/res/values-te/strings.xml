@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">ప్రసంగం గుర్తించబడలేదు. మళ్లీ ప్రయత్నించండి.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">యాప్ సెట్టింగ్‌లను తెరవండి</string>
+    <string name="androidkit_compose_hide_recent_searches">ఇటీవలి శోధనలను దాచు</string>
+    <string name="androidkit_compose_show_recent_searches">ఇటీవలి శోధనలను చూపు</string>
+    <string name="androidkit_compose_recent_searches_hidden">ఇటీవలి శోధనలు దాచబడ్డాయి</string>
 </resources>

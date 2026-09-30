@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -240,6 +241,90 @@ class SearchPageBehaviorTest {
         rule.onNode(hasContentDescription("Search") and hasSetTextAction()).assertTextEquals("coffee")
         rule.onNodeWithText("Event: Coffee outing").assertIsDisplayed()
     }
+    @Test
+    fun hidingRemovesAnimatedHistoryImmediatelyAndKeepsRecording() {
+        var query by mutableStateOf("")
+        var recents by mutableStateOf(listOf("Sensitive query"))
+        var visible by mutableStateOf(true)
+        rule.setContent {
+            TestKitTheme {
+                AndroidKitSearchPage(
+                    items = listOf(topicItem("alpha", "Alpha", "Alpha")),
+                    query = query,
+                    onQueryChange = { query = it },
+                    recentQueries = recents,
+                    onRecentQueriesChange = { recents = it },
+                    recentQueriesVisible = visible,
+                    onRecentQueriesVisibleChange = { visible = it },
+                    voiceInputEnabled = false,
+                ) { matches -> hostResults(matches) }
+            }
+        }
+        rule.onNodeWithText("Sensitive query").assertIsDisplayed()
+        rule.mainClock.autoAdvance = false
+        rule.onNodeWithText("Hide recent searches").performClick()
+        rule.mainClock.advanceTimeByFrame()
+        rule.waitForIdle()
+        rule.onNodeWithText("Sensitive query").assertDoesNotExist()
+        rule.onAllNodesWithContentDescription("Remove recent search").assertCountEquals(0)
+        rule.mainClock.autoAdvance = true
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.runOnIdle { assertEquals(listOf("Sensitive query"), recents) }
+
+        val search = rule.onNode(hasContentDescription("Search") and hasSetTextAction())
+        search.performTextReplacement("alpha")
+        rule.onNodeWithText("Event: Alpha").performClick()
+        search.performTextReplacement("Submitted privately")
+        search.performImeAction()
+        search.performTextReplacement("")
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.onNodeWithText("Submitted privately").assertDoesNotExist()
+        rule.runOnIdle { assertEquals(listOf("Submitted privately", "alpha", "Sensitive query"), recents) }
+
+        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithText("Sensitive query").assertIsDisplayed()
+        rule.onNodeWithText("Clear all").performClick()
+        rule.onNodeWithText("No recent searches").assertIsDisplayed()
+        rule.onNodeWithText("Hide recent searches").performClick()
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithText("No recent searches").assertIsDisplayed()
+    }
+
+    @Test
+    fun hostVisibilityRestoresIndependentlyForEachSearchPage() {
+        val restoration = StateRestorationTester(rule)
+        var secondPage by mutableStateOf(false)
+        restoration.setContent {
+            var firstVisible by rememberSaveable { mutableStateOf(false) }
+            var secondVisible by rememberSaveable { mutableStateOf(true) }
+            TestKitTheme {
+                AndroidKitSearchPage(
+                    items = emptyList<AndroidKitSearchItem<SearchTopic>>(),
+                    query = "",
+                    onQueryChange = {},
+                    recentQueries = listOf(if (secondPage) "Second history" else "First history"),
+                    onRecentQueriesChange = {},
+                    recentQueriesVisible = if (secondPage) secondVisible else firstVisible,
+                    onRecentQueriesVisibleChange = { if (secondPage) secondVisible = it else firstVisible = it },
+                    voiceInputEnabled = false,
+                ) { }
+            }
+        }
+        rule.onNodeWithText("First history").assertDoesNotExist()
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.runOnIdle { secondPage = true }
+        rule.onNodeWithText("Second history").assertIsDisplayed()
+        rule.onNodeWithText("Hide recent searches").performClick()
+        restoration.emulateSavedInstanceStateRestore()
+        rule.onNodeWithText("Second history").assertDoesNotExist()
+        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithText("Second history").assertIsDisplayed()
+        rule.runOnIdle { secondPage = false }
+        rule.onNodeWithText("First history").assertDoesNotExist()
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+    }
+
 }
 
 private data class SearchTopic(val topic: String, val value: String)

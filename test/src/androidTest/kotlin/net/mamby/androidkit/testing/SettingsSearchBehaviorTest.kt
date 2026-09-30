@@ -169,6 +169,48 @@ class SettingsSearchBehaviorTest {
     }
 
     @Test
+    fun catalogVisibilityControlsHistoryWithoutBlockingResultActions() {
+        var visible by mutableStateOf(false)
+        var recents by mutableStateOf(listOf("Sensitive setting"))
+        var clicks = 0
+        rule.setContent {
+            TestKitTheme {
+                val catalog = androidKitSettingsCatalog(
+                    AndroidKitSettingsSearchConfiguration(
+                        onOpenSearch = {},
+                        recentQueries = recents,
+                        onRecentQueriesChange = { recents = it },
+                        recentQueriesVisible = visible,
+                        onRecentQueriesVisibleChange = { visible = it },
+                    ),
+                ) {
+                    main("main", "Settings") {
+                        section("actions") {
+                            button("backup", "Back up now", { clicks++ })
+                        }
+                    }
+                }
+                AndroidKitSettingsSearchPage(catalog)
+            }
+        }
+        rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        val search = rule.onNodeWithContentDescription("Search")
+        search.performTextReplacement("back up")
+        rule.onNodeWithText("Back up now").performClick()
+        rule.runOnIdle {
+            assertEquals(1, clicks)
+            assertEquals("back up", recents.first())
+        }
+        search.performTextReplacement("")
+        rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
+        rule.onNodeWithText("Show recent searches").performClick()
+        rule.onNodeWithText("Sensitive setting").assertIsDisplayed()
+        rule.onNodeWithText("Hide recent searches").performClick()
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+    }
+
+    @Test
     fun catalogActionsAndSubmissionUpdateHostHistory() {
         var recents by mutableStateOf(listOf("Earlier"))
         rule.setContent {

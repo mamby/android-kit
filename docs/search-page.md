@@ -31,6 +31,8 @@ AndroidKitSearchPage(
     onQueryChange = onQueryChange,
     recentQueries = recentQueries,
     onRecentQueriesChange = onRecentQueriesChange,
+    recentQueriesVisible = recentQueriesVisible,
+    onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
     onBack = onBack,
 ) { matches ->
     items(matches, key = { it.key }) { match ->
@@ -75,6 +77,25 @@ typing and selecting an existing recent query do not record it. Individual
 removal and Clear all use `onRecentQueriesChange`. Persist the list in the host
 if it must survive restarts. Save query state in the host when restoration is
 required; the demo uses `rememberSaveable` for the query and DataStore for history.
+
+## Page-scoped history visibility
+
+Supply `recentQueriesVisible` and `onRecentQueriesVisibleChange` to enable the
+Kit-owned Hide recent searches / Show recent searches control. Without the
+callback, existing callers retain visible history and no visibility control.
+Hiding immediately removes recent rows, including outgoing animations and their
+accessibility semantics. The empty-query body says Recent searches hidden and
+offers Show even when history is empty. Clear all remains a separate deletion
+action when history is shown. Searching and recording continue while hidden.
+
+Hosts persist visibility alongside history, scoped by a stable logical search
+identifier, never a translated title or transient navigation entry. The demo
+uses separate DataStore keys `search.settings.recents_visible` and
+`search.content.recents_visible` in its existing repository. An absent key
+defaults to visible for compatibility. The demo waits for persisted settings
+before composing search; hosts must similarly avoid rendering history before
+visibility loads, or initially pass `recentQueriesVisible = false`. Visibility
+is concealment on this search page, not private browsing or encrypted storage.
 
 ## Settings integration
 

@@ -50,4 +50,7 @@
     <string name="androidkit_compose_no_matching_settings">कोई मेल खाती सेटिंग नहीं</string>
     <string name="androidkit_compose_no_matching_results">कोई मेल खाते परिणाम नहीं</string>
     <string name="androidkit_compose_no_recent_searches">कोई हाल की खोज नहीं</string>
+    <string name="androidkit_compose_hide_recent_searches">हाल की खोजें छिपाएँ</string>
+    <string name="androidkit_compose_show_recent_searches">हाल की खोजें दिखाएँ</string>
+    <string name="androidkit_compose_recent_searches_hidden">हाल की खोजें छिपी हुई हैं</string>
 </resources>

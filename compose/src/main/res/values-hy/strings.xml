@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Խոսք չի ճանաչվել: Նորից փորձեք:</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Բացեք հավելվածի կարգավորումները</string>
+    <string name="androidkit_compose_hide_recent_searches">Թաքցնել վերջին որոնումները</string>
+    <string name="androidkit_compose_show_recent_searches">Ցուցադրել վերջին որոնումները</string>
+    <string name="androidkit_compose_recent_searches_hidden">Վերջին որոնումները թաքցված են</string>
 </resources>

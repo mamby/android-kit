@@ -11,6 +11,8 @@ val catalog = androidKitSettingsCatalog(
         onOpenSearch = onOpenSearch,
         recentQueries = recentQueries,
         onRecentQueriesChange = onRecentQueriesChange,
+        recentQueriesVisible = recentQueriesVisible,
+        onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
     ),
 ) {
     main(key = "main", title = settingsTitle) {
@@ -78,7 +80,9 @@ have not been opened. It uses the shared [search page](search-page.md) implement
 for the floating field, recent searches, empty states, scrolling and managed
 clearance. Opening the page focuses its input and requests the software keyboard.
 The Settings adapter owns catalog indexing and result controls;
-results remain in the current app language. Its public API is unchanged.
+results remain in the current app language. The search configuration also accepts
+page-scoped recent-query visibility and its persistence callback, using the
+shared hide/show behavior described in the search-page contract.
 
 Matching is case-, accent-, punctuation-, and whitespace-insensitive. Every query
 token must match. Exact/current labels rank before prefixes, contained visible

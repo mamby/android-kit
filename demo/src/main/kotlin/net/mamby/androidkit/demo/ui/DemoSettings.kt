@@ -44,6 +44,8 @@ internal data class DemoSettings(
     val showCompactNavigationLabels: Boolean = false,
     val recentSettingsSearches: List<String> = emptyList(),
     val recentContentSearches: List<String> = emptyList(),
+    val recentSettingsSearchesVisible: Boolean = true,
+    val recentContentSearchesVisible: Boolean = true,
 )
 
 enum class DemoAppLockTimeout(val duration: Duration) {
@@ -81,7 +83,11 @@ internal class DemoSettingsRepository(context: Context) {
         .catch { exception ->
             if (exception is IOException) {
                 // A read failure must never silently disable a persisted app lock.
-                emit(preferencesOf(AppLockEnabledKey to true))
+                emit(preferencesOf(
+                    AppLockEnabledKey to true,
+                    RecentSettingsSearchesVisibleKey to false,
+                    RecentContentSearchesVisibleKey to false,
+                ))
             } else {
                 throw exception
             }
@@ -117,6 +123,8 @@ internal class DemoSettingsRepository(context: Context) {
                 ),
                 showCompactNavigationLabels = preferences[ShowCompactNavigationLabelsKey]
                     ?: false,
+                recentSettingsSearchesVisible = preferences[RecentSettingsSearchesVisibleKey] ?: true,
+                recentContentSearchesVisible = preferences[RecentContentSearchesVisibleKey] ?: true,
                 recentSettingsSearches = preferences[RecentSettingsSearchesKey]
                     ?.let(::decodeStringList)
                     .orEmpty(),
@@ -152,6 +160,14 @@ internal class DemoSettingsRepository(context: Context) {
 
     suspend fun setAppLockTimeout(timeout: DemoAppLockTimeout) {
         dataStore.edit { it[AppLockTimeoutKey] = timeout.name }
+    }
+
+    suspend fun setRecentSettingsSearchesVisible(visible: Boolean) {
+        dataStore.edit { it[RecentSettingsSearchesVisibleKey] = visible }
+    }
+
+    suspend fun setRecentContentSearchesVisible(visible: Boolean) {
+        dataStore.edit { it[RecentContentSearchesVisibleKey] = visible }
     }
 
     suspend fun setRecentSettingsSearches(queries: List<String>) {
@@ -319,6 +335,14 @@ internal class DemoSettingsViewModel(
         }
     }
 
+    fun setRecentSettingsSearchesVisible(visible: Boolean) {
+        viewModelScope.launch { repository.setRecentSettingsSearchesVisible(visible) }
+    }
+
+    fun setRecentContentSearchesVisible(visible: Boolean) {
+        viewModelScope.launch { repository.setRecentContentSearchesVisible(visible) }
+    }
+
     fun setRecentSettingsSearches(queries: List<String>) {
         viewModelScope.launch { repository.setRecentSettingsSearches(queries) }
     }
@@ -356,6 +380,8 @@ private val FloatingNavigationLayoutKey = stringPreferencesKey(
 private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
     "show_compact_navigation_labels",
 )
+private val RecentSettingsSearchesVisibleKey = booleanPreferencesKey("search.settings.recents_visible")
+private val RecentContentSearchesVisibleKey = booleanPreferencesKey("search.content.recents_visible")
 private val RecentSettingsSearchesKey = stringPreferencesKey("recent_settings_searches")
 private val RecentContentSearchesKey = stringPreferencesKey("recent_content_searches")
 

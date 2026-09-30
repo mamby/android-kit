@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">未辨識到語音。請再試一次。</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">開啟應用程式設定</string>
+    <string name="androidkit_compose_hide_recent_searches">隱藏最近的搜尋</string>
+    <string name="androidkit_compose_show_recent_searches">顯示最近的搜尋</string>
+    <string name="androidkit_compose_recent_searches_hidden">最近的搜尋已隱藏</string>
 </resources>

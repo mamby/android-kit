@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Яриа танигдаагүй. Дахин оролдоно уу.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Програмын тохиргоог нээнэ үү</string>
+    <string name="androidkit_compose_hide_recent_searches">Сүүлийн хайлтуудыг нуух</string>
+    <string name="androidkit_compose_show_recent_searches">Сүүлийн хайлтуудыг харуулах</string>
+    <string name="androidkit_compose_recent_searches_hidden">Сүүлийн хайлтуудыг нуусан</string>
 </resources>

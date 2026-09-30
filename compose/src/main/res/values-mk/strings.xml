@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Не е препознаен говор. Обидете се повторно.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Отворете ги поставките за апликацијата</string>
+    <string name="androidkit_compose_hide_recent_searches">Сокриј неодамнешни пребарувања</string>
+    <string name="androidkit_compose_show_recent_searches">Прикажи неодамнешни пребарувања</string>
+    <string name="androidkit_compose_recent_searches_hidden">Неодамнешните пребарувања се скриени</string>
 </resources>

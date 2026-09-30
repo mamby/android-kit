@@ -55,4 +55,7 @@
     <string name="androidkit_compose_voice_no_speech">Inget tal känns igen. Försök igen.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Öppna appinställningar</string>
+    <string name="androidkit_compose_hide_recent_searches">Dölj senaste sökningar</string>
+    <string name="androidkit_compose_show_recent_searches">Visa senaste sökningar</string>
+    <string name="androidkit_compose_recent_searches_hidden">Senaste sökningar är dolda</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -27,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +46,9 @@ private const val MaximumRecentSearches = 10
  * Hosts own [query], [content], callbacks, navigation and persistence.
  * Item keys must be unique across the page; items sharing a group key must share its title.
  * Recent queries are recorded on IME submission or a result action, never while typing.
+ * Hosts persist [recentQueriesVisible] per logical search page. Hiding preserves history and
+ * continues recording. Supply [onRecentQueriesVisibleChange] to enable the Kit-owned control;
+ * keep history hidden until its persisted visibility has loaded.
  * Opening the page focuses the input and requests the software keyboard once per entry.
  * Render [content] with stable item keys and respect each item's enabled state. Calling a matched
  * item's onClick records the query before invoking the host callback; disabled callbacks do nothing.
@@ -59,6 +64,8 @@ public fun <T> AndroidKitSearchPage(
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
     voiceInputEnabled: Boolean = true,
+    recentQueriesVisible: Boolean = true,
+    onRecentQueriesVisibleChange: ((Boolean) -> Unit)? = null,
     content: LazyListScope.(matches: List<AndroidKitSearchItem<T>>) -> Unit,
 ): Unit {
     val itemSnapshot = items.toList()
@@ -83,6 +90,8 @@ public fun <T> AndroidKitSearchPage(
         onBack = onBack,
         listState = listState,
         voiceInputEnabled = voiceInputEnabled,
+        recentQueriesVisible = recentQueriesVisible,
+        onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
     ) { recordRecent ->
         content(matches.map { item ->
             item.copy(onClick = {
@@ -122,6 +131,8 @@ internal fun AndroidKitSearchPage(
     onBack: (() -> Unit)?,
     listState: LazyListState,
     voiceInputEnabled: Boolean = true,
+    recentQueriesVisible: Boolean = true,
+    onRecentQueriesVisibleChange: ((Boolean) -> Unit)? = null,
     results: LazyListScope.(recordRecent: () -> Unit) -> Unit,
 ): Unit {
     val recents = recentQueries.sanitizedRecentSearchQueries()
@@ -153,60 +164,70 @@ internal fun AndroidKitSearchPage(
         Box(Modifier.fillMaxSize()) {
             // Keep the lazy layout composed when the last recent is removed so its
             // built-in item animator can finish the outgoing row's fade.
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = listState,
-                contentPadding = PaddingValues(
-                    start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
-                    top = padding.calculateTopPadding(),
-                    end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
-                    bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
-                ),
-                verticalArrangement = Arrangement.spacedBy(
-                    if (query.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
-                ),
-            ) {
-                if (query.isBlank() && recents.isNotEmpty()) {
-                    item(key = "recent-heading") {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(
-                                bottom = dimensions.settingsPageSectionSpacing - dimensions.spaceSmall,
-                            ),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            Text(
-                                text = strings.recentSearches,
-                                style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
-                                color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
-                            )
-                            TextButton(
-                                onClick = { onRecentQueriesChange(emptyList()) },
-                                contentPadding = PaddingValues(
-                                    horizontal = (dimensions.minimumTouchTarget - dimensions.floatingActionBarIconSize) / 2,
+            // A visibility change disposes outgoing animated rows immediately.
+            key(recentQueriesVisible) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = listState,
+                    contentPadding = PaddingValues(
+                        start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
+                        top = padding.calculateTopPadding(),
+                        end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
+                        bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(
+                        if (query.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
+                    ),
+                ) {
+                    if (query.isBlank() && recentQueriesVisible && recents.isNotEmpty()) {
+                        item(key = "recent-heading") {
+                            FlowRow(
+                                modifier = Modifier.fillMaxWidth().padding(
+                                    bottom = dimensions.settingsPageSectionSpacing - dimensions.spaceSmall,
                                 ),
-                            ) { Text(strings.clearAll) }
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                itemVerticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = strings.recentSearches,
+                                    style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
+                                    color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                                )
+                                FlowRow(horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall)) {
+                                    onRecentQueriesVisibleChange?.let { onVisibilityChange ->
+                                        TextButton(onClick = { onVisibilityChange(false) }) {
+                                            Text(strings.hideRecentSearches)
+                                        }
+                                    }
+                                    TextButton(
+                                        onClick = { onRecentQueriesChange(emptyList()) },
+                                        contentPadding = PaddingValues(
+                                            horizontal = (dimensions.minimumTouchTarget - dimensions.floatingActionBarIconSize) / 2,
+                                        ),
+                                    ) { Text(strings.clearAll) }
+                                }
+                            }
                         }
-                    }
-                    items(recents, key = { recent -> "recent:${normalizeSearchText(recent)}" }) { recent ->
-                        Box(Modifier.animateItem(fadeInSpec = null)) {
-                            RecentSearchRow(
-                                query = recent,
-                                onSelect = { onQueryChange(recent) },
-                                onRemove = {
-                                    val removed = normalizeSearchText(recent)
-                                    onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
-                                },
-                            )
+                        items(recents, key = { recent -> "recent:${normalizeSearchText(recent)}" }) { recent ->
+                            Box(Modifier.animateItem(fadeInSpec = null)) {
+                                RecentSearchRow(
+                                    query = recent,
+                                    onSelect = { onQueryChange(recent) },
+                                    onRemove = {
+                                        val removed = normalizeSearchText(recent)
+                                        onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
+                                    },
+                                )
+                            }
                         }
+                    } else if (query.isNotBlank() && !hasResults) {
+                        item(key = "no-matches") { SearchEmptyMessage(noMatchesMessage) }
+                    } else if (query.isNotBlank()) {
+                        results { recordRecent() }
                     }
-                } else if (query.isNotBlank() && !hasResults) {
-                    item(key = "no-matches") { SearchEmptyMessage(noMatchesMessage) }
-                } else if (query.isNotBlank()) {
-                    results { recordRecent() }
                 }
             }
-            if (query.isBlank() && recents.isEmpty()) {
+            if (query.isBlank() && (!recentQueriesVisible || recents.isEmpty())) {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(padding)
                         .padding(horizontal = dimensions.screenPadding),
@@ -230,11 +251,16 @@ internal fun AndroidKitSearchPage(
                             )
                         }
                         Text(
-                            text = strings.noRecentSearches,
+                            text = if (recentQueriesVisible) strings.noRecentSearches else strings.recentSearchesHidden,
                             style = AndroidKitThemeTokens.typography.bodyLarge,
                             color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
                             textAlign = TextAlign.Center,
                         )
+                        onRecentQueriesVisibleChange?.let { onVisibilityChange ->
+                            TextButton(onClick = { onVisibilityChange(!recentQueriesVisible) }) {
+                                Text(if (recentQueriesVisible) strings.hideRecentSearches else strings.showRecentSearches)
+                            }
+                        }
                     }
                 }
             }
