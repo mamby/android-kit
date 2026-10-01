@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -23,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -35,14 +37,17 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.FloatingSurface
 
 private const val MaximumRecentSearches = 10
 
@@ -187,43 +192,58 @@ internal fun AndroidKitSearchPage(
     ) { padding ->
         val showingHistory = resultsQuery.isBlank()
         // Read clearance during layout so measured floating controls and IME changes stay current.
-        val viewportPadding = remember(padding, showingHistory) {
+        val pageContentPadding = remember(padding, dimensions.screenPadding) {
             object : PaddingValues by padding {
-                override fun calculateTopPadding() = if (showingHistory) padding.calculateTopPadding() else 0.dp
+                override fun calculateLeftPadding(layoutDirection: LayoutDirection) =
+                    padding.calculateLeftPadding(layoutDirection) + dimensions.screenPadding
+                override fun calculateRightPadding(layoutDirection: LayoutDirection) =
+                    padding.calculateRightPadding(layoutDirection) + dimensions.screenPadding
+            }
+        }
+        val headingPlacementPadding = remember(pageContentPadding) {
+            object : PaddingValues by pageContentPadding {
                 override fun calculateBottomPadding() = 0.dp
             }
         }
-        val bodyPadding = remember(padding, showingHistory) {
-            object : PaddingValues by PaddingValues.Zero {
-                override fun calculateTopPadding() = if (showingHistory) 0.dp else padding.calculateTopPadding()
-                override fun calculateBottomPadding() = padding.calculateBottomPadding()
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = Color.Transparent,
+            contentWindowInsets = WindowInsets(0),
+            topBar = {
+                if (showingHistory) {
+                    Box(Modifier.padding(headingPlacementPadding)) {
+                        RecentSearchHeading(
+                            visible = recentQueriesVisible,
+                            onVisibilityChange = onRecentQueriesVisibleChange,
+                            canClear = recentQueriesVisible && recents.isNotEmpty(),
+                            onClear = { onRecentQueriesChange(emptyList()) },
+                        )
+                    }
+                }
+            },
+        ) { headingPadding ->
+            val bodyPadding = remember(pageContentPadding, headingPadding, showingHistory) {
+                object : PaddingValues by pageContentPadding {
+                    override fun calculateTopPadding() = if (showingHistory) {
+                        headingPadding.calculateTopPadding()
+                    } else {
+                        pageContentPadding.calculateTopPadding()
+                    }
+                }
             }
-        }
-        val listPadding = remember(bodyPadding, dimensions.spaceMedium) {
-            object : PaddingValues by bodyPadding {
-                override fun calculateBottomPadding() =
-                    bodyPadding.calculateBottomPadding() + dimensions.spaceMedium
+            val listPadding = remember(bodyPadding, dimensions.spaceMedium) {
+                object : PaddingValues by bodyPadding {
+                    override fun calculateBottomPadding() =
+                        bodyPadding.calculateBottomPadding() + dimensions.spaceMedium
+                }
             }
-        }
-        Column(
-            modifier = Modifier.fillMaxSize().padding(viewportPadding)
-                .padding(horizontal = dimensions.screenPadding),
-        ) {
-            if (resultsQuery.isBlank()) {
-                RecentSearchHeading(
-                    visible = recentQueriesVisible,
-                    onVisibilityChange = onRecentQueriesVisibleChange,
-                    canClear = recentQueriesVisible && recents.isNotEmpty(),
-                    onClear = { onRecentQueriesChange(emptyList()) },
-                )
-            }
-            Box(Modifier.fillMaxWidth().weight(1f)) {
+            Box(Modifier.fillMaxSize()) {
                 // Retain removal fades, but dispose outgoing rows immediately on hiding.
                 key(recentQueriesVisible) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         state = listState,
-                        // Keep the viewport behind the floating search while the final row clears it.
+                        // Rows scroll behind both floating controls; the first and last rows clear them.
                         contentPadding = listPadding,
                         verticalArrangement = Arrangement.spacedBy(
                             if (resultsQuery.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
@@ -299,43 +319,53 @@ private fun RecentSearchHeading(
 ) {
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
-    Row(
+    val toolbarStyle = AndroidKitThemeTokens.floatingToolbarStyle
+    FloatingSurface(
+        shape = toolbarStyle.shape,
         modifier = Modifier.fillMaxWidth().padding(bottom = dimensions.settingsPageSectionSpacing),
-        verticalAlignment = Alignment.CenterVertically,
+        style = toolbarStyle.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
         Row(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxWidth().padding(
+                horizontal = dimensions.spaceMedium,
+                vertical = dimensions.spaceExtraSmall,
+            ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = strings.recentSearches,
-                modifier = Modifier.weight(1f, fill = false),
-                style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
-                color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            IconToggleButton(
-                checked = visible,
-                onCheckedChange = onVisibilityChange,
-                modifier = Modifier.size(dimensions.minimumTouchTarget),
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(
-                    imageVector = if (visible) AndroidKitIcons.EyeOff else AndroidKitIcons.Eye,
-                    contentDescription = if (visible) strings.hideRecentSearches else strings.showRecentSearches,
-                    modifier = Modifier.size(dimensions.floatingActionBarIconSize),
-                    tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                Text(
+                    text = strings.recentSearches,
+                    modifier = Modifier.weight(1f, fill = false),
+                    style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
+                    color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
+                IconToggleButton(
+                    checked = visible,
+                    onCheckedChange = onVisibilityChange,
+                    modifier = Modifier.size(dimensions.minimumTouchTarget),
+                ) {
+                    Icon(
+                        imageVector = if (visible) AndroidKitIcons.EyeOff else AndroidKitIcons.Eye,
+                        contentDescription = if (visible) strings.hideRecentSearches else strings.showRecentSearches,
+                        modifier = Modifier.size(dimensions.floatingActionBarIconSize),
+                        tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                    )
+                }
             }
-        }
-        if (canClear) {
-            TextButton(
-                onClick = onClear,
-                contentPadding = PaddingValues(
-                    start = (dimensions.minimumTouchTarget - dimensions.floatingActionBarIconSize) / 2,
-                    end = dimensions.spaceExtraSmall,
-                ),
-            ) { Text(strings.clearAll, maxLines = 1) }
+            if (canClear) {
+                TextButton(
+                    onClick = onClear,
+                    contentPadding = PaddingValues(
+                        start = (dimensions.minimumTouchTarget - dimensions.floatingActionBarIconSize) / 2,
+                        end = dimensions.spaceExtraSmall,
+                    ),
+                ) { Text(strings.clearAll, maxLines = 1) }
+            }
         }
     }
 }

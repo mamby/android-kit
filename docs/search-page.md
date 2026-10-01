@@ -120,6 +120,12 @@ render as rounded Kit cards with a leading history icon and trailing X remove
 action; tapping the card restores the query. Clear all remains a separate deletion
 action when history is shown. Searching and recording continue while hidden.
 
+The recent heading, visibility toggle and Clear all share a floating Kit surface.
+The list viewport fills the page edge to edge. Its content padding keeps the first
+row below the measured recent bar and the last row above the search field, while
+rows scroll behind the recent bar, page title and system bars. The page title bar
+and status-bar protection retain the standard `AndroidKitPage` behavior.
+
 Hosts persist visibility alongside history, scoped by a stable logical search
 identifier, never a translated title or transient navigation entry. The demo
 uses separate DataStore keys `search.settings.recents_visible` and

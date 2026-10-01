@@ -81,6 +81,8 @@ escape hatch. Migrate consumers and the demo with the library.
   search. Replace `dragHandle = null` with `showDragHandle = false`.
 - Navigation: supply `AndroidKitNavigationBadge(label, contentDescription)`;
   a null badge hides it, while a badge with null label renders a dot.
+  `AndroidKitNavDisplay` owns immediate page changes, including predictive Back,
+  while hosts own routes and state. See [page navigation](navigation.md).
 
 Outer modifiers and existing style/layout parameters remain supported; new
 components follow the sealed default above. Authentication,

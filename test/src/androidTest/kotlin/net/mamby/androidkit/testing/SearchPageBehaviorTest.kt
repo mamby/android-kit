@@ -2,6 +2,7 @@ package net.mamby.androidkit.testing
 
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.lazy.LazyListScope
@@ -31,6 +32,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollToIndex
@@ -58,6 +60,7 @@ class SearchPageBehaviorTest {
 
     @Test
     fun historyAndResultsScrollBehindSearchAndKeepLastRowAboveIt() {
+        rule.activityRule.scenario.onActivity { it.enableEdgeToEdge() }
         var query by mutableStateOf("")
         val imeVisible = AtomicBoolean()
         rule.setContent {
@@ -89,13 +92,28 @@ class SearchPageBehaviorTest {
             assertTrue("Last row must scroll clear of the search box", rowBounds.bottom <= fieldBounds.top)
         }
         val headingTop = rule.onNodeWithText("Recent searches").fetchSemanticsNode().boundsInRoot.top
+        val toggleBounds = rule.onNodeWithContentDescription("Hide recent searches").fetchSemanticsNode().boundsInRoot
+        assertTrue("History viewport must extend behind the recent header", list.fetchSemanticsNode().boundsInRoot.top < headingTop)
+        assertTrue("First recent row must initially clear the header", rule.onNodeWithText("Recent 0").fetchSemanticsNode().boundsInRoot.top >= toggleBounds.bottom)
+        val title = rule.onNode(hasContentDescription("Search") and !hasSetTextAction())
+        val historyTitleBounds = title.fetchSemanticsNode().boundsInRoot
+        val pageBounds = rule.onRoot().fetchSemanticsNode().boundsInRoot
+        val historyViewportBounds = list.fetchSemanticsNode().boundsInRoot
+        assertEquals("History viewport must reach the page's top edge", pageBounds.top, historyViewportBounds.top, 0f)
+        assertEquals("History viewport must reach the page's left edge", pageBounds.left, historyViewportBounds.left, 0f)
+        assertEquals("History viewport must reach the page's right edge", pageBounds.right, historyViewportBounds.right, 0f)
+        list.performScrollToIndex(1)
+        // The target row aligns below content padding; the preceding row moves under the bar.
+        assertTrue("Recent rows must scroll behind the header", rule.onNodeWithText("Recent 0").assertIsDisplayed().fetchSemanticsNode().boundsInRoot.top < toggleBounds.bottom)
         assertViewportAndLastRow("Recent 9", 9)
         assertEquals(headingTop, rule.onNodeWithText("Recent searches").fetchSemanticsNode().boundsInRoot.top)
+        assertEquals(historyTitleBounds, title.fetchSemanticsNode().boundsInRoot)
         search.performTextReplacement("topic")
         rule.waitUntil(5_000) { rule.onAllNodes(hasText("Event: Topic", substring = true)).fetchSemanticsNodes().isNotEmpty() }
         list.performScrollToIndex(0)
         rule.onNodeWithText("Event: Topic 0").assertIsDisplayed()
         val titleBounds = rule.onNode(hasContentDescription("Search") and !hasSetTextAction()).fetchSemanticsNode().boundsInRoot
+        assertEquals("Results must use the same edge-to-edge viewport", historyViewportBounds, list.fetchSemanticsNode().boundsInRoot)
         assertTrue("Result viewport must extend behind the title bar", list.fetchSemanticsNode().boundsInRoot.top < titleBounds.bottom)
         assertTrue("First result must clear the title bar", rule.onNodeWithText("Event: Topic 0").fetchSemanticsNode().boundsInRoot.top >= titleBounds.bottom)
         assertViewportAndLastRow("Event: Topic 29", 29)

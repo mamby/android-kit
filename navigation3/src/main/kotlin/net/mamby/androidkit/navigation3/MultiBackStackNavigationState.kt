@@ -27,6 +27,12 @@ public class MultiBackStackNavigationState<Root : NavKey> internal constructor(
     public val currentBackStack: NavBackStack<NavKey>
         get() = backStacks.getValue(selectedRoot)
 
+    /** Returns a root's retained stack so each stack can own its entry decorators. */
+    public fun backStackFor(root: Root): NavBackStack<NavKey> {
+        require(root in backStacks) { "The navigation root is not registered." }
+        return backStacks.getValue(root)
+    }
+
     public val isAtRoot: Boolean
         get() = currentBackStack.size == 1
 

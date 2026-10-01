@@ -63,8 +63,12 @@ the Compose test rule.
 Keep detailed shared search-history behavior in `SearchPageBehaviorTest`;
 Settings tests verify catalog integration and host callbacks. Navigation tests
 cover independent histories, saved-state restoration, reset, and replacement
-guards. No coverage percentage is claimed; unused JaCoCo configuration has been
-removed.
+guards. Navigation entry tests also cover per-root UI state, inactive pop cleanup,
+live data and callbacks in cached entries, root/detail shell moves, the lock gate,
+and transitions with automatic clock advancement disabled. Immediate page tests
+verify that motion metadata cannot override the Kit policy and predictive Back
+keeps the current page stationary until completion, including cancellation.
+No coverage percentage is claimed; unused JaCoCo configuration has been removed.
 
 ## Screenshot baselines
 

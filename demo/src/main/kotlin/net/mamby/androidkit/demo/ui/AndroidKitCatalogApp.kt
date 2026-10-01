@@ -15,14 +15,14 @@ import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneSt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
@@ -31,10 +31,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.ui.NavDisplay
 import net.mamby.androidkit.compose.layout.AndroidKitLockPage
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigation
 import net.mamby.androidkit.compose.navigation.AndroidKitFloatingNavigationItem
+import net.mamby.androidkit.navigation3.AndroidKitNavDisplay
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.demo.R
 import net.mamby.androidkit.demo.ui.screen.ComponentDemoScreen
@@ -78,7 +78,6 @@ internal fun AndroidKitCatalogApp(
     }
     val navigation = rememberMultiBackStackNavigationState(roots)
     val navigationDemoConfiguration = floatingNavigationDemoConfiguration(settings)
-    val entryStateHolder = rememberSaveableStateHolder()
     val snackbarState = remember { SnackbarHostState() }
     val writeFailure = settingsViewModel.settingsWriteFailure
     val saveFailedMessage = stringResource(R.string.settings_save_failed)
@@ -162,70 +161,82 @@ internal fun AndroidKitCatalogApp(
             },
         )
 
-        val provider = entryProvider<NavKey> {
-            entry<ComponentsRoute>(
-                metadata = ListDetailSceneStrategy.listPane(
-                    detailPlaceholder = { ComponentPlaceholder() },
-                ),
-            ) {
-                ComponentsScreen(
-                    onSelected = {
-                        navigation.navigate(ComponentDemoRoute(demo = it))
-                    },
-                )
-            }
-            entry<ComponentDemoRoute>(
-                metadata = ListDetailSceneStrategy.detailPane(),
-            ) { route ->
-                ComponentDemoScreen(
-                    demo = route.demo,
-                    demoToggles = settings.demoToggles,
-                    onDemoToggleChange = settingsViewModel::setDemoToggle,
-                    selectedPageAction = settings.selectedPageAction,
-                    onPageActionSelected = settingsViewModel::setSelectedPageAction,
-                    pageHeaderActionPresentation =
-                        settings.pageHeaderActionPresentation,
-                    onPageHeaderActionPresentationChange =
-                        settingsViewModel::setPageHeaderActionPresentation,
-                    sheetHeaderActionPresentation =
-                        settings.sheetHeaderActionPresentation,
-                    onSheetHeaderActionPresentationChange =
-                        settingsViewModel::setSheetHeaderActionPresentation,
-                    floatingNavigationLayout = settings.floatingNavigationLayout,
-                    onFloatingNavigationLayoutChange =
-                        settingsViewModel::setFloatingNavigationLayout,
-                    showCompactNavigationLabels =
-                        settings.showCompactNavigationLabels,
-                    onShowCompactNavigationLabelsChange =
-                        settingsViewModel::setShowCompactNavigationLabels,
-                    recentContentSearchesVisible = settings.recentContentSearchesVisible,
-                    onRecentContentSearchesVisibleChange = settingsViewModel::setRecentContentSearchesVisible,
-                    recentContentSearches = settings.recentContentSearches,
-                    onRecentContentSearchesChange = settingsViewModel::setRecentContentSearches,
-                    onOpenDemo = { navigation.navigate(ComponentDemoRoute(demo = it)) },
-                    onBack = navigation::goBack,
-                )
-            }
-            entry<LocalizationRoute> { LocalizationScreen() }
-            entry<SettingsRoute> {
-                SettingsScreen(settingsCatalog)
-            }
-            entry<AboutRoute> {
-                AboutScreen(settingsCatalog, onBack = navigation::goBack)
-            }
-            entry<SettingsSearchRoute> {
-                SettingsSearchScreen(settingsCatalog, onBack = navigation::goBack)
-            }
-            entry<DemoRootRoute> { route ->
-                DummyNavigationScreen(index = route.index)
+        val currentSettings by rememberUpdatedState(settings)
+        val currentCatalog by rememberUpdatedState(settingsCatalog)
+        val provider = remember(navigation, settingsViewModel) {
+            entryProvider<NavKey> {
+                entry<ComponentsRoute>(
+                    metadata = ListDetailSceneStrategy.listPane(
+                        detailPlaceholder = { ComponentPlaceholder() },
+                    ),
+                ) {
+                    ComponentsScreen(
+                        onSelected = {
+                            navigation.navigate(ComponentDemoRoute(demo = it))
+                        },
+                    )
+                }
+                entry<ComponentDemoRoute>(
+                    metadata = ListDetailSceneStrategy.detailPane(),
+                ) { route ->
+                    ComponentDemoScreen(
+                        demo = route.demo,
+                        demoToggles = currentSettings.demoToggles,
+                        onDemoToggleChange = settingsViewModel::setDemoToggle,
+                        selectedPageAction = currentSettings.selectedPageAction,
+                        onPageActionSelected = settingsViewModel::setSelectedPageAction,
+                        pageHeaderActionPresentation =
+                            currentSettings.pageHeaderActionPresentation,
+                        onPageHeaderActionPresentationChange =
+                            settingsViewModel::setPageHeaderActionPresentation,
+                        sheetHeaderActionPresentation =
+                            currentSettings.sheetHeaderActionPresentation,
+                        onSheetHeaderActionPresentationChange =
+                            settingsViewModel::setSheetHeaderActionPresentation,
+                        floatingNavigationLayout = currentSettings.floatingNavigationLayout,
+                        onFloatingNavigationLayoutChange =
+                            settingsViewModel::setFloatingNavigationLayout,
+                        showCompactNavigationLabels =
+                            currentSettings.showCompactNavigationLabels,
+                        onShowCompactNavigationLabelsChange =
+                            settingsViewModel::setShowCompactNavigationLabels,
+                        recentContentSearchesVisible = currentSettings.recentContentSearchesVisible,
+                        onRecentContentSearchesVisibleChange = settingsViewModel::setRecentContentSearchesVisible,
+                        recentContentSearches = currentSettings.recentContentSearches,
+                        onRecentContentSearchesChange = settingsViewModel::setRecentContentSearches,
+                        onOpenDemo = { navigation.navigate(ComponentDemoRoute(demo = it)) },
+                        onBack = navigation::goBack,
+                    )
+                }
+                entry<LocalizationRoute> {
+                    LocalizationScreen()
+                }
+                entry<SettingsRoute> {
+                    SettingsScreen(currentCatalog)
+                }
+                entry<AboutRoute> {
+                    AboutScreen(currentCatalog, onBack = navigation::goBack)
+                }
+                entry<SettingsSearchRoute> {
+                    SettingsSearchScreen(currentCatalog, onBack = navigation::goBack)
+                }
+                entry<DemoRootRoute> { route ->
+                    DummyNavigationScreen(index = route.index)
+                }
             }
         }
         // Keep decoration and pop cleanup alive across shell changes and the lock gate.
-        // Entries hold callbacks, but their protected UI is composed only by NavDisplay below.
-        val entries = rememberDecoratedNavEntries(
-            entries = navigation.currentBackStack.map(provider),
-            entryDecorators = listOf(rememberSaveableStateHolderNavEntryDecorator<NavKey>(entryStateHolder)),
-        )
+        // Each root owns its decorators, including while another root is displayed.
+        val entriesByRoot = roots.associateWith { root ->
+            key(root) {
+                rememberDecoratedNavEntries(
+                    backStack = navigation.backStackFor(root),
+                    entryDecorators = listOf(rememberSaveableStateHolderNavEntryDecorator<NavKey>()),
+                    entryProvider = provider,
+                )
+            }
+        }
+        val entries = entriesByRoot.getValue(navigation.selectedRoot)
         if (settings.appLockEnabled && !settingsViewModel.unlocked) {
             AndroidKitLockPage(
                 message = stringResource(R.string.lock_page_message),
@@ -241,7 +252,7 @@ internal fun AndroidKitCatalogApp(
         }
         val currentContent by rememberUpdatedState<@Composable () -> Unit> {
             Box(modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
-                NavDisplay(
+                AndroidKitNavDisplay(
                     entries = entries,
                     onBack = navigation::goBack,
                     sceneStrategies = listOf(listDetailStrategy),

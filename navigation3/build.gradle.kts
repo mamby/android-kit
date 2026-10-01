@@ -64,7 +64,7 @@ dependencies {
     api(project(":compose"))
     api(libs.navigation3.runtime)
     implementation(libs.material3.adaptive.navigation3)
-    implementation(libs.navigation3.ui)
+    api(libs.navigation3.ui)
 }
 
 extra["POM_ARTIFACT_ID"] = "navigation3"

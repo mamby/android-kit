@@ -32,6 +32,7 @@ class MultiBackStackNavigationStateTest {
             navigation.navigate(Detail("second-detail"))
             navigation.selectRoot(FirstRoot, popToRootOnReselect = false)
 
+            assertEquals(listOf(SecondRoot, Detail("second-detail")), navigation.backStackFor(SecondRoot).toList())
             assertEquals(Detail("first-detail"), navigation.currentBackStack.last())
             assertTrue(navigation.goBack())
             assertEquals(listOf(FirstRoot), navigation.currentBackStack.toList())
@@ -110,6 +111,7 @@ class MultiBackStackNavigationStateTest {
             assertEquals(listOf(FirstRoot, Detail("parent"), Detail("replacement")), navigation.currentBackStack.toList())
             assertThrows(IllegalArgumentException::class.java) { navigation.selectRoot(UnregisteredRoot) }
             assertThrows(IllegalArgumentException::class.java) { navigation.openRoot(UnregisteredRoot) }
+            assertThrows(IllegalArgumentException::class.java) { navigation.backStackFor(UnregisteredRoot) }
             assertEquals(FirstRoot, navigation.selectedRoot)
             assertTrue(navigation.goBack())
             assertEquals(Detail("parent"), navigation.currentBackStack.last())
