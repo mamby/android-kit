@@ -8,17 +8,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 
-/** One half of the search microphone's breathing cycle, without repetition. */
-private const val NavigationHighlightDurationMillis = 900
+private const val NavigationHighlightDurationMillis = 600
 
 @Composable
 internal fun rememberNavigationHighlightScale(selected: Boolean): Animatable<Float, AnimationVector1D> {
     val scale = remember { Animatable(if (selected) 1f else 0f) }
     LaunchedEffect(selected) {
-        scale.animateTo(
-            targetValue = if (selected) 1f else 0f,
-            animationSpec = tween(NavigationHighlightDurationMillis, easing = FastOutSlowInEasing),
-        )
+        if (selected) {
+            scale.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(NavigationHighlightDurationMillis, easing = FastOutSlowInEasing),
+            )
+        } else {
+            scale.snapTo(0f)
+        }
     }
     return scale
 }

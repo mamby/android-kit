@@ -56,6 +56,11 @@ internal fun demoSettingsCatalog(
     val uriHandler = LocalUriHandler.current
     val displayLocale = LocalLocale.current.platformLocale
     val localeManager = remember(context) { AppLocaleManager(context, SupportedLanguageTags.toSet()) }
+    val languageOptions = remember {
+        SupportedLanguageTags.map { tag ->
+            AndroidKitSettingsOption(tag, nativeLanguageName(tag))
+        }
+    }
     val themeLightText = stringResource(R.string.theme_light)
     val themeDarkText = stringResource(R.string.theme_dark)
     val themePrismText = stringResource(R.string.theme_prism)
@@ -111,9 +116,7 @@ internal fun demoSettingsCatalog(
             section("language", label = languageTitle) {
                 language(AndroidKitLanguageSetting(
                     selection = AndroidKitSettingsSelection(
-                        options = SupportedLanguageTags.map { tag ->
-                            AndroidKitSettingsOption(tag, nativeLanguageName(tag))
-                        },
+                        options = languageOptions,
                         selectedId = localeManager.selectedLanguageTag() ?: "system",
                         onSelected = { id ->
                             localeManager.setApplicationLanguage(id.takeUnless { it == "system" })

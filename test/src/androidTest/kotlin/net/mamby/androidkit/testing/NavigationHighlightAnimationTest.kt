@@ -55,20 +55,22 @@ class NavigationHighlightAnimationTest {
         rule.mainClock.advanceTimeByFrame()
     }
 
-    @Test fun highlightsEnterAndExitTogetherThenStaySettled() {
+    @Test fun deselectionIsImmediateAndSelectionSettlesAfter700Millis() {
         content()
         rule.runOnIdle {
             assertEquals(1f, first.value, 0f)
             assertEquals(0f, second.value, 0f)
         }
         selectFirst(false)
-        rule.mainClock.advanceTimeBy(450)
         rule.runOnIdle {
-            assertTrue(first.value > 0f && first.value < 1f)
-            assertTrue(second.value > 0f && second.value < 1f)
-            assertEquals(1f, first.value + second.value, 0.001f)
+            assertEquals(0f, first.value, 0f)
         }
-        rule.mainClock.advanceTimeBy(500)
+        rule.mainClock.advanceTimeBy(350)
+        rule.runOnIdle {
+            assertEquals(0f, first.value, 0f)
+            assertTrue(second.value > 0f && second.value < 1f)
+        }
+        rule.mainClock.advanceTimeBy(350)
         rule.runOnIdle {
             assertEquals(0f, first.value, 0f)
             assertEquals(1f, second.value, 0f)
@@ -80,25 +82,25 @@ class NavigationHighlightAnimationTest {
         }
     }
 
-    @Test fun interruptedSelectionContinuesFromCurrentScale() {
+    @Test fun interruptedSelectionClearsImmediatelyAndReselectionGrowsAgain() {
         content()
         selectFirst(false)
-        rule.mainClock.advanceTimeBy(300)
-        var before = 0f
-        rule.runOnIdle { before = first.value }
+        rule.mainClock.advanceTimeBy(200)
+        rule.runOnIdle {
+            assertEquals(0f, first.value, 0f)
+            assertTrue(second.value > 0f && second.value < 1f)
+        }
         selectFirst(true)
         rule.runOnIdle {
-            // Selection is applied on the next frame, so the outgoing animation
-            // may advance once before cancellation. It must not jump to an endpoint.
-            assertTrue(first.value > 0f && first.value < 1f)
-            assertEquals(before, first.value, 0.06f)
-        }
-        rule.mainClock.advanceTimeBy(300)
-        rule.runOnIdle {
-            assertTrue(first.value > before)
+            assertEquals(0f, second.value, 0f)
             assertTrue(first.value < 1f)
         }
-        rule.mainClock.advanceTimeBy(650)
+        rule.mainClock.advanceTimeBy(350)
+        rule.runOnIdle {
+            assertTrue(first.value > 0f && first.value < 1f)
+            assertEquals(0f, second.value, 0f)
+        }
+        rule.mainClock.advanceTimeBy(350)
         rule.runOnIdle {
             assertEquals(1f, first.value, 0f)
             assertEquals(0f, second.value, 0f)
@@ -108,9 +110,9 @@ class NavigationHighlightAnimationTest {
     @Test fun repeatedSelectionDoesNotRestartAnimation() {
         content()
         selectFirst(false)
-        rule.mainClock.advanceTimeBy(450)
+        rule.mainClock.advanceTimeBy(350)
         selectFirst(false)
-        rule.mainClock.advanceTimeBy(500)
+        rule.mainClock.advanceTimeBy(350)
         rule.runOnIdle {
             assertEquals(0f, first.value, 0f)
             assertEquals(1f, second.value, 0f)
@@ -178,7 +180,7 @@ class NavigationHighlightAnimationTest {
             rule.waitForIdle()
             assertEquals(bounds, firstNode().fetchSemanticsNode().boundsInRoot)
             val transitioningPixels = highlightedPixels()
-            assertTrue("Highlights must shrink and grow within their original bounds", transitioningPixels in 1 until fullPixels)
+            assertTrue("Selected highlight must grow within its original bounds", transitioningPixels in 1 until fullPixels)
             rule.mainClock.advanceTimeBy(1_000)
             assertTrue("Final highlight must reach full size", highlightedPixels() > transitioningPixels)
             // Both overflow destinations share the same More highlight.

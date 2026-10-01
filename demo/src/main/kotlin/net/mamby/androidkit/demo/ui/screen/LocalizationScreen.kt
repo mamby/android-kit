@@ -1,14 +1,13 @@
 package net.mamby.androidkit.demo.ui.screen
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -66,20 +65,21 @@ internal fun LocalizationContent() {
             title = stringResource(R.string.language_section),
                     supportingText = stringResource(R.string.language_section_description),
         ) {
-            Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState()),
+            LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
             ) {
-                LanguageChip(
-                    tag = null,
-                    label = stringResource(R.string.language_system),
-                    selectedTag = selectedLanguageTag,
-                    onSelected = localeManager::setApplicationLanguage,
-                )
-                SupportedLanguageTags.forEach { languageTag ->
+                item(key = "system") {
+                    LanguageChip(
+                        tag = null,
+                        label = stringResource(R.string.language_system),
+                        selectedTag = selectedLanguageTag,
+                        onSelected = localeManager::setApplicationLanguage,
+                    )
+                }
+                items(SupportedLanguageTags, key = { it }) { languageTag ->
                     LanguageChip(
                         tag = languageTag,
-                        label = nativeLanguageName(languageTag),
+                        label = remember(languageTag) { nativeLanguageName(languageTag) },
                         selectedTag = selectedLanguageTag,
                         onSelected = localeManager::setApplicationLanguage,
                     )
