@@ -49,6 +49,7 @@ public fun AndroidKitContextMenu(
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.contextMenu
     var expanded by remember { mutableStateOf(false) }
     var position by remember { mutableStateOf<Offset?>(null) }
     var pressPosition by remember { mutableStateOf<Offset?>(null) }
@@ -131,8 +132,8 @@ public fun AndroidKitContextMenu(
             onDismissRequest = dismiss,
             onActionDismissRequest = dismiss,
             positionProvider = positionProvider,
-            style = AndroidKitThemeTokens.actionFlyoutStyle,
-            contentPadding = PaddingValues(vertical = AndroidKitThemeTokens.dimensions.spaceSmall),
+            style = tokens.flyoutStyle,
+            contentPadding = PaddingValues(vertical = tokens.verticalPadding),
             properties = PopupProperties(focusable = true),
         ) {
             AndroidKitActionFlyoutScope().apply(menu).render(this)

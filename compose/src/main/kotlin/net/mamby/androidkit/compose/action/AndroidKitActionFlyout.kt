@@ -198,7 +198,7 @@ private class ActionFlyoutScopeImpl(
             text = {
                 Text(
                     text = label,
-                    style = AndroidKitThemeTokens.typography.labelLarge,
+                    style = AndroidKitThemeTokens.componentTokens.actionFlyout.itemTextStyle,
                     fontWeight = FontWeight.Normal,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -210,8 +210,8 @@ private class ActionFlyoutScopeImpl(
             },
             enabled = this.enabled && enabled,
             contentPadding = PaddingValues(
-                start = dimensions.spaceMedium,
-                end = dimensions.spaceLarge,
+                start = AndroidKitThemeTokens.componentTokens.actionFlyout.itemStartPadding,
+                end = AndroidKitThemeTokens.componentTokens.actionFlyout.itemEndPadding,
             ),
             leadingIcon = if (iconPainter != null) {
                 {
@@ -249,11 +249,11 @@ private class ActionFlyoutScopeImpl(
 
     @Composable
     override fun separator(modifier: Modifier, color: Color) {
-        val dimensions = AndroidKitThemeTokens.dimensions
+        val tokens = AndroidKitThemeTokens.componentTokens.actionFlyout
         HorizontalDivider(
             modifier = modifier.padding(
-                horizontal = dimensions.spaceMedium,
-                vertical = dimensions.spaceExtraSmall,
+                horizontal = tokens.separatorHorizontalPadding,
+                vertical = tokens.separatorVerticalPadding,
             ),
             color = color.takeUnless { it == Color.Unspecified }
                 ?: AndroidKitThemeTokens.colorScheme.outlineVariant,
@@ -275,6 +275,7 @@ private fun ActionFlyoutSubmenu(
     onActionDismissRequest: () -> Unit,
     content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.actionFlyout
     var expanded by remember { mutableStateOf(false) }
     LaunchedEffect(enabled, parentExpanded) {
         if (!enabled || !parentExpanded) expanded = false
@@ -285,7 +286,7 @@ private fun ActionFlyoutSubmenu(
             text = {
                 Text(
                     label,
-                    style = AndroidKitThemeTokens.typography.labelLarge,
+                    style = tokens.itemTextStyle,
                     fontWeight = FontWeight.Normal,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -295,7 +296,7 @@ private fun ActionFlyoutSubmenu(
             modifier = modifier.clip(CircleShape),
             enabled = enabled,
             contentPadding = PaddingValues(
-                start = dimensions.spaceMedium, end = dimensions.spaceLarge,
+                start = tokens.itemStartPadding, end = tokens.itemEndPadding,
             ),
             leadingIcon = icon?.let {
                 {

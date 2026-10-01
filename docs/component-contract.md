@@ -11,6 +11,30 @@ default only when explicitly requested.
 
 Existing component style APIs described below remain until explicitly migrated;
 they are not a precedent for adding equivalent extensibility to new components.
+
+Component-specific defaults belong to that component. Internal semantic token
+groups own padding, gaps, icon sizes, text roles, shapes and local colors; a
+component must not borrow another component's style or dimension just because
+its current value matches. These groups are internal and introduce no new host
+styling APIs. Existing component-specific public styles and dimensions retain
+their owning component.
+
+The color palette, typography/shape/spacing scales, accessibility minimum touch
+target and floating-surface transparency, border, shadow and disabled-state
+policy remain shared foundations. Semantic defaults may derive from those
+foundations, but never from a sibling component. Shared action primitives retain
+their content inset and icon-label gap; measurement must use the same geometry
+as rendering. Composite components continue to use the actual Page, Card,
+SectionCard, BottomSheet, Tooltip and Flyout renderers, including their interaction
+contracts. Owner-specific overflow chrome is supplied to the shared menu renderer.
+Settings intentionally uses the SectionCard entry wrapper; theme/language picker
+rows, sliders and the app-lock timeout dialog have their own control tokens.
+
+Separating token ownership does not change appearance by itself. Current section
+card padding is 18 dp horizontally and 14 dp vertically, with picker padding of
+16 dp horizontally and 12 dp vertically, and the timeout dialog's current
+16 dp vertical padding. It does not reset existing dimensions as part of the refactor.
+
 `AndroidKitFloatingTooltip` accepts text, one optional typed action, and a Close
 callback. Its chrome is sealed and uses shared floating-surface transparency,
 border and shadow. The Material tooltip anchor retains placement and state ownership.

@@ -21,15 +21,17 @@ public fun AndroidKitFloatingActionBar(
     modifier: Modifier = Modifier,
     style: AndroidKitFloatingActionBarStyle = AndroidKitThemeTokens.floatingActionBarStyle,
     contentPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceSmall,
-        vertical = AndroidKitThemeTokens.dimensions.spaceExtraSmall,
+        horizontal = AndroidKitThemeTokens.componentTokens.actionBar.horizontalPadding,
+        vertical = AndroidKitThemeTokens.componentTokens.actionBar.verticalPadding,
     ),
     content: AndroidKitFloatingActionBarScope.() -> Unit,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.actionBar
     AndroidKitFloatingToolbar(
         modifier = modifier,
         style = style.asFloatingToolbarStyle(),
         contentPadding = contentPadding,
+        itemSpacing = tokens.itemSpacing,
         flyoutAnchor = AndroidKitFloatingToolbarFlyoutAnchor.Toolbar,
         content = content,
     )
@@ -40,8 +42,8 @@ private fun AndroidKitFloatingActionBarStyle.asFloatingToolbarStyle():
     AndroidKitFloatingToolbarStyle =
     AndroidKitFloatingToolbarStyle(
         surfaceStyle = surfaceStyle,
-        flyoutStyle = flyoutStyle,
-        separatorColor = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
+        flyoutStyle = flyoutStyle ?: AndroidKitThemeTokens.componentTokens.actionBar.flyoutStyle,
+        separatorColor = AndroidKitThemeTokens.componentTokens.actionBar.separatorColor,
         shape = shape,
         itemShape = itemShape,
         labelTextStyle = labelTextStyle,

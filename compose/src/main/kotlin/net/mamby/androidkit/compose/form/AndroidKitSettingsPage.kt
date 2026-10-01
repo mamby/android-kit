@@ -18,7 +18,6 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -206,6 +205,7 @@ public fun AndroidKitSettingsPage(
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.settingsPage
     val page = requireNotNull(catalog.pagesByKey[pageKey]) { "Unknown Settings page key: $pageKey" }
     var activePicker by rememberSaveable(pageKey) { mutableStateOf<String?>(null) }
     val strings = AndroidKitThemeTokens.strings
@@ -236,10 +236,10 @@ public fun AndroidKitSettingsPage(
             modifier = Modifier.fillMaxSize(),
             state = listState,
             contentPadding = PaddingValues(
-                start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
+                start = padding.calculateStartPadding(direction) + tokens.horizontalPadding,
                 top = padding.calculateTopPadding(),
-                end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
-                bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
+                end = padding.calculateEndPadding(direction) + tokens.horizontalPadding,
+                bottom = padding.calculateBottomPadding() + tokens.bottomPadding,
             ),
             verticalArrangement = Arrangement.spacedBy(dimensions.settingsPageSectionSpacing),
         ) {
@@ -409,6 +409,7 @@ internal fun RenderSettingsPicker(
 
 @Composable
 private fun AppLockTimeoutDialog(selection: AndroidKitAppLockTimeoutSetting, onDismiss: () -> Unit) {
+    val tokens = AndroidKitThemeTokens.componentTokens.appLockTimeout
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
     AlertDialog(
@@ -426,12 +427,12 @@ private fun AppLockTimeoutDialog(selection: AndroidKitAppLockTimeoutSetting, onD
                                 onClick = { onDismiss(); selection.onSelected(option.id) },
                             )
                             .heightIn(min = dimensions.minimumTouchTarget)
-                            .padding(vertical = dimensions.settingSectionEntryVerticalPadding),
+                            .padding(vertical = tokens.rowVerticalPadding),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+                        horizontalArrangement = Arrangement.spacedBy(tokens.rowContentSpacing),
                     ) {
                         RadioButton(selected = option.id == selection.selectedId, onClick = null)
-                        Text(option.label, style = MaterialTheme.typography.bodyLarge)
+                        Text(option.label, style = tokens.labelTextStyle)
                     }
                 }
             }
@@ -441,6 +442,7 @@ private fun AppLockTimeoutDialog(selection: AndroidKitAppLockTimeoutSetting, onD
 
 @Composable
 private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Unit) {
+    val tokens = AndroidKitThemeTokens.componentTokens.settingsPicker
     var query by rememberSaveable { mutableStateOf("") }
     val selection = picker.selection
     val strings = AndroidKitThemeTokens.strings
@@ -468,17 +470,17 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
             modifier = Modifier.fillMaxWidth().selectableGroup(),
             state = listState,
             contentPadding = padding,
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            verticalArrangement = Arrangement.spacedBy(tokens.rowSpacing),
         ) {
             if (options.isEmpty()) item(key = "empty") { Text(picker.emptyResultsLabel.orEmpty()) }
             items(options, key = { "option:${it.id}" }) { option ->
                 val selected = option.id == selection.selectedId
-                val contentColor = if (selected) MaterialTheme.colorScheme.onSecondaryContainer
-                    else AndroidKitThemeTokens.settingSectionStyle.contentColor
+                val contentColor = if (selected) tokens.selectedContentColor
+                    else tokens.contentColor
                 Row(
                     modifier = Modifier.fillMaxWidth()
-                        .clip(AndroidKitThemeTokens.floatingNavigationStyle.itemShape)
-                        .background(if (selected) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent)
+                        .clip(tokens.itemShape)
+                        .background(if (selected) tokens.selectedContainerColor else Color.Transparent)
                         .selectable(
                             selected = selected,
                             role = Role.RadioButton,
@@ -488,11 +490,11 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
                         .padding(horizontal = dimensions.settingsPickerHorizontalPadding,
                             vertical = dimensions.settingsPickerVerticalPadding),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+                    horizontalArrangement = Arrangement.spacedBy(tokens.rowContentSpacing),
                 ) {
                     Text(option.label, modifier = Modifier.weight(1f),
                         color = contentColor,
-                        style = AndroidKitThemeTokens.settingSectionStyle.entryLabelTextStyle.let {
+                        style = tokens.labelTextStyle.let {
                             if (selected) it.copy(fontWeight = FontWeight.Medium) else it
                         })
                     if (selected) {

@@ -45,11 +45,12 @@ public fun AndroidKitCard(
     menuItems: List<AndroidKitCardMenuItem> = emptyList(),
     title: String? = null,
     style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
-    contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.dimensions.spaceMedium),
-    contentSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.componentTokens.card.contentPadding),
+    contentSpacing: Dp = AndroidKitThemeTokens.componentTokens.card.contentSpacing,
     supportingText: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.card
     Card(
         modifier = modifier,
         shape = style.shape,
@@ -58,8 +59,8 @@ public fun AndroidKitCard(
     ) {
         AndroidKitCardContent(
             menuItems = menuItems,
-            header = title?.let { text -> { Text(text, style = style.titleTextStyle ?: AndroidKitThemeTokens.typography.titleMedium) } },
-            headerSupportingContent = supportingText?.let { text -> { Text(text, style = style.supportingTextStyle ?: AndroidKitThemeTokens.typography.bodyMedium, color = if (style.supportingTextColor == androidx.compose.ui.graphics.Color.Unspecified) AndroidKitThemeTokens.colorScheme.onSurfaceVariant else style.supportingTextColor) } },
+            header = title?.let { text -> { Text(text, style = style.titleTextStyle ?: tokens.titleTextStyle) } },
+            headerSupportingContent = supportingText?.let { text -> { Text(text, style = style.supportingTextStyle ?: tokens.supportingTextStyle, color = if (style.supportingTextColor == androidx.compose.ui.graphics.Color.Unspecified) tokens.supportingTextColor else style.supportingTextColor) } },
             contentPadding = contentPadding,
             contentSpacing = contentSpacing,
             content = content,
@@ -75,11 +76,12 @@ public fun AndroidKitCard(
     menuItems: List<AndroidKitCardMenuItem> = emptyList(),
     title: String? = null,
     style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
-    contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.dimensions.spaceMedium),
-    contentSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.componentTokens.card.contentPadding),
+    contentSpacing: Dp = AndroidKitThemeTokens.componentTokens.card.contentSpacing,
     supportingText: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.card
     Card(
         onClick = onClick,
         modifier = modifier,
@@ -90,8 +92,8 @@ public fun AndroidKitCard(
     ) {
         AndroidKitCardContent(
             menuItems = menuItems,
-            header = title?.let { text -> { Text(text, style = style.titleTextStyle ?: AndroidKitThemeTokens.typography.titleMedium) } },
-            headerSupportingContent = supportingText?.let { text -> { Text(text, style = style.supportingTextStyle ?: AndroidKitThemeTokens.typography.bodyMedium, color = if (style.supportingTextColor == androidx.compose.ui.graphics.Color.Unspecified) AndroidKitThemeTokens.colorScheme.onSurfaceVariant else style.supportingTextColor) } },
+            header = title?.let { text -> { Text(text, style = style.titleTextStyle ?: tokens.titleTextStyle) } },
+            headerSupportingContent = supportingText?.let { text -> { Text(text, style = style.supportingTextStyle ?: tokens.supportingTextStyle, color = if (style.supportingTextColor == androidx.compose.ui.graphics.Color.Unspecified) tokens.supportingTextColor else style.supportingTextColor) } },
             contentPadding = contentPadding,
             contentSpacing = contentSpacing,
             content = content,
@@ -108,7 +110,7 @@ private fun AndroidKitCardContent(
     contentSpacing: Dp,
     content: @Composable ColumnScope.() -> Unit,
 ): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
+    val tokens = AndroidKitThemeTokens.componentTokens.card
     if (menuItems.isEmpty()) {
         Column(
             modifier = Modifier.padding(contentPadding),
@@ -117,13 +119,13 @@ private fun AndroidKitCardContent(
             if (header != null || headerSupportingContent != null) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+                    verticalArrangement = Arrangement.spacedBy(tokens.headerTextSpacing),
                 ) {
                     header?.let {
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.spacedBy(
-                                dimensions.spaceExtraSmall,
+                                tokens.headerTextSpacing,
                             ),
                             content = it,
                         )
@@ -132,7 +134,7 @@ private fun AndroidKitCardContent(
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             verticalArrangement = Arrangement.spacedBy(
-                                dimensions.spaceExtraSmall,
+                                tokens.headerTextSpacing,
                             ),
                             content = it,
                         )
@@ -161,11 +163,11 @@ private fun AndroidKitCardContent(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            verticalArrangement = Arrangement.spacedBy(tokens.headerTextSpacing),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+                horizontalArrangement = Arrangement.spacedBy(tokens.headerActionSpacing),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (header == null) {
@@ -175,7 +177,7 @@ private fun AndroidKitCardContent(
                         modifier = Modifier
                             .weight(1f)
                             .padding(start = startPadding),
-                        verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+                        verticalArrangement = Arrangement.spacedBy(tokens.headerTextSpacing),
                         content = header,
                     )
                 }
@@ -186,7 +188,7 @@ private fun AndroidKitCardContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = startPadding, end = endPadding),
-                    verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+                    verticalArrangement = Arrangement.spacedBy(tokens.headerTextSpacing),
                     content = headerSupportingContent,
                 )
             }
@@ -218,6 +220,7 @@ private fun AndroidKitCardOverflowMenu(
         AndroidKitActionFlyout(
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            style = AndroidKitThemeTokens.componentTokens.card.flyoutStyle,
         ) {
             items.forEach { item ->
                 item(

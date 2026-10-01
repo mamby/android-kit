@@ -447,13 +447,14 @@ private fun SettingsSliderEntry(
     style: AndroidKitSettingSectionStyle,
     onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.settingsSlider
     val dimensions = AndroidKitThemeTokens.dimensions
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+        verticalArrangement = Arrangement.spacedBy(tokens.trackSpacing),
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+            horizontalArrangement = Arrangement.spacedBy(tokens.labelContentSpacing),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             entry.icon?.let {
@@ -464,7 +465,7 @@ private fun SettingsSliderEntry(
             }
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+                verticalArrangement = Arrangement.spacedBy(tokens.supportingTextSpacing),
             ) {
                 Text(
                     text = entry.label,
@@ -517,7 +518,7 @@ private fun SettingsSliderEntry(
                 if (entry.isOpacitySlider) {
                     Box(
                         Modifier
-                            .size(dimensions.spaceLarge)
+                            .size(tokens.opacityThumbSize)
                             .dropShadow(
                                 shape = CircleShape,
                                 shadow = Shadow(

@@ -76,7 +76,6 @@ import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltip
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltipAction
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
-import net.mamby.androidkit.compose.theme.AndroidKitDefaults
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 import kotlinx.coroutines.delay
@@ -127,11 +126,11 @@ internal fun AndroidKitFloatingSearchBox(
     searchMode: AndroidKitSearchMode = AndroidKitSearchMode.OnSubmit,
     onSubmit: (() -> Unit)? = null,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.searchBox
     val strings = AndroidKitThemeTokens.strings
-    val dimensions = AndroidKitThemeTokens.dimensions
     val surfaceStyle = AndroidKitThemeTokens.floatingSurfaceStyle
     val visuals = floatingSurfaceVisuals(surfaceStyle)
-    val shape = AndroidKitDefaults.shapes.extraLarge
+    val shape = tokens.shape
     val keyboard = LocalSoftwareKeyboardController.current
     val imeVisible = WindowInsets.isImeVisible
     val focusRequester = remember { FocusRequester() }
@@ -305,20 +304,20 @@ internal fun AndroidKitFloatingSearchBox(
             if (dictation.active) {
                 Row(
                     modifier = Modifier.fillMaxWidth().heightIn(min = TextFieldDefaults.MinHeight)
-                        .padding(horizontal = dimensions.spaceSmall),
+                        .padding(horizontal = tokens.statusHorizontalPadding),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     SearchMicrophoneHalo()
                     Text(
                         text = speechStatus.orEmpty(),
-                        modifier = Modifier.weight(1f).padding(horizontal = dimensions.spaceMedium)
+                        modifier = Modifier.weight(1f).padding(horizontal = tokens.statusTextPadding)
                             .semantics {
                                 contentDescription = strings.voiceSearch
                                 stateDescription = speechStatus.orEmpty()
                                 liveRegion = LiveRegionMode.Polite
                             },
                         color = visuals.contentColor,
-                        style = AndroidKitThemeTokens.typography.bodyLarge,
+                        style = tokens.inputTextStyle,
                         textAlign = TextAlign.Center,
                     )
                     IconButton(
@@ -326,7 +325,7 @@ internal fun AndroidKitFloatingSearchBox(
                         onClick = { dictation.stop() },
                     ) {
                         Icon(AndroidKitIcons.Close, strings.voiceStop,
-                            Modifier.size(dimensions.floatingActionIconSize))
+                            Modifier.size(tokens.iconSize))
                     }
                 }
             } else TextField(
@@ -342,19 +341,19 @@ internal fun AndroidKitFloatingSearchBox(
                     },
                 enabled = enabled,
                 lineLimits = TextFieldLineLimits.SingleLine,
-                textStyle = AndroidKitThemeTokens.typography.bodyLarge,
+                textStyle = tokens.inputTextStyle,
                 shape = shape,
                 contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(),
                 placeholder = {
                     Text(
                         text = label,
-                        style = AndroidKitThemeTokens.typography.bodyLarge,
+                        style = tokens.inputTextStyle,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
                 },
                 leadingIcon = {
-                    Icon(AndroidKitIcons.Search, null, Modifier.size(dimensions.floatingActionIconSize))
+                    Icon(AndroidKitIcons.Search, null, Modifier.size(tokens.iconSize))
                 },
                 trailingIcon = {
                     Row {
@@ -372,7 +371,7 @@ internal fun AndroidKitFloatingSearchBox(
                                 },
                             ) {
                                 Icon(AndroidKitIcons.Close, strings.clearSearch,
-                                    Modifier.size(dimensions.floatingActionIconSize))
+                                    Modifier.size(tokens.iconSize))
                             }
                         }
                         if (voiceInputEnabled) {
@@ -397,7 +396,7 @@ internal fun AndroidKitFloatingSearchBox(
                                 Icon(
                                     AndroidKitIcons.Microphone,
                                     strings.voiceSearch,
-                                    Modifier.size(dimensions.floatingActionIconSize))
+                                    Modifier.size(tokens.iconSize))
                             }
                         }
                     }
@@ -440,6 +439,7 @@ private const val SearchErrorDurationMillis: Long = 6_000L
 
 @Composable
 private fun SearchMicrophoneHalo() {
+    val tokens = AndroidKitThemeTokens.componentTokens.searchBox
     val dimensions = AndroidKitThemeTokens.dimensions
     val color = AndroidKitThemeTokens.colorScheme.primary
     val transition = rememberInfiniteTransition(label = "Speech microphone halo")
@@ -462,7 +462,7 @@ private fun SearchMicrophoneHalo() {
         contentAlignment = Alignment.Center,
     ) {
         Icon(AndroidKitIcons.Microphone, null,
-            Modifier.size(dimensions.floatingActionIconSize), tint = color)
+            Modifier.size(tokens.iconSize), tint = color)
     }
 }
 

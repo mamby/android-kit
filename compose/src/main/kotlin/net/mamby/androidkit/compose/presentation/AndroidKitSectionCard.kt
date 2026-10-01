@@ -203,6 +203,7 @@ private fun SectionCardEntry(
     padding: PaddingValues,
     customEntryLayoutModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier,
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.sectionCard
     val dimensions = AndroidKitThemeTokens.dimensions
     val entryModifier = when (entry) {
         is AndroidKitSectionCardEntry.Custom -> customEntryLayoutModifier(entry)
@@ -238,7 +239,7 @@ private fun SectionCardEntry(
             ) {}
             is AndroidKitSectionCardEntry.Multiline -> Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+                verticalArrangement = Arrangement.spacedBy(tokens.multilineSpacing),
             ) {
                 entry.label?.let { Text(it, style = style.entryLabelTextStyle) }
                 Text(entry.text, style = style.entryLabelTextStyle)
@@ -246,7 +247,7 @@ private fun SectionCardEntry(
             is AndroidKitSectionCardEntry.Info -> Column(
                 // Stack values to leave the full width available for addresses and large text.
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+                verticalArrangement = Arrangement.spacedBy(tokens.multilineSpacing),
             ) {
                 Text(entry.label, style = style.entryLabelTextStyle)
                 entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }

@@ -48,6 +48,7 @@ import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.FloatingSurfaceButton
@@ -60,6 +61,7 @@ internal fun AndroidKitPageTitleBar(
     visible: Boolean,
     style: AndroidKitPageTitleBarStyle,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.pageTitleBar
     val dimensions = AndroidKitThemeTokens.dimensions
     val pageActions = actions.filter { it.isAndroidKitAction }
     if (title == null && onBack == null && pageActions.isEmpty()) return
@@ -89,7 +91,7 @@ internal fun AndroidKitPageTitleBar(
             )
             .heightIn(min = dimensions.pageTitleBarHeight)
             .padding(
-                horizontal = dimensions.spaceSmall,
+                horizontal = tokens.horizontalPadding,
                 vertical = dimensions.pageTitleBarVerticalPadding,
             ),
     ) {
@@ -116,6 +118,7 @@ internal fun AndroidKitPageTitleBar(
                     controlSize = controlSize,
                     actionWidths = actionWidths,
                     dimensions = dimensions,
+                    tokens = tokens,
                 )
                 val actionItems = partitionAndroidKitActions(
                     items = actions,
@@ -131,15 +134,16 @@ internal fun AndroidKitPageTitleBar(
                     hasOverflow = actionItems.overflow.isNotEmpty(),
                     actionWidths = actionWidths,
                     dimensions = dimensions,
+                    tokens = tokens,
                     controlSize = controlSize,
                 )
                 val titleStartPadding = leadingWidth + if (leadingWidth > 0.dp) {
-                    dimensions.spaceExtraSmall
+                    tokens.navigationTitleSpacing
                 } else {
                     0.dp
                 }
                 val titleEndPadding = endWidth + if (endWidth > 0.dp) {
-                    dimensions.spaceExtraSmall
+                    tokens.titleActionsSpacing
                 } else {
                     0.dp
                 }
@@ -169,7 +173,7 @@ internal fun AndroidKitPageTitleBar(
                         Box(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .padding(horizontal = dimensions.spaceMedium),
+                                .padding(horizontal = tokens.titleHorizontalPadding),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
@@ -191,7 +195,7 @@ internal fun AndroidKitPageTitleBar(
                     AndroidKitPageActionToolbar(
                         visualHeight = visualHeight,
                         modifier = Modifier.align(Alignment.CenterEnd),
-                        style = pageActionToolbarStyle(style, dimensions),
+                        style = pageActionToolbarStyle(style),
                     ) {
                         actionItems.direct.forEach { pageActionItem ->
                             when (pageActionItem) {
@@ -262,7 +266,7 @@ private fun PageTitleBarBackButton(
     style: AndroidKitPageTitleBarStyle,
     visualSize: Dp,
 ): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
+    val tokens = AndroidKitThemeTokens.componentTokens.pageTitleBar
     FloatingSurfaceButton(
         onClick = onClick,
         shape = style.buttonShape,
@@ -273,7 +277,7 @@ private fun PageTitleBarBackButton(
         Icon(
             imageVector = AndroidKitIcons.ArrowBack,
             contentDescription = AndroidKitThemeTokens.strings.back,
-            modifier = Modifier.size(dimensions.floatingActionIconSize),
+            modifier = Modifier.size(tokens.iconSize),
         )
     }
 }
@@ -281,15 +285,14 @@ private fun PageTitleBarBackButton(
 @Composable
 private fun pageActionToolbarStyle(
     pageTitleBarStyle: AndroidKitPageTitleBarStyle,
-    dimensions: AndroidKitDimensions,
 ): AndroidKitFloatingToolbarStyle = AndroidKitFloatingToolbarStyle(
     surfaceStyle = pageTitleBarStyle.buttonSurfaceStyle,
-    flyoutStyle = pageTitleBarStyle.flyoutStyle,
-    separatorColor = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
+    flyoutStyle = pageTitleBarStyle.flyoutStyle ?: AndroidKitThemeTokens.componentTokens.pageTitleBar.flyoutStyle,
+    separatorColor = AndroidKitThemeTokens.componentTokens.pageTitleBar.separatorColor,
     shape = pageTitleBarStyle.buttonShape,
     itemShape = pageTitleBarStyle.buttonShape,
-    labelTextStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle,
-    iconSize = dimensions.floatingActionIconSize,
+    labelTextStyle = AndroidKitThemeTokens.componentTokens.pageTitleBar.actionTextStyle,
+    iconSize = AndroidKitThemeTokens.componentTokens.pageTitleBar.iconSize,
 )
 
 private fun directPageTitleBarActionCount(
@@ -300,6 +303,7 @@ private fun directPageTitleBarActionCount(
     controlSize: Dp,
     actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
+    tokens: AndroidKitPageTitleBarTokens,
 ): Int {
     val actionCount = items.count { it.isAndroidKitAction }
     val navigationWidth = controlRowWidth(
@@ -308,7 +312,7 @@ private fun directPageTitleBarActionCount(
         dimensions = dimensions,
     )
     val minimumTitleWidth = if (hasTitle) dimensions.pageTitleBarMinimumTitleWidth else 0.dp
-    val titleStartSpacing = if (hasTitle && hasNavigation) dimensions.spaceExtraSmall else 0.dp
+    val titleStartSpacing = if (hasTitle && hasNavigation) tokens.navigationTitleSpacing else 0.dp
 
     return (minOf(MaximumDirectHeaderActions, actionCount) downTo 0)
         .firstOrNull { directCount ->
@@ -321,10 +325,11 @@ private fun directPageTitleBarActionCount(
                 hasOverflow = actionCount > directCount,
                 actionWidths = actionWidths,
                 dimensions = dimensions,
+                tokens = tokens,
                 controlSize = controlSize,
             )
             val titleEndSpacing = if (hasTitle && endWidth > 0.dp) {
-                dimensions.spaceExtraSmall
+                tokens.titleActionsSpacing
             } else {
                 0.dp
             }
@@ -339,6 +344,7 @@ private fun pageActionRowWidth(
     actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
     controlSize: Dp,
+    tokens: AndroidKitPageTitleBarTokens,
 ): Dp = items.fold(0.dp) { width, item ->
     width + when (item) {
         is AndroidKitAction,
@@ -349,11 +355,11 @@ private fun pageActionRowWidth(
         AndroidKitActionSeparator -> DividerDefaults.Thickness
     }
 } + (if (hasOverflow) {
-    maxOf(controlSize, dimensions.floatingActionIconSize + dimensions.actionControlContentInset * 2)
+    maxOf(controlSize, tokens.iconSize + dimensions.actionControlContentInset * 2)
 } else {
     0.dp
 }) +
-    dimensions.spaceSmall * (
+    tokens.actionSpacing * (
         items.zipWithNext().count { (previous, next) ->
             previous.needsPageActionGapAtEnd() && next.needsPageActionGapAtStart()
         } +
@@ -392,6 +398,7 @@ private fun pageTitleBarVisualHeight(
     style: AndroidKitPageTitleBarStyle,
     dimensions: AndroidKitDimensions,
 ): Dp {
+    val tokens = AndroidKitThemeTokens.componentTokens.pageTitleBar
     val textMeasurer = rememberTextMeasurer(cacheSize = 2)
     val density = LocalDensity.current
     val titleTextHeight = title?.let { pageTitle ->
@@ -416,7 +423,7 @@ private fun pageTitleBarVisualHeight(
                         else -> null
                     }
                 },
-                style = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle,
+                style = tokens.actionTextStyle,
                 maxLines = 1,
             ).size.height.toDp()
         }
@@ -425,8 +432,8 @@ private fun pageTitleBarVisualHeight(
     }
     return maxOf(
         dimensions.pageTitleBarButtonSize,
-        titleTextHeight + dimensions.spaceSmall * 2,
-        actionTextHeight + dimensions.spaceSmall * 2,
+        titleTextHeight + tokens.controlVerticalPadding * 2,
+        actionTextHeight + tokens.controlVerticalPadding * 2,
     )
 }
 
@@ -436,12 +443,13 @@ private fun pageTitleBarActionWidths(
     controlSize: Dp,
     dimensions: AndroidKitDimensions,
 ): Map<AndroidKitActionItem, Dp> {
+    val tokens = AndroidKitThemeTokens.componentTokens.pageTitleBar
     val textMeasurer = rememberTextMeasurer(cacheSize = items.size.coerceAtLeast(1))
     val density = LocalDensity.current
-    val labelStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle
+    val labelStyle = tokens.actionTextStyle
     return items.filter { it.isAndroidKitAction }.associateWith { item ->
         val contentWidth = when (item) {
-            is AndroidKitAction -> dimensions.floatingActionIconSize
+            is AndroidKitAction -> tokens.iconSize
             is AndroidKitTextAction -> with(density) {
                 textMeasurer.measure(
                     text = item.label,
@@ -450,8 +458,8 @@ private fun pageTitleBarActionWidths(
                 ).size.width.toDp()
             }
 
-            is AndroidKitIconAndLabelAction -> dimensions.floatingActionIconSize +
-                dimensions.spaceExtraSmall + with(density) {
+            is AndroidKitIconAndLabelAction -> tokens.iconSize +
+                dimensions.actionControlLabelSpacing + with(density) {
                 textMeasurer.measure(
                     text = item.label,
                     style = labelStyle,
@@ -462,7 +470,7 @@ private fun pageTitleBarActionWidths(
             AndroidKitActionSeparator -> 0.dp
         }
         val startInset = if (item is AndroidKitIconAndLabelAction) {
-            dimensions.actionControlIconInset(dimensions.floatingActionIconSize, controlSize)
+            dimensions.actionControlIconInset(tokens.iconSize, controlSize)
         } else {
             dimensions.actionControlContentInset
         }

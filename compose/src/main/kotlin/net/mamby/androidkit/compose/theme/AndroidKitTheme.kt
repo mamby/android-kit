@@ -69,14 +69,14 @@ public data class AndroidKitThemeDefinition(
         containerColor = colorScheme.surface,
         contentColor = colorScheme.onSurface,
         borderColor = colorScheme.outlineVariant,
-        borderWidth = dimensions.floatingSurfaceBorderWidth,
+        borderWidth = AndroidKitCardTokens(dimensions, typography, colorScheme, shapes).borderWidth,
         shape = shapes.extraLarge,
     ),
     public val settingSectionStyle: AndroidKitSettingSectionStyle = AndroidKitSettingSectionStyle(
         containerColor = colorScheme.surface,
         contentColor = colorScheme.onSurface,
         borderColor = colorScheme.outlineVariant,
-        borderWidth = dimensions.floatingSurfaceBorderWidth,
+        borderWidth = AndroidKitSectionCardTokens(dimensions).borderWidth,
         dividerColor = colorScheme.outlineVariant,
         secondaryContentColor = colorScheme.onSurfaceVariant,
         shape = shapes.extraLarge,
@@ -101,7 +101,7 @@ public data class AndroidKitThemeDefinition(
             shape = shapes.extraLarge,
             itemShape = shapes.extraLarge,
             labelTextStyle = AndroidKitDefaults.typography.labelSmall,
-            iconSize = dimensions.floatingActionBarIconSize,
+            iconSize = AndroidKitToolbarTokens(dimensions, shapes).iconSize,
         ),
     public val actionFlyoutStyle: AndroidKitActionFlyoutStyle =
         AndroidKitActionFlyoutStyle(shape = shapes.extraLarge),
@@ -121,6 +121,8 @@ public data class AndroidKitThemeDefinition(
             overflowItemTextStyle = AndroidKitDefaults.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
         ),
 ) {
+    internal val componentTokens = AndroidKitComponentTokens(colorScheme, typography, shapes, dimensions)
+
     init {
         require(
             floatingSurfaceOpacityLevel in
@@ -175,7 +177,7 @@ public data class AndroidKitDimensions(
     public val minimumTouchTarget: Dp = 48.dp,
     public val settingsPageSectionSpacing: Dp = 20.dp,
     public val settingSectionSpacing: Dp = 5.dp,
-    public val settingSectionEntryVerticalPadding: Dp = 16.dp,
+    public val settingSectionEntryVerticalPadding: Dp = 14.dp,
     public val floatingNavigationMargin: Dp = 8.dp,
     public val floatingNavigationMaxWidth: Dp = 560.dp,
     public val floatingNavigationContentPadding: Dp = 5.dp,
@@ -228,6 +230,9 @@ public data class AndroidKitDimensions(
      */
     internal val actionControlContentInset: Dp
         get() = spaceSmall
+
+    internal val actionControlLabelSpacing: Dp
+        get() = spaceExtraSmall
 
     /** Matches the inset of an icon centered in an icon-only action's minimum width. */
     internal fun actionControlIconInset(iconSize: Dp, minimumControlWidth: Dp): Dp =
@@ -425,6 +430,11 @@ private val LocalFloatingSurfaceStyle =
  * Access outside an [AndroidKitTheme] fails immediately instead of silently using fallback styles.
  */
 public object AndroidKitThemeTokens {
+    internal val componentTokens: AndroidKitComponentTokens
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalAndroidKitThemeDefinition.current.componentTokens
+
     public val colorScheme: ColorScheme
         @Composable
         @ReadOnlyComposable

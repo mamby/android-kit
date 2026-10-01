@@ -31,13 +31,13 @@ public fun AndroidKitPage(
     titleBarStyle: AndroidKitPageTitleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
+    floatingActionMargin: Dp = AndroidKitThemeTokens.componentTokens.listPage.floatingActionMargin,
     applyImePadding: Boolean = true,
     listState: LazyListState = rememberLazyListState(),
-    contentPadding: PaddingValues = PaddingValues(horizontal = AndroidKitThemeTokens.dimensions.screenPadding),
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(AndroidKitThemeTokens.dimensions.spaceMedium),
+    contentPadding: PaddingValues = PaddingValues(horizontal = AndroidKitThemeTokens.componentTokens.listPage.horizontalPadding),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(AndroidKitThemeTokens.componentTokens.listPage.itemSpacing),
     supportPrompt: AndroidKitSupportPrompt? = null,
-    supportCardStyle: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
+    supportCardStyle: AndroidKitCardStyle = AndroidKitThemeTokens.componentTokens.supportPrompt.cardStyle,
 ): Unit {
     val direction = LocalLayoutDirection.current
     var ended by rememberSaveable(supportPrompt?.id) { mutableStateOf(false) }

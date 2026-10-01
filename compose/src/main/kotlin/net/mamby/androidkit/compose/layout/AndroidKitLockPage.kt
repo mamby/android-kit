@@ -43,6 +43,7 @@ public fun AndroidKitLockPage(
     style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.lockPage
     val dimensions = AndroidKitThemeTokens.dimensions
     val direction = LocalLayoutDirection.current
     AndroidKitPage(
@@ -53,13 +54,13 @@ public fun AndroidKitLockPage(
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
-                start = padding.calculateStartPadding(direction) + dimensions.screenPadding,
-                top = padding.calculateTopPadding() + dimensions.spaceMedium,
-                end = padding.calculateEndPadding(direction) + dimensions.screenPadding,
-                bottom = padding.calculateBottomPadding() + dimensions.spaceMedium,
+                start = padding.calculateStartPadding(direction) + tokens.horizontalPadding,
+                top = padding.calculateTopPadding() + tokens.verticalPadding,
+                end = padding.calculateEndPadding(direction) + tokens.horizontalPadding,
+                bottom = padding.calculateBottomPadding() + tokens.verticalPadding,
             ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceMedium, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(tokens.contentSpacing, Alignment.CenterVertically),
         ) {
             item { Icon(imageVector = icon ?: AndroidKitIcons.AppLock, contentDescription = null) }
             item {

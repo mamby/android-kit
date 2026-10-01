@@ -65,10 +65,11 @@ public fun AndroidKitPage(
     titleBarStyle: AndroidKitPageTitleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
+    floatingActionMargin: Dp = AndroidKitThemeTokens.componentTokens.page.floatingActionMargin,
     applyImePadding: Boolean = true,
     content: @Composable (PaddingValues) -> Unit,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.page
     var titleBarVisible by rememberSaveable(titleBarImmersiveMode) { mutableStateOf(true) }
     val dimensions = AndroidKitThemeTokens.dimensions
     val measuredContentInsets = contentWindowInsets
@@ -120,7 +121,7 @@ public fun AndroidKitPage(
                         contentPadding.withContentClearance(
                             windowInsetsPadding = measuredContentPadding,
                             additionalTop = if (hasTitleBar) {
-                                dimensions.spaceMedium
+                                tokens.titleContentSpacing
                             } else {
                                 dimensions.pageTitlelessTopPadding
                             },

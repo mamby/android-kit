@@ -77,7 +77,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -98,6 +97,7 @@ import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetStyle
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.floatingSurfaceAlphaForLevel
 
@@ -167,9 +167,10 @@ public fun AndroidKitBottomSheet(
     dismissOnBackPress: Boolean = onBack == null,
     floatingAction: AndroidKitFloatingAction? = null,
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    floatingActionMargin: Dp = AndroidKitThemeTokens.dimensions.spaceMedium,
+    floatingActionMargin: Dp = AndroidKitThemeTokens.componentTokens.bottomSheet.floatingActionMargin,
     content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.bottomSheet
     val dimensions = AndroidKitThemeTokens.dimensions
     val layoutDirection = LocalLayoutDirection.current
     val horizontalSheetPadding = PaddingValues(
@@ -336,7 +337,7 @@ public fun AndroidKitBottomSheet(
                                         value = field.query, onValueChange = field.onQueryChange,
                                         label = { Text(field.label) }, singleLine = true,
                                         enabled = field.enabled,
-                                        modifier = Modifier.fillMaxWidth().padding(bottom = dimensions.spaceSmall),
+                                        modifier = Modifier.fillMaxWidth().padding(bottom = tokens.searchContentSpacing),
                                     )
                                 }
                             }
@@ -558,6 +559,7 @@ internal fun BottomSheetChrome(
     containerColor: Color,
     modifier: Modifier = Modifier,
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.bottomSheet
     BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
@@ -573,6 +575,7 @@ internal fun BottomSheetChrome(
             hasNavigation = onBack != null,
             actionWidths = actionWidths,
             dimensions = dimensions,
+            tokens = tokens,
         )
         val actionItems = partitionAndroidKitActions(
             items = actions,
@@ -582,7 +585,7 @@ internal fun BottomSheetChrome(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = dimensions.spaceExtraSmall),
+                .padding(vertical = tokens.headerVerticalPadding),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (onBack != null) {
@@ -605,9 +608,7 @@ internal fun BottomSheetChrome(
                     modifier = Modifier.semantics { heading() },
                     color = style.contentColor,
                     style = style.titleTextStyle
-                        ?: AndroidKitThemeTokens.typography.titleMedium.copy(
-                            fontWeight = FontWeight.SemiBold,
-                        ),
+                        ?: tokens.titleTextStyle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -624,7 +625,7 @@ internal fun BottomSheetChrome(
                     actionWidths = actionWidths,
                     dimensions = dimensions,
                 )
-                Spacer(modifier = Modifier.width(dimensions.spaceSmall))
+                Spacer(modifier = Modifier.width(tokens.trailingActionsSpacing))
             }
             BottomSheetIconButton(
                 icon = AndroidKitIcons.Close,
@@ -647,6 +648,7 @@ private fun BottomSheetActionButtons(
     actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.bottomSheet
     val hasOverflow = overflowItems.any { it.isAndroidKitAction }
     var overflowExpanded by remember { mutableStateOf(false) }
 
@@ -655,8 +657,8 @@ private fun BottomSheetActionButtons(
     }
 
     Row(
-        modifier = Modifier.padding(horizontal = dimensions.spaceSmall),
-        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+        modifier = Modifier.padding(horizontal = tokens.actionRowPadding),
+        horizontalArrangement = Arrangement.spacedBy(tokens.actionSpacing),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         directItems.forEach { item ->
@@ -723,11 +725,11 @@ private fun bottomSheetActionFlyoutStyle(
     bottomSheetStyle: AndroidKitBottomSheetStyle,
     dimensions: AndroidKitDimensions,
 ): AndroidKitFloatingToolbarStyle = AndroidKitFloatingToolbarStyle(
-    flyoutStyle = bottomSheetStyle.flyoutStyle,
-    separatorColor = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
+    flyoutStyle = bottomSheetStyle.flyoutStyle ?: AndroidKitThemeTokens.componentTokens.bottomSheet.flyoutStyle,
+    separatorColor = AndroidKitThemeTokens.componentTokens.bottomSheet.separatorColor,
     shape = CircleShape,
     itemShape = CircleShape,
-    labelTextStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle,
+    labelTextStyle = AndroidKitThemeTokens.componentTokens.bottomSheet.actionTextStyle,
     iconSize = dimensions.bottomSheetIconSize,
 )
 
@@ -735,12 +737,13 @@ private fun bottomSheetActionFlyoutStyle(
 private fun BottomSheetActionSeparator(
     dimensions: AndroidKitDimensions,
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.bottomSheet
     Box(
         contentAlignment = Alignment.Center,
     ) {
         VerticalDivider(
             modifier = Modifier.height(dimensions.bottomSheetIconSize),
-            color = AndroidKitThemeTokens.floatingToolbarStyle.separatorColor,
+            color = tokens.separatorColor,
         )
     }
 }
@@ -751,6 +754,7 @@ private fun directBottomSheetActionCount(
     hasNavigation: Boolean,
     actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
+    tokens: AndroidKitBottomSheetTokens,
 ): Int {
     val actionCount = items.count { it.isAndroidKitAction }
     val navigationWidth = if (hasNavigation) {
@@ -770,10 +774,11 @@ private fun directBottomSheetActionCount(
                 hasOverflow = actionCount > directCount,
                 actionWidths = actionWidths,
                 dimensions = dimensions,
+                tokens = tokens,
             )
             val hasActionControls = actionRowWidth > 0.dp
             val trailingControlsWidth = dimensions.bottomSheetIconButtonSize +
-                if (hasActionControls) dimensions.spaceSmall + actionRowWidth else 0.dp
+                if (hasActionControls) tokens.trailingActionsSpacing + actionRowWidth else 0.dp
 
             navigationWidth +
                 dimensions.minimumTouchTarget +
@@ -787,6 +792,7 @@ private fun bottomSheetActionRowWidth(
     hasOverflow: Boolean,
     actionWidths: Map<AndroidKitActionItem, Dp>,
     dimensions: AndroidKitDimensions,
+    tokens: AndroidKitBottomSheetTokens,
 ): Dp = items.fold(0.dp) { width, item ->
     width + when (item) {
         is AndroidKitAction,
@@ -797,17 +803,18 @@ private fun bottomSheetActionRowWidth(
         AndroidKitActionSeparator -> DividerDefaults.Thickness
     }
 } + (if (hasOverflow) dimensions.bottomSheetIconButtonSize else 0.dp) +
-    dimensions.spaceSmall * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0) +
-    (if (items.isNotEmpty() || hasOverflow) dimensions.spaceSmall * 2 else 0.dp)
+    tokens.actionSpacing * (items.size + (if (hasOverflow) 1 else 0) - 1).coerceAtLeast(0) +
+    (if (items.isNotEmpty() || hasOverflow) tokens.actionRowPadding * 2 else 0.dp)
 
 @Composable
 private fun bottomSheetActionWidths(
     items: List<AndroidKitActionItem>,
     dimensions: AndroidKitDimensions,
 ): Map<AndroidKitActionItem, Dp> {
+    val tokens = AndroidKitThemeTokens.componentTokens.bottomSheet
     val textMeasurer = rememberTextMeasurer(cacheSize = items.size.coerceAtLeast(1))
     val density = LocalDensity.current
-    val labelStyle = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle
+    val labelStyle = tokens.actionTextStyle
     return items.filter { it.isAndroidKitAction }.associateWith { item ->
         val contentWidth = when (item) {
             is AndroidKitAction -> 0.dp
@@ -820,7 +827,7 @@ private fun bottomSheetActionWidths(
             }
 
             is AndroidKitIconAndLabelAction -> dimensions.bottomSheetIconSize +
-                dimensions.spaceExtraSmall + with(density) {
+                dimensions.actionControlLabelSpacing + with(density) {
                 textMeasurer.measure(
                     text = item.label,
                     style = labelStyle,
@@ -832,7 +839,7 @@ private fun bottomSheetActionWidths(
         }
         maxOf(
             dimensions.bottomSheetIconButtonSize,
-            contentWidth + dimensions.spaceSmall * 2,
+            contentWidth + tokens.actionContentPadding * 2,
         )
     }
 }
@@ -847,6 +854,7 @@ private fun BottomSheetLabeledActionButton(
     onClick: () -> Unit,
     icon: ImageVector? = null,
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.bottomSheet
     CompositionLocalProvider(
         LocalMinimumInteractiveComponentSize provides dimensions.bottomSheetIconButtonSize,
     ) {
@@ -857,7 +865,7 @@ private fun BottomSheetLabeledActionButton(
                 .heightIn(min = dimensions.bottomSheetIconButtonSize),
             enabled = enabled,
             colors = ButtonDefaults.textButtonColors(contentColor = tint),
-            contentPadding = PaddingValues(horizontal = dimensions.spaceSmall),
+            contentPadding = PaddingValues(horizontal = tokens.actionContentPadding),
         ) {
             if (icon != null) {
                 Icon(
@@ -865,11 +873,11 @@ private fun BottomSheetLabeledActionButton(
                     contentDescription = null,
                     modifier = Modifier.size(dimensions.bottomSheetIconSize),
                 )
-                Spacer(modifier = Modifier.width(dimensions.spaceExtraSmall))
+                Spacer(modifier = Modifier.width(dimensions.actionControlLabelSpacing))
             }
             Text(
                 text = label,
-                style = AndroidKitThemeTokens.floatingToolbarStyle.labelTextStyle,
+                style = tokens.actionTextStyle,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )

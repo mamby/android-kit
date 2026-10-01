@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import net.mamby.androidkit.compose.theme.AndroidKitDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 
@@ -40,8 +39,8 @@ public fun TooltipScope.AndroidKitFloatingTooltip(
     action: AndroidKitFloatingTooltipAction? = null,
     onDismiss: (() -> Unit)? = null,
 ): Unit {
-    val shape = AndroidKitDefaults.shapes.extraLarge
-    val dimensions = AndroidKitThemeTokens.dimensions
+    val tokens = AndroidKitThemeTokens.componentTokens.tooltip
+    val shape = tokens.shape
     val strings = AndroidKitThemeTokens.strings
     val hasActions = action != null || onDismiss != null
     FloatingSurface(shape = shape,
@@ -49,28 +48,28 @@ public fun TooltipScope.AndroidKitFloatingTooltip(
         Column(
             // Buttons already include vertical space around their labels and a full touch target.
             modifier = Modifier.padding(
-                start = dimensions.spaceMedium,
-                top = dimensions.spaceMedium,
-                end = dimensions.spaceMedium,
-                bottom = if (hasActions) dimensions.spaceExtraSmall else dimensions.spaceMedium,
+                start = tokens.contentPadding,
+                top = tokens.contentPadding,
+                end = tokens.contentPadding,
+                bottom = if (hasActions) tokens.actionBottomPadding else tokens.contentPadding,
             ),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+            verticalArrangement = Arrangement.spacedBy(tokens.contentSpacing),
         ) {
-            Text(text, style = AndroidKitThemeTokens.typography.bodyMedium,
+            Text(text, style = tokens.textStyle,
                 modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
             if (hasActions) {
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
-                    verticalArrangement = Arrangement.spacedBy(dimensions.spaceSmall),
+                    horizontalArrangement = Arrangement.spacedBy(tokens.actionHorizontalSpacing),
+                    verticalArrangement = Arrangement.spacedBy(tokens.actionVerticalSpacing),
                 ) {
                     action?.let {
                         TextButton(enabled = it.enabled, onClick = it.onClick) {
-                            Text(it.label, style = AndroidKitThemeTokens.typography.labelLarge)
+                            Text(it.label, style = tokens.actionTextStyle)
                         }
                     }
                     onDismiss?.let {
                         TextButton(onClick = it) {
-                            Text(strings.close, style = AndroidKitThemeTokens.typography.labelLarge)
+                            Text(strings.close, style = tokens.actionTextStyle)
                         }
                     }
                 }

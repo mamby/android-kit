@@ -23,10 +23,10 @@ internal fun SectionCardEntryContent(
     fillTextWidth: Boolean = false,
     trailingContent: @Composable () -> Unit,
 ): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
+    val tokens = AndroidKitThemeTokens.componentTokens.sectionCard
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
+        horizontalArrangement = Arrangement.spacedBy(tokens.entryContentSpacing),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         icon?.let {
@@ -37,7 +37,7 @@ internal fun SectionCardEntryContent(
         }
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            verticalArrangement = Arrangement.spacedBy(tokens.supportingTextSpacing),
         ) {
             Text(
                 text = label,

@@ -28,7 +28,7 @@ own `Custom` body. The public API exposes no card style object, header, footer o
 divider slot. The outer modifier is for placement. The host provides scrolling
 when the content can exceed the viewport. Every entry receives the same Kit-owned
 content padding: `sectionCardHorizontalPadding` horizontally and
-`settingSectionEntryVerticalPadding` vertically (18 dp and 16 dp by default).
+`settingSectionEntryVerticalPadding` vertically (18 dp and 14 dp by default).
 Titles, descriptions and dividers share the horizontal inset. This does not change
 `AndroidKitCard` or the general `spaceMedium` token.
 

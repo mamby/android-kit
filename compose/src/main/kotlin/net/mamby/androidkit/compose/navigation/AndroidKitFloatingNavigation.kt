@@ -666,9 +666,10 @@ private fun <Key : Any> NavigationOverflowFlyout(
     onSelected: (Key) -> Unit,
     style: AndroidKitFloatingNavigationStyle,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.navigation
     val dimensions = AndroidKitThemeTokens.dimensions
     val flyoutStyle = style.overflowFlyoutStyle
-        ?: AndroidKitThemeTokens.actionFlyoutStyle
+        ?: tokens.flyoutStyle
     val flyoutSurfaceStyle = flyoutStyle.surfaceStyle
         ?: AndroidKitThemeTokens.floatingSurfaceStyle
     val flyoutVisuals = floatingSurfaceVisuals(flyoutSurfaceStyle)

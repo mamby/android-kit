@@ -119,10 +119,10 @@ public fun AndroidKitFloatingToolbar(
     modifier: Modifier = Modifier,
     style: AndroidKitFloatingToolbarStyle = AndroidKitThemeTokens.floatingToolbarStyle,
     contentPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceSmall,
-        vertical = AndroidKitThemeTokens.dimensions.spaceExtraSmall,
+        horizontal = AndroidKitThemeTokens.componentTokens.toolbar.horizontalPadding,
+        vertical = AndroidKitThemeTokens.componentTokens.toolbar.verticalPadding,
     ),
-    itemSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    itemSpacing: Dp = AndroidKitThemeTokens.componentTokens.toolbar.itemSpacing,
     flyoutAnchor: AndroidKitFloatingToolbarFlyoutAnchor =
         AndroidKitFloatingToolbarFlyoutAnchor.Item,
     content: AndroidKitFloatingToolbarScope.() -> Unit,
@@ -142,11 +142,11 @@ public fun AndroidKitFloatingToolbar(
 internal fun AndroidKitPageActionToolbar(
     visualHeight: Dp,
     modifier: Modifier = Modifier,
-    style: AndroidKitFloatingToolbarStyle = AndroidKitThemeTokens.floatingToolbarStyle,
+    style: AndroidKitFloatingToolbarStyle,
     contentPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceSmall,
+        horizontal = AndroidKitThemeTokens.componentTokens.pageTitleBar.actionSpacing,
     ),
-    itemSpacing: Dp = AndroidKitThemeTokens.dimensions.spaceSmall,
+    itemSpacing: Dp = AndroidKitThemeTokens.componentTokens.pageTitleBar.actionSpacing,
     content: AndroidKitFloatingToolbarScope.() -> Unit,
 ): Unit {
     FloatingToolbar(
@@ -656,6 +656,7 @@ private fun FloatingToolbarFlyoutPopup(
     horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment,
     toolbarStyle: AndroidKitFloatingToolbarStyle,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.toolbar
     AndroidKitActionFlyout(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
@@ -663,7 +664,7 @@ private fun FloatingToolbarFlyoutPopup(
         placement = placement,
         horizontalAlignment = horizontalAlignment,
         style = toolbarStyle.flyoutStyle
-            ?: AndroidKitThemeTokens.actionFlyoutStyle,
+            ?: tokens.flyoutStyle,
     ) {
         items.forEach { item ->
             when (item) {
@@ -768,7 +769,7 @@ private fun FloatingToolbarItemContent(
             modifier = itemModifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
-                dimensions.spaceExtraSmall,
+                dimensions.actionControlLabelSpacing,
                 Alignment.CenterVertically,
             ),
         ) {
@@ -777,7 +778,7 @@ private fun FloatingToolbarItemContent(
 
         AndroidKitFloatingToolbarIconAndLabelLayout.Horizontal -> Row(
             modifier = itemModifier,
-            horizontalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            horizontalArrangement = Arrangement.spacedBy(dimensions.actionControlLabelSpacing),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             content()

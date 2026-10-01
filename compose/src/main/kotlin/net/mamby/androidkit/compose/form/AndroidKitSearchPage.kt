@@ -163,6 +163,7 @@ internal fun AndroidKitSearchPage(
     isSearching: Boolean = false,
     results: LazyListScope.(recordRecent: () -> Unit) -> Unit,
 ): Unit {
+    val tokens = AndroidKitThemeTokens.componentTokens.searchPage
     val recents = recentQueries.sanitizedRecentSearchQueries()
     fun recordRecent(valueToRecord: String = resultsQuery) {
         val value = valueToRecord.trim()
@@ -174,7 +175,6 @@ internal fun AndroidKitSearchPage(
         )
     }
     val strings = AndroidKitThemeTokens.strings
-    val dimensions = AndroidKitThemeTokens.dimensions
     AndroidKitPage(
         title = title,
         modifier = modifier,
@@ -192,12 +192,12 @@ internal fun AndroidKitSearchPage(
     ) { padding ->
         val showingHistory = resultsQuery.isBlank()
         // Read clearance during layout so measured floating controls and IME changes stay current.
-        val pageContentPadding = remember(padding, dimensions.screenPadding) {
+        val pageContentPadding = remember(padding, tokens.horizontalPadding) {
             object : PaddingValues by padding {
                 override fun calculateLeftPadding(layoutDirection: LayoutDirection) =
-                    padding.calculateLeftPadding(layoutDirection) + dimensions.screenPadding
+                    padding.calculateLeftPadding(layoutDirection) + tokens.horizontalPadding
                 override fun calculateRightPadding(layoutDirection: LayoutDirection) =
-                    padding.calculateRightPadding(layoutDirection) + dimensions.screenPadding
+                    padding.calculateRightPadding(layoutDirection) + tokens.horizontalPadding
             }
         }
         val headingPlacementPadding = remember(pageContentPadding) {
@@ -231,10 +231,10 @@ internal fun AndroidKitSearchPage(
                     }
                 }
             }
-            val listPadding = remember(bodyPadding, dimensions.spaceMedium) {
+            val listPadding = remember(bodyPadding, tokens.bottomPadding) {
                 object : PaddingValues by bodyPadding {
                     override fun calculateBottomPadding() =
-                        bodyPadding.calculateBottomPadding() + dimensions.spaceMedium
+                        bodyPadding.calculateBottomPadding() + tokens.bottomPadding
                 }
             }
             Box(Modifier.fillMaxSize()) {
@@ -246,7 +246,7 @@ internal fun AndroidKitSearchPage(
                         // Rows scroll behind both floating controls; the first and last rows clear them.
                         contentPadding = listPadding,
                         verticalArrangement = Arrangement.spacedBy(
-                            if (resultsQuery.isBlank()) dimensions.spaceSmall else dimensions.settingsPageSectionSpacing,
+                            if (resultsQuery.isBlank()) tokens.recentRowSpacing else tokens.resultSpacing,
                         ),
                     ) {
                         if (resultsQuery.isBlank() && recentQueriesVisible) {
@@ -282,24 +282,24 @@ internal fun AndroidKitSearchPage(
                         Column(
                             modifier = Modifier.verticalScroll(rememberScrollState()),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(dimensions.spaceLarge),
+                            verticalArrangement = Arrangement.spacedBy(tokens.emptyContentSpacing),
                         ) {
                             Box(
-                                modifier = Modifier.size(dimensions.floatingActionButtonSize + dimensions.spaceLarge)
+                                modifier = Modifier.size(tokens.emptyIconContainerSize)
                                     .background(AndroidKitThemeTokens.colorScheme.primaryContainer, CircleShape),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
                                     imageVector = if (recentQueriesVisible) AndroidKitIcons.Search else AndroidKitIcons.EyeOff,
                                     contentDescription = null,
-                                    modifier = Modifier.size(dimensions.actionFlyoutIconSize),
+                                    modifier = Modifier.size(tokens.emptyIconSize),
                                     tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
                                 )
                             }
                             Text(
                                 text = if (recentQueriesVisible) strings.noRecentSearches else strings.recentSearchesHidden,
-                                style = AndroidKitThemeTokens.typography.bodyLarge,
-                                color = AndroidKitThemeTokens.settingSectionStyle.contentColor,
+                                style = tokens.emptyTextStyle,
+                                color = tokens.emptyContentColor,
                                 textAlign = TextAlign.Center,
                             )
                         }
@@ -317,18 +317,18 @@ private fun RecentSearchHeading(
     canClear: Boolean,
     onClear: () -> Unit,
 ) {
+    val tokens = AndroidKitThemeTokens.componentTokens.searchPage
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
-    val toolbarStyle = AndroidKitThemeTokens.floatingToolbarStyle
     FloatingSurface(
-        shape = toolbarStyle.shape,
-        modifier = Modifier.fillMaxWidth().padding(bottom = dimensions.settingsPageSectionSpacing),
-        style = toolbarStyle.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
+        shape = tokens.headingShape,
+        modifier = Modifier.fillMaxWidth().padding(bottom = tokens.headingBottomSpacing),
+        style = AndroidKitThemeTokens.floatingSurfaceStyle,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(
-                horizontal = dimensions.spaceMedium,
-                vertical = dimensions.spaceExtraSmall,
+                horizontal = tokens.headingHorizontalPadding,
+                vertical = tokens.headingVerticalPadding,
             ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -339,8 +339,8 @@ private fun RecentSearchHeading(
                 Text(
                     text = strings.recentSearches,
                     modifier = Modifier.weight(1f, fill = false),
-                    style = AndroidKitThemeTokens.settingSectionStyle.sectionLabelTextStyle,
-                    color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                    style = tokens.headingTextStyle,
+                    color = tokens.secondaryContentColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -352,8 +352,8 @@ private fun RecentSearchHeading(
                     Icon(
                         imageVector = if (visible) AndroidKitIcons.EyeOff else AndroidKitIcons.Eye,
                         contentDescription = if (visible) strings.hideRecentSearches else strings.showRecentSearches,
-                        modifier = Modifier.size(dimensions.floatingActionBarIconSize),
-                        tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                        modifier = Modifier.size(tokens.headingIconSize),
+                        tint = tokens.secondaryContentColor,
                     )
                 }
             }
@@ -361,8 +361,8 @@ private fun RecentSearchHeading(
                 TextButton(
                     onClick = onClear,
                     contentPadding = PaddingValues(
-                        start = (dimensions.minimumTouchTarget - dimensions.floatingActionBarIconSize) / 2,
-                        end = dimensions.spaceExtraSmall,
+                        start = (dimensions.minimumTouchTarget - tokens.headingIconSize) / 2,
+                        end = tokens.clearButtonEndPadding,
                     ),
                 ) { Text(strings.clearAll, maxLines = 1) }
             }
@@ -380,12 +380,14 @@ private fun List<String>.sanitizedRecentSearchQueries(): List<String> {
 
 @Composable
 private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () -> Unit) {
+    val tokens = AndroidKitThemeTokens.componentTokens.searchPage
     val dimensions = AndroidKitThemeTokens.dimensions
     val strings = AndroidKitThemeTokens.strings
     AndroidKitCard(
         onClick = onSelect,
+        style = tokens.recentCardStyle,
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(start = dimensions.spaceMedium),
+        contentPadding = PaddingValues(start = tokens.recentStartPadding),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().heightIn(min = dimensions.minimumTouchTarget),
@@ -394,22 +396,22 @@ private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () ->
             Icon(
                 imageVector = AndroidKitIcons.History,
                 contentDescription = null,
-                modifier = Modifier.padding(end = dimensions.spaceSmall)
-                    .size(dimensions.floatingActionBarIconSize),
-                tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                modifier = Modifier.padding(end = tokens.recentIconSpacing)
+                    .size(tokens.recentIconSize),
+                tint = tokens.secondaryContentColor,
             )
             Text(
                 text = query,
-                modifier = Modifier.weight(1f).padding(end = dimensions.spaceMedium),
-                style = AndroidKitThemeTokens.typography.bodyLarge,
-                color = AndroidKitThemeTokens.cardStyle.contentColor,
+                modifier = Modifier.weight(1f).padding(end = tokens.recentTextEndPadding),
+                style = tokens.recentTextStyle,
+                color = tokens.recentContentColor,
             )
             IconButton(onClick = onRemove, modifier = Modifier.size(dimensions.minimumTouchTarget)) {
                 Icon(
                     imageVector = AndroidKitIcons.Close,
                     contentDescription = strings.removeRecentSearch,
-                    modifier = Modifier.size(dimensions.floatingActionBarIconSize),
-                    tint = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+                    modifier = Modifier.size(tokens.recentIconSize),
+                    tint = tokens.secondaryContentColor,
                 )
             }
         }
@@ -418,10 +420,11 @@ private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () ->
 
 @Composable
 private fun SearchEmptyMessage(message: String) {
+    val tokens = AndroidKitThemeTokens.componentTokens.searchPage
     Text(
         text = message,
-        modifier = Modifier.fillMaxWidth().padding(AndroidKitThemeTokens.dimensions.spaceMedium),
-        style = AndroidKitThemeTokens.settingSectionStyle.supportingTextStyle,
-        color = AndroidKitThemeTokens.settingSectionStyle.secondaryContentColor,
+        modifier = Modifier.fillMaxWidth().padding(tokens.emptyMessagePadding),
+        style = tokens.emptyMessageTextStyle,
+        color = tokens.secondaryContentColor,
     )
 }
