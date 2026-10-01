@@ -67,13 +67,17 @@ class SectionCardPixelParityTest(
             DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(fontScale)) {
                 DeviceConfigurationOverride(DeviceConfigurationOverride.LayoutDirection(direction)) {
                     val palette = if (dark) AndroidKitThemes.Dark else AndroidKitThemes.Light
-                    // Health uses Material typography/shapes and 12 dp medium spacing.
+                    // Preserve the original Health presentation's typography, shapes and spacing.
                     TestKitTheme(AndroidKitThemeDefinition(
                         colorScheme = palette.colorScheme,
                         isDark = dark,
                         typography = Typography(),
                         shapes = Shapes(),
-                        dimensions = palette.dimensions.copy(spaceMedium = 12.dp, sectionCardHorizontalPadding = 12.dp),
+                        dimensions = palette.dimensions.copy(
+                            spaceMedium = 12.dp,
+                            sectionCardHorizontalPadding = 12.dp,
+                            settingSectionEntryVerticalPadding = 12.dp,
+                        ),
                     )) {
                         Box(Modifier.width(320.dp).background(AndroidKitThemeTokens.colorScheme.background)
                             .testTag("section")) {

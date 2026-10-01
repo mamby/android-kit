@@ -175,7 +175,7 @@ public data class AndroidKitDimensions(
     public val minimumTouchTarget: Dp = 48.dp,
     public val settingsPageSectionSpacing: Dp = 20.dp,
     public val settingSectionSpacing: Dp = 5.dp,
-    public val settingSectionEntryVerticalPadding: Dp = 12.dp,
+    public val settingSectionEntryVerticalPadding: Dp = 16.dp,
     public val floatingNavigationMargin: Dp = 8.dp,
     public val floatingNavigationMaxWidth: Dp = 560.dp,
     public val floatingNavigationContentPadding: Dp = 5.dp,
