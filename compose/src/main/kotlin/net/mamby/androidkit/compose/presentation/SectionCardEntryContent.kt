@@ -2,10 +2,8 @@ package net.mamby.androidkit.compose.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,13 +20,12 @@ internal fun SectionCardEntryContent(
     icon: ImageVector?,
     modifier: Modifier,
     style: AndroidKitSettingSectionStyle,
-    contentPadding: PaddingValues,
     fillTextWidth: Boolean = false,
     trailingContent: @Composable () -> Unit,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     Row(
-        modifier = modifier.padding(contentPadding),
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -17,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.InputMode
 import androidx.compose.ui.input.InputModeManager
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalInputModeManager
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
@@ -31,6 +33,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import androidx.compose.ui.test.click
@@ -44,6 +47,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -58,6 +62,62 @@ import org.junit.Test
 
 class SectionCardBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Test
+    fun allEntryBodiesSharePaddingAndActionPaddingRemainsClickable() {
+        var direction by mutableStateOf(LayoutDirection.Ltr)
+        var calls = 0
+        var horizontalPadding = 0f
+        var verticalPadding = 0f
+        rule.setContent {
+            TestKitTheme {
+                val density = LocalDensity.current
+                val dimensions = AndroidKitThemeTokens.dimensions
+                SideEffect {
+                    horizontalPadding = with(density) { dimensions.spaceMedium.toPx() }
+                    verticalPadding = with(density) { dimensions.settingSectionEntryVerticalPadding.toPx() }
+                }
+                DeviceConfigurationOverride(DeviceConfigurationOverride.LayoutDirection(direction)) {
+                    Column {
+                        AndroidKitSectionCard(listOf(Entry.Info("info", "Info\nSecond line")), Modifier.testTag("info-card"))
+                        AndroidKitSectionCard(
+                            listOf(Entry.Action("action", "Action\nSecond line", "Activate", { calls++ })),
+                            Modifier.testTag("action-card"),
+                        )
+                        AndroidKitSectionCard(
+                            listOf(Entry.Multiline("multiline", "Multiline\nSecond line")), Modifier.testTag("multiline-card"),
+                        )
+                        AndroidKitSectionCard(
+                            listOf(Entry.Custom("custom") {
+                                Text("Custom\nSecond line")
+                                Text("Second custom line")
+                            }), Modifier.testTag("custom-card"),
+                        )
+                    }
+                }
+            }
+        }
+        for (layoutDirection in listOf(LayoutDirection.Ltr, LayoutDirection.Rtl)) {
+            rule.runOnIdle { direction = layoutDirection }
+            for ((tag, text) in listOf("info" to "Info\nSecond line", "action" to "Action\nSecond line",
+                "multiline" to "Multiline\nSecond line", "custom" to "Custom\nSecond line")) {
+                val card = rule.onNodeWithTag("$tag-card").fetchSemanticsNode().boundsInRoot
+                val body = rule.onNodeWithText(text, useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
+                val leadingPadding = if (layoutDirection == LayoutDirection.Ltr) {
+                    body.left - card.left
+                } else {
+                    card.right - body.right
+                }
+                assertEquals("$tag leading padding in $layoutDirection", horizontalPadding, leadingPadding, 1f)
+                assertEquals("$tag top padding in $layoutDirection", verticalPadding, body.top - card.top, 1f)
+            }
+            val firstCustomLine = rule.onNodeWithText("Custom\nSecond line").fetchSemanticsNode().boundsInRoot
+            val secondCustomLine = rule.onNodeWithText("Second custom line").fetchSemanticsNode().boundsInRoot
+            assertTrue("Custom children stay vertically stacked", secondCustomLine.top >= firstCustomLine.bottom)
+            rule.onNodeWithText("Action\nSecond line").performTouchInput { click(Offset(2f, center.y)) }
+        }
+        rule.runOnIdle { assertEquals(2, calls) }
+    }
 
     @Test
     fun customBodiesInheritKitTypographyAndRetainStateWhenReordered() {

@@ -8,8 +8,8 @@ and an optional `description` below it. An empty list renders nothing.
 
 - `Custom(key) { ... }` supplies a host-owned composable entry body. It inherits
   Kit entry-label typography and card content color. The host owns its body
-  layout/padding, controls, state and accessibility semantics. The card still
-  owns the title, description, shape, colors, border, dividers and keyed identity.
+  layout within the padded body, controls, state and accessibility semantics. The card still
+  owns entry padding, title, description, shape, colors, border, dividers and keyed identity.
 - `Info(key, label, value?, supportingText?)` is read-only. Values and supporting
   text appear below the label so long content retains the available width.
 - `Action(key, label, actionLabel, onClick, supportingText?, icon?, enabled)`
@@ -24,9 +24,12 @@ Reordering entries preserves their keyed composition identity, including focus.
 Hosts supply localized text and callbacks for built-in entries, or compose their
 own `Custom` body. The public API exposes no card style object, header, footer or
 divider slot. The outer modifier is for placement. The host provides scrolling
-when the content can exceed the viewport. Custom bodies can use theme spacing
-tokens; the card does not add padding around them, so full-row controls keep
-their existing touch targets and appearance.
+when the content can exceed the viewport. Every entry receives the same Kit-owned content padding: `spaceMedium` horizontally
+and `settingSectionEntryVerticalPadding` vertically (16 dp and 12 dp by default).
+Custom bodies must omit equivalent outer padding to avoid doubling it. Hosts still
+own spacing between controls inside their bodies. Custom controls act within that
+padded body; built-in Action rows and Settings controls keep interactions outside
+the padding so their entire row remains interactive. Dividers retain their own inset.
 
 ```kotlin
 AndroidKitSectionCard(
@@ -42,10 +45,7 @@ AndroidKitSectionCard(
         ),
         AndroidKitSectionCardEntry.Multiline("notes", notes, notesLabel),
         AndroidKitSectionCardEntry.Custom("custom-content") {
-            Text(
-                text = customMessage,
-                modifier = Modifier.padding(AndroidKitThemeTokens.dimensions.spaceMedium),
-            )
+            Text(text = customMessage)
         },
     ),
 )
@@ -54,8 +54,8 @@ AndroidKitSectionCard(
 Settings sections call `AndroidKitSectionCard` directly, adapting existing controls
 to the same `Custom` entry API available to hosts. An internal overload preserves
 Settings compatibility parameters; it does not introduce a separate entry model
-or generic layout component. The component owns the frame, dividers and keyed
-identity. Settings-only controls and search dispatch remain in Settings.
+or generic layout component. The component owns the frame, entry padding, dividers and keyed
+identity. Settings attaches row interaction modifiers to the internal entry wrapper. Settings-only controls and search dispatch remain in Settings.
 Both entry families use `settingSectionStyle` / dimension tokens for colors,
 border, shape, typography, padding, dividers and minimum touch targets. Settings
 retains its public DSL, controls, entry definitions and search dispatch unchanged.
@@ -80,8 +80,8 @@ stable unique keys, localized section titles and action labels. No contact-speci
 Kit API, permissions or intent handling is needed.
 
 Public actions omit the chevron, matching the current contact-value rows.
-`Multiline` uses entry-label typography, the card content color and medium padding
-on all sides, matching the current notes block. Settings-specific rows retain
+`Multiline` uses entry-label typography, the card content color and the same
+entry padding as Info, Action and Custom. Settings-specific rows retain
 their existing rendering, including navigation chevrons. No consumer files were
 changed and no consumer build or migration was performed.
 

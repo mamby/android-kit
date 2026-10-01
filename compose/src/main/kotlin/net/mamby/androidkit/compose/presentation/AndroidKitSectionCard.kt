@@ -3,6 +3,7 @@ package net.mamby.androidkit.compose.presentation
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,9 +30,9 @@ public sealed interface AndroidKitSectionCardEntry {
     public val key: String
 
     /**
-     * Host-rendered entry body. The card owns its frame, dividers and keyed identity.
+     * Host-rendered entry body. The card owns its frame, entry padding, dividers and keyed identity.
      * Content inherits Kit entry typography and card content color. The host owns
-     * body layout/padding, interaction, focus and accessibility semantics.
+     * layout within the padded body, interaction, focus and accessibility semantics.
      */
     public class Custom(
         override val key: String,
@@ -105,6 +106,7 @@ internal fun AndroidKitSectionCard(
     dividerPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
     ),
+    customEntryModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier = { Modifier },
     entryContentPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
         vertical = AndroidKitThemeTokens.dimensions.settingSectionEntryVerticalPadding,
@@ -146,7 +148,7 @@ internal fun AndroidKitSectionCard(
                         )
                     }
                     key(entry.key) {
-                        SectionCardEntry(entry, style, entryContentPadding)
+                        SectionCardEntry(entry, style, entryContentPadding, customEntryModifier)
                     }
                 }
             }
@@ -167,48 +169,61 @@ private fun SectionCardEntry(
     entry: AndroidKitSectionCardEntry,
     style: AndroidKitSettingSectionStyle,
     padding: PaddingValues,
+    customEntryModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier,
 ) {
     val dimensions = AndroidKitThemeTokens.dimensions
-    when (entry) {
-        is AndroidKitSectionCardEntry.Custom -> ProvideTextStyle(style.entryLabelTextStyle) {
-            entry.content()
-        }
-        is AndroidKitSectionCardEntry.Action -> SectionCardEntryContent(
-            label = entry.label,
-            supportingText = entry.supportingText,
-            icon = entry.icon,
-            modifier = Modifier.fillMaxWidth()
-                .clickable(
-                    enabled = entry.enabled,
-                    onClickLabel = entry.actionLabel,
-                    role = Role.Button,
-                    onClick = entry.onClick,
-                )
-                .heightIn(min = dimensions.minimumTouchTarget),
-            style = style,
-            contentPadding = padding,
-            fillTextWidth = true,
-        ) {}
-        is AndroidKitSectionCardEntry.Multiline -> Column(
-            modifier = Modifier.fillMaxWidth()
-                .semantics(mergeDescendants = true) {}
-                .padding(dimensions.spaceMedium),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
-        ) {
-            entry.label?.let { Text(it, style = style.entryLabelTextStyle) }
-            Text(entry.text, style = style.entryLabelTextStyle)
-        }
-        is AndroidKitSectionCardEntry.Info -> Column(
-            // Stack values to leave the full width available for addresses and large text.
-            modifier = Modifier.fillMaxWidth()
-                .semantics(mergeDescendants = true) {}
-                .heightIn(min = dimensions.minimumTouchTarget)
-                .padding(padding),
-            verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
-        ) {
-            Text(entry.label, style = style.entryLabelTextStyle)
-            entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }
-            entry.supportingText?.let { Text(it, style = style.supportingTextStyle, color = style.secondaryContentColor) }
+    val entryModifier = when (entry) {
+        is AndroidKitSectionCardEntry.Custom -> customEntryModifier(entry)
+        is AndroidKitSectionCardEntry.Action -> Modifier
+            .clickable(
+                enabled = entry.enabled,
+                onClickLabel = entry.actionLabel,
+                role = Role.Button,
+                onClick = entry.onClick,
+            )
+            .heightIn(min = dimensions.minimumTouchTarget)
+        is AndroidKitSectionCardEntry.Info -> Modifier
+            .semantics(mergeDescendants = true) {}
+            .heightIn(min = dimensions.minimumTouchTarget)
+        is AndroidKitSectionCardEntry.Multiline -> Modifier.semantics(mergeDescendants = true) {}
+    }
+    Box(
+        modifier = entryModifier.fillMaxWidth().padding(padding),
+        propagateMinConstraints = true,
+    ) {
+        when (entry) {
+            is AndroidKitSectionCardEntry.Custom -> ProvideTextStyle(style.entryLabelTextStyle) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    entry.content()
+                }
+            }
+            is AndroidKitSectionCardEntry.Action -> SectionCardEntryContent(
+                label = entry.label,
+                supportingText = entry.supportingText,
+                icon = entry.icon,
+                modifier = Modifier.fillMaxWidth(),
+                style = style,
+                fillTextWidth = true,
+            ) {}
+            is AndroidKitSectionCardEntry.Multiline -> Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            ) {
+                entry.label?.let { Text(it, style = style.entryLabelTextStyle) }
+                Text(entry.text, style = style.entryLabelTextStyle)
+            }
+            is AndroidKitSectionCardEntry.Info -> Column(
+                // Stack values to leave the full width available for addresses and large text.
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
+            ) {
+                Text(entry.label, style = style.entryLabelTextStyle)
+                entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }
+                entry.supportingText?.let { Text(it, style = style.supportingTextStyle, color = style.secondaryContentColor) }
+            }
         }
     }
 }

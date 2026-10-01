@@ -94,7 +94,8 @@ Existing edge-to-edge, scroll-padding, IME, and dismissal contracts remain.
 `AndroidKitSectionCard` explicitly opens only entry bodies through
 `AndroidKitSectionCardEntry.Custom(key) { ... }`. Its title, description, card
 chrome and dividers stay Kit-owned. Custom bodies inherit Kit entry typography
-and card content color; hosts own their body layout, controls and accessibility.
+and card content color. The card owns entry padding; hosts own layout within
+the padded body, controls and accessibility.
 Settings uses this same entry mechanism. This exception does not open rendering
 slots on other sealed components.
 

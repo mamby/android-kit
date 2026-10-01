@@ -5,7 +5,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,8 +36,7 @@ internal fun SectionCardDemo() {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .toggleable(value = enabled, role = Role.Switch, onValueChange = { enabled = it })
-                        .heightIn(min = dimensions.minimumTouchTarget)
-                        .padding(horizontal = dimensions.spaceMedium, vertical = dimensions.settingSectionEntryVerticalPadding),
+                        .heightIn(min = dimensions.minimumTouchTarget),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(stringResource(R.string.component_enabled), Modifier.weight(1f))

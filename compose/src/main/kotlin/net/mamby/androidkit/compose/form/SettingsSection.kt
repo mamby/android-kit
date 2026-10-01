@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
@@ -140,7 +139,7 @@ internal fun SettingsSection(
     AndroidKitSectionCard(
         entries = entries.map { entry ->
             AndroidKitSectionCardEntry.Custom(entry.key) {
-                SettingsEntry(entry, style, entryContentPadding, onEntryAction)
+                SettingsEntry(entry, style, onEntryAction)
             }
         },
         modifier = modifier,
@@ -150,6 +149,10 @@ internal fun SettingsSection(
         sectionSpacing = sectionSpacing,
         sectionTextPadding = sectionTextPadding,
         dividerPadding = dividerPadding,
+        customEntryModifier = { custom ->
+            val entry = entries.first { it.key == custom.key }
+            entry.modifier.settingsEntryModifier(entry, onEntryAction)
+        },
         entryContentPadding = entryContentPadding,
     )
 }
@@ -359,105 +362,69 @@ internal sealed interface SettingsEntryDefinition {
 }
 
 @Composable
+private fun Modifier.settingsEntryModifier(
+    entry: SettingsEntryDefinition,
+    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
+): Modifier {
+    val modifier = when (entry) {
+        is SettingsEntryDefinition.Button -> clickable(
+            enabled = entry.enabled, role = Role.Button,
+            onClick = { onEntryAction?.invoke(entry); entry.onClick() },
+        )
+        is SettingsEntryDefinition.CopyableInfo -> clickable(
+            onClickLabel = entry.onClickLabel, role = Role.Button,
+            onClick = { onEntryAction?.invoke(entry); entry.onClick() },
+        )
+        is SettingsEntryDefinition.Toggle -> toggleable(
+            value = entry.checked, enabled = entry.enabled, role = Role.Switch,
+            onValueChange = { value -> onEntryAction?.invoke(entry); entry.onCheckedChange(value) },
+        )
+        is SettingsEntryDefinition.Info, is SettingsEntryDefinition.Slider -> this
+    }
+    return if (entry is SettingsEntryDefinition.Slider) modifier else {
+        modifier.heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
+    }
+}
+
+@Composable
 private fun SettingsEntry(
     entry: SettingsEntryDefinition,
     style: AndroidKitSettingSectionStyle,
-    contentPadding: PaddingValues,
     onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
-): Unit = when (entry) {
-    is SettingsEntryDefinition.Button -> SettingsButtonEntry(entry, style, contentPadding, onEntryAction)
-    is SettingsEntryDefinition.Slider -> SettingsSliderEntry(entry, style, contentPadding, onEntryAction)
-    is SettingsEntryDefinition.Toggle -> SettingsToggleEntry(entry, style, contentPadding, onEntryAction)
-    is SettingsEntryDefinition.CopyableInfo -> SectionCardEntryContent(
+) {
+    if (entry is SettingsEntryDefinition.Slider) {
+        SettingsSliderEntry(entry, style, onEntryAction)
+        return
+    }
+    SectionCardEntryContent(
         label = entry.label,
         supportingText = entry.supportingText,
         icon = entry.icon,
-        modifier = entry.modifier
-            .fillMaxWidth()
-            .clickable(
-                onClickLabel = entry.onClickLabel,
-                role = Role.Button,
-                onClick = { onEntryAction?.invoke(entry); entry.onClick() },
+        modifier = Modifier.fillMaxWidth(),
+        style = style,
+    ) {
+        when (entry) {
+            is SettingsEntryDefinition.Button -> Icon(
+                imageVector = AndroidKitIcons.ChevronRight,
+                contentDescription = null,
+                tint = style.secondaryContentColor,
             )
-            .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget),
-        style = style,
-        contentPadding = contentPadding,
-    ) {
-        Icon(
-            imageVector = AndroidKitIcons.Copy,
-            contentDescription = null,
-            tint = style.secondaryContentColor,
-        )
-    }
-    is SettingsEntryDefinition.Info -> SectionCardEntryContent(
-        label = entry.label, supportingText = entry.supportingText, icon = entry.icon,
-        modifier = entry.modifier.fillMaxWidth()
-            .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget),
-        style = style, contentPadding = contentPadding,
-    ) {
-        entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }
-    }
-
-}
-
-@Composable
-private fun SettingsButtonEntry(
-    entry: SettingsEntryDefinition.Button,
-    style: AndroidKitSettingSectionStyle,
-    contentPadding: PaddingValues,
-    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    SectionCardEntryContent(
-        label = entry.label,
-        supportingText = entry.supportingText,
-        icon = entry.icon,
-        modifier = entry.modifier
-            .fillMaxWidth()
-            .clickable(enabled = entry.enabled, role = Role.Button,
-                onClick = { onEntryAction?.invoke(entry); entry.onClick() })
-            .heightIn(min = dimensions.minimumTouchTarget),
-        style = style,
-        contentPadding = contentPadding,
-    ) {
-        Icon(
-            imageVector = AndroidKitIcons.ChevronRight,
-            contentDescription = null,
-            tint = style.secondaryContentColor,
-        )
-    }
-}
-
-@Composable
-private fun SettingsToggleEntry(
-    entry: SettingsEntryDefinition.Toggle,
-    style: AndroidKitSettingSectionStyle,
-    contentPadding: PaddingValues,
-    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
-): Unit {
-    val dimensions = AndroidKitThemeTokens.dimensions
-    SectionCardEntryContent(
-        label = entry.label,
-        supportingText = entry.supportingText,
-        icon = entry.icon,
-        modifier = entry.modifier
-            .fillMaxWidth()
-            .toggleable(
-                value = entry.checked,
+            is SettingsEntryDefinition.CopyableInfo -> Icon(
+                imageVector = AndroidKitIcons.Copy,
+                contentDescription = null,
+                tint = style.secondaryContentColor,
+            )
+            is SettingsEntryDefinition.Info -> entry.value?.let {
+                Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor)
+            }
+            is SettingsEntryDefinition.Toggle -> Switch(
+                checked = entry.checked,
+                onCheckedChange = null,
                 enabled = entry.enabled,
-                role = Role.Switch,
-                onValueChange = { value -> onEntryAction?.invoke(entry); entry.onCheckedChange(value) },
+                colors = entry.colors ?: SwitchDefaults.colors(),
             )
-            .heightIn(min = dimensions.minimumTouchTarget),
-        style = style,
-        contentPadding = contentPadding,
-    ) {
-        Switch(
-            checked = entry.checked,
-            onCheckedChange = null,
-            enabled = entry.enabled,
-            colors = entry.colors ?: SwitchDefaults.colors(),
-        )
+            is SettingsEntryDefinition.Slider -> Unit
+        }
     }
 }
 
@@ -466,14 +433,11 @@ private fun SettingsToggleEntry(
 private fun SettingsSliderEntry(
     entry: SettingsEntryDefinition.Slider,
     style: AndroidKitSettingSectionStyle,
-    contentPadding: PaddingValues,
     onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     Column(
-        modifier = entry.modifier
-            .fillMaxWidth()
-            .padding(contentPadding),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(dimensions.spaceExtraSmall),
     ) {
         Row(
