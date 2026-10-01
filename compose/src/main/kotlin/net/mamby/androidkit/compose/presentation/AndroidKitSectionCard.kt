@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ProvideTextStyle
@@ -32,12 +33,16 @@ public sealed interface AndroidKitSectionCardEntry {
     /**
      * Host-rendered entry body. The card owns its frame, entry padding, dividers and keyed identity.
      * Content inherits Kit entry typography and card content color. The host owns
-     * layout within the padded body, interaction, focus and accessibility semantics.
+     * layout within the padded body and its controls. Optional [interaction] is rendered
+     * by the card on the full entry wrapper, including padding and minimum touch size.
      */
     public class Custom(
         override val key: String,
+        public val interaction: AndroidKitSectionCardInteraction? = null,
         public val content: @Composable () -> Unit,
-    ) : AndroidKitSectionCardEntry
+    ) : AndroidKitSectionCardEntry {
+        public constructor(key: String, content: @Composable () -> Unit) : this(key, null, content)
+    }
 
     /** Read-only content, with no action semantics or navigation affordance. */
     public data class Info(
@@ -68,6 +73,27 @@ public sealed interface AndroidKitSectionCardEntry {
         public val text: String,
         public val label: String? = null,
     ) : AndroidKitSectionCardEntry
+}
+
+/** Full-entry interaction. The Kit owns touch sizing, ripple, focus and accessibility roles. */
+public sealed interface AndroidKitSectionCardInteraction {
+    public class Click(
+        public val onClick: () -> Unit,
+        public val actionLabel: String? = null,
+        public val enabled: Boolean = true,
+    ) : AndroidKitSectionCardInteraction {
+        init {
+            require(actionLabel == null || actionLabel.isNotBlank()) {
+                "Section card action labels must not be blank when supplied."
+            }
+        }
+    }
+
+    public class Toggle(
+        public val checked: Boolean,
+        public val onCheckedChange: (Boolean) -> Unit,
+        public val enabled: Boolean = true,
+    ) : AndroidKitSectionCardInteraction
 }
 
 /**
@@ -101,14 +127,14 @@ internal fun AndroidKitSectionCard(
     style: AndroidKitSettingSectionStyle,
     sectionSpacing: Dp = AndroidKitThemeTokens.dimensions.settingSectionSpacing,
     sectionTextPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
+        horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
     ),
     dividerPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
+        horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
     ),
-    customEntryModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier = { Modifier },
+    customEntryLayoutModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier = { Modifier },
     entryContentPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
+        horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
         vertical = AndroidKitThemeTokens.dimensions.settingSectionEntryVerticalPadding,
     ),
 ): Unit {
@@ -148,7 +174,7 @@ internal fun AndroidKitSectionCard(
                         )
                     }
                     key(entry.key) {
-                        SectionCardEntry(entry, style, entryContentPadding, customEntryModifier)
+                        SectionCardEntry(entry, style, entryContentPadding, customEntryLayoutModifier)
                     }
                 }
             }
@@ -169,19 +195,15 @@ private fun SectionCardEntry(
     entry: AndroidKitSectionCardEntry,
     style: AndroidKitSettingSectionStyle,
     padding: PaddingValues,
-    customEntryModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier,
+    customEntryLayoutModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier,
 ) {
     val dimensions = AndroidKitThemeTokens.dimensions
     val entryModifier = when (entry) {
-        is AndroidKitSectionCardEntry.Custom -> customEntryModifier(entry)
-        is AndroidKitSectionCardEntry.Action -> Modifier
-            .clickable(
-                enabled = entry.enabled,
-                onClickLabel = entry.actionLabel,
-                role = Role.Button,
-                onClick = entry.onClick,
-            )
-            .heightIn(min = dimensions.minimumTouchTarget)
+        is AndroidKitSectionCardEntry.Custom -> customEntryLayoutModifier(entry)
+            .sectionCardInteraction(entry.interaction)
+        is AndroidKitSectionCardEntry.Action -> Modifier.sectionCardInteraction(
+            AndroidKitSectionCardInteraction.Click(entry.onClick, entry.actionLabel, entry.enabled),
+        )
         is AndroidKitSectionCardEntry.Info -> Modifier
             .semantics(mergeDescendants = true) {}
             .heightIn(min = dimensions.minimumTouchTarget)
@@ -226,4 +248,24 @@ private fun SectionCardEntry(
             }
         }
     }
+}
+
+@Composable
+private fun Modifier.sectionCardInteraction(interaction: AndroidKitSectionCardInteraction?): Modifier {
+    val modifier = when (interaction) {
+        null -> return this
+        is AndroidKitSectionCardInteraction.Click -> clickable(
+            enabled = interaction.enabled,
+            onClickLabel = interaction.actionLabel,
+            role = Role.Button,
+            onClick = interaction.onClick,
+        )
+        is AndroidKitSectionCardInteraction.Toggle -> toggleable(
+            value = interaction.checked,
+            enabled = interaction.enabled,
+            role = Role.Switch,
+            onValueChange = interaction.onCheckedChange,
+        )
+    }
+    return modifier.heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
 }

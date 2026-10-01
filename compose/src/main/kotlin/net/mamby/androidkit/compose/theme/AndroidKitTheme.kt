@@ -218,6 +218,7 @@ public data class AndroidKitDimensions(
     public val contentProtectionBlurRadius: Dp = 0.dp,
     public val contentProtectionFadeLength: Dp = 4.dp,
     public val pageTitlelessTopPadding: Dp = 12.dp,
+    public val sectionCardHorizontalPadding: Dp = 20.dp,
 ) {
     /**
      * Minimum horizontal inset around action-control content, independent of icon artwork.

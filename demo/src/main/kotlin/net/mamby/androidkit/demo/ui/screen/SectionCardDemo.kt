@@ -4,8 +4,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.Switch
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,17 +12,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardInteraction
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry
-import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.demo.R
 
 @Composable
 internal fun SectionCardDemo() {
     var selected by rememberSaveable { mutableStateOf<String?>(null) }
     var enabled by rememberSaveable { mutableStateOf(true) }
-    val dimensions = AndroidKitThemeTokens.dimensions
     val email = stringResource(R.string.section_card_sample_email)
     val otherEmail = stringResource(R.string.section_card_sample_other_email)
     val confirm = stringResource(R.string.action_confirm)
@@ -32,11 +28,15 @@ internal fun SectionCardDemo() {
         title = stringResource(R.string.demo_section_title),
         description = stringResource(R.string.demo_supporting_text),
         entries = listOf(
-            AndroidKitSectionCardEntry.Custom("availability") {
+            AndroidKitSectionCardEntry.Custom(
+                key = "availability",
+                interaction = AndroidKitSectionCardInteraction.Toggle(
+                    checked = enabled,
+                    onCheckedChange = { enabled = it },
+                ),
+            ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .toggleable(value = enabled, role = Role.Switch, onValueChange = { enabled = it })
-                        .heightIn(min = dimensions.minimumTouchTarget),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(stringResource(R.string.component_enabled), Modifier.weight(1f))

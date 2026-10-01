@@ -74,7 +74,7 @@ class SectionCardBehaviorTest {
                 val density = LocalDensity.current
                 val dimensions = AndroidKitThemeTokens.dimensions
                 SideEffect {
-                    horizontalPadding = with(density) { dimensions.spaceMedium.toPx() }
+                    horizontalPadding = with(density) { dimensions.sectionCardHorizontalPadding.toPx() }
                     verticalPadding = with(density) { dimensions.settingSectionEntryVerticalPadding.toPx() }
                 }
                 DeviceConfigurationOverride(DeviceConfigurationOverride.LayoutDirection(direction)) {

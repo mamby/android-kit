@@ -6,10 +6,12 @@ and an optional `description` below it. An empty list renders nothing.
 
 `AndroidKitSectionCardEntry` is sealed:
 
-- `Custom(key) { ... }` supplies a host-owned composable entry body. It inherits
-  Kit entry-label typography and card content color. The host owns its body
-  layout within the padded body, controls, state and accessibility semantics. The card still
-  owns entry padding, title, description, shape, colors, border, dividers and keyed identity.
+- `Custom(key, interaction?) { ... }` supplies a host-owned composable entry body.
+  It inherits Kit entry-label typography and card content color. The card owns
+  entry padding and optional full-row interaction. The host owns layout within
+  the padded body, controls and state. Without an interaction, the body retains
+  its own control semantics. The card also owns title, description, shape,
+  colors, border, dividers and keyed identity.
 - `Info(key, label, value?, supportingText?)` is read-only. Values and supporting
   text appear below the label so long content retains the available width.
 - `Action(key, label, actionLabel, onClick, supportingText?, icon?, enabled)`
@@ -24,12 +26,25 @@ Reordering entries preserves their keyed composition identity, including focus.
 Hosts supply localized text and callbacks for built-in entries, or compose their
 own `Custom` body. The public API exposes no card style object, header, footer or
 divider slot. The outer modifier is for placement. The host provides scrolling
-when the content can exceed the viewport. Every entry receives the same Kit-owned content padding: `spaceMedium` horizontally
-and `settingSectionEntryVerticalPadding` vertically (16 dp and 12 dp by default).
-Custom bodies must omit equivalent outer padding to avoid doubling it. Hosts still
-own spacing between controls inside their bodies. Custom controls act within that
-padded body; built-in Action rows and Settings controls keep interactions outside
-the padding so their entire row remains interactive. Dividers retain their own inset.
+when the content can exceed the viewport. Every entry receives the same Kit-owned
+content padding: `sectionCardHorizontalPadding` horizontally and
+`settingSectionEntryVerticalPadding` vertically (20 dp and 12 dp by default).
+Titles, descriptions and dividers share the horizontal inset. This does not change
+`AndroidKitCard` or the general `spaceMedium` token.
+
+`AndroidKitSectionCardInteraction.Click(onClick, actionLabel?, enabled)` and
+`Toggle(checked, onCheckedChange, enabled)` attach interaction to the Custom entry's
+surrounding wrapper. The entire row, including padding, is interactive; the Kit
+owns the minimum touch target, ripple, keyboard focus, disabled semantics, and
+Button or Switch role. A supplied click action label must be nonblank and localized;
+otherwise accessibility uses the body's visible text. Built-in Action entries and
+Settings use this same interaction renderer.
+
+Custom bodies must omit equivalent outer padding, full-row `clickable`/`toggleable`,
+and minimum touch-target sizing when an interaction is supplied. Render a toggle's
+Switch with `onCheckedChange = null` so the wrapper owns the action. Hosts still own
+spacing between controls inside their bodies. For bodies containing independent
+controls, omit the row interaction and keep each control's own behavior.
 
 ```kotlin
 AndroidKitSectionCard(
@@ -44,7 +59,13 @@ AndroidKitSectionCard(
             onClick = onCallWork,
         ),
         AndroidKitSectionCardEntry.Multiline("notes", notes, notesLabel),
-        AndroidKitSectionCardEntry.Custom("custom-content") {
+        AndroidKitSectionCardEntry.Custom(
+            key = "custom-content",
+            interaction = AndroidKitSectionCardInteraction.Click(
+                onClick = onOpenCustom,
+                actionLabel = openCustomLabel,
+            ),
+        ) {
             Text(text = customMessage)
         },
     ),
@@ -55,7 +76,10 @@ Settings sections call `AndroidKitSectionCard` directly, adapting existing contr
 to the same `Custom` entry API available to hosts. An internal overload preserves
 Settings compatibility parameters; it does not introduce a separate entry model
 or generic layout component. The component owns the frame, entry padding, dividers and keyed
-identity. Settings attaches row interaction modifiers to the internal entry wrapper. Settings-only controls and search dispatch remain in Settings.
+identity. Settings declares Click and Toggle interactions through the same public
+Custom-entry API as external hosts. Its internal layout adapter only preserves
+existing modifiers and read-only row sizing. Settings-only controls and search
+dispatch remain in Settings.
 Both entry families use `settingSectionStyle` / dimension tokens for colors,
 border, shape, typography, padding, dividers and minimum touch targets. Settings
 retains its public DSL, controls, entry definitions and search dispatch unchanged.
@@ -71,7 +95,7 @@ Section titles expose heading semantics for screen-reader heading navigation.
 
 ## Contact-detail suitability
 
-The Personal Health Vault contact detail screen was reviewed read-only. Each
+In the original 2026-09-29 review, the Personal Health Vault contact detail screen was reviewed read-only. Each
 phone, email, website and address can be an `Action`, including addresses with
 embedded line breaks. Existing dial, compose-email, open-website and address-search
 callbacks remain host-owned. Nonblank notes map to `Multiline`; the name can stay
@@ -122,3 +146,12 @@ checks do not constitute TalkBack listening or visual approval across themes.
   sizing; existing Settings text sizing and typography remain unchanged.
 - `git diff --check` passed. Physical-keyboard behavior and TalkBack speech have
   not been manually verified. Nothing was published and no host apps changed.
+
+## Custom-entry migration
+
+Contacts-style rows with custom icons can retain their Row, text and icon content.
+Move the row's click callback, localized action label and enabled state into
+`Custom(interaction = AndroidKitSectionCardInteraction.Click(...))`, and remove
+its outer padding, `clickable` and minimum-height modifier. The Kit then owns
+spacing and the full-row touch area. Consume a snapshot containing this API before
+migrating external hosts; the previously published 0.1.38-SNAPSHOT does not include it.

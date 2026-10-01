@@ -95,8 +95,11 @@ Existing edge-to-edge, scroll-padding, IME, and dismissal contracts remain.
 `AndroidKitSectionCardEntry.Custom(key) { ... }`. Its title, description, card
 chrome and dividers stay Kit-owned. Custom bodies inherit Kit entry typography
 and card content color. The card owns entry padding; hosts own layout within
-the padded body, controls and accessibility.
-Settings uses this same entry mechanism. This exception does not open rendering
+the padded body and controls. Typed `AndroidKitSectionCardInteraction.Click` and
+`Toggle` declarations let the Kit own full-entry interaction, including its padding,
+minimum touch size, focus and accessibility role. Hosts can omit the interaction
+for bodies containing independent controls.
+Settings uses this same entry and interaction mechanism. This exception does not open rendering
 slots on other sealed components.
 
 ```kotlin

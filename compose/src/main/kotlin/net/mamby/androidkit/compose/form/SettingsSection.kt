@@ -1,7 +1,6 @@
 package net.mamby.androidkit.compose.form
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,7 +33,6 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
@@ -43,6 +40,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.presentation.SectionCardEntryContent
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
+import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardInteraction
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitSettingSectionStyle
@@ -125,20 +123,23 @@ internal fun SettingsSection(
     style: AndroidKitSettingSectionStyle = AndroidKitThemeTokens.settingSectionStyle,
     sectionSpacing: Dp = AndroidKitThemeTokens.dimensions.settingSectionSpacing,
     sectionTextPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
+        horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
     ),
     entryContentPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
+        horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
         vertical = AndroidKitThemeTokens.dimensions.settingSectionEntryVerticalPadding,
     ),
     dividerPadding: PaddingValues = PaddingValues(
-        horizontal = AndroidKitThemeTokens.dimensions.spaceMedium,
+        horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
     ),
     onEntryAction: ((SettingsEntryDefinition) -> Unit)? = null,
 ): Unit {
     AndroidKitSectionCard(
         entries = entries.map { entry ->
-            AndroidKitSectionCardEntry.Custom(entry.key) {
+            AndroidKitSectionCardEntry.Custom(
+                key = entry.key,
+                interaction = settingsEntryInteraction(entry, onEntryAction),
+            ) {
                 SettingsEntry(entry, style, onEntryAction)
             }
         },
@@ -149,9 +150,13 @@ internal fun SettingsSection(
         sectionSpacing = sectionSpacing,
         sectionTextPadding = sectionTextPadding,
         dividerPadding = dividerPadding,
-        customEntryModifier = { custom ->
+        customEntryLayoutModifier = { custom ->
             val entry = entries.first { it.key == custom.key }
-            entry.modifier.settingsEntryModifier(entry, onEntryAction)
+            if (entry is SettingsEntryDefinition.Info) {
+                entry.modifier.heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
+            } else {
+                entry.modifier
+            }
         },
         entryContentPadding = entryContentPadding,
     )
@@ -361,29 +366,24 @@ internal sealed interface SettingsEntryDefinition {
 
 }
 
-@Composable
-private fun Modifier.settingsEntryModifier(
+private fun settingsEntryInteraction(
     entry: SettingsEntryDefinition,
     onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
-): Modifier {
-    val modifier = when (entry) {
-        is SettingsEntryDefinition.Button -> clickable(
-            enabled = entry.enabled, role = Role.Button,
-            onClick = { onEntryAction?.invoke(entry); entry.onClick() },
-        )
-        is SettingsEntryDefinition.CopyableInfo -> clickable(
-            onClickLabel = entry.onClickLabel, role = Role.Button,
-            onClick = { onEntryAction?.invoke(entry); entry.onClick() },
-        )
-        is SettingsEntryDefinition.Toggle -> toggleable(
-            value = entry.checked, enabled = entry.enabled, role = Role.Switch,
-            onValueChange = { value -> onEntryAction?.invoke(entry); entry.onCheckedChange(value) },
-        )
-        is SettingsEntryDefinition.Info, is SettingsEntryDefinition.Slider -> this
-    }
-    return if (entry is SettingsEntryDefinition.Slider) modifier else {
-        modifier.heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
-    }
+): AndroidKitSectionCardInteraction? = when (entry) {
+    is SettingsEntryDefinition.Button -> AndroidKitSectionCardInteraction.Click(
+        enabled = entry.enabled,
+        onClick = { onEntryAction?.invoke(entry); entry.onClick() },
+    )
+    is SettingsEntryDefinition.CopyableInfo -> AndroidKitSectionCardInteraction.Click(
+        actionLabel = entry.onClickLabel,
+        onClick = { onEntryAction?.invoke(entry); entry.onClick() },
+    )
+    is SettingsEntryDefinition.Toggle -> AndroidKitSectionCardInteraction.Toggle(
+        checked = entry.checked,
+        enabled = entry.enabled,
+        onCheckedChange = { value -> onEntryAction?.invoke(entry); entry.onCheckedChange(value) },
+    )
+    is SettingsEntryDefinition.Info, is SettingsEntryDefinition.Slider -> null
 }
 
 @Composable

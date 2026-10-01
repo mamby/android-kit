@@ -73,7 +73,7 @@ class SectionCardPixelParityTest(
                         isDark = dark,
                         typography = Typography(),
                         shapes = Shapes(),
-                        dimensions = palette.dimensions.copy(spaceMedium = 12.dp),
+                        dimensions = palette.dimensions.copy(spaceMedium = 12.dp, sectionCardHorizontalPadding = 12.dp),
                     )) {
                         Box(Modifier.width(320.dp).background(AndroidKitThemeTokens.colorScheme.background)
                             .testTag("section")) {
