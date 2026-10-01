@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalInputModeManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.MouseButton
 import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.longClick
@@ -54,10 +56,13 @@ class ContextMenuBehaviorTest {
             }
         }
         val target = rule.onNodeWithTag("target")
+        target.assertIsNotSelected()
         target.performTouchInput { longClick(Offset(width * .25f, height * .25f)) }
+        target.assertIsSelected()
         val first = rule.onNodeWithText("Edit").fetchSemanticsNode().layoutInfo.coordinates.positionOnScreen()
         rule.runOnIdle { assertEquals(0, clicks) }
         pressBack()
+        target.assertIsNotSelected()
         rule.onNodeWithText("Edit").assertDoesNotExist()
         target.performTouchInput { longClick(Offset(width * .5f, height * .5f)) }
         val second = rule.onNodeWithText("Edit").fetchSemanticsNode().layoutInfo.coordinates.positionOnScreen()
@@ -65,6 +70,7 @@ class ContextMenuBehaviorTest {
         assertEquals(bounds.width * .25f, second.x - first.x, 1f)
         assertEquals(bounds.height * .25f, second.y - first.y, 1f)
         rule.onNodeWithText("Edit").performClick()
+        target.assertIsNotSelected()
         rule.onNodeWithText("Edit").assertDoesNotExist()
         target.performClick()
         rule.runOnIdle {

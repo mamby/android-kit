@@ -2,28 +2,37 @@ package net.mamby.androidkit.compose.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SliderColors
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import net.mamby.androidkit.compose.action.AndroidKitActionFlyoutScope
+import net.mamby.androidkit.compose.action.AndroidKitContextMenuContent
+import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitSettingSectionStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
@@ -31,26 +40,13 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 public sealed interface AndroidKitSectionCardEntry {
     public val key: String
 
-    /**
-     * Host-rendered entry body. The card owns its frame, entry padding, dividers and keyed identity.
-     * Content inherits Kit entry typography and card content color. The host owns
-     * layout within the padded body and its controls. Optional [interaction] is rendered
-     * by the card on the full entry wrapper, including padding and minimum touch size.
-     */
-    public class Custom(
-        override val key: String,
-        public val interaction: AndroidKitSectionCardInteraction? = null,
-        public val content: @Composable () -> Unit,
-    ) : AndroidKitSectionCardEntry {
-        public constructor(key: String, content: @Composable () -> Unit) : this(key, null, content)
-    }
-
     /** Read-only content, with no action semantics or navigation affordance. */
     public data class Info(
         override val key: String,
         public val label: String,
         public val value: String? = null,
         public val supportingText: String? = null,
+        public val contextMenu: (AndroidKitActionFlyoutScope.() -> Unit)? = null,
     ) : AndroidKitSectionCardEntry
 
     /** [actionLabel] describes the action to accessibility services, e.g. "Call work number". */
@@ -62,6 +58,9 @@ public sealed interface AndroidKitSectionCardEntry {
         public val supportingText: String? = null,
         public val icon: ImageVector? = null,
         public val enabled: Boolean = true,
+        public val trailingIcon: ImageVector? = null,
+        public val trailingIconTint: Color = Color.Unspecified,
+        public val contextMenu: (AndroidKitActionFlyoutScope.() -> Unit)? = null,
     ) : AndroidKitSectionCardEntry {
         init {
             require(actionLabel.isNotBlank()) { "Section card action labels must not be blank." }
@@ -73,40 +72,82 @@ public sealed interface AndroidKitSectionCardEntry {
         override val key: String,
         public val text: String,
         public val label: String? = null,
+        public val contextMenu: (AndroidKitActionFlyoutScope.() -> Unit)? = null,
     ) : AndroidKitSectionCardEntry
-}
 
-/** Full-entry interaction. The Kit owns touch sizing, ripple, focus and accessibility roles. */
-public sealed interface AndroidKitSectionCardInteraction {
-    public class Click(
-        public val onClick: () -> Unit,
-        public val actionLabel: String? = null,
+    /** A single Kit-owned switch row; the switch delegates input to the full-entry wrapper. */
+    public data class Toggle(
+        override val key: String,
+        public val label: String,
+        public val checked: Boolean,
+        public val onCheckedChange: (Boolean) -> Unit,
+        public val supportingText: String? = null,
+        public val icon: ImageVector? = null,
         public val enabled: Boolean = true,
-        public val onLongClick: (() -> Unit)? = null,
-        public val longClickLabel: String? = null,
-    ) : AndroidKitSectionCardInteraction {
+    ) : AndroidKitSectionCardEntry
+
+    /** Opens a destination; Kit renders the navigation affordance. */
+    public data class Navigation(
+        override val key: String,
+        public val label: String,
+        public val onClick: () -> Unit,
+        public val supportingText: String? = null,
+        public val icon: ImageVector? = null,
+        public val enabled: Boolean = true,
+    ) : AndroidKitSectionCardEntry
+
+    /** Informational content with a trailing value, as used in Settings. */
+    public data class InlineInfo(
+        override val key: String,
+        public val label: String,
+        public val value: String? = null,
+        public val supportingText: String? = null,
+        public val icon: ImageVector? = null,
+    ) : AndroidKitSectionCardEntry
+
+    /** Copying remains a host action; Kit owns its full-row interaction and copy affordance. */
+    public data class CopyableInfo(
+        override val key: String,
+        public val label: String,
+        public val actionLabel: String,
+        public val onClick: () -> Unit,
+        public val supportingText: String? = null,
+        public val icon: ImageVector? = null,
+    ) : AndroidKitSectionCardEntry {
         init {
-            require(actionLabel == null || actionLabel.isNotBlank()) {
-                "Section card action labels must not be blank when supplied."
-            }
-            require(longClickLabel == null || longClickLabel.isNotBlank()) {
-                "Section card long-click labels must not be blank when supplied."
-            }
+            require(actionLabel.isNotBlank()) { "Section card action labels must not be blank." }
         }
     }
 
-    public class Toggle(
-        public val checked: Boolean,
-        public val onCheckedChange: (Boolean) -> Unit,
+    /** Kit-rendered slider. Hosts supply state, its range, and already-localized value labels. */
+    public data class Slider(
+        override val key: String,
+        public val label: String,
+        public val value: Float,
+        public val onValueChange: (Float) -> Unit,
+        public val valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+        public val steps: Int = 0,
+        public val onValueChangeFinished: (() -> Unit)? = null,
+        public val supportingText: String? = null,
+        public val icon: ImageVector? = null,
+        public val valueLabel: String? = null,
         public val enabled: Boolean = true,
-    ) : AndroidKitSectionCardInteraction
+        public val minimumLabel: String? = null,
+        public val maximumLabel: String? = null,
+    ) : AndroidKitSectionCardEntry
 }
+
+/** Preserve the existing Settings color APIs without exposing entry rendering or style slots. */
+internal data class AndroidKitSectionCardControlColors(
+    val switch: SwitchColors? = null,
+    val slider: SliderColors? = null,
+)
 
 /**
  * A sealed section using the Settings card's theme tokens and visual foundation.
  * Empty cards render nothing. Entries retain composition identity by [AndroidKitSectionCardEntry.key].
- * The host owns scrolling, localized text and actions. Built-in entries are Kit-rendered;
- * [AndroidKitSectionCardEntry.Custom] opens only the entry body to host composition.
+ * Whole-row content and interactions are Kit-rendered. Hosts declare content, callbacks and menu
+ * items. The public API has no composable entry-body slots.
  */
 @Composable
 public fun AndroidKitSectionCard(
@@ -138,7 +179,9 @@ internal fun AndroidKitSectionCard(
     dividerPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
     ),
-    customEntryLayoutModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier = { Modifier },
+    entryModifiers: Map<String, Modifier> = emptyMap(),
+    controlColors: Map<String, AndroidKitSectionCardControlColors> = emptyMap(),
+    opacitySliderKeys: Set<String> = emptySet(),
     entryContentPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.dimensions.sectionCardHorizontalPadding,
         vertical = AndroidKitThemeTokens.dimensions.settingSectionEntryVerticalPadding,
@@ -180,7 +223,11 @@ internal fun AndroidKitSectionCard(
                         )
                     }
                     key(entry.key) {
-                        SectionCardEntry(entry, style, entryContentPadding, customEntryLayoutModifier)
+                        SectionCardEntry(
+                            entry, style, entryContentPadding,
+                            entryModifiers[entry.key] ?: Modifier,
+                            controlColors[entry.key], entry.key in opacitySliderKeys,
+                        )
                     }
                 }
             }
@@ -201,89 +248,142 @@ private fun SectionCardEntry(
     entry: AndroidKitSectionCardEntry,
     style: AndroidKitSettingSectionStyle,
     padding: PaddingValues,
-    customEntryLayoutModifier: @Composable (AndroidKitSectionCardEntry.Custom) -> Modifier,
+    layoutModifier: Modifier,
+    controlColors: AndroidKitSectionCardControlColors?,
+    isOpacitySlider: Boolean,
 ) {
-    val tokens = AndroidKitThemeTokens.componentTokens.sectionCard
     val dimensions = AndroidKitThemeTokens.dimensions
+    val menu = when (entry) {
+        is AndroidKitSectionCardEntry.Action -> entry.contextMenu
+        is AndroidKitSectionCardEntry.Info -> entry.contextMenu
+        is AndroidKitSectionCardEntry.Multiline -> entry.contextMenu
+        else -> null
+    }
     val entryModifier = when (entry) {
-        is AndroidKitSectionCardEntry.Custom -> customEntryLayoutModifier(entry)
-            .sectionCardInteraction(entry.interaction)
-        is AndroidKitSectionCardEntry.Action -> Modifier.sectionCardInteraction(
-            AndroidKitSectionCardInteraction.Click(entry.onClick, entry.actionLabel, entry.enabled),
-        )
+        is AndroidKitSectionCardEntry.Action -> if (menu != null) {
+            Modifier.heightIn(min = dimensions.minimumTouchTarget)
+        } else Modifier.sectionCardClick(entry.onClick, entry.actionLabel, entry.enabled)
+        is AndroidKitSectionCardEntry.Navigation -> Modifier.sectionCardClick(entry.onClick, null, entry.enabled)
+        is AndroidKitSectionCardEntry.CopyableInfo -> Modifier.sectionCardClick(entry.onClick, entry.actionLabel, true)
+        is AndroidKitSectionCardEntry.Toggle -> Modifier
+            .toggleable(entry.checked, enabled = entry.enabled, role = Role.Switch, onValueChange = entry.onCheckedChange)
+            .heightIn(min = dimensions.minimumTouchTarget)
         is AndroidKitSectionCardEntry.Info -> Modifier
             .semantics(mergeDescendants = true) {}
             .heightIn(min = dimensions.minimumTouchTarget)
         is AndroidKitSectionCardEntry.Multiline -> Modifier.semantics(mergeDescendants = true) {}
+        is AndroidKitSectionCardEntry.InlineInfo -> Modifier
+            .semantics(mergeDescendants = true) {}
+            .heightIn(min = dimensions.minimumTouchTarget)
+        is AndroidKitSectionCardEntry.Slider -> Modifier
     }
-    Box(
-        modifier = entryModifier.fillMaxWidth().padding(padding),
-        propagateMinConstraints = true,
-    ) {
-        when (entry) {
-            is AndroidKitSectionCardEntry.Custom -> ProvideTextStyle(style.entryLabelTextStyle) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    entry.content()
-                }
+    val body: @Composable () -> Unit = {
+        SectionCardEntryBody(entry, style, controlColors, isOpacitySlider)
+    }
+    if (menu != null) {
+        val action = entry as? AndroidKitSectionCardEntry.Action
+        AndroidKitContextMenuContent(
+            menu = menu,
+            modifier = layoutModifier.then(entryModifier).fillMaxWidth(),
+            enabled = action?.enabled ?: true,
+            onClick = action?.onClick,
+            onClickLabel = action?.actionLabel,
+            role = if (action != null) Role.Button else null,
+        ) {
+            Box(Modifier.fillMaxWidth().padding(padding), propagateMinConstraints = true) { body() }
+        }
+    } else {
+        Box(layoutModifier.then(entryModifier).fillMaxWidth().padding(padding), propagateMinConstraints = true) { body() }
+    }
+}
+
+@Composable
+private fun SectionCardEntryBody(
+    entry: AndroidKitSectionCardEntry,
+    style: AndroidKitSettingSectionStyle,
+    controlColors: AndroidKitSectionCardControlColors?,
+    isOpacitySlider: Boolean,
+) {
+    val tokens = AndroidKitThemeTokens.componentTokens.sectionCard
+    when (entry) {
+        is AndroidKitSectionCardEntry.Action -> SectionCardEntryContent(
+            label = entry.label,
+            supportingText = entry.supportingText,
+            icon = entry.icon,
+            modifier = Modifier.fillMaxWidth(),
+            style = style,
+            fillTextWidth = true,
+        ) {
+            entry.trailingIcon?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    modifier = Modifier.size(tokens.trailingIconSize),
+                    tint = entry.trailingIconTint.takeUnless { color -> color == Color.Unspecified }
+                        ?: style.contentColor,
+                )
             }
-            is AndroidKitSectionCardEntry.Action -> SectionCardEntryContent(
-                label = entry.label,
-                supportingText = entry.supportingText,
-                icon = entry.icon,
-                modifier = Modifier.fillMaxWidth(),
-                style = style,
-                fillTextWidth = true,
-            ) {}
-            is AndroidKitSectionCardEntry.Multiline -> Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(tokens.multilineSpacing),
+        }
+        is AndroidKitSectionCardEntry.Toggle -> SectionCardEntryContent(
+            label = entry.label,
+            supportingText = entry.supportingText,
+            icon = entry.icon,
+            modifier = Modifier.fillMaxWidth(),
+            style = style,
+        ) {
+            Switch(
+                checked = entry.checked, onCheckedChange = null, enabled = entry.enabled,
+                colors = controlColors?.switch ?: SwitchDefaults.colors(),
+            )
+        }
+        is AndroidKitSectionCardEntry.Navigation -> SectionCardEntryContent(
+            entry.label, entry.supportingText, entry.icon, Modifier.fillMaxWidth(), style,
+        ) {
+            Box(
+                modifier = Modifier.size(AndroidKitIcons.ChevronRight.defaultWidth, AndroidKitIcons.ChevronRight.defaultHeight),
+                contentAlignment = Alignment.CenterEnd,
             ) {
-                entry.label?.let { Text(it, style = style.entryLabelTextStyle) }
-                Text(entry.text, style = style.entryLabelTextStyle)
+                Icon(
+                    imageVector = AndroidKitIcons.SettingsChevronRight,
+                    contentDescription = null,
+                    modifier = Modifier.size(
+                        AndroidKitIcons.SettingsChevronRight.defaultWidth, AndroidKitIcons.SettingsChevronRight.defaultHeight,
+                    ),
+                    tint = style.secondaryContentColor,
+                )
             }
-            is AndroidKitSectionCardEntry.Info -> Column(
-                // Stack values to leave the full width available for addresses and large text.
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(tokens.multilineSpacing),
-            ) {
-                Text(entry.label, style = style.entryLabelTextStyle)
-                entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }
-                entry.supportingText?.let { Text(it, style = style.supportingTextStyle, color = style.secondaryContentColor) }
-            }
+        }
+        is AndroidKitSectionCardEntry.CopyableInfo -> SectionCardEntryContent(
+            entry.label, entry.supportingText, entry.icon, Modifier.fillMaxWidth(), style,
+        ) {
+            Icon(AndroidKitIcons.Copy, contentDescription = null, tint = style.secondaryContentColor)
+        }
+        is AndroidKitSectionCardEntry.InlineInfo -> SectionCardEntryContent(
+            entry.label, entry.supportingText, entry.icon, Modifier.fillMaxWidth(), style,
+        ) {
+            entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }
+        }
+        is AndroidKitSectionCardEntry.Slider -> SectionCardSliderEntry(entry, style, controlColors?.slider, isOpacitySlider)
+        is AndroidKitSectionCardEntry.Multiline -> Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(tokens.multilineSpacing),
+        ) {
+            entry.label?.let { Text(it, style = style.entryLabelTextStyle) }
+            Text(entry.text, style = style.entryLabelTextStyle)
+        }
+        is AndroidKitSectionCardEntry.Info -> Column(
+            // Stack values to leave the full width available for addresses and large text.
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(tokens.multilineSpacing),
+        ) {
+            Text(entry.label, style = style.entryLabelTextStyle)
+            entry.value?.let { Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor) }
+            entry.supportingText?.let { Text(it, style = style.supportingTextStyle, color = style.secondaryContentColor) }
         }
     }
 }
 
 @Composable
-private fun Modifier.sectionCardInteraction(interaction: AndroidKitSectionCardInteraction?): Modifier {
-    val modifier = when (interaction) {
-        null -> return this
-        is AndroidKitSectionCardInteraction.Click -> if (interaction.onLongClick != null) {
-            combinedClickable(
-                enabled = interaction.enabled,
-                onClickLabel = interaction.actionLabel,
-                role = Role.Button,
-                onLongClickLabel = interaction.longClickLabel,
-                onLongClick = interaction.onLongClick,
-                onClick = interaction.onClick,
-            )
-        } else {
-            clickable(
-                enabled = interaction.enabled,
-                onClickLabel = interaction.actionLabel,
-                role = Role.Button,
-                onClick = interaction.onClick,
-            )
-        }
-        is AndroidKitSectionCardInteraction.Toggle -> toggleable(
-            value = interaction.checked,
-            enabled = interaction.enabled,
-            role = Role.Switch,
-            onValueChange = interaction.onCheckedChange,
-        )
-    }
-    return modifier.heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
-}
+private fun Modifier.sectionCardClick(onClick: () -> Unit, label: String?, enabled: Boolean): Modifier =
+    clickable(enabled = enabled, onClickLabel = label, role = Role.Button, onClick = onClick)
+        .heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)

@@ -26,7 +26,7 @@ internal class AndroidKitComponentTokens(
 ) {
     val card = AndroidKitCardTokens(dimensions, typography, colors, shapes)
     val sectionCard = AndroidKitSectionCardTokens(dimensions)
-    val settingsSlider = AndroidKitSettingsSliderTokens(dimensions)
+    val sectionCardSlider = AndroidKitSectionCardSliderTokens(dimensions)
     val page = AndroidKitPageTokens(dimensions)
     val listPage = AndroidKitListPageTokens(dimensions)
     val lockPage = AndroidKitLockPageTokens(dimensions)
@@ -42,7 +42,7 @@ internal class AndroidKitComponentTokens(
     val settingsPage = AndroidKitSettingsPageTokens(dimensions)
     val appLockTimeout = AndroidKitAppLockTimeoutTokens(dimensions, typography)
     val settingsPicker = AndroidKitSettingsPickerTokens(dimensions, colors, shapes)
-    val contextMenu = AndroidKitContextMenuTokens(dimensions, shapes)
+    val contextMenu = AndroidKitContextMenuTokens(dimensions, shapes, colors)
     val navigation = AndroidKitNavigationTokens(shapes)
 }
 
@@ -72,10 +72,11 @@ internal class AndroidKitSectionCardTokens(
     val supportingTextSpacing: Dp = dimensions.spaceExtraSmall
     val entryContentSpacing: Dp = dimensions.spaceMedium
     val borderWidth: Dp = 1.dp
+    val trailingIconSize: Dp = 20.dp
 }
 
 @Immutable
-internal class AndroidKitSettingsSliderTokens(
+internal class AndroidKitSectionCardSliderTokens(
     dimensions: AndroidKitDimensions,
 ) {
     val trackSpacing: Dp = dimensions.spaceExtraSmall
@@ -312,7 +313,9 @@ internal class AndroidKitSettingsPickerTokens(
 internal class AndroidKitContextMenuTokens(
     dimensions: AndroidKitDimensions,
     shapes: Shapes,
+    colors: ColorScheme,
 ) {
+    val selectedContainerColor: Color = colors.secondaryContainer
     val verticalPadding: Dp = dimensions.spaceSmall
     val flyoutStyle: AndroidKitActionFlyoutStyle = AndroidKitActionFlyoutStyle(shape = shapes.extraLarge)
 }

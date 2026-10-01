@@ -81,9 +81,9 @@ escape hatch. Migrate consumers and the demo with the library.
   present. See [settings.md](settings.md).
 - Cards: replace `header` and `headerSupportingContent` with `title` and
   `supportingText`. Explicit typography and supporting color belong in card style.
-  `AndroidKitSectionCard` provides built-in informational, action and multiline
-  entries plus custom composable entry bodies. Settings uses the same custom
-  entry API; the surrounding card remains sealed.
+  `AndroidKitSectionCard` provides typed action, navigation, toggle, slider,
+  informational, copyable and multiline entries. Settings maps its declarations
+  to these same entries; SectionCard renders the controls and surrounding card.
   See [section cards](section-card.md).
 - Floating controls: supply `AndroidKitFloatingAction.Button(icon, label, onClick)`
   or `AndroidKitFloatingAction.Bar { ... }` to page/sheet floating-action parameters.
@@ -115,16 +115,15 @@ state belong to consumers. Kit-owned vocabulary is translated only in Kit and is
 not overridable. Consumers must apply the [localization build gate](localization.md).
 Existing edge-to-edge, scroll-padding, IME, and dismissal contracts remain.
 
-`AndroidKitSectionCard` explicitly opens only entry bodies through
-`AndroidKitSectionCardEntry.Custom(key) { ... }`. Its title, description, card
-chrome and dividers stay Kit-owned. Custom bodies inherit Kit entry typography
-and card content color. The card owns entry padding; hosts own layout within
-the padded body and controls. Typed `AndroidKitSectionCardInteraction.Click` and
-`Toggle` declarations let the Kit own full-entry interaction, including its padding,
-minimum touch size, focus and accessibility role. Hosts can omit the interaction
-for bodies containing independent controls.
-Settings uses this same entry and interaction mechanism. This exception does not open rendering
-slots on other sealed components.
+`AndroidKitSectionCard` has no public composable entry-body slot or interaction
+override. Hosts supply typed content, state, callbacks and context-menu items.
+Kit owns padding, touch targets, ripple, focus, roles and control rendering.
+Settings retains hierarchy, search metadata and state while mapping its
+declarations to the same typed entries. Its existing modifier/color APIs remain
+supported through internal data adapters, without a separate row renderer.
+Context menus surround the complete entry, including padding. Their anchor
+uses the shared secondary-container selection color while the menu is open,
+and clears selection on dismissal, item invocation or disabling the entry.
 
 ```kotlin
 val addAction = AndroidKitFloatingAction.Button(

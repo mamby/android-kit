@@ -1,19 +1,13 @@
 package net.mamby.androidkit.demo.ui.screen
 
 import androidx.compose.material3.Text
-import androidx.compose.material3.Switch
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
-import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardInteraction
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry
 import net.mamby.androidkit.demo.R
 
@@ -24,25 +18,17 @@ internal fun SectionCardDemo() {
     val email = stringResource(R.string.section_card_sample_email)
     val otherEmail = stringResource(R.string.section_card_sample_other_email)
     val confirm = stringResource(R.string.action_confirm)
+    val share = stringResource(R.string.action_share)
     AndroidKitSectionCard(
         title = stringResource(R.string.demo_section_title),
         description = stringResource(R.string.demo_supporting_text),
         entries = listOf(
-            AndroidKitSectionCardEntry.Custom(
+            AndroidKitSectionCardEntry.Toggle(
                 key = "availability",
-                interaction = AndroidKitSectionCardInteraction.Toggle(
-                    checked = enabled,
-                    onCheckedChange = { enabled = it },
-                ),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(stringResource(R.string.component_enabled), Modifier.weight(1f))
-                    Switch(checked = enabled, onCheckedChange = null)
-                }
-            },
+                label = stringResource(R.string.component_enabled),
+                checked = enabled,
+                onCheckedChange = { enabled = it },
+            ),
             AndroidKitSectionCardEntry.Info(
                 key = "name",
                 label = stringResource(R.string.section_card_sample_name),
@@ -51,6 +37,7 @@ internal fun SectionCardDemo() {
             AndroidKitSectionCardEntry.Action(
                 key = "email", label = email, actionLabel = confirm,
                 onClick = { selected = email }, enabled = enabled,
+                contextMenu = { item(label = share, onClick = { selected = share }) },
             ),
             AndroidKitSectionCardEntry.Action(
                 key = "other-email", label = otherEmail, actionLabel = confirm,
@@ -66,6 +53,7 @@ internal fun SectionCardDemo() {
             ),
             AndroidKitSectionCardEntry.Multiline(
                 key = "notes", text = stringResource(R.string.section_card_sample_notes),
+                contextMenu = { item(label = share, onClick = { selected = share }) },
             ),
         ),
     )

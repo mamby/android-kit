@@ -127,6 +127,8 @@ class SettingsPageBehaviorTest {
         }
         rule.onNodeWithText("Lock now").assertDoesNotExist()
         rule.onNodeWithText("Lock after leaving the app").performClick()
+        rule.onNode(isDialog()).assertIsDisplayed()
+        rule.waitUntil { !rule.activity.hasWindowFocus() }
         pressBack()
         rule.onNode(isDialog()).assertDoesNotExist()
         rule.runOnIdle { assertEquals(0, requests) }

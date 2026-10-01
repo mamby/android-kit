@@ -6,14 +6,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.material3.Button
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Text
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.InputMode
 import androidx.compose.ui.input.InputModeManager
@@ -44,9 +39,15 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toPixelMap
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -62,6 +63,70 @@ import org.junit.Test
 
 class SectionCardBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
+
+    @Test
+    fun contextMenuPreservesTheFullEntryTargetAndHighlightsOnlyItsOwner() {
+        var calls = 0
+        var background = Color.Unspecified
+        var highlight = Color.Unspecified
+        rule.setContent {
+            TestKitTheme {
+                val selectedColor = MaterialTheme.colorScheme.secondaryContainer
+                val containerColor = AndroidKitThemeTokens.settingSectionStyle.containerColor
+                SideEffect {
+                    background = containerColor
+                    highlight = selectedColor
+                }
+                AndroidKitSectionCard(
+                    entries = listOf(
+                        Entry.Action(
+                            key = "phone", label = "Phone", actionLabel = "Call phone",
+                            onClick = { calls++ },
+                            contextMenu = { item(label = "Copy phone", onClick = {}) },
+                        ),
+                        Entry.Multiline(
+                            key = "notes", text = "Notes",
+                            contextMenu = { item(label = "Copy notes", onClick = {}) },
+                        ),
+                        Entry.Action(
+                            key = "disabled", label = "Disabled", actionLabel = "Unavailable",
+                            onClick = { calls++ }, enabled = false,
+                            contextMenu = { item(label = "Disabled menu", onClick = {}) },
+                        ),
+                    ),
+                )
+            }
+        }
+        val phone = rule.onNodeWithText("Phone")
+        val notes = rule.onNodeWithText("Notes")
+        phone.assert(SemanticsMatcher("Primary action retains its label and role") {
+            it.config[SemanticsActions.OnClick].label == "Call phone" &&
+                it.config[SemanticsProperties.Role] == Role.Button
+        })
+        phone.performTouchInput { click(Offset(2f, center.y)) }
+        phone.performTouchInput { longClick(Offset(2f, center.y)) }
+        phone.assertIsSelected()
+        notes.assertIsNotSelected()
+        rule.onNodeWithText("Copy phone").assertIsDisplayed()
+        rule.onNodeWithText("Copy phone").performClick()
+        phone.assertIsNotSelected()
+        notes.assert(SemanticsMatcher.keyNotDefined(SemanticsActions.OnClick))
+            .performTouchInput { longClick(Offset(2f, center.y)) }
+        notes.assertIsSelected()
+        phone.assertIsNotSelected()
+        // Read-only entries have no primary-action ripple to blend with the selection color.
+        // Sample away from the point-anchored popup and its shadow.
+        val pixels = notes.captureToImage().toPixelMap()
+        assertEquals(highlight, pixels[pixels.width - 10, pixels.height / 2])
+        rule.onNodeWithText("Copy notes").performClick()
+        notes.assertIsNotSelected()
+        val restored = notes.captureToImage().toPixelMap()
+        assertEquals(background, restored[restored.width - 10, restored.height / 2])
+        rule.onNodeWithText("Disabled").assertIsNotEnabled()
+            .performTouchInput { longClick() }
+        rule.onNodeWithText("Disabled menu").assertDoesNotExist()
+        rule.runOnIdle { assertEquals(1, calls) }
+    }
 
     @Test
     fun allEntryBodiesSharePaddingAndActionPaddingRemainsClickable() {
@@ -87,12 +152,6 @@ class SectionCardBehaviorTest {
                         AndroidKitSectionCard(
                             listOf(Entry.Multiline("multiline", "Multiline\nSecond line")), Modifier.testTag("multiline-card"),
                         )
-                        AndroidKitSectionCard(
-                            listOf(Entry.Custom("custom") {
-                                Text("Custom\nSecond line")
-                                Text("Second custom line")
-                            }), Modifier.testTag("custom-card"),
-                        )
                     }
                 }
             }
@@ -100,7 +159,7 @@ class SectionCardBehaviorTest {
         for (layoutDirection in listOf(LayoutDirection.Ltr, LayoutDirection.Rtl)) {
             rule.runOnIdle { direction = layoutDirection }
             for ((tag, text) in listOf("info" to "Info\nSecond line", "action" to "Action\nSecond line",
-                "multiline" to "Multiline\nSecond line", "custom" to "Custom\nSecond line")) {
+                "multiline" to "Multiline\nSecond line")) {
                 val card = rule.onNodeWithTag("$tag-card").fetchSemanticsNode().boundsInRoot
                 val body = rule.onNodeWithText(text, useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
                 val leadingPadding = if (layoutDirection == LayoutDirection.Ltr) {
@@ -111,52 +170,9 @@ class SectionCardBehaviorTest {
                 assertEquals("$tag leading padding in $layoutDirection", horizontalPadding, leadingPadding, 1f)
                 assertEquals("$tag top padding in $layoutDirection", verticalPadding, body.top - card.top, 1f)
             }
-            val firstCustomLine = rule.onNodeWithText("Custom\nSecond line").fetchSemanticsNode().boundsInRoot
-            val secondCustomLine = rule.onNodeWithText("Second custom line").fetchSemanticsNode().boundsInRoot
-            assertTrue("Custom children stay vertically stacked", secondCustomLine.top >= firstCustomLine.bottom)
             rule.onNodeWithText("Action\nSecond line").performTouchInput { click(Offset(2f, center.y)) }
         }
         rule.runOnIdle { assertEquals(2, calls) }
-    }
-
-    @Test
-    fun customBodiesInheritKitTypographyAndRetainStateWhenReordered() {
-        var reversed by mutableStateOf(false)
-        val selected = mutableListOf<String>()
-        val inheritedTypography = mutableMapOf<String, TextStyle>()
-        lateinit var expectedTypography: TextStyle
-        rule.setContent {
-            TestKitTheme {
-                val expectedStyle = AndroidKitThemeTokens.settingSectionStyle.entryLabelTextStyle
-                SideEffect { expectedTypography = expectedStyle }
-                val keys = if (reversed) listOf("second", "first") else listOf("first", "second")
-                AndroidKitSectionCard(entries = keys.map { id ->
-                    Entry.Custom(id) {
-                        var count by remember { mutableIntStateOf(0) }
-                        val currentStyle = LocalTextStyle.current
-                        SideEffect { inheritedTypography[id] = currentStyle }
-                        Button(onClick = { count++; selected += id }) { Text("$id: $count") }
-                    }
-                })
-            }
-        }
-        rule.onNodeWithText("first: 0").performClick()
-        rule.runOnIdle { reversed = true }
-        rule.onNodeWithText("first: 1").assertIsDisplayed()
-        rule.onNodeWithText("second: 0").performClick()
-        rule.onNodeWithText("second: 1").assertIsDisplayed()
-        rule.runOnIdle {
-            assertEquals(listOf("first", "second"), selected)
-            assertEquals(setOf("first", "second"), inheritedTypography.keys)
-            inheritedTypography.values.forEach { actual ->
-                assertEquals(expectedTypography.fontSize, actual.fontSize)
-                assertEquals(expectedTypography.lineHeight, actual.lineHeight)
-                assertEquals(expectedTypography.letterSpacing, actual.letterSpacing)
-                expectedTypography.fontWeight?.let { assertEquals(it, actual.fontWeight) }
-                expectedTypography.fontFamily?.let { assertEquals(it, actual.fontFamily) }
-                expectedTypography.fontStyle?.let { assertEquals(it, actual.fontStyle) }
-            }
-        }
     }
 
     @Test

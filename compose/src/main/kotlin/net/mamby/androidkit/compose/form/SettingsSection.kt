@@ -1,48 +1,15 @@
 package net.mamby.androidkit.compose.form
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderColors
-import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchColors
-import androidx.compose.material3.SwitchDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSliderState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
-import net.mamby.androidkit.compose.presentation.SectionCardEntryContent
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
-import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardInteraction
+import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardControlColors
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry
-import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitSettingSectionStyle
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
@@ -135,14 +102,7 @@ internal fun SettingsSection(
     onEntryAction: ((SettingsEntryDefinition) -> Unit)? = null,
 ): Unit {
     AndroidKitSectionCard(
-        entries = entries.map { entry ->
-            AndroidKitSectionCardEntry.Custom(
-                key = entry.key,
-                interaction = settingsEntryInteraction(entry, onEntryAction),
-            ) {
-                SettingsEntry(entry, style, onEntryAction)
-            }
-        },
+        entries = entries.map { it.toSectionCardEntry(onEntryAction) },
         modifier = modifier,
         title = label,
         description = description,
@@ -150,15 +110,44 @@ internal fun SettingsSection(
         sectionSpacing = sectionSpacing,
         sectionTextPadding = sectionTextPadding,
         dividerPadding = dividerPadding,
-        customEntryLayoutModifier = { custom ->
-            val entry = entries.first { it.key == custom.key }
-            if (entry is SettingsEntryDefinition.Info) {
-                entry.modifier.heightIn(min = AndroidKitThemeTokens.dimensions.minimumTouchTarget)
-            } else {
-                entry.modifier
+        entryModifiers = entries.associate { it.key to it.modifier },
+        controlColors = entries.mapNotNull { entry ->
+            when (entry) {
+                is SettingsEntryDefinition.Toggle -> entry.key to AndroidKitSectionCardControlColors(switch = entry.colors)
+                is SettingsEntryDefinition.Slider -> entry.key to AndroidKitSectionCardControlColors(slider = entry.colors)
+                else -> null
             }
-        },
+        }.toMap(),
+        opacitySliderKeys = entries.filterIsInstance<SettingsEntryDefinition.Slider>()
+            .filter(SettingsEntryDefinition.Slider::isOpacitySlider).mapTo(mutableSetOf()) { it.key },
         entryContentPadding = entryContentPadding,
+    )
+}
+
+private fun SettingsEntryDefinition.toSectionCardEntry(
+    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
+): AndroidKitSectionCardEntry = when (this) {
+    is SettingsEntryDefinition.Button -> AndroidKitSectionCardEntry.Navigation(
+        key = key, label = label, supportingText = supportingText, icon = icon, enabled = enabled,
+        onClick = { onEntryAction?.invoke(this); onClick() },
+    )
+    is SettingsEntryDefinition.CopyableInfo -> AndroidKitSectionCardEntry.CopyableInfo(
+        key = key, label = label, supportingText = supportingText, icon = icon,
+        actionLabel = onClickLabel, onClick = { onEntryAction?.invoke(this); onClick() },
+    )
+    is SettingsEntryDefinition.Toggle -> AndroidKitSectionCardEntry.Toggle(
+        key = key, label = label, supportingText = supportingText, icon = icon, enabled = enabled,
+        checked = checked,
+        onCheckedChange = { value -> onEntryAction?.invoke(this); onCheckedChange(value) },
+    )
+    is SettingsEntryDefinition.Info -> AndroidKitSectionCardEntry.InlineInfo(
+        key = key, label = label, supportingText = supportingText, icon = icon, value = value,
+    )
+    is SettingsEntryDefinition.Slider -> AndroidKitSectionCardEntry.Slider(
+        key = key, label = label, supportingText = supportingText, icon = icon, enabled = enabled,
+        value = value, onValueChange = onValueChange, valueRange = valueRange, steps = steps,
+        valueLabel = valueLabel, minimumLabel = minimumLabel, maximumLabel = maximumLabel,
+        onValueChangeFinished = { onEntryAction?.invoke(this); onValueChangeFinished?.invoke() },
     )
 }
 
@@ -364,213 +353,4 @@ internal sealed interface SettingsEntryDefinition {
         override val searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) : SettingsEntryDefinition
 
-}
-
-private fun settingsEntryInteraction(
-    entry: SettingsEntryDefinition,
-    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
-): AndroidKitSectionCardInteraction? = when (entry) {
-    is SettingsEntryDefinition.Button -> AndroidKitSectionCardInteraction.Click(
-        enabled = entry.enabled,
-        onClick = { onEntryAction?.invoke(entry); entry.onClick() },
-    )
-    is SettingsEntryDefinition.CopyableInfo -> AndroidKitSectionCardInteraction.Click(
-        actionLabel = entry.onClickLabel,
-        onClick = { onEntryAction?.invoke(entry); entry.onClick() },
-    )
-    is SettingsEntryDefinition.Toggle -> AndroidKitSectionCardInteraction.Toggle(
-        checked = entry.checked,
-        enabled = entry.enabled,
-        onCheckedChange = { value -> onEntryAction?.invoke(entry); entry.onCheckedChange(value) },
-    )
-    is SettingsEntryDefinition.Info, is SettingsEntryDefinition.Slider -> null
-}
-
-@Composable
-private fun SettingsEntry(
-    entry: SettingsEntryDefinition,
-    style: AndroidKitSettingSectionStyle,
-    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
-) {
-    if (entry is SettingsEntryDefinition.Slider) {
-        SettingsSliderEntry(entry, style, onEntryAction)
-        return
-    }
-    SectionCardEntryContent(
-        label = entry.label,
-        supportingText = entry.supportingText,
-        icon = entry.icon,
-        modifier = Modifier.fillMaxWidth(),
-        style = style,
-    ) {
-        when (entry) {
-            is SettingsEntryDefinition.Button -> Box(
-                modifier = Modifier.size(
-                    AndroidKitIcons.ChevronRight.defaultWidth,
-                    AndroidKitIcons.ChevronRight.defaultHeight,
-                ),
-                contentAlignment = Alignment.CenterEnd,
-            ) {
-                Icon(
-                    imageVector = AndroidKitIcons.SettingsChevronRight,
-                    contentDescription = null,
-                    modifier = Modifier.size(
-                        AndroidKitIcons.SettingsChevronRight.defaultWidth,
-                        AndroidKitIcons.SettingsChevronRight.defaultHeight,
-                    ),
-                    tint = style.secondaryContentColor,
-                )
-            }
-            is SettingsEntryDefinition.CopyableInfo -> Icon(
-                imageVector = AndroidKitIcons.Copy,
-                contentDescription = null,
-                tint = style.secondaryContentColor,
-            )
-            is SettingsEntryDefinition.Info -> entry.value?.let {
-                Text(it, style = style.valueLabelTextStyle, color = style.secondaryContentColor)
-            }
-            is SettingsEntryDefinition.Toggle -> Switch(
-                checked = entry.checked,
-                onCheckedChange = null,
-                enabled = entry.enabled,
-                colors = entry.colors ?: SwitchDefaults.colors(),
-            )
-            is SettingsEntryDefinition.Slider -> Unit
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SettingsSliderEntry(
-    entry: SettingsEntryDefinition.Slider,
-    style: AndroidKitSettingSectionStyle,
-    onEntryAction: ((SettingsEntryDefinition) -> Unit)?,
-): Unit {
-    val tokens = AndroidKitThemeTokens.componentTokens.settingsSlider
-    val dimensions = AndroidKitThemeTokens.dimensions
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(tokens.trackSpacing),
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(tokens.labelContentSpacing),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            entry.icon?.let {
-                Icon(
-                    imageVector = it,
-                    contentDescription = null,
-                )
-            }
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(tokens.supportingTextSpacing),
-            ) {
-                Text(
-                    text = entry.label,
-                    style = style.entryLabelTextStyle,
-                )
-                entry.supportingText?.let {
-                    Text(
-                        text = it,
-                        style = style.supportingTextStyle,
-                        color = style.secondaryContentColor,
-                    )
-                }
-            }
-            entry.valueLabel?.let {
-                Text(
-                    text = it,
-                    style = style.valueLabelTextStyle,
-                    color = style.secondaryContentColor,
-                )
-            }
-        }
-        val colors = entry.colors ?: if (entry.isOpacitySlider) {
-            SliderDefaults.colors(thumbColor = AndroidKitThemeTokens.colorScheme.onPrimary)
-        } else {
-            SliderDefaults.colors()
-        }
-        val interactionSource = remember { MutableInteractionSource() }
-        val sliderState = rememberSliderState(
-            value = entry.value,
-            steps = entry.steps,
-            trackRange = entry.valueRange,
-        )
-        SideEffect {
-            sliderState.value = entry.value
-        }
-        Slider(
-            state = sliderState,
-            onValueChange = entry.onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .semantics { contentDescription = entry.label },
-            onValueChangeFinished = {
-                onEntryAction?.invoke(entry)
-                entry.onValueChangeFinished?.invoke()
-            },
-            enabled = entry.enabled,
-            colors = colors,
-            interactionSource = interactionSource,
-            thumb = {
-                if (entry.isOpacitySlider) {
-                    Box(
-                        Modifier
-                            .size(tokens.opacityThumbSize)
-                            .dropShadow(
-                                shape = CircleShape,
-                                shadow = Shadow(
-                                    radius = dimensions.spaceExtraSmall,
-                                    spread = 0.dp,
-                                    offset = DpOffset.Zero,
-                                    color = if (entry.enabled) {
-                                        AndroidKitThemeTokens.colorScheme.outlineVariant
-                                    } else {
-                                        Color.Transparent
-                                    },
-                                ),
-                            )
-                            .clip(CircleShape)
-                            .background(
-                                color = if (entry.enabled) colors.thumbColor else colors.disabledThumbColor,
-                                shape = CircleShape,
-                            )
-                            .indication(interactionSource, ripple()),
-                    )
-                } else {
-                    SliderDefaults.Thumb(
-                        interactionSource = interactionSource,
-                        colors = colors,
-                        enabled = entry.enabled,
-                    )
-                }
-            },
-            track = { sliderState ->
-                if (entry.isOpacitySlider) {
-                    SliderDefaults.Track(
-                        sliderState = sliderState,
-                        colors = colors,
-                        enabled = entry.enabled,
-                        drawStopIndicator = null,
-                        drawTick = { _, _ -> },
-                        thumbTrackGapSize = 0.dp,
-                    )
-                } else {
-                    SliderDefaults.Track(
-                        sliderState = sliderState,
-                        colors = colors,
-                        enabled = entry.enabled,
-                    )
-                }
-            },
-        )
-        if (entry.minimumLabel != null && entry.maximumLabel != null) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(entry.minimumLabel, style = style.supportingTextStyle, color = style.secondaryContentColor)
-                Text(entry.maximumLabel, style = style.supportingTextStyle, color = style.secondaryContentColor)
-            }
-        }
-    }
 }

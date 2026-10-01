@@ -1,38 +1,44 @@
 package net.mamby.androidkit.compose.action
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.isSecondaryPressed
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.isSecondaryPressed
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.disabled
+import androidx.compose.ui.semantics.onLongClick
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.window.PopupProperties
 import net.mamby.androidkit.compose.R
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+
 
 /**
  * Wraps non-interactive app content with a point-anchored context menu.
@@ -47,6 +53,20 @@ public fun AndroidKitContextMenu(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+): Unit {
+    AndroidKitContextMenuContent(menu, modifier, enabled, onClick, null, null, content)
+}
+
+/** Section-card entries retain their localized primary-action semantics on the menu anchor. */
+@Composable
+internal fun AndroidKitContextMenuContent(
+    menu: AndroidKitActionFlyoutScope.() -> Unit,
+    modifier: Modifier,
+    enabled: Boolean,
+    onClick: (() -> Unit)?,
+    onClickLabel: String?,
+    role: Role?,
     content: @Composable () -> Unit,
 ): Unit {
     val tokens = AndroidKitThemeTokens.componentTokens.contextMenu
@@ -94,7 +114,10 @@ public fun AndroidKitContextMenu(
         }
 
     val trigger = when {
-        !enabled -> Modifier.semantics { disabled() }
+        !enabled -> Modifier.semantics(mergeDescendants = true) {
+            disabled()
+            role?.let { this.role = it }
+        }
         onClick != null -> Modifier.semantics {
             onLongClick(label) {
                 openFromKeyboard()
@@ -102,6 +125,8 @@ public fun AndroidKitContextMenu(
             }
         }.combinedClickable(
             onClick = onClick,
+            onClickLabel = onClickLabel,
+            role = role,
             onLongClickLabel = label,
             onLongClick = {
                 position = pressPosition
@@ -125,7 +150,13 @@ public fun AndroidKitContextMenu(
             .focusable()
     }
 
-    Box(modifier.then(input).then(trigger)) {
+    Box(
+        modifier
+            .background(if (expanded && enabled) tokens.selectedContainerColor else Color.Transparent)
+            .semantics { selected = expanded && enabled }
+            .then(input)
+            .then(trigger),
+    ) {
         content()
         ActionFlyoutPopup(
             expanded = expanded && enabled,
