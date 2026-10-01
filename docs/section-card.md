@@ -40,6 +40,28 @@ Button or Switch role. A supplied click action label must be nonblank and locali
 otherwise accessibility uses the body's visible text. Built-in Action entries and
 Settings use this same interaction renderer.
 
+Click also accepts optional `onLongClick` and `longClickLabel` parameters. Supply
+a localized, nonblank label such as "Open contact actions" for accessibility.
+Tap and long press both cover the entire entry, including its padding. The Kit
+uses Compose `combinedClickable` when a long-click callback is supplied, retaining
+normal `clickable` behavior otherwise. Disabled entries invoke neither callback.
+The callback can request a context menu or another host-owned contextual action;
+the entry does not automatically create or position a menu.
+
+```kotlin
+AndroidKitSectionCardEntry.Custom(
+    key = "contact",
+    interaction = AndroidKitSectionCardInteraction.Click(
+        onClick = onOpenContact,
+        actionLabel = openContactLabel,
+        onLongClick = onShowContactActions,
+        longClickLabel = contactActionsLabel,
+    ),
+) {
+    Text(contactName)
+}
+```
+
 Custom bodies must omit equivalent outer padding, full-row `clickable`/`toggleable`,
 and minimum touch-target sizing when an interaction is supplied. Render a toggle's
 Switch with `onCheckedChange = null` so the wrapper owns the action. Hosts still own

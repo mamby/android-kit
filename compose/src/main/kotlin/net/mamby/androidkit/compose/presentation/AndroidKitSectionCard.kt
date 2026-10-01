@@ -2,6 +2,7 @@ package net.mamby.androidkit.compose.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -81,10 +82,15 @@ public sealed interface AndroidKitSectionCardInteraction {
         public val onClick: () -> Unit,
         public val actionLabel: String? = null,
         public val enabled: Boolean = true,
+        public val onLongClick: (() -> Unit)? = null,
+        public val longClickLabel: String? = null,
     ) : AndroidKitSectionCardInteraction {
         init {
             require(actionLabel == null || actionLabel.isNotBlank()) {
                 "Section card action labels must not be blank when supplied."
+            }
+            require(longClickLabel == null || longClickLabel.isNotBlank()) {
+                "Section card long-click labels must not be blank when supplied."
             }
         }
     }
@@ -254,12 +260,23 @@ private fun SectionCardEntry(
 private fun Modifier.sectionCardInteraction(interaction: AndroidKitSectionCardInteraction?): Modifier {
     val modifier = when (interaction) {
         null -> return this
-        is AndroidKitSectionCardInteraction.Click -> clickable(
-            enabled = interaction.enabled,
-            onClickLabel = interaction.actionLabel,
-            role = Role.Button,
-            onClick = interaction.onClick,
-        )
+        is AndroidKitSectionCardInteraction.Click -> if (interaction.onLongClick != null) {
+            combinedClickable(
+                enabled = interaction.enabled,
+                onClickLabel = interaction.actionLabel,
+                role = Role.Button,
+                onLongClickLabel = interaction.longClickLabel,
+                onLongClick = interaction.onLongClick,
+                onClick = interaction.onClick,
+            )
+        } else {
+            clickable(
+                enabled = interaction.enabled,
+                onClickLabel = interaction.actionLabel,
+                role = Role.Button,
+                onClick = interaction.onClick,
+            )
+        }
         is AndroidKitSectionCardInteraction.Toggle -> toggleable(
             value = interaction.checked,
             enabled = interaction.enabled,
