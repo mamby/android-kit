@@ -172,6 +172,29 @@ internal object AndroidKitIcons {
         }
     }
 
+    // Tight horizontal bounds include the round stroke; the vertical viewport
+    // matches ChevronRight so settings can align its painted edge without scaling.
+    val SettingsChevronRight: ImageVector = ImageVector.Builder(
+        name = "AndroidKit.SettingsChevronRight",
+        defaultWidth = 8.dp,
+        defaultHeight = LucideIconSize,
+        viewportWidth = 8f,
+        viewportHeight = LucideViewportSize,
+        autoMirror = true,
+    ).apply {
+        path(
+            fill = null,
+            stroke = LucideStroke,
+            strokeLineWidth = LucideStrokeWidth,
+            strokeLineCap = StrokeCap.Round,
+            strokeLineJoin = StrokeJoin.Round,
+        ) {
+            moveTo(1f, 18f)
+            lineTo(7f, 12f)
+            lineTo(1f, 6f)
+        }
+    }.build()
+
     val Close: ImageVector = lucideIcon(name = "X") {
         path(
             fill = null,

@@ -404,11 +404,23 @@ private fun SettingsEntry(
         style = style,
     ) {
         when (entry) {
-            is SettingsEntryDefinition.Button -> Icon(
-                imageVector = AndroidKitIcons.ChevronRight,
-                contentDescription = null,
-                tint = style.secondaryContentColor,
-            )
+            is SettingsEntryDefinition.Button -> Box(
+                modifier = Modifier.size(
+                    AndroidKitIcons.ChevronRight.defaultWidth,
+                    AndroidKitIcons.ChevronRight.defaultHeight,
+                ),
+                contentAlignment = Alignment.CenterEnd,
+            ) {
+                Icon(
+                    imageVector = AndroidKitIcons.SettingsChevronRight,
+                    contentDescription = null,
+                    modifier = Modifier.size(
+                        AndroidKitIcons.SettingsChevronRight.defaultWidth,
+                        AndroidKitIcons.SettingsChevronRight.defaultHeight,
+                    ),
+                    tint = style.secondaryContentColor,
+                )
+            }
             is SettingsEntryDefinition.CopyableInfo -> Icon(
                 imageVector = AndroidKitIcons.Copy,
                 contentDescription = null,

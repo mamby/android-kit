@@ -485,8 +485,8 @@ private fun SettingsPicker(picker: SettingsPickerDefinition, onDismiss: () -> Un
                             onClick = { selection.onSelected(option.id); onDismiss() },
                         )
                         .heightIn(min = dimensions.minimumTouchTarget)
-                        .padding(horizontal = dimensions.spaceMedium,
-                            vertical = dimensions.settingSectionEntryVerticalPadding),
+                        .padding(horizontal = dimensions.settingsPickerHorizontalPadding,
+                            vertical = dimensions.settingsPickerVerticalPadding),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(dimensions.spaceMedium),
                 ) {
