@@ -154,7 +154,7 @@ internal class AndroidKitActionFlyoutTokens(
     val itemEndPadding: Dp = dimensions.spaceLarge
     val separatorHorizontalPadding: Dp = dimensions.spaceMedium
     val separatorVerticalPadding: Dp = dimensions.spaceExtraSmall
-    val itemTextStyle: TextStyle = typography.labelLarge
+    val itemTextStyle: TextStyle = typography.bodyLarge
 }
 
 @Immutable

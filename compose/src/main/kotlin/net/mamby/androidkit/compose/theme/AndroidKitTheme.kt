@@ -190,7 +190,7 @@ public data class AndroidKitDimensions(
     public val floatingNavigationItemVerticalPadding: Dp = 0.dp,
     public val floatingNavigationLabelSpacing: Dp = 0.dp,
     public val floatingActionBarIconSize: Dp = 18.dp,
-    public val actionFlyoutIconSize: Dp = 24.dp,
+    public val actionFlyoutIconSize: Dp = 20.dp,
     public val pageTitleBarButtonSize: Dp = 44.dp,
     public val pageTitleBarVerticalPadding: Dp = spaceSmall,
     public val floatingActionButtonSize: Dp = 56.dp,
