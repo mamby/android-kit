@@ -4,6 +4,13 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.produceState
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.Alignment
+import kotlinx.coroutines.CancellationException
+import net.mamby.androidkit.compose.layout.AndroidKitPage
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,8 +29,43 @@ public fun AndroidKitSettingsSearchPage(
     var query by rememberSaveable { mutableStateOf("") }
     var activePicker by rememberSaveable { mutableStateOf<String?>(null) }
     val strings = AndroidKitThemeTokens.strings
+    val history = catalog.search.history
+    val snapshot by produceState<Result<AndroidKitSearchHistorySnapshot>?>(null, history) {
+        value = null
+        try {
+            history.snapshots.collect { value = Result.success(it) }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (failure: Exception) {
+            value = Result.failure(failure)
+        }
+    }
+    val storageFailure = snapshot?.exceptionOrNull()
+    LaunchedEffect(storageFailure) {
+        storageFailure?.let(catalog.search.onStorageFailure)
+    }
+    val saved = snapshot?.getOrNull()
+    if (saved == null) {
+        // Never flash history before its privacy preference loads, or replace unreadable data.
+        AndroidKitPage(title = strings.searchSettings, modifier = modifier, onBack = onBack) {
+            if (snapshot == null) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            }
+        }
+        return
+    }
     val lexicon = rememberSettingsSearchLexicon()
     val collected = collectCatalogSearchSections(catalog) { activePicker = it }
+    val preferenceFailure = collected.scopes.firstNotNullOfOrNull { it.storageFailure }
+    if (preferenceFailure != null || collected.scopes.any { it.waitingForStorage }) {
+        LaunchedEffect(preferenceFailure) { preferenceFailure?.let(catalog.search.onStorageFailure) }
+        AndroidKitPage(title = strings.searchSettings, modifier = modifier, onBack = onBack) {
+            if (preferenceFailure == null) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            }
+        }
+        return
+    }
     val searchableEntries = collected.sections.flatMap { source ->
         source.section.entries.filter { it.searchable }.map { entry ->
             val visibleText = listOfNotNull(
@@ -62,10 +104,15 @@ public fun AndroidKitSettingsSearchPage(
     AndroidKitSearchPage(
         query = query,
         onQueryChange = { query = it },
-        recentQueries = catalog.search.recentQueries,
-        onRecentQueriesChange = catalog.search.onRecentQueriesChange,
-        recentQueriesVisible = catalog.search.recentQueriesVisible,
-        onRecentQueriesVisibleChange = catalog.search.onRecentQueriesVisibleChange,
+        recentQueries = saved.recentQueries,
+        onRecentQueriesChange = { error("Settings history changes must use persistent operations.") },
+        recentQueriesVisible = saved.visible,
+        onRecentQueriesVisibleChange = { visible ->
+            history.submit(catalog.search.onStorageFailure) { setVisible(visible) }
+        },
+        onRecordRecent = { value -> history.submit(catalog.search.onStorageFailure) { record(value) } },
+        onRemoveRecent = { value -> history.submit(catalog.search.onStorageFailure) { remove(value) } },
+        onClearRecent = { history.submit(catalog.search.onStorageFailure) { clear() } },
         title = strings.searchSettings,
         noMatchesMessage = strings.noMatchingSettings,
         hasResults = matches.isNotEmpty(),
@@ -136,14 +183,14 @@ private fun collectCatalogSearchSections(
         val pageTitle = page.title ?: strings.about
         when (page) {
             is AndroidKitSettingsCatalogPage.Main -> {
-                val scope = SettingsPageScopeImpl(page.key, strings, openPicker)
+                val scope = SettingsPageScopeImpl(page.key, strings, catalog.search.onStorageFailure, openPicker)
                 AndroidKitSettingsPageScope().apply(page.content).render(scope)
                 scopes += scope
                 scope.items.forEach { sections += SearchableSettingsSection(page.key, pageTitle,
                     page.searchTerms, it, order++) }
             }
             is AndroidKitSettingsCatalogPage.Subpage -> {
-                val scope = SettingsPageScopeImpl(page.key, strings, openPicker)
+                val scope = SettingsPageScopeImpl(page.key, strings, catalog.search.onStorageFailure, openPicker)
                 AndroidKitSettingsPageScope().apply(page.content).render(scope)
                 scopes += scope
                 scope.items.forEach { sections += SearchableSettingsSection(page.key, pageTitle,

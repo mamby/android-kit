@@ -86,8 +86,9 @@ escape hatch. Migrate consumers and the demo with the library.
   also accept only their typed declarations; custom toolbar `item` is removed.
 - Settings: declare one keyed `AndroidKitSettingsCatalog` containing Main,
   subpages and optional About, then render a page by key. The same typed entries
-  power global search, whose result controls execute in place. Hosts own state,
-  callbacks, destinations, recent-query persistence and optional translated
+  power global search, whose result controls execute in place. Kit owns durable
+  Settings values and recent queries through required persistent bindings. Hosts own
+  effect callbacks, protected-change authorization, destinations and optional translated
   aliases for host content. Kit owns the Search title action, floating search
   page, matching behavior, built-in multilingual aliases, result chrome and
   predefined labels/icons. About remains fixed and is appended to Main when

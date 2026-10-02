@@ -26,15 +26,12 @@ private fun isSettingsSearchLanguageTag(tag: String): Boolean {
     }
 }
 
-/** Controlled navigation and persistent recent-query state for Settings search. */
+/** Controlled navigation with required Kit-owned persistent search storage. */
 public data class AndroidKitSettingsSearchConfiguration(
     public val onOpenSearch: () -> Unit,
-    public val recentQueries: List<String>,
-    public val onRecentQueriesChange: (List<String>) -> Unit,
-    /** Page-scoped visibility; hiding preserves and continues recording history. */
-    public val recentQueriesVisible: Boolean,
-    /** Required persistence callback for the always-available Kit-owned privacy control. */
-    public val onRecentQueriesVisibleChange: (Boolean) -> Unit,
+    public val history: AndroidKitPersistentSearchHistory,
+    /** Report load/write failures through the host's localized error presentation. */
+    public val onStorageFailure: (Throwable) -> Unit,
 )
 
 /** A complete Settings hierarchy used by regular pages and global search. */

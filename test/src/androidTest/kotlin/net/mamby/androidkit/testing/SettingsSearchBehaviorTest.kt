@@ -54,6 +54,11 @@ import org.junit.Test
 class SettingsSearchBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
+    @org.junit.Before fun synchronizePersistentStorage() {
+        SettingsPersistenceIdlingResource.reset()
+        rule.registerIdlingResource(SettingsPersistenceIdlingResource)
+    }
+
     @Before
     fun keepTestActivityScreenOn() {
         rule.activityRule.scenario.onActivity {
@@ -100,7 +105,7 @@ class SettingsSearchBehaviorTest {
                             toggle(
                                 key = "sync",
                                 label = "Sync",
-                                checked = enabled,
+                                persistence = testSetting("settingssearchbehaviortest-1", enabled),
                                 onCheckedChange = { enabled = it },
                             )
                         }
@@ -162,9 +167,9 @@ class SettingsSearchBehaviorTest {
         }
         rule.onNodeWithText("Theme").assertIsDisplayed()
         rule.onAllNodesWithContentDescription("Remove recent search")[0].performClick()
-        rule.runOnIdle { assertEquals(listOf("Privacy"), recents) }
+        rule.waitUntil { recents == listOf("Privacy") }
         rule.onNodeWithText("Clear all").performClick()
-        rule.runOnIdle { assertTrue(recents.isEmpty()) }
+        rule.waitUntil { recents.isEmpty() }
         rule.onNodeWithText("No recent searches").assertIsDisplayed()
     }
 
@@ -176,7 +181,7 @@ class SettingsSearchBehaviorTest {
         rule.setContent {
             TestKitTheme {
                 val catalog = androidKitSettingsCatalog(
-                    AndroidKitSettingsSearchConfiguration(
+                    rememberTestSettingsSearchConfiguration(
                         onOpenSearch = {},
                         recentQueries = recents,
                         onRecentQueriesChange = { recents = it },
@@ -205,8 +210,10 @@ class SettingsSearchBehaviorTest {
         search.performTextReplacement("")
         rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
         rule.onNodeWithContentDescription("Show recent searches").performClick()
+        rule.waitUntil { visible }
         rule.onNodeWithText("Sensitive setting").assertIsDisplayed()
         rule.onNodeWithContentDescription("Hide recent searches").performClick()
+        rule.waitUntil { !visible }
         rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
     }
 
@@ -261,14 +268,14 @@ class SettingsSearchBehaviorTest {
                                             AndroidKitSettingsSearchTerms(mapOf("fr" to listOf("noir"))),
                                         ),
                                     ),
-                                    selectedId = selectedTheme,
+                                    persistence = testSetting("settingssearchbehaviortest-2", selectedTheme),
                                     onSelected = { selectedTheme = it },
                                     systemOption = AndroidKitSettingsSystemOption("system", "Light"),
                                 ),
                             )
                             transparency(
                                 AndroidKitFloatingOpacitySetting(
-                                    value = opacity,
+                                    persistence = testSetting("settingssearchbehaviortest-3", opacity),
                                     onValueChange = { opacity = it },
                                     onValueChangeFinished = { opacityCommits++ },
                                 ),
@@ -371,7 +378,7 @@ class SettingsSearchBehaviorTest {
     @Test
     fun catalogRejectsDuplicatePageKeys() {
         assertThrows(IllegalArgumentException::class.java) {
-            androidKitSettingsCatalog(AndroidKitSettingsSearchConfiguration({}, emptyList(), {}, false, {})) {
+            androidKitSettingsCatalog(AndroidKitSettingsSearchConfiguration({}, net.mamby.androidkit.compose.form.AndroidKitSettingsStore.open(androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext, "duplicate-catalog", net.mamby.androidkit.compose.form.AndroidKitSettingsStorageProtection.Plaintext).searchHistory("test"), { throw it })) {
                 main("same", "Settings")
                 subpage("same", "Other")
             }

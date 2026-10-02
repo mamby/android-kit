@@ -15,6 +15,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.lifecycleScope
+import androidx.core.os.LocaleListCompat
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import net.mamby.androidkit.demo.ui.AndroidKitCatalogApp
 import net.mamby.androidkit.demo.ui.DemoSettingsRepository
 import net.mamby.androidkit.demo.ui.DemoSettingsViewModel
@@ -32,6 +38,21 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { !isContentReady }
         super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            val preferences = try {
+                settingsViewModel.kitSettingsStore.preferences.data.first()
+            } catch (failure: java.io.IOException) {
+                settingsViewModel.settingsStorageFailed(failure)
+                return@launch
+            }
+            val language = preferences[stringPreferencesKey("selected_language_tag")]
+            if (language != null) {
+                AppCompatDelegate.setApplicationLocales(
+                    language.takeUnless { it == "system" }?.let(LocaleListCompat::forLanguageTags)
+                        ?: LocaleListCompat.getEmptyLocaleList(),
+                )
+            }
+        }
         biometricPrompt = BiometricPrompt(
             this,
             ContextCompat.getMainExecutor(this),

@@ -18,16 +18,17 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemes
 @Composable
 internal fun TestKitTheme(
     definition: AndroidKitThemeDefinition = if (isSystemInDarkTheme()) AndroidKitThemes.Dark else AndroidKitThemes.Light,
-    content: @Composable () -> Unit,
+    content: @Composable TestSettingsPersistence.() -> Unit,
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
+    val persistence = remember(context) { TestSettingsPersistence(context) }
     val resources = remember(context, configuration) {
         context.createConfigurationContext(Configuration(configuration).apply {
             setLocales(LocaleList(Locale.ENGLISH))
         }).resources
     }
-    CompositionLocalProvider(LocalResources provides resources) {
-        AndroidKitTheme(definition = definition, content = content)
+    CompositionLocalProvider(LocalResources provides resources, LocalTestSettingsPersistence provides persistence) {
+        AndroidKitTheme(definition = definition) { persistence.content() }
     }
 }

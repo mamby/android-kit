@@ -1,10 +1,14 @@
 package net.mamby.androidkit.demo.ui.screen
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
+import net.mamby.androidkit.compose.form.AndroidKitSettingsStore
+import net.mamby.androidkit.compose.form.AndroidKitSettingsStorageProtection
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.res.stringResource
 import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
@@ -20,9 +24,11 @@ import net.mamby.androidkit.demo.R
 @Preview(showBackground = true)
 @Composable
 private fun AppLockSettingsPreview() {
-    var recentQueriesVisible by rememberSaveable { mutableStateOf(true) }
-    var checked by rememberSaveable { mutableStateOf(true) }
-    var selected by rememberSaveable { mutableStateOf("5") }
+    val context = LocalContext.current
+    val store = remember(context) { AndroidKitSettingsStore.open(context, "app-lock-preview", AndroidKitSettingsStorageProtection.Plaintext) }
+    val history = remember(store) { store.searchHistory("preview") }
+    val coroutineScope = rememberCoroutineScope()
+    val appLock = store.setting(booleanPreferencesKey("app-lock"), true)
     val title = stringResource(R.string.settings_app_lock)
     val options = listOf(
         AndroidKitSettingsOption("0", stringResource(R.string.settings_lock_immediately)),
@@ -34,19 +40,18 @@ private fun AppLockSettingsPreview() {
         val catalog = androidKitSettingsCatalog(
             AndroidKitSettingsSearchConfiguration(
                 onOpenSearch = {},
-                recentQueries = emptyList(),
-                onRecentQueriesChange = {},
-                recentQueriesVisible = recentQueriesVisible,
-                onRecentQueriesVisibleChange = { recentQueriesVisible = it },
+                history = history,
+                onStorageFailure = { throw it },
             ),
         ) {
             main("preview", title) {
                 section("security") {
                     appLock(AndroidKitAppLockSetting(
-                        checked = checked, onCheckedChange = { checked = it },
+                        persistence = appLock, onCheckedChange = { coroutineScope.launch { appLock.set(it) } },
                         timeout = AndroidKitAppLockTimeoutSetting(
+                            persistence = store.setting(stringPreferencesKey("timeout"), "5"),
                             options = options,
-                            selectedId = selected, onSelected = { selected = it },
+                            onSelected = {},
                         ),
                         onLockNow = {},
                     ))

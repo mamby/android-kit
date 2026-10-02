@@ -82,6 +82,14 @@ internal fun AndroidKitCatalogApp(
     val writeFailure = settingsViewModel.settingsWriteFailure
     val saveFailedMessage = stringResource(R.string.settings_save_failed)
     val retryLabel = stringResource(R.string.action_retry)
+    val storageFailure = settingsViewModel.settingsStorageFailure
+    LaunchedEffect(storageFailure) {
+        if (storageFailure != null) {
+            previewedFloatingSurfaceOpacityLevel = settings.floatingSurfaceOpacityLevel
+            snackbarState.showSnackbar(saveFailedMessage)
+            settingsViewModel.dismissSettingsStorageFailure()
+        }
+    }
     LaunchedEffect(writeFailure, saveFailedMessage, retryLabel) {
         if (writeFailure != null) {
             previewedFloatingSurfaceOpacityLevel = settings.floatingSurfaceOpacityLevel
@@ -137,10 +145,8 @@ internal fun AndroidKitCatalogApp(
         val settingsCatalog = demoSettingsCatalog(
             onAbout = { navigation.navigate(AboutRoute) },
             onSearch = { navigation.navigate(SettingsSearchRoute) },
-            recentSearches = settings.recentSettingsSearches,
-            onRecentSearchesChange = settingsViewModel::setRecentSettingsSearches,
-            recentSearchesVisible = settings.recentSettingsSearchesVisible,
-            onRecentSearchesVisibleChange = settingsViewModel::setRecentSettingsSearchesVisible,
+            settingsStore = settingsViewModel.kitSettingsStore,
+            onSettingsStorageFailure = settingsViewModel::settingsStorageFailed,
             appLockEnabled = settings.appLockEnabled,
             appLockTimeout = settings.appLockTimeout,
             onAppLockTimeoutChange = settingsViewModel::setAppLockTimeout,

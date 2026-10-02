@@ -61,6 +61,7 @@ android {
 }
 
 dependencies {
+    api("androidx.datastore:datastore-preferences-core:1.2.1")
     api(project(":foundation"))
     api(platform(libs.compose.bom))
     api(libs.compose.foundation)

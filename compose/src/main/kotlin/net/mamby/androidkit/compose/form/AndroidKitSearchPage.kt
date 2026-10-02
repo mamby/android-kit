@@ -162,6 +162,9 @@ internal fun AndroidKitSearchPage(
     searchMode: AndroidKitSearchMode = AndroidKitSearchMode.Live,
     onSearch: (String) -> Unit = {},
     isSearching: Boolean = false,
+    onRecordRecent: ((String) -> Unit)? = null,
+    onRemoveRecent: ((String) -> Unit)? = null,
+    onClearRecent: (() -> Unit)? = null,
     results: LazyListScope.(recordRecent: () -> Unit) -> Unit,
 ): Unit {
     val tokens = AndroidKitThemeTokens.componentTokens.searchPage
@@ -169,6 +172,10 @@ internal fun AndroidKitSearchPage(
     fun recordRecent(valueToRecord: String = resultsQuery) {
         val value = valueToRecord.trim()
         if (value.isEmpty()) return
+        if (onRecordRecent != null) {
+            onRecordRecent(value)
+            return
+        }
         val normalized = normalizeSearchText(value)
         onRecentQueriesChange(
             (listOf(value) + recents.filterNot { normalizeSearchText(it) == normalized })
@@ -217,7 +224,7 @@ internal fun AndroidKitSearchPage(
                             visible = recentQueriesVisible,
                             onVisibilityChange = onRecentQueriesVisibleChange,
                             canClear = recentQueriesVisible && recents.isNotEmpty(),
-                            onClear = { onRecentQueriesChange(emptyList()) },
+                            onClear = { onClearRecent?.invoke() ?: onRecentQueriesChange(emptyList()) },
                         )
                     }
                 }
@@ -260,8 +267,12 @@ internal fun AndroidKitSearchPage(
                                             if (searchMode == AndroidKitSearchMode.Live) onSearch(recent)
                                         },
                                         onRemove = {
-                                            val removed = normalizeSearchText(recent)
-                                            onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
+                                            if (onRemoveRecent != null) {
+                                                onRemoveRecent(recent)
+                                            } else {
+                                                val removed = normalizeSearchText(recent)
+                                                onRecentQueriesChange(recents.filterNot { normalizeSearchText(it) == removed })
+                                            }
                                         },
                                     )
                                 }

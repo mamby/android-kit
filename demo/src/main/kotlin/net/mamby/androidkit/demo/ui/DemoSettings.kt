@@ -29,6 +29,11 @@ import kotlinx.coroutines.Job
 import net.mamby.androidkit.demo.ui.authentication.DemoAuthenticationState
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 import org.json.JSONArray
+import net.mamby.androidkit.compose.form.AndroidKitSettingsStore
+import net.mamby.androidkit.compose.form.AndroidKitSettingsStoreMigration
+import net.mamby.androidkit.compose.form.AndroidKitSettingsStorageProtection
+import net.mamby.androidkit.compose.form.AndroidKitSearchHistorySnapshot
+import kotlinx.coroutines.flow.first
 
 internal data class DemoSettings(
     val demoToggles: Set<DemoToggle> = DemoToggle.entries.filter { it.defaultValue }.toSet(),
@@ -79,7 +84,28 @@ internal enum class DemoFloatingNavigationLayout(
 }
 
 internal class DemoSettingsRepository(context: Context) {
-    private val dataStore = context.applicationContext.demoSettingsDataStore
+    private val legacyDataStore = context.applicationContext.demoSettingsDataStore
+    val kitSettingsStore = AndroidKitSettingsStore.open(
+        context, "demo-settings", AndroidKitSettingsStorageProtection.Plaintext,
+        listOf(object : AndroidKitSettingsStoreMigration {
+            override val id = "demo-settings-v1"
+            override suspend fun readHistories(): Map<String, AndroidKitSearchHistorySnapshot> {
+                val old = legacyDataStore.data.first()
+                return mapOf("settings" to AndroidKitSearchHistorySnapshot(
+                    old[RecentSettingsSearchesKey]?.let(::decodeStringList).orEmpty(),
+                    old[RecentSettingsSearchesVisibleKey] ?: true,
+                ))
+            }
+            override suspend fun readPreferences(): Preferences {
+                val preferences = legacyDataStore.data.first().toMutablePreferences()
+                preferences[stringPreferencesKey("selected_language_tag")] =
+                    androidx.core.app.LocaleManagerCompat.getApplicationLocales(context).get(0)?.language ?: "system"
+                return preferences.toPreferences()
+            }
+            override suspend fun cleanUp() = Unit
+        }),
+    )
+    private val dataStore = kitSettingsStore.preferences
 
     val settings: Flow<DemoSettings> = dataStore.data
         .catch { exception ->
@@ -212,6 +238,13 @@ internal class DemoSettingsRepository(context: Context) {
 internal class DemoSettingsViewModel(
     private val repository: DemoSettingsRepository,
 ) : ViewModel() {
+    val kitSettingsStore = repository.kitSettingsStore
+    var settingsStorageFailure by mutableStateOf<Throwable?>(null)
+        private set
+    fun settingsStorageFailed(@Suppress("UNUSED_PARAMETER") failure: Throwable) {
+        settingsStorageFailure = failure
+    }
+    fun dismissSettingsStorageFailure() { settingsStorageFailure = null }
     var unlocked by mutableStateOf(false)
         private set
     var authenticating by mutableStateOf(false)

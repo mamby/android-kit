@@ -2,6 +2,7 @@ package net.mamby.androidkit.compose.form
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -71,12 +72,15 @@ public data class AndroidKitSettingsSystemOption(
 }
 
 public data class AndroidKitSettingsSelection(
+    public val persistence: AndroidKitPersistentSetting<String>,
     public val options: List<AndroidKitSettingsOption>,
-    public val selectedId: String,
     public val onSelected: (String) -> Unit,
     public val enabled: Boolean = true,
     public val systemOption: AndroidKitSettingsSystemOption,
 ) {
+    public val selectedId: String get() = persistence.currentValue.takeIf { value ->
+        value == systemOption.id || options.any { it.id == value }
+    } ?: systemOption.id
     init {
         val allIds = options.map { it.id } + systemOption.id
         require(allIds.distinct().size == allIds.size) { "Option IDs must be unique." }
@@ -88,11 +92,12 @@ public data class AndroidKitSettingsSelection(
 public data class AndroidKitLanguageSetting(public val selection: AndroidKitSettingsSelection)
 
 public data class AndroidKitFloatingOpacitySetting(
-    public val value: Float,
+    public val persistence: AndroidKitPersistentSetting<Float>,
     public val onValueChange: (Float) -> Unit,
     public val onValueChangeFinished: () -> Unit,
     public val enabled: Boolean = true,
 ) {
+    public val value: Float get() = persistence.currentValue
     init {
         require(value.isFinite() && value in AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel..
             AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel) { "Opacity level must be between 0 and 100." }
@@ -100,11 +105,13 @@ public data class AndroidKitFloatingOpacitySetting(
 }
 
 public data class AndroidKitAppLockTimeoutSetting(
+    public val persistence: AndroidKitPersistentSetting<String>,
     public val options: List<AndroidKitSettingsOption>,
-    public val selectedId: String,
     public val onSelected: (String) -> Unit,
     public val enabled: Boolean = true,
 ) {
+    public val selectedId: String get() = persistence.currentValue.takeIf { value -> options.any { it.id == value } }
+        ?: options.first().id
     init {
         require(options.isNotEmpty()) { "Timeout options must not be empty." }
         require(options.map { it.id }.distinct().size == options.size) { "Timeout option IDs must be unique." }
@@ -113,13 +120,16 @@ public data class AndroidKitAppLockTimeoutSetting(
 }
 
 public data class AndroidKitAppLockSetting(
-    public val checked: Boolean,
+    public val persistence: AndroidKitPersistentSetting<Boolean>,
     public val onCheckedChange: (Boolean) -> Unit,
     public val errorMessage: String? = null,
     public val enabled: Boolean = true,
     public val timeout: AndroidKitAppLockTimeoutSetting? = null,
     public val onLockNow: (() -> Unit)? = null,
-)
+) {
+    /** Only the host's authenticated commit may change the durable preference. */
+    public val checked: Boolean get() = persistence.currentValue
+}
 
 @DslMarker
 public annotation class AndroidKitSettingsPageDsl
@@ -229,7 +239,7 @@ private fun AndroidKitSettingsPageContent(
     val page = requireNotNull(catalog.pagesByKey[pageKey]) { "Unknown Settings page key: $pageKey" }
     var activePicker by rememberSaveable(pageKey) { mutableStateOf<String?>(null) }
     val strings = AndroidKitThemeTokens.strings
-    val scope = SettingsPageScopeImpl(pageKey, strings) { activePicker = it }
+    val scope = SettingsPageScopeImpl(pageKey, strings, catalog.search.onStorageFailure) { activePicker = it }
     val sections = when (page) {
         is AndroidKitSettingsCatalogPage.Main -> {
             AndroidKitSettingsPageScope().apply(page.content).render(scope)
@@ -242,6 +252,15 @@ private fun AndroidKitSettingsPageContent(
         is AndroidKitSettingsCatalogPage.About -> settingsAboutSections(page.content)
     }
     val title = page.title ?: strings.about
+    if (scope.waitingForStorage || scope.storageFailure != null) {
+        LaunchedEffect(scope.storageFailure) { scope.storageFailure?.let(catalog.search.onStorageFailure) }
+        AndroidKitPage(title = title, modifier = modifier, onBack = onBack) {
+            if (scope.storageFailure == null) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { androidx.compose.material3.CircularProgressIndicator() }
+            }
+        }
+        return
+    }
     val searchAction = AndroidKitAction(AndroidKitIcons.Search, strings.searchSettings,
         catalog.search.onOpenSearch)
     val dimensions = AndroidKitThemeTokens.dimensions
@@ -300,18 +319,41 @@ internal data class SettingsPickerDefinition(
 internal class SettingsPageScopeImpl(
     private val pageKey: String,
     private val strings: AndroidKitStrings,
+    private val onStorageFailure: (Throwable) -> Unit,
     private val openPicker: (String) -> Unit,
 ) : SettingsPageRenderScope {
     val items = mutableListOf<SettingsRenderedSection>()
     val pickers = mutableMapOf<String, SettingsPickerDefinition>()
     val timeoutPickers = mutableMapOf<String, AndroidKitAppLockTimeoutSetting>()
     private val keys = mutableSetOf<String>()
+    private val bindings = mutableListOf<AndroidKitPersistentSetting<*>>()
+    val waitingForStorage: Boolean get() = bindings.any { it.loadedValue == null }
+    val storageFailure: Throwable? get() = bindings.firstNotNullOfOrNull { it.failure }
 
     private fun fullKey(key: String): String = "$pageKey:$key"
 
     private fun registerItem(item: SettingsRenderedSection) {
         require(keys.add(item.key)) { "Settings page keys must be unique: ${item.key}" }
-        items += item
+        items += item.copy(entries = item.entries.map { entry ->
+            when (entry) {
+                is SettingsEntryDefinition.Toggle -> {
+                    bindings += entry.persistence
+                    if (entry.protectedChange) entry else entry.copy(onCheckedChange = { value ->
+                        entry.persistence.submit(value, onStorageFailure) { entry.onCheckedChange(value) }
+                    })
+                }
+                is SettingsEntryDefinition.Slider -> {
+                    bindings += entry.persistence
+                    entry.copy(
+                        onValueChange = { value -> entry.persistence.preview(value); entry.onValueChange(value) },
+                        onValueChangeFinished = {
+                            entry.persistence.savePreview(onStorageFailure) { entry.onValueChangeFinished?.invoke() }
+                        },
+                    )
+                }
+                else -> entry
+            }
+        })
     }
 
     override fun section(
@@ -341,7 +383,7 @@ internal class SettingsPageScopeImpl(
             onTransparency = { setting ->
                 require(declaredKinds.add("transparency")) { "Duplicate transparency entry in $key" }
                 entries.entries += SettingsEntryDefinition.Slider(
-                    key = "transparency", label = strings.transparency, value = setting.value,
+                    key = "transparency", label = strings.transparency, persistence = setting.persistence,
                     onValueChange = setting.onValueChange, modifier = Modifier,
                     valueRange = AndroidKitFloatingSurfaceDefaults.MinimumOpacityLevel..
                         AndroidKitFloatingSurfaceDefaults.MaximumOpacityLevel,
@@ -356,13 +398,17 @@ internal class SettingsPageScopeImpl(
                 require(declaredKinds.add("appLock")) { "Duplicate app-lock entry in $key" }
                 val timeoutKey = "app-lock-timeout:$sectionKey"
                 val timeout = setting.timeout?.takeIf { setting.checked }
-                if (timeout != null && setting.enabled && timeout.enabled) timeoutPickers[timeoutKey] = timeout
+                if (timeout != null) bindings += timeout.persistence
+                if (timeout != null && setting.enabled && timeout.enabled) timeoutPickers[timeoutKey] = timeout.copy(
+                    onSelected = { value -> timeout.persistence.submit(value, onStorageFailure) { timeout.onSelected(value) } },
+                )
                 entries.toggle(
-                    key = "app-lock", label = strings.appLock, checked = setting.checked,
+                    key = "app-lock", label = strings.appLock, persistence = setting.persistence,
                     onCheckedChange = setting.onCheckedChange, supportingText = setting.errorMessage,
                     icon = AndroidKitIcons.AppLock, enabled = setting.enabled,
                     searchTerms = builtInSearchTerms("app-lock"),
                 )
+                entries.entries[entries.entries.lastIndex] = (entries.entries.last() as SettingsEntryDefinition.Toggle).copy(protectedChange = true)
                 timeout?.let { selection ->
                     entries.button(
                         key = "app-lock-timeout", label = strings.lockAfterLeavingApp,
@@ -393,8 +439,12 @@ internal class SettingsPageScopeImpl(
         strings: AndroidKitStrings,
     ) {
         val pickerKey = "$kind:$sectionKey"
-        pickers[pickerKey] = picker
-        val selection = picker.selection
+        val original = picker.selection
+        bindings += original.persistence
+        val selection = original.copy(onSelected = { value ->
+            original.persistence.submit(value, onStorageFailure) { original.onSelected(value) }
+        })
+        pickers[pickerKey] = picker.copy(selection = selection)
         val selectionLabel = if (kind == "theme") strings.theme else strings.language
         val options = selection.displayOptions(strings.system)
         button(

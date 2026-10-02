@@ -44,6 +44,11 @@ import org.junit.Test
 class SettingsPageBehaviorTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
+    @org.junit.Before fun synchronizePersistentStorage() {
+        SettingsPersistenceIdlingResource.reset()
+        rule.registerIdlingResource(SettingsPersistenceIdlingResource)
+    }
+
     @Test
     fun informationalRowsUpdateAndDisappearWithTheirSection() {
         var value by mutableStateOf("Before")
@@ -79,10 +84,10 @@ class SettingsPageBehaviorTest {
                 TestSettingsPage {
                     section("security", label = "Security") {
                         appLock(AndroidKitAppLockSetting(
-                        checked = checked, onCheckedChange = {},
+                        persistence = testSetting("settingspagebehaviortest-1", checked), onCheckedChange = {},
                         timeout = AndroidKitAppLockTimeoutSetting(
                             options = timeoutOptions,
-                            selectedId = selected, onSelected = { requested = it },
+                            persistence = testSetting("settingspagebehaviortest-2", selected), onSelected = { requested = it },
                         ),
                         onLockNow = { locks++ },
                         ))
@@ -99,8 +104,7 @@ class SettingsPageBehaviorTest {
         rule.onNode(hasText("Immediately") and radioRole).assertIsSelected()
         rule.onNode(hasText("After 5 minutes") and radioRole).performClick()
         rule.onNode(isDialog()).assertDoesNotExist()
-        rule.runOnIdle { assertEquals("5", requested) }
-        rule.onNodeWithText("Immediately").assertIsDisplayed()
+        rule.waitUntil { requested == "5" }
         rule.runOnIdle { selected = requireNotNull(requested) }
         rule.onNodeWithText("After 5 minutes").assertIsDisplayed()
         rule.onNodeWithText("Lock now").performClick()
@@ -115,10 +119,10 @@ class SettingsPageBehaviorTest {
                 TestSettingsPage {
                     section("security", label = "Security") {
                         appLock(AndroidKitAppLockSetting(
-                        checked = true, onCheckedChange = {},
+                        persistence = testSetting("settingspagebehaviortest-3", true), onCheckedChange = {},
                         timeout = AndroidKitAppLockTimeoutSetting(
                             options = timeoutOptions,
-                            selectedId = "5", onSelected = { requests++ },
+                            persistence = testSetting("settingspagebehaviortest-4", "5"), onSelected = { requests++ },
                         ),
                         ))
                     }
@@ -149,10 +153,10 @@ class SettingsPageBehaviorTest {
                     if (hasSection) {
                         section("security", label = "Security") {
                             appLock(AndroidKitAppLockSetting(
-                            checked = checked, onCheckedChange = {}, enabled = enabled,
+                            persistence = testSetting("settingspagebehaviortest-5", checked), onCheckedChange = {}, enabled = enabled,
                             timeout = if (hasTimeout) AndroidKitAppLockTimeoutSetting(
                                 options = timeoutOptions, enabled = timeoutEnabled,
-                                selectedId = "0", onSelected = {},
+                                persistence = testSetting("settingspagebehaviortest-6", "0"), onSelected = {},
                             ) else null,
                             onLockNow = {},
                             ))
@@ -226,7 +230,7 @@ class SettingsPageBehaviorTest {
                     section("general") {
                         language(AndroidKitLanguageSetting(AndroidKitSettingsSelection(
                             options = options,
-                            selectedId = selected,
+                            persistence = testSetting("settingspagebehaviortest-7", selected),
                             onSelected = { selected = it },
                             systemOption = AndroidKitSettingsSystemOption("system", "Device language"),
                         )))
@@ -260,7 +264,7 @@ class SettingsPageBehaviorTest {
                     section("general", label = "General") {
                         language(AndroidKitLanguageSetting(
                         selection = AndroidKitSettingsSelection(
-                            selectedId = selected, onSelected = { selected = it },
+                            persistence = testSetting("settingspagebehaviortest-8", selected), onSelected = { selected = it },
                             options = listOf(AndroidKitSettingsOption("en", "English"), AndroidKitSettingsOption("fr", "Français")),
                             systemOption = AndroidKitSettingsSystemOption("system", "English"),
                         ),
@@ -293,7 +297,7 @@ class SettingsPageBehaviorTest {
                 TestSettingsPage {
                     section("general", label = "General") {
                         theme(AndroidKitSettingsSelection(
-                        selectedId = selected, onSelected = { selected = it },
+                        persistence = testSetting("settingspagebehaviortest-9", selected), onSelected = { selected = it },
                         options = listOf(AndroidKitSettingsOption("light", "Light"), AndroidKitSettingsOption("prism", "Prism")),
                         systemOption = AndroidKitSettingsSystemOption("system", "Light"),
                         ))
@@ -313,7 +317,7 @@ class SettingsPageBehaviorTest {
                 TestSettingsPage {
                     section("general", label = "General") {
                         theme(AndroidKitSettingsSelection(
-                        selectedId = "system", onSelected = {},
+                        persistence = testSetting("settingspagebehaviortest-10", "system"), onSelected = {},
                         options = listOf(AndroidKitSettingsOption("light", "Light")),
                         systemOption = AndroidKitSettingsSystemOption(
                             id = "system", currentValueLabel = "Light",
@@ -340,13 +344,13 @@ class SettingsPageBehaviorTest {
                 TestSettingsPage {
                     section("general", label = "General") {
                         transparency(AndroidKitFloatingOpacitySetting(
-                        value = level,
+                        persistence = testSetting("settingspagebehaviortest-11", level),
                         onValueChange = { level = it }, onValueChangeFinished = { commits++ },
                         ))
                     }
                     section("security", label = "Security") {
                         appLock(AndroidKitAppLockSetting(
-                        checked = false, onCheckedChange = { lockRequests++ },
+                        persistence = testSetting("settingspagebehaviortest-12", false), onCheckedChange = { lockRequests++ },
                         ))
                     }
                 }
@@ -369,7 +373,7 @@ class SettingsPageBehaviorTest {
                 TestSettingsPage {
                     section("general", label = "General") {
                         transparency(AndroidKitFloatingOpacitySetting(
-                        value = level,
+                        persistence = testSetting("settingspagebehaviortest-13", level),
                         onValueChange = { level = it }, onValueChangeFinished = {},
                         ))
                     }
@@ -396,18 +400,18 @@ class SettingsPageBehaviorTest {
             TestKitTheme {
                 TestSettingsPage {
                     section("visibility") {
-                        toggle("show-language", "Show language", showLanguage, { showLanguage = it })
+                        toggle("show-language", "Show language", testSetting("show-language", showLanguage), { showLanguage = it })
                     }
                     section("general", label = "General") {
                         if (showLanguage) language(AndroidKitLanguageSetting(
                             selection = AndroidKitSettingsSelection(
-                                selectedId = "en", onSelected = {},
+                                persistence = testSetting("settingspagebehaviortest-14", "en"), onSelected = {},
                                 options = listOf(AndroidKitSettingsOption("en", "English")),
                                 systemOption = AndroidKitSettingsSystemOption("system", "English"),
                             ),
                         ))
                         theme(AndroidKitSettingsSelection(
-                            selectedId = "light", onSelected = {},
+                            persistence = testSetting("settingspagebehaviortest-15", "light"), onSelected = {},
                             options = listOf(AndroidKitSettingsOption("light", "Light")),
                             systemOption = AndroidKitSettingsSystemOption("system", "Light"),
                         ))

@@ -46,7 +46,7 @@ public sealed interface AndroidKitSettingSectionScope {
     public fun toggle(
         key: String,
         label: String,
-        checked: Boolean,
+        persistence: AndroidKitPersistentSetting<Boolean>,
         onCheckedChange: (Boolean) -> Unit,
         modifier: Modifier = Modifier,
         supportingText: String? = null,
@@ -60,7 +60,7 @@ public sealed interface AndroidKitSettingSectionScope {
     public fun slider(
         key: String,
         label: String,
-        value: Float,
+        persistence: AndroidKitPersistentSetting<Float>,
         onValueChange: (Float) -> Unit,
         modifier: Modifier = Modifier,
         valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
@@ -182,7 +182,7 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
     override fun toggle(
         key: String,
         label: String,
-        checked: Boolean,
+        persistence: AndroidKitPersistentSetting<Boolean>,
         onCheckedChange: (Boolean) -> Unit,
         modifier: Modifier,
         supportingText: String?,
@@ -196,7 +196,7 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
         entries += SettingsEntryDefinition.Toggle(
             key = key,
             label = label,
-            checked = checked,
+            persistence = persistence,
             onCheckedChange = onCheckedChange,
             modifier = modifier,
             supportingText = supportingText,
@@ -211,7 +211,7 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
     override fun slider(
         key: String,
         label: String,
-        value: Float,
+        persistence: AndroidKitPersistentSetting<Float>,
         onValueChange: (Float) -> Unit,
         modifier: Modifier,
         valueRange: ClosedFloatingPointRange<Float>,
@@ -229,7 +229,7 @@ internal class SettingSectionScopeImpl : AndroidKitSettingSectionScope {
         entries += SettingsEntryDefinition.Slider(
             key = key,
             label = label,
-            value = value,
+            persistence = persistence,
             onValueChange = onValueChange,
             modifier = modifier,
             valueRange = valueRange,
@@ -295,10 +295,10 @@ internal sealed interface SettingsEntryDefinition {
         override val searchTerms: AndroidKitSettingsSearchTerms? = null,
     ) : SettingsEntryDefinition
 
-    class Toggle(
+    data class Toggle(
         override val key: String,
         override val label: String,
-        val checked: Boolean,
+        val persistence: AndroidKitPersistentSetting<Boolean>,
         val onCheckedChange: (Boolean) -> Unit,
         override val modifier: Modifier,
         override val supportingText: String?,
@@ -307,12 +307,15 @@ internal sealed interface SettingsEntryDefinition {
         val colors: SwitchColors?,
         override val searchable: Boolean = true,
         override val searchTerms: AndroidKitSettingsSearchTerms? = null,
-    ) : SettingsEntryDefinition
+        val protectedChange: Boolean = false,
+    ) : SettingsEntryDefinition {
+        val checked: Boolean get() = persistence.currentValue
+    }
 
-    class Slider(
+    data class Slider(
         override val key: String,
         override val label: String,
-        val value: Float,
+        val persistence: AndroidKitPersistentSetting<Float>,
         val onValueChange: (Float) -> Unit,
         override val modifier: Modifier,
         val valueRange: ClosedFloatingPointRange<Float>,
@@ -328,7 +331,9 @@ internal sealed interface SettingsEntryDefinition {
         val isOpacitySlider: Boolean = false,
         override val searchable: Boolean = true,
         override val searchTerms: AndroidKitSettingsSearchTerms? = null,
-    ) : SettingsEntryDefinition
+    ) : SettingsEntryDefinition {
+        val value: Float get() = persistence.currentValue
+    }
 
     class Info(
         override val key: String,

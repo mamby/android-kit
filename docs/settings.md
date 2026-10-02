@@ -9,10 +9,8 @@ the page that contains it.
 val catalog = androidKitSettingsCatalog(
     search = AndroidKitSettingsSearchConfiguration(
         onOpenSearch = onOpenSearch,
-        recentQueries = recentQueries,
-        onRecentQueriesChange = onRecentQueriesChange,
-        recentQueriesVisible = recentQueriesVisible,
-        onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
+        history = settingsStore.searchHistory("settings"),
+        onStorageFailure = onSettingsStorageFailure,
     ),
 ) {
     main(key = "main", title = settingsTitle) {
@@ -22,7 +20,7 @@ val catalog = androidKitSettingsCatalog(
             toggle(
                 key = "autoplay",
                 label = autoplayLabel,
-                checked = autoplay,
+                persistence = settingsStore.setting(booleanPreferencesKey("autoplay"), false),
                 onCheckedChange = onAutoplay,
             )
         }
@@ -51,8 +49,8 @@ nonblank page keys, and nonblank titles. Section keys are unique within a page;
 custom entry keys are unique within a section. Stable keys do not depend on
 translated labels or list positions.
 
-Hosts own section titles, grouping, custom labels, state, persistence, callbacks,
-destinations, and custom title-bar actions. Kit owns predefined labels, icons,
+Hosts own section titles, grouping, custom labels, effect callbacks,
+destinations, and custom title-bar actions. Kit owns durable Settings state, predefined labels, icons,
 rendering, picker chrome, About order, the Search action, and search-page chrome.
 Use `searchable = false` for transient messages or custom rows that should not
 appear in search.
@@ -81,7 +79,7 @@ for the floating field, recent searches, empty states, scrolling and managed
 clearance. Opening the page focuses its input and requests the software keyboard.
 The Settings adapter owns catalog indexing and result controls;
 results remain in the current app language. The search configuration requires
-page-scoped recent-query visibility and its persistence callback, using the
+page-scoped persistent history and a storage-failure callback, using the
 shared hide/show behavior described in the search-page contract.
 
 Matching is case-, accent-, punctuation-, and whitespace-insensitive. Every query
@@ -102,7 +100,7 @@ For host-owned entries, the current rendered text is always searchable. Supply
 optional `AndroidKitSettingsSearchTerms` maps on pages, sections, entries, legal
 entries, or options to add translated labels and aliases from other languages.
 
-Recent queries are controlled host state. Android Kit trims submitted queries,
+Recent queries are Kit-owned durable state. Android Kit trims submitted queries,
 deduplicates them case/accent-insensitively, moves the newest spelling first, and
 keeps at most ten. A query is recorded after IME submission or a result action;
 typing and selecting an existing recent query do not change history. The host
@@ -121,5 +119,36 @@ search terms.
 Remove `AndroidKitSettingsPageConfiguration` and construct one catalog containing
 all former Main, Subpage, and About declarations. Move each page title, actions,
 and content into `main`, `subpage`, or `about`; render by `pageKey`; and add the
-host search route. Add stable keys to custom entries and persist the controlled
-recent-query list. Existing host navigation and setting callbacks remain valid.
+host search route. Add stable keys to custom entries and bind editable values to
+the Kit store. Host navigation and effect callbacks remain available.
+
+## Persistent settings (0.1.52-SNAPSHOT)
+
+Open `AndroidKitSettingsStore` once in the application's singleton DI provider,
+with a stable store name and an explicit `Plaintext` or `Encrypted` protection policy.
+The store uses transactional AndroidX DataStore under app-private `noBackupFilesDir`;
+encrypted stores use a non-exportable Android Keystore AES-GCM key. Configure
+one-time `AndroidKitSettingsStoreMigration` imports on that first call. Existing
+values take precedence over imports, and migration cleanup follows a successful write.
+History and preference imports are separate transactions with separate completion markers.
+
+Every editable Settings declaration requires an `AndroidKitPersistentSetting`:
+String for selections, Boolean for toggles/app lock, and Float for sliders/transparency.
+Create bindings with `store.setting(preferencesKey, defaultValue)`. Screen-local values
+and arbitrary persistence adapters cannot satisfy this API. History requires
+`store.searchHistory(stablePageKey)` and keeps its visibility preference with its queries.
+Use distinct page keys for separate histories such as Settings and About.
+
+Kit loads persisted values before showing controls, writes ordinary changes before
+calling host effect callbacks, and keeps writes independent of composition/navigation.
+Sliders preview while dragging and persist on completion. App lock remains an
+authorization request: after successful authentication, the host commits to the same
+Kit binding or `store.preferences`; rejection leaves the saved preference unchanged.
+Hosts still apply theme/locale/security effects and must restore those effects from the
+saved preferences on startup. Existing host repositories can use `store.preferences`
+as their DataStore to retain their keys and all additional preferences.
+
+Storage failures are reported through the required callback. Unreadable or unauthenticated
+files are never silently replaced with defaults. The storage contract guarantees use of
+durable storage, not successful writes when the device storage or Keystore is unavailable.
+Domain records, backups and controls outside the Settings API retain their host-owned storage.

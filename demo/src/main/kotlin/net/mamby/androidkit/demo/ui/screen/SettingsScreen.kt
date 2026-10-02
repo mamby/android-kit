@@ -19,6 +19,10 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchPage
+import net.mamby.androidkit.compose.form.AndroidKitSettingsStore
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
 import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
@@ -35,10 +39,8 @@ internal const val DemoAboutSettingsPageKey = "about"
 internal fun demoSettingsCatalog(
     onAbout: () -> Unit,
     onSearch: () -> Unit,
-    recentSearches: List<String>,
-    onRecentSearchesChange: (List<String>) -> Unit,
-    recentSearchesVisible: Boolean,
-    onRecentSearchesVisibleChange: (Boolean) -> Unit,
+    settingsStore: AndroidKitSettingsStore,
+    onSettingsStorageFailure: (Throwable) -> Unit,
     appLockEnabled: Boolean,
     appLockTimeout: DemoAppLockTimeout,
     onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
@@ -106,18 +108,16 @@ internal fun demoSettingsCatalog(
     return androidKitSettingsCatalog(
         search = AndroidKitSettingsSearchConfiguration(
             onOpenSearch = onSearch,
-            recentQueries = recentSearches,
-            onRecentQueriesChange = onRecentSearchesChange,
-            recentQueriesVisible = recentSearchesVisible,
-            onRecentQueriesVisibleChange = onRecentSearchesVisibleChange,
+            history = remember(settingsStore) { settingsStore.searchHistory("settings") },
+            onStorageFailure = onSettingsStorageFailure,
         ),
     ) {
         main(key = DemoMainSettingsPageKey, title = settingsTitle) {
             section("language", label = languageTitle) {
                 language(AndroidKitLanguageSetting(
                     selection = AndroidKitSettingsSelection(
+                        persistence = settingsStore.setting(stringPreferencesKey("selected_language_tag"), localeManager.selectedLanguageTag() ?: "system"),
                         options = languageOptions,
-                        selectedId = localeManager.selectedLanguageTag() ?: "system",
                         onSelected = { id ->
                             localeManager.setApplicationLanguage(id.takeUnless { it == "system" })
                         },
@@ -130,34 +130,34 @@ internal fun demoSettingsCatalog(
             }
             section("appearance", label = appearanceTitle) {
                 theme(AndroidKitSettingsSelection(
+                    persistence = settingsStore.setting(stringPreferencesKey("theme_choice"), DemoThemeChoice.System.storedValue),
                     options = listOf(
-                        AndroidKitSettingsOption(DemoThemeChoice.Light.name, themeLightText),
-                        AndroidKitSettingsOption(DemoThemeChoice.Dark.name, themeDarkText),
-                        AndroidKitSettingsOption(DemoThemeChoice.Prism.name, themePrismText),
+                        AndroidKitSettingsOption(DemoThemeChoice.Light.storedValue, themeLightText),
+                        AndroidKitSettingsOption(DemoThemeChoice.Dark.storedValue, themeDarkText),
+                        AndroidKitSettingsOption(DemoThemeChoice.Prism.storedValue, themePrismText),
                     ),
-                    selectedId = themeChoice.name,
-                    onSelected = { onThemeChoice(DemoThemeChoice.valueOf(it)) },
+                    onSelected = { onThemeChoice(DemoThemeChoice.fromStoredValue(it)) },
                     systemOption = AndroidKitSettingsSystemOption(
-                        id = DemoThemeChoice.System.name,
+                        id = DemoThemeChoice.System.storedValue,
                         currentValueLabel = systemThemeText,
                     ),
                 ))
                 transparency(AndroidKitFloatingOpacitySetting(
-                    value = floatingSurfaceOpacityLevel,
+                    persistence = settingsStore.setting(floatPreferencesKey("floating_surface_opacity_level"), net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults.DefaultOpacityLevel),
                     onValueChange = onFloatingSurfaceOpacityLevelChange,
                     onValueChangeFinished = onFloatingSurfaceOpacityLevelChangeFinished,
                 ))
             }
             section("security", label = securityTitle) {
                 appLock(AndroidKitAppLockSetting(
-                    checked = appLockEnabled,
+                    persistence = settingsStore.setting(booleanPreferencesKey("app_lock_enabled"), false),
                     onCheckedChange = onAppLockChange,
                     enabled = !appLockBusy,
                     errorMessage = appLockError,
                     onLockNow = onLockNow,
                     timeout = AndroidKitAppLockTimeoutSetting(
+                        persistence = settingsStore.setting(stringPreferencesKey("app_lock_timeout"), DemoAppLockTimeout.Immediately.name),
                         options = timeoutOptions,
-                        selectedId = appLockTimeout.name,
                         onSelected = { onAppLockTimeoutChange(DemoAppLockTimeout.valueOf(it)) },
                     ),
                 ))
