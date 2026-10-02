@@ -38,7 +38,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarColors
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.withColors
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 
@@ -119,7 +122,25 @@ public enum class AndroidKitFloatingToolbarIconAndLabelLayout {
 @Composable
 public fun AndroidKitFloatingToolbar(
     modifier: Modifier = Modifier,
-    style: AndroidKitFloatingToolbarStyle = AndroidKitThemeTokens.floatingToolbarStyle,
+    colors: AndroidKitFloatingToolbarColors = AndroidKitFloatingToolbarColors(),
+    flyoutAnchor: AndroidKitFloatingToolbarFlyoutAnchor =
+        AndroidKitFloatingToolbarFlyoutAnchor.Item,
+    content: AndroidKitFloatingToolbarScope.() -> Unit,
+): Unit {
+    AndroidKitComponentTheme {
+        AndroidKitFloatingToolbar(
+            modifier = modifier,
+            style = AndroidKitThemeTokens.floatingToolbarStyle.withColors(colors, AndroidKitThemeTokens.floatingSurfaceStyle),
+            flyoutAnchor = flyoutAnchor,
+            content = content,
+        )
+    }
+}
+
+@Composable
+internal fun AndroidKitFloatingToolbar(
+    modifier: Modifier = Modifier,
+    style: AndroidKitFloatingToolbarStyle,
     contentPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.componentTokens.toolbar.horizontalPadding,
         vertical = AndroidKitThemeTokens.componentTokens.toolbar.verticalPadding,

@@ -29,7 +29,9 @@ The sharing boundaries and stabilization order are recorded in
 All Android Kit Compose components must be descendants of `AndroidKitTheme`.
 They fail fast when the theme is missing, and consumer styling is supplied as a
 custom `AndroidKitThemeDefinition` so every component uses one coherent design
-system. Public components accept per-instance styles and typed data, state, and callbacks.
+system. Public components accept color-only appearance overrides and typed data, state,
+and callbacks. Kit owns typography, shapes and geometry; hosts can read shared
+scales for their own content.
 Kit owns control rendering and chrome; app body content remains composable inside
 pages, cards, sheets, and navigation. Styles default to the nearest Kit theme and
 do not change existing component appearance unless supplied explicitly.

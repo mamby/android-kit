@@ -4,7 +4,7 @@ Use Kotlin, Jetpack Compose, AndroidX, Material 3, Navigation 3, coroutines and
 official Android APIs. Keep the published modules app-agnostic and keep demo-only
 branding and the Prism theme inside `demo`.
 
-AndroidKit is opinionated. For new components, keep shape, typography, icons,
+AndroidKit is opinionated. Keep shape, typography, icons,
 labels, control arrangement, chrome, and interaction behavior Kit-owned and
 sealed by default. Public APIs accept typed content/data, state, callbacks,
 availability options, placement, and supported theme colors. Do not expose
@@ -13,8 +13,9 @@ arbitrary rendering slots for headers, controls, menus, settings rows, or badges
 Follow shared Kit theme tokens internally; preserve app body slots in pages,
 cards, sheets, and navigation. Hosts wanting a different visual direction should
 implement their own component. Depart from this default only when explicitly
-requested. Existing style APIs are not authorization to copy their extensibility
-into new components, nor a request to migrate them outside the current scope.
+requested. Appearance customization is color-only. Shared typography, shapes and dimensions
+may be read for app-owned bodies, but cannot be injected into Kit components.
+Do not reintroduce public styles or raw component-geometry overrides.
 See [docs/component-contract.md](docs/component-contract.md).
 
 ## Local host apps

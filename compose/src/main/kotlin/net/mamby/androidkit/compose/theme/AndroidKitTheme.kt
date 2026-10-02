@@ -34,20 +34,24 @@ public object AndroidKitFloatingSurfaceDefaults {
 public data class AndroidKitThemeDefinition(
     public val colorScheme: ColorScheme,
     public val isDark: Boolean,
-    public val typography: Typography = AndroidKitDefaults.typography,
-    public val shapes: Shapes = AndroidKitDefaults.shapes,
-    public val dimensions: AndroidKitDimensions = AndroidKitDimensions(),
     public val floatingSurfaceOpacityLevel: Float =
         AndroidKitFloatingSurfaceDefaults.DefaultOpacityLevel,
-    public val bottomSheetStyle: AndroidKitBottomSheetStyle = AndroidKitBottomSheetStyle(
+    public val floatingSurfaceColors: AndroidKitFloatingSurfaceColors = AndroidKitFloatingSurfaceColors(),
+    public val componentColors: AndroidKitComponentColors = AndroidKitComponentColors(),
+) {
+    internal val floatingSurfaceStyle = AndroidKitFloatingSurfaceStyle().withColors(floatingSurfaceColors)
+    internal val typography: Typography = AndroidKitDefaults.typography
+    internal val shapes: Shapes = AndroidKitDefaults.shapes
+    internal val dimensions: AndroidKitDimensions = AndroidKitDimensions()
+    internal val bottomSheetStyle: AndroidKitBottomSheetStyle = AndroidKitBottomSheetStyle(
         containerColor = colorScheme.surface,
         contentColor = colorScheme.onSurface,
         dragHandleColor = colorScheme.outline,
-    ),
-    public val pageStyle: AndroidKitPageStyle = AndroidKitPageStyle(
+    ).withColors(componentColors.bottomSheet, floatingSurfaceStyle)
+    internal val pageStyle: AndroidKitPageStyle = AndroidKitPageStyle(
         containerColor = colorScheme.background,
-    ),
-    public val pageTitleBarStyle: AndroidKitPageTitleBarStyle =
+    ).withColors(componentColors.page)
+    internal val pageTitleBarStyle: AndroidKitPageTitleBarStyle =
         AndroidKitPageTitleBarStyle(
             titleShape = CircleShape,
             buttonShape = CircleShape,
@@ -59,20 +63,20 @@ public data class AndroidKitThemeDefinition(
                     trim = LineHeightStyle.Trim.None,
                 ),
             ),
-        ),
-    public val floatingActionButtonStyle: AndroidKitFloatingActionButtonStyle =
+        ).withColors(componentColors.pageTitleBar, floatingSurfaceStyle)
+    internal val floatingActionButtonStyle: AndroidKitFloatingActionButtonStyle =
         AndroidKitFloatingActionButtonStyle(
             shape = CircleShape,
             visualSize = dimensions.floatingActionButtonSize,
-        ),
-    public val cardStyle: AndroidKitCardStyle = AndroidKitCardStyle(
+        ).withColors(componentColors.floatingActionButton, floatingSurfaceStyle)
+    internal val cardStyle: AndroidKitCardStyle = AndroidKitCardStyle(
         containerColor = colorScheme.surface,
         contentColor = colorScheme.onSurface,
         borderColor = colorScheme.outlineVariant,
         borderWidth = AndroidKitCardTokens(dimensions, typography, colorScheme, shapes).borderWidth,
         shape = shapes.extraLarge,
-    ),
-    public val settingSectionStyle: AndroidKitSettingSectionStyle = AndroidKitSettingSectionStyle(
+    ).withColors(componentColors.card)
+    internal val settingSectionStyle: AndroidKitSettingSectionStyle = AndroidKitSettingSectionStyle(
         containerColor = colorScheme.surface,
         contentColor = colorScheme.onSurface,
         borderColor = colorScheme.outlineVariant,
@@ -88,24 +92,24 @@ public data class AndroidKitThemeDefinition(
         entryLabelTextStyle = AndroidKitDefaults.typography.bodyLarge,
         supportingTextStyle = AndroidKitDefaults.typography.bodyMedium,
         valueLabelTextStyle = AndroidKitDefaults.typography.labelLarge,
-    ),
-    public val floatingActionBarStyle: AndroidKitFloatingActionBarStyle =
+    ).withColors(componentColors.sectionCard)
+    internal val floatingActionBarStyle: AndroidKitFloatingActionBarStyle =
         AndroidKitFloatingActionBarStyle(
             shape = shapes.extraLarge,
             itemShape = shapes.extraLarge,
             labelTextStyle = AndroidKitDefaults.typography.labelSmall,
-        ),
-    public val floatingToolbarStyle: AndroidKitFloatingToolbarStyle =
+        ).withColors(componentColors.floatingActionBar, floatingSurfaceStyle)
+    internal val floatingToolbarStyle: AndroidKitFloatingToolbarStyle =
         AndroidKitFloatingToolbarStyle(
             separatorColor = colorScheme.outlineVariant,
             shape = shapes.extraLarge,
             itemShape = shapes.extraLarge,
             labelTextStyle = AndroidKitDefaults.typography.labelSmall,
             iconSize = AndroidKitToolbarTokens(dimensions, shapes).iconSize,
-        ),
-    public val actionFlyoutStyle: AndroidKitActionFlyoutStyle =
-        AndroidKitActionFlyoutStyle(shape = shapes.extraLarge),
-    public val floatingNavigationStyle: AndroidKitFloatingNavigationStyle =
+        ).withColors(componentColors.floatingToolbar, floatingSurfaceStyle)
+    internal val actionFlyoutStyle: AndroidKitActionFlyoutStyle =
+        AndroidKitActionFlyoutStyle(shape = shapes.extraLarge).withColors(componentColors.actionFlyout, floatingSurfaceStyle)
+    internal val floatingNavigationStyle: AndroidKitFloatingNavigationStyle =
         AndroidKitFloatingNavigationStyle(
             containerColor = colorScheme.background,
             navigationBarContainerColor = colorScheme.surface,
@@ -119,8 +123,8 @@ public data class AndroidKitThemeDefinition(
             itemShape = shapes.extraLarge,
             labelTextStyle = AndroidKitDefaults.typography.labelSmall,
             overflowItemTextStyle = AndroidKitDefaults.typography.bodyLarge.copy(fontWeight = FontWeight.Normal),
-        ),
-) {
+        ).withColors(componentColors.floatingNavigation, floatingSurfaceStyle)
+
     internal val componentTokens = AndroidKitComponentTokens(colorScheme, typography, shapes, dimensions)
 
     init {
@@ -137,7 +141,7 @@ public data class AndroidKitThemeDefinition(
 }
 
 @Immutable
-public data class AndroidKitBottomSheetStyle(
+internal data class AndroidKitBottomSheetStyle(
     public val containerColor: Color,
     public val contentColor: Color,
     public val dragHandleColor: Color,
@@ -150,7 +154,7 @@ public data class AndroidKitBottomSheetStyle(
 )
 
 @Immutable
-public data class AndroidKitFloatingSurfaceStyle(
+internal data class AndroidKitFloatingSurfaceStyle(
     public val containerColor: Color = Color.Unspecified,
     public val contentColor: Color = Color.Unspecified,
     public val borderColor: Color = Color.Unspecified,
@@ -166,7 +170,7 @@ public data class AndroidKitFloatingSurfaceStyle(
 )
 
 @Immutable
-public data class AndroidKitDimensions(
+public class AndroidKitDimensions internal constructor(
     public val spaceExtraSmall: Dp = 4.dp,
     public val spaceSmall: Dp = 8.dp,
     public val spaceMedium: Dp = 16.dp,
@@ -322,11 +326,11 @@ public object AndroidKitThemes {
             onError = Color.White,
         ),
         isDark = false,
-        bottomSheetStyle = AndroidKitBottomSheetStyle(
+        componentColors = AndroidKitComponentColors(bottomSheet = AndroidKitBottomSheetColors(
             containerColor = Color.White,
             contentColor = Color(0xFF171A21),
             dragHandleColor = Color(0xFFC1C7D2),
-        ),
+        )),
     )
 
     public val Dark: AndroidKitThemeDefinition = AndroidKitThemeDefinition(
@@ -355,11 +359,11 @@ public object AndroidKitThemes {
             onError = Color(0xFF690005),
         ),
         isDark = true,
-        bottomSheetStyle = AndroidKitBottomSheetStyle(
+        componentColors = AndroidKitComponentColors(bottomSheet = AndroidKitBottomSheetColors(
             containerColor = Color(0xFF090B11),
             contentColor = Color(0xFFF5F7FB),
             dragHandleColor = Color(0xFF93A0B7),
-        ),
+        )),
     )
 }
 
@@ -460,7 +464,7 @@ public object AndroidKitThemeTokens {
         @ReadOnlyComposable
         get() = LocalAndroidKitStrings.current
 
-    public val floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle
+    internal val floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalFloatingSurfaceStyle.current
@@ -470,62 +474,117 @@ public object AndroidKitThemeTokens {
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.floatingSurfaceOpacityLevel
 
-    public val bottomSheetStyle: AndroidKitBottomSheetStyle
+    internal val bottomSheetStyle: AndroidKitBottomSheetStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.bottomSheetStyle
 
-    public val pageStyle: AndroidKitPageStyle
+    internal val pageStyle: AndroidKitPageStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.pageStyle
 
-    public val pageTitleBarStyle: AndroidKitPageTitleBarStyle
+    internal val pageTitleBarStyle: AndroidKitPageTitleBarStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.pageTitleBarStyle
 
-    public val floatingActionButtonStyle: AndroidKitFloatingActionButtonStyle
+    internal val floatingActionButtonStyle: AndroidKitFloatingActionButtonStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.floatingActionButtonStyle
 
-    public val cardStyle: AndroidKitCardStyle
+    internal val cardStyle: AndroidKitCardStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.cardStyle
 
-    public val settingSectionStyle: AndroidKitSettingSectionStyle
+    internal val settingSectionStyle: AndroidKitSettingSectionStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.settingSectionStyle
 
-    public val floatingActionBarStyle: AndroidKitFloatingActionBarStyle
+    internal val floatingActionBarStyle: AndroidKitFloatingActionBarStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.floatingActionBarStyle
 
-    public val floatingToolbarStyle: AndroidKitFloatingToolbarStyle
+    internal val floatingToolbarStyle: AndroidKitFloatingToolbarStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.floatingToolbarStyle
 
-    public val actionFlyoutStyle: AndroidKitActionFlyoutStyle
+    internal val actionFlyoutStyle: AndroidKitActionFlyoutStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.actionFlyoutStyle
 
-    public val floatingNavigationStyle: AndroidKitFloatingNavigationStyle
+    internal val floatingNavigationStyle: AndroidKitFloatingNavigationStyle
         @Composable
         @ReadOnlyComposable
         get() = LocalAndroidKitThemeDefinition.current.floatingNavigationStyle
+    public val floatingSurfaceColors: AndroidKitFloatingSurfaceColors
+        @Composable
+        @ReadOnlyComposable
+        get() = floatingSurfaceStyle.toColors()
+
+    public val pageColors: AndroidKitPageColors
+        @Composable
+        @ReadOnlyComposable
+        get() = pageStyle.toColors()
+
+    public val pageTitleBarColors: AndroidKitPageTitleBarColors
+        @Composable
+        @ReadOnlyComposable
+        get() = pageTitleBarStyle.toColors()
+
+    public val floatingActionButtonColors: AndroidKitFloatingActionButtonColors
+        @Composable
+        @ReadOnlyComposable
+        get() = floatingActionButtonStyle.toColors()
+
+    public val cardColors: AndroidKitCardColors
+        @Composable
+        @ReadOnlyComposable
+        get() = cardStyle.toColors()
+
+    public val sectionCardColors: AndroidKitSectionCardColors
+        @Composable
+        @ReadOnlyComposable
+        get() = settingSectionStyle.toColors()
+
+    public val floatingActionBarColors: AndroidKitFloatingActionBarColors
+        @Composable
+        @ReadOnlyComposable
+        get() = floatingActionBarStyle.toColors()
+
+    public val floatingToolbarColors: AndroidKitFloatingToolbarColors
+        @Composable
+        @ReadOnlyComposable
+        get() = floatingToolbarStyle.toColors()
+
+    public val actionFlyoutColors: AndroidKitActionFlyoutColors
+        @Composable
+        @ReadOnlyComposable
+        get() = actionFlyoutStyle.toColors()
+
+    public val floatingNavigationColors: AndroidKitFloatingNavigationColors
+        @Composable
+        @ReadOnlyComposable
+        get() = floatingNavigationStyle.toColors()
+
+    public val bottomSheetColors: AndroidKitBottomSheetColors
+        @Composable
+        @ReadOnlyComposable
+        get() = bottomSheetStyle.toColors()
+
 }
 
 /**
  * Required theme boundary for Android Kit Compose components.
  *
- * Supply a custom [AndroidKitThemeDefinition] to customize component colors, typography, shapes,
- * dimensions, shared floating-surface opacity level, and component-specific styles consistently.
+ * Supply a custom [AndroidKitThemeDefinition] for colors and floating-surface transparency.
+ * Kit owns typography, shapes and geometry; their public tokens are read-only.
  */
 @Composable
 public fun AndroidKitTheme(
@@ -534,13 +593,12 @@ public fun AndroidKitTheme(
     } else {
         AndroidKitThemes.Light
     },
-    floatingSurfaceStyle: AndroidKitFloatingSurfaceStyle = AndroidKitFloatingSurfaceStyle(),
     content: @Composable () -> Unit,
 ): Unit {
     CompositionLocalProvider(
         LocalAndroidKitThemeDefinition provides definition,
         LocalAndroidKitStrings provides localizedAndroidKitStrings(),
-        LocalFloatingSurfaceStyle provides floatingSurfaceStyle,
+        LocalFloatingSurfaceStyle provides definition.floatingSurfaceStyle,
     ) {
         MaterialTheme(
             colorScheme = definition.colorScheme,

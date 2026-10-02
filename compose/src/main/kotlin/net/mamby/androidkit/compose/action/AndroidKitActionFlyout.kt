@@ -46,7 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitActionFlyoutStyle
+import net.mamby.androidkit.compose.theme.AndroidKitActionFlyoutColors
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.withColors
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import kotlin.math.max
 import kotlin.math.min
@@ -358,7 +361,40 @@ public fun AndroidKitActionFlyout(
         AndroidKitActionFlyoutPlacement.Below,
     horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment =
         AndroidKitActionFlyoutHorizontalAlignment.Start,
-    style: AndroidKitActionFlyoutStyle = AndroidKitThemeTokens.actionFlyoutStyle,
+    colors: AndroidKitActionFlyoutColors = AndroidKitActionFlyoutColors(),
+    properties: PopupProperties = PopupProperties(focusable = true),
+    scrollState: ScrollState = rememberScrollState(),
+    offset: DpOffset = DpOffset.Zero,
+    enabled: Boolean = true,
+    content: AndroidKitActionFlyoutScope.() -> Unit,
+): Unit {
+    AndroidKitComponentTheme {
+        AndroidKitActionFlyout(
+            expanded = expanded,
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            placement = placement,
+            horizontalAlignment = horizontalAlignment,
+            style = AndroidKitThemeTokens.actionFlyoutStyle.withColors(colors, AndroidKitThemeTokens.floatingSurfaceStyle),
+            properties = properties,
+            scrollState = scrollState,
+            offset = offset,
+            enabled = enabled,
+            content = content,
+        )
+    }
+}
+
+@Composable
+internal fun AndroidKitActionFlyout(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    placement: AndroidKitActionFlyoutPlacement =
+        AndroidKitActionFlyoutPlacement.Below,
+    horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment =
+        AndroidKitActionFlyoutHorizontalAlignment.Start,
+    style: AndroidKitActionFlyoutStyle,
     properties: PopupProperties = PopupProperties(focusable = true),
     scrollState: ScrollState = rememberScrollState(),
     offset: DpOffset = DpOffset.Zero,
@@ -469,28 +505,30 @@ internal fun ActionFlyoutPopup(
     enabled: Boolean = true,
     content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ) {
-    DropdownMenuPopup(
-        expanded = expanded,
-        onDismissRequest = onDismissRequest,
-        popupPositionProvider = positionProvider,
-        properties = properties,
-    ) {
-        FloatingSurface(
-            shape = style.shape,
-            modifier = modifier,
-            containerColor = containerColor,
-            style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
+    AndroidKitComponentTheme {
+        DropdownMenuPopup(
+            expanded = expanded,
+            onDismissRequest = onDismissRequest,
+            popupPositionProvider = positionProvider,
+            properties = properties,
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(contentPadding)
-                    .width(IntrinsicSize.Max)
-                    .verticalScroll(scrollState),
+            FloatingSurface(
+                shape = style.shape,
+                modifier = modifier,
+                containerColor = containerColor,
+                style = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle,
             ) {
-                ActionFlyoutScopeImpl(
-                    this, onActionDismissRequest, enabled, expanded,
-                    style, properties, containerColor,
-                ).content()
+                Column(
+                    modifier = Modifier
+                        .padding(contentPadding)
+                        .width(IntrinsicSize.Max)
+                        .verticalScroll(scrollState),
+                ) {
+                    ActionFlyoutScopeImpl(
+                        this, onActionDismissRequest, enabled, expanded,
+                        style, properties, containerColor,
+                    ).content()
+                }
             }
         }
     }

@@ -46,6 +46,7 @@ import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.presentation.AndroidKitCard
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 
@@ -317,56 +318,59 @@ private fun RecentSearchHeading(
     canClear: Boolean,
     onClear: () -> Unit,
 ) {
-    val tokens = AndroidKitThemeTokens.componentTokens.searchPage
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val strings = AndroidKitThemeTokens.strings
-    FloatingSurface(
-        shape = tokens.headingShape,
-        modifier = Modifier.fillMaxWidth().padding(bottom = tokens.headingBottomSpacing),
-        style = AndroidKitThemeTokens.floatingSurfaceStyle,
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(
-                horizontal = tokens.headingHorizontalPadding,
-                vertical = tokens.headingVerticalPadding,
-            ),
-            verticalAlignment = Alignment.CenterVertically,
+    AndroidKitComponentTheme {
+        val tokens = AndroidKitThemeTokens.componentTokens.searchPage
+        val dimensions = AndroidKitThemeTokens.dimensions
+        val strings = AndroidKitThemeTokens.strings
+        FloatingSurface(
+            shape = tokens.headingShape,
+            modifier = Modifier.fillMaxWidth().padding(bottom = tokens.headingBottomSpacing),
+            style = AndroidKitThemeTokens.floatingSurfaceStyle,
         ) {
             Row(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth().padding(
+                    horizontal = tokens.headingHorizontalPadding,
+                    vertical = tokens.headingVerticalPadding,
+                ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = strings.recentSearches,
-                    modifier = Modifier.weight(1f, fill = false),
-                    style = tokens.headingTextStyle,
-                    color = tokens.secondaryContentColor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                IconToggleButton(
-                    checked = visible,
-                    onCheckedChange = onVisibilityChange,
-                    modifier = Modifier.size(dimensions.minimumTouchTarget),
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        imageVector = if (visible) AndroidKitIcons.EyeOff else AndroidKitIcons.Eye,
-                        contentDescription = if (visible) strings.hideRecentSearches else strings.showRecentSearches,
-                        modifier = Modifier.size(tokens.headingIconSize),
-                        tint = tokens.secondaryContentColor,
+                    Text(
+                        text = strings.recentSearches,
+                        modifier = Modifier.weight(1f, fill = false),
+                        style = tokens.headingTextStyle,
+                        color = tokens.secondaryContentColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
+                    IconToggleButton(
+                        checked = visible,
+                        onCheckedChange = onVisibilityChange,
+                        modifier = Modifier.size(dimensions.minimumTouchTarget),
+                    ) {
+                        Icon(
+                            imageVector = if (visible) AndroidKitIcons.EyeOff else AndroidKitIcons.Eye,
+                            contentDescription = if (visible) strings.hideRecentSearches else strings.showRecentSearches,
+                            modifier = Modifier.size(tokens.headingIconSize),
+                            tint = tokens.secondaryContentColor,
+                        )
+                    }
+                }
+                if (canClear) {
+                    TextButton(
+                        onClick = onClear,
+                        contentPadding = PaddingValues(
+                            start = (dimensions.minimumTouchTarget - tokens.headingIconSize) / 2,
+                            end = tokens.clearButtonEndPadding,
+                        ),
+                    ) { Text(strings.clearAll, maxLines = 1) }
                 }
             }
-            if (canClear) {
-                TextButton(
-                    onClick = onClear,
-                    contentPadding = PaddingValues(
-                        start = (dimensions.minimumTouchTarget - tokens.headingIconSize) / 2,
-                        end = tokens.clearButtonEndPadding,
-                    ),
-                ) { Text(strings.clearAll, maxLines = 1) }
-            }
         }
+
     }
 }
 
@@ -380,51 +384,57 @@ private fun List<String>.sanitizedRecentSearchQueries(): List<String> {
 
 @Composable
 private fun RecentSearchRow(query: String, onSelect: () -> Unit, onRemove: () -> Unit) {
-    val tokens = AndroidKitThemeTokens.componentTokens.searchPage
-    val dimensions = AndroidKitThemeTokens.dimensions
-    val strings = AndroidKitThemeTokens.strings
-    AndroidKitCard(
-        onClick = onSelect,
-        style = tokens.recentCardStyle,
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(start = tokens.recentStartPadding),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().heightIn(min = dimensions.minimumTouchTarget),
-            verticalAlignment = Alignment.CenterVertically,
+    AndroidKitComponentTheme {
+        val tokens = AndroidKitThemeTokens.componentTokens.searchPage
+        val dimensions = AndroidKitThemeTokens.dimensions
+        val strings = AndroidKitThemeTokens.strings
+        AndroidKitCard(
+            onClick = onSelect,
+            style = tokens.recentCardStyle,
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(start = tokens.recentStartPadding),
         ) {
-            Icon(
-                imageVector = AndroidKitIcons.History,
-                contentDescription = null,
-                modifier = Modifier.padding(end = tokens.recentIconSpacing)
-                    .size(tokens.recentIconSize),
-                tint = tokens.secondaryContentColor,
-            )
-            Text(
-                text = query,
-                modifier = Modifier.weight(1f).padding(end = tokens.recentTextEndPadding),
-                style = tokens.recentTextStyle,
-                color = tokens.recentContentColor,
-            )
-            IconButton(onClick = onRemove, modifier = Modifier.size(dimensions.minimumTouchTarget)) {
+            Row(
+                modifier = Modifier.fillMaxWidth().heightIn(min = dimensions.minimumTouchTarget),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Icon(
-                    imageVector = AndroidKitIcons.Close,
-                    contentDescription = strings.removeRecentSearch,
-                    modifier = Modifier.size(tokens.recentIconSize),
+                    imageVector = AndroidKitIcons.History,
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = tokens.recentIconSpacing)
+                        .size(tokens.recentIconSize),
                     tint = tokens.secondaryContentColor,
                 )
+                Text(
+                    text = query,
+                    modifier = Modifier.weight(1f).padding(end = tokens.recentTextEndPadding),
+                    style = tokens.recentTextStyle,
+                    color = tokens.recentContentColor,
+                )
+                IconButton(onClick = onRemove, modifier = Modifier.size(dimensions.minimumTouchTarget)) {
+                    Icon(
+                        imageVector = AndroidKitIcons.Close,
+                        contentDescription = strings.removeRecentSearch,
+                        modifier = Modifier.size(tokens.recentIconSize),
+                        tint = tokens.secondaryContentColor,
+                    )
+                }
             }
         }
+
     }
 }
 
 @Composable
 private fun SearchEmptyMessage(message: String) {
-    val tokens = AndroidKitThemeTokens.componentTokens.searchPage
-    Text(
-        text = message,
-        modifier = Modifier.fillMaxWidth().padding(tokens.emptyMessagePadding),
-        style = tokens.emptyMessageTextStyle,
-        color = tokens.secondaryContentColor,
-    )
+    AndroidKitComponentTheme {
+        val tokens = AndroidKitThemeTokens.componentTokens.searchPage
+        Text(
+            text = message,
+            modifier = Modifier.fillMaxWidth().padding(tokens.emptyMessagePadding),
+            style = tokens.emptyMessageTextStyle,
+            color = tokens.secondaryContentColor,
+        )
+
+    }
 }

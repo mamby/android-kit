@@ -75,6 +75,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltip
 import net.mamby.androidkit.compose.action.AndroidKitFloatingTooltipAction
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
@@ -126,311 +127,314 @@ internal fun AndroidKitFloatingSearchBox(
     searchMode: AndroidKitSearchMode = AndroidKitSearchMode.OnSubmit,
     onSubmit: (() -> Unit)? = null,
 ): Unit {
-    val tokens = AndroidKitThemeTokens.componentTokens.searchBox
-    val strings = AndroidKitThemeTokens.strings
-    val surfaceStyle = AndroidKitThemeTokens.floatingSurfaceStyle
-    val visuals = floatingSurfaceVisuals(surfaceStyle)
-    val shape = tokens.shape
-    val keyboard = LocalSoftwareKeyboardController.current
-    val imeVisible = WindowInsets.isImeVisible
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    var fieldFocused by remember { mutableStateOf(false) }
-    var refocusAfterClear by remember { mutableStateOf(false) }
-    var preserveFocusAfterClear by remember { mutableStateOf(false) }
-    var previousImeVisible by remember { mutableStateOf(imeVisible) }
-    LaunchedEffect(Unit) {
-        if (requestFocusOnOpen && enabled) {
-            focusRequester.requestFocus()
+    AndroidKitComponentTheme {
+        val tokens = AndroidKitThemeTokens.componentTokens.searchBox
+        val strings = AndroidKitThemeTokens.strings
+        val surfaceStyle = AndroidKitThemeTokens.floatingSurfaceStyle
+        val visuals = floatingSurfaceVisuals(surfaceStyle)
+        val shape = tokens.shape
+        val keyboard = LocalSoftwareKeyboardController.current
+        val imeVisible = WindowInsets.isImeVisible
+        val focusRequester = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
+        var fieldFocused by remember { mutableStateOf(false) }
+        var refocusAfterClear by remember { mutableStateOf(false) }
+        var preserveFocusAfterClear by remember { mutableStateOf(false) }
+        var previousImeVisible by remember { mutableStateOf(imeVisible) }
+        LaunchedEffect(Unit) {
+            if (requestFocusOnOpen && enabled) {
+                focusRequester.requestFocus()
+            }
         }
-    }
-    LaunchedEffect(imeVisible) {
-        if (previousImeVisible && !imeVisible && fieldFocused && !preserveFocusAfterClear) {
-            focusManager.clearFocus()
+        LaunchedEffect(imeVisible) {
+            if (previousImeVisible && !imeVisible && fieldFocused && !preserveFocusAfterClear) {
+                focusManager.clearFocus()
+            }
+            if (imeVisible) preserveFocusAfterClear = false
+            previousImeVisible = imeVisible
         }
-        if (imeVisible) preserveFocusAfterClear = false
-        previousImeVisible = imeVisible
-    }
-    LaunchedEffect(refocusAfterClear, query) {
-        if (refocusAfterClear) {
-            focusRequester.requestFocus()
-            keyboard?.show()
-            refocusAfterClear = false
+        LaunchedEffect(refocusAfterClear, query) {
+            if (refocusAfterClear) {
+                focusRequester.requestFocus()
+                keyboard?.show()
+                refocusAfterClear = false
+            }
         }
-    }
-    val fieldState = rememberTextFieldState(initialText = query, initialSelection = TextRange(query.length))
-    LaunchedEffect(query) {
-        if (fieldState.text.toString() != query) fieldState.setTextAndPlaceCursorAtEnd(query)
-    }
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val factory = LocalSearchSpeechInputFactory.current
-    val currentEnabled by rememberUpdatedState(enabled && voiceInputEnabled)
-    val currentQuery by rememberUpdatedState(query)
-    val currentOnQueryChange by rememberUpdatedState<(String) -> Unit>({ value ->
-        onQueryChange(value)
-        if (searchMode == AndroidKitSearchMode.Live) onSearch(value)
-    })
-    var permissionPending by remember { mutableStateOf(false) }
-    val tooltipState = rememberTooltipState(isPersistent = true)
-    var errorPresentation by remember { mutableIntStateOf(0) }
-    var settingsLaunchFailed by remember { mutableStateOf(false) }
-    val dictation = remember(context, lifecycleOwner, factory) {
-        SearchDictation(
-            createInput = { factory(context) },
-            canPublish = {
-                currentEnabled && lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-            },
-            onQueryChange = { currentOnQueryChange(it) },
-        )
-    }
-    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        val requested = permissionPending
-        permissionPending = false
-        if (requested && currentEnabled) {
-            if (granted) dictation.start(currentQuery) else dictation.permissionDenied()
+        val fieldState = rememberTextFieldState(initialText = query, initialSelection = TextRange(query.length))
+        LaunchedEffect(query) {
+            if (fieldState.text.toString() != query) fieldState.setTextAndPlaceCursorAtEnd(query)
         }
-    }
-    val settingsLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            dictation.clearError()
+        val context = LocalContext.current
+        val lifecycleOwner = LocalLifecycleOwner.current
+        val factory = LocalSearchSpeechInputFactory.current
+        val currentEnabled by rememberUpdatedState(enabled && voiceInputEnabled)
+        val currentQuery by rememberUpdatedState(query)
+        val currentOnQueryChange by rememberUpdatedState<(String) -> Unit>({ value ->
+            onQueryChange(value)
+            if (searchMode == AndroidKitSearchMode.Live) onSearch(value)
+        })
+        var permissionPending by remember { mutableStateOf(false) }
+        val tooltipState = rememberTooltipState(isPersistent = true)
+        var errorPresentation by remember { mutableIntStateOf(0) }
+        var settingsLaunchFailed by remember { mutableStateOf(false) }
+        val dictation = remember(context, lifecycleOwner, factory) {
+            SearchDictation(
+                createInput = { factory(context) },
+                canPublish = {
+                    currentEnabled && lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
+                },
+                onQueryChange = { currentOnQueryChange(it) },
+            )
         }
-    }
-    DisposableEffect(dictation, lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) {
-                permissionPending = false
-                dictation.cancel()
-                tooltipState.dismiss()
-            } else if (event == Lifecycle.Event.ON_RESUME && dictation.error == DictationError.Permission &&
-                ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+        val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            val requested = permissionPending
+            permissionPending = false
+            if (requested && currentEnabled) {
+                if (granted) dictation.start(currentQuery) else dictation.permissionDenied()
+            }
+        }
+        val settingsLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
                 dictation.clearError()
             }
         }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            permissionPending = false
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            dictation.cancel()
-        }
-    }
-    SideEffect {
-        if (!currentEnabled) {
-            permissionPending = false
-            dictation.cancel()
-        } else dictation.hostQueryChanged(query)
-    }
-    BackHandler(enabled = dictation.active) { dictation.cancel() }
-    LaunchedEffect(fieldState) {
-        snapshotFlow { fieldState.text.toString() }.collect { text ->
-            // Host updates, clear and dictation already own their query/search callbacks.
-            if (text != currentQuery) {
-                dictation.cancel()
-                if (dictation.error != DictationError.Permission) dictation.clearError()
-                tooltipState.dismiss()
-                permissionPending = false
-                currentOnQueryChange(text)
-            }
-        }
-    }
-
-    val speechStatus = when (dictation.phase) {
-        DictationPhase.Starting -> strings.voiceStarting
-        DictationPhase.Listening -> strings.voiceListening
-        DictationPhase.Finishing -> strings.voiceFinishing
-        DictationPhase.Idle -> null
-    }
-    val visibleError = dictation.error.takeIf { enabled && voiceInputEnabled }
-    val errorMessage = when (visibleError) {
-        DictationError.Permission -> strings.voicePermission
-        DictationError.NoSpeech -> strings.voiceNoSpeech
-        DictationError.Unavailable -> strings.voiceSearchUnavailable
-        null -> null
-    }
-    val accessibilityManager = LocalAccessibilityManager.current
-    val errorTimeout = accessibilityManager?.calculateRecommendedTimeoutMillis(
-        originalTimeoutMillis = SearchErrorDurationMillis,
-        containsIcons = true,
-        containsText = true,
-        containsControls = true,
-    ) ?: SearchErrorDurationMillis
-    LaunchedEffect(visibleError, errorPresentation, errorTimeout) {
-        if (visibleError != null) {
-            val showing = launch { tooltipState.show() }
-            try { delay(errorTimeout) } finally {
-                tooltipState.dismiss()
-                showing.cancel()
-            }
-        } else {
-            tooltipState.dismiss()
-            settingsLaunchFailed = false
-        }
-    }
-    TooltipBox(
-        modifier = modifier.fillMaxWidth(),
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-        state = tooltipState,
-        enableUserInput = false,
-        focusable = visibleError == DictationError.Permission,
-        tooltip = {
-            if (errorMessage != null) {
-                AndroidKitFloatingTooltip(
-                    text = if (settingsLaunchFailed) strings.voiceSearchUnavailable else errorMessage,
-                    onDismiss = { tooltipState.dismiss() },
-                    action = if (visibleError == DictationError.Permission) {
-                        AndroidKitFloatingTooltipAction(
-                            label = strings.openAppSettings,
-                            onClick = {
-                                try {
-                                    settingsLauncher.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                        Uri.fromParts("package", context.packageName, null)))
-                                    tooltipState.dismiss()
-                                } catch (_: ActivityNotFoundException) {
-                                    settingsLaunchFailed = true
-                                } catch (_: SecurityException) {
-                                    settingsLaunchFailed = true
-                                }
-                            },
-                        )
-                    } else null,
-                )
-            }
-        },
-    ) {
-        FloatingSurface(
-            shape = shape,
-            style = surfaceStyle,
-        ) {
-            if (dictation.active) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().heightIn(min = TextFieldDefaults.MinHeight)
-                        .padding(horizontal = tokens.statusHorizontalPadding),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    SearchMicrophoneHalo()
-                    Text(
-                        text = speechStatus.orEmpty(),
-                        modifier = Modifier.weight(1f).padding(horizontal = tokens.statusTextPadding)
-                            .semantics {
-                                contentDescription = strings.voiceSearch
-                                stateDescription = speechStatus.orEmpty()
-                                liveRegion = LiveRegionMode.Polite
-                            },
-                        color = visuals.contentColor,
-                        style = tokens.inputTextStyle,
-                        textAlign = TextAlign.Center,
-                    )
-                    IconButton(
-                        enabled = enabled && dictation.phase != DictationPhase.Finishing,
-                        onClick = { dictation.stop() },
-                    ) {
-                        Icon(AndroidKitIcons.Close, strings.voiceStop,
-                            Modifier.size(tokens.iconSize))
-                    }
+        DisposableEffect(dictation, lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_STOP) {
+                    permissionPending = false
+                    dictation.cancel()
+                    tooltipState.dismiss()
+                } else if (event == Lifecycle.Event.ON_RESUME && dictation.error == DictationError.Permission &&
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    dictation.clearError()
                 }
-            } else TextField(
-                state = fieldState,
-                modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
-                    .onFocusChanged {
-                        fieldFocused = it.isFocused
-                        if (!it.isFocused && !refocusAfterClear) preserveFocusAfterClear = false
-                    }
-                    .semantics {
-                        contentDescription = label
-                        if (tooltipState.isVisible && errorMessage != null) error(errorMessage)
-                    },
-                enabled = enabled,
-                lineLimits = TextFieldLineLimits.SingleLine,
-                textStyle = tokens.inputTextStyle,
-                shape = shape,
-                contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(),
-                placeholder = {
-                    Text(
-                        text = label,
-                        style = tokens.inputTextStyle,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-                leadingIcon = {
-                    Icon(AndroidKitIcons.Search, null, Modifier.size(tokens.iconSize))
-                },
-                trailingIcon = {
-                    Row {
-                        if (query.isNotEmpty()) {
-                            IconButton(
-                                enabled = enabled,
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                permissionPending = false
+                lifecycleOwner.lifecycle.removeObserver(observer)
+                dictation.cancel()
+            }
+        }
+        SideEffect {
+            if (!currentEnabled) {
+                permissionPending = false
+                dictation.cancel()
+            } else dictation.hostQueryChanged(query)
+        }
+        BackHandler(enabled = dictation.active) { dictation.cancel() }
+        LaunchedEffect(fieldState) {
+            snapshotFlow { fieldState.text.toString() }.collect { text ->
+                // Host updates, clear and dictation already own their query/search callbacks.
+                if (text != currentQuery) {
+                    dictation.cancel()
+                    if (dictation.error != DictationError.Permission) dictation.clearError()
+                    tooltipState.dismiss()
+                    permissionPending = false
+                    currentOnQueryChange(text)
+                }
+            }
+        }
+
+        val speechStatus = when (dictation.phase) {
+            DictationPhase.Starting -> strings.voiceStarting
+            DictationPhase.Listening -> strings.voiceListening
+            DictationPhase.Finishing -> strings.voiceFinishing
+            DictationPhase.Idle -> null
+        }
+        val visibleError = dictation.error.takeIf { enabled && voiceInputEnabled }
+        val errorMessage = when (visibleError) {
+            DictationError.Permission -> strings.voicePermission
+            DictationError.NoSpeech -> strings.voiceNoSpeech
+            DictationError.Unavailable -> strings.voiceSearchUnavailable
+            null -> null
+        }
+        val accessibilityManager = LocalAccessibilityManager.current
+        val errorTimeout = accessibilityManager?.calculateRecommendedTimeoutMillis(
+            originalTimeoutMillis = SearchErrorDurationMillis,
+            containsIcons = true,
+            containsText = true,
+            containsControls = true,
+        ) ?: SearchErrorDurationMillis
+        LaunchedEffect(visibleError, errorPresentation, errorTimeout) {
+            if (visibleError != null) {
+                val showing = launch { tooltipState.show() }
+                try { delay(errorTimeout) } finally {
+                    tooltipState.dismiss()
+                    showing.cancel()
+                }
+            } else {
+                tooltipState.dismiss()
+                settingsLaunchFailed = false
+            }
+        }
+        TooltipBox(
+            modifier = modifier.fillMaxWidth(),
+            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+            state = tooltipState,
+            enableUserInput = false,
+            focusable = visibleError == DictationError.Permission,
+            tooltip = {
+                if (errorMessage != null) {
+                    AndroidKitFloatingTooltip(
+                        text = if (settingsLaunchFailed) strings.voiceSearchUnavailable else errorMessage,
+                        onDismiss = { tooltipState.dismiss() },
+                        action = if (visibleError == DictationError.Permission) {
+                            AndroidKitFloatingTooltipAction(
+                                label = strings.openAppSettings,
                                 onClick = {
-                                    dictation.cancel()
-                                    if (dictation.error != DictationError.Permission) dictation.clearError()
-                                    tooltipState.dismiss()
-                                    permissionPending = false
-                                    currentOnQueryChange("")
-                                    preserveFocusAfterClear = true
-                                    refocusAfterClear = true
-                                },
-                            ) {
-                                Icon(AndroidKitIcons.Close, strings.clearSearch,
-                                    Modifier.size(tokens.iconSize))
-                            }
-                        }
-                        if (voiceInputEnabled) {
-                            IconButton(
-                                enabled = enabled && !permissionPending,
-                                onClick = {
-                                    if (!permissionPending) {
-                                        errorPresentation++
-                                        settingsLaunchFailed = false
-                                        dictation.clearError()
-                                        keyboard?.hide()
-                                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
-                                            PackageManager.PERMISSION_GRANTED) {
-                                            dictation.start(query)
-                                        } else {
-                                            permissionPending = true
-                                            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                                        }
+                                    try {
+                                        settingsLauncher.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", context.packageName, null)))
+                                        tooltipState.dismiss()
+                                    } catch (_: ActivityNotFoundException) {
+                                        settingsLaunchFailed = true
+                                    } catch (_: SecurityException) {
+                                        settingsLaunchFailed = true
                                     }
                                 },
-                            ) {
-                                Icon(
-                                    AndroidKitIcons.Microphone,
-                                    strings.voiceSearch,
-                                    Modifier.size(tokens.iconSize))
-                            }
+                            )
+                        } else null,
+                    )
+                }
+            },
+        ) {
+            FloatingSurface(
+                shape = shape,
+                style = surfaceStyle,
+            ) {
+                if (dictation.active) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().heightIn(min = TextFieldDefaults.MinHeight)
+                            .padding(horizontal = tokens.statusHorizontalPadding),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        SearchMicrophoneHalo()
+                        Text(
+                            text = speechStatus.orEmpty(),
+                            modifier = Modifier.weight(1f).padding(horizontal = tokens.statusTextPadding)
+                                .semantics {
+                                    contentDescription = strings.voiceSearch
+                                    stateDescription = speechStatus.orEmpty()
+                                    liveRegion = LiveRegionMode.Polite
+                                },
+                            color = visuals.contentColor,
+                            style = tokens.inputTextStyle,
+                            textAlign = TextAlign.Center,
+                        )
+                        IconButton(
+                            enabled = enabled && dictation.phase != DictationPhase.Finishing,
+                            onClick = { dictation.stop() },
+                        ) {
+                            Icon(AndroidKitIcons.Close, strings.voiceStop,
+                                Modifier.size(tokens.iconSize))
                         }
                     }
-                },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                onKeyboardAction = {
-                    if (enabled && query.isNotBlank()) {
-                        dictation.cancel()
-                        permissionPending = false
-                        keyboard?.hide()
-                        onSearch(query)
-                        onSubmit?.invoke()
-                    }
-                },
-                colors = TextFieldDefaults.colors(
-                    cursorColor = if (imeVisible) AndroidKitThemeTokens.colorScheme.primary else Color.Transparent,
-                    focusedTextColor = visuals.contentColor,
-                    unfocusedTextColor = visuals.contentColor,
-                    disabledTextColor = visuals.disabledContentColor,
-                    focusedLeadingIconColor = visuals.contentColor,
-                    unfocusedLeadingIconColor = visuals.contentColor,
-                    disabledLeadingIconColor = visuals.disabledContentColor,
-                    focusedTrailingIconColor = visuals.contentColor,
-                    unfocusedTrailingIconColor = visuals.contentColor,
-                    disabledTrailingIconColor = visuals.disabledContentColor,
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                ),
-            )
+                } else TextField(
+                    state = fieldState,
+                    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
+                        .onFocusChanged {
+                            fieldFocused = it.isFocused
+                            if (!it.isFocused && !refocusAfterClear) preserveFocusAfterClear = false
+                        }
+                        .semantics {
+                            contentDescription = label
+                            if (tooltipState.isVisible && errorMessage != null) error(errorMessage)
+                        },
+                    enabled = enabled,
+                    lineLimits = TextFieldLineLimits.SingleLine,
+                    textStyle = tokens.inputTextStyle,
+                    shape = shape,
+                    contentPadding = TextFieldDefaults.contentPaddingWithoutLabel(),
+                    placeholder = {
+                        Text(
+                            text = label,
+                            style = tokens.inputTextStyle,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(AndroidKitIcons.Search, null, Modifier.size(tokens.iconSize))
+                    },
+                    trailingIcon = {
+                        Row {
+                            if (query.isNotEmpty()) {
+                                IconButton(
+                                    enabled = enabled,
+                                    onClick = {
+                                        dictation.cancel()
+                                        if (dictation.error != DictationError.Permission) dictation.clearError()
+                                        tooltipState.dismiss()
+                                        permissionPending = false
+                                        currentOnQueryChange("")
+                                        preserveFocusAfterClear = true
+                                        refocusAfterClear = true
+                                    },
+                                ) {
+                                    Icon(AndroidKitIcons.Close, strings.clearSearch,
+                                        Modifier.size(tokens.iconSize))
+                                }
+                            }
+                            if (voiceInputEnabled) {
+                                IconButton(
+                                    enabled = enabled && !permissionPending,
+                                    onClick = {
+                                        if (!permissionPending) {
+                                            errorPresentation++
+                                            settingsLaunchFailed = false
+                                            dictation.clearError()
+                                            keyboard?.hide()
+                                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) ==
+                                                PackageManager.PERMISSION_GRANTED) {
+                                                dictation.start(query)
+                                            } else {
+                                                permissionPending = true
+                                                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                                            }
+                                        }
+                                    },
+                                ) {
+                                    Icon(
+                                        AndroidKitIcons.Microphone,
+                                        strings.voiceSearch,
+                                        Modifier.size(tokens.iconSize))
+                                }
+                            }
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    onKeyboardAction = {
+                        if (enabled && query.isNotBlank()) {
+                            dictation.cancel()
+                            permissionPending = false
+                            keyboard?.hide()
+                            onSearch(query)
+                            onSubmit?.invoke()
+                        }
+                    },
+                    colors = TextFieldDefaults.colors(
+                        cursorColor = if (imeVisible) AndroidKitThemeTokens.colorScheme.primary else Color.Transparent,
+                        focusedTextColor = visuals.contentColor,
+                        unfocusedTextColor = visuals.contentColor,
+                        disabledTextColor = visuals.disabledContentColor,
+                        focusedLeadingIconColor = visuals.contentColor,
+                        unfocusedLeadingIconColor = visuals.contentColor,
+                        disabledLeadingIconColor = visuals.disabledContentColor,
+                        focusedTrailingIconColor = visuals.contentColor,
+                        unfocusedTrailingIconColor = visuals.contentColor,
+                        disabledTrailingIconColor = visuals.disabledContentColor,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                    ),
+                )
+            }
         }
+
     }
 }
 

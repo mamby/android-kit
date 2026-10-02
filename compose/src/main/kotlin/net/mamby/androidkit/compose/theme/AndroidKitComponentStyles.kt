@@ -7,112 +7,112 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 
 @Immutable
-public data class AndroidKitPageStyle(
-    public val containerColor: Color,
-    public val contentProtectionColor: Color = Color.Unspecified,
+internal data class AndroidKitPageStyle(
+    val containerColor: Color,
+    val contentProtectionColor: Color = Color.Unspecified,
 )
 
 @Immutable
-public data class AndroidKitPageTitleBarStyle(
-    public val titleSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val buttonSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
-    public val titleShape: Shape,
-    public val buttonShape: Shape,
-    public val titleTextStyle: TextStyle,
+internal data class AndroidKitPageTitleBarStyle(
+    val titleSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    val buttonSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
+    val titleShape: Shape,
+    val buttonShape: Shape,
+    val titleTextStyle: TextStyle,
 )
 
 @Immutable
-public data class AndroidKitFloatingActionButtonStyle(
-    public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val shape: Shape,
-    public val visualSize: Dp,
+internal data class AndroidKitFloatingActionButtonStyle(
+    val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    val shape: Shape,
+    val visualSize: Dp,
 )
 
 @Immutable
-public data class AndroidKitCardStyle(
-    public val containerColor: Color,
-    public val contentColor: Color,
-    public val borderColor: Color,
-    public val borderWidth: Dp,
-    public val shape: Shape,
-    public val titleTextStyle: TextStyle? = null,
-    public val supportingTextStyle: TextStyle? = null,
-    public val supportingTextColor: Color = Color.Unspecified,
+internal data class AndroidKitCardStyle(
+    val containerColor: Color,
+    val contentColor: Color,
+    val borderColor: Color,
+    val borderWidth: Dp,
+    val shape: Shape,
+    val titleTextStyle: TextStyle? = null,
+    val supportingTextStyle: TextStyle? = null,
+    val supportingTextColor: Color = Color.Unspecified,
 )
 
 @Immutable
-public data class AndroidKitSettingSectionStyle(
-    public val containerColor: Color,
-    public val contentColor: Color,
-    public val borderColor: Color,
-    public val borderWidth: Dp,
-    public val dividerColor: Color,
-    public val secondaryContentColor: Color,
-    public val shape: Shape,
-    public val sectionLabelTextStyle: TextStyle,
-    public val descriptionTextStyle: TextStyle,
-    public val entryLabelTextStyle: TextStyle,
-    public val supportingTextStyle: TextStyle,
-    public val valueLabelTextStyle: TextStyle,
+internal data class AndroidKitSettingSectionStyle(
+    val containerColor: Color,
+    val contentColor: Color,
+    val borderColor: Color,
+    val borderWidth: Dp,
+    val dividerColor: Color,
+    val secondaryContentColor: Color,
+    val shape: Shape,
+    val sectionLabelTextStyle: TextStyle,
+    val descriptionTextStyle: TextStyle,
+    val entryLabelTextStyle: TextStyle,
+    val supportingTextStyle: TextStyle,
+    val valueLabelTextStyle: TextStyle,
 )
 
 @Immutable
-public data class AndroidKitFloatingActionBarStyle(
-    public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
-    public val shape: Shape,
-    public val itemShape: Shape,
-    public val labelTextStyle: TextStyle,
+internal data class AndroidKitFloatingActionBarStyle(
+    val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
+    val shape: Shape,
+    val itemShape: Shape,
+    val labelTextStyle: TextStyle,
 )
 
 @Immutable
-public data class AndroidKitFloatingToolbarStyle(
-    public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
-    public val separatorColor: Color,
-    public val shape: Shape,
-    public val itemShape: Shape,
-    public val labelTextStyle: TextStyle,
-    public val iconSize: Dp,
+internal data class AndroidKitFloatingToolbarStyle(
+    val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    val flyoutStyle: AndroidKitActionFlyoutStyle? = null,
+    val separatorColor: Color,
+    val shape: Shape,
+    val itemShape: Shape,
+    val labelTextStyle: TextStyle,
+    val iconSize: Dp,
 )
 
 @Immutable
-public data class AndroidKitActionFlyoutStyle(
-    public val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val shape: Shape,
+internal data class AndroidKitActionFlyoutStyle(
+    val surfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    val shape: Shape,
 )
 
 @Immutable
-public data class AndroidKitAdaptiveNavigationItemStyle(
-    public val selectedIconColor: Color = Color.Unspecified,
-    public val selectedTextColor: Color = Color.Unspecified,
-    public val selectedIndicatorColor: Color = Color.Unspecified,
-    public val unselectedIconColor: Color = Color.Unspecified,
-    public val unselectedTextColor: Color = Color.Unspecified,
-    public val disabledIconColor: Color = Color.Unspecified,
-    public val disabledTextColor: Color = Color.Unspecified,
-    public val drawerSelectedContainerColor: Color = Color.Unspecified,
-    public val drawerUnselectedContainerColor: Color = Color.Unspecified,
-    public val drawerSelectedBadgeColor: Color = Color.Unspecified,
-    public val drawerUnselectedBadgeColor: Color = Color.Unspecified,
+internal data class AndroidKitAdaptiveNavigationItemStyle(
+    val selectedIconColor: Color = Color.Unspecified,
+    val selectedTextColor: Color = Color.Unspecified,
+    val selectedIndicatorColor: Color = Color.Unspecified,
+    val unselectedIconColor: Color = Color.Unspecified,
+    val unselectedTextColor: Color = Color.Unspecified,
+    val disabledIconColor: Color = Color.Unspecified,
+    val disabledTextColor: Color = Color.Unspecified,
+    val drawerSelectedContainerColor: Color = Color.Unspecified,
+    val drawerUnselectedContainerColor: Color = Color.Unspecified,
+    val drawerSelectedBadgeColor: Color = Color.Unspecified,
+    val drawerUnselectedBadgeColor: Color = Color.Unspecified,
 )
 
 @Immutable
-public data class AndroidKitFloatingNavigationStyle(
-    public val containerColor: Color,
-    public val navigationBarContainerColor: Color,
-    public val navigationRailContainerColor: Color,
-    public val navigationDrawerContainerColor: Color,
-    public val compactSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
-    public val compactContainerColor: Color,
-    public val selectedContainerColor: Color,
-    public val selectedContentColor: Color,
-    public val unselectedContentColor: Color,
-    public val barShape: Shape,
-    public val itemShape: Shape,
-    public val labelTextStyle: TextStyle,
-    public val overflowItemTextStyle: TextStyle,
-    public val overflowFlyoutStyle: AndroidKitActionFlyoutStyle? = null,
-    public val adaptiveItemStyle: AndroidKitAdaptiveNavigationItemStyle? = null,
+internal data class AndroidKitFloatingNavigationStyle(
+    val containerColor: Color,
+    val navigationBarContainerColor: Color,
+    val navigationRailContainerColor: Color,
+    val navigationDrawerContainerColor: Color,
+    val compactSurfaceStyle: AndroidKitFloatingSurfaceStyle? = null,
+    val compactContainerColor: Color,
+    val selectedContainerColor: Color,
+    val selectedContentColor: Color,
+    val unselectedContentColor: Color,
+    val barShape: Shape,
+    val itemShape: Shape,
+    val labelTextStyle: TextStyle,
+    val overflowItemTextStyle: TextStyle,
+    val overflowFlyoutStyle: AndroidKitActionFlyoutStyle? = null,
+    val adaptiveItemStyle: AndroidKitAdaptiveNavigationItemStyle? = null,
 )

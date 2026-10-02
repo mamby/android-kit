@@ -11,7 +11,15 @@ import androidx.compose.ui.unit.Dp
 import net.mamby.androidkit.compose.action.AndroidKitActionItem
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
 import net.mamby.androidkit.compose.presentation.*
-import net.mamby.androidkit.compose.theme.*
+import net.mamby.androidkit.compose.theme.AndroidKitCardColors
+import net.mamby.androidkit.compose.theme.AndroidKitCardStyle
+import net.mamby.androidkit.compose.theme.AndroidKitPageColors
+import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
+import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarColors
+import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.toColors
+import net.mamby.androidkit.compose.theme.withColors
 
 /**
  * A page with one Kit-owned lazy list. [supportPrompt] precedes [listContent] and scrolls with it.
@@ -27,7 +35,48 @@ public fun AndroidKitPage(
     actions: List<AndroidKitActionItem> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
     floatingActionButton: AndroidKitFloatingAction? = null,
-    style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
+    colors: AndroidKitPageColors = AndroidKitPageColors(),
+    titleBarColors: AndroidKitPageTitleBarColors = AndroidKitPageTitleBarColors(),
+    contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
+    floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    applyImePadding: Boolean = true,
+    listState: LazyListState = rememberLazyListState(),
+    contentPadding: PaddingValues = PaddingValues(horizontal = AndroidKitThemeTokens.componentTokens.listPage.horizontalPadding),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(AndroidKitThemeTokens.componentTokens.listPage.itemSpacing),
+    supportPrompt: AndroidKitSupportPrompt? = null,
+    supportCardColors: AndroidKitCardColors = AndroidKitCardColors(),
+): Unit {
+    AndroidKitPage(
+        listContent = listContent,
+        title = title,
+        modifier = modifier,
+        onBack = onBack,
+        actions = actions,
+        titleBarImmersiveMode = titleBarImmersiveMode,
+        floatingActionButton = floatingActionButton,
+        style = AndroidKitThemeTokens.pageStyle.withColors(colors),
+        titleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle.withColors(titleBarColors, AndroidKitThemeTokens.floatingSurfaceStyle),
+        contentWindowInsets = contentWindowInsets,
+        floatingActionAlignment = floatingActionAlignment,
+        applyImePadding = applyImePadding,
+        listState = listState,
+        contentPadding = contentPadding,
+        verticalArrangement = verticalArrangement,
+        supportPrompt = supportPrompt,
+        supportCardStyle = AndroidKitThemeTokens.componentTokens.supportPrompt.cardStyle.withColors(supportCardColors),
+    )
+}
+
+@Composable
+internal fun AndroidKitPage(
+    listContent: LazyListScope.() -> Unit,
+    title: String? = null,
+    modifier: Modifier = Modifier,
+    onBack: (() -> Unit)? = null,
+    actions: List<AndroidKitActionItem> = emptyList(),
+    titleBarImmersiveMode: Boolean = false,
+    floatingActionButton: AndroidKitFloatingAction? = null,
+    style: AndroidKitPageStyle,
     titleBarStyle: AndroidKitPageTitleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
@@ -52,8 +101,8 @@ public fun AndroidKitPage(
     AndroidKitPage(
         title = title, modifier = modifier, onBack = onBack, actions = actions,
         titleBarImmersiveMode = titleBarImmersiveMode, floatingActionButton = floatingActionButton,
-        style = style, titleBarStyle = titleBarStyle, contentWindowInsets = contentWindowInsets,
-        floatingActionAlignment = floatingActionAlignment, floatingActionMargin = floatingActionMargin,
+        colors = style.toColors(), titleBarColors = titleBarStyle.toColors(), contentWindowInsets = contentWindowInsets,
+        floatingActionAlignment = floatingActionAlignment,
         applyImePadding = applyImePadding,
     ) { clearance ->
         LazyColumn(

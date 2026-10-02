@@ -4,7 +4,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import net.mamby.androidkit.compose.theme.AndroidKitDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
 enum class DemoThemeChoice(internal val storedValue: String) {
@@ -46,8 +45,6 @@ val PrismThemeDefinition = AndroidKitThemeDefinition(
         onError = Color(0xFF690005),
     ),
     isDark = true,
-    typography = AndroidKitDefaults.typography,
-    shapes = AndroidKitDefaults.shapes,
 )
 
 @Composable

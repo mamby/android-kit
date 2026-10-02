@@ -29,6 +29,19 @@ configuration entries, unsupported declared languages, and incompatible language
 aliases in resource directories, dependency AARs and locale filters. Fixture sources live
 under `test/gradle`; no application source files are edited by the test runner.
 
+## Theme appearance API contracts
+
+Run `./test/gradle/verify-theme-api.ps1` with PowerShell 7. Independent snippets
+compile through the demo without the test module's Kotlin friend access.
+Supported colors, transparency and read-only scale access must compile; legacy
+styles, injected shapes/typography/dimensions and raw component geometry must not.
+The runner verifies compiler diagnostics at each fixture and restores the normal
+demo compilation afterward. Fixture sources stay under `test/gradle`.
+
+`ThemeColorResolutionTest` covers palette replacement and independent color-role
+inheritance. `ThemeAppearanceBehaviorTest` verifies rendered palette changes and
+that nested host typography/shapes affect bodies while Kit chrome remains fixed.
+
 ## Instrumented behavior tests
 
 With a device or emulator connected:

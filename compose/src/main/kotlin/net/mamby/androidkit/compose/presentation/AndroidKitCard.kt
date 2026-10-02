@@ -29,7 +29,11 @@ import net.mamby.androidkit.compose.action.AndroidKitActionFlyout
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitCardDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitCardStyle
+import net.mamby.androidkit.compose.theme.AndroidKitCardColors
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.androidKitHostTheme
+import net.mamby.androidkit.compose.theme.withColors
 
 @Immutable
 public class AndroidKitCardMenuItem(
@@ -44,7 +48,29 @@ public fun AndroidKitCard(
     modifier: Modifier = Modifier,
     menuItems: List<AndroidKitCardMenuItem> = emptyList(),
     title: String? = null,
-    style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
+    colors: AndroidKitCardColors = AndroidKitCardColors(),
+    supportingText: String? = null,
+    content: @Composable ColumnScope.() -> Unit,
+): Unit {
+    val hostTheme = androidKitHostTheme()
+    AndroidKitComponentTheme {
+        AndroidKitCard(
+            modifier = modifier,
+            menuItems = menuItems,
+            title = title,
+            style = AndroidKitThemeTokens.cardStyle.withColors(colors),
+            supportingText = supportingText,
+            content = { hostTheme.Content { content() } },
+        )
+    }
+}
+
+@Composable
+internal fun AndroidKitCard(
+    modifier: Modifier = Modifier,
+    menuItems: List<AndroidKitCardMenuItem> = emptyList(),
+    title: String? = null,
+    style: AndroidKitCardStyle,
     contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.componentTokens.card.contentPadding),
     contentSpacing: Dp = AndroidKitThemeTokens.componentTokens.card.contentSpacing,
     supportingText: String? = null,
@@ -75,7 +101,33 @@ public fun AndroidKitCard(
     enabled: Boolean = true,
     menuItems: List<AndroidKitCardMenuItem> = emptyList(),
     title: String? = null,
-    style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
+    colors: AndroidKitCardColors = AndroidKitCardColors(),
+    supportingText: String? = null,
+    content: @Composable ColumnScope.() -> Unit,
+): Unit {
+    val hostTheme = androidKitHostTheme()
+    AndroidKitComponentTheme {
+        AndroidKitCard(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+            menuItems = menuItems,
+            title = title,
+            style = AndroidKitThemeTokens.cardStyle.withColors(colors),
+            supportingText = supportingText,
+            content = { hostTheme.Content { content() } },
+        )
+    }
+}
+
+@Composable
+internal fun AndroidKitCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    menuItems: List<AndroidKitCardMenuItem> = emptyList(),
+    title: String? = null,
+    style: AndroidKitCardStyle,
     contentPadding: PaddingValues = PaddingValues(AndroidKitThemeTokens.componentTokens.card.contentPadding),
     contentSpacing: Dp = AndroidKitThemeTokens.componentTokens.card.contentSpacing,
     supportingText: String? = null,

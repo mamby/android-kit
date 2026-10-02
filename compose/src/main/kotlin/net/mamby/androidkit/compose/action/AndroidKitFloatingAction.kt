@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionButtonStyle
-import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionButtonColors
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarColors
 import net.mamby.androidkit.compose.form.AndroidKitFloatingSearchBox
 import net.mamby.androidkit.compose.form.AndroidKitSearchMode
 
@@ -55,25 +55,25 @@ public sealed interface AndroidKitFloatingAction {
         public val onClick: () -> Unit,
         public val enabled: Boolean,
         public val modifier: Modifier,
-        public val style: AndroidKitFloatingActionButtonStyle?,
+        public val colors: AndroidKitFloatingActionButtonColors?,
         public val tooltip: String?,
     ) : AndroidKitFloatingAction {
         public constructor(icon: ImageVector, label: String, onClick: () -> Unit,
             enabled: Boolean = true, modifier: Modifier = Modifier,
-            style: AndroidKitFloatingActionButtonStyle? = null,
+            colors: AndroidKitFloatingActionButtonColors? = null,
             tooltip: String? = null,
-        ) : this(icon, null, label, onClick, enabled, modifier, style, tooltip)
+        ) : this(icon, null, label, onClick, enabled, modifier, colors, tooltip)
 
         public constructor(icon: Painter, label: String, onClick: () -> Unit,
             enabled: Boolean = true, modifier: Modifier = Modifier,
-            style: AndroidKitFloatingActionButtonStyle? = null,
+            colors: AndroidKitFloatingActionButtonColors? = null,
             tooltip: String? = null,
-        ) : this(null, icon, label, onClick, enabled, modifier, style, tooltip)
+        ) : this(null, icon, label, onClick, enabled, modifier, colors, tooltip)
     }
 
     public class Bar(
         public val modifier: Modifier = Modifier,
-        public val style: AndroidKitFloatingActionBarStyle? = null,
+        public val colors: AndroidKitFloatingActionBarColors? = null,
         internal val content: AndroidKitFloatingActionBarScope.() -> Unit,
     ) : AndroidKitFloatingAction
 }
@@ -97,7 +97,7 @@ internal fun RenderFloatingAction(action: AndroidKitFloatingAction?) {
         is AndroidKitFloatingAction.Button -> AndroidKitFloatingActionButton(action)
         is AndroidKitFloatingAction.Bar -> AndroidKitFloatingActionBar(
             modifier = action.modifier,
-            style = action.style ?: AndroidKitThemeTokens.floatingActionBarStyle,
+            colors = action.colors ?: AndroidKitFloatingActionBarColors(),
             content = action.content,
         )
     }

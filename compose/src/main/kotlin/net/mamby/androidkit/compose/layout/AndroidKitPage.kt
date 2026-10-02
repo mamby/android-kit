@@ -36,7 +36,12 @@ import net.mamby.androidkit.compose.action.AndroidKitTextAction
 import net.mamby.androidkit.compose.action.isAndroidKitAction
 import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
 import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
+import net.mamby.androidkit.compose.theme.AndroidKitPageColors
+import net.mamby.androidkit.compose.theme.AndroidKitPageTitleBarColors
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.androidKitHostTheme
+import net.mamby.androidkit.compose.theme.withColors
 
 public typealias AndroidKitPageActionItem = AndroidKitActionItem
 
@@ -61,7 +66,41 @@ public fun AndroidKitPage(
     actions: List<AndroidKitActionItem> = emptyList(),
     titleBarImmersiveMode: Boolean = false,
     floatingActionButton: AndroidKitFloatingAction? = null,
-    style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
+    colors: AndroidKitPageColors = AndroidKitPageColors(),
+    titleBarColors: AndroidKitPageTitleBarColors = AndroidKitPageTitleBarColors(),
+    contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
+    floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    applyImePadding: Boolean = true,
+    content: @Composable (PaddingValues) -> Unit,
+): Unit {
+    val hostTheme = androidKitHostTheme()
+    AndroidKitComponentTheme {
+        AndroidKitPage(
+            title = title,
+            modifier = modifier,
+            onBack = onBack,
+            actions = actions,
+            titleBarImmersiveMode = titleBarImmersiveMode,
+            floatingActionButton = floatingActionButton,
+            style = AndroidKitThemeTokens.pageStyle.withColors(colors),
+            titleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle.withColors(titleBarColors, AndroidKitThemeTokens.floatingSurfaceStyle),
+            contentWindowInsets = contentWindowInsets,
+            floatingActionAlignment = floatingActionAlignment,
+            applyImePadding = applyImePadding,
+            content = { padding -> hostTheme.Content { content(padding) } },
+        )
+    }
+}
+
+@Composable
+internal fun AndroidKitPage(
+    title: String? = null,
+    modifier: Modifier = Modifier,
+    onBack: (() -> Unit)? = null,
+    actions: List<AndroidKitActionItem> = emptyList(),
+    titleBarImmersiveMode: Boolean = false,
+    floatingActionButton: AndroidKitFloatingAction? = null,
+    style: AndroidKitPageStyle,
     titleBarStyle: AndroidKitPageTitleBarStyle = AndroidKitThemeTokens.pageTitleBarStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
     floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,

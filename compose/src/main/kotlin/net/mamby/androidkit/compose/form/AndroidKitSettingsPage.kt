@@ -42,6 +42,7 @@ import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.AndroidKitPage
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingSurfaceDefaults
 import net.mamby.androidkit.compose.theme.AndroidKitStrings
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import java.util.Locale
 
@@ -199,6 +200,25 @@ internal interface SettingsPageRenderScope {
 /** Renders a page from the shared Settings catalog. */
 @Composable
 public fun AndroidKitSettingsPage(
+    catalog: AndroidKitSettingsCatalog,
+    pageKey: String,
+    modifier: Modifier = Modifier,
+    onBack: (() -> Unit)? = null,
+    listState: LazyListState = rememberLazyListState(),
+): Unit {
+    AndroidKitComponentTheme {
+        AndroidKitSettingsPageContent(
+            catalog = catalog,
+            pageKey = pageKey,
+            modifier = modifier,
+            onBack = onBack,
+            listState = listState,
+        )
+    }
+}
+
+@Composable
+private fun AndroidKitSettingsPageContent(
     catalog: AndroidKitSettingsCatalog,
     pageKey: String,
     modifier: Modifier = Modifier,

@@ -24,7 +24,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitPageStyle
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
+import net.mamby.androidkit.compose.theme.AndroidKitPageColors
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.withColors
 
 /**
  * A title-free access-gate page. The host owns authentication, lock policy and navigation.
@@ -40,7 +43,34 @@ public fun AndroidKitLockPage(
     isUnlocking: Boolean = false,
     errorMessage: String? = null,
     icon: ImageVector? = null,
-    style: AndroidKitPageStyle = AndroidKitThemeTokens.pageStyle,
+    colors: AndroidKitPageColors = AndroidKitPageColors(),
+    contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
+): Unit {
+    AndroidKitComponentTheme {
+        AndroidKitLockPage(
+            message = message,
+            unlockLabel = unlockLabel,
+            onUnlock = onUnlock,
+            modifier = modifier,
+            isUnlocking = isUnlocking,
+            errorMessage = errorMessage,
+            icon = icon,
+            style = AndroidKitThemeTokens.pageStyle.withColors(colors),
+            contentWindowInsets = contentWindowInsets,
+        )
+    }
+}
+
+@Composable
+internal fun AndroidKitLockPage(
+    message: String,
+    unlockLabel: String,
+    onUnlock: () -> Unit,
+    modifier: Modifier = Modifier,
+    isUnlocking: Boolean = false,
+    errorMessage: String? = null,
+    icon: ImageVector? = null,
+    style: AndroidKitPageStyle,
     contentWindowInsets: WindowInsets = androidKitContentWindowInsets(),
 ) {
     val tokens = AndroidKitThemeTokens.componentTokens.lockPage

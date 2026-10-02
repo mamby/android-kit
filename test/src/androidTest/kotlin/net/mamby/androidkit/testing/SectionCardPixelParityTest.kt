@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
-import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +37,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCard
 import net.mamby.androidkit.compose.presentation.AndroidKitSectionCardEntry as Entry
-import net.mamby.androidkit.compose.theme.AndroidKitThemeDefinition
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.AndroidKitThemes
 import org.junit.Assert.assertEquals
@@ -48,7 +45,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-/** In-memory pixel comparison against the pre-migration consumer presentation, not a golden image. */
+/** In-memory pixel comparison against an independent presentation using sealed Kit geometry. */
 @RunWith(Parameterized::class)
 class SectionCardPixelParityTest(
     private val dark: Boolean,
@@ -67,18 +64,8 @@ class SectionCardPixelParityTest(
             DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(fontScale)) {
                 DeviceConfigurationOverride(DeviceConfigurationOverride.LayoutDirection(direction)) {
                     val palette = if (dark) AndroidKitThemes.Dark else AndroidKitThemes.Light
-                    // Preserve the original Health presentation's typography, shapes and spacing.
-                    TestKitTheme(AndroidKitThemeDefinition(
-                        colorScheme = palette.colorScheme,
-                        isDark = dark,
-                        typography = Typography(),
-                        shapes = Shapes(),
-                        dimensions = palette.dimensions.copy(
-                            spaceMedium = 12.dp,
-                            sectionCardHorizontalPadding = 12.dp,
-                            settingSectionEntryVerticalPadding = 12.dp,
-                        ),
-                    )) {
+                    // Hosts now share Kit geometry; the independent reference uses its defaults.
+                    TestKitTheme(palette) {
                         Box(Modifier.width(320.dp).background(AndroidKitThemeTokens.colorScheme.background)
                             .testTag("section")) {
                             val title = if (notes) "Notes" else "Contact values"
@@ -126,7 +113,7 @@ class SectionCardPixelParityTest(
     }
 }
 
-/** Frozen rendering contract from Health ContactsScreen.kt, reviewed 2026-09-29.
+/** Independent contact-section reference using the sealed Kit geometry.
  * Keep independent of the new component so typography, padding and affordance changes are caught.
  * Only fictional data is rendered and no screenshots are saved.
  */
@@ -137,7 +124,7 @@ private fun ExistingContactSection(title: String, values: List<String>, notes: S
     Column(verticalArrangement = Arrangement.spacedBy(dimensions.settingSectionSpacing)) {
         Text(
             title,
-            modifier = Modifier.padding(horizontal = dimensions.spaceMedium).semantics { heading() },
+            modifier = Modifier.padding(horizontal = dimensions.sectionCardHorizontalPadding).semantics { heading() },
             style = style.sectionLabelTextStyle,
             color = style.secondaryContentColor,
         )
@@ -148,16 +135,16 @@ private fun ExistingContactSection(title: String, values: List<String>, notes: S
             border = BorderStroke(style.borderWidth, style.borderColor),
         ) {
             if (notes != null) {
-                Text(notes, Modifier.padding(dimensions.spaceMedium), style = style.entryLabelTextStyle)
+                Text(notes, Modifier.padding(horizontal = dimensions.sectionCardHorizontalPadding, vertical = dimensions.settingSectionEntryVerticalPadding), style = style.entryLabelTextStyle)
             } else {
                 values.forEachIndexed { index, value ->
                     if (index > 0) {
-                        HorizontalDivider(Modifier.padding(horizontal = dimensions.spaceMedium), color = style.dividerColor)
+                        HorizontalDivider(Modifier.padding(horizontal = dimensions.sectionCardHorizontalPadding), color = style.dividerColor)
                     }
                     Row(
                         modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "Open value") {}
                             .heightIn(min = dimensions.minimumTouchTarget)
-                            .padding(horizontal = dimensions.spaceMedium, vertical = dimensions.settingSectionEntryVerticalPadding),
+                            .padding(horizontal = dimensions.sectionCardHorizontalPadding, vertical = dimensions.settingSectionEntryVerticalPadding),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(value, Modifier.fillMaxWidth(), style = style.entryLabelTextStyle)

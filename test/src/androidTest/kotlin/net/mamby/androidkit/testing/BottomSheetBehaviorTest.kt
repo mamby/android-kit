@@ -347,7 +347,7 @@ class BottomSheetBehaviorTest {
                     visible = true,
                     title = SheetTitle,
                     onDismiss = {},
-                    style = AndroidKitThemeTokens.bottomSheetStyle.copy(
+                    colors = AndroidKitThemeTokens.bottomSheetColors.copy(
                         chromeContainerColor = chromeBaseColor,
                     ),
                     scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
@@ -401,8 +401,6 @@ class BottomSheetBehaviorTest {
                         maxHeightFraction = AndroidKitBottomSheetDefaults.MaximumHeightFraction,
                         scrollMode = AndroidKitBottomSheetScrollMode.ContentManaged,
                         showChrome = false,
-                        sheetContentPadding = PaddingValues.Zero,
-                        contentBottomPadding = 0.dp,
                         showDragHandle = false,
                         contentWindowInsets = WindowInsets(0, 0, 0, TestBottomInsetPx),
                     ) { managedContentPadding ->

@@ -5,9 +5,9 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 
-public object AndroidKitCardDefaults {
+internal object AndroidKitCardDefaults {
     @Composable
-    public fun colors(
+    fun colors(
         style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
     ): CardColors = CardDefaults.cardColors(
         containerColor = style.containerColor,
@@ -15,7 +15,7 @@ public object AndroidKitCardDefaults {
     )
 
     @Composable
-    public fun border(
+    fun border(
         style: AndroidKitCardStyle = AndroidKitThemeTokens.cardStyle,
     ): BorderStroke = BorderStroke(
         width = style.borderWidth,

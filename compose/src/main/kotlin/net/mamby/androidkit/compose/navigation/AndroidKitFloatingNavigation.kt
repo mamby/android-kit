@@ -91,7 +91,12 @@ import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.layout.LocalAndroidKitFloatingNavigationInsets
 import net.mamby.androidkit.compose.theme.AndroidKitAdaptiveNavigationItemStyle
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingNavigationStyle
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingNavigationColors
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.androidKitHostTheme
+import net.mamby.androidkit.compose.theme.orDefault
+import net.mamby.androidkit.compose.theme.withColors
 import net.mamby.androidkit.compose.theme.FloatingSurface
 import net.mamby.androidkit.compose.theme.floatingSurfaceVisuals
 import kotlin.math.roundToInt
@@ -128,7 +133,34 @@ public fun <Key : Any> AndroidKitFloatingNavigation(
     modifier: Modifier = Modifier,
     compactVisibleDestinationCount: Int = 4,
     showCompactLabels: Boolean = false,
-    style: AndroidKitFloatingNavigationStyle = AndroidKitThemeTokens.floatingNavigationStyle,
+    colors: AndroidKitFloatingNavigationColors = AndroidKitFloatingNavigationColors(),
+    content: @Composable () -> Unit,
+): Unit {
+    val hostTheme = androidKitHostTheme()
+    AndroidKitComponentTheme {
+        AndroidKitFloatingNavigation(
+            items = items,
+            selectedKey = selectedKey,
+            onSelected = onSelected,
+            modifier = modifier,
+            compactVisibleDestinationCount = compactVisibleDestinationCount,
+            showCompactLabels = showCompactLabels,
+            style = AndroidKitThemeTokens.floatingNavigationStyle.withColors(colors, AndroidKitThemeTokens.floatingSurfaceStyle),
+            content = { hostTheme.Content(content) },
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+internal fun <Key : Any> AndroidKitFloatingNavigation(
+    items: List<AndroidKitFloatingNavigationItem<Key>>,
+    selectedKey: Key,
+    onSelected: (Key) -> Unit,
+    modifier: Modifier = Modifier,
+    compactVisibleDestinationCount: Int = 4,
+    showCompactLabels: Boolean = false,
+    style: AndroidKitFloatingNavigationStyle,
     content: @Composable () -> Unit,
 ): Unit {
     require(items.isNotEmpty()) { "At least one navigation item is required." }

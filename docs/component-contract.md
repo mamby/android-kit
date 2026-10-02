@@ -1,6 +1,6 @@
 # Component ownership
 
-AndroidKit is opinionated. New components seal shape, typography, icons, labels,
+AndroidKit is opinionated. Components seal shape, typography, icons, labels,
 control arrangement, chrome, interaction semantics and control rendering by
 default. Consumers provide typed content/data, state, callbacks, availability
 options, placement and supported theme colors. Components follow shared Kit
@@ -9,15 +9,24 @@ or rendering overrides that let hosts redesign the control. A host wanting a
 different visual direction should implement its own component. Depart from this
 default only when explicitly requested.
 
-Existing component style APIs described below remain until explicitly migrated;
-they are not a precedent for adding equivalent extensibility to new components.
+The public theme accepts a color scheme, light/dark identity, floating-surface
+transparency, shared floating-surface colors and component-specific colors.
+Immutable color groups contain only colors and other color groups. Instance
+`colors` arguments refine existing component color roles; unspecified values
+inherit the active theme. Shapes, typography, border widths, shadow geometry,
+icon/control sizes and component padding/spacing remain internal.
+
+Shared typography, shapes and dimensions are readable through
+`AndroidKitThemeTokens` for host-owned content. Dimensions have no public
+constructor or copy operation. No theme or component input accepts replacement
+scales. Nested host Material themes style app bodies; Kit controls establish
+their own Material theme boundary.
 
 Component-specific defaults belong to that component. Internal semantic token
 groups own padding, gaps, icon sizes, text roles, shapes and local colors; a
 component must not borrow another component's style or dimension just because
 its current value matches. These groups are internal and introduce no new host
-styling APIs. Existing component-specific public styles and dimensions retain
-their owning component.
+geometry APIs. Color groups and internal defaults retain their owning component.
 
 The color palette, typography/shape/spacing scales, accessibility minimum touch
 target and floating-surface transparency, border, shadow and disabled-state
@@ -84,7 +93,8 @@ escape hatch. Migrate consumers and the demo with the library.
   predefined labels/icons. About remains fixed and is appended to Main when
   present. See [settings.md](settings.md).
 - Cards: replace `header` and `headerSupportingContent` with `title` and
-  `supportingText`. Explicit typography and supporting color belong in card style.
+  `supportingText`. Supporting colors belong in `AndroidKitCardColors`;
+  title/supporting typography and card padding/spacing remain Kit-owned.
   `AndroidKitSectionCard` provides typed action, navigation, toggle, slider,
   informational, copyable and multiline entries. Settings maps its declarations
   to these same entries; SectionCard renders the controls and surrounding card.
@@ -112,8 +122,11 @@ escape hatch. Migrate consumers and the demo with the library.
   `AndroidKitNavDisplay` owns immediate page changes, including predictive Back,
   while hosts own routes and state. See [page navigation](navigation.md).
 
-Outer modifiers and existing style/layout parameters remain supported; new
-components follow the sealed default above. Authentication,
+Outer modifiers and supported presentation options remain: app-list content
+padding/arrangement, window insets, alignment, menu placement/offset/anchor,
+sheet width/height/fit options, chrome visibility and typed action layout variants.
+These do not replace Kit control renderers or internal geometry.
+Legacy public styles and raw component padding/spacing arguments are removed. Authentication,
 persistence, application-content localization, navigation decisions, and application
 state belong to consumers. Kit-owned vocabulary is translated only in Kit and is
 not overridable. Consumers must apply the [localization build gate](localization.md).

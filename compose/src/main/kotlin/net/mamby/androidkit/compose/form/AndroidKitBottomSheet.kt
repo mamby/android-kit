@@ -98,7 +98,11 @@ import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetStyle
 import net.mamby.androidkit.compose.theme.AndroidKitDimensions
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetTokens
+import net.mamby.androidkit.compose.theme.AndroidKitBottomSheetColors
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.androidKitHostTheme
+import net.mamby.androidkit.compose.theme.withColors
 import net.mamby.androidkit.compose.theme.floatingSurfaceAlphaForLevel
 
 public enum class AndroidKitBottomSheetScrollMode {
@@ -139,7 +143,68 @@ public fun AndroidKitBottomSheet(
     title: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    style: AndroidKitBottomSheetStyle = AndroidKitThemeTokens.bottomSheetStyle,
+    colors: AndroidKitBottomSheetColors = AndroidKitBottomSheetColors(),
+    maxHeightFraction: Float = AndroidKitBottomSheetDefaults.DefaultMaxHeightFraction,
+    scrollMode: AndroidKitBottomSheetScrollMode = AndroidKitBottomSheetScrollMode.VerticalScroll,
+    fitContent: Boolean = false,
+    showChrome: Boolean = true,
+    gesturesEnabled: Boolean = true,
+    dismissGesturesEnabled: Boolean = true,
+    closeContentDescription: String? = null,
+    backContentDescription: String? = null,
+    onBack: (() -> Unit)? = null,
+    actions: List<AndroidKitActionItem> = emptyList(),
+    sheetMaxWidth: Dp = Dp.Unspecified,
+    showDragHandle: Boolean = true,
+    search: AndroidKitSheetSearch? = null,
+    contentWindowInsets: WindowInsets = WindowInsets.safeDrawing.exclude(WindowInsets.ime).only(
+        WindowInsetsSides.Top + WindowInsetsSides.Bottom,
+    ),
+    skipPartiallyExpanded: Boolean = true,
+    dismissOnBackPress: Boolean = onBack == null,
+    floatingAction: AndroidKitFloatingAction? = null,
+    floatingActionAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    content: @Composable ColumnScope.(managedContentPadding: PaddingValues) -> Unit,
+): Unit {
+    val hostTheme = androidKitHostTheme()
+    AndroidKitComponentTheme {
+        AndroidKitBottomSheet(
+            visible = visible,
+            title = title,
+            onDismiss = onDismiss,
+            modifier = modifier,
+            style = AndroidKitThemeTokens.bottomSheetStyle.withColors(colors, AndroidKitThemeTokens.floatingSurfaceStyle),
+            maxHeightFraction = maxHeightFraction,
+            scrollMode = scrollMode,
+            fitContent = fitContent,
+            showChrome = showChrome,
+            gesturesEnabled = gesturesEnabled,
+            dismissGesturesEnabled = dismissGesturesEnabled,
+            closeContentDescription = closeContentDescription,
+            backContentDescription = backContentDescription,
+            onBack = onBack,
+            actions = actions,
+            sheetMaxWidth = sheetMaxWidth,
+            showDragHandle = showDragHandle,
+            search = search,
+            contentWindowInsets = contentWindowInsets,
+            skipPartiallyExpanded = skipPartiallyExpanded,
+            dismissOnBackPress = dismissOnBackPress,
+            floatingAction = floatingAction,
+            floatingActionAlignment = floatingActionAlignment,
+            content = { padding -> hostTheme.Content { content(padding) } },
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun AndroidKitBottomSheet(
+    visible: Boolean,
+    title: String,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+    style: AndroidKitBottomSheetStyle,
     maxHeightFraction: Float = AndroidKitBottomSheetDefaults.DefaultMaxHeightFraction,
     scrollMode: AndroidKitBottomSheetScrollMode = AndroidKitBottomSheetScrollMode.VerticalScroll,
     fitContent: Boolean = false,

@@ -37,6 +37,9 @@ jobs:
       - name: Verify localization packaging contracts
         shell: pwsh
         run: ./test/gradle/verify-localization.ps1
+      - name: Verify sealed theme API contracts
+        shell: pwsh
+        run: ./test/gradle/verify-theme-api.ps1
 
   lint:
     runs-on: ubuntu-latest

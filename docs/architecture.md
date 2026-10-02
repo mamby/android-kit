@@ -19,18 +19,19 @@ immutable state and callbacks; consumers retain navigation routes, ViewModels,
 repositories and side effects.
 
 `AndroidKitTheme` is a required boundary for every shared Compose component.
-Components read colors, typography, shapes, dimensions and component styles
-from its `AndroidKitThemeDefinition`; they do not silently inherit an ambient
-destination-app `MaterialTheme`. Missing the kit theme fails immediately with a
+Components resolve colors from its `AndroidKitThemeDefinition` and geometry
+from fixed internal tokens; Kit chrome does not inherit a destination-app
+Material theme's typography or shapes. Missing the kit theme fails immediately with a
 clear integration error.
 
-The theme is the default styling source, not a restriction on local composition.
-Public components expose immutable per-instance styles, focused layout parameters
-and body slots in pages, cards, sheets, and navigation. Kit-owned chrome and
+The theme accepts colors and floating-surface transparency. Public components
+expose immutable color-only overrides, supported presentation options and body
+slots in pages, cards, sheets and navigation. Shared scales are read-only; host
+Material themes remain available inside app-owned bodies. Kit-owned chrome and
 controls accept typed data rather than rendering slots; see
-[the component contract](component-contract.md). Every override defaults to the
-theme-backed value, while touch targets, safe-area behavior, accessibility
-semantics and adaptive layout policy remain owned by the kit.
+[the component contract](component-contract.md). Unspecified colors inherit the
+current theme. Touch targets, safe-area behavior, accessibility semantics and
+adaptive layout policy remain owned by the kit. See [theme migration](theme.md).
 
 ## Demo-owned surface
 

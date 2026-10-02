@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 import net.mamby.androidkit.compose.theme.FloatingSurface
 
@@ -34,6 +35,24 @@ public data class AndroidKitFloatingTooltipAction(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun TooltipScope.AndroidKitFloatingTooltip(
+    text: String,
+    modifier: Modifier = Modifier,
+    action: AndroidKitFloatingTooltipAction? = null,
+    onDismiss: (() -> Unit)? = null,
+): Unit {
+    AndroidKitComponentTheme {
+        AndroidKitFloatingTooltipContent(
+            text = text,
+            modifier = modifier,
+            action = action,
+            onDismiss = onDismiss,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TooltipScope.AndroidKitFloatingTooltipContent(
     text: String,
     modifier: Modifier = Modifier,
     action: AndroidKitFloatingTooltipAction? = null,

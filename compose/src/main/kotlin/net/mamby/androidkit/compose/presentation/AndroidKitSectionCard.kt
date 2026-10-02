@@ -34,6 +34,7 @@ import net.mamby.androidkit.compose.action.AndroidKitActionFlyoutScope
 import net.mamby.androidkit.compose.action.AndroidKitContextMenuContent
 import net.mamby.androidkit.compose.icon.AndroidKitIcons
 import net.mamby.androidkit.compose.theme.AndroidKitSettingSectionStyle
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 
 /** Host-owned, localized content. Keys must be nonblank, stable and unique within a card. */
@@ -187,59 +188,62 @@ internal fun AndroidKitSectionCard(
         vertical = AndroidKitThemeTokens.dimensions.settingSectionEntryVerticalPadding,
     ),
 ): Unit {
-    require(entries.all { it.key.isNotBlank() }) { "Section card entry keys must not be blank." }
-    require(entries.map { it.key }.toSet().size == entries.size) {
-        "Section card entry keys must be unique within a card."
-    }
-    if (entries.isEmpty()) return
-
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(sectionSpacing),
-    ) {
-        title?.let {
-            Text(
-                text = it,
-                modifier = Modifier.padding(sectionTextPadding).semantics { heading() },
-                style = style.sectionLabelTextStyle,
-                color = style.secondaryContentColor,
-            )
+    AndroidKitComponentTheme {
+        require(entries.all { it.key.isNotBlank() }) { "Section card entry keys must not be blank." }
+        require(entries.map { it.key }.toSet().size == entries.size) {
+            "Section card entry keys must be unique within a card."
         }
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = style.shape,
-            colors = CardDefaults.cardColors(
-                containerColor = style.containerColor,
-                contentColor = style.contentColor,
-            ),
-            border = BorderStroke(style.borderWidth, style.borderColor),
+        if (entries.isEmpty()) return@AndroidKitComponentTheme
+
+        Column(
+            modifier = modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(sectionSpacing),
         ) {
-            Column {
-                entries.forEachIndexed { index, entry ->
-                    if (index > 0) {
-                        HorizontalDivider(
-                            modifier = Modifier.padding(dividerPadding),
-                            color = style.dividerColor,
-                        )
-                    }
-                    key(entry.key) {
-                        SectionCardEntry(
-                            entry, style, entryContentPadding,
-                            entryModifiers[entry.key] ?: Modifier,
-                            controlColors[entry.key], entry.key in opacitySliderKeys,
-                        )
+            title?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier.padding(sectionTextPadding).semantics { heading() },
+                    style = style.sectionLabelTextStyle,
+                    color = style.secondaryContentColor,
+                )
+            }
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = style.shape,
+                colors = CardDefaults.cardColors(
+                    containerColor = style.containerColor,
+                    contentColor = style.contentColor,
+                ),
+                border = BorderStroke(style.borderWidth, style.borderColor),
+            ) {
+                Column {
+                    entries.forEachIndexed { index, entry ->
+                        if (index > 0) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(dividerPadding),
+                                color = style.dividerColor,
+                            )
+                        }
+                        key(entry.key) {
+                            SectionCardEntry(
+                                entry, style, entryContentPadding,
+                                entryModifiers[entry.key] ?: Modifier,
+                                controlColors[entry.key], entry.key in opacitySliderKeys,
+                            )
+                        }
                     }
                 }
             }
+            description?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier.padding(sectionTextPadding),
+                    style = style.descriptionTextStyle,
+                    color = style.secondaryContentColor,
+                )
+            }
         }
-        description?.let {
-            Text(
-                text = it,
-                modifier = Modifier.padding(sectionTextPadding),
-                style = style.descriptionTextStyle,
-                color = style.secondaryContentColor,
-            )
-        }
+
     }
 }
 

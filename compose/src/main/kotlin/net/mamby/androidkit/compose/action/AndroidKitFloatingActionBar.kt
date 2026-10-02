@@ -5,7 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarStyle
 import net.mamby.androidkit.compose.theme.AndroidKitFloatingToolbarStyle
+import net.mamby.androidkit.compose.theme.AndroidKitComponentTheme
+import net.mamby.androidkit.compose.theme.AndroidKitFloatingActionBarColors
 import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
+import net.mamby.androidkit.compose.theme.withColors
 
 public typealias AndroidKitFloatingActionBarDsl = AndroidKitFloatingToolbarDsl
 
@@ -19,7 +22,22 @@ public typealias AndroidKitFloatingActionBarIconAndLabelLayout =
 @Composable
 public fun AndroidKitFloatingActionBar(
     modifier: Modifier = Modifier,
-    style: AndroidKitFloatingActionBarStyle = AndroidKitThemeTokens.floatingActionBarStyle,
+    colors: AndroidKitFloatingActionBarColors = AndroidKitFloatingActionBarColors(),
+    content: AndroidKitFloatingActionBarScope.() -> Unit,
+): Unit {
+    AndroidKitComponentTheme {
+        AndroidKitFloatingActionBar(
+            modifier = modifier,
+            style = AndroidKitThemeTokens.floatingActionBarStyle.withColors(colors, AndroidKitThemeTokens.floatingSurfaceStyle),
+            content = content,
+        )
+    }
+}
+
+@Composable
+internal fun AndroidKitFloatingActionBar(
+    modifier: Modifier = Modifier,
+    style: AndroidKitFloatingActionBarStyle,
     contentPadding: PaddingValues = PaddingValues(
         horizontal = AndroidKitThemeTokens.componentTokens.actionBar.horizontalPadding,
         vertical = AndroidKitThemeTokens.componentTokens.actionBar.verticalPadding,

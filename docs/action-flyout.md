@@ -46,7 +46,8 @@ Content scrolls vertically within the shared flyout.
 Use `placement` (`Above` or `Below`) and `horizontalAlignment` (`Start` or `End`)
 to choose the preferred anchor edge. The flyout respects RTL and falls back to
 another position when the preferred edge cannot fit within the window. It also
-accepts `offset`, `contentPadding`, `scrollState`, `properties`, and `style`.
+accepts `offset`, `scrollState`, `properties`, and color-only `colors`.
+Container/item padding, shapes and typography are Kit-owned.
 
 ## Material menu trial and submenus
 
@@ -66,7 +67,7 @@ submenu(label = "Share") {
 }
 ```
 
-Submenus inherit the parent surface style, padding, and popup properties. They
+Submenus inherit the parent surface colors, Kit padding and popup properties. They
 use Material's end-relative positioning, including RTL and window-edge fallback.
 Back or an outside click dismisses the current submenu; selecting an action
 requests dismissal of every parent before invoking the action. Disabling or
@@ -85,7 +86,7 @@ The separate dropdown API has been removed. Consumers must update these names:
 | `AndroidKitFloatingDropdownMenuHorizontalAlignment` | `AndroidKitActionFlyoutHorizontalAlignment` |
 | `AndroidKitFloatingDropdownMenuStyle` | `AndroidKitActionFlyoutStyle` |
 | `floatingDropdownMenuStyle` | `actionFlyoutStyle` |
-| Component style `dropdownMenuStyle` | `flyoutStyle` |
+| Component style `dropdownMenuStyle` | Color-only `flyoutColors`; geometry is internal |
 | Dimension `floatingDropdownMenuIconSize` | `actionFlyoutIconSize` |
 | Dimension `floatingDropdownShadowElevation` | `actionFlyoutShadowElevation` |
 
