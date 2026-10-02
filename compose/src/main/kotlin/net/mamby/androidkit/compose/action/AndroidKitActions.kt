@@ -12,6 +12,7 @@ public class AndroidKitAction(
     public val label: String,
     public val onClick: () -> Unit,
     public val enabled: Boolean = true,
+    public val destructive: Boolean = false,
 ) : AndroidKitActionItem
 
 /** An action rendered as text when shown directly. */

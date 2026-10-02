@@ -21,7 +21,7 @@ Box {
         item(label = "Edit", onClick = onEdit, icon = editIcon)
         item(label = "Share", onClick = onShare)
         separator()
-        item(label = "Delete", onClick = onDelete, enabled = canDelete)
+        item(label = "Delete", onClick = onDelete, enabled = canDelete, destructive = true)
     }
 }
 ```
@@ -29,6 +29,10 @@ Box {
 Standard `item` entries request dismissal before invoking their action. Icons
 are optional, and disabled entries cannot invoke their action. Setting the
 flyout's `enabled` to `false` closes it and requests dismissal if it was expanded.
+`destructive = true` uses the theme's error color for the enabled label and icon;
+disabled entries retain Material's disabled colors. This option also applies to
+toolbar flyout entries and `AndroidKitAction` header actions, including direct
+icon buttons. Hosts declare the action's meaning; Kit owns its colors.
 The caller owns the expanded state; outside clicks and Back request dismissal
 through the popup's default `PopupProperties`.
 

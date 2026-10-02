@@ -53,6 +53,7 @@ public sealed interface AndroidKitFloatingToolbarScope {
         contentDescription: String,
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
+        destructive: Boolean = false,
     ): Unit
 
     public fun iconAndLabel(
@@ -101,6 +102,7 @@ public sealed interface AndroidKitFloatingToolbarFlyoutScope {
         label: String,
         onClick: () -> Unit,
         enabled: Boolean = true,
+        destructive: Boolean = false,
     ): Unit
 }
 
@@ -292,6 +294,7 @@ private class FloatingToolbarScopeImpl : AndroidKitFloatingToolbarScope {
         contentDescription: String,
         modifier: Modifier,
         enabled: Boolean,
+        destructive: Boolean,
     ) {
         items += FloatingToolbarItemDefinition.Icon(
             onClick = onClick,
@@ -299,6 +302,7 @@ private class FloatingToolbarScopeImpl : AndroidKitFloatingToolbarScope {
             label = contentDescription,
             modifier = modifier,
             enabled = enabled,
+            destructive = destructive,
         )
     }
 
@@ -386,12 +390,14 @@ private class FloatingToolbarFlyoutScopeImpl : AndroidKitFloatingToolbarFlyoutSc
         label: String,
         onClick: () -> Unit,
         enabled: Boolean,
+        destructive: Boolean,
     ) {
         items += FloatingToolbarFlyoutItem.Action(
             icon = icon,
             label = label,
             onClick = onClick,
             enabled = enabled,
+            destructive = destructive,
         )
     }
 }
@@ -405,6 +411,7 @@ private sealed interface FloatingToolbarItemDefinition {
         val label: String,
         override val modifier: Modifier,
         val enabled: Boolean,
+        val destructive: Boolean,
     ) : FloatingToolbarItemDefinition
 
     class IconAndLabel(
@@ -462,6 +469,7 @@ private sealed interface FloatingToolbarFlyoutItem {
         val label: String,
         val onClick: () -> Unit,
         val enabled: Boolean,
+        val destructive: Boolean = false,
     ) : FloatingToolbarFlyoutItem {
         override val modifier: Modifier = Modifier
     }
@@ -490,6 +498,7 @@ private fun FloatingToolbarItem(
             enabled = item.enabled,
             style = style,
             visualSize = itemVisualSize,
+            destructive = item.destructive,
         )
 
         is FloatingToolbarItemDefinition.IconAndLabel -> FloatingToolbarItemContent(
@@ -619,6 +628,7 @@ internal fun AndroidKitActionFlyout(
                 label = item.label,
                 onClick = item.onClick,
                 enabled = item.enabled,
+                destructive = item.destructive,
             )
 
             is AndroidKitTextAction -> FloatingToolbarFlyoutItem.Action(
@@ -673,6 +683,7 @@ private fun FloatingToolbarFlyoutPopup(
                     icon = item.icon,
                     onClick = item.onClick,
                     enabled = item.enabled,
+                    destructive = item.destructive,
                 )
 
                 is FloatingToolbarFlyoutItem.Separator -> separator(
@@ -712,6 +723,7 @@ private fun FloatingToolbarItemContent(
     enabled: Boolean,
     style: AndroidKitFloatingToolbarStyle,
     visualSize: Dp?,
+    destructive: Boolean = false,
 ): Unit {
     val dimensions = AndroidKitThemeTokens.dimensions
     val surfaceStyle = style.surfaceStyle ?: AndroidKitThemeTokens.floatingSurfaceStyle
@@ -751,7 +763,9 @@ private fun FloatingToolbarItemContent(
                 imageVector = it,
                 contentDescription = label.takeUnless { showLabel },
                 modifier = Modifier.size(style.iconSize),
-                tint = disabledContentColor ?: LocalContentColor.current,
+                tint = disabledContentColor ?: if (destructive) {
+                    AndroidKitThemeTokens.colorScheme.error
+                } else LocalContentColor.current,
             )
         }
         if (showLabel) {

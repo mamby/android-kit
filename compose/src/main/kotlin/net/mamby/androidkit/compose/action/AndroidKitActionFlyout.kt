@@ -63,8 +63,9 @@ public class AndroidKitActionFlyoutScope internal constructor() {
         modifier: Modifier = Modifier,
         icon: ImageVector? = null,
         enabled: Boolean = true,
+        destructive: Boolean = false,
     ) {
-        entries += Entry.Action(label, onClick, modifier, icon, null, enabled)
+        entries += Entry.Action(label, onClick, modifier, icon, null, enabled, destructive)
     }
 
     /** Adds an action with painter data; Kit owns the icon's size and tint. */
@@ -74,8 +75,9 @@ public class AndroidKitActionFlyoutScope internal constructor() {
         icon: Painter,
         modifier: Modifier = Modifier,
         enabled: Boolean = true,
+        destructive: Boolean = false,
     ) {
-        entries += Entry.Action(label, onClick, modifier, null, icon, enabled)
+        entries += Entry.Action(label, onClick, modifier, null, icon, enabled, destructive)
     }
 
     public fun submenu(
@@ -106,6 +108,7 @@ public class AndroidKitActionFlyoutScope internal constructor() {
                     icon = entry.icon,
                     enabled = entry.enabled,
                     iconPainter = entry.painter,
+                    destructive = entry.destructive,
                 )
                 is Entry.Submenu -> scope.submenu(
                     label = entry.label,
@@ -126,6 +129,7 @@ public class AndroidKitActionFlyoutScope internal constructor() {
             val icon: ImageVector?,
             val painter: Painter?,
             val enabled: Boolean,
+            val destructive: Boolean,
         ) : Entry
 
         data class Submenu(
@@ -152,6 +156,7 @@ internal interface ActionFlyoutRenderScope : ColumnScope {
         icon: ImageVector? = null,
         enabled: Boolean = true,
         iconPainter: Painter? = null,
+        destructive: Boolean = false,
     ): Unit
 
     /** Opens a nested menu. Back/outside dismisses that level; actions dismiss the entire flyout. */
@@ -190,8 +195,10 @@ private class ActionFlyoutScopeImpl(
         icon: ImageVector?,
         enabled: Boolean,
         iconPainter: Painter?,
+        destructive: Boolean,
     ) {
         val dimensions = AndroidKitThemeTokens.dimensions
+        val contentColor = if (destructive) AndroidKitThemeTokens.colorScheme.error else Color.Unspecified
         DropdownMenuItem(
             modifier = modifier.clip(CircleShape),
             text = {
@@ -208,6 +215,10 @@ private class ActionFlyoutScopeImpl(
                 onClick()
             },
             enabled = this.enabled && enabled,
+            colors = MenuDefaults.itemColors(
+                textColor = contentColor,
+                leadingIconColor = contentColor,
+            ),
             contentPadding = PaddingValues(
                 start = AndroidKitThemeTokens.componentTokens.actionFlyout.itemStartPadding,
                 end = AndroidKitThemeTokens.componentTokens.actionFlyout.itemEndPadding,

@@ -666,7 +666,7 @@ private fun BottomSheetActionButtons(
                 is AndroidKitAction -> BottomSheetIconButton(
                     icon = item.icon,
                     contentDescription = item.label,
-                    tint = tint,
+                    tint = if (item.destructive) AndroidKitThemeTokens.colorScheme.error else tint,
                     dimensions = dimensions,
                     enabled = enabled && item.enabled,
                     onClick = item.onClick,

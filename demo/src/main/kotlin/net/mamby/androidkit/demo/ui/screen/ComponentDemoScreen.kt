@@ -656,7 +656,8 @@ private fun AndroidKitContextMenuDemo() {
                     item(label = share, onClick = { count += 1 })
                 }
                 separator()
-                item(label = delete, enabled = false, onClick = {})
+                item(label = delete, destructive = true, onClick = { count += 1 })
+                item(label = delete, enabled = false, destructive = true, onClick = {})
             },
         ) {
             AndroidKitCard(title = "AndroidKitContextMenu") {
@@ -849,6 +850,7 @@ private fun demoHeaderActions(
                     icon = icon,
                     label = label,
                     onClick = { onAction(action) },
+                    destructive = action == DemoPageAction.Delete,
                 )
 
                 DemoHeaderActionPresentation.Mixed -> when (index) {
@@ -867,6 +869,7 @@ private fun demoHeaderActions(
                         icon = icon,
                         label = label,
                         onClick = { onAction(action) },
+                        destructive = action == DemoPageAction.Delete,
                     )
                 }
 

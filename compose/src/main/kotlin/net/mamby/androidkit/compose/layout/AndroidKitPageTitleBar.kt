@@ -204,6 +204,7 @@ internal fun AndroidKitPageTitleBar(
                                     icon = pageActionItem.icon,
                                     contentDescription = pageActionItem.label,
                                     enabled = pageActionItem.enabled,
+                                    destructive = pageActionItem.destructive,
                                 )
 
                                 is AndroidKitTextAction -> text(
@@ -232,6 +233,7 @@ internal fun AndroidKitPageTitleBar(
                                             label = pageActionItem.label,
                                             onClick = pageActionItem.onClick,
                                             enabled = pageActionItem.enabled,
+                                            destructive = pageActionItem.destructive,
                                         )
 
                                         is AndroidKitTextAction -> item(
