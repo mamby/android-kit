@@ -5,7 +5,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
@@ -164,7 +163,6 @@ internal fun AndroidKitContextMenuContent(
             onActionDismissRequest = dismiss,
             positionProvider = positionProvider,
             style = tokens.flyoutStyle,
-            contentPadding = PaddingValues(vertical = tokens.verticalPadding),
             properties = PopupProperties(focusable = true),
         ) {
             AndroidKitActionFlyoutScope().apply(menu).render(this)

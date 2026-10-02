@@ -179,7 +179,6 @@ private class ActionFlyoutScopeImpl(
     private val enabled: Boolean,
     private val expanded: Boolean,
     private val style: AndroidKitActionFlyoutStyle,
-    private val contentPadding: PaddingValues,
     private val properties: PopupProperties,
     private val containerColor: Color?,
 ) : ActionFlyoutRenderScope, ColumnScope by columnScope {
@@ -243,7 +242,7 @@ private class ActionFlyoutScopeImpl(
     ) {
         ActionFlyoutSubmenu(
             label, modifier, icon, this.enabled && enabled, expanded,
-            style, contentPadding, properties, containerColor, onDismissRequest, content,
+            style, properties, containerColor, onDismissRequest, content,
         )
     }
 
@@ -269,7 +268,6 @@ private fun ActionFlyoutSubmenu(
     enabled: Boolean,
     parentExpanded: Boolean,
     style: AndroidKitActionFlyoutStyle,
-    contentPadding: PaddingValues,
     properties: PopupProperties,
     containerColor: Color?,
     onActionDismissRequest: () -> Unit,
@@ -324,7 +322,6 @@ private fun ActionFlyoutSubmenu(
                 MenuAnchorPosition.End,
             ),
             style = style,
-            contentPadding = contentPadding,
             properties = properties,
             containerColor = containerColor,
             enabled = enabled,
@@ -351,7 +348,6 @@ public fun AndroidKitActionFlyout(
     horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment =
         AndroidKitActionFlyoutHorizontalAlignment.Start,
     style: AndroidKitActionFlyoutStyle = AndroidKitThemeTokens.actionFlyoutStyle,
-    contentPadding: PaddingValues = PaddingValues(5.dp),
     properties: PopupProperties = PopupProperties(focusable = true),
     scrollState: ScrollState = rememberScrollState(),
     offset: DpOffset = DpOffset.Zero,
@@ -365,7 +361,6 @@ public fun AndroidKitActionFlyout(
     horizontalAlignment = horizontalAlignment,
     offset = offset,
     style = style,
-    contentPadding = contentPadding,
     properties = properties,
     scrollState = scrollState,
     enabled = enabled,
@@ -380,7 +375,6 @@ internal fun AndroidKitActionFlyoutWithContainerColor(
     placement: AndroidKitActionFlyoutPlacement,
     horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment,
     style: AndroidKitActionFlyoutStyle,
-    contentPadding: PaddingValues,
     content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ): Unit = ActionFlyoutContent(
     expanded = expanded,
@@ -390,10 +384,11 @@ internal fun AndroidKitActionFlyoutWithContainerColor(
     horizontalAlignment = horizontalAlignment,
     offset = DpOffset.Zero,
     style = style,
-    contentPadding = contentPadding,
     properties = PopupProperties(focusable = true),
     scrollState = rememberScrollState(),
     containerColor = containerColor,
+    // Navigation paints its selection background around the padded rows.
+    contentPadding = PaddingValues.Zero,
     content = content,
 )
 
@@ -416,10 +411,10 @@ private fun ActionFlyoutContent(
     horizontalAlignment: AndroidKitActionFlyoutHorizontalAlignment,
     offset: DpOffset,
     style: AndroidKitActionFlyoutStyle,
-    contentPadding: PaddingValues,
     properties: PopupProperties,
     scrollState: ScrollState,
     containerColor: Color? = null,
+    contentPadding: PaddingValues = AndroidKitThemeTokens.componentTokens.actionFlyout.containerPadding,
     enabled: Boolean = true,
     content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ): Unit {
@@ -456,10 +451,10 @@ internal fun ActionFlyoutPopup(
     positionProvider: DropdownMenuPopupPositionProvider,
     modifier: Modifier = Modifier,
     style: AndroidKitActionFlyoutStyle,
-    contentPadding: PaddingValues,
     properties: PopupProperties,
     scrollState: ScrollState = rememberScrollState(),
     containerColor: Color? = null,
+    contentPadding: PaddingValues = AndroidKitThemeTokens.componentTokens.actionFlyout.containerPadding,
     enabled: Boolean = true,
     content: @Composable ActionFlyoutRenderScope.() -> Unit,
 ) {
@@ -483,7 +478,7 @@ internal fun ActionFlyoutPopup(
             ) {
                 ActionFlyoutScopeImpl(
                     this, onActionDismissRequest, enabled, expanded,
-                    style, contentPadding, properties, containerColor,
+                    style, properties, containerColor,
                 ).content()
             }
         }

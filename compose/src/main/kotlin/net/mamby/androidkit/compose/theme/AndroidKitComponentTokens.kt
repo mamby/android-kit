@@ -1,5 +1,6 @@
 package net.mamby.androidkit.compose.theme
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
@@ -42,7 +43,7 @@ internal class AndroidKitComponentTokens(
     val settingsPage = AndroidKitSettingsPageTokens(dimensions)
     val appLockTimeout = AndroidKitAppLockTimeoutTokens(dimensions, typography)
     val settingsPicker = AndroidKitSettingsPickerTokens(dimensions, colors, shapes)
-    val contextMenu = AndroidKitContextMenuTokens(dimensions, shapes, colors)
+    val contextMenu = AndroidKitContextMenuTokens(shapes, colors)
     val navigation = AndroidKitNavigationTokens(shapes)
 }
 
@@ -150,6 +151,7 @@ internal class AndroidKitActionFlyoutTokens(
     dimensions: AndroidKitDimensions,
     typography: Typography,
 ) {
+    val containerPadding: PaddingValues = PaddingValues(5.dp)
     val itemStartPadding: Dp = dimensions.spaceMedium
     val itemEndPadding: Dp = dimensions.spaceLarge
     val separatorHorizontalPadding: Dp = dimensions.spaceMedium
@@ -311,12 +313,10 @@ internal class AndroidKitSettingsPickerTokens(
 
 @Immutable
 internal class AndroidKitContextMenuTokens(
-    dimensions: AndroidKitDimensions,
     shapes: Shapes,
     colors: ColorScheme,
 ) {
     val selectedContainerColor: Color = colors.secondaryContainer
-    val verticalPadding: Dp = dimensions.spaceSmall
     val flyoutStyle: AndroidKitActionFlyoutStyle = AndroidKitActionFlyoutStyle(shape = shapes.extraLarge)
 }
 

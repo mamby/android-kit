@@ -45,6 +45,10 @@ scopes cannot be implemented by consumers.
 interaction behavior. It shares the action flyout renderer and typed menu DSL;
 its app body slot does not expose menu rendering or component style overrides.
 
+Action flyouts, context menus, submenus, and navigation overflow share one internal
+container-padding token: 5 dp on every side. Container padding is Kit-owned and
+cannot be overridden by hosts; it is separate from each menu item's content padding.
+
 Toolbar actions, floating action bars, and page action controls share an internal
 content inset derived from the small spacing token (8 dp by default). The renderer
 reserves this inset around the content box, including icon-only and More buttons;

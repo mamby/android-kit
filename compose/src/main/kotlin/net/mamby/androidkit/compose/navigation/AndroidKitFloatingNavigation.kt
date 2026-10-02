@@ -696,7 +696,6 @@ private fun <Key : Any> NavigationOverflowFlyout(
         placement = AndroidKitActionFlyoutPlacement.Above,
         horizontalAlignment = AndroidKitActionFlyoutHorizontalAlignment.End,
         style = flyoutStyle,
-        contentPadding = PaddingValues.Zero,
     ) {
         Box(
             modifier = Modifier.onGloballyPositioned { coordinates ->
@@ -712,7 +711,7 @@ private fun <Key : Any> NavigationOverflowFlyout(
                 opacity = flyoutVisuals.opacity,
             )
             Column(
-                modifier = Modifier.padding(dimensions.floatingNavigationContentPadding),
+                modifier = Modifier.padding(AndroidKitThemeTokens.componentTokens.actionFlyout.containerPadding),
             ) {
                 items.forEach { item ->
                     val selected = item.key == selectedKey
