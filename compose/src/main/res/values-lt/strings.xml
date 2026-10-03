@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Kalba neatpažinta. Bandykite dar kartą.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">atidarykite programos nustatymus</string>
-    <string name="androidkit_compose_hide_recent_searches">Slėpti naujausias paieškas</string>
-    <string name="androidkit_compose_show_recent_searches">Rodyti naujausias paieškas</string>
-    <string name="androidkit_compose_recent_searches_hidden">Naujausios paieškos paslėptos</string>
+    <string name="androidkit_compose_disable_search_history">Išjungti paieškos istoriją</string>
+    <string name="androidkit_compose_enable_search_history">Įjungti paieškos istoriją</string>
+    <string name="androidkit_compose_search_history_disabled">Paieškos istorija išjungta</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Išjungus ištrinamos išsaugotos paieškos.</string>
 </resources>

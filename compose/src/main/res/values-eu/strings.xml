@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Ez da hizketarik ezagutzen. Saiatu berriro.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Ireki aplikazioaren ezarpenak</string>
-    <string name="androidkit_compose_hide_recent_searches">Ezkutatu azken bilaketak</string>
-    <string name="androidkit_compose_show_recent_searches">Erakutsi azken bilaketak</string>
-    <string name="androidkit_compose_recent_searches_hidden">Azken bilaketak ezkutatuta daude</string>
+    <string name="androidkit_compose_disable_search_history">Desgaitu bilaketa-historia</string>
+    <string name="androidkit_compose_enable_search_history">Gaitu bilaketa-historia</string>
+    <string name="androidkit_compose_search_history_disabled">Bilaketa-historia desgaituta dago</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Desgaitzean, gordetako bilaketak ezabatzen dira.</string>
 </resources>

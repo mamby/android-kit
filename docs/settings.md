@@ -40,7 +40,7 @@ AndroidKitSettings(
 ```
 
 Settings is one logical search scope. Main, About and every subpage share the
-complete catalog, recent queries and history visibility. `AndroidKitSettings`
+complete catalog, recent queries and history enabled state. `AndroidKitSettings`
 binds the store's existing `"settings"` history internally. Pages and search have
 no catalog or history parameters. Missing, nested and simultaneous owners for
 the same store are rejected. Declare the owner above navigation, never inside
@@ -89,7 +89,7 @@ for the floating field, recent searches, empty states, scrolling and managed
 clearance. Opening the page focuses its input and requests the software keyboard.
 The Settings adapter owns catalog indexing and result controls;
 results remain in the current app language. The Settings owner requires the persistent store and a storage-failure callback.
-It shares history and hide/show state across the complete Settings hierarchy.
+It shares history and enabled state across the complete Settings hierarchy.
 
 Matching is case-, accent-, punctuation-, and whitespace-insensitive. Every query
 token must match. Exact/current labels rank before prefixes, contained visible
@@ -145,7 +145,7 @@ Every editable Settings declaration requires an `AndroidKitPersistentSetting`:
 String for selections, Boolean for toggles/app lock, and Float for sliders/transparency.
 Create bindings with `store.setting(preferencesKey, defaultValue)`. Screen-local values
 and arbitrary persistence adapters cannot satisfy this API. The Settings owner
-binds one canonical `"settings"` history and its visibility preference for Main,
+binds one canonical `"settings"` history and its enabled preference for Main,
 About and every subpage. `store.searchHistory(stablePageKey)` remains available
 for independent content searches; Settings pages cannot select a history key.
 
@@ -172,7 +172,8 @@ all Settings navigation destinations. Remove catalog arguments from
 `AndroidKitSettingsPage` and `AndroidKitSettingsSearchPage`. Subpage destinations
 must not build replacement catalogs or declare their own owner.
 
-Existing `"settings"` queries and visibility remain unchanged. Former separate
+Existing enabled `"settings"` queries remain unchanged. Previously hidden histories
+are migrated to disabled and cleared before loading. Former separate
 About history is left in storage and is not displayed or merged into Settings;
 this avoids revealing previously hidden subpage queries. General SearchPage
-history and persistence APIs are unchanged.
+history preferences use the enabled policy described in [SearchPage](search-page.md).

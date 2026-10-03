@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">未辨識到語音。請再試一次。</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">開啟應用程式設定</string>
-    <string name="androidkit_compose_hide_recent_searches">隱藏最近的搜尋</string>
-    <string name="androidkit_compose_show_recent_searches">顯示最近的搜尋</string>
-    <string name="androidkit_compose_recent_searches_hidden">最近的搜尋已隱藏</string>
+    <string name="androidkit_compose_disable_search_history">停用搜尋紀錄</string>
+    <string name="androidkit_compose_enable_search_history">啟用搜尋紀錄</string>
+    <string name="androidkit_compose_search_history_disabled">搜尋紀錄已停用</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">停用後會清除已儲存的搜尋紀錄。</string>
 </resources>

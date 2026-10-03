@@ -50,7 +50,9 @@
     <string name="androidkit_compose_no_matching_settings">Tidak ada setelan yang cocok</string>
     <string name="androidkit_compose_no_matching_results">Tidak ada hasil yang cocok</string>
     <string name="androidkit_compose_no_recent_searches">Tidak ada penelusuran terbaru</string>
-    <string name="androidkit_compose_hide_recent_searches">Sembunyikan penelusuran terbaru</string>
-    <string name="androidkit_compose_show_recent_searches">Tampilkan penelusuran terbaru</string>
-    <string name="androidkit_compose_recent_searches_hidden">Penelusuran terbaru disembunyikan</string>
+    <string name="androidkit_compose_disable_search_history">Nonaktifkan histori penelusuran</string>
+    <string name="androidkit_compose_enable_search_history">Aktifkan histori penelusuran</string>
+    <string name="androidkit_compose_search_history_disabled">Histori penelusuran dinonaktifkan</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Menonaktifkan akan menghapus penelusuran yang tersimpan.</string>
 </resources>

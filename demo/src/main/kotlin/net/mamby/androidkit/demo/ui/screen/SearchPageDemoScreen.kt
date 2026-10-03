@@ -29,8 +29,8 @@ import net.mamby.androidkit.navigation3.listDetailBackAction
 internal fun SearchPageDemoScreen(
     recentQueries: List<String>,
     onRecentQueriesChange: (List<String>) -> Unit,
-    recentQueriesVisible: Boolean,
-    onRecentQueriesVisibleChange: (Boolean) -> Unit,
+    searchHistoryEnabled: Boolean,
+    onSearchHistoryEnabledChange: (Boolean) -> Unit,
     onOpenDemo: (ComponentDemo) -> Unit,
     onBack: () -> Unit,
 ) {
@@ -54,8 +54,8 @@ internal fun SearchPageDemoScreen(
         onQueryChange = { query = it },
         recentQueries = recentQueries,
         onRecentQueriesChange = onRecentQueriesChange,
-        recentQueriesVisible = recentQueriesVisible,
-        onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
+        searchHistoryEnabled = searchHistoryEnabled,
+        onSearchHistoryEnabledChange = onSearchHistoryEnabledChange,
         onBack = listDetailBackAction(onBack),
         modifier = Modifier.testTag("search_page_demo"),
         searchMode = AndroidKitSearchMode.OnSubmit,

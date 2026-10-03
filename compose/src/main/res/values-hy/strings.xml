@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Խոսք չի ճանաչվել: Նորից փորձեք:</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Բացեք հավելվածի կարգավորումները</string>
-    <string name="androidkit_compose_hide_recent_searches">Թաքցնել վերջին որոնումները</string>
-    <string name="androidkit_compose_show_recent_searches">Ցուցադրել վերջին որոնումները</string>
-    <string name="androidkit_compose_recent_searches_hidden">Վերջին որոնումները թաքցված են</string>
+    <string name="androidkit_compose_disable_search_history">Անջատել որոնումների պատմությունը</string>
+    <string name="androidkit_compose_enable_search_history">Միացնել որոնումների պատմությունը</string>
+    <string name="androidkit_compose_search_history_disabled">Որոնումների պատմությունն անջատված է</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Անջատելիս պահպանված որոնումները ջնջվում են։</string>
 </resources>

@@ -45,15 +45,15 @@ internal fun rememberTestSettingsSearchConfiguration(
     onOpenSearch: () -> Unit,
     recentQueries: List<String>,
     onRecentQueriesChange: (List<String>) -> Unit,
-    recentQueriesVisible: Boolean = true,
-    onRecentQueriesVisibleChange: (Boolean) -> Unit = {},
+    searchHistoryEnabled: Boolean = true,
+    onSearchHistoryEnabledChange: (Boolean) -> Unit = {},
 ): TestSettingsConfiguration {
     val context = LocalContext.current
     val store = remember {
         AndroidKitSettingsStore.open(context, "history-${UUID.randomUUID()}", AndroidKitSettingsStorageProtection.Plaintext,
             listOf(object : AndroidKitSettingsStoreMigration {
                 override val id = "fixture"
-                override suspend fun readHistories() = mapOf("settings" to AndroidKitSearchHistorySnapshot(recentQueries, recentQueriesVisible))
+                override suspend fun readHistories() = mapOf("settings" to AndroidKitSearchHistorySnapshot(recentQueries, searchHistoryEnabled))
                 override suspend fun cleanUp() = Unit
             }))
     }
@@ -64,7 +64,7 @@ internal fun rememberTestSettingsSearchConfiguration(
     LaunchedEffect(history) {
         history.snapshots.collect { snapshot ->
             onRecentQueriesChange(snapshot.recentQueries)
-            onRecentQueriesVisibleChange(snapshot.visible)
+            onSearchHistoryEnabledChange(snapshot.enabled)
             loaded.set(true)
         }
     }

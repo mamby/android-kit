@@ -50,7 +50,9 @@
     <string name="androidkit_compose_no_matching_settings">ไม่พบการตั้งค่าที่ตรงกัน</string>
     <string name="androidkit_compose_no_matching_results">ไม่พบผลลัพธ์ที่ตรงกัน</string>
     <string name="androidkit_compose_no_recent_searches">ไม่มีการค้นหาล่าสุด</string>
-    <string name="androidkit_compose_hide_recent_searches">ซ่อนการค้นหาล่าสุด</string>
-    <string name="androidkit_compose_show_recent_searches">แสดงการค้นหาล่าสุด</string>
-    <string name="androidkit_compose_recent_searches_hidden">การค้นหาล่าสุดถูกซ่อนอยู่</string>
+    <string name="androidkit_compose_disable_search_history">ปิดประวัติการค้นหา</string>
+    <string name="androidkit_compose_enable_search_history">เปิดประวัติการค้นหา</string>
+    <string name="androidkit_compose_search_history_disabled">ประวัติการค้นหาปิดอยู่</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">การปิดจะลบการค้นหาที่บันทึกไว้</string>
 </resources>

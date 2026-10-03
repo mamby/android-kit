@@ -56,7 +56,9 @@
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Open app settings</string>
     <!-- Page-scoped history visibility only: hiding neither deletes nor stops saving searches. -->
-    <string name="androidkit_compose_hide_recent_searches">Hide recent searches</string>
-    <string name="androidkit_compose_show_recent_searches">Show recent searches</string>
-    <string name="androidkit_compose_recent_searches_hidden">Recent searches hidden</string>
+    <string name="androidkit_compose_disable_search_history">Disable search history</string>
+    <string name="androidkit_compose_enable_search_history">Enable search history</string>
+    <string name="androidkit_compose_search_history_disabled">Search history is disabled</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Disabling clears saved searches.</string>
 </resources>

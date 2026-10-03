@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Govor nije prepoznat. Pokušajte ponovno.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Otvorite postavke aplikacije</string>
-    <string name="androidkit_compose_hide_recent_searches">Sakrij nedavna pretraživanja</string>
-    <string name="androidkit_compose_show_recent_searches">Prikaži nedavna pretraživanja</string>
-    <string name="androidkit_compose_recent_searches_hidden">Nedavna pretraživanja su skrivena</string>
+    <string name="androidkit_compose_disable_search_history">Isključi povijest pretraživanja</string>
+    <string name="androidkit_compose_enable_search_history">Uključi povijest pretraživanja</string>
+    <string name="androidkit_compose_search_history_disabled">Povijest pretraživanja je isključena</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Isključivanjem se brišu spremljena pretraživanja.</string>
 </resources>

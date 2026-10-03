@@ -50,7 +50,9 @@
     <string name="androidkit_compose_no_matching_settings">कोई मेल खाती सेटिंग नहीं</string>
     <string name="androidkit_compose_no_matching_results">कोई मेल खाते परिणाम नहीं</string>
     <string name="androidkit_compose_no_recent_searches">कोई हाल की खोज नहीं</string>
-    <string name="androidkit_compose_hide_recent_searches">हाल की खोजें छिपाएँ</string>
-    <string name="androidkit_compose_show_recent_searches">हाल की खोजें दिखाएँ</string>
-    <string name="androidkit_compose_recent_searches_hidden">हाल की खोजें छिपी हुई हैं</string>
+    <string name="androidkit_compose_disable_search_history">खोज इतिहास बंद करें</string>
+    <string name="androidkit_compose_enable_search_history">खोज इतिहास चालू करें</string>
+    <string name="androidkit_compose_search_history_disabled">खोज इतिहास बंद है</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">बंद करने पर सहेजी गई खोजें मिट जाती हैं।</string>
 </resources>

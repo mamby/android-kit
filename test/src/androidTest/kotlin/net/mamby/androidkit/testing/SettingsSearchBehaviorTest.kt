@@ -171,7 +171,7 @@ class SettingsSearchBehaviorTest {
     }
 
     @Test
-    fun catalogVisibilityControlsHistoryWithoutBlockingResultActions() {
+    fun disabledCatalogHistoryDoesNotRecordOrBlockResultActions() {
         var visible by mutableStateOf(false)
         var recents by mutableStateOf(listOf("Sensitive setting"))
         var clicks = 0
@@ -182,8 +182,8 @@ class SettingsSearchBehaviorTest {
                         onOpenSearch = {},
                         recentQueries = recents,
                         onRecentQueriesChange = { recents = it },
-                        recentQueriesVisible = visible,
-                        onRecentQueriesVisibleChange = { visible = it },
+                        searchHistoryEnabled = visible,
+                        onSearchHistoryEnabledChange = { visible = it },
                     ),
                 ) {
                     main("main", "Settings") {
@@ -196,23 +196,24 @@ class SettingsSearchBehaviorTest {
             }
         }
         rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
-        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.onNodeWithText("Search history is disabled").assertIsDisplayed()
         val search = rule.onNodeWithContentDescription("Search")
         search.performTextReplacement("back up")
         rule.onNodeWithText("Back up now").performClick()
-        rule.waitUntil { recents.firstOrNull() == "back up" }
+        rule.waitUntil { recents.isEmpty() }
         rule.runOnIdle {
             assertEquals(1, clicks)
-            assertEquals("back up", recents.first())
+            assertEquals(emptyList<String>(), recents)
         }
         search.performTextReplacement("")
         rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
-        rule.onNodeWithContentDescription("Show recent searches").performClick()
+        rule.onNodeWithContentDescription("Enable search history").performClick()
         rule.waitUntil { visible }
-        rule.onNodeWithText("Sensitive setting").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Hide recent searches").performClick()
+        rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
+        rule.onNodeWithText("No recent searches").assertIsDisplayed()
+        rule.onNodeWithContentDescription("Disable search history").performClick()
         rule.waitUntil { !visible }
-        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.onNodeWithText("Search history is disabled").assertIsDisplayed()
     }
 
     @Test
@@ -428,15 +429,21 @@ class SettingsSearchBehaviorTest {
         rule.runOnIdle { assertEquals(6, clicks) }
         openFrom("sub")
         rule.onNodeWithText("main action").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Hide recent searches").performClick()
+        rule.onNodeWithContentDescription("Disable search history").performClick()
         rule.waitUntil { !visible }
         openFrom("about")
-        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.onNodeWithText("Search history is disabled").assertIsDisplayed()
         rule.onNodeWithText("Seed").assertDoesNotExist()
-        rule.onNodeWithContentDescription("Show recent searches").performClick()
-        rule.waitUntil {
-            visible && rule.onAllNodesWithContentDescription("Remove recent search").fetchSemanticsNodes().isNotEmpty()
-        }
+        rule.onNodeWithContentDescription("Enable search history").performClick()
+        rule.waitUntil { visible && recents.isEmpty() }
+        rule.onNodeWithText("No recent searches").assertIsDisplayed()
+        val search = rule.onNodeWithContentDescription("Search")
+        search.performTextReplacement("main action")
+        rule.onNodeWithText("Main action").performClick()
+        search.performTextReplacement("sub action")
+        rule.onNodeWithText("Sub action").performClick()
+        search.performTextReplacement("")
+        rule.waitUntil { recents.firstOrNull() == "sub action" }
         rule.onAllNodesWithContentDescription("Remove recent search")[0].performClick()
         rule.waitUntil { "sub action" !in recents }
         openFrom("main")

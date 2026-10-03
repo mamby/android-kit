@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">സംസാരമൊന്നും തിരിച്ചറിഞ്ഞിട്ടില്ല. വീണ്ടും ശ്രമിക്കുക.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">ആപ്പ് ക്രമീകരണങ്ങൾ തുറക്കുക</string>
-    <string name="androidkit_compose_hide_recent_searches">സമീപകാല തിരയലുകൾ മറയ്ക്കുക</string>
-    <string name="androidkit_compose_show_recent_searches">സമീപകാല തിരയലുകൾ കാണിക്കുക</string>
-    <string name="androidkit_compose_recent_searches_hidden">സമീപകാല തിരയലുകൾ മറച്ചിരിക്കുന്നു</string>
+    <string name="androidkit_compose_disable_search_history">തിരയൽ ചരിത്രം പ്രവർത്തനരഹിതമാക്കുക</string>
+    <string name="androidkit_compose_enable_search_history">തിരയൽ ചരിത്രം പ്രവർത്തനക്ഷമമാക്കുക</string>
+    <string name="androidkit_compose_search_history_disabled">തിരയൽ ചരിത്രം പ്രവർത്തനരഹിതമാണ്</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">പ്രവർത്തനരഹിതമാക്കുമ്പോൾ സംരക്ഷിച്ച തിരയലുകൾ മായ്‌ക്കും.</string>
 </resources>

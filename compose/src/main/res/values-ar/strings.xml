@@ -45,7 +45,9 @@
     <string name="androidkit_compose_no_matching_settings">لا توجد إعدادات مطابقة</string>
     <string name="androidkit_compose_no_matching_results">لا توجد نتائج مطابقة</string>
     <string name="androidkit_compose_no_recent_searches">لا توجد عمليات بحث حديثة</string>
-    <string name="androidkit_compose_hide_recent_searches">إخفاء عمليات البحث الأخيرة</string>
-    <string name="androidkit_compose_show_recent_searches">إظهار عمليات البحث الأخيرة</string>
-    <string name="androidkit_compose_recent_searches_hidden">عمليات البحث الأخيرة مخفية</string>
+    <string name="androidkit_compose_disable_search_history">تعطيل سجل البحث</string>
+    <string name="androidkit_compose_enable_search_history">تفعيل سجل البحث</string>
+    <string name="androidkit_compose_search_history_disabled">سجل البحث معطّل</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">يؤدي التعطيل إلى حذف عمليات البحث المحفوظة.</string>
 </resources>

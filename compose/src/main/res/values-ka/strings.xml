@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">მეტყველება არ არის აღიარებული. სცადეთ ხელახლა.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">გახსენით აპის პარამეტრები</string>
-    <string name="androidkit_compose_hide_recent_searches">ბოლო ძიებების დამალვა</string>
-    <string name="androidkit_compose_show_recent_searches">ბოლო ძიებების ჩვენება</string>
-    <string name="androidkit_compose_recent_searches_hidden">ბოლო ძიებები დამალულია</string>
+    <string name="androidkit_compose_disable_search_history">ძიების ისტორიის გამორთვა</string>
+    <string name="androidkit_compose_enable_search_history">ძიების ისტორიის ჩართვა</string>
+    <string name="androidkit_compose_search_history_disabled">ძიების ისტორია გამორთულია</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">გამორთვა წაშლის შენახულ ძიებებს.</string>
 </resources>

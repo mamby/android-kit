@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">କୌଣସି କଥା ଚିହ୍ନଟ ହୋଇନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">ଆପ୍ ସେଟିଂସ୍ ଖୋଲନ୍ତୁ</string>
-    <string name="androidkit_compose_hide_recent_searches">ସାମ୍ପ୍ରତିକ ଖୋଜଗୁଡ଼ିକ ଲୁଚାନ୍ତୁ</string>
-    <string name="androidkit_compose_show_recent_searches">ସାମ୍ପ୍ରତିକ ଖୋଜଗୁଡ଼ିକ ଦେଖାନ୍ତୁ</string>
-    <string name="androidkit_compose_recent_searches_hidden">ସାମ୍ପ୍ରତିକ ଖୋଜଗୁଡ଼ିକ ଲୁଚାଯାଇଛି</string>
+    <string name="androidkit_compose_disable_search_history">ସନ୍ଧାନ ଇତିହାସ ବନ୍ଦ କରନ୍ତୁ</string>
+    <string name="androidkit_compose_enable_search_history">ସନ୍ଧାନ ଇତିହାସ ଚାଲୁ କରନ୍ତୁ</string>
+    <string name="androidkit_compose_search_history_disabled">ସନ୍ଧାନ ଇତିହାସ ବନ୍ଦ ଅଛି</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">ବନ୍ଦ କଲେ ସଞ୍ଚିତ ସନ୍ଧାନଗୁଡ଼ିକ ଲିଭିଯାଏ।</string>
 </resources>

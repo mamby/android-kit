@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Runas atpazīšana neizdevās. Mēģiniet vēlreiz.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Atvērt lietotnes iestatījumus</string>
-    <string name="androidkit_compose_hide_recent_searches">Paslēpt nesenos meklējumus</string>
-    <string name="androidkit_compose_show_recent_searches">Rādīt nesenos meklējumus</string>
-    <string name="androidkit_compose_recent_searches_hidden">Nesenie meklējumi ir paslēpti</string>
+    <string name="androidkit_compose_disable_search_history">Atspējot meklēšanas vēsturi</string>
+    <string name="androidkit_compose_enable_search_history">Iespējot meklēšanas vēsturi</string>
+    <string name="androidkit_compose_search_history_disabled">Meklēšanas vēsture ir atspējota</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Atspējojot tiek dzēsti saglabātie meklējumi.</string>
 </resources>

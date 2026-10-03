@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">هیچ گفتاری شناسایی نشد. دوباره امتحان کنید.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">تنظیمات برنامه را باز کنید</string>
-    <string name="androidkit_compose_hide_recent_searches">پنهان کردن جستجوهای اخیر</string>
-    <string name="androidkit_compose_show_recent_searches">نمایش جستجوهای اخیر</string>
-    <string name="androidkit_compose_recent_searches_hidden">جستجوهای اخیر پنهان هستند</string>
+    <string name="androidkit_compose_disable_search_history">غیرفعال کردن سابقهٔ جستجو</string>
+    <string name="androidkit_compose_enable_search_history">فعال کردن سابقهٔ جستجو</string>
+    <string name="androidkit_compose_search_history_disabled">سابقهٔ جستجو غیرفعال است</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">غیرفعال کردن، جستجوهای ذخیره‌شده را پاک می‌کند.</string>
 </resources>

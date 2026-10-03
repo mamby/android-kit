@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Nebola rozpoznaná žiadna reč. Skúste to znova.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Otvorte nastavenia aplikácie</string>
-    <string name="androidkit_compose_hide_recent_searches">Skryť nedávne vyhľadávania</string>
-    <string name="androidkit_compose_show_recent_searches">Zobraziť nedávne vyhľadávania</string>
-    <string name="androidkit_compose_recent_searches_hidden">Nedávne vyhľadávania sú skryté</string>
+    <string name="androidkit_compose_disable_search_history">Vypnúť históriu vyhľadávania</string>
+    <string name="androidkit_compose_enable_search_history">Zapnúť históriu vyhľadávania</string>
+    <string name="androidkit_compose_search_history_disabled">História vyhľadávania je vypnutá</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Vypnutím sa vymažú uložené vyhľadávania.</string>
 </resources>

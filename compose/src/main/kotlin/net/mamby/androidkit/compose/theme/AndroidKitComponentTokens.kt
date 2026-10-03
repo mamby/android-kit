@@ -266,6 +266,7 @@ internal class AndroidKitSearchPageTokens(
         fontWeight = FontWeight.Normal,
     )
     val emptyMessageTextStyle: TextStyle = AndroidKitDefaults.typography.bodyMedium
+    val headingSupportingTextStyle: TextStyle = typography.bodySmall
     val emptyTextStyle: TextStyle = typography.bodyLarge
     val recentTextStyle: TextStyle = typography.bodyLarge
     val headingShape: Shape = shapes.extraLarge

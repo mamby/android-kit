@@ -1,5 +1,6 @@
 package net.mamby.androidkit.demo.ui
 
+import kotlinx.coroutines.flow.onStart
 import android.content.Context
 import android.os.SystemClock
 import androidx.compose.runtime.getValue
@@ -51,8 +52,8 @@ internal data class DemoSettings(
     val showCompactNavigationLabels: Boolean = false,
     val recentSettingsSearches: List<String> = emptyList(),
     val recentContentSearches: List<String> = emptyList(),
-    val recentSettingsSearchesVisible: Boolean = true,
-    val recentContentSearchesVisible: Boolean = true,
+    val settingsSearchHistoryEnabled: Boolean = true,
+    val contentSearchHistoryEnabled: Boolean = true,
 )
 
 enum class DemoAppLockTimeout(val duration: Duration) {
@@ -93,7 +94,7 @@ internal class DemoSettingsRepository(context: Context) {
                 val old = legacyDataStore.data.first()
                 return mapOf("settings" to AndroidKitSearchHistorySnapshot(
                     old[RecentSettingsSearchesKey]?.let(::decodeStringList).orEmpty(),
-                    old[RecentSettingsSearchesVisibleKey] ?: true,
+                    old[SettingsSearchHistoryEnabledKey] ?: true,
                 ))
             }
             override suspend fun readPreferences(): Preferences {
@@ -108,13 +109,22 @@ internal class DemoSettingsRepository(context: Context) {
     private val dataStore = kitSettingsStore.preferences
 
     val settings: Flow<DemoSettings> = dataStore.data
+        .onStart {
+            dataStore.edit {
+                val marker = booleanPreferencesKey("search.content.enabled_policy_v1")
+                if (it[marker] != true) {
+                    if (it[ContentSearchHistoryEnabledKey] == false) it.remove(RecentContentSearchesKey)
+                    it[marker] = true
+                }
+            }
+        }
         .catch { exception ->
             if (exception is IOException) {
                 // A read failure must never silently disable a persisted app lock.
                 emit(preferencesOf(
                     AppLockEnabledKey to true,
-                    RecentSettingsSearchesVisibleKey to false,
-                    RecentContentSearchesVisibleKey to false,
+                    SettingsSearchHistoryEnabledKey to false,
+                    ContentSearchHistoryEnabledKey to false,
                 ))
             } else {
                 throw exception
@@ -151,8 +161,8 @@ internal class DemoSettingsRepository(context: Context) {
                 ),
                 showCompactNavigationLabels = preferences[ShowCompactNavigationLabelsKey]
                     ?: false,
-                recentSettingsSearchesVisible = preferences[RecentSettingsSearchesVisibleKey] ?: true,
-                recentContentSearchesVisible = preferences[RecentContentSearchesVisibleKey] ?: true,
+                settingsSearchHistoryEnabled = preferences[SettingsSearchHistoryEnabledKey] ?: true,
+                contentSearchHistoryEnabled = preferences[ContentSearchHistoryEnabledKey] ?: true,
                 recentSettingsSearches = preferences[RecentSettingsSearchesKey]
                     ?.let(::decodeStringList)
                     .orEmpty(),
@@ -190,12 +200,15 @@ internal class DemoSettingsRepository(context: Context) {
         dataStore.edit { it[AppLockTimeoutKey] = timeout.name }
     }
 
-    suspend fun setRecentSettingsSearchesVisible(visible: Boolean) {
-        dataStore.edit { it[RecentSettingsSearchesVisibleKey] = visible }
+    suspend fun setSettingsSearchHistoryEnabled(enabled: Boolean) {
+        dataStore.edit { it[SettingsSearchHistoryEnabledKey] = enabled }
     }
 
-    suspend fun setRecentContentSearchesVisible(visible: Boolean) {
-        dataStore.edit { it[RecentContentSearchesVisibleKey] = visible }
+    suspend fun setContentSearchHistoryEnabled(enabled: Boolean) {
+        dataStore.edit {
+            it[ContentSearchHistoryEnabledKey] = enabled
+            if (!enabled) it.remove(RecentContentSearchesKey)
+        }
     }
 
     suspend fun setRecentSettingsSearches(queries: List<String>) {
@@ -203,7 +216,11 @@ internal class DemoSettingsRepository(context: Context) {
     }
 
     suspend fun setRecentContentSearches(queries: List<String>) {
-        dataStore.edit { it[RecentContentSearchesKey] = JSONArray(queries).toString() }
+        dataStore.edit {
+            if (it[ContentSearchHistoryEnabledKey] != false) {
+                it[RecentContentSearchesKey] = JSONArray(queries).toString()
+            }
+        }
     }
 
     suspend fun setThemeChoice(choice: DemoThemeChoice) {
@@ -365,12 +382,12 @@ internal class DemoSettingsViewModel(
         persist { repository.setShowCompactNavigationLabels(showLabels) }
     }
 
-    fun setRecentSettingsSearchesVisible(visible: Boolean) {
-        persist { repository.setRecentSettingsSearchesVisible(visible) }
+    fun setSettingsSearchHistoryEnabled(enabled: Boolean) {
+        persist { repository.setSettingsSearchHistoryEnabled(enabled) }
     }
 
-    fun setRecentContentSearchesVisible(visible: Boolean) {
-        persist { repository.setRecentContentSearchesVisible(visible) }
+    fun setContentSearchHistoryEnabled(enabled: Boolean) {
+        persist { repository.setContentSearchHistoryEnabled(enabled) }
     }
 
     fun setRecentSettingsSearches(queries: List<String>) {
@@ -429,8 +446,8 @@ private val FloatingNavigationLayoutKey = stringPreferencesKey(
 private val ShowCompactNavigationLabelsKey = booleanPreferencesKey(
     "show_compact_navigation_labels",
 )
-private val RecentSettingsSearchesVisibleKey = booleanPreferencesKey("search.settings.recents_visible")
-private val RecentContentSearchesVisibleKey = booleanPreferencesKey("search.content.recents_visible")
+private val SettingsSearchHistoryEnabledKey = booleanPreferencesKey("search.settings.recents_visible")
+private val ContentSearchHistoryEnabledKey = booleanPreferencesKey("search.content.recents_visible")
 private val RecentSettingsSearchesKey = stringPreferencesKey("recent_settings_searches")
 private val RecentContentSearchesKey = stringPreferencesKey("recent_content_searches")
 

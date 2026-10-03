@@ -21,7 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -40,6 +40,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import net.mamby.androidkit.compose.action.AndroidKitFloatingAction
@@ -59,9 +61,9 @@ private const val MaximumRecentSearches = 10
  * Hosts own [query], [content], callbacks, navigation and persistence.
  * Item keys must be unique across the page; items sharing a group key must share its title.
  * Recent queries are recorded on IME submission or a result action, never while typing.
- * Hosts persist [recentQueriesVisible] per logical search page. Hiding preserves history and
- * continues recording. Hosts must supply [onRecentQueriesVisibleChange] and persist its changes;
- * keep history hidden until its persisted visibility has loaded.
+ * Hosts persist [searchHistoryEnabled] per logical search page. Disabling clears history and
+ * stops recording. Persist enabled state and clearing together in [onSearchHistoryEnabledChange],
+ * and reject history writes while disabled. Keep history disabled until the preference has loaded.
  * Opening the page focuses the input and requests the software keyboard once per entry.
  * Render [content] with stable item keys and respect each item's enabled state. Calling a matched
  * item's onClick records the query before invoking the host callback; disabled callbacks do nothing.
@@ -73,8 +75,8 @@ public fun <T> AndroidKitSearchPage(
     onQueryChange: (String) -> Unit,
     recentQueries: List<String>,
     onRecentQueriesChange: (List<String>) -> Unit,
-    recentQueriesVisible: Boolean,
-    onRecentQueriesVisibleChange: (Boolean) -> Unit,
+    searchHistoryEnabled: Boolean,
+    onSearchHistoryEnabledChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
@@ -128,8 +130,8 @@ public fun <T> AndroidKitSearchPage(
         onBack = onBack,
         listState = listState,
         voiceInputEnabled = voiceInputEnabled,
-        recentQueriesVisible = recentQueriesVisible,
-        onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
+        searchHistoryEnabled = searchHistoryEnabled,
+        onSearchHistoryEnabledChange = onSearchHistoryEnabledChange,
     ) { recordRecent ->
         content(matches.map { item ->
             item.copy(onClick = {
@@ -149,8 +151,8 @@ internal fun AndroidKitSearchPage(
     onQueryChange: (String) -> Unit,
     recentQueries: List<String>,
     onRecentQueriesChange: (List<String>) -> Unit,
-    recentQueriesVisible: Boolean,
-    onRecentQueriesVisibleChange: (Boolean) -> Unit,
+    searchHistoryEnabled: Boolean,
+    onSearchHistoryEnabledChange: (Boolean) -> Unit,
     title: String,
     noMatchesMessage: String,
     hasResults: Boolean,
@@ -170,6 +172,7 @@ internal fun AndroidKitSearchPage(
     val tokens = AndroidKitThemeTokens.componentTokens.searchPage
     val recents = recentQueries.sanitizedRecentSearchQueries()
     fun recordRecent(valueToRecord: String = resultsQuery) {
+        if (!searchHistoryEnabled) return
         val value = valueToRecord.trim()
         if (value.isEmpty()) return
         if (onRecordRecent != null) {
@@ -221,9 +224,12 @@ internal fun AndroidKitSearchPage(
                 if (showingHistory) {
                     Box(Modifier.padding(headingPlacementPadding)) {
                         RecentSearchHeading(
-                            visible = recentQueriesVisible,
-                            onVisibilityChange = onRecentQueriesVisibleChange,
-                            canClear = recentQueriesVisible && recents.isNotEmpty(),
+                            enabled = searchHistoryEnabled,
+                            onEnabledChange = { enabled ->
+                                if (!enabled && onClearRecent == null) onRecentQueriesChange(emptyList())
+                                onSearchHistoryEnabledChange(enabled)
+                            },
+                            canClear = searchHistoryEnabled && recents.isNotEmpty(),
                             onClear = { onClearRecent?.invoke() ?: onRecentQueriesChange(emptyList()) },
                         )
                     }
@@ -246,8 +252,8 @@ internal fun AndroidKitSearchPage(
                 }
             }
             Box(Modifier.fillMaxSize()) {
-                // Retain removal fades, but dispose outgoing rows immediately on hiding.
-                key(recentQueriesVisible) {
+                // Retain removal fades, but dispose outgoing rows immediately on disabling.
+                key(searchHistoryEnabled) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         state = listState,
@@ -257,7 +263,7 @@ internal fun AndroidKitSearchPage(
                             if (resultsQuery.isBlank()) tokens.recentRowSpacing else tokens.resultSpacing,
                         ),
                     ) {
-                        if (resultsQuery.isBlank() && recentQueriesVisible) {
+                        if (resultsQuery.isBlank() && searchHistoryEnabled) {
                             items(recents, key = { recent -> "recent:${normalizeSearchText(recent)}" }) { recent ->
                                 Box(Modifier.animateItem(fadeInSpec = null)) {
                                     RecentSearchRow(
@@ -289,7 +295,7 @@ internal fun AndroidKitSearchPage(
                         CircularProgressIndicator()
                     }
                 }
-                if (resultsQuery.isBlank() && (!recentQueriesVisible || recents.isEmpty())) {
+                if (resultsQuery.isBlank() && (!searchHistoryEnabled || recents.isEmpty())) {
                     Box(Modifier.fillMaxSize().padding(bodyPadding), contentAlignment = Alignment.Center) {
                         Column(
                             modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -302,14 +308,14 @@ internal fun AndroidKitSearchPage(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
-                                    imageVector = if (recentQueriesVisible) AndroidKitIcons.Search else AndroidKitIcons.EyeOff,
+                                    imageVector = if (searchHistoryEnabled) AndroidKitIcons.Search else AndroidKitIcons.History,
                                     contentDescription = null,
                                     modifier = Modifier.size(tokens.emptyIconSize),
                                     tint = AndroidKitThemeTokens.colorScheme.onPrimaryContainer,
                                 )
                             }
                             Text(
-                                text = if (recentQueriesVisible) strings.noRecentSearches else strings.recentSearchesHidden,
+                                text = if (searchHistoryEnabled) strings.noRecentSearches else strings.searchHistoryDisabled,
                                 style = tokens.emptyTextStyle,
                                 color = tokens.emptyContentColor,
                                 textAlign = TextAlign.Center,
@@ -324,8 +330,8 @@ internal fun AndroidKitSearchPage(
 
 @Composable
 private fun RecentSearchHeading(
-    visible: Boolean,
-    onVisibilityChange: (Boolean) -> Unit,
+    enabled: Boolean,
+    onEnabledChange: (Boolean) -> Unit,
     canClear: Boolean,
     onClear: () -> Unit,
 ) {
@@ -349,26 +355,26 @@ private fun RecentSearchHeading(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = strings.recentSearches,
-                        modifier = Modifier.weight(1f, fill = false),
-                        style = tokens.headingTextStyle,
-                        color = tokens.secondaryContentColor,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    IconToggleButton(
-                        checked = visible,
-                        onCheckedChange = onVisibilityChange,
-                        modifier = Modifier.size(dimensions.minimumTouchTarget),
-                    ) {
-                        Icon(
-                            imageVector = if (visible) AndroidKitIcons.EyeOff else AndroidKitIcons.Eye,
-                            contentDescription = if (visible) strings.hideRecentSearches else strings.showRecentSearches,
-                            modifier = Modifier.size(tokens.headingIconSize),
-                            tint = tokens.secondaryContentColor,
+                    Column(Modifier.weight(1f)) {
+                        Text(
+                            text = strings.recentSearches,
+                            style = tokens.headingTextStyle,
+                            color = tokens.secondaryContentColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            text = strings.disablingSearchHistoryClears,
+                            style = tokens.headingSupportingTextStyle,
+                            color = tokens.secondaryContentColor,
                         )
                     }
+                    val historyAction = if (enabled) strings.disableSearchHistory else strings.enableSearchHistory
+                    Switch(
+                        checked = enabled,
+                        onCheckedChange = onEnabledChange,
+                        modifier = Modifier.semantics { contentDescription = historyAction },
+                    )
                 }
                 if (canClear) {
                     TextButton(

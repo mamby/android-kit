@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">ప్రసంగం గుర్తించబడలేదు. మళ్లీ ప్రయత్నించండి.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">యాప్ సెట్టింగ్‌లను తెరవండి</string>
-    <string name="androidkit_compose_hide_recent_searches">ఇటీవలి శోధనలను దాచు</string>
-    <string name="androidkit_compose_show_recent_searches">ఇటీవలి శోధనలను చూపు</string>
-    <string name="androidkit_compose_recent_searches_hidden">ఇటీవలి శోధనలు దాచబడ్డాయి</string>
+    <string name="androidkit_compose_disable_search_history">శోధన చరిత్రను నిలిపివేయండి</string>
+    <string name="androidkit_compose_enable_search_history">శోధన చరిత్రను ప్రారంభించండి</string>
+    <string name="androidkit_compose_search_history_disabled">శోధన చరిత్ర నిలిపివేయబడింది</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">నిలిపివేస్తే సేవ్ చేసిన శోధనలు తొలగించబడతాయి.</string>
 </resources>

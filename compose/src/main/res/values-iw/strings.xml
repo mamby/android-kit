@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">לא זוהה דיבור. נסה שוב.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">פתח את הגדרות האפליקציה</string>
-    <string name="androidkit_compose_hide_recent_searches">הסתרת חיפושים אחרונים</string>
-    <string name="androidkit_compose_show_recent_searches">הצגת חיפושים אחרונים</string>
-    <string name="androidkit_compose_recent_searches_hidden">החיפושים האחרונים מוסתרים</string>
+    <string name="androidkit_compose_disable_search_history">השבתת היסטוריית החיפוש</string>
+    <string name="androidkit_compose_enable_search_history">הפעלת היסטוריית החיפוש</string>
+    <string name="androidkit_compose_search_history_disabled">היסטוריית החיפוש מושבתת</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">השבתה מוחקת את החיפושים השמורים.</string>
 </resources>

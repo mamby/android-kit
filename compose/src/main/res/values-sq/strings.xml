@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Nuk u njoh asnjë fjalim. Provo sërish.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Hapni cilësimet e aplikacionit</string>
-    <string name="androidkit_compose_hide_recent_searches">Fshih kërkimet e fundit</string>
-    <string name="androidkit_compose_show_recent_searches">Shfaq kërkimet e fundit</string>
-    <string name="androidkit_compose_recent_searches_hidden">Kërkimet e fundit janë të fshehura</string>
+    <string name="androidkit_compose_disable_search_history">Çaktivizo historikun e kërkimit</string>
+    <string name="androidkit_compose_enable_search_history">Aktivizo historikun e kërkimit</string>
+    <string name="androidkit_compose_search_history_disabled">Historiku i kërkimit është çaktivizuar</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Çaktivizimi fshin kërkimet e ruajtura.</string>
 </resources>

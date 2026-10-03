@@ -42,8 +42,8 @@ class SearchAsyncBehaviorTest {
                     onQueryChange = { query = it },
                     recentQueries = emptyList(),
                     onRecentQueriesChange = {},
-                    recentQueriesVisible = false,
-                    onRecentQueriesVisibleChange = {},
+                    searchHistoryEnabled = false,
+                    onSearchHistoryEnabledChange = {},
                     voiceInputEnabled = false,
                 ) { matches ->
                     items(matches, key = { it.key }) { match ->

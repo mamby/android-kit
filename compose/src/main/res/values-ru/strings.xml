@@ -50,7 +50,9 @@
     <string name="androidkit_compose_no_matching_settings">Подходящие настройки не найдены</string>
     <string name="androidkit_compose_no_matching_results">Подходящие результаты не найдены</string>
     <string name="androidkit_compose_no_recent_searches">Недавних запросов нет</string>
-    <string name="androidkit_compose_hide_recent_searches">Скрыть недавние запросы</string>
-    <string name="androidkit_compose_show_recent_searches">Показать недавние запросы</string>
-    <string name="androidkit_compose_recent_searches_hidden">Недавние запросы скрыты</string>
+    <string name="androidkit_compose_disable_search_history">Отключить историю поиска</string>
+    <string name="androidkit_compose_enable_search_history">Включить историю поиска</string>
+    <string name="androidkit_compose_search_history_disabled">История поиска отключена</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">При отключении сохранённые поисковые запросы удаляются.</string>
 </resources>

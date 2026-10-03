@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Не е разпознат говор. Опитайте отново.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Отворете настройките на приложението</string>
-    <string name="androidkit_compose_hide_recent_searches">Скриване на последните търсения</string>
-    <string name="androidkit_compose_show_recent_searches">Показване на последните търсения</string>
-    <string name="androidkit_compose_recent_searches_hidden">Последните търсения са скрити</string>
+    <string name="androidkit_compose_disable_search_history">Изключване на историята на търсенията</string>
+    <string name="androidkit_compose_enable_search_history">Включване на историята на търсенията</string>
+    <string name="androidkit_compose_search_history_disabled">Историята на търсенията е изключена</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Изключването изтрива запазените търсения.</string>
 </resources>

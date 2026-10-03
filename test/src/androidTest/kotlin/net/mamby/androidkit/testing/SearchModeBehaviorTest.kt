@@ -112,8 +112,8 @@ class SearchModeBehaviorTest {
                     onQueryChange = { query = it },
                     recentQueries = recents,
                     onRecentQueriesChange = { recents = it },
-                    recentQueriesVisible = true,
-                    onRecentQueriesVisibleChange = {},
+                    searchHistoryEnabled = true,
+                    onSearchHistoryEnabledChange = {},
                     voiceInputEnabled = false,
                     searchMode = AndroidKitSearchMode.OnSubmit,
                 ) { matches ->

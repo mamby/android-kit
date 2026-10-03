@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Non se recoñece a palabra. Téntao de novo.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">abra a configuración da aplicación</string>
-    <string name="androidkit_compose_hide_recent_searches">Agochar as buscas recentes</string>
-    <string name="androidkit_compose_show_recent_searches">Amosar as buscas recentes</string>
-    <string name="androidkit_compose_recent_searches_hidden">As buscas recentes están agochadas</string>
+    <string name="androidkit_compose_disable_search_history">Desactivar o historial de buscas</string>
+    <string name="androidkit_compose_enable_search_history">Activar o historial de buscas</string>
+    <string name="androidkit_compose_search_history_disabled">O historial de buscas está desactivado</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Ao desactivalo, bórranse as buscas gardadas.</string>
 </resources>

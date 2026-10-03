@@ -107,9 +107,9 @@ public fun AndroidKitSettingsSearchPage(
         onQueryChange = { query = it },
         recentQueries = saved.recentQueries,
         onRecentQueriesChange = { error("Settings history changes must use persistent operations.") },
-        recentQueriesVisible = saved.visible,
-        onRecentQueriesVisibleChange = { visible ->
-            history.submit(owner.search.onStorageFailure) { setVisible(visible) }
+        searchHistoryEnabled = saved.enabled,
+        onSearchHistoryEnabledChange = { enabled ->
+            history.submit(owner.search.onStorageFailure) { setEnabled(enabled) }
         },
         onRecordRecent = { value -> history.submit(owner.search.onStorageFailure) { record(value) } },
         onRemoveRecent = { value -> history.submit(owner.search.onStorageFailure) { remove(value) } },

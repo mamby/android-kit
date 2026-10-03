@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Walang kinikilalang pananalita. Subukan muli.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Buksan ang mga setting ng app</string>
-    <string name="androidkit_compose_hide_recent_searches">Itago ang mga kamakailang paghahanap</string>
-    <string name="androidkit_compose_show_recent_searches">Ipakita ang mga kamakailang paghahanap</string>
-    <string name="androidkit_compose_recent_searches_hidden">Nakatago ang mga kamakailang paghahanap</string>
+    <string name="androidkit_compose_disable_search_history">I-disable ang history ng paghahanap</string>
+    <string name="androidkit_compose_enable_search_history">I-enable ang history ng paghahanap</string>
+    <string name="androidkit_compose_search_history_disabled">Naka-disable ang history ng paghahanap</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Mabubura ang mga naka-save na paghahanap kapag na-disable.</string>
 </resources>

@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Engin tala þekkt. Reyndu aftur.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Opnaðu forritastillingar</string>
-    <string name="androidkit_compose_hide_recent_searches">Fela nýlegar leitir</string>
-    <string name="androidkit_compose_show_recent_searches">Sýna nýlegar leitir</string>
-    <string name="androidkit_compose_recent_searches_hidden">Nýlegar leitir eru faldar</string>
+    <string name="androidkit_compose_disable_search_history">Slökkva á leitarsögu</string>
+    <string name="androidkit_compose_enable_search_history">Kveikja á leitarsögu</string>
+    <string name="androidkit_compose_search_history_disabled">Slökkt er á leitarsögu</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Þegar slökkt er á leitarsögu er vistuðum leitum eytt.</string>
 </resources>

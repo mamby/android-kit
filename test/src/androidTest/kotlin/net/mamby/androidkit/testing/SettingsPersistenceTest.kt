@@ -58,12 +58,15 @@ class SettingsPersistenceTest {
         }
         session { store ->
             val history = store.searchHistory("settings")
-            assertEquals(listOf("private-query-4821"), history.snapshots.first().recentQueries)
-            assertFalse(history.snapshots.first().visible)
+            assertEquals(emptyList<String>(), history.snapshots.first().recentQueries)
+            assertFalse(history.snapshots.first().enabled)
             assertEquals("dark", store.setting(theme, "system").values.first())
             assertEquals("fr", store.setting(language, "system").values.first())
             assertEquals(75f, store.setting(opacity, 0f).values.first())
             assertTrue(store.setting(appLock, false).values.first())
+            history.record("ignored-while-disabled")
+            assertEquals(emptyList<String>(), history.snapshots.first().recentQueries)
+            history.setEnabled(true)
             history.clear()
             coroutineScope {
                 launch { history.record("private-query-4821") }
@@ -77,13 +80,69 @@ class SettingsPersistenceTest {
         session { store ->
             val saved = store.searchHistory("settings").snapshots.first()
             assertEquals(setOf("private-query-4821", "second-private-query-9916"), saved.recentQueries.toSet())
-            assertFalse(saved.visible)
+            assertTrue(saved.enabled)
             assertEquals(listOf("content-only"), store.searchHistory("content").snapshots.first().recentQueries)
             assertEquals(40f, store.setting(opacity, 0f).values.first())
             assertEquals(1, historyReads)
             assertEquals(1, preferenceReads)
             assertEquals(1, cleanups)
         }
+    }
+
+    @Test
+    fun disablingIsAtomicWithConcurrentRecordingAndSurvivesRecreation() = runBlocking {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val name = "disabled-${UUID.randomUUID()}"
+        val file = File(context.cacheDir, "$name/settings")
+        suspend fun session(check: suspend (AndroidKitSettingsStore) -> Unit) {
+            val job = SupervisorJob()
+            val store = AndroidKitSettingsStore.create(file, name, AndroidKitSettingsStorageProtection.Encrypted,
+                emptyList(), CoroutineScope(job + Dispatchers.IO))
+            try { check(store) } finally { job.cancelAndJoin() }
+        }
+        session { store ->
+            val history = store.searchHistory("settings")
+            history.record("existing")
+            store.searchHistory("content").record("independent")
+            coroutineScope {
+                launch { history.setEnabled(false) }
+                launch { repeat(20) { history.record("pending-$it") } }
+            }
+            assertEquals(AndroidKitSearchHistorySnapshot(emptyList(), false), history.snapshots.first())
+        }
+        session { store ->
+            val history = store.searchHistory("settings")
+            history.record("still-disabled")
+            assertEquals(AndroidKitSearchHistorySnapshot(emptyList(), false), history.snapshots.first())
+            assertEquals(listOf("independent"), store.searchHistory("content").snapshots.first().recentQueries)
+            history.setEnabled(true)
+            assertEquals(emptyList<String>(), history.snapshots.first().recentQueries)
+            history.record("new")
+            history.clear()
+            assertTrue(history.snapshots.first().enabled)
+            history.record("after-clear")
+            assertEquals(listOf("after-clear"), history.snapshots.first().recentQueries)
+        }
+    }
+
+    @Test
+    fun legacyHiddenHistoryIsErasedOnDiskBeforeItIsExposed() = runBlocking {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val name = "legacy-${UUID.randomUUID()}"
+        val file = File(context.cacheDir, "$name/settings")
+        file.parentFile!!.mkdirs()
+        file.writeText("""{"version":1,"histories":{"settings":{"queries":["hidden-sensitive"],"visible":false},"content":{"queries":["retained"],"visible":true}},"migrations":["legacy-import"]}""")
+        val job = SupervisorJob()
+        val store = AndroidKitSettingsStore.create(file, name, AndroidKitSettingsStorageProtection.Plaintext,
+            emptyList(), CoroutineScope(job + Dispatchers.IO))
+        try {
+            assertEquals(AndroidKitSearchHistorySnapshot(emptyList(), false), store.searchHistory("settings").snapshots.first())
+            assertEquals(listOf("retained"), store.searchHistory("content").snapshots.first().recentQueries)
+            val persisted = org.json.JSONObject(file.readText())
+            assertEquals(2, persisted.getInt("version"))
+            assertFalse(file.readText().contains("hidden-sensitive"))
+            assertEquals("legacy-import", persisted.getJSONArray("migrations").getString(0))
+        } finally { job.cancelAndJoin() }
     }
 
     @Test

@@ -113,3 +113,12 @@ by the developer catalog recognizable. They are names and identifiers, rather
 than untranslated application instructions. New native language labels use
 `Locale.getDisplayName(locale)` so script/region variants can be distinguished;
 sorting uses stable language tags, independently of their writing systems.
+
+## Search history policy
+
+Enable/disable search history controls whether submitted or activated queries
+are saved. Disabling also deletes existing saved queries in that logical search
+scope. It must never be translated as show/hide or visibility. French uses
+**Activer / Désactiver l’historique des recherches**; the deletion consequence is
+**La désactivation efface les recherches enregistrées.** These are editorial
+phrases for this component, not a claim of native-speaker approval.

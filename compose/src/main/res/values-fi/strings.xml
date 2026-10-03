@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Puhetta ei tunnistettu. Yritä uudelleen.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Avaa sovelluksen asetukset</string>
-    <string name="androidkit_compose_hide_recent_searches">Piilota viimeaikaiset haut</string>
-    <string name="androidkit_compose_show_recent_searches">Näytä viimeaikaiset haut</string>
-    <string name="androidkit_compose_recent_searches_hidden">Viimeaikaiset haut on piilotettu</string>
+    <string name="androidkit_compose_disable_search_history">Poista hakuhistoria käytöstä</string>
+    <string name="androidkit_compose_enable_search_history">Ota hakuhistoria käyttöön</string>
+    <string name="androidkit_compose_search_history_disabled">Hakuhistoria on poistettu käytöstä</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Käytöstä poistaminen tyhjentää tallennetut haut.</string>
 </resources>

@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">မည်သည့်မိန့်ခွန်းကိုမျှ အသိအမှတ်မပြုပါ။ ထပ်စမ်းကြည့်ပါ။</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">အက်ပ်ဆက်တင်များကို ဖွင့်ပါ။</string>
-    <string name="androidkit_compose_hide_recent_searches">လတ်တလော ရှာဖွေမှုများကို ဖျောက်ရန်</string>
-    <string name="androidkit_compose_show_recent_searches">လတ်တလော ရှာဖွေမှုများကို ပြရန်</string>
-    <string name="androidkit_compose_recent_searches_hidden">လတ်တလော ရှာဖွေမှုများကို ဖျောက်ထားသည်</string>
+    <string name="androidkit_compose_disable_search_history">ရှာဖွေမှုမှတ်တမ်းကို ပိတ်ရန်</string>
+    <string name="androidkit_compose_enable_search_history">ရှာဖွေမှုမှတ်တမ်းကို ဖွင့်ရန်</string>
+    <string name="androidkit_compose_search_history_disabled">ရှာဖွေမှုမှတ်တမ်းကို ပိတ်ထားသည်</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">ပိတ်လိုက်လျှင် သိမ်းဆည်းထားသော ရှာဖွေမှုများကို ဖျက်ပါမည်။</string>
 </resources>

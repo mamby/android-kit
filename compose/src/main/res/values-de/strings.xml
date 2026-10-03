@@ -50,7 +50,9 @@
     <string name="androidkit_compose_no_matching_settings">Keine passenden Einstellungen</string>
     <string name="androidkit_compose_no_matching_results">Keine passenden Ergebnisse</string>
     <string name="androidkit_compose_no_recent_searches">Keine letzten Suchanfragen</string>
-    <string name="androidkit_compose_hide_recent_searches">Letzte Suchanfragen ausblenden</string>
-    <string name="androidkit_compose_show_recent_searches">Letzte Suchanfragen anzeigen</string>
-    <string name="androidkit_compose_recent_searches_hidden">Letzte Suchanfragen sind ausgeblendet</string>
+    <string name="androidkit_compose_disable_search_history">Suchverlauf deaktivieren</string>
+    <string name="androidkit_compose_enable_search_history">Suchverlauf aktivieren</string>
+    <string name="androidkit_compose_search_history_disabled">Der Suchverlauf ist deaktiviert</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Beim Deaktivieren werden gespeicherte Suchanfragen gelöscht.</string>
 </resources>

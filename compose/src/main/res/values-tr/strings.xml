@@ -50,7 +50,9 @@
     <string name="androidkit_compose_no_matching_settings">Eşleşen ayar yok</string>
     <string name="androidkit_compose_no_matching_results">Eşleşen sonuç yok</string>
     <string name="androidkit_compose_no_recent_searches">Son arama yok</string>
-    <string name="androidkit_compose_hide_recent_searches">Son aramaları gizle</string>
-    <string name="androidkit_compose_show_recent_searches">Son aramaları göster</string>
-    <string name="androidkit_compose_recent_searches_hidden">Son aramalar gizlendi</string>
+    <string name="androidkit_compose_disable_search_history">Arama geçmişini devre dışı bırak</string>
+    <string name="androidkit_compose_enable_search_history">Arama geçmişini etkinleştir</string>
+    <string name="androidkit_compose_search_history_disabled">Arama geçmişi devre dışı</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Devre dışı bırakmak kayıtlı aramaları siler.</string>
 </resources>

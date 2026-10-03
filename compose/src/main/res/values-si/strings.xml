@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">කථාවක් හඳුනාගෙන නොමැත. නැවත උත්සාහ කරන්න.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">යෙදුම් සැකසුම් විවෘත කරන්න</string>
-    <string name="androidkit_compose_hide_recent_searches">මෑත සෙවුම් සඟවන්න</string>
-    <string name="androidkit_compose_show_recent_searches">මෑත සෙවුම් පෙන්වන්න</string>
-    <string name="androidkit_compose_recent_searches_hidden">මෑත සෙවුම් සඟවා ඇත</string>
+    <string name="androidkit_compose_disable_search_history">සෙවුම් ඉතිහාසය අක්‍රිය කරන්න</string>
+    <string name="androidkit_compose_enable_search_history">සෙවුම් ඉතිහාසය සක්‍රිය කරන්න</string>
+    <string name="androidkit_compose_search_history_disabled">සෙවුම් ඉතිහාසය අක්‍රියයි</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">අක්‍රිය කිරීමෙන් සුරැකි සෙවුම් මැකේ.</string>
 </resources>

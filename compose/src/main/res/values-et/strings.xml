@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">kõnet ei tuvastatud. Proovi uuesti.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">avage rakenduse seaded</string>
-    <string name="androidkit_compose_hide_recent_searches">Peida viimased otsingud</string>
-    <string name="androidkit_compose_show_recent_searches">Näita viimaseid otsinguid</string>
-    <string name="androidkit_compose_recent_searches_hidden">Viimased otsingud on peidetud</string>
+    <string name="androidkit_compose_disable_search_history">Keela otsinguajalugu</string>
+    <string name="androidkit_compose_enable_search_history">Luba otsinguajalugu</string>
+    <string name="androidkit_compose_search_history_disabled">Otsinguajalugu on keelatud</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Keelamine kustutab salvestatud otsingud.</string>
 </resources>

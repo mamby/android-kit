@@ -49,8 +49,8 @@ AndroidKitSearchPage(
     onQueryChange = onQueryChange,
     recentQueries = recentQueries,
     onRecentQueriesChange = onRecentQueriesChange,
-    recentQueriesVisible = recentQueriesVisible,
-    onRecentQueriesVisibleChange = onRecentQueriesVisibleChange,
+    searchHistoryEnabled = searchHistoryEnabled,
+    onSearchHistoryEnabledChange = onSearchHistoryEnabledChange,
     onBack = onBack,
 ) { matches ->
     items(matches, key = { it.key }) { match ->
@@ -104,35 +104,44 @@ removal and Clear all use `onRecentQueriesChange`. Persist the list in the host
 if it must survive restarts. Save query state in the host when restoration is
 required; the demo uses `rememberSaveable` for the query and DataStore for history.
 
-## Page-scoped history visibility
+## Page-scoped search history
 
-Both `recentQueriesVisible` and `onRecentQueriesVisibleChange` are required in
-`AndroidKitSearchPage`. Hosts must
-wire the callback to their page-scoped persisted state. Every search page includes the
-Kit-owned eye toggle immediately after the Recent searches heading. Its localized
-accessibility action is Hide recent searches / Show recent searches. There is no
-API option to omit the privacy control. This is a source-breaking change: callers
-must supply both arguments explicitly when upgrading.
-Hiding immediately removes recent rows, including outgoing animations and their
-accessibility semantics. The empty-query body says Recent searches hidden and
-keeps the heading and toggle available even when history is empty. Recent queries
-render as rounded Kit cards with a leading history icon and trailing X remove
-action; tapping the card restores the query. Clear all remains a separate deletion
-action when history is shown. Searching and recording continue while hidden.
+`searchHistoryEnabled` and `onSearchHistoryEnabledChange` are required in
+`AndroidKitSearchPage`. The Kit-owned Material 3 switch enables or disables
+history; its localized accessibility actions are Enable search history and
+Disable search history. A visible note explains that disabling clears saved
+searches. There is no API option to omit this control.
 
-The recent heading, visibility toggle and Clear all share a floating Kit surface.
-The list viewport fills the page edge to edge. Its content padding keeps the first
-row below the measured recent bar and the last row above the search field, while
-rows scroll behind the recent bar, page title and system bars. The page title bar
-and status-bar protection retain the standard `AndroidKitPage` behavior.
+Disabling immediately removes recent rows, including outgoing animations and
+accessibility semantics, clears saved queries, and stops recording both IME
+submissions and result actions. Searching and result actions continue normally.
+The empty-query body says Search history is disabled. Enabling starts empty;
+deleted searches do not return. Clear all clears entries while leaving history
+enabled. Recent-query cards and individual removal retain their existing behavior.
 
-Hosts persist visibility alongside history, scoped by a stable logical search
-identifier, never a translated title or transient navigation entry. Settings is the exception to destination-level scoping: its complete hierarchy
-shares one Settings owner and one history visibility preference. An absent key
-defaults to visible for compatibility. The demo waits for persisted settings
-before composing search; hosts must similarly avoid rendering history before
-visibility loads, or initially pass `recentQueriesVisible = false`. Visibility
-is concealment on this search page, not private browsing or encrypted storage.
+The public page requests an empty list when disabled and calls
+`onSearchHistoryEnabledChange`. Hosts must atomically persist clearing and the
+new enabled state in that callback, and reject writes when their persisted state
+is disabled. This protects against pending writes and callbacks from other screens.
+The Kit persistent store enforces this inside DataStore transactions using
+`AndroidKitPersistentSearchHistory.setEnabled`; its snapshot exposes `enabled`.
+
+Persist this preference per stable logical search identifier. Main Settings,
+About and Settings subpages share one owner and one history preference. Independent
+content searches retain separate preferences. The absent preference defaults to
+enabled. Load persisted state before rendering history; initially pass
+`searchHistoryEnabled = false` while loading.
+
+This is a source-breaking rename from `recentQueriesVisible`,
+`onRecentQueriesVisibleChange`, snapshot `visible`, and `setVisible`. Kit storage
+version 2 migrates version 1 before exposing data: old hidden histories become
+disabled and empty on disk; visible histories remain enabled with their queries.
+Migration markers and unrelated preferences are preserved. The demo similarly
+clears its previously hidden independent content history before presenting it.
+
+The recent heading, switch and Clear all share a floating Kit surface. The list
+viewport remains edge to edge, with measured content padding keeping its rows
+clear of floating controls. Encryption remains an independent storage policy.
 
 ## Settings integration
 

@@ -624,3 +624,16 @@ translations; no external linguistic source or native-speaker approval is claime
 Idiomatic wording and pronunciation, particularly in less familiar locales,
 remain subject to competent language review. XML completeness and Android
 resource/build checks verify packaging, not linguistic quality.
+
+## Search history enable/disable — 2026-10-03
+
+Reviewed the four history actions/state/policy strings against SearchPage and
+its store, in all 72 Compose locale directories (288 values). English now means
+allow recording, rather than conceal saved queries. Disabling deletes existing
+queries; enabling starts empty. The visible deletion consequence is a separate
+string. The demo reuses Kit chrome, so it has no duplicate labels to translate.
+These are machine-assisted editorial translations reviewed against English,
+not independent human or native-speaker approval. No per-language reference or
+native-speaker validation is claimed. Resource checks and builds establish
+packaging coverage, not idiomatic language or pronunciation. Device verification
+targets English; truncation, RTL and larger text in other locales remain unverified.

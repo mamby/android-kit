@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Ешбір сөз танылмады. Қайтадан байқап көріңіз.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Қолданба параметрлерін ашыңыз</string>
-    <string name="androidkit_compose_hide_recent_searches">Соңғы іздеулерді жасыру</string>
-    <string name="androidkit_compose_show_recent_searches">Соңғы іздеулерді көрсету</string>
-    <string name="androidkit_compose_recent_searches_hidden">Соңғы іздеулер жасырылған</string>
+    <string name="androidkit_compose_disable_search_history">Іздеу тарихын өшіру</string>
+    <string name="androidkit_compose_enable_search_history">Іздеу тарихын қосу</string>
+    <string name="androidkit_compose_search_history_disabled">Іздеу тарихы өшірілген</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Өшіргенде сақталған іздеулер жойылады.</string>
 </resources>

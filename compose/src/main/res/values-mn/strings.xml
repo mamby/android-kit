@@ -55,7 +55,9 @@
     <string name="androidkit_compose_voice_no_speech">Яриа танигдаагүй. Дахин оролдоно уу.</string>
     <!-- Tooltip action opening this application's system settings to manage microphone access. -->
     <string name="androidkit_compose_open_app_settings">Програмын тохиргоог нээнэ үү</string>
-    <string name="androidkit_compose_hide_recent_searches">Сүүлийн хайлтуудыг нуух</string>
-    <string name="androidkit_compose_show_recent_searches">Сүүлийн хайлтуудыг харуулах</string>
-    <string name="androidkit_compose_recent_searches_hidden">Сүүлийн хайлтуудыг нуусан</string>
+    <string name="androidkit_compose_disable_search_history">Хайлтын түүхийг идэвхгүй болгох</string>
+    <string name="androidkit_compose_enable_search_history">Хайлтын түүхийг идэвхжүүлэх</string>
+    <string name="androidkit_compose_search_history_disabled">Хайлтын түүх идэвхгүй байна</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Идэвхгүй болгоход хадгалсан хайлтууд устна.</string>
 </resources>

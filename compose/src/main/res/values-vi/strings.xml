@@ -50,7 +50,9 @@
     <string name="androidkit_compose_no_matching_settings">Không có cài đặt phù hợp</string>
     <string name="androidkit_compose_no_matching_results">Không có kết quả phù hợp</string>
     <string name="androidkit_compose_no_recent_searches">Không có tìm kiếm gần đây</string>
-    <string name="androidkit_compose_hide_recent_searches">Ẩn các tìm kiếm gần đây</string>
-    <string name="androidkit_compose_show_recent_searches">Hiện các tìm kiếm gần đây</string>
-    <string name="androidkit_compose_recent_searches_hidden">Các tìm kiếm gần đây đã được ẩn</string>
+    <string name="androidkit_compose_disable_search_history">Tắt nhật ký tìm kiếm</string>
+    <string name="androidkit_compose_enable_search_history">Bật nhật ký tìm kiếm</string>
+    <string name="androidkit_compose_search_history_disabled">Nhật ký tìm kiếm đã tắt</string>
+    <!-- Disabling history deletes existing queries and stops saving new queries. -->
+    <string name="androidkit_compose_disabling_search_history_clears">Tắt sẽ xóa các lượt tìm kiếm đã lưu.</string>
 </resources>

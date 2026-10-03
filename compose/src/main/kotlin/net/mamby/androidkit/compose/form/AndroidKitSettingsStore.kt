@@ -48,7 +48,7 @@ public enum class AndroidKitSettingsStorageProtection { Plaintext, Encrypted }
 /** One logical page's durable history and privacy preference. */
 public data class AndroidKitSearchHistorySnapshot(
     public val recentQueries: List<String> = emptyList(),
-    public val visible: Boolean = true,
+    public val enabled: Boolean = true,
 )
 
 /** Import existing host preferences once; cleanup runs only after the Kit transaction succeeds. */
@@ -102,7 +102,7 @@ public class AndroidKitSettingsStore private constructor(
         return AndroidKitPersistentSearchHistory(this, pageKey)
     }
 
-    /** Erases all queries and visibility preferences, without resetting migration markers. */
+    /** Erases all queries and history preferences, without resetting migration markers. */
     public suspend fun clearSearchHistories(): Unit {
         dataStore.updateData { it.copy(histories = emptyMap()) }
     }
@@ -170,7 +170,14 @@ public class AndroidKitSettingsStore private constructor(
         ): AndroidKitSettingsStore = AndroidKitSettingsStore(
             DataStoreFactory.create(
                 serializer = SettingsSerializer(name, protection),
-                migrations = migrations.map { migration ->
+                migrations = listOf(object : DataMigration<StoredSettings> {
+                    override suspend fun shouldMigrate(currentData: StoredSettings) = currentData.version < StorageVersion
+                    override suspend fun migrate(currentData: StoredSettings) = currentData.copy(
+                        version = StorageVersion,
+                        histories = currentData.histories.mapValues { it.value.sanitized() },
+                    )
+                    override suspend fun cleanUp() = Unit
+                }) + migrations.map { migration ->
                     object : DataMigration<StoredSettings> {
                         override suspend fun shouldMigrate(currentData: StoredSettings) = migration.id !in currentData.migrations
                         override suspend fun migrate(currentData: StoredSettings): StoredSettings = currentData.copy(
@@ -287,7 +294,7 @@ public class AndroidKitPersistentSearchHistory internal constructor(
         val value = query.trim()
         if (value.isEmpty()) return
         store.updateHistory(pageKey) { current ->
-            current.copy(recentQueries = listOf(value) + current.recentQueries.filterNot {
+            if (!current.enabled) current else current.copy(recentQueries = listOf(value) + current.recentQueries.filterNot {
                 normalizeSearchText(it) == normalizeSearchText(value)
             })
         }
@@ -300,13 +307,14 @@ public class AndroidKitPersistentSearchHistory internal constructor(
     }
 
     public suspend fun clear(): Unit = store.updateHistory(pageKey) { it.copy(recentQueries = emptyList()) }
-    public suspend fun setVisible(visible: Boolean): Unit = store.updateHistory(pageKey) { it.copy(visible = visible) }
+    public suspend fun setEnabled(enabled: Boolean): Unit = store.updateHistory(pageKey) { it.copy(enabled = enabled, recentQueries = if (enabled) it.recentQueries else emptyList()) }
 
     internal fun submit(onFailure: (Throwable) -> Unit, operation: suspend AndroidKitPersistentSearchHistory.() -> Unit) =
         store.submit(onFailure) { operation() }
 }
 
 private fun AndroidKitSearchHistorySnapshot.sanitized(): AndroidKitSearchHistorySnapshot {
+    if (!enabled) return copy(recentQueries = emptyList())
     val seen = mutableSetOf<String>()
     return copy(recentQueries = recentQueries.map(String::trim).filter {
         it.isNotEmpty() && seen.add(normalizeSearchText(it))
@@ -314,9 +322,10 @@ private fun AndroidKitSearchHistorySnapshot.sanitized(): AndroidKitSearchHistory
 }
 
 private const val MaximumRecentQueries = 10
-private const val StorageVersion = 1
+private const val StorageVersion = 2
 
 private data class StoredSettings(
+    val version: Int = StorageVersion,
     val histories: Map<String, AndroidKitSearchHistorySnapshot> = emptyMap(),
     val migrations: Set<String> = emptySet(),
 )
@@ -333,13 +342,17 @@ private class SettingsSerializer(
         val plaintext = encryption?.decrypt(encoded) ?: encoded
         try {
             val root = JSONObject(plaintext.toString(Charsets.UTF_8))
-            if (root.getInt("version") != StorageVersion) throw CorruptionException("Unsupported settings storage version.")
+            val version = root.getInt("version")
+            if (version !in 1..StorageVersion) throw CorruptionException("Unsupported settings storage version.")
             val histories = root.getJSONObject("histories")
             val values = histories.keys().asSequence().associateWith { key ->
                 val history = histories.getJSONObject(key)
-                AndroidKitSearchHistorySnapshot(history.getJSONArray("queries").strings(), history.getBoolean("visible")).sanitized()
+                AndroidKitSearchHistorySnapshot(
+                    history.getJSONArray("queries").strings(),
+                    history.getBoolean(if (version == 1) "visible" else "enabled"),
+                ).sanitized()
             }
-            return StoredSettings(values, root.getJSONArray("migrations").strings().toSet())
+            return StoredSettings(version, values, root.getJSONArray("migrations").strings().toSet())
         } catch (failure: JSONException) {
             throw CorruptionException("Unreadable settings storage.", failure)
         } finally {
@@ -350,7 +363,7 @@ private class SettingsSerializer(
     override suspend fun writeTo(t: StoredSettings, output: OutputStream) {
         val histories = JSONObject()
         t.histories.forEach { (key, history) ->
-            histories.put(key, JSONObject().put("queries", JSONArray(history.recentQueries)).put("visible", history.visible))
+            histories.put(key, JSONObject().put("queries", JSONArray(history.recentQueries)).put("enabled", history.enabled))
         }
         val plaintext = JSONObject().put("version", StorageVersion).put("histories", histories)
             .put("migrations", JSONArray(t.migrations.toList())).toString().toByteArray(Charsets.UTF_8)
