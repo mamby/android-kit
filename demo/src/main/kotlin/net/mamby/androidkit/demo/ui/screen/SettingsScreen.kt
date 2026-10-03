@@ -17,7 +17,6 @@ import net.mamby.androidkit.compose.form.AndroidKitSettingsLegalEntry
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
-import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsStore
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -38,9 +37,7 @@ internal const val DemoAboutSettingsPageKey = "about"
 @Composable
 internal fun demoSettingsCatalog(
     onAbout: () -> Unit,
-    onSearch: () -> Unit,
     settingsStore: AndroidKitSettingsStore,
-    onSettingsStorageFailure: (Throwable) -> Unit,
     appLockEnabled: Boolean,
     appLockTimeout: DemoAppLockTimeout,
     onAppLockTimeoutChange: (DemoAppLockTimeout) -> Unit,
@@ -105,13 +102,7 @@ internal fun demoSettingsCatalog(
             ),
         ),
     )
-    return androidKitSettingsCatalog(
-        search = AndroidKitSettingsSearchConfiguration(
-            onOpenSearch = onSearch,
-            history = remember(settingsStore) { settingsStore.searchHistory("settings") },
-            onStorageFailure = onSettingsStorageFailure,
-        ),
-    ) {
+    return androidKitSettingsCatalog {
         main(key = DemoMainSettingsPageKey, title = settingsTitle) {
             section("language", label = languageTitle) {
                 language(AndroidKitLanguageSetting(
@@ -168,18 +159,18 @@ internal fun demoSettingsCatalog(
 }
 
 @Composable
-internal fun SettingsScreen(catalog: AndroidKitSettingsCatalog) {
-    AndroidKitSettingsPage(catalog = catalog, pageKey = DemoMainSettingsPageKey)
+internal fun SettingsScreen() {
+    AndroidKitSettingsPage(pageKey = DemoMainSettingsPageKey)
 }
 
 @Composable
-internal fun AboutScreen(catalog: AndroidKitSettingsCatalog, onBack: () -> Unit) {
-    AndroidKitSettingsPage(catalog = catalog, pageKey = DemoAboutSettingsPageKey, onBack = onBack)
+internal fun AboutScreen(onBack: () -> Unit) {
+    AndroidKitSettingsPage(pageKey = DemoAboutSettingsPageKey, onBack = onBack)
 }
 
 @Composable
-internal fun SettingsSearchScreen(catalog: AndroidKitSettingsCatalog, onBack: () -> Unit) {
-    AndroidKitSettingsSearchPage(catalog = catalog, onBack = onBack)
+internal fun SettingsSearchScreen(onBack: () -> Unit) {
+    AndroidKitSettingsSearchPage(onBack = onBack)
 }
 
 private const val CatalogRepository = "https://github.com/mamby/android-kit"

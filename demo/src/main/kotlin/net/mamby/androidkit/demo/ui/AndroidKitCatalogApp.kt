@@ -44,6 +44,7 @@ import net.mamby.androidkit.demo.ui.screen.DummyNavigationScreen
 import net.mamby.androidkit.demo.ui.screen.LocalizationScreen
 import net.mamby.androidkit.demo.ui.screen.SettingsScreen
 import net.mamby.androidkit.demo.ui.screen.AboutScreen
+import net.mamby.androidkit.compose.form.AndroidKitSettings
 import net.mamby.androidkit.demo.ui.screen.SettingsSearchScreen
 import net.mamby.androidkit.demo.ui.screen.demoSettingsCatalog
 import net.mamby.androidkit.navigation3.rememberMultiBackStackNavigationState
@@ -144,9 +145,7 @@ internal fun AndroidKitCatalogApp(
         val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
         val settingsCatalog = demoSettingsCatalog(
             onAbout = { navigation.navigate(AboutRoute) },
-            onSearch = { navigation.navigate(SettingsSearchRoute) },
             settingsStore = settingsViewModel.kitSettingsStore,
-            onSettingsStorageFailure = settingsViewModel::settingsStorageFailed,
             appLockEnabled = settings.appLockEnabled,
             appLockTimeout = settings.appLockTimeout,
             onAppLockTimeoutChange = settingsViewModel::setAppLockTimeout,
@@ -168,7 +167,6 @@ internal fun AndroidKitCatalogApp(
         )
 
         val currentSettings by rememberUpdatedState(settings)
-        val currentCatalog by rememberUpdatedState(settingsCatalog)
         val provider = remember(navigation, settingsViewModel) {
             entryProvider<NavKey> {
                 entry<ComponentsRoute>(
@@ -218,13 +216,13 @@ internal fun AndroidKitCatalogApp(
                     LocalizationScreen()
                 }
                 entry<SettingsRoute> {
-                    SettingsScreen(currentCatalog)
+                    SettingsScreen()
                 }
                 entry<AboutRoute> {
-                    AboutScreen(currentCatalog, onBack = navigation::goBack)
+                    AboutScreen(onBack = navigation::goBack)
                 }
                 entry<SettingsSearchRoute> {
-                    SettingsSearchScreen(currentCatalog, onBack = navigation::goBack)
+                    SettingsSearchScreen(onBack = navigation::goBack)
                 }
                 entry<DemoRootRoute> { route ->
                     DummyNavigationScreen(index = route.index)
@@ -258,11 +256,18 @@ internal fun AndroidKitCatalogApp(
         }
         val currentContent by rememberUpdatedState<@Composable () -> Unit> {
             Box(modifier = Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
-                AndroidKitNavDisplay(
-                    entries = entries,
-                    onBack = navigation::goBack,
-                    sceneStrategies = listOf(listDetailStrategy),
-                )
+                AndroidKitSettings(
+                    catalog = settingsCatalog,
+                    store = settingsViewModel.kitSettingsStore,
+                    onOpenSearch = { navigation.navigate(SettingsSearchRoute) },
+                    onStorageFailure = settingsViewModel::settingsStorageFailed,
+                ) {
+                    AndroidKitNavDisplay(
+                        entries = entries,
+                        onBack = navigation::goBack,
+                        sceneStrategies = listOf(listDetailStrategy),
+                    )
+                }
             }
         }
         // Move one NavDisplay instead of creating overlapping saved-state owners in subcomposition.

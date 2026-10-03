@@ -1,0 +1,15 @@
+// Compile independent consumer snippets without :test's Kotlin friend access.
+gradle.beforeProject { app ->
+    if (app.path != ':demo') return
+    app.plugins.withId('com.android.application') {
+        def scenario = app.providers.gradleProperty('androidKitSettingsApiFixture').get()
+        def source = app.rootProject.file("test/gradle/settings-api-fixtures/${scenario}")
+        if (!source.isDirectory()) throw new GradleException("Unknown Settings API fixture: ${scenario}")
+        def components = app.extensions.getByName('androidComponents')
+        components.onVariants(components.selector().all()) { variant ->
+            if (variant.name == 'debug') {
+                variant.sources.kotlin.addStaticSourceDirectory(source.absolutePath)
+            }
+        }
+    }
+}

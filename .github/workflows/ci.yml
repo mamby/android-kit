@@ -40,6 +40,9 @@ jobs:
       - name: Verify sealed theme API contracts
         shell: pwsh
         run: ./test/gradle/verify-theme-api.ps1
+      - name: Verify shared Settings ownership API contracts
+        shell: pwsh
+        run: ./test/gradle/verify-settings-api.ps1
 
   lint:
     runs-on: ubuntu-latest

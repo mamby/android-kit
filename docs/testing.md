@@ -42,6 +42,15 @@ demo compilation afterward. Fixture sources stay under `test/gradle`.
 inheritance. `ThemeAppearanceBehaviorTest` verifies rendered palette changes and
 that nested host typography/shapes affect bodies while Kit chrome remains fixed.
 
+## Settings ownership API contracts
+
+Run `./test/gradle/verify-settings-api.ps1` with PowerShell 7. Independent consumer
+snippets must accept a shared Settings owner and reject page-specific catalogs,
+search-specific catalogs and host-selected Settings histories. CI runs this
+check without Kotlin friend access. `SettingsSearchBehaviorTest` exercises searches
+opened from Main, a subpage and About against one catalog, with shared history,
+privacy, removal and clearing. General SearchPage behavior remains independent.
+
 ## Instrumented behavior tests
 
 With a device or emulator connected:

@@ -19,8 +19,6 @@ import androidx.compose.ui.test.performScrollToNode
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLegalEntry
-import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
-import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -34,7 +32,7 @@ class SettingsCommunityBehaviorTest {
         var aboutClicks = 0
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings") {
@@ -44,7 +42,7 @@ class SettingsCommunityBehaviorTest {
                         aboutClicks++
                     }
                 }
-                AndroidKitSettingsPage(catalog, "main")
+                TestCatalogPage(catalog, "main")
             }
         }
         assertOrder("Host setting", "About")
@@ -76,13 +74,13 @@ class SettingsCommunityBehaviorTest {
                                 AndroidKitSettingsLegalEntry("notices", "Notices", { disabledClicks++ }, enabled = false),
                             ),
                         )
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     about("about", about, {})
                 }
-                AndroidKitSettingsPage(catalog, "about")
+                TestCatalogPage(catalog, "about")
             }
         }
         assertOrder("Android Kit", "Website", "Source code", "Version",
@@ -118,13 +116,13 @@ class SettingsCommunityBehaviorTest {
                             libraries = link,
                             description = "   ",
                         )
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     about("about", about, {})
                 }
-                AndroidKitSettingsPage(catalog, "about")
+                TestCatalogPage(catalog, "about")
             }
         }
         rule.onNodeWithText("1.0").assertIsDisplayed()

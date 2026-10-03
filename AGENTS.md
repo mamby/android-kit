@@ -18,6 +18,12 @@ may be read for app-owned bodies, but cannot be injected into Kit components.
 Do not reintroduce public styles or raw component-geometry overrides.
 See [docs/component-contract.md](docs/component-contract.md).
 
+Settings is one logical search scope. Declare one complete catalog in one
+`AndroidKitSettings` owner above Settings navigation. Main, About and all
+subpages share its catalog, history and visibility preference. Never construct
+page-local Settings owners or histories. Independent content searches through
+`AndroidKitSearchPage` retain their own logical-page history and privacy state.
+
 ## Local host apps
 
 The active AndroidKit host apps are `D:\src\local-events` and

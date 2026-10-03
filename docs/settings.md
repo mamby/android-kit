@@ -6,13 +6,7 @@ search results execute the original callback or control instead of navigating to
 the page that contains it.
 
 ```kotlin
-val catalog = androidKitSettingsCatalog(
-    search = AndroidKitSettingsSearchConfiguration(
-        onOpenSearch = onOpenSearch,
-        history = settingsStore.searchHistory("settings"),
-        onStorageFailure = onSettingsStorageFailure,
-    ),
-) {
+val catalog = androidKitSettingsCatalog {
     main(key = "main", title = settingsTitle) {
         section(key = "appearance", label = appearanceTitle) {
             theme(themeSetting)
@@ -33,9 +27,25 @@ val catalog = androidKitSettingsCatalog(
     about(key = "about", content = aboutContent, onOpen = onAbout)
 }
 
-AndroidKitSettingsPage(catalog, pageKey = catalog.mainPageKey)
-AndroidKitSettingsSearchPage(catalog, onBack = onBack)
+AndroidKitSettings(
+    catalog = catalog,
+    store = settingsStore,
+    onOpenSearch = onOpenSearch,
+    onStorageFailure = onSettingsStorageFailure,
+) {
+    // Host navigation destinations render these inside this single owner.
+    AndroidKitSettingsPage(pageKey = catalog.mainPageKey)
+    // In the Search destination: AndroidKitSettingsSearchPage(onBack = onBack)
+}
 ```
+
+Settings is one logical search scope. Main, About and every subpage share the
+complete catalog, recent queries and history visibility. `AndroidKitSettings`
+binds the store's existing `"settings"` history internally. Pages and search have
+no catalog or history parameters. Missing, nested and simultaneous owners for
+the same store are rejected. Declare the owner above navigation, never inside
+an individual destination. Independent content searches retain their own
+page-scoped history through `AndroidKitSearchPage`.
 
 The host registers page keys in its navigation stack and routes
 `onOpenSearch`/About callbacks. Android Kit does not install a navigation
@@ -78,9 +88,8 @@ have not been opened. It uses the shared [search page](search-page.md) implement
 for the floating field, recent searches, empty states, scrolling and managed
 clearance. Opening the page focuses its input and requests the software keyboard.
 The Settings adapter owns catalog indexing and result controls;
-results remain in the current app language. The search configuration requires
-page-scoped persistent history and a storage-failure callback, using the
-shared hide/show behavior described in the search-page contract.
+results remain in the current app language. The Settings owner requires the persistent store and a storage-failure callback.
+It shares history and hide/show state across the complete Settings hierarchy.
 
 Matching is case-, accent-, punctuation-, and whitespace-insensitive. Every query
 token must match. Exact/current labels rank before prefixes, contained visible
@@ -135,9 +144,10 @@ History and preference imports are separate transactions with separate completio
 Every editable Settings declaration requires an `AndroidKitPersistentSetting`:
 String for selections, Boolean for toggles/app lock, and Float for sliders/transparency.
 Create bindings with `store.setting(preferencesKey, defaultValue)`. Screen-local values
-and arbitrary persistence adapters cannot satisfy this API. History requires
-`store.searchHistory(stablePageKey)` and keeps its visibility preference with its queries.
-Use distinct page keys for separate histories such as Settings and About.
+and arbitrary persistence adapters cannot satisfy this API. The Settings owner
+binds one canonical `"settings"` history and its visibility preference for Main,
+About and every subpage. `store.searchHistory(stablePageKey)` remains available
+for independent content searches; Settings pages cannot select a history key.
 
 Kit loads persisted values before showing controls, writes ordinary changes before
 calling host effect callbacks, and keeps writes independent of composition/navigation.
@@ -152,3 +162,17 @@ Storage failures are reported through the required callback. Unreadable or unaut
 files are never silently replaced with defaults. The storage contract guarantees use of
 durable storage, not successful writes when the device storage or Keystore is unavailable.
 Domain records, backups and controls outside the Settings API retain their host-owned storage.
+
+## Shared Settings owner migration
+
+Remove `AndroidKitSettingsSearchConfiguration` and its host-selected history.
+Build the complete catalog with `androidKitSettingsCatalog { ... }`, and place
+one `AndroidKitSettings(catalog, store, onOpenSearch, onStorageFailure)` above
+all Settings navigation destinations. Remove catalog arguments from
+`AndroidKitSettingsPage` and `AndroidKitSettingsSearchPage`. Subpage destinations
+must not build replacement catalogs or declare their own owner.
+
+Existing `"settings"` queries and visibility remain unchanged. Former separate
+About history is left in storage and is not displayed or merged into Settings;
+this avoids revealing previously hidden subpage queries. General SearchPage
+history and persistence APIs are unchanged.

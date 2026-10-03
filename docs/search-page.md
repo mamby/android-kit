@@ -107,7 +107,7 @@ required; the demo uses `rememberSaveable` for the query and DataStore for histo
 ## Page-scoped history visibility
 
 Both `recentQueriesVisible` and `onRecentQueriesVisibleChange` are required in
-`AndroidKitSearchPage` and `AndroidKitSettingsSearchConfiguration`. Hosts must
+`AndroidKitSearchPage`. Hosts must
 wire the callback to their page-scoped persisted state. Every search page includes the
 Kit-owned eye toggle immediately after the Recent searches heading. Its localized
 accessibility action is Hide recent searches / Show recent searches. There is no
@@ -127,9 +127,8 @@ rows scroll behind the recent bar, page title and system bars. The page title ba
 and status-bar protection retain the standard `AndroidKitPage` behavior.
 
 Hosts persist visibility alongside history, scoped by a stable logical search
-identifier, never a translated title or transient navigation entry. The demo
-uses separate DataStore keys `search.settings.recents_visible` and
-`search.content.recents_visible` in its existing repository. An absent key
+identifier, never a translated title or transient navigation entry. Settings is the exception to destination-level scoping: its complete hierarchy
+shares one Settings owner and one history visibility preference. An absent key
 defaults to visible for compatibility. The demo waits for persisted settings
 before composing search; hosts must similarly avoid rendering history before
 visibility loads, or initially pass `recentQueriesVisible = false`. Visibility
@@ -138,7 +137,9 @@ is concealment on this search page, not private browsing or encrypted storage.
 ## Settings integration
 
 `AndroidKitSettingsSearchPage` uses the same internal page implementation, recent
-history logic, and matching/ranking helpers. Its public signature is unchanged.
+history logic, and matching/ranking helpers. It resolves the complete catalog
+and shared history from its enclosing `AndroidKitSettings` owner; individual
+Settings pages cannot supply a separate catalog or history.
 The Settings adapter supplies catalog results and renders their original
 controls through the result slot, retaining the Search settings title, Settings
 empty message, multilingual lexicon, section context, and in-place pickers,

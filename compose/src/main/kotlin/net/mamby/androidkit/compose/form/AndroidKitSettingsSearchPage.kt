@@ -21,15 +21,16 @@ import net.mamby.androidkit.compose.theme.AndroidKitThemeTokens
 /** Global Settings search rendered from the same catalog as every Settings page. */
 @Composable
 public fun AndroidKitSettingsSearchPage(
-    catalog: AndroidKitSettingsCatalog,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
 ): Unit {
+    val owner = currentSettingsOwner()
+    val catalog = owner.catalog
     var query by rememberSaveable { mutableStateOf("") }
     var activePicker by rememberSaveable { mutableStateOf<String?>(null) }
     val strings = AndroidKitThemeTokens.strings
-    val history = catalog.search.history
+    val history = owner.search.history
     val snapshot by produceState<Result<AndroidKitSearchHistorySnapshot>?>(null, history) {
         value = null
         try {
@@ -42,7 +43,7 @@ public fun AndroidKitSettingsSearchPage(
     }
     val storageFailure = snapshot?.exceptionOrNull()
     LaunchedEffect(storageFailure) {
-        storageFailure?.let(catalog.search.onStorageFailure)
+        storageFailure?.let(owner.search.onStorageFailure)
     }
     val saved = snapshot?.getOrNull()
     if (saved == null) {
@@ -58,7 +59,7 @@ public fun AndroidKitSettingsSearchPage(
     val collected = collectCatalogSearchSections(catalog) { activePicker = it }
     val preferenceFailure = collected.scopes.firstNotNullOfOrNull { it.storageFailure }
     if (preferenceFailure != null || collected.scopes.any { it.waitingForStorage }) {
-        LaunchedEffect(preferenceFailure) { preferenceFailure?.let(catalog.search.onStorageFailure) }
+        LaunchedEffect(preferenceFailure) { preferenceFailure?.let(owner.search.onStorageFailure) }
         AndroidKitPage(title = strings.searchSettings, modifier = modifier, onBack = onBack) {
             if (preferenceFailure == null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
@@ -108,11 +109,11 @@ public fun AndroidKitSettingsSearchPage(
         onRecentQueriesChange = { error("Settings history changes must use persistent operations.") },
         recentQueriesVisible = saved.visible,
         onRecentQueriesVisibleChange = { visible ->
-            history.submit(catalog.search.onStorageFailure) { setVisible(visible) }
+            history.submit(owner.search.onStorageFailure) { setVisible(visible) }
         },
-        onRecordRecent = { value -> history.submit(catalog.search.onStorageFailure) { record(value) } },
-        onRemoveRecent = { value -> history.submit(catalog.search.onStorageFailure) { remove(value) } },
-        onClearRecent = { history.submit(catalog.search.onStorageFailure) { clear() } },
+        onRecordRecent = { value -> history.submit(owner.search.onStorageFailure) { record(value) } },
+        onRemoveRecent = { value -> history.submit(owner.search.onStorageFailure) { remove(value) } },
+        onClearRecent = { history.submit(owner.search.onStorageFailure) { clear() } },
         title = strings.searchSettings,
         noMatchesMessage = strings.noMatchingSettings,
         hasResults = matches.isNotEmpty(),
@@ -175,6 +176,7 @@ private fun collectCatalogSearchSections(
     catalog: AndroidKitSettingsCatalog,
     openPicker: (String) -> Unit,
 ): CollectedSearchSections {
+    val owner = currentSettingsOwner()
     val strings = AndroidKitThemeTokens.strings
     val sections = mutableListOf<SearchableSettingsSection>()
     val scopes = mutableListOf<SettingsPageScopeImpl>()
@@ -183,14 +185,14 @@ private fun collectCatalogSearchSections(
         val pageTitle = page.title ?: strings.about
         when (page) {
             is AndroidKitSettingsCatalogPage.Main -> {
-                val scope = SettingsPageScopeImpl(page.key, strings, catalog.search.onStorageFailure, openPicker)
+                val scope = SettingsPageScopeImpl(page.key, strings, owner.search.onStorageFailure, openPicker)
                 AndroidKitSettingsPageScope().apply(page.content).render(scope)
                 scopes += scope
                 scope.items.forEach { sections += SearchableSettingsSection(page.key, pageTitle,
                     page.searchTerms, it, order++) }
             }
             is AndroidKitSettingsCatalogPage.Subpage -> {
-                val scope = SettingsPageScopeImpl(page.key, strings, catalog.search.onStorageFailure, openPicker)
+                val scope = SettingsPageScopeImpl(page.key, strings, owner.search.onStorageFailure, openPicker)
                 AndroidKitSettingsPageScope().apply(page.content).render(scope)
                 scopes += scope
                 scope.items.forEach { sections += SearchableSettingsSection(page.key, pageTitle,

@@ -210,7 +210,6 @@ internal interface SettingsPageRenderScope {
 /** Renders a page from the shared Settings catalog. */
 @Composable
 public fun AndroidKitSettingsPage(
-    catalog: AndroidKitSettingsCatalog,
     pageKey: String,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
@@ -218,7 +217,7 @@ public fun AndroidKitSettingsPage(
 ): Unit {
     AndroidKitComponentTheme {
         AndroidKitSettingsPageContent(
-            catalog = catalog,
+            catalog = currentSettingsOwner().catalog,
             pageKey = pageKey,
             modifier = modifier,
             onBack = onBack,
@@ -235,11 +234,12 @@ private fun AndroidKitSettingsPageContent(
     onBack: (() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
 ): Unit {
+    val search = currentSettingsOwner().search
     val tokens = AndroidKitThemeTokens.componentTokens.settingsPage
     val page = requireNotNull(catalog.pagesByKey[pageKey]) { "Unknown Settings page key: $pageKey" }
     var activePicker by rememberSaveable(pageKey) { mutableStateOf<String?>(null) }
     val strings = AndroidKitThemeTokens.strings
-    val scope = SettingsPageScopeImpl(pageKey, strings, catalog.search.onStorageFailure) { activePicker = it }
+    val scope = SettingsPageScopeImpl(pageKey, strings, search.onStorageFailure) { activePicker = it }
     val sections = when (page) {
         is AndroidKitSettingsCatalogPage.Main -> {
             AndroidKitSettingsPageScope().apply(page.content).render(scope)
@@ -253,7 +253,7 @@ private fun AndroidKitSettingsPageContent(
     }
     val title = page.title ?: strings.about
     if (scope.waitingForStorage || scope.storageFailure != null) {
-        LaunchedEffect(scope.storageFailure) { scope.storageFailure?.let(catalog.search.onStorageFailure) }
+        LaunchedEffect(scope.storageFailure) { scope.storageFailure?.let(search.onStorageFailure) }
         AndroidKitPage(title = title, modifier = modifier, onBack = onBack) {
             if (scope.storageFailure == null) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { androidx.compose.material3.CircularProgressIndicator() }
@@ -262,7 +262,7 @@ private fun AndroidKitSettingsPageContent(
         return
     }
     val searchAction = AndroidKitAction(AndroidKitIcons.Search, strings.searchSettings,
-        catalog.search.onOpenSearch)
+        search.onOpenSearch)
     val dimensions = AndroidKitThemeTokens.dimensions
     val direction = LocalLayoutDirection.current
     AndroidKitPage(

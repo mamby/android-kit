@@ -71,6 +71,18 @@ public class AndroidKitSettingsStore private constructor(
     public val preferences: DataStore<Preferences>,
 ) {
     private val settings = mutableMapOf<Preferences.Key<*>, AndroidKitPersistentSetting<*>>()
+    private var settingsOwner: Any? = null
+
+    internal fun attachSettingsOwner(identity: Any): Unit = synchronized(this) {
+        check(settingsOwner == null || settingsOwner === identity) {
+            "Only one AndroidKitSettings owner may use a Settings store. Place it above Settings navigation."
+        }
+        settingsOwner = identity
+    }
+
+    internal fun detachSettingsOwner(identity: Any): Unit = synchronized(this) {
+        if (settingsOwner === identity) settingsOwner = null
+    }
     /** A typed binding backed only by this store's real DataStore, never arbitrary callbacks. */
     @Suppress("UNCHECKED_CAST")
     public fun <T : Any> setting(key: Preferences.Key<T>, defaultValue: T): AndroidKitPersistentSetting<T> = synchronized(settings) {

@@ -15,7 +15,7 @@ import net.mamby.androidkit.compose.form.AndroidKitAppLockSetting
 import net.mamby.androidkit.compose.form.AndroidKitAppLockTimeoutSetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
 import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
-import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
+import net.mamby.androidkit.compose.form.AndroidKitSettings
 import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
 import net.mamby.androidkit.compose.theme.AndroidKitTheme
 import net.mamby.androidkit.demo.R
@@ -26,7 +26,6 @@ import net.mamby.androidkit.demo.R
 private fun AppLockSettingsPreview() {
     val context = LocalContext.current
     val store = remember(context) { AndroidKitSettingsStore.open(context, "app-lock-preview", AndroidKitSettingsStorageProtection.Plaintext) }
-    val history = remember(store) { store.searchHistory("preview") }
     val coroutineScope = rememberCoroutineScope()
     val appLock = store.setting(booleanPreferencesKey("app-lock"), true)
     val title = stringResource(R.string.settings_app_lock)
@@ -37,13 +36,7 @@ private fun AppLockSettingsPreview() {
         AndroidKitSettingsOption("15", stringResource(R.string.settings_lock_after_fifteen_minutes)),
     )
     AndroidKitTheme {
-        val catalog = androidKitSettingsCatalog(
-            AndroidKitSettingsSearchConfiguration(
-                onOpenSearch = {},
-                history = history,
-                onStorageFailure = { throw it },
-            ),
-        ) {
+        val catalog = androidKitSettingsCatalog {
             main("preview", title) {
                 section("security") {
                     appLock(AndroidKitAppLockSetting(
@@ -58,6 +51,8 @@ private fun AppLockSettingsPreview() {
                 }
             }
         }
-        AndroidKitSettingsPage(catalog, "preview")
+        AndroidKitSettings(catalog, store, onOpenSearch = {}, onStorageFailure = { throw it }) {
+            AndroidKitSettingsPage("preview")
+        }
     }
 }

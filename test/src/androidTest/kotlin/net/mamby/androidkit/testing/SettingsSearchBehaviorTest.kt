@@ -37,13 +37,9 @@ import net.mamby.androidkit.compose.form.AndroidKitFloatingOpacitySetting
 import net.mamby.androidkit.compose.form.AndroidKitSettingsAbout
 import net.mamby.androidkit.compose.form.AndroidKitSettingsLink
 import net.mamby.androidkit.compose.form.AndroidKitSettingsOption
-import net.mamby.androidkit.compose.form.AndroidKitSettingsPage
-import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchConfiguration
-import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchPage
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSearchTerms
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSelection
 import net.mamby.androidkit.compose.form.AndroidKitSettingsSystemOption
-import net.mamby.androidkit.compose.form.androidKitSettingsCatalog
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
@@ -72,14 +68,14 @@ class SettingsSearchBehaviorTest {
         var searchRequests = 0
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({ searchRequests++ }, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     subpage("sub", "Subpage")
                     about("about", AndroidKitSettingsAbout("App", "1"), {})
                 }
-                AndroidKitSettingsPage(catalog, page)
+                TestCatalogPage(catalog, page)
             }
         }
         listOf("main", "sub", "about").forEachIndexed { index, key ->
@@ -97,7 +93,7 @@ class SettingsSearchBehaviorTest {
         var recents by mutableStateOf(emptyList<String>())
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) {
                     main("main", "Settings") {
@@ -132,7 +128,7 @@ class SettingsSearchBehaviorTest {
                         {},
                     )
                 }
-                AndroidKitSettingsSearchPage(catalog)
+                TestCatalogSearchPage(catalog)
             }
         }
 
@@ -148,6 +144,7 @@ class SettingsSearchBehaviorTest {
 
         search.performTextReplacement("sync")
         rule.onNodeWithText("Sync").assertIsDisplayed().performClick()
+        rule.waitUntil { enabled && recents.firstOrNull() == "sync" }
         rule.runOnIdle {
             assertTrue(enabled)
             assertEquals("sync", recents.first())
@@ -159,10 +156,10 @@ class SettingsSearchBehaviorTest {
         var recents by mutableStateOf(listOf("Theme", "Privacy"))
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) { main("main", "Settings") }
-                AndroidKitSettingsSearchPage(catalog)
+                TestCatalogSearchPage(catalog)
             }
         }
         rule.onNodeWithText("Theme").assertIsDisplayed()
@@ -180,7 +177,7 @@ class SettingsSearchBehaviorTest {
         var clicks = 0
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration(
                         onOpenSearch = {},
                         recentQueries = recents,
@@ -195,7 +192,7 @@ class SettingsSearchBehaviorTest {
                         }
                     }
                 }
-                AndroidKitSettingsSearchPage(catalog)
+                TestCatalogSearchPage(catalog)
             }
         }
         rule.onNodeWithText("Sensitive setting").assertDoesNotExist()
@@ -203,6 +200,7 @@ class SettingsSearchBehaviorTest {
         val search = rule.onNodeWithContentDescription("Search")
         search.performTextReplacement("back up")
         rule.onNodeWithText("Back up now").performClick()
+        rule.waitUntil { recents.firstOrNull() == "back up" }
         rule.runOnIdle {
             assertEquals(1, clicks)
             assertEquals("back up", recents.first())
@@ -222,20 +220,21 @@ class SettingsSearchBehaviorTest {
         var recents by mutableStateOf(listOf("Earlier"))
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, recents, { recents = it }),
                 ) {
                     main("main", "Settings") {
                         section("actions") { button("alpha", "Alpha", {}) }
                     }
                 }
-                AndroidKitSettingsSearchPage(catalog)
+                TestCatalogSearchPage(catalog)
             }
         }
 
         val search = rule.onNodeWithContentDescription("Search")
         search.performTextReplacement("alpha")
         rule.onNodeWithText("Alpha").performClick()
+        rule.waitUntil { recents == listOf("alpha", "Earlier") }
         rule.runOnIdle {
             assertEquals(listOf("alpha", "Earlier"), recents)
         }
@@ -243,6 +242,7 @@ class SettingsSearchBehaviorTest {
         search.performTextReplacement("nothing here")
         search.performImeAction()
         rule.onNodeWithText("No matching settings").assertIsDisplayed()
+        rule.waitUntil { recents == listOf("nothing here", "alpha", "Earlier") }
         rule.runOnIdle { assertEquals(listOf("nothing here", "alpha", "Earlier"), recents) }
     }
 
@@ -254,7 +254,7 @@ class SettingsSearchBehaviorTest {
         var showConditional by mutableStateOf(true)
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings") {
@@ -287,7 +287,7 @@ class SettingsSearchBehaviorTest {
                         }
                     }
                 }
-                AndroidKitSettingsSearchPage(catalog)
+                TestCatalogSearchPage(catalog)
             }
         }
 
@@ -295,11 +295,13 @@ class SettingsSearchBehaviorTest {
         search.performTextReplacement("noir")
         rule.onNodeWithText("Theme").performClick()
         rule.onNodeWithText("Dark").performClick()
+        rule.waitUntil { selectedTheme == "dark" }
         rule.runOnIdle { assertEquals("dark", selectedTheme) }
 
         search.performTextReplacement("opacity")
         rule.onNodeWithContentDescription("Transparency")
             .performSemanticsAction(SemanticsActions.SetProgress) { it(75f) }
+        rule.waitUntil { opacity == 75f && opacityCommits == 1 }
         rule.runOnIdle {
             assertEquals(75f, opacity)
             assertEquals(1, opacityCommits)
@@ -326,13 +328,13 @@ class SettingsSearchBehaviorTest {
         var aboutRequests = 0
         rule.setContent {
             TestKitTheme {
-                val catalog = androidKitSettingsCatalog(
+                val catalog = testSettingsCatalog(
                     rememberTestSettingsSearchConfiguration({}, emptyList(), {}),
                 ) {
                     main("main", "Settings")
                     about("about", AndroidKitSettingsAbout("App", "1.2.3"), { aboutRequests++ })
                 }
-                AndroidKitSettingsSearchPage(catalog)
+                TestCatalogSearchPage(catalog)
             }
         }
 
@@ -355,10 +357,10 @@ class SettingsSearchBehaviorTest {
                 DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(1.5f)) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                         TestKitTheme {
-                            val catalog = androidKitSettingsCatalog(
+                            val catalog = testSettingsCatalog(
                                 rememberTestSettingsSearchConfiguration({}, listOf("Theme"), {}),
                             ) { main("main", "Settings") }
-                            AndroidKitSettingsSearchPage(catalog)
+                            TestCatalogSearchPage(catalog)
                         }
                     }
                 }
@@ -376,9 +378,101 @@ class SettingsSearchBehaviorTest {
     }
 
     @Test
+    fun searchFromEverySettingsDestinationSharesCatalogHistoryAndPrivacy() {
+        var page by mutableStateOf("main")
+        var searching by mutableStateOf(false)
+        var recents by mutableStateOf(listOf("Seed"))
+        var visible by mutableStateOf(true)
+        var clicks = 0
+        rule.setContent {
+            TestKitTheme {
+                val catalog = testSettingsCatalog(
+                    rememberTestSettingsSearchConfiguration(
+                        { searching = true }, recents, { recents = it }, visible, { visible = it },
+                    ),
+                ) {
+                    main("main", "Settings") {
+                        section("actions") { button("main-action", "Main action", { clicks++ }) }
+                    }
+                    subpage("sub", "Subpage") {
+                        section("actions") { button("sub-action", "Sub action", { clicks++ }) }
+                    }
+                    about("about", AndroidKitSettingsAbout("App", "1"), {})
+                }
+                TestCatalogOwner(catalog) {
+                    if (searching) {
+                        net.mamby.androidkit.compose.form.AndroidKitSettingsSearchPage(onBack = { searching = false })
+                    } else {
+                        net.mamby.androidkit.compose.form.AndroidKitSettingsPage(pageKey = page)
+                    }
+                }
+            }
+        }
+        fun openFrom(key: String) {
+            rule.runOnIdle { searching = false; page = key }
+            rule.onNodeWithContentDescription("Search settings").performClick()
+        }
+        listOf("main", "sub", "about").forEach { key ->
+            openFrom(key)
+            rule.onNodeWithText("Seed").assertIsDisplayed()
+            val search = rule.onNodeWithContentDescription("Search")
+            search.performTextReplacement("main action")
+            rule.onNodeWithText("Main action").assertIsDisplayed().performClick()
+            rule.waitUntil { recents.firstOrNull() == "main action" }
+            search.performTextReplacement("sub action")
+            rule.onNodeWithText("Sub action").assertIsDisplayed().performClick()
+            rule.waitUntil { recents.firstOrNull() == "sub action" }
+            search.performTextReplacement("version")
+            rule.onNodeWithText("Version").assertIsDisplayed()
+        }
+        rule.runOnIdle { assertEquals(6, clicks) }
+        openFrom("sub")
+        rule.onNodeWithText("main action").assertIsDisplayed()
+        rule.onNodeWithContentDescription("Hide recent searches").performClick()
+        rule.waitUntil { !visible }
+        openFrom("about")
+        rule.onNodeWithText("Recent searches hidden").assertIsDisplayed()
+        rule.onNodeWithText("Seed").assertDoesNotExist()
+        rule.onNodeWithContentDescription("Show recent searches").performClick()
+        rule.waitUntil {
+            visible && rule.onAllNodesWithContentDescription("Remove recent search").fetchSemanticsNodes().isNotEmpty()
+        }
+        rule.onAllNodesWithContentDescription("Remove recent search")[0].performClick()
+        rule.waitUntil { "sub action" !in recents }
+        openFrom("main")
+        rule.onNodeWithText("sub action").assertDoesNotExist()
+        rule.onNodeWithText("Clear all").performClick()
+        rule.waitUntil { recents.isEmpty() }
+        openFrom("about")
+        rule.onNodeWithText("Seed").assertDoesNotExist()
+        rule.onNodeWithText("main action").assertDoesNotExist()
+    }
+
+    @Test
+    fun oneStoreRejectsSimultaneousSettingsOwnersAndAllowsDisposal() {
+        val store = net.mamby.androidkit.compose.form.AndroidKitSettingsStore.open(
+            rule.activity, "owner-${java.util.UUID.randomUUID()}",
+            net.mamby.androidkit.compose.form.AndroidKitSettingsStorageProtection.Plaintext,
+        )
+        val first = Any()
+        val second = Any()
+        store.attachSettingsOwner(first)
+        try {
+            assertThrows(IllegalStateException::class.java) { store.attachSettingsOwner(second) }
+            // A different owner cannot release the active owner's registration.
+            store.detachSettingsOwner(second)
+            assertThrows(IllegalStateException::class.java) { store.attachSettingsOwner(second) }
+        } finally {
+            store.detachSettingsOwner(first)
+        }
+        store.attachSettingsOwner(second)
+        store.detachSettingsOwner(second)
+    }
+
+    @Test
     fun catalogRejectsDuplicatePageKeys() {
         assertThrows(IllegalArgumentException::class.java) {
-            androidKitSettingsCatalog(AndroidKitSettingsSearchConfiguration({}, net.mamby.androidkit.compose.form.AndroidKitSettingsStore.open(androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext, "duplicate-catalog", net.mamby.androidkit.compose.form.AndroidKitSettingsStorageProtection.Plaintext).searchHistory("test"), { throw it })) {
+            net.mamby.androidkit.compose.form.androidKitSettingsCatalog {
                 main("same", "Settings")
                 subpage("same", "Other")
             }

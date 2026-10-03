@@ -69,7 +69,7 @@ class SettingsPersistenceTest {
                 launch { history.record("private-query-4821") }
                 launch { history.record("second-private-query-9916") }
             }
-            store.searchHistory("about").record("about-only")
+            store.searchHistory("content").record("content-only")
             store.setting(opacity, 0f).set(40f)
         }
         assertFalse(file.readBytes().toString(Charsets.ISO_8859_1).contains("private-query"))
@@ -78,7 +78,7 @@ class SettingsPersistenceTest {
             val saved = store.searchHistory("settings").snapshots.first()
             assertEquals(setOf("private-query-4821", "second-private-query-9916"), saved.recentQueries.toSet())
             assertFalse(saved.visible)
-            assertEquals(listOf("about-only"), store.searchHistory("about").snapshots.first().recentQueries)
+            assertEquals(listOf("content-only"), store.searchHistory("content").snapshots.first().recentQueries)
             assertEquals(40f, store.setting(opacity, 0f).values.first())
             assertEquals(1, historyReads)
             assertEquals(1, preferenceReads)

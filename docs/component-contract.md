@@ -85,7 +85,9 @@ escape hatch. Migrate consumers and the demo with the library.
 - Flyouts: declare `item`, `separator`, and `submenu`. Toolbar/action-bar builders
   also accept only their typed declarations; custom toolbar `item` is removed.
 - Settings: declare one keyed `AndroidKitSettingsCatalog` containing Main,
-  subpages and optional About, then render a page by key. The same typed entries
+  subpages and optional About in one `AndroidKitSettings` owner above navigation,
+  then render a page by key. Pages cannot supply catalogs or search histories;
+  all Settings destinations share the complete search scope and privacy state. The same typed entries
   power global search, whose result controls execute in place. Kit owns durable
   Settings values and recent queries through required persistent bindings. Hosts own
   effect callbacks, protected-change authorization, destinations and optional translated

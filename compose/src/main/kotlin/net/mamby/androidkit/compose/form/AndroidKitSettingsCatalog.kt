@@ -26,17 +26,8 @@ private fun isSettingsSearchLanguageTag(tag: String): Boolean {
     }
 }
 
-/** Controlled navigation with required Kit-owned persistent search storage. */
-public data class AndroidKitSettingsSearchConfiguration(
-    public val onOpenSearch: () -> Unit,
-    public val history: AndroidKitPersistentSearchHistory,
-    /** Report load/write failures through the host's localized error presentation. */
-    public val onStorageFailure: (Throwable) -> Unit,
-)
-
 /** A complete Settings hierarchy used by regular pages and global search. */
 public class AndroidKitSettingsCatalog internal constructor(
-    internal val search: AndroidKitSettingsSearchConfiguration,
     internal val pages: List<AndroidKitSettingsCatalogPage>,
 ) {
     internal val pagesByKey: Map<String, AndroidKitSettingsCatalogPage> = pages.associateBy { it.key }
@@ -49,7 +40,6 @@ public class AndroidKitSettingsCatalog internal constructor(
 
 /** Builds one validated Settings hierarchy. */
 public fun androidKitSettingsCatalog(
-    search: AndroidKitSettingsSearchConfiguration,
     content: AndroidKitSettingsCatalogScope.() -> Unit,
 ): AndroidKitSettingsCatalog {
     val pages = AndroidKitSettingsCatalogScope().apply(content).pages
@@ -61,7 +51,7 @@ public fun androidKitSettingsCatalog(
     }
     val keys = pages.map { it.key }
     require(keys.size == keys.distinct().size) { "Settings catalog page keys must be unique." }
-    return AndroidKitSettingsCatalog(search, pages)
+    return AndroidKitSettingsCatalog(pages)
 }
 
 @AndroidKitSettingsPageDsl
